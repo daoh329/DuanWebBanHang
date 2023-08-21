@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/deital.css';
+import '../css/detail.css';
 
 function Detail() {
     
