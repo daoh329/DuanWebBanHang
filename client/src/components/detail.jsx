@@ -558,83 +558,9 @@ function Detail() {
       </div>
       <div className="st-boxFeature">
         <ul>
+
           <li>
-            <label className="img">
-              <img
-                src="https://images.fpt.shop/unsafe/fit-in/48x48/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2022/11/9/638036094193162159_zalopay.jpg"
-                width={48}
-                height={48}
-                alt="Nhập mã FPTSHOP200 giảm 1% tối đa 200.000 đồng khi thanh toán 100% qua ZaloPay."
-              />
-              <div className="e-label-pos">
-                <div className="checkbox">
-                  <input
-                    name="promotion3"
-                    className="form-check-input"
-                    type="checkbox"
-                    id="check2"
-                    data-value={21}
-                    data2-value="Thanh toán ZaloPay-QR"
-                    defaultValue={85511}
-                  />
-                </div>
-              </div>
-            </label>
-            <div className="text">
-              <p>Thanh toán ZaloPay-QR</p>
-              <div>
-                <span>
-                  Nhập mã FPTSHOP200 giảm 1% tối đa 200.000 đồng khi thanh toán
-                  100% qua ZaloPay.
-                </span>
-                <a
-                  href="https://fptshop.com.vn/tin-tuc/tin-khuyen-mai/fpt-shop-giam-ngay-1-toi-da-200-000-dong-khi-mua-mot-so-san-pham-laptop-nhat-dinh-va-thanh-toan-tai-zalopay-159381?utm_source=Chitietsanpham&utm_medium=Xemchitiet&utm_campaign=FPTSHOP200"
-                  target="_blank"
-                  className="re-link"
-                >
-                  Xem chi tiết
-                </a>
-              </div>
-            </div>
-          </li>
-          <li>
-            <label className="img">
-              <img
-                src="https://images.fpt.shop/unsafe/fit-in/48x48/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2022/3/14/637828748513420662_Kredio.jpg"
-                width={48}
-                height={48}
-                alt="Giảm ngay 5% tối đa 200.000 đồng khi thanh toán trả góp 6/12 tháng qua Kredivo"
-              />
-              <div className="e-label-pos">
-                <div className="checkbox">
-                  <input
-                    name="promotion3"
-                    className="form-check-input"
-                    type="checkbox"
-                    id="check2"
-                    data-value={21}
-                    data2-value="Thanh toán Kredivo"
-                    defaultValue={79473}
-                  />
-                </div>
-              </div>
-            </label>
-            <div className="text">
-              <p>Thanh toán Kredivo</p>
-              <div>
-                <span>
-                  Giảm ngay 5% tối đa 200.000 đồng khi thanh toán trả góp 6/12
-                  tháng qua Kredivo
-                </span>
-                <a
-                  href="https://fptshop.com.vn/ctkm/kredivo?utm_source=chitietsanpham&utm_medium=xemchitiet&utm_id=kredivo"
-                  target="_blank"
-                  className="re-link"
-                >
-                  Xem chi tiết
-                </a>
-              </div>
-            </div>
+           
           </li>
         </ul>
       </div>
