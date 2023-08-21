@@ -3,15 +3,6 @@ import '../css/detail.css';
 
 function Detail() {
     
-  const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState('');
-
-  const handleAddItem = () => {
-    if (newItem.trim() !== '') {
-      setItems([...items, newItem]);
-      setNewItem('');
-    }
-  };
 
   return (
 <div>
