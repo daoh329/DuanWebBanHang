@@ -1,0 +1,11 @@
+@import './mdb.pro.scss';
+
+
+$my-theme-primary: #9c27b0; // theme primary color, change this value to customize theme
+$my-theme-secondary: #69f0ae; // theme secondary color, change this value to customize theme
+
+$my-light-theme: mdb-light-theme($my-theme-primary, $my-theme-secondary); // create the new light theme using
+// primary and secondary colors
+
+// include theme styles
+@include mdb-theme($my-light-theme);

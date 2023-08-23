@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import '../css/detail.css';
-
 function Detail() {
-    
-
 
   return (
 <div>
@@ -354,28 +351,29 @@ function Detail() {
       </div>
       <div className="css-f7zc9t">
         {/* button mua ngay */}
-        <div
-          data-content-region-name="descriptionDetail"
-          data-track-content="true"
-          data-content-name="buyNow"
-          data-content-target="cart"
-          data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
-          className="css-yp9swi"
-        >
-          <button
-            height="2.5rem"
-            color="white"
-            className="att-detail-page-buy-now-button css-9p27dv"
-            type="button"
-          >
-            <div type="subtitle" className="css-ueraml">
-              MUA NGAY
-            </div>
-            <span id="style-Ff8iU" className="style-Ff8iU">
-              <div className="css-157jl91"></div>
-            </span>
-          </button>
-        </div>
+<div
+  data-content-region-name="descriptionDetail"
+  data-track-content="true"
+  data-content-name="buyNow"
+  data-content-target="cart"
+  data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
+  className="css-yp9swi"
+>
+  <button
+    height="2.5rem"
+    color="white"
+    className="att-detail-page-buy-now-button css-9p27dv"
+    type="button"
+    // Thêm sự kiện onClick
+  >
+    <div type="subtitle" className="css-ueraml">
+      MUA NGAY
+    </div>
+    <span id="style-Ff8iU" className="style-Ff8iU">
+      <div className="css-157jl91"></div>
+    </span>
+  </button>
+</div>
         {/* button thêm vào giỏ hàng */}
         <div
           data-content-region-name="descriptionDetail"
