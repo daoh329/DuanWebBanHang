@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import Detail from '../components/detail';
 import CardProduct from '../components/CardProduct';
+import Cart from '../components/cart';
 
 
 function App() {
@@ -8,10 +9,10 @@ function App() {
     <div>
       <header >
       <h1>Product List</h1>
-<CardProduct/>
+
       </header>
       <body>
-        
+      <Cart/>
       </body>
     </div>
   );
