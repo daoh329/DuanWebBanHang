@@ -31,7 +31,8 @@ function Detail() {
             />
           </div>
         </div>
-        <div className="css-12isv00">
+        {/* slider hình nhỏ */}
+        {/* <div className="css-12isv00">
           <div className="css-4ok7dy">
             <div height="50px" width="50px" className="css-1dje825">
               <img
@@ -92,25 +93,14 @@ function Detail() {
               />
             </div>
           </div>
-          <div className="css-4ok7dy">
-            <div height="50px" width="50px" className="css-1dje825">
-              <img
-                src="https://lh3.googleusercontent.com/hxiicUKuEgoaZEvCB7s8yY_39thHLFwNeDU3W_-unM5oXGf1mAqAhTvYUekRW0AbExPgqGv79KphqJ7GzLBG6wE-7l_XDqcz=rw"
-                loading="lazy"
-                decoding="async"
-                alt="Laptop Asus ROG Strix G G513RC-HN038W"
-                id="style-ocZrC"
-                className="style-ocZrC"
-              />
-            </div>
-            <div className="css-cr19bb">+2</div>
-          </div>
-        </div>
+
+        </div> */}
       </div>
       <div className="css-1o4pdv8">
         <div width="100%" color="divider" className="css-1fm9yfq"></div>
       </div>
-      <div className="css-1nv5d5l">
+      {/* hiển thị chi tiết  */}
+      {/* <div className="css-1nv5d5l">
         - CPU: AMD Ryzen 7 6800H
         <br />
         - Màn hình: 15.6" IPS (1920 x 1080),144Hz
@@ -125,7 +115,7 @@ function Detail() {
         <br />
         - Pin: 4 cell 56 Wh Pin liền
         <br />- Khối lượng: 2.1kg
-      </div>
+      </div> */}
       <a
         target="_blank"
         rel="noopener noreferrer"
@@ -138,6 +128,7 @@ function Detail() {
       </a>
     </div>
     <div className="css-6b3ezu">
+      {/* ten, mã , thương hiệu */}
       <div>
         <h1 className="css-4kh4rf">
           Laptop ASUS ROG Strix G15 G513RC-HN038W (Ryzen 7 6800H/RAM 8GB/512GB
@@ -161,7 +152,9 @@ function Detail() {
           </div>
         </div>
       </div>
+
       <div className="css-qmrpdk"></div>
+      {/* giá tiền */}
       <div className="css-1q5zfcu">
         <div
           type="title"
@@ -188,7 +181,8 @@ function Detail() {
       </div>
       <div className="css-1gs5ebu">
         <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
-        <div direction="column" className="css-cs5l6d">
+        {/* phần khuyến mãi */}
+        {/* <div direction="column" className="css-cs5l6d">
           <div
             className="att-product-detail-default-promotion-478703 css-ixczt2"
             direction="row"
@@ -314,7 +308,7 @@ function Detail() {
               </span>
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="css-30n8gl">
         <div className="css-ixp6xz">Chọn 1 trong những khuyến mãi sau</div>
@@ -359,6 +353,7 @@ function Detail() {
         </div>
       </div>
       <div className="css-f7zc9t">
+        {/* button mua ngay */}
         <div
           data-content-region-name="descriptionDetail"
           data-track-content="true"
@@ -381,6 +376,7 @@ function Detail() {
             </span>
           </button>
         </div>
+        {/* button thêm vào giỏ hàng */}
         <div
           data-content-region-name="descriptionDetail"
           data-track-content="true"
