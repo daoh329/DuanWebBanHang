@@ -1,0 +1,37 @@
+/* cart.css */
+/* Áp dụng kiểu cho table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+/* Áp dụng kiểu cho header của table */
+thead th {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 10px;
+}
+
+/* Áp dụng kiểu cho nội dung của table */
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Áp dụng kiểu cho checkbox */
+.MDBCheckbox {
+  /* Các quy tắc CSS cho checkbox */
+}
+
+/* Áp dụng kiểu cho nút */
+.MDBBtn {
+  /* Các quy tắc CSS cho nút */
+}
+body{
+  padding: auto;
+  margin: auto;
+}
+.custom-checkbox{
+  margin: 10px;
+}

@@ -4,9 +4,13 @@ import './styles/global.scss';
 import App from './views/App';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux';
-
 import rootReducer from './store/reducers/rootReducer';
 import reportWebVitals from './reportWebVitals';
+// thư viện mdb
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
