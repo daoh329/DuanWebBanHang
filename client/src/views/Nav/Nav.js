@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix } from 'antd';
 import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom/dist/umd/react-router-dom.development';
 
 const { Header } = Layout;
 
@@ -13,7 +14,9 @@ const App = () => {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1">Đăng nhập</Menu.Item>
+            <Menu.Item key="1">
+                <NavLink to="/login">Đăng nhập</NavLink>
+            </Menu.Item>
             <Menu.Item key="2">Đăng xuất</Menu.Item>
         </Menu>
     );
