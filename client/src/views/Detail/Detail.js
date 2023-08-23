@@ -1,31 +1,91 @@
 import React, { useState } from 'react';
-import '../css/detail.css';
-function Detail() {
+// Thư viện mdb
+import {
+  MDBCarousel,
+  MDBCarouselItem,
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBInput,
+  MDBCol,
+  MDBRow,
+} from "mdb-react-ui-kit";
+// link
+import './Detail.css';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
+
+function Detail() {
+// usestate của modal
+  const [scrollableModal, setScrollableModal] = useState(false);
+// 
+const formik = useFormik({
+  initialValues: {
+    firstName: '',
+    address: '',
+    // email: '',
+    phoneNumber: '',
+    // password: '',
+  },
+  validationSchema: Yup.object({
+    firstName: Yup.string().required('Vui lòng nhập tên.'),
+    address: Yup.string().required('Vui lòng nhập địa chỉ.'),
+    // email: Yup.string().email('Email không hợp lệ.').required('Vui lòng nhập email.'),
+    phoneNumber: Yup.number().required('Vui lòng nhập số điện thoại.'),
+    // password: Yup.string().required('Vui lòng nhập mật khẩu.'),
+  }),
+  onSubmit: (values) => {
+    // Xử lý dữ liệu gửi đi sau khi xác thực thành công
+    console.log(values);
+  },
+});
+// 
   return (
 <div>
 <div className="css-rfz8yf snipcss-lgA99 style-BooKL" id="style-BooKL">
   <div className="css-4cffwv">
     <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
       <div
-        data-content-region-name="imgProductDetail"
-        data-track-content="true"
-        data-content-name="viewImage"
-        data-content-target="productImage"
-        data-content-payload='{"sku":"220300268","screenName":"productDetail","index":4}'
+        
       >
-        <div className="productDetailPreview style-FMPIO" id="style-FMPIO">
-          <div width="100%" className="css-j4683g">
-            <img
-              src="https://lh3.googleusercontent.com/Hbe8oJ8locI181eLzTt4nmjHMf5Qs2cpgJ1p6XL4tC9FFia0I7LbY9UHY9tzUDpyzYjlS9aNq0Yhcp6uWZwhl2MZvaDyp3XX=w500-rw"
-              loading="lazy"
-              hover=""
-              decoding="async"
-              alt="Laptop Asus ROG Strix G G513RC-HN038W"
-              fetchpriority="low"
-              id="style-t5ITG"
-              className="style-t5ITG"
-            />
+        <div className="productDetailPreview style-FMPIO">
+
+          <div width="100%">
+            {/*  className="css-j4683g" */}
+            {/* SLIder */}
+          <MDBCarousel showControls showIndicators dark fade>
+      <MDBCarouselItem
+        className='w-100 d-block'
+        itemId={1}
+        src='https://lh3.googleusercontent.com/Hbe8oJ8locI181eLzTt4nmjHMf5Qs2cpgJ1p6XL4tC9FFia0I7LbY9UHY9tzUDpyzYjlS9aNq0Yhcp6uWZwhl2MZvaDyp3XX=w500-rw'
+        alt='...'
+      >
+     
+      </MDBCarouselItem>
+      <MDBCarouselItem
+        className='w-100 d-block'
+        itemId={2}
+        src="https://lh3.googleusercontent.com/wFaBZbSH4BXYvOzCWFAt3NO1HgblJ1ygVmXTUx1BCmd0qL_xZkkpcA9UEag8i79qneu2r0A9T526sXCbPzeFXkI4DGCtmbV-=rw"
+        alt='...'
+      >
+ 
+      </MDBCarouselItem>
+
+      <MDBCarouselItem
+        className='w-100 d-block'
+        itemId={3}
+        src="https://lh3.googleusercontent.com/lPsRWb6bFndzZQ9EFw-xVJO2WZUBqmpy5NGq2ueVdOSI89r8TFHSaNI_DcGHMyFK3mCj4cU8RoH7sXtcSLk89Tu0kBqkp6N8=rw"
+        alt='...'
+      >
+
+      </MDBCarouselItem>
+    </MDBCarousel>
           </div>
         </div>
         {/* slider hình nhỏ */}
@@ -364,7 +424,8 @@ function Detail() {
     color="white"
     className="att-detail-page-buy-now-button css-9p27dv"
     type="button"
-    // Thêm sự kiện onClick
+    onClick={() => setScrollableModal(!scrollableModal)}
+    // sự kiện cho modal
   >
     <div type="subtitle" className="css-ueraml">
       MUA NGAY
@@ -487,6 +548,104 @@ function Detail() {
     </div>
   </div>
 </div>
+{/* modal */}
+<MDBModal show={scrollableModal} setShow={setScrollableModal} tabIndex='-1'>
+        <MDBModalDialog size='lg' scrollable>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Chi tiết sản phẩm</MDBModalTitle>
+              <MDBBtn
+                className='btn-close'
+                color='none'
+                onClick={() => setScrollableModal(!scrollableModal)}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              {/* fomr */}
+              <form onSubmit={formik.handleSubmit} action='home' method='detail'>
+      <MDBRow className='mb-4'>
+        <MDBCol>
+          <MDBInput
+            id='firstName'
+            name='firstName'
+            label='Tên người dùng'
+            value={formik.values.firstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.firstName && formik.errors.firstName ? (
+            <div>{formik.errors.firstName}</div>
+          ) : null}
+        </MDBCol>
+        <MDBCol>
+          <MDBInput
+            id='address'
+            name='address'
+            label='Địa chỉ chi tiết'
+            value={formik.values.address}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.address && formik.errors.address ? (
+            <div>{formik.errors.address}</div>
+          ) : null}
+        </MDBCol>
+      </MDBRow>
+      <MDBInput
+        className='mb-4'
+        type='email'
+        id='email'
+        name='email'
+        label='Email(Không bắt buộc)'
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      {formik.touched.email && formik.errors.email ? (
+        <div>{formik.errors.email}</div>
+      ) : null}
+      <MDBInput
+        className='mb-4'
+        type='number'
+        id='phoneNumber'
+        name='phoneNumber'
+        label='Số điện thoại'
+        value={formik.values.phoneNumber}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+        <div>{formik.errors.phoneNumber}</div>
+      ) : null}
+
+<MDBBtn type='submit' className='mb-4' block>
+    Mua hàng
+  </MDBBtn>
+    </form>
+
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color='secondary' onClick={() => setScrollableModal(!setScrollableModal)}>
+                Đóng
+              </MDBBtn>
+              {/* <MDBBtn>Mua hàng</MDBBtn> */}
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
 
 </div>
   );
