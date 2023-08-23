@@ -2,7 +2,7 @@
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    database: 'qlthuvien'
+    database: 'WBH'
 });
 
 
