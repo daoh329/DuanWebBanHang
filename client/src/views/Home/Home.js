@@ -192,6 +192,7 @@ const Home = () => {
                         <div className="content" style={{ display: 'flex', flexWrap: 'wrap', width: '100%', margin: "0 auto", padding: '10px' }}>
                             {tuanlevang && tuanlevang.length > 0 &&
                                 tuanlevang.map((item, index) => (
+                                    
                                     <Card
                                         key={item.id}
                                         hoverable
@@ -236,6 +237,8 @@ const Home = () => {
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
                                 </Card>
+
+                                
                             ))}
                     </div>
                 </div>
