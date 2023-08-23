@@ -1,0 +1,91 @@
+/* Home.css */
+.slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .left-block {
+    position: absolute;
+    margin-left: 20px;
+    transform: translateY(-50%);
+    transition: width 0.3s ease; /* Hiệu ứng khi hover */
+  }
+  .category-list {
+    list-style: none;
+    padding: 20px;
+    height: 400px; /* Độ rộng */
+    background-color:#ffffff; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Hiển thị đổ bóng */
+  }
+  .category-item {
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+    position: relative; /* Đặt vị trí để làm việc với con trỏ chuột */
+    
+  }
+  
+  .category-item:hover {
+    background-color: #ffffff; /* Màu nền khi hover */
+  }
+  
+  .sub-category-list {
+    list-style: none;
+    padding: 0;
+    display: none;
+    position: absolute; /* Đặt vị trí tương đối */
+    top: 0; /* Đặt top để nó hiển thị ở phía dưới */
+    margin-left: 80px;
+    background-color:#ffffff; /* Màu nền danh mục con */
+    border-radius: 5px; /* Bo góc */
+    width: 200px; /* Độ rộng danh mục con */
+    padding: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Hiển thị đổ bóng */
+    
+  }
+  
+  .category-item:hover .sub-category-list {
+    display: block;
+  }
+  
+  .right-block {
+    position: absolute;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column; /* Hiển thị các hình ảnh dọc */
+    align-items: flex-end; /* Căn phải */
+    padding: 20px;
+  }
+  
+  .right-image {
+    max-width: 90%;
+    height: auto;
+    transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
+  }
+  
+  .right-image:hover {
+    transform: scale(0.9); /* Khi hover vào, phóng to lên 1.2 lần */
+  }
+  
+
+// --- tab -----
+.ant-tabs-tab-active {
+    background-color: rgba(255, 255, 255, 0) !important; 
+    color: #ffffff;
+}
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: rgb(255, 255, 255) !important; /* Set the text color you want */
+}
+.ant-tabs-ink-bar {
+    background-color: rgb(255, 255, 255) !important; /* Set the background color you want */
+}
+  
+
+
+  
+ 
