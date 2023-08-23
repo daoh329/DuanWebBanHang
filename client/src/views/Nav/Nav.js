@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix } from 'antd';
 import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined } from '@ant-design/icons';
-
+import { NavLink } from 'react-router-dom';
 const { Header } = Layout;
 
 const App = () => {
@@ -13,9 +13,13 @@ const App = () => {
 
     const menu = (
         <Menu>
-            <Menu.Item key="1">Đăng nhập</Menu.Item>
-            <Menu.Item key="2">Đăng xuất</Menu.Item>
-        </Menu>
+        <Menu.Item key="1">
+            <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
+        </Menu.Item>
+        <Menu.Item key="2">
+            <NavLink to="/logout">Đăng xuất</NavLink> {/* Link to logout page */}
+        </Menu.Item>
+    </Menu>
     );
 
     return (
@@ -31,7 +35,7 @@ const App = () => {
                 <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'black' }}>
                     <div className="logo" style={{ width: '80px', marginRight: '16px', color: '#ffffff' }}>
                         {/* Add your logo here */}
-                        <span>Logo</span>
+                        <span style={{position: 'relative', }}>  <NavLink to="/home">Logo</NavLink></span>
                     </div>
                     <Menu
                         theme="dark"
