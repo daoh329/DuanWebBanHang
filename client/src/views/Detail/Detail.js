@@ -1,6 +1,26 @@
 import React, { useState } from 'react';
-import '../css/detail.css';
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBIcon,
+  MDBRipple,
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
+import './Detail.css';
 function Detail() {
+
+  const [scrollableModal, setScrollableModal] = useState(false);
 
   return (
 <div>
@@ -364,6 +384,7 @@ function Detail() {
     color="white"
     className="att-detail-page-buy-now-button css-9p27dv"
     type="button"
+    onClick={() => setScrollableModal(!scrollableModal)}
     // Thêm sự kiện onClick
   >
     <div type="subtitle" className="css-ueraml">
@@ -487,6 +508,101 @@ function Detail() {
     </div>
   </div>
 </div>
+{/* modal */}
+<MDBModal show={scrollableModal} setShow={setScrollableModal} tabIndex='-1'>
+        <MDBModalDialog size='lg' scrollable>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Chi tiết sản phẩm</MDBModalTitle>
+              <MDBBtn
+                className='btn-close'
+                color='none'
+                onClick={() => setScrollableModal(!scrollableModal)}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+              <p>
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
+                egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+              </p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel
+                augue laoreet rutrum faucibus dolor auctor.
+              </p>
+              <p>
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl
+                consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+              </p>
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color='secondary' onClick={() => setScrollableModal(!setScrollableModal)}>
+                Đóng
+              </MDBBtn>
+              <MDBBtn>Mua hàng</MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
 
 </div>
   );
