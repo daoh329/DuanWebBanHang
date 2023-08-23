@@ -1,7 +1,7 @@
 # DuanWebBanHang
 # Đây là minh
-# oke oke 
-
-# npm install sass
-# npm install react-redux
-# npm install redux
+# minh2
+# minh n
+# minh nnn
+# minh 3
+# code form chi tiết sản phẩm
