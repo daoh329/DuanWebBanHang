@@ -7,7 +7,7 @@ import Nav from './Nav/Nav'
 import Footer from './Footer/Footer';
 import Detail from './Detail/Detail';
 import Card from './card';
-import Login from './Login/Login';
+import Login from './Login/Login.js';
 const App = () => {
   return (
     <div className='App'>
