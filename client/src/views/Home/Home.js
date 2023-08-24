@@ -5,6 +5,7 @@ import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import { useNavigate } from "react-router-dom";
 import './Home.scss'
 const { Header } = Layout;
 const { TabPane } = Tabs;
@@ -121,7 +122,14 @@ const tuanlevang = [
 
 const Home = () => {
     const [ListUsers, setListUsers] = useState([]);
+    const navigate = useNavigate()
 
+    const handleViewDetailuser = (user) => {
+        console.log('click oke')
+        navigate(`/detail/${user.id}`);
+       
+    }
+    
     useEffect(() => {
         async function fetchData() {
             try {
@@ -333,7 +341,7 @@ const Home = () => {
                                     <img src={item.imageUrl} style={{ width: '200px' }}></img>
                                     <h3>{item.name}</h3>
                                     <p>{item.price}$</p>
-                                    <Button type="primary" icon={<ShoppingCartOutlined />}>
+                                    <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>Buy
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
                                 </Card>
@@ -363,7 +371,7 @@ const Home = () => {
                                     <img src={item.imageUrl} style={{ width: '200px' }}></img>
                                     <h3>{item.name}</h3>
                                     <p>{item.price}$</p>
-                                    <Button type="primary" icon={<ShoppingCartOutlined />}>
+                                    <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
                                 </Card>
@@ -390,7 +398,8 @@ const Home = () => {
                                 <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{item.Price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
+
                                         </Button>
                                     </div>
                                 </div>
