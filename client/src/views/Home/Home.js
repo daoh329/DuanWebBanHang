@@ -5,123 +5,132 @@ import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import { useNavigate } from "react-router-dom";
 import './Home.scss'
 const { Header } = Layout;
 const { TabPane } = Tabs;
 
 const products = [
-    {
-        id: 1,
-        name: 'LapTop A',
-        price: 100000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-    },
-    {
-        id: 2,
-        name: 'LapTop B',
-        price: 150000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 3,
-        name: 'LapTop C',
-        price: 200000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 4,
-        name: 'LapTop D',
-        price: 260000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 5,
-        name: 'LapTop E',
-        price: 50000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 6,
-        name: 'LapTop F',
-        price: 170000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 7,
-        name: 'LapTop G',
-        price: 150000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 8,
-        name: 'LapTop H',
-        price: 150,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 9,
-        name: 'LapTop Y',
-        price: 150,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 10,
-        name: 'LapTop K',
-        price: 150,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    // Thêm các sản phẩm khác vào đây
+  {
+    id: 1,
+    name: "LapTop A",
+    price: 100000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 2,
+    name: "LapTop B",
+    price: 150000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 3,
+    name: "LapTop C",
+    price: 200000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 4,
+    name: "LapTop D",
+    price: 260000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 5,
+    name: "LapTop E",
+    price: 50000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 6,
+    name: "LapTop F",
+    price: 170000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 7,
+    name: "LapTop G",
+    price: 150000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 8,
+    name: "LapTop H",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 9,
+    name: "LapTop Y",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 10,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  // Thêm các sản phẩm khác vào đây
 ];
 const tuanlevang = [
-    {
-        id: 1,
-        name: 'LapTop A',
-        price: 100000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-    },
-    {
-        id: 2,
-        name: 'LapTop B',
-        price: 150000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 3,
-        name: 'LapTop C',
-        price: 200000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 4,
-        name: 'LapTop D',
-        price: 260000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 5,
-        name: 'LapTop E',
-        price: 50000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-
+  {
+    id: 1,
+    name: "LapTop A",
+    price: 100000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 2,
+    name: "LapTop B",
+    price: 150000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 3,
+    name: "LapTop C",
+    price: 200000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 4,
+    name: "LapTop D",
+    price: 260000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 5,
+    name: "LapTop E",
+    price: 50000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
 ];
 
 const Home = () => {
     const [ListUsers, setListUsers] = useState([]);
+    const navigate = useNavigate()
 
+    const handleViewDetailuser = (user) => {
+        console.log('click oke')
+        navigate(`/detail/${user.id}`);
+       
+    }
+    
     useEffect(() => {
         async function fetchData() {
             try {
@@ -333,7 +342,7 @@ const Home = () => {
                                     <img src={item.imageUrl} style={{ width: '200px' }}></img>
                                     <h3>{item.name}</h3>
                                     <p>{item.price}$</p>
-                                    <Button type="primary" icon={<ShoppingCartOutlined />}>
+                                    <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>Buy
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
                                 </Card>
@@ -363,7 +372,7 @@ const Home = () => {
                                     <img src={item.imageUrl} style={{ width: '200px' }}></img>
                                     <h3>{item.name}</h3>
                                     <p>{item.price}$</p>
-                                    <Button type="primary" icon={<ShoppingCartOutlined />}>
+                                    <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
                                 </Card>
@@ -390,7 +399,8 @@ const Home = () => {
                                 <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{item.Price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
+
                                         </Button>
                                     </div>
                                 </div>
