@@ -401,7 +401,6 @@ const Home = () => {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{item.Price} ₫</p>
                                         <Button  type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
-
                                         </Button>
                                     </div>
                                 </div>

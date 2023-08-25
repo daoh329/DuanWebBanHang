@@ -68,7 +68,7 @@ const App = () => {
                         <Badge count={3} style={{ marginRight: '10px', marginTop: '10px' }}>
                             <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
                         </Badge>
-                        <Dropdown overlay={menu} trigger={['click']}>
+                        <Dropdown overlay={menu}>
                             <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
                         </Dropdown>
                     </div>
