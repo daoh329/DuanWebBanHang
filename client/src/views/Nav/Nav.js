@@ -42,6 +42,13 @@ const App = () => {
       </Menu.Item>
     </Menu>
   );
+  const bell = (
+    <Menu>
+      <Menu.Item key="1">
+        <NavLink to="/tb">Xem tất cả thông báo</NavLink> {/* Link to login page */}
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <Layout>
@@ -167,22 +174,24 @@ const App = () => {
                 color: "#fff",
               }}
             >
-              <BellOutlined
+              <Dropdown overlay={bell}>
+                    <BellOutlined
                 style={{ fontSize: "24px", color: "#ffffff", margin: "10px" }}
               />
+              </Dropdown>
+          
             </Badge>
             <Badge count={3} style={{ marginRight: "10px", marginTop: "10px" }}>
               <ShoppingCartOutlined
                 style={{ fontSize: "24px", color: "#ffffff", margin: "10px" }}
               />
             </Badge>
-            <Dropdown overlay={menu} >
+            <Dropdown overlay={menu}>
               <Avatar
                 icon={<UserOutlined />}
                 style={{ backgroundColor: "#005c42", margin: "10px" }}
               />
             </Dropdown>
-            
           </div>
         </Header>
       </Affix>
