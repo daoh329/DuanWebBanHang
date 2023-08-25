@@ -32,7 +32,6 @@ import * as Yup from "yup";
 
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 const onFinish = (values) => {
   console.log('Success:', values);
@@ -41,14 +40,7 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 //form
-const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
 //select
 
 //
@@ -81,10 +73,8 @@ function Detail() {
 
 //
   const { id } = useParams();
-
   const [user, setUser] = useState({});
 
-  const navigate = useNavigate();
   useEffect(() => {
     async function fetchData() {
       try {
@@ -102,22 +92,22 @@ function Detail() {
   // usestate của modal
   const [scrollableModal, setScrollableModal] = useState(false);
   //formik validate form
-  const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      address: "",
-      phoneNumber: "",
-    },
-    validationSchema: Yup.object({
-      firstName: Yup.string().required("Vui lòng nhập tên."),
-      address: Yup.string().required("Vui lòng nhập địa chỉ."),
-      phoneNumber: Yup.number().required("Vui lòng nhập số điện thoại."),
-    }),
-    onSubmit: (values) => {
-      // Xử lý dữ liệu gửi đi sau khi xác thực thành công
-      console.log(values);
-    },
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     firstName: "",
+  //     address: "",
+  //     phoneNumber: "",
+  //   },
+  //   validationSchema: Yup.object({
+  //     firstName: Yup.string().required("Vui lòng nhập tên."),
+  //     address: Yup.string().required("Vui lòng nhập địa chỉ."),
+  //     phoneNumber: Yup.number().required("Vui lòng nhập số điện thoại."),
+  //   }),
+  //   onSubmit: (values) => {
+  //     // Xử lý dữ liệu gửi đi sau khi xác thực thành công
+  //     console.log(values);
+  //   },
+  // });
   //form
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
@@ -132,11 +122,11 @@ function Detail() {
         storage: '256 GB SSD',
         gpu: 'NVIDIA GeForce GTX 1650',
         os: 'Windows 10',
-        price: user.Price,
+        price: parseInt(user.Price),
         category: 'gaming',
       };
       setProductDetail(fetchedProductDetail);
-    }, []); // Empty dependency array to trigger only once on mount
+    }, [user]); // Empty dependency array to trigger only once on mount
 
     // tăng sl
     const handleIncreaseQuantity = () => {
@@ -151,12 +141,11 @@ function Detail() {
     // hiển thị giá
     const calculateTotalPrice = () => {
       if (productDetail) {
-        
         return productDetail.price * quantity;
       }
       return 0;
     };
-    //
+    
  //
   return (
     <>
@@ -643,34 +632,10 @@ function Detail() {
           <h2>Thông tin sản phẩm</h2>
           <Form layout="vertical">
             <Form.Item label="Tên sản phẩm">
-              <Input value={productDetail.productName} disabled />
-            </Form.Item>
-            <Form.Item label="Thương hiệu">
-              <Input value={productDetail.brand} disabled />
-            </Form.Item>
-            <Form.Item label="Màn hình">
-              <Input value={productDetail.display} disabled />
-            </Form.Item>
-            <Form.Item label="CPU">
-              <Input value={productDetail.cpu} disabled />
-            </Form.Item>
-            <Form.Item label="RAM">
-              <Input value={productDetail.ram} disabled />
-            </Form.Item>
-            <Form.Item label="Ổ cứng">
-              <Input value={productDetail.storage} disabled />
-            </Form.Item>
-            <Form.Item label="Card đồ họa">
-              <Input value={productDetail.gpu} disabled />
-            </Form.Item>
-            <Form.Item label="Hệ điều hành">
-              <Input value={productDetail.os} disabled />
+              <Input value={user.name} disabled />
             </Form.Item>
             <Form.Item label="Giá">
-              <Input value={productDetail.price} disabled />
-            </Form.Item>
-            <Form.Item label="Loại">
-              <Input value={productDetail.category} disabled />
+              <Input value={user.Price} disabled />
             </Form.Item>
             <Form.Item label="Số lượng">
               <Input value={quantity} readOnly style={{ width: 60, textAlign: 'center' }} />
@@ -678,7 +643,7 @@ function Detail() {
               <Button onClick={handleDecreaseQuantity}>-</Button>
             </Form.Item>
             <Form.Item label="Giá tiền">
-            <span>Giá tiền: {calculateTotalPrice()} đ</span>
+
             </Form.Item>
           </Form>
         </div>
