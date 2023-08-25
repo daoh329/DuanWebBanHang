@@ -55,6 +55,8 @@ const normFile = (e) => {
 const {Option} = Select;
 
 function Detail() {
+// 
+
   //select
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -78,7 +80,6 @@ function Detail() {
   };
 
 //
-
   const { id } = useParams();
 
   const [user, setUser] = useState({});
@@ -100,7 +101,7 @@ function Detail() {
   }, [id]);
   // usestate của modal
   const [scrollableModal, setScrollableModal] = useState(false);
-  //
+  //formik validate form
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -117,34 +118,46 @@ function Detail() {
       console.log(values);
     },
   });
-  //
-  const items = [
-    {
-      key: '1',
-      label: 'Product',
-      children: user.name,
-    },
-    {
-      key: '2',
-      label: 'Thanh toán',
-      children: 'Trả trước',
-    },
-  
+  //form
+  const [quantity, setQuantity] = useState(1);
+  const [productDetail, setProductDetail] = useState(null);
+    useEffect(() => {
+      // Simulate fetching product detail from a server based on some criteria
+      const fetchedProductDetail = {
+        productName: user.name,
+        brand: 'Brand ABC',
+        display: '15.6 inch',
+        cpu: 'Intel Core i5',
+        ram: '8 GB',
+        storage: '256 GB SSD',
+        gpu: 'NVIDIA GeForce GTX 1650',
+        os: 'Windows 10',
+        price: user.Price,
+        category: 'gaming',
+      };
+      setProductDetail(fetchedProductDetail);
+    }, []); // Empty dependency array to trigger only once on mount
 
-    {
-      key: '4',
-      label: 'Giá bán',
-      children: user.Price,
-    },
-    {
-      key: '5',
-      label: 'Automatic Renewal',
-      children: 'YES',
-    },
-
-
-    
-  ];
+    // tăng sl
+    const handleIncreaseQuantity = () => {
+      setQuantity(quantity + 1);
+    };
+  // giảm sl
+    const handleDecreaseQuantity = () => {
+      if (quantity > 1) {
+        setQuantity(quantity - 1);
+      }
+    };
+    // hiển thị giá
+    const calculateTotalPrice = () => {
+      if (productDetail) {
+        
+        return productDetail.price * quantity;
+      }
+      return 0;
+    };
+    //
+ //
   return (
     <>
       <div>
@@ -624,17 +637,54 @@ function Detail() {
               </MDBModalHeader>
               <MDBModalBody>
                 {/*  */}
-              
-                <Descriptions title="User Info" layout="vertical" items={items} >
-        {items.map(item => (
-          <Descriptions >
+            
+      {productDetail && (
+        <div>
+          <h2>Thông tin sản phẩm</h2>
+          <Form layout="vertical">
+            <Form.Item label="Tên sản phẩm">
+              <Input value={productDetail.productName} disabled />
+            </Form.Item>
+            <Form.Item label="Thương hiệu">
+              <Input value={productDetail.brand} disabled />
+            </Form.Item>
+            <Form.Item label="Màn hình">
+              <Input value={productDetail.display} disabled />
+            </Form.Item>
+            <Form.Item label="CPU">
+              <Input value={productDetail.cpu} disabled />
+            </Form.Item>
+            <Form.Item label="RAM">
+              <Input value={productDetail.ram} disabled />
+            </Form.Item>
+            <Form.Item label="Ổ cứng">
+              <Input value={productDetail.storage} disabled />
+            </Form.Item>
+            <Form.Item label="Card đồ họa">
+              <Input value={productDetail.gpu} disabled />
+            </Form.Item>
+            <Form.Item label="Hệ điều hành">
+              <Input value={productDetail.os} disabled />
+            </Form.Item>
+            <Form.Item label="Giá">
+              <Input value={productDetail.price} disabled />
+            </Form.Item>
+            <Form.Item label="Loại">
+              <Input value={productDetail.category} disabled />
+            </Form.Item>
+            <Form.Item label="Số lượng">
+              <Input value={quantity} readOnly style={{ width: 60, textAlign: 'center' }} />
+              <Button onClick={handleIncreaseQuantity}>+</Button>
+              <Button onClick={handleDecreaseQuantity}>-</Button>
+            </Form.Item>
+            <Form.Item label="Giá tiền">
+            <span>Giá tiền: {calculateTotalPrice()} đ</span>
+            </Form.Item>
+          </Form>
+        </div>
+      )}
 
-            {item.children}
 
-
-          </Descriptions>
-        ))}
-      </Descriptions>
                 {/* fomr 
                 <form
                   onSubmit={formik.handleSubmit}
@@ -782,7 +832,6 @@ function Detail() {
         </Form.Item>
       </Form>
 
-      
               </MDBModalBody>
               <MDBModalFooter>
                 <MDBBtn
