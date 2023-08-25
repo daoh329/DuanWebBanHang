@@ -116,7 +116,8 @@
 
 .card-sp {
   box-sizing: border-box;
-  padding: 10px;
+  padding: 5px;
+  margin: 5px;
   display: flex; // Sử dụng flex để tự động dãn theo chiều ngang
   flex-direction: column;
   width: 220px; // Giới hạn chiều rộng thẻ để tránh tên quá dài
@@ -126,10 +127,9 @@
 
 .name-card {
   overflow: hidden;
-   display: -webkit-box;
-   -webkit-line-clamp: 3;
-   -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-     margin-bottom: 8px;  
-     
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  margin-bottom: 8px;
 }
