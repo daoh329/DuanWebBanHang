@@ -392,14 +392,15 @@ const Home = () => {
                             <Card
                                 key={item.id}
                                 hoverable
-                                className="card-sp"              
+                                className="card-sp" 
+                                             
                             >
-                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} />
+                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailuser(item)} />
                                 <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{item.Price} ₫</p>
-                                        <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
+                                        <Button  type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
 
                                         </Button>
                                     </div>

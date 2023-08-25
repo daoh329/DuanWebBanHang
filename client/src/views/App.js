@@ -6,7 +6,7 @@ import Home from './Home/Home';
 import Nav from './Nav/Nav'
 import Footer from './Footer/Footer';
 import Detail from './Detail/Detail';
-import Card from './card';
+
 import Login from './Login/Login.js';
 const App = () => {
   return (
@@ -17,7 +17,7 @@ const App = () => {
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/card" element={<Card />} />
+         
           <Route path="/login" element={<Login />} />
           </Routes>
         </header>
