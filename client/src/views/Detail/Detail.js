@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-
-import { Image, Carousel, Badge, Descriptions } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
+import { Image, Carousel, Badge, Descriptions, Button, Checkbox, Form, Input,  Cascader,
+  DatePicker,
+  InputNumber,
+  Radio,
+  Select,
+  Slider,
+  Switch,
+  TreeSelect,
+  Upload, } from "antd";
 // Thư viện mdb
 import {
   MDBCarousel,
@@ -26,79 +34,23 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-//
-const items = [
-  {
-    key: '1',
-    label: 'Product',
-    children: 'Cloud Database',
-  },
-  {
-    key: '2',
-    label: 'Billing Mode',
-    children: 'Prepaid',
-  },
-  {
-    key: '3',
-    label: 'Automatic Renewal',
-    children: 'YES',
-  },
-  {
-    key: '4',
-    label: 'Order time',
-    children: '2018-04-24 18:00:00',
-  },
-  {
-    key: '5',
-    label: 'Usage Time',
-    children: '2019-04-24 18:00:00',
-    span: 2,
-  },
-  {
-    key: '6',
-    label: 'Status',
-    children: <Badge status="processing" text="Running" />,
-    span: 3,
-  },
-  {
-    key: '7',
-    label: 'Negotiated Amount',
-    children: '$80.00',
-  },
-  {
-    key: '8',
-    label: 'Discount',
-    children: '$20.00',
-  },
-  {
-    key: '9',
-    label: 'Official Receipts',
-    children: '$60.00',
-  },
-  {
-    key: '10',
-    label: 'Config Info',
-    children: (
-      <>
-        Data disk type: MongoDB
-        <br />
-        Database version: 3.4
-        <br />
-        Package: dds.mongo.mid
-        <br />
-        Storage space: 10 GB
-        <br />
-        Replication factor: 3
-        <br />
-        Region: East China 1
-        <br />
-      </>
-    ),
-  },
-];
-//
+const onFinish = (values) => {
+  console.log('Success:', values);
+};
+const onFinishFailed = (errorInfo) => {
+  console.log('Failed:', errorInfo);
+};
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
 function Detail() {
   //
+//
 
   const { id } = useParams();
 
@@ -142,6 +94,35 @@ function Detail() {
       console.log(values);
     },
   });
+  //
+  const items = [
+    {
+      key: '1',
+      label: 'Product',
+      children: user.name,
+    },
+    {
+      key: '2',
+      label: 'Thanh toán',
+      children: 'Trả trước',
+    },
+  
+
+    {
+      key: '4',
+      label: 'Giá bán',
+      children: user.Price,
+    },
+    {
+      key: '5',
+      label: 'Automatic Renewal',
+      children: 'YES',
+    },
+
+
+    
+  ];
+  const [componentDisabled, setComponentDisabled] = useState(true);
   //
   return (
     <>
@@ -622,8 +603,18 @@ function Detail() {
               </MDBModalHeader>
               <MDBModalBody>
                 {/*  */}
-              <Descriptions title="User Info" bordered items={items} />
-                {/* fomr */}
+              
+                <Descriptions title="User Info" layout="vertical" items={items} >
+        {items.map(item => (
+          <Descriptions >
+
+            {item.children}
+
+
+          </Descriptions>
+        ))}
+      </Descriptions>
+                {/* fomr 
                 <form
                   onSubmit={formik.handleSubmit}
                   action="home"
@@ -688,6 +679,119 @@ function Detail() {
                     Mua hàng
                   </MDBBtn>
                 </form>
+        */}
+    <Checkbox
+        checked={componentDisabled}
+        onChange={(e) => setComponentDisabled(e.target.checked)}
+      >
+        Form disabled
+      </Checkbox>
+      <Form
+        labelCol={{
+          span: 4,
+        }}
+        wrapperCol={{
+          span: 14,
+        }}
+        layout="horizontal"
+        disabled={componentDisabled}
+        style={{
+          maxWidth: 600,
+        }}
+      >
+        <Form.Item name="disabled" valuePropName="checked">
+          
+        </Form.Item>
+        <Form.Item label="Giới tính">
+          <Radio.Group>
+            <Radio checked='true' value="man"> Anh </Radio>
+            <Radio value="male"> Chị </Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item label="Tên">
+          <Input/>
+        </Form.Item>
+        
+        <Form.Item label="Thành phố">
+          <Select>
+            <Select.Option value="HCM">Tp.HCM</Select.Option>
+            <Select.Option value="DN">Đà nẵng</Select.Option>
+            <Select.Option value="SG">Sài gòn</Select.Option>
+            <Select.Option value="DL">Đắk lăk</Select.Option>
+            
+          </Select>
+        </Form.Item>
+
+
+
+        <Form.Item label="TreeSelect">
+          <TreeSelect
+            treeData={[
+              {
+                title: 'Light',
+                value: 'light',
+                children: [
+                  {
+                    title: 'Bamboo',
+                    value: 'bamboo',
+                  },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item label="Cascader">
+          <Cascader
+            options={[
+              {
+                value: 'zhejiang',
+                label: 'Zhejiang',
+                children: [
+                  {
+                    value: 'hangzhou',
+                    label: 'Hangzhou',
+                  },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item label="DatePicker">
+          <DatePicker />
+        </Form.Item>
+        <Form.Item label="RangePicker">
+          <RangePicker />
+        </Form.Item>
+        <Form.Item label="InputNumber">
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="TextArea">
+          <TextArea rows={4} />
+        </Form.Item>
+        <Form.Item label="Switch" valuePropName="checked">
+          <Switch />
+        </Form.Item>
+        <Form.Item label="Upload" valuePropName="fileList" getValueFromEvent={normFile}>
+          <Upload action="/upload.do" listType="picture-card">
+            <div>
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </Upload>
+        </Form.Item>
+        <Form.Item label="Button">
+          <Button>Button</Button>
+        </Form.Item>
+        <Form.Item label="Slider">
+          <Slider />
+        </Form.Item>
+      </Form>
               </MDBModalBody>
               <MDBModalFooter>
                 <MDBBtn
