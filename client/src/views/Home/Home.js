@@ -126,10 +126,42 @@ const Home = () => {
     const navigate = useNavigate()
 
     const handleViewDetailuser = (user) => {
+         // Lấy danh sách các sản phẩm đã xem từ session storage
+        const historysp = JSON.parse(sessionStorage.getItem('products')) || [];
+        // Tạo đối tượng sản phẩm mới
+        const historyproduct = {
+            name: user.name,
+            price: user.Price,
+            imageUrl: user.avatar
+        };
+        // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+        const isViewed = historysp.some(product => product.name === historyproduct.name);
+        // Nếu sản phẩm mới chưa được xem
+        if (!isViewed) {
+            // Thêm đối tượng sản phẩm mới vào cuối danh sách
+            historysp.push(historyproduct);
+            // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+            sessionStorage.setItem('products', JSON.stringify(historysp));
+        }
+
         console.log('click oke')
         navigate(`/detail/${user.id}`);
        
     }
+
+    const handleViewDetailproduct = (user) => {
+        console.log('click oke')
+        navigate(`/detail/${user.id}`);
+    }
+
+    const [historysp, sethistorysp] = useState([]);
+
+    useEffect(() => {
+        // Lấy giá trị từ session storage
+        const storedProducts = JSON.parse(sessionStorage.getItem('products')) || [];
+        // Cập nhật state
+        sethistorysp(storedProducts);
+    }, []);
     
     useEffect(() => {
         async function fetchData() {
@@ -418,7 +450,45 @@ const Home = () => {
                 </div>
             </div>
 
+            
 
+            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
+                <div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm đã xem</div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
+                    {historysp && historysp.length > 0 &&
+                        historysp.slice(startIndex, endIndex).map((product, index) => (
+                            <Card
+                                key={product.id}
+                                hoverable
+                                className="card-sp"              
+                            >
+                                <img src={product.imageUrl} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={product.name} />
+                                <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <a className="name-card">{product.name}</a>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{product.price} ₫</p>
+                                        <Button onClick={() => handleViewDetailuser(product)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
+
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
+                        
+                    
+                </div>
+                {/* Phân trang */}
+                <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                    <Pagination
+                        current={currentPage}
+                        total={ListUsers.length}
+                        pageSize={itemsPerPage}
+                        onChange={handlePageChange}
+                    />
+                </div>
+            </div>
         </Layout>
     );
 };
