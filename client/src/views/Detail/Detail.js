@@ -111,22 +111,14 @@ function Detail() {
   //form
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
-    useEffect(() => {
-      // Simulate fetching product detail from a server based on some criteria
-      const fetchedProductDetail = {
-        productName: user.name,
-        brand: 'Brand ABC',
-        display: '15.6 inch',
-        cpu: 'Intel Core i5',
-        ram: '8 GB',
-        storage: '256 GB SSD',
-        gpu: 'NVIDIA GeForce GTX 1650',
-        os: 'Windows 10',
-        price: parseInt(user.Price),
-        category: 'gaming',
-      };
-      setProductDetail(fetchedProductDetail);
-    }, [user]); // Empty dependency array to trigger only once on mount
+  useEffect(() => {
+
+    const fetchedProductDetail = {
+      productName: user.name,
+      price: parseFloat(user.Price), // Chuyển đổi user.Price thành số
+    };
+    setProductDetail(fetchedProductDetail);
+  }, [user]);
 
     // tăng sl
     const handleIncreaseQuantity = () => {
@@ -140,10 +132,13 @@ function Detail() {
     };
     // hiển thị giá
     const calculateTotalPrice = () => {
-      if (productDetail) {
+      if (productDetail && !isNaN(productDetail.price) && !isNaN(quantity)) {
         return productDetail.price * quantity;
       }
       return 0;
+    };
+    const formatPrice = (price) => {
+      return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     };
     
  //
@@ -629,7 +624,7 @@ function Detail() {
           <h2>Thông tin sản phẩm</h2>
           <Form layout="vertical">
             <Form.Item label="Tên sản phẩm">
-              <Input value={user.name} disabled />
+              <Input className="product-name" value={user.name} disabled />
             </Form.Item>
             <Form.Item label="Hình">
               <Image width={380}  src={user.avatar}></Image>
@@ -643,6 +638,7 @@ function Detail() {
               <Button onClick={handleDecreaseQuantity}>-</Button>
             </Form.Item>
             <Form.Item label="Giá tiền">
+              <span> {formatPrice(calculateTotalPrice())} </span>
 
             </Form.Item>
           </Form>
