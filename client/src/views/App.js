@@ -6,7 +6,7 @@ import Home from './Home/Home';
 import Nav from './Nav/Nav'
 import Footer from './Footer/Footer';
 import Detail from './Detail/Detail';
-import Card from './card';
+
 const App = () => {
   return (
     <div className='App'>
