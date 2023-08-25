@@ -40,6 +40,7 @@ const onFinish = (values) => {
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
+//form
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const normFile = (e) => {
@@ -48,8 +49,34 @@ const normFile = (e) => {
   }
   return e?.fileList;
 };
+//select
+
+//
+const {Option} = Select;
+
 function Detail() {
-  //
+  //select
+  const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+  const provinces = [
+    { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
+    { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
+    { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
+
+    // ... other provinces
+  ];
+
+  const handleProvinceChange = value => {
+    const selectedProvinceData = provinces.find(province => province.id === value);
+    setSelectedProvince(selectedProvinceData);
+    setSelectedDistrict(null); // Reset selected district
+  };
+
+  const handleDistrictChange = value => {
+    setSelectedDistrict(value);
+  };
+
 //
 
   const { id } = useParams();
@@ -78,16 +105,12 @@ function Detail() {
     initialValues: {
       firstName: "",
       address: "",
-      // email: '',
       phoneNumber: "",
-      // password: '',
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Vui lòng nhập tên."),
       address: Yup.string().required("Vui lòng nhập địa chỉ."),
-      // email: Yup.string().email('Email không hợp lệ.').required('Vui lòng nhập email.'),
       phoneNumber: Yup.number().required("Vui lòng nhập số điện thoại."),
-      // password: Yup.string().required('Vui lòng nhập mật khẩu.'),
     }),
     onSubmit: (values) => {
       // Xử lý dữ liệu gửi đi sau khi xác thực thành công
@@ -122,8 +145,6 @@ function Detail() {
 
     
   ];
-  const [componentDisabled, setComponentDisabled] = useState(true);
-  //
   return (
     <>
       <div>
@@ -680,12 +701,7 @@ function Detail() {
                   </MDBBtn>
                 </form>
         */}
-    <Checkbox
-        checked={componentDisabled}
-        onChange={(e) => setComponentDisabled(e.target.checked)}
-      >
-        Form disabled
-      </Checkbox>
+
       <Form
         labelCol={{
           span: 4,
@@ -694,11 +710,9 @@ function Detail() {
           span: 14,
         }}
         layout="horizontal"
-        disabled={componentDisabled}
         style={{
           maxWidth: 600,
-        }}
-      >
+        }}>
         <Form.Item name="disabled" valuePropName="checked">
           
         </Form.Item>
@@ -708,90 +722,67 @@ function Detail() {
             <Radio value="male"> Chị </Radio>
           </Radio.Group>
         </Form.Item>
+        {/* Tên */}
         <Form.Item label="Tên">
           <Input/>
         </Form.Item>
-        
+{/* form select */}
         <Form.Item label="Thành phố">
-          <Select>
-            <Select.Option value="HCM">Tp.HCM</Select.Option>
-            <Select.Option value="DN">Đà nẵng</Select.Option>
-            <Select.Option value="SG">Sài gòn</Select.Option>
-            <Select.Option value="DL">Đắk lăk</Select.Option>
-            
+        <Select onChange={handleProvinceChange}>
+          {provinces.map(province => (
+            <Select.Option key={province.id} value={province.id}>
+              {province.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+
+      <Form.Item label="Huyện">
+        {selectedProvince && (
+          <Select onChange={handleDistrictChange} value={selectedDistrict}>
+            {selectedProvince.districts.map(district => (
+              <Select.Option key={district} value={district}>
+                {district}
+              </Select.Option>
+            ))}
           </Select>
+        )}
+      </Form.Item>
+
+
+    {/* Địa chỉ chi tiết */}
+    <Form.Item label="Địa chỉ chi tiết">
+          <Input/>
         </Form.Item>
 
-
-
-        <Form.Item label="TreeSelect">
+        <Form.Item label="Giao hàng">
           <TreeSelect
             treeData={[
               {
-                title: 'Light',
-                value: 'light',
-                children: [
-                  {
-                    title: 'Bamboo',
-                    value: 'bamboo',
-                  },
-                ],
+                title: 'Giờ hành chính',
+                value: 'GHC',
               },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item label="Cascader">
-          <Cascader
-            options={[
               {
-                value: 'zhejiang',
-                label: 'Zhejiang',
-                children: [
-                  {
-                    value: 'hangzhou',
-                    label: 'Hangzhou',
-                  },
-                ],
+                title: 'Tất cả ngày trong tuần',
+                value: 'WEEKED',
               },
             ]}
           />
+          
         </Form.Item>
-        <Form.Item label="DatePicker">
-          <DatePicker />
+        <Form.Item label="Số điện thoại">
+          <Input type="number"/>
         </Form.Item>
-        <Form.Item label="RangePicker">
-          <RangePicker />
-        </Form.Item>
-        <Form.Item label="InputNumber">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="TextArea">
+        <Form.Item label="Ghi chú">
           <TextArea rows={4} />
         </Form.Item>
-        <Form.Item label="Switch" valuePropName="checked">
-          <Switch />
-        </Form.Item>
-        <Form.Item label="Upload" valuePropName="fileList" getValueFromEvent={normFile}>
-          <Upload action="/upload.do" listType="picture-card">
-            <div>
-              <PlusOutlined />
-              <div
-                style={{
-                  marginTop: 8,
-                }}
-              >
-                Upload
-              </div>
-            </div>
-          </Upload>
-        </Form.Item>
-        <Form.Item label="Button">
-          <Button>Button</Button>
-        </Form.Item>
-        <Form.Item label="Slider">
-          <Slider />
+
+        <Form.Item >
+        <Button>Xác nhận</Button>
         </Form.Item>
       </Form>
+
+      
               </MDBModalBody>
               <MDBModalFooter>
                 <MDBBtn
