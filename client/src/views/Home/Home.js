@@ -11,113 +11,114 @@ const { Header } = Layout;
 const { TabPane } = Tabs;
 
 const products = [
-    {
-        id: 1,
-        name: 'LapTop A',
-        price: 100000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-    },
-    {
-        id: 2,
-        name: 'LapTop B',
-        price: 150000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 3,
-        name: 'LapTop C',
-        price: 200000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 4,
-        name: 'LapTop D',
-        price: 260000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 5,
-        name: 'LapTop E',
-        price: 50000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 6,
-        name: 'LapTop F',
-        price: 170000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 7,
-        name: 'LapTop G',
-        price: 150000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 8,
-        name: 'LapTop H',
-        price: 150,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 9,
-        name: 'LapTop Y',
-        price: 150,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 10,
-        name: 'LapTop K',
-        price: 150,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    // Thêm các sản phẩm khác vào đây
+  {
+    id: 1,
+    name: "LapTop A",
+    price: 100000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 2,
+    name: "LapTop B",
+    price: 150000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 3,
+    name: "LapTop C",
+    price: 200000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 4,
+    name: "LapTop D",
+    price: 260000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 5,
+    name: "LapTop E",
+    price: 50000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 6,
+    name: "LapTop F",
+    price: 170000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 7,
+    name: "LapTop G",
+    price: 150000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 8,
+    name: "LapTop H",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 9,
+    name: "LapTop Y",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 10,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  // Thêm các sản phẩm khác vào đây
 ];
 const tuanlevang = [
-    {
-        id: 1,
-        name: 'LapTop A',
-        price: 100000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-    },
-    {
-        id: 2,
-        name: 'LapTop B',
-        price: 150000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 3,
-        name: 'LapTop C',
-        price: 200000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 4,
-        name: 'LapTop D',
-        price: 260000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-    {
-        id: 5,
-        name: 'LapTop E',
-        price: 50000,
-        imageUrl: 'https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw',
-
-    },
-
+  {
+    id: 1,
+    name: "LapTop A",
+    price: 100000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 2,
+    name: "LapTop B",
+    price: 150000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 3,
+    name: "LapTop C",
+    price: 200000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 4,
+    name: "LapTop D",
+    price: 260000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 5,
+    name: "LapTop E",
+    price: 50000,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
 ];
 
 const Home = () => {

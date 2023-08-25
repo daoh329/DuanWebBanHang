@@ -7,6 +7,8 @@ import Nav from './Nav/Nav'
 import Footer from './Footer/Footer';
 import Detail from './Detail/Detail';
 
+
+import Login from './Login/Login.js';
 const App = () => {
   return (
     <div className='App'>
@@ -14,9 +16,9 @@ const App = () => {
         <Nav />
         <header>
           <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
-          
+          <Route path="/login" element={<Login />} />
           </Routes>
         </header>
         <Footer />

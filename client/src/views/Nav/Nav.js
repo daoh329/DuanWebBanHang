@@ -35,7 +35,7 @@ const App = () => {
                 <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'black' }}>
                     <div className="logo" style={{ width: '80px', marginRight: '16px', color: '#ffffff' }}>
                         {/* Add your logo here */}
-                        <span style={{position: 'relative', }}>  <NavLink to="/home">Logo</NavLink></span>
+                        <span style={{position: 'relative', }}>  <NavLink to="/">Logo</NavLink></span>
                     </div>
                     <Menu
                         theme="dark"
