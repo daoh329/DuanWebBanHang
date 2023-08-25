@@ -187,10 +187,7 @@ function Detail() {
                   preview={{
                     onChange: (current, prev) =>
                       console.log(
-                        `current index: ${current}, prev index: ${prev}`
-                      ),
-                  }}
-                >
+                        `current index: ${current}, prev index: ${prev}`),}}>
                   <Image width={80} src={user.avatar} />
                   <Image
                     width={80}
@@ -633,6 +630,9 @@ function Detail() {
           <Form layout="vertical">
             <Form.Item label="Tên sản phẩm">
               <Input value={user.name} disabled />
+            </Form.Item>
+            <Form.Item label="Hình">
+              <Image width={380}  src={user.avatar}></Image>
             </Form.Item>
             <Form.Item label="Giá">
               <Input value={user.Price} disabled />
