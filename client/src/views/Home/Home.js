@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from 'antd';
+import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination} from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";

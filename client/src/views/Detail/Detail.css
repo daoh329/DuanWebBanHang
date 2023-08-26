@@ -818,3 +818,8 @@ strong {
    color: rgb(237, 33, 1);  
     font-weight: 500;  
 }  
+.product-name {
+    overflow: hidden;
+    white-space: nowrap; /* Đảm bảo tên không ngắt dòng */
+    text-overflow: ellipsis; /* Hiển thị dấu chấm (...) khi tên quá dài */
+  }
