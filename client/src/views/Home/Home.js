@@ -12,114 +12,114 @@ const { Header } = Layout;
 const { TabPane } = Tabs;
 
 const products = [
-  {
-    id: 1,
-    name: "LapTop A",
-    price: 100000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 2,
-    name: "LapTop B",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 3,
-    name: "LapTop C",
-    price: 200000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 4,
-    name: "LapTop D",
-    price: 260000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 5,
-    name: "LapTop E",
-    price: 50000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 6,
-    name: "LapTop F",
-    price: 170000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 7,
-    name: "LapTop G",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 8,
-    name: "LapTop H",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 9,
-    name: "LapTop Y",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 10,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  // Thêm các sản phẩm khác vào đây
+    {
+        id: 1,
+        name: "LapTop A",
+        price: 100000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 2,
+        name: "LapTop B",
+        price: 150000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 3,
+        name: "LapTop C",
+        price: 200000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 4,
+        name: "LapTop D",
+        price: 260000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 5,
+        name: "LapTop E",
+        price: 50000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 6,
+        name: "LapTop F",
+        price: 170000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 7,
+        name: "LapTop G",
+        price: 150000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 8,
+        name: "LapTop H",
+        price: 150,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 9,
+        name: "LapTop Y",
+        price: 150,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 10,
+        name: "LapTop K",
+        price: 150,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    // Thêm các sản phẩm khác vào đây
 ];
 const tuanlevang = [
-  {
-    id: 1,
-    name: "LapTop A",
-    price: 100000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 2,
-    name: "LapTop B",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 3,
-    name: "LapTop C",
-    price: 200000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 4,
-    name: "LapTop D",
-    price: 260000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 5,
-    name: "LapTop E",
-    price: 50000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
+    {
+        id: 1,
+        name: "LapTop A",
+        price: 100000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 2,
+        name: "LapTop B",
+        price: 150000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 3,
+        name: "LapTop C",
+        price: 200000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 4,
+        name: "LapTop D",
+        price: 260000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
+    {
+        id: 5,
+        name: "LapTop E",
+        price: 50000,
+        imageUrl:
+            "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+    },
 ];
 
 const Home = () => {
@@ -127,7 +127,7 @@ const Home = () => {
     const navigate = useNavigate()
 
     const handleViewDetailuser = (user) => {
-         // Lấy danh sách các sản phẩm đã xem từ session storage
+        // Lấy danh sách các sản phẩm đã xem từ session storage
         const historysp = JSON.parse(sessionStorage.getItem('products')) || [];
         // Tạo đối tượng sản phẩm mới
         const historyproduct = {
@@ -147,7 +147,7 @@ const Home = () => {
 
         console.log('click oke')
         navigate(`/detail/${user.id}`);
-       
+
     }
 
     const handleViewDetailproduct = (user) => {
@@ -163,7 +163,7 @@ const Home = () => {
         // Cập nhật state
         sethistorysp(storedProducts);
     }, []);
-    
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -191,26 +191,26 @@ const Home = () => {
         // ... Thêm các danh mục con khác
     };
     const danhmuc1 = [
-        { name: 'Laptop', image: 'https://lh3.googleusercontent.com/wOhcPJSPsA2l653-KPjmfodiem9y3NS6Mji6SZhkNCKsuyHK9Z3x0X-2l8gikfPI5n1DX0Fg9bBCHsOI0ACZD7n20XHN4e72=rw' },
-        { name: 'Macbook', image: 'https://lh3.googleusercontent.com/-kvGX205lg2FwjlevgAws0VOVKjDJVkZLuzdUzV-tFWi0fxs7rz2rd3ZvzQ1GLBs2j67HwrTqM1KdkfekyWPz9olDW-quolzlA=rw' },
-        { name: 'PC', image: 'https://lh3.googleusercontent.com/AsrwiaAHgA9NcpFVm8hBkOkG3Chv2XzObdRlzJStQ5rTTI7YSzlGo2_fl6wwpWLJKkgv_aHOEiN8UXagLUHwq3nDYzEwFBw=rw' },
-        { name: 'Card Màn Hình', image: 'https://lh3.googleusercontent.com/2701fTP9z5BT0Jn40Jc6qiXij824-WxAM6wavqFHvf7tp5WLkpJwh7Kn6TsesgatH_avVdZMkVtu8qfpZ3jfkWDsIeXYKg-L=rw' },
-        { name: 'CPU', image: 'https://lh3.googleusercontent.com/BWmrmeD9ZNoYqrCztPIpHCwFbKB6JtEOjC53KDuCEDSH2nVakRhjhBhiftXVl_ugvOerBhgCaBZanc2cC1ihcUU2DZw8QEfN=rw' },
-        { name: 'Ram', image: 'https://lh3.googleusercontent.com/4Lt6ipknHdhytA3yBKGstu2R75Ip-RCpIng6rmnsOT6bHR_Nq0BiIEXI81-kV4otHS5epUEz8YSoIYg5DdeVCiVZ9UguiWsk=rw' },
-        { name: 'Ổ cứng', image: 'https://lh3.googleusercontent.com/stw8R9S4NPD2_WXwwxRbfVpm076f53ZQbnJ1gtFucrv6nWkcERiCfg7BJ2_AQv4zY8oIlO-SipQWOK7Uc8UvXw9pnuBN6bs=rw' },
-        { name: 'Màn Hình', image: 'https://lh3.googleusercontent.com/rg0MMQFfyjZzGjsmcJrpqQx7Zp8c7KDPPMX6yUtafXTn9qgSMaA9lavKd8q1vz1nfxYgnjbjfHLmFsw7IxLfkupM83NBzYY=rw' },
-        { name: 'Chuột Máy tính', image: 'https://lh3.googleusercontent.com/eIAVPQdJ20jpuDYypRQSF5zcugh6q6V4_04jopbdc5gdvQUo11j6z_1K9NGV2DNSlzofo2ztZaKZuZ0ijKDUvUExrOZuZTQ=rw' },
+        { name: 'Apple', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2022/09/07/logoooooooooooooooo.png' },
+        { name: 'SamSung', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/samsung-logo-transparent.png' },
+        { name: 'PC', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2023/07/18/xiaomi-logo.png' },
+        { name: 'Card Màn Hình', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(3).png' },
+        { name: 'CPU', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(6).png' },
+        { name: 'Ram', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/12/rog.png' },
+        { name: 'Ổ cứng', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(4).png' },
+        { name: 'Màn Hình', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/vivo-logo.png' },
+        { name: 'Chuột Máy tính', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/02/tecno.png' },
     ];
     const danhmuc2 = [
-        { name: 'Bàn Phím', image: 'https://lh3.googleusercontent.com/x-UKqLN2rYJIb365dmAUfqR8T09NwI0gzqnUJsCIJsaaFUGSsWWzQoxY6e1FjghDm8E7kR9SR0jySLL6hBfgh2msMi2vJ2mp=rw' },
-        { name: 'IPhone', image: 'https://lh3.googleusercontent.com/lmY5CJ2nNtJYXqb5CgtJ0z6EmY5ZS3x06oQt6Aneh8KEdnTCYY2cdjsAQDD5gFllIj8f84DZP94AkvhnZ1pj6nysi1uwsXM=rw' },
-        { name: 'Ipad', image: 'https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw' },
-        { name: 'Loa', image: 'https://lh3.googleusercontent.com/S1yuYdyvEMVRPWQqTV9wVhhGLE2oa8Yc1JhT2hjDOFFLb-QeO9YFxNRIb7IV2MmeFCSa0SwE4bj0SiNvsX4MD7t4ZAiIWR15tA=rw' },
-        { name: 'Phụ kiện chung', image: 'https://lh3.googleusercontent.com/c5bndXV3StqApjCkeie7NJwmm0CINqli4c-ojXm0sYgybzkrxUlvQcc0bEEkWsWA36pEUs3rAPqSrujbb8MuR78F0chH0xXS=rw' },
-        { name: 'Điện thoại', image: 'https://lh3.googleusercontent.com/hKlLfslwlu8yhXnGev18Nhv2HJ8nbtj-irvFZ41n7uCGyut1eZ-ZPOYFM7pUmdC3fC5Po2BzdSk89VShSwzSnk0sgwUGV50=rw' },
-        { name: 'Máy tính bảng', image: 'https://lh3.googleusercontent.com/SnA2s4Q1SidX0eSBKUtlrTV3BkCHtWwJmwu5EmrPPjSLbZBce96IYn4ZYYaUUTbe2HVn6pnJbl-2zWcQUfFBRMW_2aWNXpk5=rw' },
-        { name: 'Máy in', image: 'https://lh3.googleusercontent.com/NlL5KvzewP3NBuHU_LswDZWgDKo6GACf_eQE4pqAbhafnxUO9RycDE6lYS0O8tMibJhhsSh5Hm7lU-M0l1tVuTGHlnAKTHG0=rw' },
-        { name: 'TV', image: 'https://lh3.googleusercontent.com/nQEoUshCFBITCkHdHmHVx3-Hjhn_Y6Tjvh7jDfEVDQ-tind2G44ebk3shJI9GrQzGW29BK2B-qPXEB2AZeWq8DfA8LR0IlY=rw' },
+        { name: 'Bàn Phím', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2022/09/07/logoooooooooooooooo.png' },
+        { name: 'IPhone', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/11/asu-logo.png' },
+        { name: 'Ipad', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/dell-logo.png' },
+        { name: 'Loa', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/18/oooo.png' },
+        { name: 'Phụ kiện chung', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2022/05/30/logo-acer-inkythuatso-2-01-27-15-50-00.jpg' },
+        { name: 'Điện thoại', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2022/01/15/anh-chup-man-hinh-2022-01-15-luc-08-49-50.png' },
+        { name: 'Máy tính bảng', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/11/microsoft-logo-inkythuatso-01-29-10-05-20.jpg' },
+        { name: 'Máy in', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/lenovo-logo-png-1_638218133437530990.png' },
+        { name: 'TV', image: 'https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/2560px-lg-logo-2015-svg.png' },
     ];
     const [activeTab, setActiveTab] = useState("1"); // State to keep track of active tab
 
@@ -289,11 +289,11 @@ const Home = () => {
                     onChange={handleTabChange}
 
                 >
-                    <TabPane tab="Tuần Lễ Micro" key="1" >
+                    <TabPane tab="Tuần lễ giảm giá" key="1" >
                         <div className="content" style={{ display: 'flex', flexWrap: 'wrap', width: '100%', margin: "0 auto", padding: '10px' }}>
                             {tuanlevang && tuanlevang.length > 0 &&
                                 tuanlevang.map((item, index) => (
-                                    
+
                                     <Card
                                         key={item.id}
                                         hoverable
@@ -309,10 +309,10 @@ const Home = () => {
                                 ))}
                         </div>
                     </TabPane>
-                    <TabPane tab="Chuột - Phím - Tai Nghe" key="2">
+                    <TabPane tab="Ưu đãi ngon vl" key="2">
                         Content of Tab 2
                     </TabPane>
-                    <TabPane tab="Flash Sales 102" key="3">
+                    <TabPane tab="Flash Sales" key="3">
                         Content of Tab 3
                     </TabPane>
                 </Tabs>
@@ -321,7 +321,7 @@ const Home = () => {
             {/*-------- Danh mục nổi bật -----------*/}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục nổi bật</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục điện thoại</div>
                 </div>
                 <div style={{ paddingTop: '10px' }}>
                     <MDBContainer>
@@ -329,8 +329,8 @@ const Home = () => {
                             {danhmuc1.map((danhmuc1, index) => (
                                 <MDBCol size='md' key={index}>
                                     <div className="category-image-container">
-                                        <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '50px' }} />
-                                        <p className="category-name">{danhmuc1.name}</p>
+                                        <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
+
                                     </div>
                                 </MDBCol>
                             ))}
@@ -340,7 +340,7 @@ const Home = () => {
             </div>
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
                 <div>
-                    {/* <div style={{fontWeight: 'bold', fontSize:'20px', display: '-webkit-box'}}>Danh mục nổi bật</div> */}
+                    <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
                 </div>
                 <div style={{ paddingTop: '10px' }}>
                     <MDBContainer>
@@ -348,8 +348,8 @@ const Home = () => {
                             {danhmuc2.map((danhmuc2, index) => (
                                 <MDBCol size='md' key={index}>
                                     <div className="category-image-container">
-                                        <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '50px' }} />
-                                        <p className="category-name">{danhmuc2.name}</p>
+                                        <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '90px' }} />
+                                        {/* <p className="category-name">{danhmuc2.name}</p> */}
                                     </div>
                                 </MDBCol>
                             ))}
@@ -360,7 +360,9 @@ const Home = () => {
 
             {/* ------------------box sản phẩm Laptop ------------------ */}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/FphgdKoJkfp17IB5xYJvah5EShCZUjDQER9SGUCZMzvzsfcDeRKvZ-coSz0kSdhRn7ZvwPBC2qMoHO3Iek_p5knTcxv2Gb-7=w1232)' }}>
-                <h2 style={{ color: "white", }}>LAPTOP</h2>
+                <div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>LapTop ngon</div>
+                </div>
                 <div style={{ width: '98%', margin: '0 auto' }}>
                     <div
                         className="horizontal-scroll-view"
@@ -380,16 +382,16 @@ const Home = () => {
                                     </Button>
                                 </Card>
 
-                                
+
                             ))}
                     </div>
                 </div>
             </div>
 
-            {/* ------------------box sản phẩm Linh kiện ------------------ */}
+            {/* ------------------box sản phẩm Điện thoại ------------------ */}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/oOKsGNxeJyYtVHbBAk6HdIirUD7P794VfnTf3cKYJvU9zNbXJSAc8AtH79dno-6KrMH9nJXNOYqamANUtAHH3jDE0HDo3sM=w1232)' }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Linh kiện</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Điện Thoại</div>
                 </div>
                 <div style={{ width: '98%', margin: '0 auto' }}>
                     <div
@@ -425,15 +427,14 @@ const Home = () => {
                             <Card
                                 key={item.id}
                                 hoverable
-                                className="card-sp"              
+                                className="card-sp"
                             >
-                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} />
+                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailuser(item)} />
                                 <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <a className="name-card">{item.name}</a>
+                                    <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{item.Price} ₫</p>
-                                        <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
-
+                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
                                         </Button>
                                     </div>
                                 </div>
@@ -451,8 +452,8 @@ const Home = () => {
                 </div>
             </div>
 
-            
 
+            {/* ------------------Sản phẩm đã xem -----------------------*/}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm đã xem</div>
@@ -463,13 +464,13 @@ const Home = () => {
                             <Card
                                 key={product.id}
                                 hoverable
-                                className="card-sp"              
+                                className="card-sp"
                             >
                                 <img src={product.imageUrl} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={product.name} />
                                 <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <a className="name-card">{product.name}</a>
+                                    <a className="name-card">{product.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <p style={{color:'rgb(20, 53, 195)', fontWeight: 'bold'}}>{product.price} ₫</p>
+                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{product.price} ₫</p>
                                         <Button onClick={() => handleViewDetailuser(product)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
 
                                         </Button>
@@ -477,8 +478,8 @@ const Home = () => {
                                 </div>
                             </Card>
                         ))}
-                        
-                    
+
+
                 </div>
                 {/* Phân trang */}
                 <div style={{ textAlign: 'center', marginTop: '10px' }}>
