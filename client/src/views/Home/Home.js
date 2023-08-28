@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination} from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
@@ -133,7 +132,8 @@ const Home = () => {
         const historyproduct = {
             name: user.name,
             price: user.Price,
-            imageUrl: user.avatar
+            imageUrl: user.avatar,
+            id: user.id,
         };
         // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
         const isViewed = historysp.some(product => product.name === historyproduct.name);
@@ -150,7 +150,7 @@ const Home = () => {
 
     }
 
-    const handleViewDetailproduct = (user) => {
+    const handleViewDetailproducts = (user) => {
         console.log('click oke')
         navigate(`/detail/${user.id}`);
     }
@@ -460,19 +460,18 @@ const Home = () => {
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
                     {historysp && historysp.length > 0 &&
-                        historysp.slice(startIndex, endIndex).map((product, index) => (
+                        historysp.slice(startIndex, endIndex).map((item, index) => (
                             <Card
-                                key={product.id}
+                                key={item.id}
                                 hoverable
                                 className="card-sp"
                             >
-                                <img src={product.imageUrl} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={product.name} />
+                                <img src={item.imageUrl} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailproducts(item)} />
                                 <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                    <a className="name-card">{product.name}</a>
+                                    <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{product.price} ₫</p>
-                                        <Button onClick={() => handleViewDetailuser(product)} type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>Shop
-
+                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.price} ₫</p>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
                                         </Button>
                                     </div>
                                 </div>

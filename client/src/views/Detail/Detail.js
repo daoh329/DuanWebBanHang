@@ -91,7 +91,7 @@ function Detail() {
   const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
-  const [phone, setPhone] = useState('');
+  const [userName, setUserName] = useState('');
   const [note, setNote] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
@@ -143,6 +143,7 @@ function Detail() {
       avatar: user.avatar,
       price: productDetail.price * quantity,
       quantity: quantity,
+      userName: userName,
       city: city,
       // district: selectedDistrict,
       address: address,
@@ -689,7 +690,7 @@ function Detail() {
         </Form.Item>
         {/* Tên */}
         <Form.Item label="Tên">
-          <Input />
+          <Input onChange={(e) => setUserName(e.target.value)} value={userName}/>
         </Form.Item>
         {/* form select */}
         <Form.Item label="Thành phố">
