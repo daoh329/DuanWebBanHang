@@ -2,81 +2,93 @@ import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from '@ant-design/icons';
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from '../../firebaseConfig';
-import { Image, Carousel, Badge, Descriptions, Button, Form, Input, 
+// import firebase from 'firebase'
+import { Image, Button, Checkbox, Form, Input,
   InputNumber,
   Radio,
   Select,
-  Slider,
-  Switch,
-  TreeSelect,
   Modal,
-  Upload, } from "antd";
+  TreeSelect,
+ } from "antd";
 // Thư viện mdb
 import {
   MDBCarousel,
   MDBCarouselItem,
-
 } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
-//form
+//text area
 const { TextArea } = Input;
 //select
-
-//
 const {Option} = Select;
-
 function Detail() {
-// modal
-const [isModalOpen, setIsModalOpen] = useState(false);
-
-const showModal = () => {
-  setIsModalOpen(true);
-};
-
-const handleOk = () => {
-  setIsModalOpen(false);
-};
-
-const handleCancel = () => {
-  setIsModalOpen(false);
-};
-
+  // ------------------------------------------------------------------------------------------------------------------------main
+  //Modal antd
+  const [isModalOpen, setIsModalOpen] = useState(false);
+// sự kiện mở modal
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+//sự kiện ok
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+//sự kiện đóng
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  
   //select
+  // const [selectedProvince, setSelectedProvince] = useState(null);
+  // const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+  // const provinces = [
+  //   { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
+  //   { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
+  //   { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
+
+
+  //   // ... other provinces
+  // ];
+
+  // const handleProvinceChange = value => {
+  //   const SelectedProvinceData = provinces.find(province => province.id === value);
+  //   setSelectedProvince(SelectedProvinceData);
+  //   setSelectedDistrict(null); // Reset selected district
+  //   setCity(value); // Cập nhật giá trị của state city
+  // };
+
+  // const handleDistrictChange = value => {
+  //   setSelectedDistrict(value);
+  // };
+  // select mới
+  
+  const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
-  const provinces = [
-    { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
-    { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
-    { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
-
-    // ... other provinces
-  ];
+  useEffect(() => {
+    // Tải dữ liệu từ URL
+    axios.get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
+      .then(response => {
+        setProvinces(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
   const handleProvinceChange = value => {
     const selectedProvinceData = provinces.find(province => province.id === value);
     setSelectedProvince(selectedProvinceData);
     setSelectedDistrict(null); // Reset selected district
-    setCity(value); // Cập nhật giá trị của state city
   };
 
   const handleDistrictChange = value => {
     setSelectedDistrict(value);
   };
-
 //
   const { id } = useParams();
   const [user, setUser] = useState({});
@@ -95,26 +107,7 @@ const handleCancel = () => {
     }
     fetchData();
   }, [id]);
-  // usestate của modal
-  const [scrollableModal, setScrollableModal] = useState(false);
-  //formik validate form
-  // const formik = useFormik({
-  //   initialValues: {
-  //     firstName: "",
-  //     address: "",
-  //     phoneNumber: "",
-  //   },
-  //   validationSchema: Yup.object({
-  //     firstName: Yup.string().required("Vui lòng nhập tên."),
-  //     address: Yup.string().required("Vui lòng nhập địa chỉ."),
-  //     phoneNumber: Yup.number().required("Vui lòng nhập số điện thoại."),
-  //   }),
-  //   onSubmit: (values) => {
-  //     // Xử lý dữ liệu gửi đi sau khi xác thực thành công
-  //     console.log(values);
-  //   },
-  // });
-  //form
+// so luong sp
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
 
@@ -124,7 +117,7 @@ const handleCancel = () => {
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [userName, setUserName] = useState('');
   const [note, setNote] = useState('');
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -163,13 +156,11 @@ const handleCancel = () => {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
-
-    if (!isOTPVerified) {
-      // Nếu người dùng chưa xác minh mã OTP
-      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-      return;
-    }
-    
+    // if (!isOTPVerified) {
+    //   // Nếu người dùng chưa xác minh mã OTP
+    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+    //   return;
+    // }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
@@ -207,29 +198,6 @@ const handleCancel = () => {
     }
   };
 
-
-  //   // tăng sl
-  //   const handleIncreaseQuantity = () => {
-  //     setQuantity(quantity + 1);
-  //   };
-  // // giảm sl
-  //   const handleDecreaseQuantity = () => {
-  //     if (quantity > 1) {
-  //       setQuantity(quantity - 1);
-  //     }
-  //   };
-    // // hiển thị giá
-    // const calculateTotalPrice = () => {
-    //   if (productDetail && !isNaN(productDetail.price) && !isNaN(quantity)) {
-    //     return productDetail.price * quantity;
-    //   }
-    //   return 0;
-    // };
-    // const formatPrice = (price) => {
-    //   return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    // };
-    
- //
   return (
     <>
       <div>
@@ -689,11 +657,18 @@ const handleCancel = () => {
         </div>
 
         {/* modal */}
-        <Modal title="Basic Modal" width="1000px" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
- {/* body */}
- {productDetail && (
+        <Modal
+          title="Basic Modal"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={1000}
+        >
+       
+          {/* body */}
+          {productDetail && (
         <div>
-          <h2>Thông tin cá nhân</h2>
+          <h2>Thông tin sản phẩm</h2>
           <Form layout="vertical">
             <Form.Item label="Tên sản phẩm">
               <Input className="product-name" value={user.name} disabled />
@@ -716,6 +691,7 @@ const handleCancel = () => {
           </Form>
         </div>
       )}
+       <h2>Thông tin người dùng</h2>
       <Form
         labelCol={{
           span: 4,
@@ -725,7 +701,7 @@ const handleCancel = () => {
         }}
         layout="horizontal"
         style={{
-          maxWidth: 600,
+          maxWidth: 800,
         }}>
         <Form.Item name="disabled" valuePropName="checked"></Form.Item>
         <Form.Item label="Giới tính">
@@ -742,14 +718,14 @@ const handleCancel = () => {
         </Form.Item>
         {/* form select */}
         <Form.Item label="Thành phố">
-          <Select onChange={handleProvinceChange} value={city}>
-            {provinces.map((province) => (
-              <Select.Option key={province.id} value={province.name}>
-                {province.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Select onChange={handleProvinceChange}>
+          {provinces.map(province => (
+            <Select.Option key={province.id} value={province.id}>
+              {province.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
 
         <Form.Item label="Huyện">
         {selectedProvince && (
@@ -763,9 +739,9 @@ const handleCancel = () => {
         )}
         </Form.Item>
 
-        {/* Địa chỉ chi tiết */}
-        <Form.Item label="Địa chỉ chi tiết">
-          <Input onChange={(e) => setAddress(e.target.value)} value={address} />
+    {/* Địa chỉ chi tiết */}
+    <Form.Item label="Địa chỉ chi tiết">
+          <Input onChange={(e) => setAddress(e.target.value)} value={address}/>
         </Form.Item>
 
         <Form.Item label="Giao hàng">
@@ -785,7 +761,7 @@ const handleCancel = () => {
           />
         </Form.Item>
         <Form.Item label="Số điện thoại">
-          <Input onChange={(e) => setPhone(e.target.value)} value={phone} />
+          <Input  onChange={(e) => setPhone(e.target.value)} value={phone} />
         </Form.Item>
 
         <Form.Item>
@@ -809,8 +785,8 @@ const handleCancel = () => {
         </Form.Item>
       </Form>
 
-      </Modal>
-        
+        </Modal>
+        {/*  */}
       </div>
     </>
   );
