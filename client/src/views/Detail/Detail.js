@@ -24,6 +24,8 @@ const { TextArea } = Input;
 //select
 const {Option} = Select;
 function Detail() {
+  // ------------------------------------------------------------------------------------------------------------------------main
+  const [phoneNumber1, setPhoneNumber1] = useState('+84');
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
 // sự kiện mở modal
@@ -47,6 +49,7 @@ function Detail() {
     { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
     { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
     { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
+
 
     // ... other provinces
   ];
@@ -90,7 +93,7 @@ function Detail() {
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [phone, setPhone] = useState('');
   const [note, setNote] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -733,7 +736,7 @@ function Detail() {
           />
         </Form.Item>
         <Form.Item label="Số điện thoại">
-          <Input onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
+          <Input  onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber1} />
         </Form.Item>
 
         <Form.Item>
