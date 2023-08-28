@@ -9,7 +9,10 @@ import Detail from './Detail/Detail';
 import Login from './Login/Login.js';
 import AdminPage from './QuanLyAdmin/QuanLyAdmin';
 import Search from './Search/Search';
+import Sale from './Menu/Sale';
 import QLdonhang from './QuanLyAdmin/QLdonhang';
+import ShowRoom from './Menu/ShowRoom';
+
 const App = () => {
   return (
     <div className='App'>
@@ -22,6 +25,11 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/search" element={<Search/>} />
+
+          <Route path="/showroom" element={<ShowRoom/>} />
+          <Route path="/sale" element={<Sale/>} />
+
+
           <Route path='/order/json' element={<QLdonhang />} /> 
           </Routes>
         </header>
