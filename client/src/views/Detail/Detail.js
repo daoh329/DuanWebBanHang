@@ -173,7 +173,7 @@ function Detail() {
       address: address,
       deliveryMethod: deliveryMethod,
       phone: phone,
-      note: note
+      note: note,
     };
 
     // In ra giá trị của biến data
