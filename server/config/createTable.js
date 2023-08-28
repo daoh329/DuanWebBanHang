@@ -7,6 +7,7 @@ const createOrdersTable = () => {
       avatar VARCHAR(255),
       price FLOAT,
       quantity INT,
+      userName VARCHAR(255),
       city VARCHAR(255),
       address VARCHAR(255),
       deliveryMethod VARCHAR(255),
