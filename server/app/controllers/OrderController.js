@@ -19,7 +19,7 @@ class OrderController {
 
         // Thực hiện truy vấn SQL
 
-        mysql.query(query, [data.name, data.avatar, data.price, data.quantity, data.userName, data.city, data.address, data.deliveryMethod, data.phone, data.note], (error, results, fields) => {
+        mysql.query(query, [data.name, data.avatar, data.price, data.quantity, data.userName, data.city, data.address, data.deliveryMethod, data.phone, data.note, data.status], (error, results, fields) => {
 
 
             if (error) {
