@@ -7,8 +7,10 @@ const OrderController = require("../app/controllers/OrderController");
 
 router.post('/order', OrderController.order);
 // Trong routes.js hoặc tệp tương tự
-const OrderController = require("../app/controllers/OrderController");
-router.get('/order/json', OrderController.json);
+router.get('/json', OrderController.json);
+
+router.post('/order/:id/confirm', OrderController.confirmOrder);
+router.post('/order/:id/cancel', OrderController.cancelOrder);
 
 
 module.exports = router;

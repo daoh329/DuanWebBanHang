@@ -1,59 +1,72 @@
 import React, { useState, useEffect } from "react";
+import { Table, Button } from 'antd';
 import axios from "axios";
 
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
 
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         try {
-    //              let res = await axios.get("http://localhost:3000/order/json");
-    //             console.log('API Response:', res.data);
-    //             setOrderList(res && res.data && res.data ? res.data : []);
-    //         } catch (error) {
-    //             console.error("Error fetching order data:", error);
-    //         }
-    //     }
-    //     fetchData();
-    // }, []);
-
-    axios
-      .get('"http://localhost:3000/order/json', )
-      .then(response => {
-        const result = response.data;
-
-        if (response.status === 200) {
-            console.log("data:>>",result)
+    const fetchData = async () => {
+        try {
+            const res = await axios.get("http://localhost:3000/order/json");
+            console.log('API Response:', res.data);
+            setOrderList(res.data || []);
+        } catch (error) {
+            console.error("Error fetching order data:", error);
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-       
-      });
-  
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleConfirmOrder = async (record) => {
+        console.log('Confirm order button clicked for order:', record.id);
+        try {
+            await axios.post(`http://localhost:3000/order/${record.id}/confirm`);
+            fetchData();
+        } catch (error) {
+            console.error("Error confirming order:", error);
+        }
+    };
+    const handleCancelOrder = async (record) => {
+        try {
+            await axios.post(`http://localhost:3000/order/${record.id}/cancel`);
+            fetchData();
+        } catch (error) {
+            console.error("Error canceling order:", error);
+        }
+    };
+    const columns = [
+        { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
+        { title: 'Giá', dataIndex: 'price', key: 'price' },
+        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
+        { title: 'Ghi chú', dataIndex: 'note', key: 'note' },
+        { title: 'Trạng thái', dataIndex: 'status', key: 'status' },
+
+        {
+            title: 'Hành động',
+            dataIndex: 'action',
+            key: 'action',
+            render: (_, record) => (
+                <span>
+                    {record.status === 'unconfirmed' ? (
+                        <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
+                            Hủy
+                        </Button>
+                    ) : (
+                        <Button className="confirm-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
+                            Xác nhận
+                        </Button>
+                    )}
+                </span>
+            ),
+        },
+    ];
     return (
         <div>
-            <h1>Order List</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orderList.map(order => (
-                        <tr key={order.id}>
-                            <td>{order.id}</td>
-                            <td>{order.name}</td>
-                            <td>{order.price}</td>
-                            <td>{order.quantity}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <h1>Quản lý đơn hàng</h1>
+            <Table columns={columns} dataSource={orderList} />
         </div>
     );
 }
