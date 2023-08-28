@@ -1,68 +1,121 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from "@ant-design/icons";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from '../../firebaseConfig';
+import { auth } from "../../firebaseConfig";
 // import firebase from 'firebase'
-import { Image, Button, Checkbox, Form, Input,
+import {
+  Image,
+  Button,
+  Form,
+  Input,
+  Modal,
   InputNumber,
   Radio,
   Select,
-  Modal,
   TreeSelect,
- } from "antd";
+} from "antd";
 // Thư viện mdb
 import {
   MDBCarousel,
   MDBCarouselItem,
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
 } from "mdb-react-ui-kit";
 // link
+
 import "./Detail.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-//text area
+//form
 const { TextArea } = Input;
 //select
-const {Option} = Select;
-function Detail() {
+
+const { Option } = Select;
+
+function Detail1() {
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
-// sự kiện mở modal
+
   const showModal = () => {
     setIsModalOpen(true);
   };
-//sự kiện ok
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
-//sự kiện đóng
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  
+  //
+
+  const handleOption1Change = (value) => {
+    setSelectedOption1(value);
+    setSelectedOption2(null);
+  };
+
+  const handleOption2Change = (value) => {
+    setSelectedOption2(value);
+  };
   //select
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
   const provinces = [
-    { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
-    { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
-    { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
+    {
+      id: 1,
+      name: "Hồ Chí Minh ",
+      districts: [
+        "Thủ Đức",
+        "Biên Hòa",
+        "Vũng Tàu",
+        "Mỹ Tho",
+        "Bà Rịa",
+        "Tân An",
+        "Tây Ninh",
+        "Đồng Xoài",
+        "Đồng Xoài",
+      ],
+    },
+    {
+      id: 2,
+      name: "Đắk Lăk",
+      districts: [
+        "Buôn Ma Thuột",
+        "Buôn Hồ",
+        "Ea Kar",
+        "Ea Súp",
+        "Krông Ana",
+        "Krông Bông",
+        "Krông Búk",
+        "M Drắk",
+      ],
+    },
+    { id: 3, name: "Đà nẵng", districts: ["Quận I", "Quận II", "Quận III"] },
 
     // ... other provinces
   ];
 
-  const handleProvinceChange = value => {
-    const SelectedProvinceData = provinces.find(province => province.id === value);
+  const handleProvinceChange = (value) => {
+    const SelectedProvinceData = provinces.find(
+      (province) => province.id === value
+    );
     setSelectedProvince(SelectedProvinceData);
     setSelectedDistrict(null); // Reset selected district
     setCity(value); // Cập nhật giá trị của state city
   };
 
-  const handleDistrictChange = value => {
+  const handleDistrictChange = (value) => {
     setSelectedDistrict(value);
   };
 
-//
+  //
   const { id } = useParams();
   const [user, setUser] = useState({});
 
@@ -80,22 +133,22 @@ function Detail() {
     }
     fetchData();
   }, [id]);
-// so luong sp
+  // usestate của modal
+  const [scrollableModal, setScrollableModal] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
 
   // Khai báo state cho các trường thông tin cá nhân
-  const [city, setCity] = useState('');
-  const [address, setAddress] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState('');
-  const [userName, setUserName] = useState('');
-  const [note, setNote] = useState('');
+  const [city, setCity] = useState("");
+  const [address, setAddress] = useState("");
+  const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [phone, setPhone] = useState("");
+  const [note, setNote] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
   useEffect(() => {
-
     const fetchedProductDetail = {
       productName: user.name,
       price: parseFloat(user.Price), // Chuyển đổi user.Price thành số
@@ -103,73 +156,6 @@ function Detail() {
     setProductDetail(fetchedProductDetail);
     console.log(user.Price);
   }, [user]);
-
-  const handleSendOTP = () => {
-    // Set up reCAPTCHA verifier
-    const verifier = new RecaptchaVerifier (auth, 'recaptcha-container', {});
-
-    // Send OTP to user's phone number
-    signInWithPhoneNumber(auth, phoneNumber, verifier)
-      .then((result) => {
-        setConfirmationResult(result);
-      });
-  }
-
-  const handleVerifyOTP = () => {
-    // Prompt user to enter OTP
-    const code = window.prompt("Enter OTP");
-
-    // Verify OTP
-    confirmationResult.confirm(code).then((result) => {
-      // User is signed in
-      const user = result.user;
-      setIsOTPVerified(true); // Cập nhật trạng thái xác minh OTP
-    });
-  }
-
-  // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
-  const handleConfirm = async () => {
-    if (!isOTPVerified) {
-      // Nếu người dùng chưa xác minh mã OTP
-      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-      return;
-    }
-    // Lấy thông tin cá nhân của người dùng từ state hoặc form
-    const data = {
-      name: user.name,
-      avatar: user.avatar,
-      price: productDetail.price * quantity,
-      quantity: quantity,
-      userName: userName,
-      city: city,
-      // district: selectedDistrict,
-      address: address,
-      deliveryMethod: deliveryMethod,
-      phoneNumber: phoneNumber,
-      note: note
-    };
-
-    // In ra giá trị của biến data
-    console.log('Data:', data);
-
-    // Gửi thông tin đăng ký lên server
-    const response = await fetch('http://localhost:3000/order/order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-
-    // Xử lý kết quả trả về từ server NodeJS
-    if (response.ok) {
-      // Thông báo thành công
-      alert('Thêm thông tin cá nhân thành công');
-    } else {
-      // Thông báo lỗi
-      alert('Có lỗi xảy ra khi thêm thông tin cá nhân');
-    }
-  };
 
   return (
     <>
@@ -211,7 +197,10 @@ function Detail() {
                   preview={{
                     onChange: (current, prev) =>
                       console.log(
-                        `current index: ${current}, prev index: ${prev}`),}}>
+                        `current index: ${current}, prev index: ${prev}`
+                      ),
+                  }}
+                >
                   <Image width={80} src={user.avatar} />
                   <Image
                     width={80}
@@ -497,14 +486,15 @@ function Detail() {
                   data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
                   className="css-yp9swi"
                 >
-                  <button
+                  {/* <button
                     height="2.5rem"
                     color="white"
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
-                    onClick={showModal}
+                    onClick={() => setScrollableModal(!scrollableModal)}
                     // sự kiện cho modal
-                  >
+                  > */}
+                  <button type="primary" onClick={showModal}>
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
                     </div>
@@ -637,132 +627,15 @@ function Detail() {
           onCancel={handleCancel}
           width={1000}
         >
-       
+          {/* title */}
           {/* body */}
-          {productDetail && (
-        <div>
-          <h2>Thông tin sản phẩm</h2>
-          <Form layout="vertical">
-            <Form.Item label="Tên sản phẩm">
-              <Input className="product-name" value={user.name} disabled />
-            </Form.Item>
-            <Form.Item label="Hình">
-              <Image width={380} src={user.avatar}></Image>
-            </Form.Item>
-            <Form.Item label="Giá">
-              <Input value={productDetail.price * quantity + 'đ'} disabled />
-            </Form.Item>
-            <Form.Item label="Số lượng">
-              <Button onClick={() => setQuantity(quantity - 1)}>-</Button>
-              <Input
-                value={quantity}
-                readOnly
-                style={{ width: 60, textAlign: 'center' }}
-              />
-              <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
-            </Form.Item>
-          </Form>
-        </div>
-      )}
-       <h2>Thông tin người dùng</h2>
-      <Form
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 14,
-        }}
-        layout="horizontal"
-        style={{
-          maxWidth: 800,
-        }}>
-        <Form.Item name="disabled" valuePropName="checked"></Form.Item>
-        <Form.Item label="Giới tính">
-          <Radio.Group>
-            <Radio checked="true" value="man">
-              Anh
-            </Radio>
-            <Radio value="male">Chị</Radio>
-          </Radio.Group>
-        </Form.Item>
-        {/* Tên */}
-        <Form.Item label="Tên">
-          <Input onChange={(e) => setUserName(e.target.value)} value={userName}/>
-        </Form.Item>
-        {/* form select */}
-        <Form.Item label="Thành phố">
-        <Select onChange={handleProvinceChange}>
-          {provinces.map(province => (
-            <Select.Option key={province.id} value={province.id}>
-              {province.name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-        <Form.Item label="Huyện">
-        {selectedProvince && (
-          <Select onChange={handleDistrictChange} value={selectedDistrict}>
-            {selectedProvince.districts.map(district => (
-              <Select.Option key={district} value={district}>
-                {district}
-              </Select.Option>
-            ))}
-          </Select>
-        )}
-        </Form.Item>
-
-    {/* Địa chỉ chi tiết */}
-    <Form.Item label="Địa chỉ chi tiết">
-          <Input/>
-        </Form.Item>
-
-        <Form.Item label="Giao hàng">
-          <TreeSelect
-            onChange={(value) => setDeliveryMethod(value)}
-            value={deliveryMethod}
-            treeData={[
-              {
-                title: 'Giờ hành chính',
-                value: 'GHC',
-              },
-              {
-                title: 'Tất cả ngày trong tuần',
-                value: 'WEEKED',
-              },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item label="Số điện thoại">
-          <Input onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
-        </Form.Item>
-
-        <Form.Item>
-          <Button onClick={handleSendOTP}>Gửi mã OTP</Button>
-          <div id="recaptcha-container"></div>
-        </Form.Item>
-        <Form.Item>
-          <Button onClick={handleVerifyOTP}>Nhập mã OTP đã gửi</Button>
-        </Form.Item>
-
-        <Form.Item label="Ghi chú">
-          <TextArea
-            onChange={(e) => setNote(e.target.value)}
-            value={note}
-            rows={4}
-          />
-        </Form.Item>
-
-        <Form.Item>
-          <Button onClick={handleConfirm}>Xác nhận</Button>
-        </Form.Item>
-      </Form>
-
+          
         </Modal>
-        {/*  */}
+
+
       </div>
     </>
   );
 }
 
-export default Detail;
+export default Detail1;
