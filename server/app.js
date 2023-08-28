@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const route = require('./routes/index')
+const route = require('./routes')
+const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
 const mysql = require('./config/db/mySQL');
 // Định nghĩa các tuyến (routes)
@@ -10,6 +11,22 @@ app.get('/', (req, res) => {
 
 app.get('/about', (req, res) => {
   res.send('Đây là trang giới thiệu về chúng tôi.');
+});
+
+// Sử dụng bodyParser để phân tích cú pháp các yêu cầu đến
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// nếu gặp lỗi do bảo mật CORS thì mở ra
+const cors = require('cors');app.use(cors());
+
+// Kết nối tới cơ sở dữ liệu
+mysql.connect((err) => {
+  if (err) {
+      console.error("Lỗi kết nối:", err);
+  } else {
+      console.log("Kết nối thành công đến MySQL");
+  }
 });
 
 route(app);
