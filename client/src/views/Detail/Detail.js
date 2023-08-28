@@ -61,7 +61,7 @@ function Detail() {
 
     fetchData();
   }, []);
-// select city
+  // select city
   const handleCityChange = (value) => {
     const selectedCity = cities.find((city) => city.Id === value);
     setSelectedCity(selectedCity);
@@ -693,11 +693,10 @@ function Detail() {
             }}
           >
             <Form.Item name="disabled" valuePropName="checked"></Form.Item>
+            {/* Giới tính */}
             <Form.Item label="Giới tính">
-              <Radio.Group>
-                <Radio checked="true" value="man">
-                  Anh
-                </Radio>
+              <Radio.Group defaultValue="man">
+                <Radio value="man">Anh</Radio>
                 <Radio value="male">Chị</Radio>
               </Radio.Group>
             </Form.Item>
@@ -712,36 +711,36 @@ function Detail() {
 
             {/*  */}
             <Form.Item label="Thành phố">
-        <Select onChange={handleCityChange}>
-          {cities.map((city) => (
-            <Option key={city.Id} value={city.Id}>
-              {city.Name}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
+              <Select onChange={handleCityChange}>
+                {cities.map((city) => (
+                  <Option key={city.Id} value={city.Id}>
+                    {city.Name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-      <Form.Item label="Huyện">
-        <Select onChange={handleDistrictChange}>
-          {selectedCity &&
-            selectedCity.Districts.map((district) => (
-              <Option key={district.Id} value={district.Id}>
-                {district.Name}
-              </Option>
-            ))}
-        </Select>
-      </Form.Item>
+            <Form.Item label="Huyện">
+              <Select onChange={handleDistrictChange}>
+                {selectedCity &&
+                  selectedCity.Districts.map((district) => (
+                    <Option key={district.Id} value={district.Id}>
+                      {district.Name}
+                    </Option>
+                  ))}
+              </Select>
+            </Form.Item>
 
-      <Form.Item label="Xã">
-        <Select>
-          {selectedDistrict &&
-            selectedDistrict.Wards.map((ward) => (
-              <Option key={ward.Id} value={ward.Id}>
-                {ward.Name}
-              </Option>
-            ))}
-        </Select>
-      </Form.Item>
+            <Form.Item label="Xã">
+              <Select>
+                {selectedDistrict &&
+                  selectedDistrict.Wards.map((ward) => (
+                    <Option key={ward.Id} value={ward.Id}>
+                      {ward.Name}
+                    </Option>
+                  ))}
+              </Select>
+            </Form.Item>
             {/* Địa chỉ chi tiết */}
             <Form.Item label="Địa chỉ chi tiết">
               <Input
