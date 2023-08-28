@@ -25,7 +25,6 @@ const { TextArea } = Input;
 const {Option} = Select;
 function Detail() {
   // ------------------------------------------------------------------------------------------------------------------------main
-  const [phoneNumber1, setPhoneNumber1] = useState('+84');
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
 // sự kiện mở modal
@@ -42,29 +41,54 @@ function Detail() {
   };
   
   //select
+  // const [selectedProvince, setSelectedProvince] = useState(null);
+  // const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+  // const provinces = [
+  //   { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
+  //   { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
+  //   { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
+
+
+  //   // ... other provinces
+  // ];
+
+  // const handleProvinceChange = value => {
+  //   const SelectedProvinceData = provinces.find(province => province.id === value);
+  //   setSelectedProvince(SelectedProvinceData);
+  //   setSelectedDistrict(null); // Reset selected district
+  //   setCity(value); // Cập nhật giá trị của state city
+  // };
+
+  // const handleDistrictChange = value => {
+  //   setSelectedDistrict(value);
+  // };
+  // select mới
+  
+  const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
-  const provinces = [
-    { id: 1, name: 'Hồ Chí Minh ', districts: ['Thủ Đức', 'Biên Hòa', 'Vũng Tàu', 'Mỹ Tho', 'Bà Rịa', 'Tân An', 'Tây Ninh', 'Đồng Xoài', 'Đồng Xoài'] },
-    { id: 2, name: 'Đắk Lăk', districts: ['Buôn Ma Thuột', 'Buôn Hồ', 'Ea Kar', 'Ea Súp', 'Krông Ana', 'Krông Bông', 'Krông Búk', 'M Drắk'] },
-    { id: 3, name: 'Đà nẵng', districts: ['Quận I', 'Quận II', 'Quận III'] },
-
-
-    // ... other provinces
-  ];
+  useEffect(() => {
+    // Tải dữ liệu từ URL
+    axios.get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
+      .then(response => {
+        setProvinces(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
   const handleProvinceChange = value => {
-    const SelectedProvinceData = provinces.find(province => province.id === value);
-    setSelectedProvince(SelectedProvinceData);
+    const selectedProvinceData = provinces.find(province => province.id === value);
+    setSelectedProvince(selectedProvinceData);
     setSelectedDistrict(null); // Reset selected district
-    setCity(value); // Cập nhật giá trị của state city
   };
 
   const handleDistrictChange = value => {
     setSelectedDistrict(value);
   };
-
 //
   const { id } = useParams();
   const [user, setUser] = useState({});
@@ -93,7 +117,7 @@ function Detail() {
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [userName, setUserName] = useState('');
   const [note, setNote] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone, setPhone] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -112,7 +136,7 @@ function Detail() {
     const verifier = new RecaptchaVerifier (auth, 'recaptcha-container', {});
 
     // Send OTP to user's phone number
-    signInWithPhoneNumber(auth, phoneNumber, verifier)
+    signInWithPhoneNumber(auth, phone, verifier)
       .then((result) => {
         setConfirmationResult(result);
       });
@@ -132,11 +156,11 @@ function Detail() {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
-    if (!isOTPVerified) {
-      // Nếu người dùng chưa xác minh mã OTP
-      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-      return;
-    }
+    // if (!isOTPVerified) {
+    //   // Nếu người dùng chưa xác minh mã OTP
+    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+    //   return;
+    // }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
@@ -148,7 +172,7 @@ function Detail() {
       // district: selectedDistrict,
       address: address,
       deliveryMethod: deliveryMethod,
-      phoneNumber: phoneNumber,
+      phone: phone,
       note: note
     };
 
@@ -717,7 +741,7 @@ function Detail() {
 
     {/* Địa chỉ chi tiết */}
     <Form.Item label="Địa chỉ chi tiết">
-          <Input/>
+          <Input onChange={(e) => setAddress(e.target.value)} value={address}/>
         </Form.Item>
 
         <Form.Item label="Giao hàng">
@@ -737,7 +761,7 @@ function Detail() {
           />
         </Form.Item>
         <Form.Item label="Số điện thoại">
-          <Input  onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber1} />
+          <Input  onChange={(e) => setPhone(e.target.value)} value={phone} />
         </Form.Item>
 
         <Form.Item>
