@@ -13,6 +13,7 @@ app.get('/about', (req, res) => {
   res.send('Đây là trang giới thiệu về chúng tôi.');
 });
 
+app.use(express.json());
 // Sử dụng bodyParser để phân tích cú pháp các yêu cầu đến
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

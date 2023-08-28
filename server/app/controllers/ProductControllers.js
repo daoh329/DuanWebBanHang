@@ -4,6 +4,7 @@ const createTables = require("../../config/CrTables");
 class Product{
     async Addlaptop(res,req){
         const data = req.body;
+        console.log(req.body);
         console.log(data);
         if (!data) {
             return res.status(400).json("Invalid data");
@@ -59,11 +60,11 @@ class Product{
             
             imageUrls.forEach((imageUrl) => {
                 const imageSql = `
-                  INSERT INTO image_url (image_url, laptop_id, dienthoai_id)
+                  INSERT INTO image_url (image_url, laptop_id)
                   VALUES (?, ?, ?)
                 `;
               
-                const values = [imageUrl, laptopId]; // Thay thế laptopId và dienthoaiId bằng các giá trị thích hợp
+                const values = [imageUrl, laptopId]; 
               
                 mysql.query(imageSql, values, (err, imageResult) => {
                   if (err) {
@@ -80,4 +81,4 @@ class Product{
 
     }
 }
-module.exports = new Product
+module.exports = new Product;
