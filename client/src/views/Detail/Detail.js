@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Carousel, Badge, Descriptions, Button, Checkbox, Form, Input,  Cascader,
-  DatePicker,
   InputNumber,
   Radio,
+  
   Select,
   Slider,
   Switch,
@@ -21,9 +21,6 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
-  MDBInput,
-  MDBCol,
-  MDBRow,
 } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
@@ -741,9 +738,9 @@ function Detail() {
         <Form.Item label="Thành phố">
         <Select onChange={handleProvinceChange}>
           {provinces.map(province => (
-            <Select.Option key={province.id} value={province.id}>
+            <Option key={province.id} value={province.id}>
               {province.name}
-            </Select.Option>
+            </Option>
           ))}
         </Select>
       </Form.Item>
@@ -759,6 +756,31 @@ function Detail() {
           </Select>
         )}
       </Form.Item>
+
+      <Form.Item label="Thành phố">
+        <Select id="provinceSelect" onChange={e => handleProvinceChange(parseInt(e.target.value))}>
+          {provinces.map(province => (
+            <option key={province.id} value={province.id}>
+              {province.name}
+            </option>
+          ))}
+        </Select>
+        </Form.Item>
+
+      {selectedProvince && (
+        <div>
+          <label htmlFor="districtSelect">Quận/Huyện:</label>
+          <select id="districtSelect" onChange={e => handleDistrictChange(e.target.value)}>
+            <option value={null}>Chọn quận/huyện</option>
+            {selectedProvince.districts.map(district => (
+              <option key={district} value={district}>
+                {district}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
 
 
     {/* Địa chỉ chi tiết */}
