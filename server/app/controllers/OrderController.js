@@ -1,4 +1,5 @@
 const mysql = require("../../config/db/mySQL");
+const mysql2 = require('../../config/db/mySQL');
 const createOrdersTable = require("../../config/createTable");
 
 class OrderController {
@@ -15,7 +16,7 @@ class OrderController {
         const query = 'INSERT INTO orders (name, avatar, price, quantity, city, address, deliveryMethod, phone, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
         // Thực hiện truy vấn SQL
-        mysql.query(query, [data.name, data.avatar, data.price, data.quantity, data.city, data.address, data.deliveryMethod, data.phone, data.note], (error, results, fields) => {
+        mysql2.query(query, [data.name, data.avatar, data.price, data.quantity, data.city, data.address, data.deliveryMethod, data.phone, data.note], (error, results, fields) => {
         if (error) {
             // Trả về mã trạng thái 500 nếu có lỗi xảy ra
             res.status(500).send("Có lỗi xảy ra khi thêm thông tin cá nhân");
@@ -23,6 +24,18 @@ class OrderController {
             // Trả về mã trạng thái 200 nếu thêm thông tin cá nhân thành công
             res.status(200).send("Thêm thông tin cá nhân thành công");
         }
+        });
+    }
+    async json(req, res, next) {
+        // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng users
+        mysql2.query('select* from orders', (err, result) => {
+            if (err) throw err;
+    
+            // Chuyển đổi kết quả truy vấn thành chuỗi JSON
+            const jsonResult = JSON.stringify(result);
+    
+            // Gửi chuỗi JSON về cho client
+            res.send(jsonResult);
         });
     }
 }
