@@ -22,7 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/search" element={<Search/>} />
-          <Route path="/order/json" element={<QLdonhang/>} />
+          <Route path='/order/json' element={<QLdonhang />} /> 
           </Routes>
         </header>
         <Footer />

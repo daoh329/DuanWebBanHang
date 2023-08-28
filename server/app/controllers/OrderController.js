@@ -15,9 +15,10 @@ class OrderController {
 
         const query = 'INSERT INTO orders (name, avatar, price, quantity, userName, city, address, deliveryMethod, phone, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
+
         // Thực hiện truy vấn SQL
 
-        mysql2.query(query, [data.name, data.avatar, data.price, data.quantity, data.city, data.address, data.deliveryMethod, data.phone, data.note], (error, results, fields) => {
+        mysql2.query(query, [data.name, data.avatar, data.price, data.quantity, data.userName, data.city, data.address, data.deliveryMethod, data.phone, data.note], (error, results, fields) => {
 
     
         if (error) {
@@ -30,16 +31,17 @@ class OrderController {
         });
     }
     async json(req, res, next) {
-        // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng users
+        
         mysql2.query('select* from orders', (err, result) => {
-            if (err) throw err;
-    
-            // Chuyển đổi kết quả truy vấn thành chuỗi JSON
+            if (err) {
+              console.error("Lỗi truy vấn:", err);
+              throw err;
+            }
+          
             const jsonResult = JSON.stringify(result);
-    
-            // Gửi chuỗi JSON về cho client
             res.send(jsonResult);
-        });
+          });
+          
     }
 }
 
