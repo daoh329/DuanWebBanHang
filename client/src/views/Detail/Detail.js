@@ -2,43 +2,58 @@ import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from '@ant-design/icons';
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from '../../firebaseConfig';
-// import firebase from 'firebase'
-import { Image, Button, Checkbox, Form, Input,
+import { Image, Carousel, Badge, Descriptions, Button, Form, Input, 
   InputNumber,
   Radio,
   Select,
-  Modal,
+  Slider,
+  Switch,
   TreeSelect,
- } from "antd";
+  Modal,
+  Upload, } from "antd";
 // Thư viện mdb
 import {
   MDBCarousel,
   MDBCarouselItem,
+
 } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
 import axios from "axios";
 import { useParams } from "react-router-dom";
-//text area
+
+const onFinish = (values) => {
+  console.log('Success:', values);
+};
+const onFinishFailed = (errorInfo) => {
+  console.log('Failed:', errorInfo);
+};
+//form
 const { TextArea } = Input;
 //select
+
+//
 const {Option} = Select;
+
 function Detail() {
-  //Modal antd
-  const [isModalOpen, setIsModalOpen] = useState(false);
-// sự kiện mở modal
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-//sự kiện ok
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-//sự kiện đóng
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  
+// modal
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+const showModal = () => {
+  setIsModalOpen(true);
+};
+
+const handleOk = () => {
+  setIsModalOpen(false);
+};
+
+const handleCancel = () => {
+  setIsModalOpen(false);
+};
+
   //select
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -52,8 +67,8 @@ function Detail() {
   ];
 
   const handleProvinceChange = value => {
-    const SelectedProvinceData = provinces.find(province => province.id === value);
-    setSelectedProvince(SelectedProvinceData);
+    const selectedProvinceData = provinces.find(province => province.id === value);
+    setSelectedProvince(selectedProvinceData);
     setSelectedDistrict(null); // Reset selected district
     setCity(value); // Cập nhật giá trị của state city
   };
@@ -80,7 +95,26 @@ function Detail() {
     }
     fetchData();
   }, [id]);
-// so luong sp
+  // usestate của modal
+  const [scrollableModal, setScrollableModal] = useState(false);
+  //formik validate form
+  // const formik = useFormik({
+  //   initialValues: {
+  //     firstName: "",
+  //     address: "",
+  //     phoneNumber: "",
+  //   },
+  //   validationSchema: Yup.object({
+  //     firstName: Yup.string().required("Vui lòng nhập tên."),
+  //     address: Yup.string().required("Vui lòng nhập địa chỉ."),
+  //     phoneNumber: Yup.number().required("Vui lòng nhập số điện thoại."),
+  //   }),
+  //   onSubmit: (values) => {
+  //     // Xử lý dữ liệu gửi đi sau khi xác thực thành công
+  //     console.log(values);
+  //   },
+  // });
+  //form
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
 
@@ -90,7 +124,7 @@ function Detail() {
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [userName, setUserName] = useState('');
   const [note, setNote] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phone, setPhone] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -109,7 +143,7 @@ function Detail() {
     const verifier = new RecaptchaVerifier (auth, 'recaptcha-container', {});
 
     // Send OTP to user's phone number
-    signInWithPhoneNumber(auth, phoneNumber, verifier)
+    signInWithPhoneNumber(auth, phone, verifier)
       .then((result) => {
         setConfirmationResult(result);
       });
@@ -129,11 +163,13 @@ function Detail() {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
+
     if (!isOTPVerified) {
       // Nếu người dùng chưa xác minh mã OTP
       alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
       return;
     }
+    
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
@@ -145,7 +181,7 @@ function Detail() {
       // district: selectedDistrict,
       address: address,
       deliveryMethod: deliveryMethod,
-      phoneNumber: phoneNumber,
+      phone: phone,
       note: note
     };
 
@@ -171,6 +207,29 @@ function Detail() {
     }
   };
 
+
+  //   // tăng sl
+  //   const handleIncreaseQuantity = () => {
+  //     setQuantity(quantity + 1);
+  //   };
+  // // giảm sl
+  //   const handleDecreaseQuantity = () => {
+  //     if (quantity > 1) {
+  //       setQuantity(quantity - 1);
+  //     }
+  //   };
+    // // hiển thị giá
+    // const calculateTotalPrice = () => {
+    //   if (productDetail && !isNaN(productDetail.price) && !isNaN(quantity)) {
+    //     return productDetail.price * quantity;
+    //   }
+    //   return 0;
+    // };
+    // const formatPrice = (price) => {
+    //   return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    // };
+    
+ //
   return (
     <>
       <div>
@@ -630,18 +689,11 @@ function Detail() {
         </div>
 
         {/* modal */}
-        <Modal
-          title="Basic Modal"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          width={1000}
-        >
-       
-          {/* body */}
-          {productDetail && (
+        <Modal title="Basic Modal" width="1000px" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+ {/* body */}
+ {productDetail && (
         <div>
-          <h2>Thông tin sản phẩm</h2>
+          <h2>Thông tin cá nhân</h2>
           <Form layout="vertical">
             <Form.Item label="Tên sản phẩm">
               <Input className="product-name" value={user.name} disabled />
@@ -664,7 +716,6 @@ function Detail() {
           </Form>
         </div>
       )}
-       <h2>Thông tin người dùng</h2>
       <Form
         labelCol={{
           span: 4,
@@ -674,7 +725,7 @@ function Detail() {
         }}
         layout="horizontal"
         style={{
-          maxWidth: 800,
+          maxWidth: 600,
         }}>
         <Form.Item name="disabled" valuePropName="checked"></Form.Item>
         <Form.Item label="Giới tính">
@@ -691,14 +742,14 @@ function Detail() {
         </Form.Item>
         {/* form select */}
         <Form.Item label="Thành phố">
-        <Select onChange={handleProvinceChange}>
-          {provinces.map(province => (
-            <Select.Option key={province.id} value={province.id}>
-              {province.name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
+          <Select onChange={handleProvinceChange} value={city}>
+            {provinces.map((province) => (
+              <Select.Option key={province.id} value={province.name}>
+                {province.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
 
         <Form.Item label="Huyện">
         {selectedProvince && (
@@ -712,9 +763,9 @@ function Detail() {
         )}
         </Form.Item>
 
-    {/* Địa chỉ chi tiết */}
-    <Form.Item label="Địa chỉ chi tiết">
-          <Input/>
+        {/* Địa chỉ chi tiết */}
+        <Form.Item label="Địa chỉ chi tiết">
+          <Input onChange={(e) => setAddress(e.target.value)} value={address} />
         </Form.Item>
 
         <Form.Item label="Giao hàng">
@@ -734,7 +785,7 @@ function Detail() {
           />
         </Form.Item>
         <Form.Item label="Số điện thoại">
-          <Input onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
+          <Input onChange={(e) => setPhone(e.target.value)} value={phone} />
         </Form.Item>
 
         <Form.Item>
@@ -758,8 +809,8 @@ function Detail() {
         </Form.Item>
       </Form>
 
-        </Modal>
-        {/*  */}
+      </Modal>
+        
       </div>
     </>
   );
