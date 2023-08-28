@@ -97,12 +97,14 @@ function Detail() {
   const [productDetail, setProductDetail] = useState(null);
 
   // Khai báo state cho các trường thông tin cá nhân
-  const [city, setCity] = useState("");
-  const [address, setAddress] = useState("");
-  const [deliveryMethod, setDeliveryMethod] = useState("");
-  const [userName, setUserName] = useState("");
-  const [note, setNote] = useState("");
-  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState('');
+  const [address, setAddress] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState('');
+  const [userName, setUserName] = useState('');
+  const [note, setNote] = useState('');
+  const [phone, setPhone] = useState('');
+  const [status, setStatus] = useState('');
+
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -157,6 +159,7 @@ function Detail() {
       deliveryMethod: deliveryMethod,
       phone: phone,
       note: note,
+      status:'Chưa xác nhận',
     };
 
     // In ra giá trị của biến data
