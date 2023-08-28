@@ -4,6 +4,7 @@ const createTables = require("../../config/CrTables");
 class Product{
     async Addlaptop(res,req){
         const data = req.body;
+        console.log(data);
         if (!data) {
             return res.status(400).json("Invalid data");
         }
