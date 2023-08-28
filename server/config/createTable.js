@@ -12,7 +12,8 @@ const createOrdersTable = () => {
       address VARCHAR(255),
       deliveryMethod VARCHAR(255),
       phone VARCHAR(255),
-      note TEXT
+      note TEXT,
+      status VARCHAR(255)
     )`;
   
     mysql2.query(createTableQuery, (error, results, fields) => {
