@@ -13,10 +13,13 @@ class OrderController {
         // Gọi hàm createOrdersTable để tạo bảng orders nếu chưa tồn tại
         createOrdersTable();
 
-        const query = 'INSERT INTO orders (name, avatar, price, quantity, city, address, deliveryMethod, phone, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO orders (name, avatar, price, quantity, userName, city, address, deliveryMethod, phone, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
         // Thực hiện truy vấn SQL
+
         mysql2.query(query, [data.name, data.avatar, data.price, data.quantity, data.city, data.address, data.deliveryMethod, data.phone, data.note], (error, results, fields) => {
+
+    
         if (error) {
             // Trả về mã trạng thái 500 nếu có lỗi xảy ra
             res.status(500).send("Có lỗi xảy ra khi thêm thông tin cá nhân");
