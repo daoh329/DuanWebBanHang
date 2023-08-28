@@ -7,6 +7,8 @@ import Nav from './Nav/Nav'
 import Footer from './Footer/Footer';
 import Detail from './Detail/Detail';
 import Login from './Login/Login.js';
+import AdminPage from './QuanLyAdmin/QuanLyAdmin';
+import Search from './Search/Search';
 const App = () => {
   return (
     <div className='App'>
@@ -17,6 +19,8 @@ const App = () => {
           <Route path="" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/search" element={<Search/>} />
           </Routes>
         </header>
         <Footer />
