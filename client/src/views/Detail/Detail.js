@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from '@ant-design/icons';
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth } from '../../firebaseConfig';
+// import firebase from 'firebase'
 import { Image, Carousel, Badge, Descriptions, Button, Checkbox, Form, Input,  Cascader,
   InputNumber,
   Radio,
@@ -23,6 +26,7 @@ import {
   MDBModalFooter,
 } from "mdb-react-ui-kit";
 // link
+
 import "./Detail.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -62,6 +66,7 @@ function Detail() {
     const selectedProvinceData = provinces.find(province => province.id === value);
     setSelectedProvince(selectedProvinceData);
     setSelectedDistrict(null); // Reset selected district
+    setCity(value); // Cập nhật giá trị của state city
   };
 
   const handleDistrictChange = value => {
@@ -108,6 +113,17 @@ function Detail() {
   //form
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
+
+  // Khai báo state cho các trường thông tin cá nhân
+  const [city, setCity] = useState('');
+  const [address, setAddress] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState('');
+  const [phone, setPhone] = useState('');
+  const [note, setNote] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [confirmationResult, setConfirmationResult] = useState(null);
+  const [isOTPVerified, setIsOTPVerified] = useState(false);
+
   useEffect(() => {
 
     const fetchedProductDetail = {
@@ -115,28 +131,98 @@ function Detail() {
       price: parseFloat(user.Price), // Chuyển đổi user.Price thành số
     };
     setProductDetail(fetchedProductDetail);
+    console.log(user.Price);
   }, [user]);
 
-    // tăng sl
-    const handleIncreaseQuantity = () => {
-      setQuantity(quantity + 1);
+  const handleSendOTP = () => {
+    // Set up reCAPTCHA verifier
+    const verifier = new RecaptchaVerifier (auth, 'recaptcha-container', {});
+
+    // Send OTP to user's phone number
+    signInWithPhoneNumber(auth, phoneNumber, verifier)
+      .then((result) => {
+        setConfirmationResult(result);
+      });
+  }
+
+  const handleVerifyOTP = () => {
+    // Prompt user to enter OTP
+    const code = window.prompt("Enter OTP");
+
+    // Verify OTP
+    confirmationResult.confirm(code).then((result) => {
+      // User is signed in
+      const user = result.user;
+      setIsOTPVerified(true); // Cập nhật trạng thái xác minh OTP
+    });
+  }
+
+  // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
+  const handleConfirm = async () => {
+
+    if (!isOTPVerified) {
+      // Nếu người dùng chưa xác minh mã OTP
+      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+      return;
+    }
+    
+    // Lấy thông tin cá nhân của người dùng từ state hoặc form
+    const data = {
+      name: user.name,
+      avatar: user.avatar,
+      price: productDetail.price * quantity,
+      quantity: quantity,
+      city: city,
+      // district: selectedDistrict,
+      address: address,
+      deliveryMethod: deliveryMethod,
+      phoneNumber: phoneNumber,
+      note: note
     };
-  // giảm sl
-    const handleDecreaseQuantity = () => {
-      if (quantity > 1) {
-        setQuantity(quantity - 1);
-      }
-    };
-    // hiển thị giá
-    const calculateTotalPrice = () => {
-      if (productDetail && !isNaN(productDetail.price) && !isNaN(quantity)) {
-        return productDetail.price * quantity;
-      }
-      return 0;
-    };
-    const formatPrice = (price) => {
-      return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    };
+
+    // In ra giá trị của biến data
+    console.log('Data:', data);
+
+    // Gửi thông tin đăng ký lên server
+    const response = await fetch('http://localhost:3000/order/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    // Xử lý kết quả trả về từ server NodeJS
+    if (response.ok) {
+      // Thông báo thành công
+      alert('Thêm thông tin cá nhân thành công');
+    } else {
+      // Thông báo lỗi
+      alert('Có lỗi xảy ra khi thêm thông tin cá nhân');
+    }
+  };
+
+
+  //   // tăng sl
+  //   const handleIncreaseQuantity = () => {
+  //     setQuantity(quantity + 1);
+  //   };
+  // // giảm sl
+  //   const handleDecreaseQuantity = () => {
+  //     if (quantity > 1) {
+  //       setQuantity(quantity - 1);
+  //     }
+  //   };
+    // // hiển thị giá
+    // const calculateTotalPrice = () => {
+    //   if (productDetail && !isNaN(productDetail.price) && !isNaN(quantity)) {
+    //     return productDetail.price * quantity;
+    //   }
+    //   return 0;
+    // };
+    // const formatPrice = (price) => {
+    //   return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    // };
     
  //
   return (
@@ -618,98 +704,29 @@ function Detail() {
             
       {productDetail && (
         <div>
-          <h2>Thông tin sản phẩm</h2>
+          <h2>Thông tin cá nhân</h2>
           <Form layout="vertical">
             <Form.Item label="Tên sản phẩm">
               <Input className="product-name" value={user.name} disabled />
             </Form.Item>
             <Form.Item label="Hình">
-              <Image width={380}  src={user.avatar}></Image>
+              <Image width={380} src={user.avatar}></Image>
             </Form.Item>
             <Form.Item label="Giá">
-              <Input value={user.Price} disabled />
+              <Input value={productDetail.price * quantity + 'đ'} disabled />
             </Form.Item>
             <Form.Item label="Số lượng">
-              <Input value={quantity} readOnly style={{ width: 60, textAlign: 'center' }} />
-              <Button onClick={handleIncreaseQuantity}>+</Button>
-              <Button onClick={handleDecreaseQuantity}>-</Button>
-            </Form.Item>
-            <Form.Item label="Giá tiền">
-              <span> {formatPrice(calculateTotalPrice())} </span>
-
+              <Button onClick={() => setQuantity(quantity - 1)}>-</Button>
+              <Input
+                value={quantity}
+                readOnly
+                style={{ width: 60, textAlign: 'center' }}
+              />
+              <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
             </Form.Item>
           </Form>
         </div>
       )}
-
-
-                {/* fomr 
-                <form
-                  onSubmit={formik.handleSubmit}
-                  action="home"
-                  method="detail"
-                >
-                  <MDBRow className="mb-4">
-                    <MDBCol>
-                      <MDBInput
-                        id="firstName"
-                        name="firstName"
-                        label="Tên người dùng"
-                        value={formik.values.firstName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.firstName && formik.errors.firstName ? (
-                        <div>{formik.errors.firstName}</div>
-                      ) : null}
-                    </MDBCol>
-                    <MDBCol>
-                      <MDBInput
-                        id="address"
-                        name="address"
-                        label="Địa chỉ chi tiết"
-                        value={formik.values.address}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.address && formik.errors.address ? (
-                        <div>{formik.errors.address}</div>
-                      ) : null}
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBInput
-                    className="mb-4"
-                    type="email"
-                    id="email"
-                    name="email"
-                    label="Email(Không bắt buộc)"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.email && formik.errors.email ? (
-                    <div>{formik.errors.email}</div>
-                  ) : null}
-                  <MDBInput
-                    className="mb-4"
-                    type="number"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    label="Số điện thoại"
-                    value={formik.values.phoneNumber}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
-                    <div>{formik.errors.phoneNumber}</div>
-                  ) : null}
-
-                  <MDBBtn type="submit" className="mb-4" block>
-                    Mua hàng
-                  </MDBBtn>
-                </form>
-        */}
-
       <Form
         labelCol={{
           span: 4,
@@ -721,20 +738,20 @@ function Detail() {
         style={{
           maxWidth: 600,
         }}>
-        <Form.Item name="disabled" valuePropName="checked">
-          
-        </Form.Item>
+        <Form.Item name="disabled" valuePropName="checked"></Form.Item>
         <Form.Item label="Giới tính">
           <Radio.Group>
-            <Radio checked='true' value="man"> Anh </Radio>
-            <Radio value="male"> Chị </Radio>
+            <Radio checked="true" value="man">
+              Anh
+            </Radio>
+            <Radio value="male">Chị</Radio>
           </Radio.Group>
         </Form.Item>
         {/* Tên */}
         <Form.Item label="Tên">
-          <Input/>
+          <Input />
         </Form.Item>
-{/* form select */}
+        {/* form select */}
         <Form.Item label="Thành phố">
         <Select onChange={handleProvinceChange}>
           {provinces.map(province => (
@@ -745,7 +762,7 @@ function Detail() {
         </Select>
       </Form.Item>
 
-      <Form.Item label="Huyện">
+        {/* <Form.Item label="Huyện">
         {selectedProvince && (
           <Select onChange={handleDistrictChange} value={selectedDistrict}>
             {selectedProvince.districts.map(district => (
@@ -755,7 +772,7 @@ function Detail() {
             ))}
           </Select>
         )}
-      </Form.Item>
+        </Form.Item> */}
 
       <Form.Item label="Thành phố">
         <Select id="provinceSelect" onChange={e => handleProvinceChange(parseInt(e.target.value))}>
@@ -790,6 +807,8 @@ function Detail() {
 
         <Form.Item label="Giao hàng">
           <TreeSelect
+            onChange={(value) => setDeliveryMethod(value)}
+            value={deliveryMethod}
             treeData={[
               {
                 title: 'Giờ hành chính',
@@ -801,17 +820,29 @@ function Detail() {
               },
             ]}
           />
-          
         </Form.Item>
         <Form.Item label="Số điện thoại">
-          <Input type="number"/>
-        </Form.Item>
-        <Form.Item label="Ghi chú">
-          <TextArea rows={4} />
+          <Input onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
         </Form.Item>
 
-        <Form.Item >
-        <Button>Xác nhận</Button>
+        <Form.Item>
+          <Button onClick={handleSendOTP}>Gửi mã OTP</Button>
+          <div id="recaptcha-container"></div>
+        </Form.Item>
+        <Form.Item>
+          <Button onClick={handleVerifyOTP}>Nhập mã OTP đã gửi</Button>
+        </Form.Item>
+
+        <Form.Item label="Ghi chú">
+          <TextArea
+            onChange={(e) => setNote(e.target.value)}
+            value={note}
+            rows={4}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Button onClick={handleConfirm}>Xác nhận</Button>
         </Form.Item>
       </Form>
 
