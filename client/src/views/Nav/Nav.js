@@ -72,7 +72,7 @@ console.log(">>>",searchQuery)
   <TagOutlined style={{ marginRight: '8px' }} />
   Khuyến mãi
 </a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
+                    <a href='/showroom' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
                     <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
                     <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
                 </div>
