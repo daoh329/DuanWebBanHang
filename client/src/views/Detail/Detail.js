@@ -118,6 +118,7 @@ function Detail() {
   const [userName, setUserName] = useState('');
   const [note, setNote] = useState('');
   const [phone, setPhone] = useState('');
+  const [status, setStatus] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -174,6 +175,7 @@ function Detail() {
       deliveryMethod: deliveryMethod,
       phone: phone,
       note: note,
+      status:'Chưa xác nhận',
     };
 
     // In ra giá trị của biến data

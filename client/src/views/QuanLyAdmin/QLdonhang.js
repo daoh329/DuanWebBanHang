@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from 'antd';
+import { format } from 'date-fns';
 import axios from "axios";
 
 function OrderList() {
@@ -9,7 +10,8 @@ function OrderList() {
         try {
             const res = await axios.get("http://localhost:3000/order/json");
             console.log('API Response:', res.data);
-            setOrderList(res.data || []);
+            const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setOrderList(sortedOrders || []);
         } catch (error) {
             console.error("Error fetching order data:", error);
         }
@@ -22,35 +24,49 @@ function OrderList() {
     const handleConfirmOrder = async (record) => {
         console.log('Confirm order button clicked for order:', record.id);
         try {
-            await axios.post(`http://localhost:3000/order/${record.id}/confirm`);
+            await axios.put(`http://localhost:3000/order/confirm/${record.id}`);
             fetchData();
         } catch (error) {
             console.error("Error confirming order:", error);
         }
     };
+
     const handleCancelOrder = async (record) => {
         try {
-            await axios.post(`http://localhost:3000/order/${record.id}/cancel`);
+            await axios.put(`http://localhost:3000/order/cancel/${record.id}`);
             fetchData();
         } catch (error) {
             console.error("Error canceling order:", error);
         }
     };
+
     const columns = [
+        { title: 'Người mua', dataIndex: 'userName', key: 'userName' },
+        { title: 'SDT', dataIndex: 'phone', key: 'phone' },
+        { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
         { title: 'Giá', dataIndex: 'price', key: 'price' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
+        
         { title: 'Ghi chú', dataIndex: 'note', key: 'note' },
-        { title: 'Trạng thái', dataIndex: 'status', key: 'status' },
-
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: created_at => format(new Date(created_at), 'dd/MM/yyyy HH:mm:ss'), // Định dạng lại thời gian
+        },
+        {
+            title: 'Trạng thái', dataIndex: 'status', key: 'status', render: status => <span style={{
+                fontWeight: 'bold', color: status === 'Đã xác nhận' ? 'green' : status === 'Chưa xác nhận' ? 'orange' : 'red'
+            }}>{status}</span>
+        },
         {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'action',
             render: (_, record) => (
                 <span>
-                    {record.status === 'unconfirmed' ? (
+                    {record.status === 'Đã xác nhận' ? (
                         <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
                             Hủy
                         </Button>
@@ -63,6 +79,7 @@ function OrderList() {
             ),
         },
     ];
+
     return (
         <div>
             <h1>Quản lý đơn hàng</h1>

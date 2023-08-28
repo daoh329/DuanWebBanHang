@@ -13,7 +13,9 @@ const createOrdersTable = () => {
       deliveryMethod VARCHAR(255),
       phone VARCHAR(255),
       note TEXT,
-      status VARCHAR(255)
+      status VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`;
   
     mysql2.query(createTableQuery, (error, results, fields) => {

@@ -13,13 +13,13 @@ class OrderController {
         // Gọi hàm createOrdersTable để tạo bảng orders nếu chưa tồn tại
         createOrdersTable();
 
-        const query = 'INSERT INTO orders (name, avatar, price, quantity, userName, city, address, deliveryMethod, phone, note, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO orders (name, avatar, price, quantity, userName, city, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 
 
         // Thực hiện truy vấn SQL
 
-        mysql.query(query, [data.name, data.avatar, data.price, data.quantity, data.userName, data.city, data.address, data.deliveryMethod, data.phone, data.note, data.status], (error, results, fields) => {
+        mysql.query(query, [data.name, data.avatar, data.price, data.quantity, data.userName, data.city, data.address, data.deliveryMethod, data.phone, data.note, data.status, new Date()], (error, results, fields) => {
 
 
             if (error) {
