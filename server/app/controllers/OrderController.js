@@ -1,5 +1,4 @@
 const mysql = require("../../config/db/mySQL");
-const mysql2 = require('../../config/db/mySQL');
 const createOrdersTable = require("../../config/createTable");
 
 class OrderController {
@@ -69,6 +68,16 @@ class OrderController {
             } else {
                 res.status(200).send("Cập nhật trạng thái đơn hàng thành công");
             }
+        });
+    }
+
+    async orderHistory(req, res) {
+        const phone = req.params.phone;
+        // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
+        mysql.query('SELECT * FROM orders WHERE phone = ?', [phone], (error, results, fields) => {
+            if (error) throw error;
+            res.send(results);
+            console.log(results);
         });
     }
 }
