@@ -2,9 +2,8 @@ const mysql = require("../../config/db/mySQL");
 const createTables = require("../../config/CrTables");
 
 class Product{
-    async Addlaptop(res,req){
+    async Addlaptop(req,res){
         const data = req.body;
-        console.log(req.body);
         console.log(data);
         if (!data) {
             return res.status(400).json("Invalid data");
@@ -13,6 +12,7 @@ class Product{
         // createTables.Laptop
         // createTables.image_url
         const imageUrls = data.image;
+        console.log(imageUrls);
         const dataLaptop = [
             data.name,
             data.price,
@@ -57,11 +57,12 @@ class Product{
             res.status(500).send("Bug khi đẩy lên database");
         } else {
             // Trả về mã trạng thái 200 nếu thêm thông tin cá nhân thành công
-            
+            const laptopId = results.insertId; // Lấy ID mới được tạo tự động
+            console.log("Thêm dữ liệu thành công. ID mới:", laptopId);
             imageUrls.forEach((imageUrl) => {
                 const imageSql = `
                   INSERT INTO image_url (image_url, laptop_id)
-                  VALUES (?, ?, ?)
+                  VALUES (?, ?)
                 `;
               
                 const values = [imageUrl, laptopId]; 
