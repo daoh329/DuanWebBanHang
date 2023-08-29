@@ -12,6 +12,7 @@ import Search from './Search/Search';
 import Sale from './Menu/Sale';
 import QLdonhang from './QuanLyAdmin/QLdonhang';
 import ShowRoom from './Menu/ShowRoom';
+import OrderHistory from './OrderHistory/HistoryOrder';
 
 const App = () => {
   return (
@@ -29,8 +30,9 @@ const App = () => {
           <Route path="/showroom" element={<ShowRoom/>} />
           <Route path="/sale" element={<Sale/>} />
 
+          <Route path="/orderhistory/:phone" element={<OrderHistory/>} />
 
-          <Route path='/order/json' element={<QLdonhang />} /> 
+          <Route path='/order/json' element={<QLdonhang/>} /> 
           </Routes>
         </header>
         <Footer />
