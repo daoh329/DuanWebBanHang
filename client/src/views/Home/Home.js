@@ -191,9 +191,18 @@ const Home = () => {
 
     // them giỏ hàng
     const { addToCart } = useCart();
-    const handleAddToCart = (product) => {
-        addToCart(product);
+    const handleAddToCart = (item) => {
+        // addToCart(item);
         message.success('Sản phẩm đã được thêm vào giỏ hàng');
+
+        // Lấy giỏ hàng hiện tại từ session
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+
+        // Thêm sản phẩm vào giỏ hàng
+        cart.push(item);
+
+        // Lưu giỏ hàng đã cập nhật vào session
+        sessionStorage.setItem('cart', JSON.stringify(cart));
     };
 
      //---------------------------
