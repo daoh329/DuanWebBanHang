@@ -6,7 +6,6 @@ const connection = mysql.createConnection({
     user: 'root',
     post: 3306,
 
-
     database: 'banhangdientu'
 });
 

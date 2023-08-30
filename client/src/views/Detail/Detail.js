@@ -181,7 +181,9 @@ function Detail() {
       alert("Có lỗi xảy ra khi thêm thông tin cá nhân");
     }
   };
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
   return (
     <>
       <div>
