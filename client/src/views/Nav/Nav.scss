@@ -56,3 +56,21 @@
 //       border: 1px solid #ccc;
 //     }
 //   }
+.custom-input-search .ant-input {
+  
+    color: #ae69dd;
+    border-color: #ae69dd;
+  }
+  .custom-input-search .ant-btn-search {
+    background-color: #ae69dd;
+    border-color: #ae69dd;
+    color: #ae69dd;
+  }
+  :where(.css-dev-only-do-not-override-17a39f8).ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary) {
+    color:  #ae69dd;;
+   
+    border-color: #ae69dd;
+}
+  
+  
+  
