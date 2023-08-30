@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button } from 'antd';
+import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover } from 'antd';
 import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Hinh from '../../../src/assets/logo1.png';
-
+import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 
 
@@ -19,6 +19,8 @@ const App = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
+    const { cartItems } = useCart();
+
     // phone
     const [phone, setPhone] = useState('');
     const handleConfirm = async () => {
@@ -26,6 +28,8 @@ const App = () => {
         window.sessionStorage.setItem('phone', phone);
         navigate(`/orderHistory/${phone}`);
     }
+    //------giỏ hàng---------------
+  
 
     useEffect(() => {
         // Tải dữ liệu từ API khi component được render
@@ -47,7 +51,7 @@ const App = () => {
         );
         setFilteredProducts(filtered);
     }, [searchQuery, products]);
-console.log(">>>",searchQuery)
+    console.log(">>>", searchQuery)
     const handleSearch = value => {
         setSearchQuery(value);
         navigate(`/search?query=${encodeURIComponent(value)}`);
@@ -67,6 +71,7 @@ console.log(">>>",searchQuery)
         <Layout>
             <Affix offsetTop={0}>
                 <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f8fc', margintop: '0px' }}>
+
                 <a
   href="/sale"
   style={{
@@ -83,6 +88,7 @@ console.log(">>>",searchQuery)
                     <a href='/showroom' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
                     <a href='/support' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
                     <a href='/host' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
+
                 </div>
 
                 <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'black' }}>
@@ -97,16 +103,29 @@ console.log(">>>",searchQuery)
                         <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
                             <BellOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
                         </Badge>
-                        <Badge count={3} style={{ marginRight: '10px', marginTop: '10px' }}>
-                            <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
-                        </Badge>
+                        <Popover
+                            content={
+                                <div>
+                                    {/* Hiển thị danh sách sản phẩm trong giỏ hàng */}
+                                    <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>
+                                    <NavLink to="/cart">Giỏ hàng</NavLink> {/* Link to login page */}
+                                    </Button>
+                                </div>
+                            }
+                            title="Giỏ hàng"
+                            trigger="hover"
+                        >
+                            <Badge count={cartItems.length} style={{ marginRight: '10px', marginTop: '10px' }}>
+                                <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
+                            </Badge>
+                        </Popover>
                         <Dropdown overlay={menu}>
                             <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
                         </Dropdown>
                     </div>
 
                     <div className="search-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50}} onSearch={handleSearch} />
+                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50 }} onSearch={handleSearch} />
                     </div>
                     {/* <Menu
                         theme="dark"
