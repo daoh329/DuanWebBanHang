@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix } from 'antd';
+import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button } from 'antd';
 import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Hinh from '../../../src/assets/logo1.png'
+import Hinh from '../../../src/assets/logo1.png';
 
 const { Header } = Layout;
 
@@ -18,6 +18,13 @@ const App = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [phone, setPhone] = useState('');
+
+    const handleConfirm = async () => {
+        // Lưu giá trị phone vào session
+        window.sessionStorage.setItem('phone', phone);
+        navigate(`/orderHistory/${phone}`);
+    }
 
     useEffect(() => {
         // Tải dữ liệu từ API khi component được render
@@ -84,7 +91,28 @@ console.log(">>>",searchQuery)
 
                             <img src={Hinh} style={{ width: '100%', height: '100%' }}></img></NavLink></span>
                     </div>
-                    <Menu
+
+                    <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
+                        <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
+                            <BellOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
+                        </Badge>
+                        <Badge count={3} style={{ marginRight: '10px', marginTop: '10px' }}>
+                            <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
+                        </Badge>
+                        <Dropdown overlay={menu}>
+                            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
+                        </Dropdown>
+                    </div>
+
+                    <div className="search-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50}} onSearch={handleSearch} />
+                    </div>
+                    <div style={{display: 'flex'}}>
+                        <Input style={{width: 300, marginRight: 10}} onChange={(e) => setPhone(e.target.value)} value={phone} placeholder='Nhập số điện thoại để kiểm tra đơn hàng'/>
+                        
+                        <Button onClick={handleConfirm} style={{backgroundColor: '#005c42', color: '#ffffff'}}>Xác nhận</Button>
+                    </div>
+                    {/* <Menu
                         theme="dark"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
@@ -104,21 +132,7 @@ console.log(">>>",searchQuery)
                             <Menu.Item key="3">Danh mục 3</Menu.Item>
                             <Menu.Item key="4">Danh mục 4</Menu.Item>
                         </Menu.SubMenu>
-                    </Menu>
-                    <div className="search-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff' }} onSearch={handleSearch} />
-                    </div>
-                    <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
-                        <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
-                            <BellOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
-                        </Badge>
-                        <Badge count={3} style={{ marginRight: '10px', marginTop: '10px' }}>
-                            <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
-                        </Badge>
-                        <Dropdown overlay={menu}>
-                            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
-                        </Dropdown>
-                    </div>
+                    </Menu> */}
                 </Header>
             </Affix>
         </Layout>
