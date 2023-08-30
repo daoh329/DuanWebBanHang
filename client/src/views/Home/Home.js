@@ -142,8 +142,8 @@ const Home = () => {
         // Tạo đối tượng sản phẩm mới
         const historyproduct = {
             name: user.name,
-            price: user.Price,
-            imageUrl: user.avatar,
+            Price: user.Price,
+            avatar: user.avatar,
             id: user.id,
         };
         // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
@@ -203,6 +203,7 @@ const Home = () => {
 
         // Lưu giỏ hàng đã cập nhật vào session
         sessionStorage.setItem('cart', JSON.stringify(cart));
+        console.log(">>>",cart)
     };
 
      //---------------------------
@@ -388,7 +389,7 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm Laptop ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/FphgdKoJkfp17IB5xYJvah5EShCZUjDQER9SGUCZMzvzsfcDeRKvZ-coSz0kSdhRn7ZvwPBC2qMoHO3Iek_p5knTcxv2Gb-7=w1232)' }}>
+            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/pSzqZlVLMrhpyoU2QoTUVctJZc8uuuLNG97D8rZTQ0Ds29acQoNVkeG93TEklTJSMQyDjnpDhs0p8eCI1WRpAefb8iNlJ8Os=w1232)' }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>Top 5 Laptop bán chạy</div>
                 </div>
@@ -417,7 +418,7 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm Điện thoại ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/oOKsGNxeJyYtVHbBAk6HdIirUD7P794VfnTf3cKYJvU9zNbXJSAc8AtH79dno-6KrMH9nJXNOYqamANUtAHH3jDE0HDo3sM=w1232)' }}>
+            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232)' }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Top 5 Điện Thoại bán chạy</div>
                 </div>
@@ -494,11 +495,11 @@ const Home = () => {
                                 hoverable
                                 className="card-sp"
                             >
-                                <img src={item.imageUrl} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailproducts(item)} />
+                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailproducts(item)} />
                                 <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.price} ₫</p>
+                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
                                         <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
                                     </div>

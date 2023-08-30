@@ -12,13 +12,6 @@
       padding: 85px 99px;
   } 
   
-  
-  div > span  { 
-      font-size: 24px; 
-      font-weight: normal; 
-      line-height: 1.5;
-  } 
-  
   div > form > *  { 
       display: block; 
       margin: auto; 
