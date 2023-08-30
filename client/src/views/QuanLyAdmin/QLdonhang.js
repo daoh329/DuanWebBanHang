@@ -56,7 +56,8 @@ function OrderList() {
             render: created_at => format(new Date(created_at), 'dd/MM/yyyy HH:mm:ss'), // Định dạng lại thời gian
         },
         {
-            title: 'Trạng thái', dataIndex: 'status', key: 'status', render: status => <span style={{
+            title:  'Trạng thái', dataIndex: 'status', key: 'status',onClick:'', render: status => <span style={{
+               
                 fontWeight: 'bold', color: status === 'Đã xác nhận' ? 'green' : status === 'Chưa xác nhận' ? 'orange' : 'red'
             }}>{status}</span>
         },

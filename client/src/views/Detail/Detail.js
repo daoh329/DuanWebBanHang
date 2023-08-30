@@ -67,14 +67,14 @@ function Detail() {
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
-
+//select district
   const handleDistrictChange = (value) => {
     const selectedDistrict = selectedCity.Districts.find(
       (district) => district.Id === value
     );
     setSelectedDistrict(selectedDistrict);
   };
-  //
+  //lấy thông tin vào modal
   const { id } = useParams();
   const [user, setUser] = useState({});
 
@@ -104,7 +104,7 @@ function Detail() {
   const [note, setNote] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState('');
-
+// otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
