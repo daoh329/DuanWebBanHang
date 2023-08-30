@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from 'antd';
 import { format } from 'date-fns';
@@ -8,27 +7,19 @@ import { useCart } from '../Cart/CartContext';
 const { Header, Footer, Sider, Content } = Layout;
 
 function Cart() {
-
     // Lấy giỏ hàng hiện tại từ session
     let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
-    // const [cartList, setCartList] = useState([]);
+
     const [selectedItems, setSelectedItems] = useState([]);
+    const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
 
-
-    // const fetchData = async () => {
-    //     try {
-    //         const res = await axios.get("http://localhost:3000/order/json");
-    //         const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    //         setCartList(sortedOrders || []);
-    //     } catch (error) {
-    //         console.error("Error fetching order data:", error);
-    //     }
-    // };
-
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        // Sắp xếp dữ liệu sản phẩm theo thời gian mới nhất đầu tiên
+        const sortedProducts = [...cart].sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setSortedCart(sortedProducts);
+    }, [cart]);
 
     const columns = [
         {
@@ -38,7 +29,7 @@ function Cart() {
             render: (_, record) => (
                 <Checkbox />
             ),
-            width: 50, // Để đảm bảo chiều rộng cố định cho ô checkbox
+            width: 50,
         },
         {
             title: '',
@@ -47,7 +38,7 @@ function Cart() {
             render: (_, record) => (
                 <img src={record.avatar} alt="Avatar" style={{ width: '50px', height: '50px' }} />
             ),
-            width: 50, // Để đảm bảo chiều rộng cố định cho hình ảnh
+            width: 50,
         },
         { title: 'Sản Phẩm', dataIndex: 'name', key: 'name' },
         { title: 'Đơn giá', dataIndex: 'Price', key: 'Price' },
@@ -57,15 +48,16 @@ function Cart() {
     const handleCheckboxChange = (selected) => {
         setSelectedItems(selected);
     };
-
+    useEffect(() => {
+        window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+      }, []);
     return (
         <Space style={{ width: '80%', marginTop: '20px', display: 'block', margin: '0 auto' }}>
-            <h2 style={{ textAlign: 'left' }}>Cart</h2>
+            <h2 style={{ textAlign: 'left' }}>Giỏ hàng</h2>
             <Row>
                 <Col span={18}>
-
-                    <Table columns={columns} dataSource={cart} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
-
+                    {/* Sử dụng sortedCart thay vì cart */}
+                    <Table columns={columns} dataSource={sortedCart} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
                 </Col>
                 <Col span={6}>
                     <Card title="Thanh toán" bordered={false} style={{ width: 300, marginLeft: "10px" }}>

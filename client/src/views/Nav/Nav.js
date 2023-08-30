@@ -3,13 +3,15 @@ import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, L
 import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Hinh from '../../../src/assets/logo1.png';
+import '../Nav/Nav.scss'
+import Hinh from '../../../src/assets/logo4.png';
 import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 
 
 const App = () => {
     const [menuOpenKeys, setMenuOpenKeys] = useState([]);
+    const [cart, setCart] = useState(JSON.parse(sessionStorage.getItem('cart')) || []);
 
     const handleMenuOpenChange = (openKeys) => {
         setMenuOpenKeys(openKeys);
@@ -19,8 +21,13 @@ const App = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
-    const { cartItems, removeFromCart } = useCart();
-
+    // const [cartList, setCartList] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const removeFromCart = (productId) => {
+        const updatedCart = cart.filter(item => item.id !== productId);
+        sessionStorage.setItem('cart', JSON.stringify(updatedCart));
+        setCart(updatedCart); // Cập nhật state giỏ hàng
+    };
     // phone
     const [phone, setPhone] = useState('');
     const handleConfirm = async () => {
@@ -91,37 +98,43 @@ const App = () => {
 
                 </div>
 
-                <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'black' }}>
+                <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#ffffff' }}>
                     <div className="logo" style={{ width: '80px', marginRight: '16px', color: '#ffffff' }}>
                         {/* Add your logo here */}
                         <span style={{ position: 'relative', }}>  <NavLink to="/">
-
-                            <img src={Hinh} style={{ width: '100%', height: '100%' }}></img></NavLink></span>
+                            <img src={Hinh} style={{ width: '130%', height: '130%' }}></img></NavLink></span>
                     </div>
-                    <div className="search-container" style={{ flex: 'auto', display: 'flex', justifyContent: 'center', maxWidth:'60%' }}>
-                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50 }} onSearch={handleSearch} />
+                    <div className="search-container" style={{ flex: 'auto', display: 'flex', justifyContent: 'center', maxWidth: '60%' }}>
+                        <Input.Search
+                            placeholder="Tìm kiếm"
+                            className="custom-input-search"
+                            onSearch={handleSearch}
+                        />
                     </div>
                     <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
                         <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
-                            <BellOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
+                            <BellOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
                         </Badge>
                         <Popover
                             content={
                                 <div style={{ width: '300px', maxHeight: '200px', overflowY: 'auto', scrollbarWidth: 'none' }}>
+                                    <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>
+                                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                                    </Button>
                                     <List
                                         itemLayout="horizontal"
-                                        dataSource={cartItems}
-                                        renderItem={item => (
+                                        dataSource={cart}
+                                        renderItem={selectedItems => (
                                             <List.Item
                                                 actions={[
-                                                    <Button type="danger" icon={<DeleteOutlined />} onClick={() => removeFromCart(item.id)}>
+                                                    <Button type="danger" icon={<DeleteOutlined />} onClick={() => removeFromCart(selectedItems.id)}>
                                                     </Button>,
                                                 ]}
                                             >
                                                 <List.Item.Meta
-                                                    avatar={<Avatar src={item.avatar} />}
-                                                    title={item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}
-                                                    description={`Giá: ${item.Price} ₫`}
+                                                    avatar={<Avatar src={selectedItems.avatar} />}
+                                                    title={selectedItems.name.length > 20 ? selectedItems.name.substring(0, 20) + "..." : selectedItems.name}
+                                                    description={`Giá: ${selectedItems.Price} ₫`}
                                                 />
                                             </List.Item>
                                         )}
@@ -134,13 +147,13 @@ const App = () => {
                             title="Giỏ hàng"
                             trigger="hover"
                         >
-                            <Badge count={cartItems.length} style={{ marginRight: '10px', marginTop: '10px' }}>
-                                <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
+                            <Badge count={cart.length} style={{ marginRight: '10px', marginTop: '10px' }}>
+                                <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
                             </Badge>
                         </Popover>
 
                         <Dropdown overlay={menu}>
-                            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
+                            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#ae69dd', margin: '10px' }} />
                         </Dropdown>
                     </div>
 
