@@ -80,6 +80,17 @@ class OrderController {
             console.log(results);
         });
     }
+
+    async topLaptop(req, res) {
+        const query = `SELECT name, avatar FROM orders GROUP BY name, avatar ORDER BY COUNT(*) DESC LIMIT 5`;
+        mysql.query(query, (error, results) => {
+            if (error) {
+                res.status(500).send(error);
+            } else {
+                res.send(results);
+            }
+    });
+    }
 }
 
 module.exports = new OrderController;

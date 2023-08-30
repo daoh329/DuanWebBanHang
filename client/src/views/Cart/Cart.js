@@ -7,22 +7,25 @@ import axios from "axios";
 const { Header, Footer, Sider, Content } = Layout;
 
 function Cart() {
-    const [cartList, setCartList] = useState([]);
+
+    // Lấy giỏ hàng hiện tại từ session
+    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    // const [cartList, setCartList] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
 
-    const fetchData = async () => {
-        try {
-            const res = await axios.get("http://localhost:3000/order/json");
-            const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            setCartList(sortedOrders || []);
-        } catch (error) {
-            console.error("Error fetching order data:", error);
-        }
-    };
+    // const fetchData = async () => {
+    //     try {
+    //         const res = await axios.get("http://localhost:3000/order/json");
+    //         const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    //         setCartList(sortedOrders || []);
+    //     } catch (error) {
+    //         console.error("Error fetching order data:", error);
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
     const columns = [
         {
@@ -44,8 +47,8 @@ function Cart() {
             width: 50, // Để đảm bảo chiều rộng cố định cho hình ảnh
         },
         { title: 'Sản Phẩm', dataIndex: 'name', key: 'name' },
-        { title: 'Đơn giá', dataIndex: 'price', key: 'price' },
-        { title: 'Thành tiền', dataIndex: 'price', key: 'price' },
+        { title: 'Đơn giá', dataIndex: 'Price', key: 'Price' },
+        { title: 'Thành tiền', dataIndex: 'Price', key: 'Price' },
     ];
 
     const handleCheckboxChange = (selected) => {
@@ -57,7 +60,7 @@ function Cart() {
             <h2 style={{ textAlign: 'left' }}>Cart</h2>
             <Row>
                 <Col span={18}>
-                    <Table columns={columns} dataSource={cartList} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
+                    <Table columns={columns} dataSource={cart} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
                 </Col>
                 <Col span={6}>
                     <Card title="Thanh toán" bordered={false} style={{ width: 300, marginLeft: "10px" }}>

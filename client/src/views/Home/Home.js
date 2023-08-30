@@ -125,7 +125,16 @@ const tuanlevang = [
 
 const Home = () => {
     const [ListUsers, setListUsers] = useState([]);
+    const [topLaptop, setTopLaptop] = useState([]);
     const navigate = useNavigate()
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/order/laptopbanchay`)
+            .then(res => {
+                setTopLaptop(res.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
 
     const handleViewDetailuser = (user) => {
         // Lấy danh sách các sản phẩm đã xem từ session storage
@@ -182,9 +191,18 @@ const Home = () => {
 
     // them giỏ hàng
     const { addToCart } = useCart();
-    const handleAddToCart = (product) => {
-        addToCart(product);
+    const handleAddToCart = (item) => {
+        // addToCart(item);
         message.success('Sản phẩm đã được thêm vào giỏ hàng');
+
+        // Lấy giỏ hàng hiện tại từ session
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+
+        // Thêm sản phẩm vào giỏ hàng
+        cart.push(item);
+
+        // Lưu giỏ hàng đã cập nhật vào session
+        sessionStorage.setItem('cart', JSON.stringify(cart));
     };
 
      //---------------------------
@@ -372,22 +390,21 @@ const Home = () => {
             {/* ------------------box sản phẩm Laptop ------------------ */}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/FphgdKoJkfp17IB5xYJvah5EShCZUjDQER9SGUCZMzvzsfcDeRKvZ-coSz0kSdhRn7ZvwPBC2qMoHO3Iek_p5knTcxv2Gb-7=w1232)' }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>LapTop ngon</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>Top 5 Laptop bán chạy</div>
                 </div>
                 <div style={{ width: '98%', margin: '0 auto' }}>
                     <div
                         className="horizontal-scroll-view"
                         style={{ display: 'flex', overflowX: 'scroll', padding: '10px', whiteSpace: 'nowrap', }} >
-                        {products && products.length > 0 &&
-                            products.map((item, index) => (
+                        {topLaptop && topLaptop.length > 0 &&
+                            topLaptop.map((item, index) => (
                                 <Card
                                     key={item.id}
                                     hoverable
                                     className="product-card"
-                                    style={{ width: '60%', boxSizing: 'border-box', marginRight: '10px', display: 'inline-block', }}>
-                                    <img src={item.imageUrl} style={{ width: '200px' }}></img>
-                                    <h3>{item.name}</h3>
-                                    <p>{item.price}$</p>
+                                    style={{ width: '20%', boxSizing: 'border-box', marginRight: '10px', display: 'inline-block', }}>
+                                    <img src={item.avatar} style={{ width: '200px' }}></img>
+                                    <a className="name-card">{item.name}</a>
                                     <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>Buy
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
@@ -402,7 +419,7 @@ const Home = () => {
             {/* ------------------box sản phẩm Điện thoại ------------------ */}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/oOKsGNxeJyYtVHbBAk6HdIirUD7P794VfnTf3cKYJvU9zNbXJSAc8AtH79dno-6KrMH9nJXNOYqamANUtAHH3jDE0HDo3sM=w1232)' }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Điện Thoại</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Top 5 Điện Thoại bán chạy</div>
                 </div>
                 <div style={{ width: '98%', margin: '0 auto' }}>
                     <div
@@ -427,10 +444,10 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* ------------------box sản phẩm nổi bật ------------------ */}
+            {/* ------------------box sản phẩm ------------------ */}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm nổi bật</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm</div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
                     {ListUsers && ListUsers.length > 0 &&
@@ -482,7 +499,7 @@ const Home = () => {
                                     <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
                                     </div>
                                 </div>

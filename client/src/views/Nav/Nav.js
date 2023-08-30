@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover } from 'antd';
-import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, List, } from 'antd';
+import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Hinh from '../../../src/assets/logo1.png';
@@ -19,7 +19,7 @@ const App = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
 
-    const { cartItems } = useCart();
+    const { cartItems, removeFromCart } = useCart();
 
     // phone
     const [phone, setPhone] = useState('');
@@ -29,7 +29,7 @@ const App = () => {
         navigate(`/orderHistory/${phone}`);
     }
     //------giỏ hàng---------------
-  
+
 
     useEffect(() => {
         // Tải dữ liệu từ API khi component được render
@@ -72,19 +72,19 @@ const App = () => {
             <Affix offsetTop={0}>
                 <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f8fc', margintop: '0px' }}>
 
-                <a
-  href="/sale"
-  style={{
-    marginRight: '20px',
-    color: '#333',
-    textDecoration: 'none',
-    display: 'flex',
-    alignItems: 'center'
-  }}
->
-  <TagOutlined style={{ marginRight: '8px' }} />
-  Khuyến mãi
-</a>
+                    <a
+                        href="/sale"
+                        style={{
+                            marginRight: '20px',
+                            color: '#333',
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <TagOutlined style={{ marginRight: '8px' }} />
+                        Khuyến mãi
+                    </a>
                     <a href='/showroom' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
                     <a href='/support' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
                     <a href='/host' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
@@ -105,10 +105,29 @@ const App = () => {
                         </Badge>
                         <Popover
                             content={
-                                <div>
-                                    {/* Hiển thị danh sách sản phẩm trong giỏ hàng */}
+                                <div style={{  width: '300px', maxHeight: '200px', overflowY: 'auto', scrollbarWidth: 'none'}}>
+                                    <List                                   
+                                        itemLayout="horizontal"
+                                        dataSource={cartItems}
+                                        
+
+                                        renderItem={item => (
+                                            <List.Item
+                                                actions={[
+                                                    <Button type="danger" icon={<DeleteOutlined />} onClick={() => removeFromCart(item.id)}>                                                   
+                                                    </Button>,
+                                                ]}
+                                            >
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={item.avatar} />}
+                                                    title={item.name.length > 20 ? item.name.substring(0, 20) + "..." : item.name}
+                                                    description={`Giá: ${item.Price} ₫`}
+                                                />
+                                            </List.Item>
+                                        )}
+                                    />
                                     <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>
-                                    <NavLink to="/cart">Giỏ hàng</NavLink> {/* Link to login page */}
+                                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
                                     </Button>
                                 </div>
                             }
@@ -119,6 +138,7 @@ const App = () => {
                                 <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
                             </Badge>
                         </Popover>
+
                         <Dropdown overlay={menu}>
                             <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
                         </Dropdown>
@@ -149,8 +169,8 @@ const App = () => {
                         </Menu.SubMenu>
                     </Menu> */}
                 </Header>
-            </Affix>
-        </Layout>
+            </Affix >
+        </Layout >
     );
 };
 
