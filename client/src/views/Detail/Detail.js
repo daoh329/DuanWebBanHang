@@ -164,7 +164,6 @@ function Detail() {
 
     // In ra giá trị của biến data
     console.log("Data:", data);
-
     // Gửi thông tin đăng ký lên server
     const response = await fetch("http://localhost:3000/order/order", {
       method: "POST",
@@ -173,7 +172,6 @@ function Detail() {
       },
       body: JSON.stringify(data),
     });
-
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
