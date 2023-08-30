@@ -14,7 +14,8 @@ const CheckSP = () => {
   // otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
-
+  const [enteredOTP, setEnteredOTP] = useState(""); 
+  
   const handleSendOTP = () => {
     // Set up reCAPTCHA verifier
     const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
@@ -38,37 +39,28 @@ const CheckSP = () => {
   };
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
-  const handleConfirmotp = async () => {
+  const handleConfirmOTP = async () => {
     if (!isOTPVerified) {
-      // Nếu người dùng chưa xác minh mã OTP
-      alert('Vui lòng xác minh mã OTP');
+      alert("Vui lòng xác minh mã OTP trước");
       return;
     }
-  
-    const enteredOTP = window.prompt("Nhập mã OTP đã gửi");
-    if (!enteredOTP) {
-      // Nếu người dùng chưa nhập mã OTP
-      alert('Vui lòng nhập mã OTP');
-      return;
-    }
-  
+
     try {
       const response = await fetch("http://localhost:3000/checkOTP", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ otp: enteredOTP }),
+        body: JSON.stringify({
+          otp: enteredOTP,
+        }),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         if (result.isValid) {
-          // Nếu mã OTP hợp lệ
-          window.sessionStorage.setItem('phone', phone);
-          navigate(`/orderHistory/${phone}`);
+          alert("Mã OTP hợp lệ");
         } else {
-          // Nếu mã OTP không hợp lệ
           alert("Mã OTP không hợp lệ");
         }
       } else {
@@ -78,7 +70,6 @@ const CheckSP = () => {
       console.error("Lỗi: ", error);
     }
   };
-  
   
 
   
@@ -134,7 +125,7 @@ const CheckSP = () => {
             <Form.Item>
               <Button onClick={handleVerifyOTP}>Nhập mã OTP đã gửi</Button>
             </Form.Item>
-    <Button type="submit" onClick={handleConfirmotp} className="btn">
+    <Button type="submit" onClick={handleConfirmOTP} className="btn">
       Tra cứu
     </Button>
   </Form>
