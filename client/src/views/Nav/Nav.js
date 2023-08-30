@@ -18,8 +18,9 @@ const App = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [phone, setPhone] = useState('');
 
+    // phone
+    const [phone, setPhone] = useState('');
     const handleConfirm = async () => {
         // Lưu giá trị phone vào session
         window.sessionStorage.setItem('phone', phone);
@@ -79,9 +80,9 @@ console.log(">>>",searchQuery)
   <TagOutlined style={{ marginRight: '8px' }} />
   Khuyến mãi
 </a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
+                    <a href='/showroom' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
+                    <a href='/support' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
+                    <a href='/host' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
                 </div>
 
                 <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'black' }}>
@@ -106,11 +107,6 @@ console.log(">>>",searchQuery)
 
                     <div className="search-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
                         <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50}} onSearch={handleSearch} />
-                    </div>
-                    <div style={{display: 'flex'}}>
-                        <Input style={{width: 300, marginRight: 10}} onChange={(e) => setPhone(e.target.value)} value={phone} placeholder='Nhập số điện thoại để kiểm tra đơn hàng'/>
-                        
-                        <Button onClick={handleConfirm} style={{backgroundColor: '#005c42', color: '#ffffff'}}>Xác nhận</Button>
                     </div>
                     {/* <Menu
                         theme="dark"

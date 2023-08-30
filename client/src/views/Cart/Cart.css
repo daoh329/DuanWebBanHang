@@ -1,0 +1,1086 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap'); 
+
+
+.css-8x68m { 
+    box-sizing: border-box; 
+    margin: 0px 16px 0px 0px; 
+    min-width: 0px; 
+    width: 100%;
+} 
+
+*,:before,:after { 
+    box-sizing: border-box;
+} 
+
+.css-1jky165 { 
+    border-radius: 8px; 
+    background-color: rgb(255, 255, 255); 
+    position: relative; 
+    margin-bottom: 1rem;
+} 
+
+.css-u8zylc { 
+    border-style: none none solid; 
+    border-width: 1px; 
+    border-top-color: unset; 
+    border-right-color: unset; 
+    border-left-color: unset; 
+    opacity: 1; 
+    padding: 1rem; 
+    border-bottom-color: rgb(234, 234, 234);
+} 
+
+.css-u8zylc.teko-row { 
+    display: flex; 
+    flex-flow: wrap;
+} 
+
+@media (min-width: 1024px){ 
+  .css-u8zylc.teko-row { 
+    -webkit-box-pack: center; 
+    justify-content: center;
+  } 
+}     
+
+.css-u8zylc.teko-row-space-between { 
+    -webkit-box-pack: justify; 
+    justify-content: space-between;
+} 
+
+.css-u8zylc.teko-row-middle { 
+    -webkit-box-align: center; 
+    align-items: center;
+} 
+
+.css-u8zylc.teko-row:before,.css-u8zylc.teko-row:after { 
+    display: flex;
+} 
+
+.css-xr8qe8 { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    padding: 1rem; 
+    background-color: white;
+} 
+
+.css-gr7r8o { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+.css-gr7r8o.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-1o3gs9x { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+.css-1o3gs9x.teko-row { 
+    display: flex; 
+    flex-flow: wrap;
+} 
+
+@media (min-width: 1024px){ 
+  .css-1o3gs9x.teko-row { 
+    -webkit-box-pack: center; 
+    justify-content: center;
+  } 
+}     
+
+.css-1o3gs9x.teko-row-space-between { 
+    -webkit-box-pack: justify; 
+    justify-content: space-between;
+} 
+
+.css-1o3gs9x.teko-row-middle { 
+    -webkit-box-align: center; 
+    align-items: center;
+} 
+
+.css-1o3gs9x.teko-row:before,.css-1o3gs9x.teko-row:after { 
+    display: flex;
+} 
+
+.css-1o3gs9x.teko-row-no-wrap { 
+    flex-wrap: nowrap;
+} 
+
+.css-1o3gs9x.teko-row-start { 
+    -webkit-box-pack: start; 
+    justify-content: flex-start;
+} 
+
+label { 
+    display: inline-block; 
+    margin-bottom: 0.5rem;
+} 
+
+.css-1arb6mh { 
+    display: inline-flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    line-height: unset; 
+    cursor: pointer; 
+    list-style: none; 
+    box-sizing: border-box; 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+.css-1nyd7c5 { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    padding: 8px 0px; 
+    margin: 12px 0px; 
+    background-color: rgb(243, 243, 247); 
+    border-radius: 4px;
+} 
+
+.css-1nyd7c5.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-l24w9c { 
+    display: inline-block; 
+    position: relative; 
+    width: 16px; 
+    height: 16px;
+} 
+
+.css-gr7r8o.teko-col-6 { 
+    display: block; 
+    flex: 0 0 50%; 
+    max-width: 50%;
+} 
+
+.css-okd5mq { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    padding-right: 1rem; 
+    text-align: right;
+} 
+
+.css-okd5mq.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-okd5mq.teko-col-2 { 
+    display: block; 
+    flex: 0 0 16.66%; 
+    max-width: 16.66%;
+} 
+
+.css-u0n5ut { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    text-align: center;
+} 
+
+.css-u0n5ut.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-u0n5ut.teko-col-2 { 
+    display: block; 
+    flex: 0 0 16.66%; 
+    max-width: 16.66%;
+} 
+
+.css-t7prwg { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    text-align: right;
+} 
+
+.css-t7prwg.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-t7prwg.teko-col-2 { 
+    display: block; 
+    flex: 0 0 16.66%; 
+    max-width: 16.66%;
+} 
+
+input { 
+    margin: 0; 
+    font-family: inherit; 
+    font-size: inherit; 
+    line-height: inherit;
+} 
+
+input { 
+    overflow: visible;
+} 
+
+.css-lc01j1 { 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    bottom: 0; 
+    left: 0; 
+    z-index: 1; 
+    width: 16px; 
+    height: 16px; 
+    margin: auto; 
+    cursor: pointer; 
+    opacity: 0;
+} 
+
+.css-gfk8lf { 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    bottom: 0; 
+    left: 0; 
+    width: 16px; 
+    height: 16px; 
+    margin: auto; 
+    border: 1px solid #E4E5F0; 
+    border-radius: 2px; 
+    background-color: #FFFFFF;
+} 
+
+.css-1yiwpef { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    gap: 0.5rem; 
+    background: white; 
+    border-radius: 0.5rem;
+} 
+
+.css-9o8e5m { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: inherit; 
+    font-weight: 500; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-1ohnjvy { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    padding-right: 1rem;
+} 
+
+.css-1ohnjvy.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-1ohnjvy.teko-col-2 { 
+    display: block; 
+    flex: 0 0 16.66%; 
+    max-width: 16.66%;
+} 
+
+.css-gr7r8o.teko-col-2 { 
+    display: block; 
+    flex: 0 0 16.66%; 
+    max-width: 16.66%;
+} 
+
+.css-a5flv3 { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: center; 
+    justify-content: center;
+} 
+
+.css-a5flv3.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+svg { 
+    vertical-align: middle;
+} 
+
+.css-u5ggi9 { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    -webkit-transform: translate(-50%, -50%); 
+    -moz-transform: translate(-50%, -50%); 
+    -ms-transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
+} 
+
+.css-vhnop0 { 
+    display: flex; 
+    gap: 12px;
+} 
+
+.css-1oskuwq { 
+    display: flex; 
+    flex-direction: column; 
+    -webkit-box-align: center; 
+    align-items: center;
+} 
+
+.css-1hhvlhc { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    width: 100%; 
+    margin: 0.25rem 1rem;
+} 
+
+.css-1numgqw { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: inherit; 
+    font-weight: 500; 
+    text-decoration: unset; 
+    font-size: 15px; 
+    line-height: 24px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-1numgqw:hover { 
+    color: rgb(20, 53, 195);
+} 
+
+a { 
+    color: #0d6efd; 
+    -webkit-text-decoration: underline; 
+    text-decoration: underline;
+} 
+
+.css-cbrxda { 
+    -webkit-text-decoration: none; 
+    text-decoration: none; 
+    color: unset; 
+    cursor: pointer;
+} 
+
+a:hover { 
+    color: #024dbc;
+} 
+
+.css-cbrxda:hover { 
+    color: unset;
+} 
+
+.css-yp9swi { 
+    flex: 1 1 0%;
+} 
+
+.css-1o3gs9x.teko-row-end { 
+    -webkit-box-pack: end; 
+    justify-content: flex-end;
+} 
+
+.css-2c0axb { 
+    opacity: 1; 
+    height: 2rem; 
+    width: 6.375rem; 
+    border-radius: 0.25rem; 
+    background: rgb(248, 248, 252); 
+    border: 1px solid rgb(228, 229, 240); 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    overflow: hidden;
+} 
+
+.css-1d9jvxg { 
+    margin: 12px 0px 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s; 
+    cursor: pointer; 
+    color: rgb(25, 144, 255);
+} 
+
+.css-1d9jvxg:hover { 
+    color: rgb(218, 67, 67);
+} 
+
+.css-1i7enn7 { 
+    position: relative; 
+    display: inline-block; 
+    overflow: hidden; 
+    height: 80px; 
+    width: 80px; 
+    border: 1px solid rgb(228, 229, 240);
+} 
+
+.css-1qm2d75 { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: rgb(130, 134, 158); 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 12px; 
+    line-height: 16px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-1u7nn1v { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    width: max-content; 
+    display: inline-block; 
+    color: inherit; 
+    font-size: 1rem; 
+    font-weight: bold;
+} 
+
+button { 
+    border-radius: 0;
+} 
+
+button { 
+    margin: 0; 
+    font-family: inherit; 
+    font-size: inherit; 
+    line-height: inherit;
+} 
+
+button { 
+    overflow: visible;
+} 
+
+button { 
+    text-transform: none;
+} 
+
+button { 
+    -webkit-appearance: button;
+} 
+
+.css-1kcvffe { 
+    height: 100%; 
+    width: 2rem; 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: center; 
+    justify-content: center; 
+    user-select: none; 
+    border: none; 
+    background: transparent; 
+    cursor: not-allowed;
+} 
+
+.css-ktgpr2 { 
+    flex: 1 1 0%;
+} 
+
+.css-1i77det { 
+    height: 100%; 
+    width: 2rem; 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    user-select: none; 
+    border: none; 
+    background: transparent;
+} 
+
+button:not(:disabled) { 
+    cursor: pointer;
+} 
+
+.css-1xow1ww { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    padding-right: 0.75rem;
+} 
+
+.css-1xow1ww.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-1qy1wza { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    width: 100%;
+} 
+
+.css-1qy1wza.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+img { 
+    vertical-align: middle;
+} 
+
+.css-l4bwcr { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: rgb(67, 70, 87); 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: 2; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-l4bwcr:hover { 
+    color: rgb(20, 53, 195);
+} 
+
+.css-1orfikq { 
+    display: inline-flex; 
+    -webkit-box-align: center; 
+    align-items: center;
+} 
+
+.css-1d2ixzd { 
+    opacity: 1; 
+    height: 40px; 
+    padding-right: 0rem; 
+    background: white; 
+    border: 1px solid rgb(228, 229, 240); 
+    border-radius: 4px; 
+    display: flex; 
+    padding-left: 0.75rem;
+} 
+
+.css-ktgpr2 .wrap-input-number  { 
+    padding: 0px; 
+    border: none; 
+    background-color: transparent;
+} 
+
+.css-11m9qpq { 
+    position: relative; 
+    display: inline-block; 
+    height: 16px; 
+    width: 16px; 
+    overflow: initial;
+} 
+
+.css-2knkn8 { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: inherit; 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-1d2ixzd .rc-input-number  { 
+    position: relative; 
+    flex: 1 1 0%; 
+    padding: 0px 1px;
+} 
+
+.css-1d2ixzd .rc-input-number-input-wrap  { 
+    height: 100%;
+} 
+
+.css-ktgpr2 .wrap-input-number input  { 
+    text-align: center; 
+    background-color: transparent; 
+    font-size: 0.8125rem; 
+    font-weight: 500; 
+    color: rgb(67, 70, 87);
+} 
+
+.css-1d2ixzd .rc-input-number-input-wrap input  { 
+    width: 100%; 
+    height: 100%; 
+    outline: 0px; 
+    border: 0px;
+} 
+
+
+/* These were inline style tags. Uses id+class to override almost everything */
+#style-8UpHo.style-8UpHo {  
+   flex: 0 0 4%;  
+}  
+#style-FHpnT.style-FHpnT {  
+   flex: 0 0 96%;  
+}  
+#style-wBN8z.style-wBN8z {  
+   flex: 0 0 4%;  
+}  
+#style-DNOmA.style-DNOmA {  
+   flex: 0 0 96%;  
+}  
+#style-smHHE.style-smHHE {  
+   width: 100%;  
+    height: 80px;  
+}  
+#style-dBZ7C.style-dBZ7C {  
+   flex: 0 0 4%;  
+}  
+#style-dzMRm.style-dzMRm {  
+   flex: 0 0 96%;  
+}  
+#style-S2H2o.style-S2H2o {  
+   flex: 0 0 94%;  
+}  
+#style-mh6RX.style-mh6RX {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-lW3aE.style-lW3aE {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-NFk7x.style-NFk7x {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-v5GGa.style-v5GGa {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-ZTd2L.style-ZTd2L {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-1sSL2.style-1sSL2 {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-8AirP.style-8AirP {  
+   width: 100%;  
+    height: 16px;  
+}  
+#style-lR2nA.style-lR2nA {  
+   flex: 0 0 6%;  
+}  
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap'); 
+
+.css-127zbo8 { 
+    border-radius: 8px; 
+    background-color: rgb(255, 255, 255); 
+    position: relative; 
+    padding: 1rem; 
+    margin-top: 0px;
+} 
+
+*,:before,:after { 
+    box-sizing: border-box;
+} 
+
+.css-1knbux5 { 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: justify; 
+    justify-content: space-between;
+} 
+
+.css-twos5s { 
+    font-size: 15px; 
+    line-height: 24px; 
+    margin-right: 12px; 
+    color: rgb(130, 134, 158);
+} 
+
+h6 { 
+    margin-top: 0; 
+    margin-bottom: 0.5rem; 
+    font-weight: 500; 
+    line-height: 1.3;
+} 
+
+h6 { 
+    font-size: 1rem;
+} 
+
+a { 
+    color: #0d6efd; 
+    -webkit-text-decoration: underline; 
+    text-decoration: underline;
+} 
+
+.css-gmt3b { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    display: inline; 
+    cursor: pointer; 
+    text-decoration: none; 
+    color: rgb(25, 144, 255) !important;
+} 
+
+a:not([href]) { 
+    color: inherit; 
+    -webkit-text-decoration: none; 
+    text-decoration: none;
+} 
+
+a:hover { 
+    color: #024dbc;
+} 
+
+.css-gmt3b:hover { 
+    text-decoration: underline;
+} 
+
+a:not([href]),a:not([href]):hover { 
+    color: inherit; 
+    -webkit-text-decoration: none; 
+    text-decoration: none;
+} 
+
+svg { 
+    vertical-align: middle;
+} 
+
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap'); 
+  body {  
+    font-size:0.875rem;
+    line-height:1.25rem;
+    font-family:'Roboto',sans-serif;
+    color:#333333;
+  }  
+* { 
+    box-sizing: border-box;
+} 
+
+body { 
+    margin: 0; 
+    font-size: 0.875rem; 
+    line-height: 1.25rem; 
+    -webkit-text-size-adjust: 100%; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+} 
+
+body { 
+    background-color: #f8f8fc; 
+    font-family: 'Roboto',sans-serif; 
+    line-height: 1.25rem; 
+    color: #333333; 
+    padding-bottom: 2px;
+} 
+
+*,:before,:after { 
+    box-sizing: border-box;
+} 
+
+.css-1pmyljg { 
+    border-radius: 8px; 
+    background-color: rgb(255, 255, 255); 
+    position: relative; 
+    padding: 1rem; 
+    margin-top: 1rem;
+} 
+
+.css-2wrijr { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem;
+} 
+
+.css-u3rm9s { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    margin-bottom: 0.25rem;
+} 
+
+.css-u3rm9s.teko-row { 
+    display: flex; 
+    flex-flow: wrap;
+} 
+
+@media (min-width: 1024px){ 
+  .css-u3rm9s.teko-row { 
+    -webkit-box-pack: center; 
+    justify-content: center;
+  } 
+}     
+
+.css-u3rm9s.teko-row-space-between { 
+    -webkit-box-pack: justify; 
+    justify-content: space-between;
+} 
+
+.css-u3rm9s.teko-row-top { 
+    align-items: flex-start;
+} 
+
+.css-u3rm9s.teko-row:before,.css-u3rm9s.teko-row:after { 
+    display: flex;
+} 
+
+button { 
+    border-radius: 0;
+} 
+
+button { 
+    margin: 0; 
+    font-family: inherit; 
+    font-size: inherit; 
+    line-height: inherit;
+} 
+
+button { 
+    overflow: visible;
+} 
+
+button { 
+    text-transform: none;
+} 
+
+button { 
+    -webkit-appearance: button;
+} 
+
+.css-v463h2 { 
+    cursor: pointer; 
+    border-radius: 4px; 
+    overflow: hidden; 
+    line-height: 1rem; 
+    display: inline-flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: center; 
+    justify-content: center; 
+    text-align: center; 
+    background-color: rgb(20, 53, 195); 
+    border-color: rgb(20, 53, 195); 
+    color: rgb(255, 255, 255); 
+    border-width: 1px; 
+    border-style: solid; 
+    user-select: none; 
+    text-decoration: none; 
+    flex-direction: row; 
+    position: relative; 
+    width: 100%; 
+    padding: 0.7rem 1rem; 
+    margin-top: 1rem;
+} 
+
+button:not(:disabled) { 
+    cursor: pointer;
+} 
+
+.css-gr7r8o { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+.css-gr7r8o.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-bauii2 { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: inherit; 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 15px; 
+    line-height: 24px; 
+    overflow: hidden; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s; 
+    display: flex; 
+    flex-wrap: wrap; 
+    column-gap: 4px;
+} 
+
+.css-pvevfp { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: inherit; 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 15px; 
+    line-height: 24px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-z5zzx6 { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: rgb(130, 134, 158); 
+    font-weight: 500; 
+    text-decoration: unset; 
+    font-size: 12px; 
+    line-height: 16px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-1hkl6un { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    width: max-content; 
+    display: inline-block; 
+    color: rgb(20, 53, 195); 
+    font-weight: 700;
+} 
+
+
+/* These were inline style tags. Uses id+class to override almost everything */
+#style-5idUQ.style-5idUQ {  
+   text-align: right;  
+}  
+#style-rQvcF.style-rQvcF {  
+   text-align: right;  
+}  

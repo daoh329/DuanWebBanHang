@@ -11,7 +11,7 @@ router.get('/json', OrderController.json);
 
 router.put(`/confirm/:id`, OrderController.confirmOrder);
 router.put(`/cancel/:id`, OrderController.cancelOrder);
-router.get('/orderhistory/:phone', OrderController.orderHistory);
+router.get(`/orderhistory/:phone`, OrderController.orderHistory);
 
 
 module.exports = router;
