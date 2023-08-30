@@ -13,12 +13,14 @@ import Sale from './Menu/Sale';
 import QLdonhang from './QuanLyAdmin/QLdonhang';
 import ShowRoom from './Menu/ShowRoom';
 import OrderHistory from './OrderHistory/HistoryOrder';
-
+import Cart from './Cart/Cart';
+import { CartProvider } from './Cart/CartContext';
 const App = () => {
   return (
     <div className='App'>
       <BrowserRouter>
-        <Nav />
+      <CartProvider>
+          <Nav />
         <header>
           <Routes>
           <Route path="" element={<Home />} />
@@ -31,11 +33,13 @@ const App = () => {
           <Route path="/sale" element={<Sale/>} />
 
           <Route path="/orderhistory/:phone" element={<OrderHistory/>} />
-
+          <Route path="/cart" element={<Cart/>} />
           <Route path='/order/json' element={<QLdonhang/>} /> 
           </Routes>
         </header>
         <Footer />
+      </CartProvider>
+      
       </BrowserRouter>
     </div>
   );
