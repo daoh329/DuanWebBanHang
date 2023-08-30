@@ -15,6 +15,7 @@ import ShowRoom from './Menu/ShowRoom';
 import OrderHistory from './OrderHistory/HistoryOrder';
 import Cart from './Cart/Cart';
 import { CartProvider } from './Cart/CartContext';
+import CheckSP from './Menu/CheckSP';
 const App = () => {
   return (
     <div className='App'>
@@ -28,10 +29,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/search" element={<Search/>} />
-
           <Route path="/showroom" element={<ShowRoom/>} />
+          <Route path="/checkSP" element={<CheckSP/>} />
           <Route path="/sale" element={<Sale/>} />
-
           <Route path="/orderhistory/:phone" element={<OrderHistory/>} />
           <Route path="/cart" element={<Cart/>} />
           <Route path='/order/json' element={<QLdonhang/>} /> 
