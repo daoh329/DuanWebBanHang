@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from "antd";
+import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination,message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-
+import { useCart } from '../Cart/CartContext';
 const Search = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -11,6 +11,12 @@ const Search = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const navigate = useNavigate();
+    // them giỏ hàng
+    const { addToCart } = useCart();
+    const handleAddToCart = (product) => {
+        addToCart(product);
+        message.success('Sản phẩm đã được thêm vào giỏ hàng');
+    };
   useEffect(() => {
     // Tải dữ liệu từ API khi component được render
     fetch("https://64df1e7171c3335b25821aef.mockapi.io/users")
@@ -138,11 +144,8 @@ const Search = () => {
                   <p style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}>
                     {product.Price} ₫
                   </p>
-                  <Button
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
-                    style={{ marginLeft: "auto" }}
-                  ></Button>
+                  <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(product)}>
+                                        </Button>
                 </div>
               </div>
             </Card>
