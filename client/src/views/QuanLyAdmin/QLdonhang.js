@@ -47,7 +47,6 @@ function OrderList() {
         { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
         { title: 'Giá', dataIndex: 'price', key: 'price' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        
         { title: 'Ghi chú', dataIndex: 'note', key: 'note' },
         {
             title: 'Thời gian tạo',

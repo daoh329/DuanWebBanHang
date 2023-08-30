@@ -6,7 +6,9 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
+import { message } from 'antd'; 
 import './Home.scss'
+import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 const { TabPane } = Tabs;
 
@@ -186,6 +188,15 @@ const Home = () => {
         fetchData();
     }, []);
 
+
+    // them giỏ hàng
+    const { addToCart } = useCart();
+    const handleAddToCart = (product) => {
+        addToCart(product);
+        message.success('Sản phẩm đã được thêm vào giỏ hàng');
+    };
+
+     //---------------------------
     const sliderImages = [
         'https://lh3.googleusercontent.com/Z4ALctQHIePEih7m2kbV-DyrS4NGkU3ba51_ELp9L7Y_UyJTvEWC1mLFDRss3v5UNrEO62ijjSuY4iWFum-j4oUyXgoGfz10dA=w1920-rw',
         'https://lh3.googleusercontent.com/l-97kfw2WWEm-jtK28TpqtA4T0jBKWm8eGn-FSJ4gI-pz83AXBScpf2VTtcZ4F2vn-hBSt45eDJmOziqesf08ru3FOHGJr0s=w1920-rw',
@@ -442,7 +453,7 @@ const Home = () => {
                                     <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
                                     </div>
                                 </div>
