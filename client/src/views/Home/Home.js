@@ -499,7 +499,7 @@ const Home = () => {
                                     <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
                                     </div>
                                 </div>
