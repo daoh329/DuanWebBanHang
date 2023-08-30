@@ -12,9 +12,13 @@ import { auth } from "../../firebaseConfig";
 const CheckSP = () => {
 
   // otp
+  // Khai báo state cho các trường thông tin cá nhân
+  const [phone, setPhone] = useState('');
+  const [status, setStatus] = useState('');
+// otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
-  const [enteredOTP, setEnteredOTP] = useState(""); 
+ 
   
   const handleSendOTP = () => {
     // Set up reCAPTCHA verifier
@@ -39,65 +43,67 @@ const CheckSP = () => {
   };
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
-  const handleConfirmOTP = async () => {
-    if (!isOTPVerified) {
-      alert("Vui lòng xác minh mã OTP trước");
-      return;
-    }
+  const handleConfirm = async () => {
+    // if (!isOTPVerified) {
+    //   // Nếu người dùng chưa xác minh mã OTP
+    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+    //   return;
+    // }
+    // Lấy thông tin cá nhân của người dùng từ state hoặc form
+    const data = {
+      phone: phone,
+      status:'Chưa xác nhận',
+    };
 
-    try {
-      const response = await fetch("http://localhost:3000/checkOTP", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          otp: enteredOTP,
-        }),
-      });
+    // In ra giá trị của biến data
+    console.log("Data:", data);
 
-      if (response.ok) {
-        const result = await response.json();
-        if (result.isValid) {
-          alert("Mã OTP hợp lệ");
-        } else {
-          alert("Mã OTP không hợp lệ");
-        }
-      } else {
-        alert("Có lỗi khi kiểm tra mã OTP");
-      }
-    } catch (error) {
-      console.error("Lỗi: ", error);
+    // Gửi thông tin đăng ký lên server
+    const response = await fetch("http://localhost:3000/order/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    // Xử lý kết quả trả về từ server NodeJS
+    if (response.ok) {
+      // Thông báo thành công
+      alert("thành công");
+    } else {
+      // Thông báo lỗi
+      alert("Có lỗi ");
     }
   };
   
 
   
 //phone
-    const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+//     const navigate = useNavigate();
+//     const [products, setProducts] = useState([]);
+//     const [filteredProducts, setFilteredProducts] = useState([]);
 
-// phone
-    const [phone, setPhone] = useState('');
-    const handleConfirm = async () => {
-        // Lưu giá trị phone vào session
-        window.sessionStorage.setItem('phone', phone);
-        navigate(`/orderHistory/${phone}`);
-    }
+// // phone
+//     const [phone, setPhone] = useState('');
+//     const handleConfirm = async () => {
+//         // Lưu giá trị phone vào session
+//         window.sessionStorage.setItem('phone', phone);
+//         navigate(`/orderHistory/${phone}`);
+//     }
 
-    useEffect(() => {
-        // Tải dữ liệu từ API khi component được render
-        fetch('https://64df1e7171c3335b25821aef.mockapi.io/users')
-            .then(response => response.json())
-            .then(data => {
-                setProducts(data);
-                setFilteredProducts(data);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }, []);
+//     useEffect(() => {
+//         // Tải dữ liệu từ API khi component được render
+//         fetch('https://64df1e7171c3335b25821aef.mockapi.io/users')
+//             .then(response => response.json())
+//             .then(data => {
+//                 setProducts(data);
+//                 setFilteredProducts(data);
+//             })
+//             .catch(error => {
+//                 console.error('Error fetching data:', error);
+//             });
+//     }, []);
 
 
     return (
@@ -111,13 +117,10 @@ const CheckSP = () => {
         type="tel"
         name="txtPhoneNumber"
         id="txtPhoneNumber"
-        onkeypress="ValidateOnlyNumber(event)"
         placeholder="Nhập số điện thoại mua hàng"
-        autoComplete="off"
         maxLength={15}
       />
     </div>
-    <label className="hide"></label>
             <Form.Item>
               <Button onClick={handleSendOTP}>Gửi mã OTP</Button>
               <div id="recaptcha-container"></div>
@@ -125,7 +128,7 @@ const CheckSP = () => {
             <Form.Item>
               <Button onClick={handleVerifyOTP}>Nhập mã OTP đã gửi</Button>
             </Form.Item>
-    <Button type="submit" onClick={handleConfirmOTP} className="btn">
+    <Button type="submit" onClick={handleConfirm} className="btn">
       Tra cứu
     </Button>
   </Form>

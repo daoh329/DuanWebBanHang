@@ -12,12 +12,7 @@
       padding: 85px 99px;
   } 
   
-  
-  div > span  { 
-      font-size: 24px; 
-      font-weight: normal; 
-      line-height: 1.5;
-  } 
+
   
   div > form > *  { 
       display: block; 
@@ -110,7 +105,7 @@
   div > form input  { 
       border: 1px solid #e0e0e0; 
       border-radius: 100px; 
-      height: 48px; 
+      height: 38px; 
       padding: 0 50px; 
       font-size: 15px; 
       width: 100%; 
