@@ -98,23 +98,23 @@ const App = () => {
 
                             <img src={Hinh} style={{ width: '100%', height: '100%' }}></img></NavLink></span>
                     </div>
-
+                    <div className="search-container" style={{ flex: 'auto', display: 'flex', justifyContent: 'center', maxWidth:'60%' }}>
+                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50 }} onSearch={handleSearch} />
+                    </div>
                     <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
                         <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
                             <BellOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
                         </Badge>
                         <Popover
                             content={
-                                <div style={{  width: '300px', maxHeight: '200px', overflowY: 'auto', scrollbarWidth: 'none'}}>
-                                    <List                                   
+                                <div style={{ width: '300px', maxHeight: '200px', overflowY: 'auto', scrollbarWidth: 'none' }}>
+                                    <List
                                         itemLayout="horizontal"
                                         dataSource={cartItems}
-                                        
-
                                         renderItem={item => (
                                             <List.Item
                                                 actions={[
-                                                    <Button type="danger" icon={<DeleteOutlined />} onClick={() => removeFromCart(item.id)}>                                                   
+                                                    <Button type="danger" icon={<DeleteOutlined />} onClick={() => removeFromCart(item.id)}>
                                                     </Button>,
                                                 ]}
                                             >
@@ -144,9 +144,7 @@ const App = () => {
                         </Dropdown>
                     </div>
 
-                    <div className="search-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff', marginRight: 50 }} onSearch={handleSearch} />
-                    </div>
+
                     {/* <Menu
                         theme="dark"
                         mode="horizontal"

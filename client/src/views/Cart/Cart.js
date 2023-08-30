@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
+import { useCart } from '../Cart/CartContext';
 
 const { Header, Footer, Sider, Content } = Layout;
 
 function Cart() {
     const [cartList, setCartList] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
-
+    const { cartItems, removeFromCart } = useCart();
     const fetchData = async () => {
         try {
             const res = await axios.get("http://localhost:3000/order/json");
@@ -57,7 +58,7 @@ function Cart() {
             <h2 style={{ textAlign: 'left' }}>Cart</h2>
             <Row>
                 <Col span={18}>
-                    <Table columns={columns} dataSource={cartList} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
+                    <Table columns={columns} dataSource={cartItems} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
                 </Col>
                 <Col span={6}>
                     <Card title="Thanh toán" bordered={false} style={{ width: 300, marginLeft: "10px" }}>
