@@ -41,6 +41,7 @@ class Product{
           data.Production_Date,
           data.Entry_Date,
           data.color,
+          data.warranty,
           data.status
         ];
       } else if (data.type === 'phone') {
@@ -61,34 +62,47 @@ class Product{
           data.battery_life,
           data.Chip,
           data.quantity,
+          data.Entry_Date,
+          data.warranty,
           data.status
         ];
       }
   
-      const query = `INSERT INTO ${table} (
-          name,
+      const query = `INSERT INTO ${table} (name,
           price,
           ${table === 'laptop' ? 'quantity,' : ''}
+          ${table === 'phone' ? 'ram,':''}
+          ${table === 'phone' ? 'rom,':''}
           brand,
+          ${table === 'phone' ? 'color,':''}
           series,
-          CPU,
-          GPU,
-          VGA,
-          ram,
-          Screen_size,
-          Screen_resolution,
-          OS,
+          ${table === 'laptop' ? 'CPU,' : ''}
+          ${table === 'laptop' ? 'GPU,' : ''}
+          ${table === 'laptop' ? 'VGA,' : ''}
+          ${table === 'laptop' ? 'ram,':''}
+          ${table === 'phone' ? 'OS,':''}
+          ${table === 'phone' ? 'fast_charging,':''}
+          ${table === 'phone' ? 'camera_main,':''}
+          ${table === 'phone' ? 'camera_selfie,':''}
+          ${table === 'phone' ? 'screen,':''}
+          ${table === 'phone' ? 'battery_life,':''}
+          ${table === 'phone' ? 'chip,':''}
+          ${table === 'phone' ? 'quantity,':''}
+          ${table === 'laptop' ? 'Screen_size,' : ''}
+          ${table === 'laptop' ? 'Screen_resolution,' : ''}
+          ${table === 'laptop' ? 'OS,' : ''}
           ${table === 'laptop' ? 'mass,' : ''}
-          Production_Date,
+          ${table === 'laptop' ? 'Production_Date,' : ''}
           Entry_Date,
           ${table === 'laptop' ? 'color,' : ''}
-          status
-        ) VALUES (${table === 'laptop' ? '?, ' : ''}?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ${table === 'laptop' ? '?, ' : ''}?, ?, ${table === 'laptop' ? '?, ' : ''}?)`;
+          warranty,
+          status) VALUES (${table === 'laptop' ? '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ' : ''} ${table === 'phone' ? '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ':''})`;
   
       // Thực hiện truy vấn SQL
       mysql.query(query, values, (error, results, fields) => {
         if (error) {
           // Trả về mã trạng thái 500 nếu có lỗi xảy ra
+          console.log(error);
           res.status(500).send("Bug khi đẩy lên database");
         } else {
           // Trả về mã trạng thái 200 nếu thêm thông tin thành công

@@ -1,7 +1,7 @@
 const mysql = require("./db/mySQL");
 
-class CreateTable {
-    async createLaptopTable() {
+class CreateTable{
+        async createLaptopTable(){
         const createTableQuery = `CREATE TABLE IF NOT EXISTS laptop (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255),
@@ -20,6 +20,7 @@ class CreateTable {
             Production_Date DATE,
             Entry_Date DATE,
             color VARCHAR(255),
+            warranty VARCHAR(255),
             status ENUM('available', 'out of stock', 'discontinued')
           );`;
 
@@ -50,6 +51,8 @@ class CreateTable {
             battery_life VARCHAR(255),
             Chip VARCHAR(255),
             quantity INT,
+            Entry_Date DATE,
+            warranty VARCHAR(255),
             status ENUM('available', 'out of stock', 'discontinued')
           );`;
 
