@@ -1,4 +1,4 @@
-const mysql = require("../config/db/mySQL");
+const mysql2 = require("../config/db/mySQL");
 
 const createOrdersTable = () => {
     const createTableQuery = `CREATE TABLE IF NOT EXISTS orders (
@@ -12,10 +12,13 @@ const createOrdersTable = () => {
       address VARCHAR(255),
       deliveryMethod VARCHAR(255),
       phone VARCHAR(255),
-      note TEXT
+      note TEXT,
+      status VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`;
   
-    mysql.query(createTableQuery, (error, results, fields) => {
+    mysql2.query(createTableQuery, (error, results, fields) => {
       if (error) {
         // Xử lý lỗi
         console.error(error);

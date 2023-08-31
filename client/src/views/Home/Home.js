@@ -6,7 +6,9 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
+import { message } from 'antd'; 
 import './Home.scss'
+import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 const { TabPane } = Tabs;
 
@@ -123,7 +125,16 @@ const tuanlevang = [
 
 const Home = () => {
     const [ListUsers, setListUsers] = useState([]);
+    const [topLaptop, setTopLaptop] = useState([]);
     const navigate = useNavigate()
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/order/laptopbanchay`)
+            .then(res => {
+                setTopLaptop(res.data);
+            })
+            .catch(error => console.log(error));
+    }, []);
 
     const handleViewDetailuser = (user) => {
         // Lấy danh sách các sản phẩm đã xem từ session storage
@@ -131,8 +142,8 @@ const Home = () => {
         // Tạo đối tượng sản phẩm mới
         const historyproduct = {
             name: user.name,
-            price: user.Price,
-            imageUrl: user.avatar,
+            Price: user.Price,
+            avatar: user.avatar,
             id: user.id,
         };
         // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
@@ -177,6 +188,25 @@ const Home = () => {
         fetchData();
     }, []);
 
+
+    // them giỏ hàng
+    const { addToCart } = useCart();
+    const handleAddToCart = (item) => {
+        // addToCart(item);
+        message.success('Sản phẩm đã được thêm vào giỏ hàng');
+
+        // Lấy giỏ hàng hiện tại từ session
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+
+        // Thêm sản phẩm vào giỏ hàng
+        cart.push(item);
+
+        // Lưu giỏ hàng đã cập nhật vào session
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        console.log(">>>",cart)
+    };
+
+     //---------------------------
     const sliderImages = [
         'https://lh3.googleusercontent.com/Z4ALctQHIePEih7m2kbV-DyrS4NGkU3ba51_ELp9L7Y_UyJTvEWC1mLFDRss3v5UNrEO62ijjSuY4iWFum-j4oUyXgoGfz10dA=w1920-rw',
         'https://lh3.googleusercontent.com/l-97kfw2WWEm-jtK28TpqtA4T0jBKWm8eGn-FSJ4gI-pz83AXBScpf2VTtcZ4F2vn-hBSt45eDJmOziqesf08ru3FOHGJr0s=w1920-rw',
@@ -359,24 +389,23 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm Laptop ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/FphgdKoJkfp17IB5xYJvah5EShCZUjDQER9SGUCZMzvzsfcDeRKvZ-coSz0kSdhRn7ZvwPBC2qMoHO3Iek_p5knTcxv2Gb-7=w1232)' }}>
+            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/pSzqZlVLMrhpyoU2QoTUVctJZc8uuuLNG97D8rZTQ0Ds29acQoNVkeG93TEklTJSMQyDjnpDhs0p8eCI1WRpAefb8iNlJ8Os=w1232)' }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>LapTop ngon</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>Top 5 Laptop bán chạy</div>
                 </div>
                 <div style={{ width: '98%', margin: '0 auto' }}>
                     <div
                         className="horizontal-scroll-view"
                         style={{ display: 'flex', overflowX: 'scroll', padding: '10px', whiteSpace: 'nowrap', }} >
-                        {products && products.length > 0 &&
-                            products.map((item, index) => (
+                        {topLaptop && topLaptop.length > 0 &&
+                            topLaptop.map((item, index) => (
                                 <Card
                                     key={item.id}
                                     hoverable
                                     className="product-card"
-                                    style={{ width: '60%', boxSizing: 'border-box', marginRight: '10px', display: 'inline-block', }}>
-                                    <img src={item.imageUrl} style={{ width: '200px' }}></img>
-                                    <h3>{item.name}</h3>
-                                    <p>{item.price}$</p>
+                                    style={{ width: '20%', boxSizing: 'border-box', marginRight: '10px', display: 'inline-block', }}>
+                                    <img src={item.avatar} style={{ width: '200px' }}></img>
+                                    <a className="name-card">{item.name}</a>
                                     <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>Buy
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
@@ -389,9 +418,9 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm Điện thoại ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/oOKsGNxeJyYtVHbBAk6HdIirUD7P794VfnTf3cKYJvU9zNbXJSAc8AtH79dno-6KrMH9nJXNOYqamANUtAHH3jDE0HDo3sM=w1232)' }}>
+            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232)' }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Điện Thoại</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Top 5 Điện Thoại bán chạy</div>
                 </div>
                 <div style={{ width: '98%', margin: '0 auto' }}>
                     <div
@@ -416,10 +445,10 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* ------------------box sản phẩm nổi bật ------------------ */}
+            {/* ------------------box sản phẩm ------------------ */}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm nổi bật</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm</div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
                     {ListUsers && ListUsers.length > 0 &&
@@ -434,7 +463,7 @@ const Home = () => {
                                     <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
                                     </div>
                                 </div>
@@ -466,12 +495,12 @@ const Home = () => {
                                 hoverable
                                 className="card-sp"
                             >
-                                <img src={item.imageUrl} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailproducts(item)} />
+                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailproducts(item)} />
                                 <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <a className="name-card">{item.name}</a>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.price} ₫</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }}>
+                                        <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
+                                        <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
                                     </div>
                                 </div>

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix } from 'antd';
-import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, List, } from 'antd';
+import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Hinh from '../../../src/assets/logo1.png'
+import '../Nav/Nav.scss'
+import Hinh from '../../../src/assets/logo4.png';
+import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 
 
 const App = () => {
     const [menuOpenKeys, setMenuOpenKeys] = useState([]);
+    const [cart, setCart] = useState(JSON.parse(sessionStorage.getItem('cart')) || []);
 
     const handleMenuOpenChange = (openKeys) => {
         setMenuOpenKeys(openKeys);
@@ -17,6 +20,23 @@ const App = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
+
+    // const [cartList, setCartList] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const removeFromCart = (productId) => {
+        const updatedCart = cart.filter(item => item.id !== productId);
+        sessionStorage.setItem('cart', JSON.stringify(updatedCart));
+        setCart(updatedCart); // Cập nhật state giỏ hàng
+    };
+    // phone
+    const [phone, setPhone] = useState('');
+    const handleConfirm = async () => {
+        // Lưu giá trị phone vào session
+        window.sessionStorage.setItem('phone', phone);
+        navigate(`/orderHistory/${phone}`);
+    }
+    //------giỏ hàng---------------
+
 
     useEffect(() => {
         // Tải dữ liệu từ API khi component được render
@@ -38,7 +58,7 @@ const App = () => {
         );
         setFilteredProducts(filtered);
     }, [searchQuery, products]);
-console.log(">>>",searchQuery)
+    console.log(">>>", searchQuery)
     const handleSearch = value => {
         setSearchQuery(value);
         navigate(`/search?query=${encodeURIComponent(value)}`);
@@ -58,20 +78,87 @@ console.log(">>>",searchQuery)
         <Layout>
             <Affix offsetTop={0}>
                 <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f8fc', margintop: '0px' }}>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><TagOutlined style={{ marginRight: '8px' }} /> Khuyến mãi</a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
-                    <a style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
+
+                    <a
+                        href="/sale"
+                        style={{
+                            marginRight: '20px',
+                            color: '#333',
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <TagOutlined style={{ marginRight: '8px' }} />
+                        Khuyến mãi
+                    </a>
+                    <a href='/showroom' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><EnvironmentOutlined style={{ marginRight: '8px' }} /> Hệ thống showroom</a>
+                    <a href='/support' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><CommentOutlined style={{ marginRight: '8px' }} /> Tư vẫn doanh nghiệp</a>
+                    <a href='/host' style={{ marginRight: '20px', color: '#333', textDecoration: 'none', display: 'flex', alignItems: 'center' }}><PhoneOutlined style={{ marginRight: '8px' }} /> Liên hệ</a>
+
                 </div>
 
-                <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'black' }}>
+                <Header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#ffffff' }}>
                     <div className="logo" style={{ width: '80px', marginRight: '16px', color: '#ffffff' }}>
                         {/* Add your logo here */}
                         <span style={{ position: 'relative', }}>  <NavLink to="/">
-
-                            <img src={Hinh} style={{ width: '100%', height: '100%' }}></img></NavLink></span>
+                            <img src={Hinh} style={{ width: '130%', height: '130%' }}></img></NavLink></span>
                     </div>
-                    <Menu
+                    <div className="search-container" style={{ flex: 'auto', display: 'flex', justifyContent: 'center', maxWidth: '60%' }}>
+                        <Input.Search
+                            placeholder="Tìm kiếm"
+                            className="custom-input-search"
+                            onSearch={handleSearch}
+                        />
+                    </div>
+                    <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
+                        <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
+                            <BellOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
+                        </Badge>
+                        <Popover
+                            content={
+                                <div style={{ width: '300px', maxHeight: '200px', overflowY: 'auto', scrollbarWidth: 'none' }}>
+                                    <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>
+                                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                                    </Button>
+                                    <List
+                                        itemLayout="horizontal"
+                                        dataSource={cart}
+                                        renderItem={selectedItems => (
+                                            <List.Item
+                                                actions={[
+                                                    <Button type="danger" icon={<DeleteOutlined />} onClick={() => removeFromCart(selectedItems.id)}>
+                                                    </Button>,
+                                                ]}
+                                            >
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={selectedItems.avatar} />}
+                                                    title={selectedItems.name.length > 20 ? selectedItems.name.substring(0, 20) + "..." : selectedItems.name}
+                                                    description={`Giá: ${selectedItems.Price} ₫`}
+                                                />
+                                            </List.Item>
+                                        )}
+                                    />
+                                    <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>
+                                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                                    </Button>
+                                </div>
+                            }
+                            title="Giỏ hàng"
+                            trigger="hover"
+                        >
+                            <Badge count={cart.length} style={{ marginRight: '10px', marginTop: '10px' }}>
+                                <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
+                            </Badge>
+                        </Popover>
+
+                        <Dropdown overlay={menu}>
+                            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#ae69dd', margin: '10px' }} />
+                        </Dropdown>
+                    </div>
+
+
+                    {/* <Menu
                         theme="dark"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
@@ -91,24 +178,10 @@ console.log(">>>",searchQuery)
                             <Menu.Item key="3">Danh mục 3</Menu.Item>
                             <Menu.Item key="4">Danh mục 4</Menu.Item>
                         </Menu.SubMenu>
-                    </Menu>
-                    <div className="search-container" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-                        <Input.Search placeholder="Tìm kiếm" style={{ width: '100%', color: '#ffffff' }} onSearch={handleSearch} />
-                    </div>
-                    <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
-                        <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
-                            <BellOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
-                        </Badge>
-                        <Badge count={3} style={{ marginRight: '10px', marginTop: '10px' }}>
-                            <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ffffff', margin: '10px' }} />
-                        </Badge>
-                        <Dropdown overlay={menu}>
-                            <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#005c42', margin: '10px' }} />
-                        </Dropdown>
-                    </div>
+                    </Menu> */}
                 </Header>
-            </Affix>
-        </Layout>
+            </Affix >
+        </Layout >
     );
 };
 
