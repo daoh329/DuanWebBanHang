@@ -29,9 +29,13 @@
     const handleOnClickGG = () => {
       if (check) {
         // Call API
-        return;
+        window.open(
+          `${process.env.REACT_APP_API_URL}/auth/google/callback`,
+          "_self"
+        );
+      }else{
+        alert('Vui lòng đồng ý với chính sách điều khoản và bảo mật của chúng tôi.');
       }
-      return alert('Vui lòng đồng ý với chính sách điều khoản và bảo mật của chúng tôi.');
     };
 
     const handleOnClickNumberPhone = () => {

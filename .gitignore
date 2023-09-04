@@ -1,3 +1,6 @@
 
-server/config/db/mySQL.js
-server/config/db/mySQL.js
+/client/node_modules
+/client/.env
+
+/server/node_modules
+/server/.env

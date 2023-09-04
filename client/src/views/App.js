@@ -1,5 +1,5 @@
 //App.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 import '../views/App.scss';
 import Home from './Home/Home';
@@ -16,12 +16,31 @@ import OrderHistory from './OrderHistory/HistoryOrder';
 import Cart from './Cart/Cart';
 import { CartProvider } from './Cart/CartContext';
 import CheckSP from './Menu/CheckSP';
+import axios from 'axios';
 const App = () => {
+
+  const [user, setUser] = useState(null);
+
+  const getUser = async () => {
+
+    try {
+      const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+      const {data} = await axios.get(url, {withCredentials:true});
+      setUser(data.user._json);
+      // alert(data)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <div className='App'>
-      <BrowserRouter>
       <CartProvider>
-          <Nav />
+          <Nav user={user}/>
         <header>
           <Routes>
           <Route path="" element={<Home />} />
@@ -39,8 +58,6 @@ const App = () => {
         </header>
         <Footer />
       </CartProvider>
-      
-      </BrowserRouter>
     </div>
   );
 };
