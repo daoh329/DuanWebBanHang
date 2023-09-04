@@ -19,36 +19,30 @@ class Product{
     
     
     const imageUrls = data.image;
-      let table = '';
+      let Type = data.Type;
+      let product = [
+        data.name,data.price,data.quantity,data.Entry_Date,Type
+      ]
+      const query = `INSERT INTO product (name, price, quantity, Entry_Date, Type, status)
+      VALUES (?, ?, ?, ?, ?, 'available')`;
       let values = [];
   
-      if (data.type === 'laptop') {
-        table = 'laptop';
+      if (Type === 'laptop') {
         values = [
-          data.name,
-          data.price,
-          data.quantity,
           data.brand,
+          data.warranty,
           data.series,
           data.CPU,
           data.GPU,
-          data.VGA,
           data.ram,
-          data.Screen_size,
-          data.Screen_resolution,
+          data.Screen,
+          data.Storage,
           data.OS,
           data.mass,
-          data.Production_Date,
-          data.Entry_Date,
           data.color,
-          data.warranty,
-          data.status
         ];
-      } else if (data.type === 'phone') {
-        table = 'phone';
+      } else if (Type === 'phone') {
         values = [
-          data.name,
-          data.price,
           data.ram,
           data.rom,
           data.brand,
@@ -61,60 +55,44 @@ class Product{
           data.screen,
           data.battery_life,
           data.Chip,
-          data.quantity,
-          data.Entry_Date,
-          data.warranty,
-          data.status
         ];
       }
-  
-      const query = `INSERT INTO ${table} (name,
-          price,
-          ${table === 'laptop' ? 'quantity,' : ''}
-          ${table === 'phone' ? 'ram,':''}
-          ${table === 'phone' ? 'rom,':''}
-          brand,
-          ${table === 'phone' ? 'color,':''}
-          series,
-          ${table === 'laptop' ? 'CPU,' : ''}
-          ${table === 'laptop' ? 'GPU,' : ''}
-          ${table === 'laptop' ? 'VGA,' : ''}
-          ${table === 'laptop' ? 'ram,':''}
-          ${table === 'phone' ? 'OS,':''}
-          ${table === 'phone' ? 'fast_charging,':''}
-          ${table === 'phone' ? 'camera_main,':''}
-          ${table === 'phone' ? 'camera_selfie,':''}
-          ${table === 'phone' ? 'screen,':''}
-          ${table === 'phone' ? 'battery_life,':''}
-          ${table === 'phone' ? 'chip,':''}
-          ${table === 'phone' ? 'quantity,':''}
-          ${table === 'laptop' ? 'Screen_size,' : ''}
-          ${table === 'laptop' ? 'Screen_resolution,' : ''}
-          ${table === 'laptop' ? 'OS,' : ''}
-          ${table === 'laptop' ? 'mass,' : ''}
-          ${table === 'laptop' ? 'Production_Date,' : ''}
-          Entry_Date,
-          ${table === 'laptop' ? 'color,' : ''}
-          warranty,
-          status) VALUES (${table === 'laptop' ? '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ' : ''} ${table === 'phone' ? '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ':''})`;
-  
       // Thực hiện truy vấn SQL
-      mysql.query(query, values, (error, results, fields) => {
+      mysql.query(query, product, (error, results, fields) => {
         if (error) {
           // Trả về mã trạng thái 500 nếu có lỗi xảy ra
           console.log(error);
-          res.status(500).send("Bug khi đẩy lên database");
+          res.status(500).send("Bug khi đẩy lên database 'product'");
         } else {
           // Trả về mã trạng thái 200 nếu thêm thông tin thành công
           const newId = results.insertId; // Lấy ID mới được tạo tự động
           console.log("Thêm dữ liệu thành công. ID mới:", newId);
-  
-          if (table === 'laptop' || table === 'phone') {
-            imageUrls.forEach((imageUrl) => {
-              const imageSql = `
-                INSERT INTO image_url (image_url, ${table === 'laptop' ? 'laptop_id' : 'phone_id'})
+          const imageSql = `
+                INSERT INTO image_url (image_url, product_id)
                 VALUES (?, ?)
               `;
+          if (Type === 'laptop' || Type === 'phone') {
+            if(Type === 'laptop'){
+              const Sql=`INSERT INTO laptop (id, brand, warranty, series, CPU, GPU, ram, Screen, Storage, OS, mass, color)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+              mysql.query(Sql,[newId, ...values],(error, results, fields)=>{
+                if(error){
+                  console.log(error);
+                  res.status(500).send("Bug khi đẩy lên database 'laptop'");
+                }
+              })
+            }else if(Type === 'phone'){
+              const Sql=`INSERT INTO phone (id, ram, rom, brand, color, series, OS, fast_charging, camera_main, camera_selfie, screen, battery_life, Chip)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+              mysql.query(Sql,[newId, ...values],(error, results, fields)=>{
+                if(error){
+                  console.log(error);
+                  res.status(500).send("Bug khi đẩy lên database 'phone'");
+                }
+              })
+            }
+            imageUrls.forEach((imageUrl) => {
+              
             
               const imageValues = [imageUrl, newId];
             
@@ -122,12 +100,12 @@ class Product{
                 if (err) {
                   console.log(err);
                 } else {
-                  console.log('Image added successfully for', table, 'with ID', newId);
+                  console.log('Image added successfully for', Type, 'with ID', newId);
                 }
               });
             });
           }
-          console.log(table, 'and images added successfully');
+          console.log(Type, 'and images added successfully');
           res.status(200).send("Thêm thông tin thành công");
         }
       });
