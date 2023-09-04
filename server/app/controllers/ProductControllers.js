@@ -132,5 +132,20 @@ class Product{
         }
       });
     }
+    async json(req,res){
+      const data = req.body;
+      const table = data.type;
+      const query = `SELECT * FROM ${table} ORDER BY id (current_page - 1) * 20 LIMIT 20;`
+      // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
+      mysql.query(query, (err, result) => {
+        if (err) throw err;
+
+        // Chuyển đổi kết quả truy vấn thành chuỗi JSON
+        const jsonResult = JSON.stringify(result);
+
+        // Gửi chuỗi JSON về cho client
+        res.send(jsonResult);
+    });
+    }
   }
 module.exports = new Product;

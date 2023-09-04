@@ -112,10 +112,12 @@ const App = (userDetails) => {
         </button>
         {/* Link to logout page */}
       </Menu.Item>
+      <Menu.Item key="3">
+        <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
+        {/* Link to checkSP */}
+      </Menu.Item>
     </Menu>
   );
-
-
 
   return (
     <Layout>
@@ -299,14 +301,14 @@ const App = (userDetails) => {
             </Popover>
 
             <Dropdown overlay={menu}>
-              {
-                user ? <Avatar src={user.picture}/> : 
+              {user ? (
+                <Avatar src={user.picture} />
+              ) : (
                 <Avatar
-                icon={<UserOutlined />}
-                style={{ backgroundColor: "#ae69dd", margin: "10px" }}
-              />
-              }
-              
+                  icon={<UserOutlined />}
+                  style={{ backgroundColor: "#ae69dd", margin: "10px" }}
+                />
+              )}
             </Dropdown>
           </div>
 
