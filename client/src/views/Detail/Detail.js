@@ -41,7 +41,7 @@ function Detail() {
     setIsModalOpen(false);
   };
   // select mới
-  const [cities, setCities] = useState([]);
+  const [city, setCity] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -53,7 +53,7 @@ function Detail() {
         const response = await axios.get(
           "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
         );
-        setCities(response.data);
+        setCity(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -63,7 +63,7 @@ function Detail() {
   }, []);
   // select city
   const handleCityChange = (value) => {
-    const selectedCity = cities.find((city) => city.Id === value);
+    const selectedCity = city.find((city) => city.Id === value);
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
@@ -97,7 +97,6 @@ function Detail() {
   const [productDetail, setProductDetail] = useState(null);
 
   // Khai báo state cho các trường thông tin cá nhân
-  const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [userName, setUserName] = useState('');
@@ -149,11 +148,11 @@ function Detail() {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
-    if (!isOTPVerified) {
-      // Nếu người dùng chưa xác minh mã OTP
-      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-      return;
-    }
+    // if (!isOTPVerified) {
+    //   // Nếu người dùng chưa xác minh mã OTP
+    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+    //   return;
+    // }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
@@ -161,8 +160,9 @@ function Detail() {
       price: productDetail.price * quantity,
       quantity: quantity,
       userName: userName,
-      city: city,
-      // district: selectedDistrict,
+      city: selectedCity.Name,
+      selectedCity: selectedDistrict.Name,
+      selectedDistrict: wards.Name,
       address: address,
       deliveryMethod: deliveryMethod,
       phone: phone,
@@ -723,7 +723,7 @@ function Detail() {
             {/*  */}
             <Form.Item label="Thành phố">
               <Select onChange={handleCityChange}>
-                {cities.map((city) => (
+                {city.map((city) => (
                   <Option key={city.Id} value={city.Id}>
                     {city.Name}
                   </Option>
