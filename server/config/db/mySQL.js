@@ -5,10 +5,9 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     post: 3306,
-  
-
+    password: '123456',
     database: 'banhangdientu'
 });
 
-//xoa pass
+
 module.exports = connection;
