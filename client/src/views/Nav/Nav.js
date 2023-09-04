@@ -71,6 +71,9 @@ const App = () => {
             <Menu.Item key="2">
                 <NavLink to="/logout">Đăng xuất</NavLink> {/* Link to logout page */}
             </Menu.Item>
+            <Menu.Item key="3">
+                <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink> {/* Link to checkSP */}
+            </Menu.Item>
         </Menu>
     );
 
