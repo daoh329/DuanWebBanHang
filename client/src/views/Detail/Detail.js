@@ -46,6 +46,8 @@ function Detail() {
   const [wards, setWards] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +75,13 @@ function Detail() {
       (district) => district.Id === value
     );
     setSelectedDistrict(selectedDistrict);
+  };
+  //select ward
+  const handleWardChange = (value) => {
+    const selectedWard = selectedDistrict.Wards.find(
+      (ward) => ward.Id === value
+    );
+    setSelectedWard(selectedWard);
   };
   //lấy thông tin vào modal
   const { id } = useParams();
@@ -148,11 +157,11 @@ function Detail() {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
-    // if (!isOTPVerified) {
-    //   // Nếu người dùng chưa xác minh mã OTP
-    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-    //   return;
-    // }
+    if (!isOTPVerified) {
+      // Nếu người dùng chưa xác minh mã OTP
+      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+      return;
+    }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
@@ -162,7 +171,7 @@ function Detail() {
       userName: userName,
       city: selectedCity.Name,
       selectedCity: selectedDistrict.Name,
-      selectedDistrict: wards.Name,
+      selectedDistrict: selectedWard.Name,
       address: address,
       deliveryMethod: deliveryMethod,
       phone: phone,
@@ -743,7 +752,7 @@ function Detail() {
             </Form.Item>
 
             <Form.Item label="Xã">
-              <Select>
+              <Select onChange={handleWardChange}>
                 {selectedDistrict &&
                   selectedDistrict.Wards.map((ward) => (
                     <Option key={ward.Id} value={ward.Id}>
