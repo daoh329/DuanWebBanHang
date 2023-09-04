@@ -8,7 +8,7 @@ function OrderList() {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/order/json");
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/order/json`);
             console.log('API Response:', res.data);
             const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setOrderList(sortedOrders || []);
@@ -24,7 +24,7 @@ function OrderList() {
     const handleConfirmOrder = async (record) => {
         console.log('Confirm order button clicked for order:', record.id);
         try {
-            await axios.put(`http://localhost:3000/order/confirm/${record.id}`);
+            await axios.put(`${process.env.REACT_APP_API_URL}/order/confirm/${record.id}`);
             fetchData();
         } catch (error) {
             console.error("Error confirming order:", error);
@@ -33,7 +33,7 @@ function OrderList() {
 
     const handleCancelOrder = async (record) => {
         try {
-            await axios.put(`http://localhost:3000/order/cancel/${record.id}`);
+            await axios.put(`${process.env.REACT_APP_API_URL}/order/cancel/${record.id}`);
             fetchData();
         } catch (error) {
             console.error("Error canceling order:", error);
