@@ -120,11 +120,19 @@ function Detail() {
   const handleSendOTP = () => {
     // Set up reCAPTCHA verifier
     const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
-
+  
     // Send OTP to user's phone number
-    signInWithPhoneNumber(auth, phone, verifier).then((result) => {
-      setConfirmationResult(result);
-    });
+    signInWithPhoneNumber(auth, phone, verifier)
+      .then((result) => {
+        setConfirmationResult(result);
+      })
+      .catch((error) => {
+        if (error.code === "auth/too-many-requests") {
+          alert("Bạn đã nhập số điện thoại quá nhiều lần. Vui lòng thử lại sau ít phút.");
+        } else {
+          // Handle other errors
+        }
+      });
   };
 
   const handleVerifyOTP = () => {
@@ -141,11 +149,11 @@ function Detail() {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
-    // if (!isOTPVerified) {
-    //   // Nếu người dùng chưa xác minh mã OTP
-    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-    //   return;
-    // }
+    if (!isOTPVerified) {
+      // Nếu người dùng chưa xác minh mã OTP
+      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+      return;
+    }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
