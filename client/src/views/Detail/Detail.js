@@ -67,14 +67,14 @@ function Detail() {
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
-
+//select district
   const handleDistrictChange = (value) => {
     const selectedDistrict = selectedCity.Districts.find(
       (district) => district.Id === value
     );
     setSelectedDistrict(selectedDistrict);
   };
-  //
+  //lấy thông tin vào modal
   const { id } = useParams();
   const [user, setUser] = useState({});
 
@@ -103,7 +103,7 @@ function Detail() {
   const [note, setNote] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState('');
-
+// otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -172,7 +172,6 @@ function Detail() {
 
     // In ra giá trị của biến data
     console.log("Data:", data);
-
     // Gửi thông tin đăng ký lên server
     const response = await fetch("http://localhost:3000/order/order", {
       method: "POST",
@@ -181,7 +180,6 @@ function Detail() {
       },
       body: JSON.stringify(data),
     });
-
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
