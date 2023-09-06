@@ -1,8 +1,8 @@
 const mysql = require("./db/mySQL");
 
-class CreateTable{
-        async createLaptopTable(){
-        const createTableQuery = `CREATE TABLE IF NOT EXISTS laptop (
+class CreateTable {
+  async createLaptopTable() {
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS laptop (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255),
             price INT,
@@ -24,17 +24,17 @@ class CreateTable{
             status ENUM('available', 'out of stock', 'discontinued')
           );`;
 
-        mysql.query(createTableQuery, (error, results, fields) => {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log('Bảng Laptop đã được tạo hoặc đã tồn tại');
-            }
-        });
-    }
+    mysql.query(createTableQuery, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Bảng Laptop đã được tạo hoặc đã tồn tại");
+      }
+    });
+  }
 
-    async createPhoneTable() {
-        const createTableQuery = `CREATE TABLE IF NOT EXISTS phone (
+  async createPhoneTable() {
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS phone (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255),
             price INT,
@@ -56,17 +56,17 @@ class CreateTable{
             status ENUM('available', 'out of stock', 'discontinued')
           );`;
 
-        mysql.query(createTableQuery, (error, results, fields) => {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log('Bảng Phone đã được tạo hoặc đã tồn tại');
-            }
-        });
-    }
+    mysql.query(createTableQuery, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Bảng Phone đã được tạo hoặc đã tồn tại");
+      }
+    });
+  }
 
-    async createImageUrlTable() {
-        const createTableQuery = `CREATE TABLE IF NOT EXISTS image_url (
+  async createImageUrlTable() {
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS image_url (
             id INT AUTO_INCREMENT PRIMARY KEY,
             image_url VARCHAR(255),
             laptop_id INT,
@@ -75,14 +75,32 @@ class CreateTable{
             FOREIGN KEY (phone_id) REFERENCES phone(id)
           );`;
 
-        mysql.query(createTableQuery, (error, results, fields) => {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log('Bảng image_url đã được tạo hoặc đã tồn tại');
-            }
-        });
-    }
+    mysql.query(createTableQuery, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Bảng image_url đã được tạo hoặc đã tồn tại");
+      }
+    });
+  }
+
+  async createUserTable() {
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS users ( 
+        user_id INT AUTO_INCREMENT PRIMARY KEY, 
+        user_name VARCHAR(255), 
+        address VARCHAR(255), 
+        email VARCHAR(255), 
+        phone_number VARCHAR(15), 
+        gender ENUM('Male', 'Female', 'Other')
+        );`;
+    mysql.query(createTableQuery, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Bảng user đã được tạo hoặc đã tồn tại");
+      }
+    });
+  }
 }
 
-module.exports = new CreateTable;
+module.exports = new CreateTable();
