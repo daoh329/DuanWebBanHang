@@ -1,16 +1,24 @@
-import React from 'react';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination} from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import {
+    MDBTabs,
+    MDBTabsItem,
+    MDBTabsLink,
+    MDBTabsContent,
+    MDBTabsPane
+  } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
 import { message } from 'antd'; 
 import './Home.scss'
 import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 const { TabPane } = Tabs;
+
 
 const products = [
     {
@@ -123,7 +131,17 @@ const tuanlevang = [
     },
 ];
 
+
 const Home = () => {
+
+    const [fillActive, setFillActive] = useState('tab1');
+  const handleFillClick = (value) => {
+    if (value === fillActive) {
+      return;
+    }
+    setFillActive(value);
+  };
+    // 
     const [ListUsers, setListUsers] = useState([]);
     const [topLaptop, setTopLaptop] = useState([]);
     const navigate = useNavigate()
@@ -300,54 +318,72 @@ const Home = () => {
             </div>
 
             {/* -------tabsPane---------- */}
-            <div className="content1"
-                style={{
-                    width: "80%",
-                    margin: "0 auto",
-                    backgroundImage: "url('https://lh3.googleusercontent.com/kNQJhjNgt5WnorADIKUr1lQIkwlxmWnUfOARFP5TfYXldzRRkfFw3hbzbXEBZo-20klJuDRkUZkDWbypz2UmFj0LesbRckx-=rw-w1920')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    borderRadius: '20px',
-                    marginTop: '10px'
-                }}>
-                <Tabs
-                    centered={true} /* Để Tabs căn giữa theo chiều ngang */
-                    style={{ fontWeight: 'bold' }}
-                    tabBarStyle={{ background: 'transparent' }}
-                    activeKey={activeTab}
-                    onChange={handleTabChange}
+            <div
+                     style={{
+                        width: "80%",
+                        margin: "0 auto",
+                        backgroundImage: "url('https://lh3.googleusercontent.com/kNQJhjNgt5WnorADIKUr1lQIkwlxmWnUfOARFP5TfYXldzRRkfFw3hbzbXEBZo-20klJuDRkUZkDWbypz2UmFj0LesbRckx-=rw-w1920')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        borderRadius: '20px',
+                        marginTop: '10px'
+                    }}
+            >
+            <div className="center-container"
 
-                >
-                    <TabPane tab="Tuần lễ giảm giá" key="1" >
-                        <div className="content" style={{ display: 'flex', flexWrap: 'wrap', width: '100%', margin: "0 auto", padding: '10px' }}>
-                            {tuanlevang && tuanlevang.length > 0 &&
-                                tuanlevang.map((item, index) => (
+            >
+            <MDBTabs
+              tabBarStyle={{ background: 'transparent' }}
+            fill className='mb-1'>
+        <MDBTabsItem>
+          <MDBTabsLink onClick={() => handleFillClick('tab1')} active={fillActive === 'tab1'}>
+            Sản phẩm mới mỗi ngày
+          </MDBTabsLink>
+        </MDBTabsItem>
+        <MDBTabsItem>
+          <MDBTabsLink onClick={() => handleFillClick('tab2')} active={fillActive === 'tab2'}>
+            Ưu đãi trong ngày
+          </MDBTabsLink>
+        </MDBTabsItem>
+        <MDBTabsItem>
+          <MDBTabsLink onClick={() => handleFillClick('tab3')} active={fillActive === 'tab3'}>
+           Sản phẩm khuyến mãi
+          </MDBTabsLink>
+        </MDBTabsItem>
+      </MDBTabs>
+      </div>
 
-                                    <Card
-                                        key={item.id}
-                                        hoverable
-                                        style={{ width: 230, boxSizing: 'border-box', margin: "0 auto", marginTop: "10px" }}
-                                        cover={<img alt={item.name} src={item.imageUrl} />}
-                                    >
-                                        <h3>{item.name}</h3>
-                                        <p>{item.price}$</p>
-                                        <Button type="primary" icon={<ShoppingCartOutlined />}>
+      <MDBTabsContent 
 
-                                        </Button>
-                                    </Card>
-                                ))}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="Ưu đãi ngon vl" key="2">
-                        Content of Tab 2
-                    </TabPane>
-                    <TabPane tab="Flash Sales" key="3">
-                        Content of Tab 3
-                    </TabPane>
-                </Tabs>
-            </div>
+      >
 
+      <MDBTabsPane show={fillActive === 'tab1'}>   
+  <div className="product-list">
+    {tuanlevang && tuanlevang.length > 0 &&
+      tuanlevang.map((item, index) => (
+        <Card
+          key={item.id}
+          hoverable
+          className="product-card"
+        >
+          <div className="product-image">
+            <img alt={item.name} src={item.imageUrl} />
+          </div>
+          <div className="product-details">
+            <h3>{item.name}</h3>
+            <p>{item.price}$</p>
+            <Button type="primary" icon={<ShoppingCartOutlined />} />
+          </div>
+        </Card>
+      ))}
+  </div>
+</MDBTabsPane>
+
+        <MDBTabsPane show={fillActive === 'tab2'}>Tab 2 content</MDBTabsPane>
+        <MDBTabsPane show={fillActive === 'tab3'}>Tab 3 content</MDBTabsPane>
+      </MDBTabsContent>
+      </div>
             {/*-------- Danh mục nổi bật -----------*/}
             <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
                 <div>
