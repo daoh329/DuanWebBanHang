@@ -7,10 +7,7 @@ function HistoryOrder(props) {
 
     // Lấy giá trị phone từ session
     const phone = window.sessionStorage.getItem('phone');
-    console.log(phone)
-
     const [data, setData] = useState([]);
-
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${phone}`)
             .then(res => {

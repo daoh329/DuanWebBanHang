@@ -104,23 +104,27 @@ const App = (userDetails) => {
 
   const menu = (
     <Menu>
-      <Menu.Item key="1">
-        <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
-      </Menu.Item>
-      <Menu.Item key="2">
-        <button
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "none",
-          }}
-          onClick={logout}
-        >
-          Đăng xuất
-        </button>
-        {/* Link to logout page */}
-      </Menu.Item>
+      {user ? (
+        <Menu.Item key="1">
+          <div
+            style={{
+              border: "none",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "none",
+            }}
+            onClick={logout}
+          >
+            Đăng xuất
+          </div>
+          {/* Link to logout page */}
+        </Menu.Item>
+      ) : (
+        <Menu.Item key="1">
+          <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
+        </Menu.Item>
+      )}
+
       <Menu.Item key="3">
         <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
         {/* Link to checkSP */}
