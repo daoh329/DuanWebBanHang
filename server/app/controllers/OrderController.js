@@ -62,6 +62,7 @@ class OrderController {
       res.send(jsonResult);
     });
   }
+
   async confirmOrder(req, res) {
     console.log("Confirm order request received");
     const orderId = req.params.id;
@@ -121,6 +122,7 @@ class OrderController {
       }
     });
   }
+  
 }
 
 module.exports = new OrderController();

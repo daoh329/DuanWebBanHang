@@ -9,14 +9,11 @@ class Product{
     // createTables.createPhoneTable
     // createTables.createImageUrlTable
 
-
       const data = req.body;
     console.log(data);
     if (!data) {
       return res.status(400).json("Invalid data");
     }
-    
-    
     
     const imageUrls = data.image;
       let table = '';
@@ -132,6 +129,7 @@ class Product{
         }
       });
     }
+
     async json(req,res){
       const data = req.body;
       const table = data.type;
@@ -147,5 +145,7 @@ class Product{
         res.send(jsonResult);
     });
     }
+
+    
   }
 module.exports = new Product;
