@@ -41,11 +41,13 @@ function Detail() {
     setIsModalOpen(false);
   };
   // select mới
-  const [cities, setCities] = useState([]);
+  const [city, setCity] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +55,7 @@ function Detail() {
         const response = await axios.get(
           "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
         );
-        setCities(response.data);
+        setCity(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -63,7 +65,7 @@ function Detail() {
   }, []);
   // select city
   const handleCityChange = (value) => {
-    const selectedCity = cities.find((city) => city.Id === value);
+    const selectedCity = city.find((city) => city.Id === value);
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
@@ -73,6 +75,13 @@ function Detail() {
       (district) => district.Id === value
     );
     setSelectedDistrict(selectedDistrict);
+  };
+  //select ward
+  const handleWardChange = (value) => {
+    const selectedWard = selectedDistrict.Wards.find(
+      (ward) => ward.Id === value
+    );
+    setSelectedWard(selectedWard);
   };
   //lấy thông tin vào modal
   const { id } = useParams();
@@ -97,7 +106,6 @@ function Detail() {
   const [productDetail, setProductDetail] = useState(null);
 
   // Khai báo state cho các trường thông tin cá nhân
-  const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [userName, setUserName] = useState('');
@@ -161,8 +169,9 @@ function Detail() {
       price: productDetail.price * quantity,
       quantity: quantity,
       userName: userName,
-      city: city,
-      // district: selectedDistrict,
+      city: selectedCity.Name,
+      selectedCity: selectedDistrict.Name,
+      selectedDistrict: selectedWard.Name,
       address: address,
       deliveryMethod: deliveryMethod,
       phone: phone,
@@ -173,7 +182,7 @@ function Detail() {
     // In ra giá trị của biến data
     console.log("Data:", data);
     // Gửi thông tin đăng ký lên server
-    const response = await fetch("http://localhost:3000/order/order", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/order/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -723,7 +732,7 @@ function Detail() {
             {/*  */}
             <Form.Item label="Thành phố">
               <Select onChange={handleCityChange}>
-                {cities.map((city) => (
+                {city.map((city) => (
                   <Option key={city.Id} value={city.Id}>
                     {city.Name}
                   </Option>
@@ -743,7 +752,7 @@ function Detail() {
             </Form.Item>
 
             <Form.Item label="Xã">
-              <Select>
+              <Select onChange={handleWardChange}>
                 {selectedDistrict &&
                   selectedDistrict.Wards.map((ward) => (
                     <Option key={ward.Id} value={ward.Id}>
