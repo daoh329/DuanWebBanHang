@@ -111,9 +111,8 @@ class Product{
       });
     }
     async json(req,res){
-      const data = req.body;
-      const table = data.type;
-      const query = `SELECT * FROM ${table} ORDER BY id (current_page - 1) * 20 LIMIT 20;`
+      console.log('runjsonP');
+      const query = `SELECT * FROM product`
       // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
       mysql.query(query, (err, result) => {
         if (err) throw err;

@@ -11,6 +11,7 @@ import AdminPage from './QuanLyAdmin/QuanLyAdmin';
 import Search from './Search/Search';
 import Sale from './Menu/Sale';
 import QLdonhang from './QuanLyAdmin/QLdonhang';
+import QLsanpham from './QuanLyAdmin/QLsanpham';
 import ShowRoom from './Menu/ShowRoom';
 import OrderHistory from './OrderHistory/HistoryOrder';
 import Cart from './Cart/Cart';
@@ -54,6 +55,7 @@ const App = () => {
           <Route path="/orderhistory/:phone" element={<OrderHistory/>} />
           <Route path="/cart" element={<Cart/>} />
           <Route path='/order/json' element={<QLdonhang/>} /> 
+          <Route path='/product/json' element={<QLsanpham/>}/>
           </Routes>
         </header>
         <Footer />
