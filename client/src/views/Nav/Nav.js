@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, List, } from 'antd';
-import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
+import { Layout, Menu, Input, Badge, Avatar, Affix, Button, Popover, List } from 'antd';
+import { Dropdown, Space } from 'antd';
+import { DownOutlined,SmileOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
@@ -71,6 +72,35 @@ const App = (userDetails) => {
   const logout = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
   };
+  const host = (
+    <Menu>
+      <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
+      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
+
+    </Menu>
+  );
+  // 
+  const items = [
+    {
+      key: '1',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+          Chăm sóc khách hàng: 18006569
+        </a>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+          Tư vấn khách hàng: 18006569
+        </a>
+      ),
+      icon: <SmileOutlined />,
+      disabled: true,
+    },
+  ];
+// 
 
   const menu = (
     <Menu>
@@ -150,8 +180,23 @@ const App = (userDetails) => {
             <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
             nghiệp
           </a>
-          <a
-            href="/host"
+
+    <Dropdown overlay={host} placement="bottomRight">
+      <a
+        href="/host"
+        style={{
+          marginRight: "20px",
+          color: "#333",
+          textDecoration: "none",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+      </a>
+    </Dropdown>
+        <a
+            href="/tin-tuc"
             style={{
               marginRight: "20px",
               color: "#333",
@@ -160,8 +205,9 @@ const App = (userDetails) => {
               alignItems: "center",
             }}
           >
-            <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
           </a>
+
         </div>
         <Header
           className="header"

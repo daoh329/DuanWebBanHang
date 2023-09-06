@@ -1,7 +1,8 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
+import './Tintuc.css'
 
-const Support = () => (
+const Tintuc = () => (
   <div>
     <Breadcrumb
       items={[
@@ -9,7 +10,7 @@ const Support = () => (
           title: <a href="/">Trang chủ</a>,
         },
         {
-          title: <a href="/support">Tư vấn doanh nghiệp</a>,
+          title: <a href="/tin-tuc">Tin tức</a>,
         }
       ]}
     />
@@ -17,10 +18,14 @@ const Support = () => (
 
 
     <body>
-        <h1 style={{ textAlign: "center" }}>Thông tin chi tiết phòng ban</h1><br/>
+    <h1 className="title-tintuc">
+  <span>
+    Tin tức
+  </span>
+</h1>
     
     </body>
   </div>
 );
 
-export default Support;
+export default Tintuc;

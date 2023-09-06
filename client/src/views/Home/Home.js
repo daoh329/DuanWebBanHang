@@ -300,7 +300,7 @@ const Home = () => {
             </div>
 
             {/* -------tabsPane---------- */}
-            <div className="content"
+            <div className="content1"
                 style={{
                     width: "80%",
                     margin: "0 auto",

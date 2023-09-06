@@ -13,6 +13,8 @@ import Search from './Search/Search';
 import Sale from './Menu/Sale';
 import QLdonhang from './QuanLyAdmin/QLdonhang';
 import ShowRoom from './Menu/ShowRoom';
+import Tintuc from './Menu/Tintuc';
+import Support from './Menu/Support';
 import OrderHistory from './OrderHistory/HistoryOrder';
 import Cart from './Cart/Cart';
 import { CartProvider } from './Cart/CartContext';
@@ -53,6 +55,8 @@ const App = () => {
              <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
              <Route path="/search" element={<Search />} />
              <Route path="/showroom" element={<ShowRoom />} />
+             <Route path="/tin-tuc" element={<Tintuc />} />
+             <Route path="/support" element={<Support />} />
              <Route path="/checkSP" element={<CheckSP />} />
              <Route path="/sale" element={<Sale />} />
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />

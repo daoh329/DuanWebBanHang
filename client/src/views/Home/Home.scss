@@ -1,4 +1,15 @@
 /* Home.css */
+/* CSS cho khối .content */
+
+
+/* Media query cho kích thước màn hình nhỏ hơn */
+@media (max-width: 768px) {
+  .slider-overlay {
+    display: none; /* Ẩn khối content khi màn hình quá nhỏ */
+  }
+}
+
+// 
 .slider-container {
   position: relative;
   display: flex;
@@ -112,6 +123,7 @@
 :where(.css-dev-only-do-not-override-17a39f8).ant-card .ant-card-body {
   padding: 5px !important;
   border-radius: 0 !important;
+
 }
 
 .card-sp {
