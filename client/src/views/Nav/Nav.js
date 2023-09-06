@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, List, } from 'antd';
-import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import '../Nav/Nav.scss'
-import Hinh from '../../../src/assets/logo4.png';
+import Hinh from '../../../src/assets/logo5.png';
 import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
 
@@ -102,7 +102,7 @@ const App = () => {
                     <div className="logo" style={{ width: '80px', marginRight: '16px', color: '#ffffff' }}>
                         {/* Add your logo here */}
                         <span style={{ position: 'relative', }}>  <NavLink to="/">
-                            <img src={Hinh} style={{ width: '130%', height: '130%' }}></img></NavLink></span>
+                            <img src={Hinh} style={{ width: '150%', height: '150%' }}></img></NavLink></span>
                     </div>
                     <div className="search-container" style={{ flex: 'auto', display: 'flex', justifyContent: 'center', maxWidth: '60%' }}>
                         <Input.Search
@@ -111,6 +111,8 @@ const App = () => {
                             onSearch={handleSearch}
                         />
                     </div>
+
+
                     <div className="right-icons" style={{ display: 'flex', alignItems: 'center' }}>
                         <Badge count={5} style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
                             <BellOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
@@ -151,10 +153,16 @@ const App = () => {
                                 <ShoppingCartOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
                             </Badge>
                         </Popover>
+                        <Badge style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
+                            <NavLink to="/checkSP">
+                                <SolutionOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
+                            </NavLink>
+                        </Badge>
 
                         <Dropdown overlay={menu}>
                             <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#ae69dd', margin: '10px' }} />
                         </Dropdown>
+
                     </div>
 
 

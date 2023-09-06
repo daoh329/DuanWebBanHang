@@ -12,7 +12,7 @@ class OrderController {
         // Gọi hàm createOrdersTable để tạo bảng orders nếu chưa tồn tại
         createOrdersTable();
 
-        const query = 'INSERT INTO orders (name, avatar, price, quantity, userName, city, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO orders (name, avatar, price, quantity, userName, city, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 
 
