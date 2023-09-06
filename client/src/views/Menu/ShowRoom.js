@@ -9,7 +9,7 @@ const ShowRoom = () => (
           title: <a href="/">Trang chủ</a>,
         },
         {
-          title: <a href="/showroom">ShowRoom</a>,
+          title: <a href="/showroom">showroom</a>,
         }
       ]}
     />

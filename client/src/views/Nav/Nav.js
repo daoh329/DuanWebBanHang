@@ -1,33 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  Layout,
-  Menu,
-  Input,
-  Badge,
-  Avatar,
-  Dropdown,
-  Affix,
-  Button,
-  Popover,
-  List,
-} from "antd";
-import {
-  DownOutlined,
-  BellOutlined,
-  ShoppingCartOutlined,
-  UserOutlined,
-  SearchOutlined,
-  TagOutlined,
-  EnvironmentOutlined,
-  CommentOutlined,
-  PhoneOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, List, } from 'antd';
+import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
 import Hinh from "../../../src/assets/logo4.png";
-import { useCart } from "../Cart/CartContext";
+import { useCart } from '../Cart/CartContext';
+
 const { Header } = Layout;
 
 const App = (userDetails) => {
@@ -184,7 +163,6 @@ const App = (userDetails) => {
             <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
           </a>
         </div>
-
         <Header
           className="header"
           style={{
@@ -299,7 +277,11 @@ const App = (userDetails) => {
                 />
               </Badge>
             </Popover>
-
+            <Badge style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
+                            <NavLink to="/checkSP">
+                                <SolutionOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
+                            </NavLink>
+                        </Badge>
             <Dropdown overlay={menu}>
               {user ? (
                 <Avatar src={user.picture} />
