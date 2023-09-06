@@ -128,8 +128,9 @@ const Home = () => {
     const [topLaptop, setTopLaptop] = useState([]);
     const navigate = useNavigate()
 
+    //top 5 laptop bán chạy
     useEffect(() => {
-        axios.get(`http://localhost:3000/order/laptopbanchay`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
             .then(res => {
                 setTopLaptop(res.data);
             })
