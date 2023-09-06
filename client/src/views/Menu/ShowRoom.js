@@ -6,10 +6,10 @@ const ShowRoom = () => (
     <Breadcrumb
       items={[
         {
-          title: 'Home',
+          title:<a href="/">Home</a>,
         },
         {
-          title: <a href="/showroom">ShowRoom</a>,
+          title: <a href="/showroom">showroom</a>,
         }
       ]}
     />
