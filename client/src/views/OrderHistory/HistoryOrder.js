@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Table, Button,Breadcrumb } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
 
@@ -28,7 +28,7 @@ function HistoryOrder(props) {
         { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
         { title: 'Giá', dataIndex: 'price', key: 'price' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        
+
         { title: 'Ghi chú', dataIndex: 'note', key: 'note' },
         {
             title: 'Thời gian tạo',
@@ -44,8 +44,22 @@ function HistoryOrder(props) {
     ]
 
     return (
-        <div>
-            <h1>Lịch sử mua hàng</h1>
+        <div style={{ margin: '0 auto', width: '80%', marginTop:'10px' }}>
+            <h6>
+                <Breadcrumb
+                    items={[
+                        {
+                            title: <a href="/">Home</a>,
+                        },
+                        {
+                            title: <a href="/checkSP">Tra cứu</a>,
+                        }, {
+                            title: <a href="/orderHistory/${phone}">Lịch sử mua hàng</a>,
+                        }
+                    ]}
+                />
+            </h6>
+            <h4>Lịch sử mua hàng</h4>
             <Table columns={columns} dataSource={data} />
         </div>
     );
