@@ -39,13 +39,13 @@ const App = () => {
   }, []);
 
   return (
-     <div className='App'>
-     <BrowserRouter>
-       <CartProvider>
-       <Nav user={user}/>
-         <header>
-           <Routes>
-             <Route path="" element={<Home />} />
+    <div className='App'>
+    <BrowserRouter>
+      <CartProvider>
+        <Nav user={user} />
+        <header>
+          <Routes>
+          <Route path="" element={<Home />} />
              <Route path="/detail/:id" element={<Detail />} />
              <Route path="/login" element={<Login />} />
              <Route path="/adminPage" element={<AdminPage />} />
@@ -58,12 +58,12 @@ const App = () => {
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
              <Route path="/cart" element={<Cart />} />
              <Route path='/order/json' element={<QLdonhang />} />
-           </Routes>
-         </header>
-         <Footer />
-       </CartProvider>
-     </BrowserRouter>
-   </div>
+          </Routes>
+        </header>
+        <Footer />
+      </CartProvider>
+    </BrowserRouter>
+  </div>
   );
 };
 

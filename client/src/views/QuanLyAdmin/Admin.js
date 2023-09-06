@@ -17,7 +17,7 @@ import {
   DatabaseOutlined,
   FileProtectOutlined,
 } from '@ant-design/icons';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import './Admin.css'
 import Dashboard from "./Pages/Dashboard";
 import NewProduct from "./Pages/NewProduct";
@@ -45,14 +45,14 @@ function Admin() {
           icon: <HomeOutlined />,
           label: 'Bảng điều khiển',
           type: 'item',
-          route: 'dashboard', 
+          route: 'dashboard',
         },
         {
           key: '2',
           icon: <AppstoreAddOutlined />,
           label: 'Sản phẩm mới',
           type: 'item',
-          route: 'newproduct', 
+          route: 'newproduct',
         },
         {
           key: '3',
@@ -74,7 +74,7 @@ function Admin() {
           icon: <ShoppingOutlined />,
           label: 'Tất cả sản phẩm',
           type: 'item',
-          route:'products'
+          route: 'products'
         },
         {
           key: '5',
@@ -107,7 +107,7 @@ function Admin() {
           icon: <ShoppingCartOutlined />,
           label: 'Đơn đặt hàng',
           type: 'item',
-          route:'orders'
+          route: 'orders'
         },
       ],
     },
@@ -135,7 +135,7 @@ function Admin() {
           key: '10',
           label: 'Trang',
           type: 'item',
-          icon:<FileProtectOutlined />,
+          icon: <FileProtectOutlined />,
         },
       ],
     },
@@ -189,13 +189,13 @@ function Admin() {
   return (
     <>
       <Row>
-        <Col className="custom-scrollbar" span={18} push={6} style={{overflowY: 'scroll',height: '100vh'}}>
+        <Col className="custom-scrollbar" span={18} push={6} style={{ overflowY: 'scroll', height: '100vh' }}>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="newproduct" element={<QuanLyAdmin />} />
-            <Route path="newcoupon" element={<NewCoupon/>} />
-            <Route path="products" element={<Products/>} />
-            <Route path="orders" element={<OrderList/>} />     
+            <Route path="newcoupon" element={<NewCoupon />} />
+            <Route path="products" element={<Products />} />
+            <Route path="orders" element={<OrderList />} />
           </Routes>
         </Col>
         <Col span={6} pull={18}>
