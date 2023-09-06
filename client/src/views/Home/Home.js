@@ -146,8 +146,9 @@ const Home = () => {
     const [topLaptop, setTopLaptop] = useState([]);
     const navigate = useNavigate()
 
+    //top 5 laptop bán chạy
     useEffect(() => {
-        axios.get(`http://localhost:3000/order/laptopbanchay`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
             .then(res => {
                 setTopLaptop(res.data);
             })
@@ -442,6 +443,7 @@ const Home = () => {
                                     style={{ width: '20%', boxSizing: 'border-box', marginRight: '10px', display: 'inline-block', }}>
                                     <img src={item.avatar} style={{ width: '200px' }}></img>
                                     <a className="name-card">{item.name}</a>
+                                    <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.price} ₫</p>
                                     <Button onClick={() => handleViewDetailuser(item)} type="primary" icon={<ShoppingCartOutlined />}>Buy
                                         {/* Biểu tượng mua hàng */}
                                     </Button>
