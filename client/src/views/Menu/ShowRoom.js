@@ -6,7 +6,7 @@ const ShowRoom = () => (
     <Breadcrumb
       items={[
         {
-          title: 'Home',
+          title: <a href="/">Trang chủ</a>,
         },
         {
           title: <a href="/showroom">ShowRoom</a>,
