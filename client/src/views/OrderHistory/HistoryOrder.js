@@ -12,7 +12,7 @@ function HistoryOrder(props) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/order/orderhistory/${phone}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${phone}`)
             .then(res => {
                 setData(res.data);
             })

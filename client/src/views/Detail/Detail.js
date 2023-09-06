@@ -41,11 +41,13 @@ function Detail() {
     setIsModalOpen(false);
   };
   // select mới
-  const [cities, setCities] = useState([]);
+  const [city, setCity] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +55,7 @@ function Detail() {
         const response = await axios.get(
           "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
         );
-        setCities(response.data);
+        setCity(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -63,18 +65,25 @@ function Detail() {
   }, []);
   // select city
   const handleCityChange = (value) => {
-    const selectedCity = cities.find((city) => city.Id === value);
+    const selectedCity = city.find((city) => city.Id === value);
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
-
+//select district
   const handleDistrictChange = (value) => {
     const selectedDistrict = selectedCity.Districts.find(
       (district) => district.Id === value
     );
     setSelectedDistrict(selectedDistrict);
   };
-  //
+  //select ward
+  const handleWardChange = (value) => {
+    const selectedWard = selectedDistrict.Wards.find(
+      (ward) => ward.Id === value
+    );
+    setSelectedWard(selectedWard);
+  };
+  //lấy thông tin vào modal
   const { id } = useParams();
   const [user, setUser] = useState({});
 
@@ -97,14 +106,13 @@ function Detail() {
   const [productDetail, setProductDetail] = useState(null);
 
   // Khai báo state cho các trường thông tin cá nhân
-  const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [userName, setUserName] = useState('');
   const [note, setNote] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState('');
-
+// otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -120,11 +128,19 @@ function Detail() {
   const handleSendOTP = () => {
     // Set up reCAPTCHA verifier
     const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
-
+  
     // Send OTP to user's phone number
-    signInWithPhoneNumber(auth, phone, verifier).then((result) => {
-      setConfirmationResult(result);
-    });
+    signInWithPhoneNumber(auth, phone, verifier)
+      .then((result) => {
+        setConfirmationResult(result);
+      })
+      .catch((error) => {
+        if (error.code === "auth/too-many-requests") {
+          alert("Bạn đã nhập số điện thoại quá nhiều lần. Vui lòng thử lại sau ít phút.");
+        } else {
+          // Handle other errors
+        }
+      });
   };
 
   const handleVerifyOTP = () => {
@@ -141,11 +157,11 @@ function Detail() {
 
   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
   const handleConfirm = async () => {
-    // if (!isOTPVerified) {
-    //   // Nếu người dùng chưa xác minh mã OTP
-    //   alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
-    //   return;
-    // }
+    if (!isOTPVerified) {
+      // Nếu người dùng chưa xác minh mã OTP
+      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+      return;
+    }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       name: user.name,
@@ -153,8 +169,9 @@ function Detail() {
       price: productDetail.price * quantity,
       quantity: quantity,
       userName: userName,
-      city: city,
-      // district: selectedDistrict,
+      city: selectedCity.Name,
+      selectedCity: selectedDistrict.Name,
+      selectedDistrict: selectedWard.Name,
       address: address,
       deliveryMethod: deliveryMethod,
       phone: phone,
@@ -164,16 +181,14 @@ function Detail() {
 
     // In ra giá trị của biến data
     console.log("Data:", data);
-
     // Gửi thông tin đăng ký lên server
-    const response = await fetch("http://localhost:3000/order/order", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/order/order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
@@ -717,7 +732,7 @@ function Detail() {
             {/*  */}
             <Form.Item label="Thành phố">
               <Select onChange={handleCityChange}>
-                {cities.map((city) => (
+                {city.map((city) => (
                   <Option key={city.Id} value={city.Id}>
                     {city.Name}
                   </Option>
@@ -737,7 +752,7 @@ function Detail() {
             </Form.Item>
 
             <Form.Item label="Xã">
-              <Select>
+              <Select onChange={handleWardChange}>
                 {selectedDistrict &&
                   selectedDistrict.Wards.map((ward) => (
                     <Option key={ward.Id} value={ward.Id}>

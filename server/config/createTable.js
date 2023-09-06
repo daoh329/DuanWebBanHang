@@ -9,6 +9,8 @@ const createOrdersTable = () => {
       quantity INT,
       userName VARCHAR(255),
       city VARCHAR(255),
+      selectedCity VARCHAR(255),
+      selectedDistrict VARCHAR(255),
       address VARCHAR(255),
       deliveryMethod VARCHAR(255),
       phone VARCHAR(255),
