@@ -133,3 +133,75 @@
   text-overflow: ellipsis;
   margin-bottom: 8px;
 }
+
+.phone-group {
+  position: relative;
+  border-radius: 20px;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 20px;
+  background-size: cover;
+  background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
+}
+
+.phone-title {
+  font-weight: bold;
+  font-size: 25px;
+  display: -webkit-box;
+  padding: 20px 0px 0px 20px;
+  color: white;
+}
+
+.scroll-group-phone {
+  width: 98%;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+.scroll-control-phone::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-control-phone {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px;
+  white-space: nowrap;
+  width: 100%;
+  height: 100%;
+  padding-right: 17px;
+  scroll-behavior: smooth;
+  /* Đảm bảo không bị tràn nội dung */
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  text-align: center;
+  background-color: #00000017;
+  /* Màu nền của nút */
+  border: none;
+  height: 15%;
+  width: 4%;
+  transition: all 0.2s ease-in;
+  color: black;
+}
+
+.scroll-button:hover {
+  background-color: #0000005c;
+}
+
+#scroll-left-button {
+  left: 0;
+  border-top-right-radius:25px;
+  border-bottom-right-radius: 25px;
+}
+
+#scroll-right-button {
+  right: 0;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+
+}
