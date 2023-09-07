@@ -28,7 +28,7 @@ passport.use(
       createTable.createUserTable();
 
       // lệnh thêm người dùng
-      const queryInsertUser = `INSERT INTO users (user_name, email)
+      const queryInsertUser = `INSERT INTO users (name, email)
 			VALUES (?, ?)`;
 
       // lệnh kiểm tra email người dùng đã tồn tại chưa (đã đăng nhập 1 ít nhất 1 lần)
@@ -45,7 +45,7 @@ passport.use(
         if (!error) {
           
           // Kiểm tra, nếu không có hàng (rows) nào được trả về thì thêm user
-          if ((results[0].count = 0)) {
+          if ((results[0].count === 0)) {
             mysql.query(
               queryInsertUser,
               [nameProfile, emailProfile],
