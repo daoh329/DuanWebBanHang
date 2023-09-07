@@ -133,3 +133,54 @@
   text-overflow: ellipsis;
   margin-bottom: 8px;
 }
+
+/* CSS cho màn hình lớn hơn hoặc bằng iPhone 12 Pro */
+@media (max-width: 768px) {
+  .banner {
+    border-radius: 20px;
+  }
+
+  .slider-overlay {
+    display: none;
+
+  }
+
+  .tabsPane {
+    display: none;
+  }
+
+  .danhmucnoibat {
+    display: none;
+
+  }
+
+  .boxDT {
+    width: 100% !important;
+  }
+
+  .product-container {
+    width: 100% !important;
+  }
+
+  .card-sp {
+    box-sizing: border-box;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 170px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .danhmucmobile {
+    display: none;
+
+  }
+
+}

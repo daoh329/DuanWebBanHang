@@ -7,7 +7,7 @@
 //   // left: 0;
 //   // right: 0;
 //   }
-  
+
 //   /* Style the links inside the navigation bar */
 //   .topnav a {
 //     float: left;
@@ -19,19 +19,19 @@
 //     font-size: 17px;
 
 //   }
-  
+
 //   /* Change the color of links on hover */
 //   .topnav a:hover {
 //     background-color: #ddd;
 //     color: black;
 //   }
-  
+
 //   /* Style the "active" element to highlight the current page */
 //   .topnav a.active {
 //     background-color: #2196F3;
 //     color: white;
 //   }
-  
+
 //   /* Style the search box inside the navigation bar */
 //   .topnav input[type=text] {
 //     float: right;
@@ -41,7 +41,7 @@
 //     margin-right: 16px;
 //     font-size: 17px;
 //   }
-  
+
 //   /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
 //   @media screen and (max-width: 600px) {
 //     .topnav a, .topnav input[type=text] {
@@ -57,20 +57,43 @@
 //     }
 //   }
 .custom-input-search .ant-input {
-  
-    color: #ae69dd;
-    border-color: #ae69dd;
-  }
-  .custom-input-search .ant-btn-search {
-    background-color: #ae69dd;
-    border-color: #ae69dd;
-    color: #ae69dd;
-  }
-  :where(.css-dev-only-do-not-override-17a39f8).ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary) {
-    color:  #ae69dd;;
-   
-    border-color: #ae69dd;
+
+  color: #ae69dd;
+  border-color: #ae69dd;
 }
-  
-  
-  
+
+.custom-input-search .ant-btn-search {
+  background-color: #ae69dd;
+  border-color: #ae69dd;
+  color: #ae69dd;
+}
+
+:where(.css-dev-only-do-not-override-17a39f8).ant-input-search>.ant-input-group>.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary) {
+  color: #ae69dd;
+  ;
+
+  border-color: #ae69dd;
+}
+
+@media (max-width: 768px) {
+  .tracuu {
+    display: none;
+  }
+
+  .thongbao {
+    display: none;
+  }
+
+  .header {
+    padding: 10px;
+  }.logo{
+    display: none;
+  }
+}
+
+@media (min-width:768px) {
+  .hd-logo {
+    display: none;
+
+  }
+}

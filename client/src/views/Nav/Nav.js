@@ -95,6 +95,7 @@ const App = (userDetails) => {
         <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
         {/* Link to checkSP */}
       </Menu.Item>
+
     </Menu>
   );
 
@@ -163,6 +164,14 @@ const App = (userDetails) => {
             <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
           </a>
         </div>
+        <div className="hd-logo" style={{width:'100%',  backgroundColor: "#f8f8fc",}}>
+          <span style={{ position: "relative" }}>
+            {" "}
+            <NavLink to="/">
+              <img src={Hinh} style={{ width: "10%"}}></img>
+            </NavLink>
+          </span>
+        </div>
         <Header
           className="header"
           style={{
@@ -176,7 +185,6 @@ const App = (userDetails) => {
             className="logo"
             style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
           >
-            {/* Add your logo here */}
             <span style={{ position: "relative" }}>
               {" "}
               <NavLink to="/">
@@ -203,7 +211,7 @@ const App = (userDetails) => {
             className="right-icons"
             style={{ display: "flex", alignItems: "center" }}
           >
-            <Badge
+            <Badge className='thongbao'
               count={5}
               style={{
                 marginTop: "10px",
@@ -277,11 +285,11 @@ const App = (userDetails) => {
                 />
               </Badge>
             </Popover>
-            <Badge style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
-                            <NavLink to="/checkSP">
-                                <SolutionOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
-                            </NavLink>
-                        </Badge>
+            <Badge className='tracuu' style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
+              <NavLink to="/checkSP">
+                <SolutionOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
+              </NavLink>
+            </Badge>
             <Dropdown overlay={menu}>
               {user ? (
                 <Avatar src={user.picture} />

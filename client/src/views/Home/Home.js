@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination} from 'antd';
+import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
-import { message } from 'antd'; 
+import { message } from 'antd';
 import './Home.scss'
 import { useCart } from '../Cart/CartContext';
 const { Header } = Layout;
@@ -203,10 +203,10 @@ const Home = () => {
 
         // Lưu giỏ hàng đã cập nhật vào session
         sessionStorage.setItem('cart', JSON.stringify(cart));
-        console.log(">>>",cart)
+        console.log(">>>", cart)
     };
 
-     //---------------------------
+    //---------------------------
     const sliderImages = [
         'https://lh3.googleusercontent.com/Z4ALctQHIePEih7m2kbV-DyrS4NGkU3ba51_ELp9L7Y_UyJTvEWC1mLFDRss3v5UNrEO62ijjSuY4iWFum-j4oUyXgoGfz10dA=w1920-rw',
         'https://lh3.googleusercontent.com/l-97kfw2WWEm-jtK28TpqtA4T0jBKWm8eGn-FSJ4gI-pz83AXBScpf2VTtcZ4F2vn-hBSt45eDJmOziqesf08ru3FOHGJr0s=w1920-rw',
@@ -271,7 +271,7 @@ const Home = () => {
                 <Carousel autoplay>
                     {sliderImages.map((image, index) => (
                         <div key={index}>
-                            <img src={image} alt={`Slide ${index}`} style={{ width: '100%', height: 'auto' }} />
+                            <img className='banner' src={image} alt={`Slide ${index}`} style={{ width: '100%', height: 'auto' }} />
                         </div>
                     ))}
                 </Carousel>
@@ -300,7 +300,7 @@ const Home = () => {
             </div>
 
             {/* -------tabsPane---------- */}
-            <div className="content"
+            <div className="tabsPane"
                 style={{
                     width: "80%",
                     margin: "0 auto",
@@ -349,7 +349,40 @@ const Home = () => {
             </div>
 
             {/*-------- Danh mục nổi bật -----------*/}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
+            <div className='danhmucmobile' style={{
+                borderRadius: '20px',
+                width: '100%',
+                margin: '0 auto',
+                marginTop: '20px',
+                backgroundColor: 'white',
+                padding: '10px',
+              
+            }}>
+                <div>
+                    <div style={{ fontWeight: 'bold', fontSize: '20px', }}>
+                        Danh mục điện thoại
+                    </div>
+                </div>
+                <div style={{ paddingTop: '10px' ,  overflowX: 'auto', 
+                whiteSpace: 'nowrap', }}>
+                    <div>
+                        <div>
+                            {danhmuc1.map((danhmuc1, index) => (
+                                <div size='md' key={index} style={{ display: 'inline-block', marginRight: '10px' }}>
+                                    <div className="category-image-container">
+                                        <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className='danhmucnoibat' style={{
+                borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px', overflowX: 'auto', // Cho phép cuộn ngang
+                whiteSpace: 'nowrap'
+            }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục điện thoại</div>
                 </div>
@@ -367,8 +400,8 @@ const Home = () => {
                         </MDBRow>
                     </MDBContainer>
                 </div>
-            </div>
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
+            </div >
+            <div className='danhmucnoibat' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
                 </div>
@@ -389,7 +422,7 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm Laptop ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/pSzqZlVLMrhpyoU2QoTUVctJZc8uuuLNG97D8rZTQ0Ds29acQoNVkeG93TEklTJSMQyDjnpDhs0p8eCI1WRpAefb8iNlJ8Os=w1232)' }}>
+            <div className='boxDT' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/pSzqZlVLMrhpyoU2QoTUVctJZc8uuuLNG97D8rZTQ0Ds29acQoNVkeG93TEklTJSMQyDjnpDhs0p8eCI1WRpAefb8iNlJ8Os=w1232)' }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 10px 20px', color: 'white' }}>Top 5 Laptop bán chạy</div>
                 </div>
@@ -418,7 +451,7 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm Điện thoại ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232)' }}>
+            <div className='boxDT' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundImage: 'url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232)' }}>
                 <div>
                     <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: ' 20px 0px 0px 20px', color: 'white' }}>Top 5 Điện Thoại bán chạy</div>
                 </div>
@@ -446,11 +479,11 @@ const Home = () => {
             </div>
 
             {/* ------------------box sản phẩm ------------------ */}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
+            <div className="product-container" style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
                 <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm</div>
+                    <div className="product-title" style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm</div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
+                <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
                     {ListUsers && ListUsers.length > 0 &&
                         ListUsers.slice(startIndex, endIndex).map((item, index) => (
                             <Card
@@ -459,9 +492,9 @@ const Home = () => {
                                 className="card-sp"
                             >
                                 <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailuser(item)} />
-                                <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <div className="product-details" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <a className="name-card">{item.name}</a>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="product-price" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
                                         <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
@@ -471,7 +504,7 @@ const Home = () => {
                         ))}
                 </div>
                 {/* Phân trang */}
-                <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                <div className="pagination-container" style={{ textAlign: 'center', marginTop: '10px' }}>
                     <Pagination
                         current={currentPage}
                         total={ListUsers.length}
@@ -483,11 +516,11 @@ const Home = () => {
 
 
             {/* ------------------Sản phẩm đã xem -----------------------*/}
-            <div style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
-                <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm đã xem</div>
+            <div className="product-container" style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundSize: 'cover', backgroundColor: "white" }}>
+            <div>
+                    <div className="product-title" style={{ fontWeight: 'bold', fontSize: '25px', display: '-webkit-box', padding: '20px', color: 'black' }}>Sản phẩm đã xem</div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
+                <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
                     {historysp && historysp.length > 0 &&
                         historysp.slice(startIndex, endIndex).map((item, index) => (
                             <Card
@@ -495,10 +528,10 @@ const Home = () => {
                                 hoverable
                                 className="card-sp"
                             >
-                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailproducts(item)} />
-                                <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <img src={item.avatar} style={{ width: '170px', height: '170px', objectFit: 'cover' }} alt={item.name} onClick={() => handleViewDetailuser(item)} />
+                                <div className="product-details" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <a className="name-card">{item.name}</a>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="product-price" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <p style={{ color: 'rgb(20, 53, 195)', fontWeight: 'bold' }}>{item.Price} ₫</p>
                                         <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(item)}>
                                         </Button>
@@ -510,7 +543,7 @@ const Home = () => {
 
                 </div>
                 {/* Phân trang */}
-                <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                <div className="pagination-container" style={{ textAlign: 'center', marginTop: '10px' }}>
                     <Pagination
                         current={currentPage}
                         total={ListUsers.length}
@@ -519,7 +552,7 @@ const Home = () => {
                     />
                 </div>
             </div>
-        </Layout>
+        </Layout >
     );
 };
 
