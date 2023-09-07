@@ -85,19 +85,16 @@ class CreateTable {
   }
 
   async createUserTable() {
-    const createTableQuery = `CREATE TABLE IF NOT EXISTS users ( 
-        user_id INT AUTO_INCREMENT PRIMARY KEY, 
-        user_name VARCHAR(255), 
-        address VARCHAR(255), 
-        email VARCHAR(255), 
-        phone_number VARCHAR(15), 
-        gender ENUM('Male', 'Female', 'Other')
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        email VARCHAR(255),
+        address VARCHAR(255),
+        phone_number VARCHAR(15)
         );`;
     mysql.query(createTableQuery, (error, results, fields) => {
       if (error) {
         console.error(error);
-      } else {
-        console.log("Bảng user đã được tạo hoặc đã tồn tại");
       }
     });
   }
