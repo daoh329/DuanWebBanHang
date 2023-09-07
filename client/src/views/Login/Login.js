@@ -10,12 +10,7 @@
     const [check, setCheck] = useState(false);
 
     const handleCheckbox = () => {
-      if (check) {
-        setCheck(false);
-        return;
-      }
-      setCheck(true);
-      return;
+      setCheck(!check);
     };
 
     const handleOnClickFB = () => {
@@ -76,6 +71,7 @@
             onChange={handleCheckbox}
             className="terms-privacy-control"
             type="checkbox"
+            checked={check}
           />
           <p className="p-terms-privacy">
             Bằng việc đánh dấu vào ô này, Tôi xác nhận:
