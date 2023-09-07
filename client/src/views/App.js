@@ -1,6 +1,6 @@
 //App.js
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import '../views/App.scss';
 import Home from './Home/Home';
 import Nav from './Nav/Nav'
@@ -45,9 +45,9 @@ const App = () => {
         <Nav user={user} />
         <header>
           <Routes>
-          <Route path="" element={<Home />} />
+            <Route path="/" element={<Home />} />
              <Route path="/detail/:id" element={<Detail />} />
-             <Route path="/login" element={<Login />} />
+             <Route path="/login" element={user ? <Navigate to='/'/> :<Login />} />
              <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} />
              <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
