@@ -62,6 +62,7 @@ class OrderController {
       res.send(jsonResult);
     });
   }
+
   async confirmOrder(req, res) {
     console.log("Confirm order request received");
     const orderId = req.params.id;
@@ -112,7 +113,13 @@ class OrderController {
   }
 
   async topLaptop(req, res) {
-    const query = `SELECT name, avatar FROM orders GROUP BY name, avatar ORDER BY COUNT(*) DESC LIMIT 5`;
+    const query = `SELECT name, avatar, price, created_at, COUNT(*)
+    FROM orders
+    WHERE created_at >= DATE_ADD(CURDATE(), INTERVAL -1 MONTH)
+    GROUP BY name, avatar, price, created_at
+    ORDER BY COUNT(*) DESC
+    LIMIT 5;      
+    `;
     mysql.query(query, (error, results) => {
       if (error) {
         res.status(500).send(error);
@@ -121,6 +128,7 @@ class OrderController {
       }
     });
   }
+  
 }
 
 module.exports = new OrderController();

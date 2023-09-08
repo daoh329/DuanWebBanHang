@@ -11,14 +11,11 @@ class Product{
     // createTables.createPhoneTable
     // createTables.createImageUrlTable
 
-
       const data = req.body;
     console.log(data);
     if (!data) {
       return res.status(400).json("Invalid data");
     }
-    
-    
     
     const imageUrls = data.image;
       let Type = data.Type;
@@ -112,6 +109,7 @@ class Product{
         }
       });
     }
+
     async json(req,res){
       // API: /product/json
       console.log('runjsonP');
@@ -127,5 +125,7 @@ class Product{
         res.send(jsonResult);
     });
     }
+
+    
   }
 module.exports = new Product;

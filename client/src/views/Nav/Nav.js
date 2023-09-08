@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Badge, Avatar, Dropdown, Affix, Button, Popover, List, } from 'antd';
-import { DownOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
+import { Layout, Menu, Input, Badge, Avatar, Affix, Button, Popover, List } from 'antd';
+import { Dropdown, Space } from 'antd';
+import { DownOutlined,SmileOutlined, BellOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, TagOutlined, EnvironmentOutlined, CommentOutlined, PhoneOutlined, DeleteOutlined, SolutionOutlined } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
@@ -62,39 +63,79 @@ const App = (userDetails) => {
     setFilteredProducts(filtered);
   }, [searchQuery, products]);
   console.log(">>>", searchQuery);
-  const handleSearch = (value) => {
-    setSearchQuery(value);
-    navigate(`/search?query=${encodeURIComponent(value)}`);
+
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
+
+  // Xử lý tìm kiếm khi người dùng nhấn nút "Tìm"
+  const handleSearch = () => {
+    navigate(`/search?query=${encodeURIComponent(searchQuery.toLowerCase())}`);
+  };
+
 
   // call API logout
   const logout = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
   };
+  const host = (
+    <Menu>
+      <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
+      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
+
+    </Menu>
+  );
+  // 
+  const items = [
+    {
+      key: '1',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+          Chăm sóc khách hàng: 18006569
+        </a>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+          Tư vấn khách hàng: 18006569
+        </a>
+      ),
+      icon: <SmileOutlined />,
+      disabled: true,
+    },
+  ];
+// 
 
   const menu = (
     <Menu>
-      <Menu.Item key="1">
-        <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
-      </Menu.Item>
-      <Menu.Item key="2">
-        <button
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "none",
-          }}
-          onClick={logout}
-        >
-          Đăng xuất
-        </button>
-        {/* Link to logout page */}
-      </Menu.Item>
+      {user ? (
+        <Menu.Item key="1">
+          <div
+            style={{
+              border: "none",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "none",
+            }}
+            onClick={logout}
+          >
+            Đăng xuất
+          </div>
+          {/* Link to logout page */}
+        </Menu.Item>
+      ) : (
+        <Menu.Item key="1">
+          <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
+        </Menu.Item>
+      )}
+
       <Menu.Item key="3">
         <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
         {/* Link to checkSP */}
       </Menu.Item>
+
     </Menu>
   );
 
@@ -102,14 +143,8 @@ const App = (userDetails) => {
     <Layout>
       <Affix offsetTop={0}>
         <div
-          className="header"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "#f8f8fc",
-            margintop: "0px",
-          }}
+          className="danhmuc"
+         
         >
           <a
             href="/sale"
@@ -150,8 +185,23 @@ const App = (userDetails) => {
             <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
             nghiệp
           </a>
-          <a
-            href="/host"
+
+    <Dropdown overlay={host} placement="bottomRight">
+      <a
+        href="/host"
+        style={{
+          marginRight: "20px",
+          color: "#333",
+          textDecoration: "none",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+      </a>
+    </Dropdown>
+        <a
+            href="/tin-tuc"
             style={{
               marginRight: "20px",
               color: "#333",
@@ -160,8 +210,19 @@ const App = (userDetails) => {
               alignItems: "center",
             }}
           >
-            <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
           </a>
+
+        </div>
+
+
+        <div className="hd-logo" style={{ width: '100%', backgroundColor: "#f8f8fc", }}>
+          <span style={{ position: "relative" }}>
+            {" "}
+            <NavLink to="/">
+              <img src={Hinh} style={{ width: "10%" }}></img>
+            </NavLink>
+          </span>
         </div>
         <Header
           className="header"
@@ -176,7 +237,6 @@ const App = (userDetails) => {
             className="logo"
             style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
           >
-            {/* Add your logo here */}
             <span style={{ position: "relative" }}>
               {" "}
               <NavLink to="/">
@@ -184,7 +244,7 @@ const App = (userDetails) => {
               </NavLink>
             </span>
           </div>
-          <div
+          {/* <div
             className="search-container"
             style={{
               flex: "auto",
@@ -198,12 +258,92 @@ const App = (userDetails) => {
               className="custom-input-search"
               onSearch={handleSearch}
             />
+          </div> */}
+
+
+          <div className="hamburger-menu">
+            <input id="menu__toggle" type="checkbox" />
+            <label className="menu__btn" htmlFor="menu__toggle">
+              <span />
+              <span />
+              <span />
+            </label>
+            <ul className="menu__box">
+              <li>
+                <a className="menu__item" href="#">
+                  home
+                </a>
+              </li>
+              <li>
+                <a className="menu__item" href="#">
+                  about
+                </a>
+              </li>
+              <li>
+                <a className="menu__item" href="#">
+                  team
+                </a>
+              </li>
+              <li>
+                <a className="menu__item" href="#">
+                  contact
+                </a>
+              </li>
+              <li>
+                <a className="menu__item" href="#">
+                  twitter
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* <div className="timkiem">
+            <Input
+              placeholder="Tìm kiếm"
+              className="custom-timkiem"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onPressEnter={handleSearch}
+              suffix={
+                <Button
+                  type="pr"
+                  icon={<SearchOutlined />}
+                  onClick={handleSearch}
+                />
+              }
+            />
+          </div>
+          <div className="group">
+            <svg className="icon" aria-hidden="true" viewBox="0 0 24 24">
+              <g>
+                <path d="m21.53 20.47l-3.66-3.66c19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zm3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z" />
+              </g>
+            </svg>
+            <input placeholder="search" type="search" className="input" />
+          </div> */}
+
+<div
+            className="search-container"
+            style={{
+              flex: "auto",
+              display: "flex",
+              justifyContent: "center",
+              maxWidth: "60%",
+            }}
+          >
+            <Input.Search
+              placeholder="Tìm kiếm"
+              className="custom-input-search"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onSearch={handleSearch}
+            />
           </div>
           <div
             className="right-icons"
             style={{ display: "flex", alignItems: "center" }}
           >
-            <Badge
+            <Badge className='thongbao'
               count={5}
               style={{
                 marginTop: "10px",
@@ -277,11 +417,11 @@ const App = (userDetails) => {
                 />
               </Badge>
             </Popover>
-            <Badge style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
-                            <NavLink to="/checkSP">
-                                <SolutionOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
-                            </NavLink>
-                        </Badge>
+            <Badge className='tracuu' style={{ marginTop: '10px', marginRight: '10px', backgroundColor: '#f50', color: '#fff' }}>
+              <NavLink to="/checkSP">
+                <SolutionOutlined style={{ fontSize: '24px', color: '#ae69dd', margin: '10px' }} />
+              </NavLink>
+            </Badge>
             <Dropdown overlay={menu}>
               {user ? (
                 <Avatar src={user.picture} />
