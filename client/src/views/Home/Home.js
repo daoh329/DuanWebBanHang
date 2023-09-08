@@ -3,8 +3,8 @@ import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from "antd";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined, CaretLeftOutlined, CaretRightOutlined, } from "@ant-design/icons";
+import { ShoppingCartOutlined, LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
@@ -359,6 +359,7 @@ const Home = () => {
       containerRef.current.scrollLeft += 1000; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
+
   return (
     <Layout>
       <div className="content">
@@ -366,7 +367,7 @@ const Home = () => {
           {sliderImages.map((image, index) => (
             <div key={index}>
               <img
-              className='banner' 
+                className='banner'
                 src={image}
                 alt={`Slide ${index}`}
                 style={{ width: "100%", height: "auto" }}
@@ -474,145 +475,147 @@ const Home = () => {
 
       {/*-------- Danh mục nổi bật -----------*/}
       <div className='danhmucmobile' style={{
-                borderRadius: '20px',
-                width: '100%',
-                margin: '0 auto',
-                marginTop: '20px',
-                backgroundColor: 'white',
-                padding: '10px',
-              
-            }}>
-                <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '20px', }}>
-                        Danh mục điện thoại
-                    </div>
-                </div>
-                <div style={{ paddingTop: '10px' ,  overflowX: 'auto',  whiteSpace: 'nowrap', }}>
-                    <div>
-                        <div>
-                            {danhmuc1.map((danhmuc1, index) => (
-                                <div size='md' key={index} style={{ display: 'inline-block', marginRight: '10px' }}>
-                                    <div className="category-image-container">
-                                        <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
+        borderRadius: '20px',
+        width: '100%',
+        margin: '0 auto',
+        marginTop: '20px',
+        backgroundColor: 'white',
+        padding: '10px',
 
-            <div className='danhmucnoibat' style={{
-                borderRadius: '20px', width: '80%',
-                 margin: '0 auto', marginTop: '20px', 
-                 backgroundColor: 'white', padding: '10px',
-                  overflowX: 'auto', // Cho phép cuộn ngang
-                whiteSpace: 'nowrap'
-            }}>
-                <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '20px'
-                    , display: '-webkit-box' }}>Danh mục điện thoại</div>
+      }}>
+        <div>
+          <div style={{ fontWeight: 'bold', fontSize: '20px', }}>
+            Danh mục điện thoại
+          </div>
+        </div>
+        <div style={{ paddingTop: '10px', overflowX: 'auto', whiteSpace: 'nowrap', }}>
+          <div>
+            <div>
+              {danhmuc1.map((danhmuc1, index) => (
+                <div size='md' key={index} style={{ display: 'inline-block', marginRight: '10px' }}>
+                  <div className="category-image-container">
+                    <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
+                  </div>
                 </div>
-                <div style={{ paddingTop: '10px' }}>
-                    <MDBContainer>
-                        <MDBRow>
-                            {danhmuc1.map((danhmuc1, index) => (
-                                <MDBCol size='md' key={index}>
-                                    <div className="category-image-container">
-                                        <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
-
-                                    </div>
-                                </MDBCol>
-                            ))}
-                        </MDBRow>
-                    </MDBContainer>
-                </div>
-            </div >
-            <div className='danhmucnoibat' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
-                <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
-                </div>
-                <div style={{ paddingTop: '10px' }}>
-                    <MDBContainer>
-                        <MDBRow>
-                            {danhmuc2.map((danhmuc2, index) => (
-                                <MDBCol size='md' key={index}>
-                                    <div className="category-image-container">
-                                        <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '90px' }} />
-                                        {/* <p className="category-name">{danhmuc2.name}</p> */}
-                                    </div>
-                                </MDBCol>
-                            ))}
-                        </MDBRow>
-                    </MDBContainer>
-                </div>
+              ))}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='danhmucnoibat' style={{
+        borderRadius: '20px', width: '80%',
+        margin: '0 auto', marginTop: '20px',
+        backgroundColor: 'white', padding: '10px',
+        overflowX: 'auto', // Cho phép cuộn ngang
+        whiteSpace: 'nowrap'
+      }}>
+        <div>
+          <div style={{
+            fontWeight: 'bold', fontSize: '20px'
+            , display: '-webkit-box'
+          }}>Danh mục điện thoại</div>
+        </div>
+        <div style={{ paddingTop: '10px' }}>
+          <MDBContainer>
+            <MDBRow>
+              {danhmuc1.map((danhmuc1, index) => (
+                <MDBCol size='md' key={index}>
+                  <div className="category-image-container">
+                    <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
+
+                  </div>
+                </MDBCol>
+              ))}
+            </MDBRow>
+          </MDBContainer>
+        </div>
+      </div >
+      <div className='danhmucnoibat' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
+        <div>
+          <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
+        </div>
+        <div style={{ paddingTop: '10px' }}>
+          <MDBContainer>
+            <MDBRow>
+              {danhmuc2.map((danhmuc2, index) => (
+                <MDBCol size='md' key={index}>
+                  <div className="category-image-container">
+                    <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '90px' }} />
+                    {/* <p className="category-name">{danhmuc2.name}</p> */}
+                  </div>
+                </MDBCol>
+              ))}
+            </MDBRow>
+          </MDBContainer>
+        </div>
+      </div>
 
 
       {/* ------------------box sản phẩm Laptop ------------------ */}
-      <div  className='phone-group' >
+      <div className='phone-group' >
         <div>
-          <div  className="phone-title">Top 5 Laptop bán chạy  </div>
+          <div className="phone-title">Top 5 Laptop bán chạy  </div>
         </div>
         <div className="scroll-group-phone">
 
-           <div className="scroll-control-phone" ref={containerRef}>
+          <div className="scroll-control-phone" ref={containerRef}>
             {topLaptop &&
               topLaptop.length > 0 &&
               topLaptop.map((item, index) => (
                 <Card
                   key={item.id}
                   hoverable
-                  className="card-sp"               
+                  className="card-sp"
                 >
-                  <img src={item.avatar} style={{ width: "-webkit-fill-available" ,objectFit: "cover",}}></img>
-                  <div
-                  style={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <a className="name-card">{item.name}</a>
+                  <img src={item.avatar} style={{ width: "-webkit-fill-available", objectFit: "cover", }}></img>
                   <div
                     style={{
+                      flexGrow: 1,
                       display: "flex",
+                      flexDirection: "column",
                       justifyContent: "space-between",
-                      alignItems: "center",
                     }}
                   >
-                    <p
-                      style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
+                    <a className="name-card">{item.name}</a>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
                     >
-                      {item.Price} ₫
-                    </p>
-                    <Button
-                      type="primary"
-                      icon={<ShoppingCartOutlined />}
-                      style={{ marginLeft: "auto" }}
-                      onClick={() => handleAddToCart(item)}
-                    ></Button>
+                      <p
+                        style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
+                      >
+                        {item.Price} ₫
+                      </p>
+                      <Button
+                        type="primary"
+                        icon={<ShoppingCartOutlined />}
+                        style={{ marginLeft: "auto" }}
+                        onClick={() => handleAddToCart(item)}
+                      ></Button>
+                    </div>
                   </div>
-                </div>
                 </Card>
               ))}
           </div>
-            {/* button */}
-            <button
+          {/* button */}
+          {/* <button
             className="scroll-button"
             id="scroll-left-button"
             onClick={scrollLeft}
           >
-            scroll left
+            <CaretLeftOutlined />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollRight}
           >
-            scroll-right
-          </button>
+            <CaretRightOutlined />
+          </button> */}
         </div>
       </div>
 
@@ -657,21 +660,21 @@ const Home = () => {
             id="scroll-left-button"
             onClick={scrollLeft}
           >
-            scroll left
+            <CaretLeftOutlined />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollRight}
           >
-            scroll-right
+            <CaretRightOutlined />
           </button>
         </div>
       </div>
 
       {/* ------------------box sản phẩm ------------------ */}
       <div
-      className="product-container" 
+        className="product-container"
         style={{
           borderRadius: "20px",
           width: "80%",
@@ -683,7 +686,7 @@ const Home = () => {
       >
         <div>
           <div
-          className="product-title"
+            className="product-title"
             style={{
               fontWeight: "bold",
               fontSize: "25px",
@@ -696,7 +699,7 @@ const Home = () => {
           </div>
         </div>
         <div
-        className="product-grid"
+          className="product-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
@@ -762,7 +765,7 @@ const Home = () => {
 
       {/* ------------------Sản phẩm đã xem -----------------------*/}
       <div
-      className="product-container"
+        className="product-container"
         style={{
           borderRadius: "20px",
           width: "80%",
@@ -774,7 +777,7 @@ const Home = () => {
       >
         <div>
           <div
-          className="product-title" 
+            className="product-title"
             style={{
               fontWeight: "bold",
               fontSize: "25px",
@@ -787,7 +790,7 @@ const Home = () => {
           </div>
         </div>
         <div
-        className="product-grid"
+          className="product-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
