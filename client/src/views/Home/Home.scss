@@ -134,74 +134,184 @@
   margin-bottom: 8px;
 }
 
-.phone-group {
-  position: relative;
-  border-radius: 20px;
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 20px;
-  background-size: cover;
-  background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
+
+/* CSS cho màn hình lớn hơn hoặc bằng iPhone 12 Pro */
+@media (max-width: 768px) {
+  .banner {
+    border-radius: 20px;
+  }
+
+  .slider-overlay {
+    display: none;
+
+  }
+
+  .tabsPane {
+    display: none;
+  }
+
+  .danhmucnoibat {
+    display: none;
+
+  }
+
+  .phone-group {
+    position: relative;
+    border-radius: 20px;
+    width: 100% !important;
+    padding: 10px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-size: cover;
+    background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
+  }
+  .phone-title {
+    font-weight: bold;
+    font-size: 25px;
+    display: -webkit-box;
+    padding: 20px 0px 0px 20px;
+    color: white;
+  }
+  
+  .scroll-control-phone {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    height: 100%;
+    padding-right: 17px;
+    scroll-behavior: smooth;
+    margin-top: 10px;
+    /* Đảm bảo không bị tràn nội dung */
+  }
+  .product-container {
+    width: 100% !important;
+  }
+
+  .card-sp {
+    box-sizing: border-box;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 170px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    text-align: center;
+    background-color: #00000017;
+    /* Màu nền của nút */
+    border: none;
+    height: 15%;
+    width: 4%;
+    transition: all 0.2s ease-in;
+    color: black;
+  }
+
+  .scroll-button:hover {
+    background-color: #0000005c;
+  }
+
+  #scroll-left-button {
+    left: 0;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+
+  #scroll-right-button {
+    right: 0;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+
+
+  }
+
 }
 
-.phone-title {
-  font-weight: bold;
-  font-size: 25px;
-  display: -webkit-box;
-  padding: 20px 0px 0px 20px;
-  color: white;
-}
+@media (min-width: 768px) {
+  .danhmucmobile {
+    display: none;
 
-.scroll-group-phone {
-  width: 98%;
-  margin: 0 auto;
-  overflow-x: hidden;
-}
+  }
 
-.scroll-control-phone::-webkit-scrollbar {
-  display: none;
-}
+  .phone-group {
+    position: relative;
+    border-radius: 20px;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-size: cover;
+    padding: 10px;
+    background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
+  }
 
-.scroll-control-phone {
-  display: flex;
-  overflow-x: auto;
-  padding: 10px;
-  white-space: nowrap;
-  width: 100%;
-  height: 100%;
-  padding-right: 17px;
-  scroll-behavior: smooth;
-  /* Đảm bảo không bị tràn nội dung */
-}
+  .phone-title {
+    font-weight: bold;
+    font-size: 25px;
+    display: -webkit-box;
+    padding: 20px 0px 0px 20px;
+    color: white;
+  }
 
-.scroll-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  text-align: center;
-  background-color: #00000017;
-  /* Màu nền của nút */
-  border: none;
-  height: 15%;
-  width: 4%;
-  transition: all 0.2s ease-in;
-  color: black;
-}
+  .scroll-group-phone {
+    width: 98%;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
 
-.scroll-button:hover {
-  background-color: #0000005c;
-}
+  .scroll-control-phone::-webkit-scrollbar {
+    display: none;
+  }
 
-#scroll-left-button {
-  left: 0;
-  border-top-right-radius:25px;
-  border-bottom-right-radius: 25px;
-}
+  .scroll-control-phone {
+    display: flex;
+    overflow-x: auto;
+    margin-top: 10px;
+    white-space: nowrap;
+    width: 100%;
+    height: 100%;
+    padding-right: 17px;
+    scroll-behavior: smooth;
+    /* Đảm bảo không bị tràn nội dung */
+  }
 
-#scroll-right-button {
-  right: 0;
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
+  .scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    text-align: center;
+    background-color: #00000017;
+    /* Màu nền của nút */
+    border: none;
+    height: 15%;
+    width: 4%;
+    transition: all 0.2s ease-in;
+    color: black;
+  }
 
+  .scroll-button:hover {
+    background-color: #0000005c;
+  }
+
+  #scroll-left-button {
+    left: 0;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+
+  #scroll-right-button {
+    right: 0;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+
+
+  }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell,AreaChart,Area } from 'recharts';
 import { Col, Divider, Row } from 'antd'
 import moment from 'moment';
 
@@ -48,9 +48,9 @@ function Dashboard() {
       <div style={{ width: '90%', margin: '0 auto' }}>
         <Divider orientation="left">Dashboard</Divider>
         <Row>
-          <Col flex="auto">  
-            <ResponsiveContainer width="90%" height={400} >
-              <LineChart data={data} style={{ borderRadius: '6px', backgroundColor: 'white', }}>
+          <Col flex="auto">
+            <ResponsiveContainer width="90%" height={400}>
+              <AreaChart data={data} style={{ borderRadius: '6px', backgroundColor: 'white' }}>
                 <text x="50%" y="20" textAnchor="middle" fill="#333" fontSize="16">
                   Thống kê bán hàng
                 </text>
@@ -59,13 +59,13 @@ function Dashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="quantity" name="Số lượng sản phẩm đã bán" stroke="rgba(75, 192, 192, 0.6)" />
-              </LineChart>
+                <Area type="monotone" dataKey="quantity" name="Số lượng sản phẩm đã bán" fill="rgba(75, 192, 192, 0.6)" />
+              </AreaChart>
             </ResponsiveContainer>
           </Col>
           <Col flex="300px">
             <ResponsiveContainer width="100%" height={400}>
-              <PieChart  style={{ borderRadius: '6px', backgroundColor: 'white', }} >
+              <PieChart style={{ borderRadius: '6px', backgroundColor: 'white', }} >
                 <Pie
                   data={data1}
                   cx="50%"

@@ -192,7 +192,7 @@ function Admin() {
         <Col className="custom-scrollbar" span={18} push={6} style={{ overflowY: 'scroll', height: '100vh' }}>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="newproduct" element={<QuanLyAdmin />} />
+            <Route path="newproduct" element={<NewProduct />} />
             <Route path="newcoupon" element={<NewCoupon />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<OrderList />} />
