@@ -418,7 +418,7 @@ const Home = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          borderRadius: "20px",
+          // borderRadius: "20px",
           marginTop: "10px",
         }}
       >
@@ -438,6 +438,7 @@ const Home = () => {
                 width: "100%",
                 margin: "0 auto",
                 padding: "10px",
+                borderRadius:'0px'
               }}
             >
               {tuanlevang &&
@@ -451,9 +452,11 @@ const Home = () => {
                       boxSizing: "border-box",
                       margin: "0 auto",
                       marginTop: "10px",
+                      borderRadius:'0px'
                     }}
-                    cover={<img alt={item.name} src={item.imageUrl} />}
+                   
                   >
+                    <img alt={item.name} src={item.imageUrl} />
                     <h3>{item.name}</h3>
                     <p>{item.price}$</p>
                     <Button
@@ -523,7 +526,6 @@ const Home = () => {
                 <MDBCol size='md' key={index}>
                   <div className="category-image-container">
                     <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
-
                   </div>
                 </MDBCol>
               ))}
@@ -634,12 +636,6 @@ const Home = () => {
                   key={item.id}
                   hoverable
                   className="product-card"
-                  style={{
-                    width: "60%",
-                    boxSizing: "border-box",
-                    marginRight: "10px",
-                    display: "inline-block",
-                  }}
                 >
                   <img src={item.imageUrl} style={{ width: "170px" }}></img>
                   <h3>{item.name}</h3>
@@ -660,14 +656,14 @@ const Home = () => {
             id="scroll-left-button"
             onClick={scrollLeft}
           >
-            <CaretLeftOutlined />
+            <LeftOutlined style={{fontSize:'32px'}} />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollRight}
           >
-            <CaretRightOutlined />
+            <RightOutlined style={{fontSize:'32px'}}/>
           </button>
         </div>
       </div>
