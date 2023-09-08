@@ -347,16 +347,16 @@ const Home = () => {
 
   // logic scroll button phone
   const containerRef = useRef(null);
-
+  
   const scrollLeft = () => {
     if (containerRef.current) {
-      containerRef.current.scrollLeft -= 1000; // Điều chỉnh khoảng cách cuộn tùy ý
+      containerRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
 
   const scrollRight = () => {
     if (containerRef.current) {
-      containerRef.current.scrollLeft += 1000; // Điều chỉnh khoảng cách cuộn tùy ý
+      containerRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
 
