@@ -47,19 +47,6 @@ const App = () => {
         <header>
           <Routes>
           <Route path="" element={<Home />} />
-<<<<<<< HEAD
-          <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/search" element={<Search/>} />
-          <Route path="/showroom" element={<ShowRoom/>} />
-          <Route path="/checkSP" element={<CheckSP/>} />
-          <Route path="/sale" element={<Sale/>} />
-          <Route path="/orderhistory/:phone" element={<OrderHistory/>} />
-          <Route path="/cart" element={<Cart/>} />
-          <Route path='/order/json' element={<QLdonhang/>} /> 
-          <Route path='/product/json' element={<QLsanpham/>}/>
-=======
              <Route path="/detail/:id" element={<Detail />} />
              <Route path="/login" element={<Login />} />
              <Route path="/adminPage" element={<AdminPage />} />
@@ -71,8 +58,8 @@ const App = () => {
              <Route path="/sale" element={<Sale />} />
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
              <Route path="/cart" element={<Cart />} />
-             <Route path='/order/json' element={<QLdonhang />} />
->>>>>>> main
+             <Route path='/order/json' element={<QLdonhang/>} />
+             <Route path='/product/json' element={<QLsanpham/>}/>
           </Routes>
         </header>
         <Footer />

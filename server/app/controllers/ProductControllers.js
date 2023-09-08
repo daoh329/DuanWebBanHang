@@ -3,6 +3,8 @@ const createTables = require("../../config/CrTables");
 
 class Product{
     async Addproduct(req,res){
+      // API: /product/Add
+
 
     // CODE TẠO BẢNG TABLE TRONG MYSQL
     // createTables.createLaptopTable
@@ -111,6 +113,7 @@ class Product{
       });
     }
     async json(req,res){
+      // API: /product/json
       console.log('runjsonP');
       const query = `SELECT * FROM product`
       // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
