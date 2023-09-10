@@ -1,9 +1,10 @@
+
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from "antd";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined, CaretLeftOutlined, CaretRightOutlined, } from "@ant-design/icons";
+import { ShoppingCartOutlined, LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
@@ -346,18 +347,19 @@ const Home = () => {
 
   // logic scroll button phone
   const containerRef = useRef(null);
-
+  
   const scrollLeft = () => {
     if (containerRef.current) {
-      containerRef.current.scrollLeft -= 1000; // Điều chỉnh khoảng cách cuộn tùy ý
+      containerRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
 
   const scrollRight = () => {
     if (containerRef.current) {
-      containerRef.current.scrollLeft += 1000; // Điều chỉnh khoảng cách cuộn tùy ý
+      containerRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
+
   return (
     <Layout>
       <div className="content">
@@ -365,6 +367,7 @@ const Home = () => {
           {sliderImages.map((image, index) => (
             <div key={index}>
               <img
+                className='banner'
                 src={image}
                 alt={`Slide ${index}`}
                 style={{ width: "100%", height: "auto" }}
@@ -406,7 +409,7 @@ const Home = () => {
 
       {/* -------tabsPane---------- */}
       <div
-        className="content"
+        className="tabsPane"
         style={{
           width: "80%",
           margin: "0 auto",
@@ -415,7 +418,7 @@ const Home = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          borderRadius: "20px",
+          // borderRadius: "20px",
           marginTop: "10px",
         }}
       >
@@ -435,6 +438,7 @@ const Home = () => {
                 width: "100%",
                 margin: "0 auto",
                 padding: "10px",
+                borderRadius:'0px'
               }}
             >
               {tuanlevang &&
@@ -448,9 +452,11 @@ const Home = () => {
                       boxSizing: "border-box",
                       margin: "0 auto",
                       marginTop: "10px",
+                      borderRadius:'0px'
                     }}
-                    cover={<img alt={item.name} src={item.imageUrl} />}
+                   
                   >
+                    <img alt={item.name} src={item.imageUrl} />
                     <h3>{item.name}</h3>
                     <p>{item.price}$</p>
                     <Button
@@ -471,79 +477,73 @@ const Home = () => {
       </div>
 
       {/*-------- Danh mục nổi bật -----------*/}
-      <div
-        style={{
-          borderRadius: "20px",
-          width: "80%",
-          margin: "0 auto",
-          marginTop: "20px",
-          backgroundColor: "white",
-          padding: "10px",
-        }}
-      >
+      <div className='danhmucmobile' style={{
+        borderRadius: '20px',
+        width: '100%',
+        margin: '0 auto',
+        marginTop: '20px',
+        backgroundColor: 'white',
+        padding: '10px',
+
+      }}>
         <div>
-          <div
-            style={{
-              fontWeight: "bold",
-              fontSize: "20px",
-              display: "-webkit-box",
-            }}
-          >
+          <div style={{ fontWeight: 'bold', fontSize: '20px', }}>
             Danh mục điện thoại
           </div>
         </div>
-        <div style={{ paddingTop: "10px" }}>
+        <div style={{ paddingTop: '10px', overflowX: 'auto', whiteSpace: 'nowrap', }}>
+          <div>
+            <div>
+              {danhmuc1.map((danhmuc1, index) => (
+                <div size='md' key={index} style={{ display: 'inline-block', marginRight: '10px' }}>
+                  <div className="category-image-container">
+                    <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='danhmucnoibat' style={{
+        borderRadius: '20px', width: '80%',
+        margin: '0 auto', marginTop: '20px',
+        backgroundColor: 'white', padding: '10px',
+        overflowX: 'auto', // Cho phép cuộn ngang
+        whiteSpace: 'nowrap'
+      }}>
+        <div>
+          <div style={{
+            fontWeight: 'bold', fontSize: '20px'
+            , display: '-webkit-box'
+          }}>Danh mục điện thoại</div>
+        </div>
+        <div style={{ paddingTop: '10px' }}>
           <MDBContainer>
             <MDBRow>
               {danhmuc1.map((danhmuc1, index) => (
-                <MDBCol size="md" key={index}>
+                <MDBCol size='md' key={index}>
                   <div className="category-image-container">
-                    <img
-                      src={danhmuc1.image}
-                      alt={danhmuc1.name}
-                      className="category-image-mdb"
-                      style={{ width: "90px" }}
-                    />
+                    <img src={danhmuc1.image} alt={danhmuc1.name} className="category-image-mdb" style={{ width: '90px' }} />
                   </div>
                 </MDBCol>
               ))}
             </MDBRow>
           </MDBContainer>
         </div>
-      </div>
-      <div
-        style={{
-          borderRadius: "20px",
-          width: "80%",
-          margin: "0 auto",
-          marginTop: "20px",
-          backgroundColor: "white",
-          padding: "10px",
-        }}
-      >
+      </div >
+      <div className='danhmucnoibat' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
         <div>
-          <div
-            style={{
-              fontWeight: "bold",
-              fontSize: "20px",
-              display: "-webkit-box",
-            }}
-          >
-            Danh mục LapTop
-          </div>
+          <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
         </div>
-        <div style={{ paddingTop: "10px" }}>
+        <div style={{ paddingTop: '10px' }}>
           <MDBContainer>
             <MDBRow>
               {danhmuc2.map((danhmuc2, index) => (
-                <MDBCol size="md" key={index}>
+                <MDBCol size='md' key={index}>
                   <div className="category-image-container">
-                    <img
-                      src={danhmuc2.image}
-                      alt={danhmuc2.name}
-                      className="category-image-mdb"
-                      style={{ width: "90px" }}
-                    />
+                    <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '90px' }} />
                     {/* <p className="category-name">{danhmuc2.name}</p> */}
                   </div>
                 </MDBCol>
@@ -553,71 +553,71 @@ const Home = () => {
         </div>
       </div>
 
+
       {/* ------------------box sản phẩm Laptop ------------------ */}
-      <div
-        style={{
-          borderRadius: "20px",
-          width: "80%",
-          margin: "0 auto",
-          marginTop: "20px",
-          backgroundSize: "cover",
-          backgroundImage:
-            "url(https://lh3.googleusercontent.com/pSzqZlVLMrhpyoU2QoTUVctJZc8uuuLNG97D8rZTQ0Ds29acQoNVkeG93TEklTJSMQyDjnpDhs0p8eCI1WRpAefb8iNlJ8Os=w1232)",
-        }}
-      >
+      <div className='phone-group' >
         <div>
-          <div
-            style={{
-              fontWeight: "bold",
-              fontSize: "25px",
-              display: "-webkit-box",
-              padding: " 20px 0px 10px 20px",
-              color: "white",
-            }}
-          >
-            Top 5 Laptop bán chạy
-          </div>
+          <div className="phone-title">Top 5 Laptop bán chạy  </div>
         </div>
-        <div style={{ width: "98%", margin: "0 auto" }}>
-          <div
-            className="horizontal-scroll-view"
-            style={{
-              display: "flex",
-              overflowX: "scroll",
-              padding: "10px",
-              whiteSpace: "nowrap",
-            }}
-          >
+        <div className="scroll-group-phone">
+
+          <div className="scroll-control-phone" ref={containerRef}>
             {topLaptop &&
               topLaptop.length > 0 &&
               topLaptop.map((item, index) => (
                 <Card
                   key={item.id}
                   hoverable
-                  className="product-card"
-                  style={{
-                    width: "20%",
-                    boxSizing: "border-box",
-                    marginRight: "10px",
-                    display: "inline-block",
-                  }}
+                  className="card-sp"
                 >
-                  <img src={item.avatar} style={{ width: "200px" }}></img>
-                  <a className="name-card">{item.name}</a>
-                  <p style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}>
-                    {item.price} ₫
-                  </p>
-                  <Button
-                    onClick={() => handleViewDetailuser(item)}
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
+                  <img src={item.avatar} style={{ width: "-webkit-fill-available", objectFit: "cover", }}></img>
+                  <div
+                    style={{
+                      flexGrow: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    Buy
-                    {/* Biểu tượng mua hàng */}
-                  </Button>
+                    <a className="name-card">{item.name}</a>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p
+                        style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
+                      >
+                        {item.Price} ₫
+                      </p>
+                      <Button
+                        type="primary"
+                        icon={<ShoppingCartOutlined />}
+                        style={{ marginLeft: "auto" }}
+                        onClick={() => handleAddToCart(item)}
+                      ></Button>
+                    </div>
+                  </div>
                 </Card>
               ))}
           </div>
+          {/* button */}
+          {/* <button
+            className="scroll-button"
+            id="scroll-left-button"
+            onClick={scrollLeft}
+          >
+            <CaretLeftOutlined />
+          </button>
+          <button
+            className="scroll-button"
+            id="scroll-right-button"
+            onClick={scrollRight}
+          >
+            <CaretRightOutlined />
+          </button> */}
         </div>
       </div>
 
@@ -636,14 +636,8 @@ const Home = () => {
                   key={item.id}
                   hoverable
                   className="product-card"
-                  style={{
-                    width: "60%",
-                    boxSizing: "border-box",
-                    marginRight: "10px",
-                    display: "inline-block",
-                  }}
                 >
-                  <img src={item.imageUrl} style={{ width: "200px" }}></img>
+                  <img src={item.imageUrl} style={{ width: "170px" }}></img>
                   <h3>{item.name}</h3>
                   <p>{item.price}$</p>
                   <Button
@@ -662,20 +656,21 @@ const Home = () => {
             id="scroll-left-button"
             onClick={scrollLeft}
           >
-            scroll left
+            <LeftOutlined style={{fontSize:'32px'}} />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollRight}
           >
-            scroll-right
+            <RightOutlined style={{fontSize:'32px'}}/>
           </button>
         </div>
       </div>
 
       {/* ------------------box sản phẩm ------------------ */}
       <div
+        className="product-container"
         style={{
           borderRadius: "20px",
           width: "80%",
@@ -687,6 +682,7 @@ const Home = () => {
       >
         <div>
           <div
+            className="product-title"
             style={{
               fontWeight: "bold",
               fontSize: "25px",
@@ -699,6 +695,7 @@ const Home = () => {
           </div>
         </div>
         <div
+          className="product-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
@@ -712,7 +709,7 @@ const Home = () => {
                 <img
                   src={item.avatar}
                   style={{
-                    width: "170px",
+                    width: "-webkit-fill-available",
                     height: "170px",
                     objectFit: "cover",
                   }}
@@ -752,7 +749,7 @@ const Home = () => {
             ))}
         </div>
         {/* Phân trang */}
-        <div style={{ textAlign: "center", marginTop: "10px" }}>
+        <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
           <Pagination
             current={currentPage}
             total={ListUsers.length}
@@ -764,6 +761,7 @@ const Home = () => {
 
       {/* ------------------Sản phẩm đã xem -----------------------*/}
       <div
+        className="product-container"
         style={{
           borderRadius: "20px",
           width: "80%",
@@ -775,6 +773,7 @@ const Home = () => {
       >
         <div>
           <div
+            className="product-title"
             style={{
               fontWeight: "bold",
               fontSize: "25px",
@@ -787,6 +786,7 @@ const Home = () => {
           </div>
         </div>
         <div
+          className="product-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
@@ -800,7 +800,7 @@ const Home = () => {
                 <img
                   src={item.avatar}
                   style={{
-                    width: "170px",
+                    width: "-webkit-fill-available",
                     height: "170px",
                     objectFit: "cover",
                   }}
@@ -840,7 +840,7 @@ const Home = () => {
             ))}
         </div>
         {/* Phân trang */}
-        <div style={{ textAlign: "center", marginTop: "10px" }}>
+        <div className="pagination-container" sstyle={{ textAlign: "center", marginTop: "10px" }}>
           <Pagination
             current={currentPage}
             total={ListUsers.length}
