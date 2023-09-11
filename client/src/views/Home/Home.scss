@@ -1,4 +1,59 @@
-/* Home.css */
+/* Media query cho kích thước màn hình nhỏ hơn */
+@media (max-width: 768px) {
+  .slider-overlay {
+    display: none;
+    /* Ẩn khối content khi màn hình quá nhỏ */
+  }
+
+  .mb-1 {
+    margin-bottom: 0.25rem !important;
+    width: 100%;
+    margin-left: 11%;
+  }
+
+  .center-container {
+    width: 100%;
+    margin-left: 11%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+
+  .mb-1 {
+    margin-bottom: 0.25rem !important;
+    width: 80%;
+    margin-left: 11%;
+  }
+}
+
+.product-list {
+  display: flex;
+  /* Hiển thị các sản phẩm theo chiều ngang */
+  flex-wrap: nowrap;
+  /* Ngăn các sản phẩm bọc dòng khi không đủ không gian */
+  overflow-x: auto;
+  /* Bật thanh cuộn ngang khi không đủ không gian */
+  max-width: 80%;
+  /* Đảm bảo không bị tràn ra ngoài khung */
+  margin-left: 11%;
+}
+
+.product-image img {
+  width: 100%;
+  /* Đảm bảo hình ảnh điền vào khung */
+}
+
+.product-details {
+  padding: 10px;
+  /* Khoảng cách giữa hình ảnh và thông tin sản phẩm */
+}
+
+.center-container {
+  width: 80%;
+  margin-left: 11%;
+}
+
+// 
 .slider-container {
   position: relative;
   display: flex;
@@ -112,6 +167,7 @@
 :where(.css-dev-only-do-not-override-17a39f8).ant-card .ant-card-body {
   padding: 5px !important;
   border-radius: 0 !important;
+
 }
 
 .card-sp {
@@ -123,6 +179,7 @@
   width: 220px; // Giới hạn chiều rộng thẻ để tránh tên quá dài
   height: 300px;
   position: relative;
+  border-radius: 0px;
 }
 
 .name-card {
@@ -135,15 +192,23 @@
 }
 
 
-
 @media (max-width: 768px) {
-  .banner {
+  s .banner {
     border-radius: 20px;
   }
 
   .slider-overlay {
     display: none;
 
+  }
+
+  .product-card {
+    width: 220px;
+    height: 250px;
+    /* Độ rộng của mỗi sản phẩm */
+    margin-right: 10px;
+    /* Khoảng cách giữa các sản phẩm */
+    border-radius: 0px;
   }
 
   .tabsPane {
@@ -157,7 +222,6 @@
 
   .phone-group {
     position: relative;
-    border-radius: 20px;
     width: 100% !important;
     padding: 10px;
     margin: 0 auto;
@@ -165,25 +229,30 @@
     background-size: cover;
     background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
   }
+
   .phone-title {
     font-weight: bold;
     font-size: 25px;
     display: -webkit-box;
-    padding: 20px 0px 0px 20px;
+    padding: 0px 0px 0px 0px;
     color: white;
   }
-  
+
   .scroll-control-phone {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
     width: 100%;
     height: 100%;
-    padding-right: 17px;
     scroll-behavior: smooth;
     margin-top: 10px;
     /* Đảm bảo không bị tràn nội dung */
   }
+
+  .scroll-control-phone::-webkit-scrollbar {
+    display: none;
+  }
+
   .product-container {
     width: 100% !important;
   }
@@ -200,6 +269,7 @@
   .product-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+
   .scroll-button {
     position: absolute;
     top: 50%;
@@ -210,7 +280,7 @@
     /* Màu nền của nút */
     border: none;
     height: 15%;
-    width: 4%;
+    width: 7%;
     transition: all 0.2s ease-in;
     color: black;
   }
@@ -229,8 +299,6 @@
     right: 0;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
-
-
   }
 
 }
@@ -243,12 +311,11 @@
 
   .phone-group {
     position: relative;
-    border-radius: 20px;
     width: 80%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 0 auto;
     margin-top: 20px;
     background-size: cover;
-    padding: 10px;
     background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
   }
 
@@ -256,14 +323,15 @@
     font-weight: bold;
     font-size: 25px;
     display: -webkit-box;
-    padding: 20px 0px 0px 20px;
+    padding: 10px;
     color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.561);
   }
 
   .scroll-group-phone {
-    width: 98%;
-    margin: 0 auto;
+    width: 100%;
     overflow-x: hidden;
+    padding-right: 10px;
   }
 
   .scroll-control-phone::-webkit-scrollbar {
@@ -272,12 +340,11 @@
 
   .scroll-control-phone {
     display: flex;
-    overflow-x: auto;
-    margin-top: 10px;
+    overflow-x: scroll;
+    margin: 10px;
     white-space: nowrap;
     width: 100%;
     height: 100%;
-    padding-right: 17px;
     scroll-behavior: smooth;
     /* Đảm bảo không bị tràn nội dung */
   }
@@ -311,7 +378,16 @@
     right: 0;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
+  }
 
-
+  .product-card {
+    min-width: 220px;
+    height: 350px;
+    /* Độ rộng của mỗi sản phẩm */
+    margin-right: 10px;
+    /* Khoảng cách giữa các sản phẩm */
+    border-radius: 0px;
+    padding: 5px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
 }

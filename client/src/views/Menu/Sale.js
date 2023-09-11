@@ -1,11 +1,22 @@
 import { Header } from "antd/es/layout/layout";
 import React, { useState, useEffect } from "react";
+import { Breadcrumb } from 'antd';
 import './Sale.css'
 
 function Sale(){
     return(
 <>
-  {/* Hello world */}
+<Breadcrumb
+      items={[
+        {
+          title: <a href="/">Trang chủ</a>,
+        },
+        {
+          title: <a href="/sale">Khuyến mãi</a>,
+        }
+      ]}
+    />
+    {/* Nội dung khác của trang */}
 
 <body>
     {/* title */}

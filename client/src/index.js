@@ -20,10 +20,8 @@ const reduxStore = createStore(
 
 root.render(
   <React.StrictMode>
-  
       <Provider store={reduxStore}>
         <App />
       </Provider>
- 
   </React.StrictMode>
 );
