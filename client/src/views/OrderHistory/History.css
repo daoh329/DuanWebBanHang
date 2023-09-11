@@ -1,0 +1,36 @@
+/* Kiểu dáng chung cho bảng */
+.table-container {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Kiểu dáng cho hàng tiêu đề */
+  th {
+    background-color: #f2f2f2;
+    white-space: nowrap; /* Ngăn tiêu đề bị tràn dòng */
+  }
+  
+  /* Kiểu dáng cho các ô dữ liệu */
+  td, th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  /* Media query cho kích thước màn hình nhỏ hơn */
+  @media (max-width: 768px) {
+    /* Thay đổi kiểu dáng cho bảng khi màn hình nhỏ hơn */
+    .table {
+      font-size: 12px; /* Điều chỉnh kích thước font chữ hoặc các thuộc tính khác theo nhu cầu */
+    }
+  
+    /* Thay đổi kiểu dáng cho hàng tiêu đề khi màn hình nhỏ hơn */
+    th {
+      font-size: 14px; /* Điều chỉnh kích thước font chữ hoặc các thuộc tính khác theo nhu cầu */
+    }
+  }
+  

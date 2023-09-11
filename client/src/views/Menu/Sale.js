@@ -405,6 +405,294 @@ function Sale(){
     </div>
   </div>
 </div>
+{/* card5 */}
+<div
+  className="bg-lazy bg-visible-lazy css-123dyzu snipcss-FHSEE"
+  data-uniq-id=".yq5smqad"
+>
+  <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi">
+    <div data-uniq-id=".cb7zm3mu" className="teko-col css-1ezrukj">
+      <div className="bg-lazy bg-visible-lazy css-2t7lu2 tether-target tether-enabled tether-target-attached-top tether-abutted tether-abutted-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
+        <a
+          href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=uu-dai-sv-t8-23"
+          target="_blank"
+          rel="noopener noreferrer"
+          id="style-xy3lr"
+          className="style-xy3lr"
+        >
+          <div className=" css-1q0vk5q" data-uniq-id=".xp709zwu">
+            <picture className=" css-4mc33u">
+              <img
+                src="https://lh3.googleusercontent.com/JReVLA8zuOmAhjdMsTpS3uzwL7SqKdUwN5uVLFpeU7LuCwRFoOBJKs107PxCuVbKs2Ch3lMXZq08wRepwRUXRD8JSaEMPzY=rw-w523"
+                alt="Mua Nitro 16 Phoenix Tặng Ngay Bộ Quà 7 Triệu"
+                decoding="async"
+                className="lazyload css-fj9uxg tether-target tether-enabled tether-abutted tether-abutted-top tether-element-attached-top tether-element-attached-center tether-target-attached-top tether-target-attached-center"
+                loading="lazy"
+              />
+            </picture>
+          </div>
+        </a>
+        <div className=" css-17v6u7d" data-uniq-id=".87a9edsk">
+          <p style={{ fontSize: 16 }}>
+            <span style={{ fontSize: 16 }}>
+              <strong>GIẢM THÊM 1.5 TRIỆU CHO HSSV</strong>
+            </span>
+          </p>
+        </div>
+        <div className=" css-1xbgrjh" data-uniq-id=".b74iemsg">
+          <p>01/08 - 30/09/2023</p>
+        </div>
+        <div className=" css-1hjg543">
+          <a
+            href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=uu-dai-sv-t8-23"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="style-3yFgU"
+            className="style-3yFgU"
+          >
+            <button data-uniq-id=".2wje39mo" className="css-1rft5xj">
+              <span id="style-oToTo" className="style-oToTo">
+                <span>
+                  <p>Xem chi tiết</p>
+                </span>
+              </span>
+              <div className="css-157jl91"></div>
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div data-uniq-id=".4kx8thns" className="teko-col css-1ezrukj">
+      <div className="bg-lazy bg-visible-lazy css-2t7lu2">
+        <a
+          href="https://phongvu.vn/c/nang-cap-ram?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=tang-ram-8gb-t8-23"
+          target="_blank"
+          rel="noopener noreferrer"
+          id="style-5IE4R"
+          className="style-5IE4R"
+        >
+          <div className=" css-1q0vk5q" data-uniq-id=".r8koicvw">
+            <picture className=" css-4mc33u">
+              <img
+                src="https://lh3.googleusercontent.com/c5EHZTUcf_CvD6QD7JqAsIOJ0YTw4QiDjq77HjjpLY0DWvcO1GP-tgNBbvM_IohdPfqj9UUZfnFLV7UlaCCuEqdqIgeLtaIs=rw-w523"
+                alt="Mua Nitro 16 Phoenix Tặng Ngay Bộ Quà 7 Triệu"
+                decoding="async"
+                className="lazyload css-fj9uxg"
+                loading="lazy"
+              />
+            </picture>
+          </div>
+        </a>
+        <div className=" css-17v6u7d" data-uniq-id=".cu090k07">
+          <p style={{ fontSize: 16 }}>
+            <span style={{ fontSize: 16 }}>
+              <strong>MIỄN PHÍ NÂNG CẤP RAM</strong>
+            </span>
+          </p>
+        </div>
+        <div className=" css-1xbgrjh" data-uniq-id=".cj5r5625">
+          <p>01/08 - 30/09/2023</p>
+        </div>
+        <div className="css-1hjg543 tether-target tether-enabled tether-element-attached-top tether-element-attached-center tether-target-attached-top tether-target-attached-center">
+          <a
+            href="https://phongvu.vn/c/nang-cap-ram?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=tang-ram-8gb-t8-23"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="style-9H4fw"
+            className="style-9H4fw"
+          >
+            <button data-uniq-id=".wrbssndz" className="css-1rft5xj">
+              <span id="style-PME89" className="style-PME89">
+                <span>
+                  <p>Xem chi tiết</p>
+                </span>
+              </span>
+              <div className="css-157jl91"></div>
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{/*  */}
+<div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss-3qYfC">
+  <div data-uniq-id=".flt15z72" className="teko-col css-1ezrukj">
+    <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-0-0-1">
+      <a
+        href="https://phongvu.vn/c/msi?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-nhan-code-t8-23"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="snipcss0-1-1-2 style-Ui96b"
+        id="style-Ui96b"
+      >
+        <div className="css-1q0vk5q snipcss0-2-2-3" data-uniq-id=".mwxmculv">
+          <picture className="css-4mc33u snipcss0-3-3-4">
+            <img
+              src="https://lh3.googleusercontent.com/t_5UU9AdsrMByJz5SLvusnT7HuM2jZhj8G2-wA_r1A6uTBmOSMrW6ibDgS0S3fFciZmWQY7hlhXxiujjcLK3DzQmcHjlsXV6=rw-w523"
+              alt=""
+              decoding="async"
+              className="lazyload css-fj9uxg snipcss0-4-4-8"
+              loading="lazy"
+            />
+          </picture>
+        </div>
+      </a>
+      <div className="css-17v6u7d snipcss0-1-1-9" data-uniq-id=".lmwpnm88">
+        <p style={{ fontSize: 16 }} className="snipcss0-2-9-10">
+          <span style={{ fontSize: 16 }} className="snipcss0-3-10-11">
+            <strong className="snipcss0-4-11-12">
+              MUA LATOP MSI NHẬN VẬT PHẨM TRONG GAME
+            </strong>
+          </span>
+        </p>
+      </div>
+      <div className="css-1xbgrjh snipcss0-1-1-13" data-uniq-id=".3cdmnwh4">
+        <p className="snipcss0-2-13-14">
+          <span style={{ fontSize: 14 }} className="snipcss0-3-14-15">
+            11/08 - 09/09/2023
+          </span>
+        </p>
+      </div>
+      <div className="css-1hjg543 snipcss0-1-1-16">
+        <a
+          href="https://phongvu.vn/c/msi?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-nhan-code-t8-23"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="snipcss0-2-16-17 style-heGEq"
+          id="style-heGEq"
+        >
+          <button
+            data-uniq-id=".q8ylg0tx"
+            className="css-1rft5xj snipcss0-3-17-18"
+          >
+            <span className="snipcss0-4-18-19 style-orqsS" id="style-orqsS">
+              <span className="snipcss0-5-19-20">
+                <p className="snipcss0-6-20-21">Xem chi tiết</p>
+              </span>
+            </span>
+            <div className="css-157jl91 snipcss0-4-18-22"></div>
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{/*  */}
+<div
+  className="bg-lazy bg-visible-lazy css-123dyzu snipcss-HRFkk"
+  data-uniq-id=".kdbrjgnv"
+>
+  <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi">
+    <div data-uniq-id=".tqwmy380" className="teko-col css-1ezrukj">
+      <div className="bg-lazy bg-visible-lazy css-2t7lu2">
+        <a
+          href="https://phongvu.vn/c/gigabyte-linh-kien?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=gigabyte-nhan-code-t8-23"
+          target="_blank"
+          rel="noopener noreferrer"
+          id="style-hCIz7"
+          className="style-hCIz7"
+        >
+          <div className=" css-1q0vk5q" data-uniq-id=".iqaew28q">
+            <picture className=" css-4mc33u">
+              <img
+                src="https://lh3.googleusercontent.com/oGHRspK7Ls-jEhGYNXBkMTEk1nc4zOrBZljVmHB7uGf5s3-LuHC7qAc3Al4GSw6eFaEAb4cyD1c-3hneuYoBoxD9z3_Jr0m33A=rw-w523"
+                alt=""
+                decoding="async"
+                className="lazyload css-fj9uxg"
+                loading="lazy"
+              />
+            </picture>
+          </div>
+        </a>
+        <div className=" css-17v6u7d" data-uniq-id=".cg36vrkc">
+          <p style={{ fontSize: 16 }}>
+            <span style={{ fontSize: 16 }}>
+              <strong>MUA VGA GIGABYTE NHẬN VẬT PHẨM TRONG GAME</strong>
+            </span>
+          </p>
+        </div>
+        <div className=" css-1xbgrjh" data-uniq-id=".477jnke5">
+          <p>
+            <span style={{ fontSize: 14 }}>11/08 - 10/09/2023</span>
+          </p>
+        </div>
+        <div className=" css-1hjg543">
+          <a
+            href="https://phongvu.vn/c/gigabyte-linh-kien?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=gigabyte-nhan-code-t8-23"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="style-EoCos"
+            className="style-EoCos"
+          >
+            <button data-uniq-id=".gbt8kbxg" className="css-1rft5xj">
+              <span id="style-q3yKE" className="style-q3yKE">
+                <span>
+                  <p>Xem chi tiết</p>
+                </span>
+              </span>
+              <div className="css-157jl91"></div>
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div data-uniq-id=".cz5u8jwo" className="teko-col css-1ezrukj">
+      <div className="bg-lazy bg-visible-lazy css-2t7lu2">
+        <a
+          href="https://phongvu.vn/p/lg?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=lg-gram-thang-8-9"
+          target="_blank"
+          rel="noopener noreferrer"
+          id="style-qYXbY"
+          className="style-qYXbY"
+        >
+          <div className=" css-1q0vk5q" data-uniq-id=".ljv9nshe">
+            <picture className=" css-4mc33u">
+              <img
+                src="https://lh3.googleusercontent.com/TLAtRUNBdze8WKm5FewZE1KruLhvA7lPAzNkoCeRIeWIx_uRvqeD7mp7oCyrpVMuMx3xjaU8_rbtRDHtWwCmQCoNzotJnHA=rw-w524"
+                alt="Mua Laptop LG Gram Giảm Thêm Đến 700K"
+                decoding="async"
+                className="lazyload css-fj9uxg"
+                loading="lazy"
+              />
+            </picture>
+          </div>
+        </a>
+        <div className=" css-17v6u7d" data-uniq-id=".ps4svlzw">
+          <p style={{ fontSize: 16 }}>
+            <span style={{ fontSize: 16 }}>
+              <strong>Mua Laptop LG Gram Giảm Thêm Đến 700K</strong>
+            </span>
+          </p>
+        </div>
+        <div className=" css-1xbgrjh" data-uniq-id=".5iit7lgo">
+          <p>
+            <span style={{ fontSize: 14 }}>17/08/2023 - 30/09/2023</span>
+          </p>
+        </div>
+        <div className=" css-1hjg543">
+          <a
+            href="https://phongvu.vn/p/lg?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=lg-gram-thang-8-9"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="style-yq3k3"
+            className="style-yq3k3"
+          >
+            <button data-uniq-id=".09d8vtoo" className="css-1w48v8s">
+              <span id="style-ftJs1" className="style-ftJs1">
+                <span>
+                  <p>Xem chi tiết</p>
+                </span>
+              </span>
+              <div className="css-157jl91"></div>
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 
 
