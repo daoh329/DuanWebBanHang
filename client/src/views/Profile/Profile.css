@@ -90,7 +90,18 @@ body {
   .css-hveu7a { 
     width: 80%;
   } 
-}     
+}    
+@media screen and (max-width: 767px){ 
+    .css-hveu7a { 
+        display: flex;
+      max-width: 100%;
+    } 
+    .css-1o3gs9x.teko-row { 
+         justify-content: center;
+ 
+
+    } 
+  }  
 
 .css-u0wwqg { 
     padding-right: 1rem;
@@ -105,13 +116,13 @@ body {
 
 .css-1o3gs9x.teko-row { 
     display: flex; 
-    flex-flow: wrap;
+ 
 } 
 
 @media (min-width: 1024px){ 
   .css-1o3gs9x.teko-row { 
     -webkit-box-pack: center; 
-    justify-content: center;
+    /* justify-content: center; */
   } 
 }     
 
@@ -121,16 +132,7 @@ body {
 
 .css-ov1ktg { 
     display: flex;
-} 
-
-ul { 
-    padding-left: 2rem;
-} 
-
-ul { 
-    margin-top: 0; 
-    margin-bottom: 1rem;
-} 
+}  
 
 .css-zzskb3 { 
     padding: 0px; 
@@ -153,8 +155,8 @@ ul {
 /*  */
 .css-gr7r8o.teko-col-8 { 
     display: block; 
-    flex: 0 0 66.66%; 
-    max-width: 66.66%;
+    flex: 0 0 83%; 
+    max-width:100%;
 } 
 
 .css-gr7r8o.teko-col-4 { 
@@ -451,17 +453,6 @@ img {
     font-size: 13px;
 } 
 
-input { 
-    margin: 0; 
-    font-family: inherit; 
-    font-size: inherit; 
-    line-height: inherit;
-} 
-
-input { 
-    overflow: visible;
-} 
-
 .css-90j4a3 { 
     display: block; 
     width: 100%; 
@@ -470,10 +461,6 @@ input {
     border: 1px solid rgb(224, 224, 224); 
     min-height: 16px; 
     height: 40px;
-} 
-
-input[type="date"] { 
-    -webkit-appearance: textfield;
 } 
 
 label { 
@@ -504,9 +491,6 @@ button {
     text-transform: none;
 } 
 
-button,[type="submit"] { 
-    -webkit-appearance: button;
-} 
 
 .css-1nlo7xx { 
     border-style: none; 
@@ -531,9 +515,6 @@ button,[type="submit"] {
     transition-property: background-color;
 } 
 
-.css-ekrzeo input[type="radio"]  { 
-    margin-right: 5px;
-} 
 
 .css-gnd1m2 { 
     margin: 0px; 
