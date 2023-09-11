@@ -270,8 +270,8 @@ const App = (userDetails) => {
             </label>
             <ul className="menu__box">
               <li>
-                <a className="menu__item" href="#">
-                  home
+                <a className="menu__item" href="/">
+                  Trang chủ
                 </a>
               </li>
               <li>
