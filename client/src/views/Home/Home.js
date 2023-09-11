@@ -84,6 +84,46 @@ const products = [
     imageUrl:
       "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
   },
+  {
+    id: 11,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 12,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 13,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 14,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },{
+    id: 15,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },{
+    id: 16,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
   // Thêm các sản phẩm khác vào đây
 ];
 const tuanlevang = [
@@ -464,7 +504,7 @@ const Home = () => {
                 ))}
             </div>
           </TabPane>
-          <TabPane tab="Ưu đãi ngon vl" key="2">
+          <TabPane tab="Ưu đãi ngon" key="2">
             Content of Tab 2
           </TabPane>
           <TabPane tab="Flash Sales" key="3">
@@ -481,7 +521,7 @@ const Home = () => {
         marginTop: '20px',
         backgroundColor: 'white',
         padding: '10px',
-
+        
       }}>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '20px', }}>
