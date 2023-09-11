@@ -51,8 +51,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
              <Route path="/detail/:id" element={<Detail />} />
              <Route path="/login" element={user ? <Navigate to='/'/> :<Login />} />
-             <Route path="/adminPage" element={<AdminPage />} />
-             <Route path="/admin" element={<Admin />} />
+             {/* <Route path="/adminPage" element={<AdminPage />} />
+             <Route path="/admin" element={<Admin />} /> */}
              <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
              <Route path="/search" element={<Search />} />
              <Route path="/showroom" element={<ShowRoom />} />
