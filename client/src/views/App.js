@@ -19,6 +19,7 @@ import OrderHistory from './OrderHistory/HistoryOrder';
 import Cart from './Cart/Cart';
 import { CartProvider } from './Cart/CartContext';
 import CheckSP from './Menu/CheckSP';
+import Profile from './Profile/Profile';
 import axios from 'axios';
 const App = () => {
 
@@ -58,6 +59,7 @@ const App = () => {
              <Route path="/tin-tuc" element={<Tintuc />} />
              <Route path="/support" element={<Support />} />
              <Route path="/checkSP" element={<CheckSP />} />
+             <Route path="/profile" element={<Profile />} />       
              <Route path="/sale" element={<Sale />} />
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
              <Route path="/cart" element={<Cart />} />
