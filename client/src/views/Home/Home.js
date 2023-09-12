@@ -9,6 +9,7 @@ import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 import "./Home.scss";
+
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
 const { TabPane } = Tabs;
@@ -111,13 +112,13 @@ const products = [
     price: 150,
     imageUrl:
       "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },{
+  }, {
     id: 15,
     name: "LapTop K",
     price: 150,
     imageUrl:
       "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },{
+  }, {
     id: 16,
     name: "LapTop K",
     price: 150,
@@ -387,7 +388,7 @@ const Home = () => {
 
   // logic scroll button phone
   const containerRef = useRef(null);
-  
+
   const scrollLeft = () => {
     if (containerRef.current) {
       containerRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
@@ -447,6 +448,7 @@ const Home = () => {
         </div>
       </div>
 
+
       {/* -------tabsPane---------- */}
       <div
         className="tabsPane"
@@ -478,7 +480,7 @@ const Home = () => {
                 width: "100%",
                 margin: "0 auto",
                 padding: "10px",
-                borderRadius:'0px'
+                borderRadius: '0px'
               }}
             >
               {tuanlevang &&
@@ -492,9 +494,9 @@ const Home = () => {
                       boxSizing: "border-box",
                       margin: "0 auto",
                       marginTop: "10px",
-                      borderRadius:'0px'
+                      borderRadius: '0px'
                     }}
-                   
+
                   >
                     <img alt={item.name} src={item.imageUrl} />
                     <h3>{item.name}</h3>
@@ -516,6 +518,103 @@ const Home = () => {
         </Tabs>
       </div>
 
+
+
+      {/* ---------------menu-------------------- */}
+      <nav style={{ color: '#333333', fontFamily: '-apple-system', fontSize: '13px', height: '63px', width: '100%', marginTop: '10px' }}>
+        <ul style={{
+          width: '80%', height: '100%', alignItems: 'center', backgroundColor: '#ae69dd', borderRadius: '5px', boxShadow: '#cccccc 0px 4px 6px 0px', color: '#333333',
+          display: 'flex', fontSize: '13px', justifyContent: 'center', textAlign: 'center', margin: '0 auto'
+        }}>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-mobile-phone" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Điện thoại</span>
+            </a>
+            <div className="sub-container" style={{position:'absolute', left:'0', top:"55px", zIndex:"199", paddingTop:'15px', display:'none', opacity:'0', visibility:'hidden',transition:'opacity 200ms,visibility 200ms'}}>
+              abc
+            </div>
+          </li>
+
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-laptop" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Lap Top</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa-brands fa-apple" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Apple</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-keyboard" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Keyboard</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fas fa-rotate" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Máy cũ</span>
+            </a>
+          </li>
+
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Sua chua</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-bolt-lightning" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Ưu đãi</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-newspaper" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Tin tức</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-headset" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Dịch vụ</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
       {/*-------- Danh mục nổi bật -----------*/}
       <div className='danhmucmobile' style={{
         borderRadius: '20px',
@@ -524,7 +623,7 @@ const Home = () => {
         marginTop: '20px',
         backgroundColor: 'white',
         padding: '10px',
-        
+
       }}>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '20px', }}>
@@ -545,7 +644,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-
+      {/* 
       <div className='danhmucnoibat' style={{
         borderRadius: '20px', width: '80%',
         margin: '0 auto', marginTop: '20px',
@@ -573,6 +672,7 @@ const Home = () => {
           </MDBContainer>
         </div>
       </div >
+      
       <div className='danhmucnoibat' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
@@ -584,14 +684,14 @@ const Home = () => {
                 <MDBCol size='md' key={index}>
                   <div className="category-image-container">
                     <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '90px' }} />
-                    {/* <p className="category-name">{danhmuc2.name}</p> */}
+                  
                   </div>
                 </MDBCol>
               ))}
             </MDBRow>
           </MDBContainer>
         </div>
-      </div>
+      </div> */}
 
 
       {/* ------------------box sản phẩm Laptop ------------------ */}
@@ -604,44 +704,29 @@ const Home = () => {
           <div className="scroll-control-phone" ref={containerRef}>
             {topLaptop &&
               topLaptop.length > 0 &&
-              topLaptop.map((item, index) => (
-                <Card
-                  key={item.id}
-                  hoverable
-                  className="card-sp"
-                >
-                  <img src={item.avatar} style={{ width: "-webkit-fill-available", objectFit: "cover", }}></img>
-                  <div
-                    style={{
-                      flexGrow: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <a className="name-card">{item.name}</a>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p
-                        style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
-                      >
-                        {item.Price} ₫
-                      </p>
-                      <Button
-                        type="primary"
-                        icon={<ShoppingCartOutlined />}
-                        style={{ marginLeft: "auto" }}
-                        onClick={() => handleAddToCart(item)}
-                      ></Button>
+              topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                <div className="sanpham-card">
+                  <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                      APPLE
                     </div>
                   </div>
-                </Card>
+                  <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
+                      {item.name}
+                    </h3>
+                  </div>
+
+                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                      29.290.000
+                    </div>
+
+                  </div>
+                </div>
               ))}
+
           </div>
           {/* button */}
           {/* <button
@@ -661,6 +746,7 @@ const Home = () => {
         </div>
       </div>
 
+
       {/* ------------------box sản phẩm Điện thoại ------------------ */}
       <div className="phone-group">
         <div>
@@ -669,26 +755,31 @@ const Home = () => {
         <div className="scroll-group-phone">
           {/* content */}
           <div className="scroll-control-phone" ref={containerRef}>
-            {products &&
-              products.length > 0 &&
-              products.map((item, index) => (
-                <Card
-                  key={item.id}
-                  hoverable
-                  className="product-card"
-                >
-                  <img src={item.imageUrl} style={{ width: "170px" }}></img>
-                  <h3>{item.name}</h3>
-                  <p>{item.price}$</p>
-                  <Button
-                    onClick={() => handleViewDetailuser(item)}
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
-                  >
-                    {/* Biểu tượng mua hàng */}
-                  </Button>
-                </Card>
+            {ListUsers &&
+              ListUsers.length > 0 &&
+              ListUsers.slice(startIndex, endIndex).map((item, index) => (
+                <div className="sanpham-card">
+                  <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                      APPLE
+                    </div>
+                  </div>
+                  <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                      {item.name}
+                    </h3>
+                  </div>
+
+                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                      29.290.000
+                    </div>
+
+                  </div>
+                </div>
               ))}
+
           </div>
           {/* button */}
           <button
@@ -696,17 +787,21 @@ const Home = () => {
             id="scroll-left-button"
             onClick={scrollLeft}
           >
-            <LeftOutlined style={{fontSize:'32px'}} />
+            <LeftOutlined style={{ fontSize: '32px' }} />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollRight}
           >
-            <RightOutlined style={{fontSize:'32px'}}/>
+            <RightOutlined style={{ fontSize: '32px' }} />
           </button>
         </div>
       </div>
+
+      {/* --------------------------------------- */}
+
+
 
       {/* ------------------box sản phẩm ------------------ */}
       <div

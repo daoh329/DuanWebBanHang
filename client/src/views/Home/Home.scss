@@ -241,7 +241,7 @@
   .scroll-control-phone {
     display: flex;
     overflow-x: auto;
-    white-space: nowrap;
+   
     width: 100%;
     height: 100%;
     scroll-behavior: smooth;
@@ -254,7 +254,7 @@
   }
 
   .product-container {
-    width: 100% !important;
+    width: 98% !important;
   }
 
   .card-sp {
@@ -331,7 +331,7 @@
   .scroll-group-phone {
     width: 100%;
     overflow-x: hidden;
-    padding-right: 10px;
+   
   }
 
   .scroll-control-phone::-webkit-scrollbar {
@@ -342,10 +342,9 @@
     display: flex;
     overflow-x: scroll;
     margin: 10px;
-    white-space: nowrap;
-    width: 100%;
     height: 100%;
     scroll-behavior: smooth;
+    column-gap: 5px;
     /* Đảm bảo không bị tràn nội dung */
   }
 
@@ -390,4 +389,64 @@
     padding: 5px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
+
+  .sanpham {
+    color: #333333;
+    flex-basis: 83.33%;
+    font-size: 14px;
+    line-height: 20px;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 10px
+  }
+
+  .teko-row-start {
+
+    align-items: baseline;
+    background-color: #ffffff;
+    border-radius: 8px;
+    color: #333333;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    justify-content: flex-start;
+    line-height: 20px;
+    margin: 0px, 0px 4px;
+    padding: 12px 16px;
+    width: 100%
+  }
+
+  .sanpham-group {
+
+    background-color: #f6f6f6;
+    color: #333333;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    gap: nowrnal 2px;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 2px 0px;
+    height: auto;
+
+    
+  }
+
+  .sanpham-card {
+
+    background-color: #ffffff;
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 16px;
+    height: 362px;
+    margin-top: 5px;
+  }
+
+.fa-mobile-phone:hover .sub-container{
+  display: block;
+}
 }
