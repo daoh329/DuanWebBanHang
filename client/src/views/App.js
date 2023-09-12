@@ -21,8 +21,8 @@ import { CartProvider } from './Cart/CartContext';
 import CheckSP from './Menu/CheckSP';
 import Profile from './Profile/Profile';
 import axios from 'axios';
-// 
-import Test from './Test/test';
+
+import Test from './test1/test'
 
 
 
@@ -70,6 +70,9 @@ const App = () => {
              <Route path='/order/json' element={<QLdonhang />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/test" element={<Test />} />
+           
+
+
          
 
           </Routes>
