@@ -65,4 +65,63 @@
         align-items: center;
     }
   }
-  
+  /* App.css */
+.app-container {
+  padding: 20px;
+}
+
+.responsive-container {
+  width: 100%;
+}
+
+.responsive-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.responsive-col1 {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.responsive-col2 {
+  flex: 0 0 300px;
+}
+
+/* Điểm ngắt: Điều chỉnh bố cục cho màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
+  .responsive-row {
+    flex-direction: column;
+  }
+
+  .responsive-col1 {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .responsive-col2 {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .app-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .responsive-col1 {
+    width: 70%; /* Điều chỉnh kích thước cột 1 tùy theo nhu cầu */
+  }
+
+  .responsive-col2 {
+    width: 30%; /* Điều chỉnh kích thước cột 2 tùy theo nhu cầu */
+  }
+
+  .responsive-container {
+    display: flex;
+    flex-direction: column;
+  }
+}

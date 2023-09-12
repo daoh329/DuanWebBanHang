@@ -52,24 +52,31 @@ function Cart() {
         window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
       }, []);
     return (
+        <div className="app-container">
+           
         <Space className="responsive-container">
-            <h2 style={{ textAlign: 'left' }}>Giỏ hàng</h2>
-            <div className="responsive-row">
-                <div className="responsive-col1" span={18}>
-                    {/* Sử dụng sortedCart thay vì cart */}
-                    <Table columns={columns} dataSource={sortedCart} rowSelection={{ selectedItems, onChange: handleCheckboxChange }} />
-                </div>
-                <div className="responsive-col2" span={6}>
-                    <Card className="responsive-card" title="Thanh toán" bordered={false} style={{ width: 300, marginLeft: "10px" }}>
-                        <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
-                            Tổng tiền tính tạm:
-                            <span style={{ color: 'green', fontWeight: 'bold' }}> 100000 vnd</span>
-                        </p>
-                        <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>Tiếp tục</Button>
-                    </Card>
-                </div>
+          <h2 style={{ textAlign: 'left' }}>Giỏ hàng</h2>
+          <div className="responsive-row">
+            <div className="responsive-col1">
+              <Table columns={columns} dataSource={sortedCart} />
             </div>
+            <div className="responsive-col2">
+              <Card
+                className="responsive-card"
+                title="Thanh toán"
+                bordered={false}
+              >
+                <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
+                  Tổng tiền tính tạm:
+                  <span style={{ color: 'green', fontWeight: 'bold' }}> 100000 vnd</span>
+                </p>
+                <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>Tiếp tục</Button>
+              </Card>
+            </div>
+          </div>
         </Space>
+       
+      </div>
     );
 }
 
