@@ -11,9 +11,9 @@ import {
 } from "mdb-react-ui-kit";
 import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
 
-//
+//hỗ trợ icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser,faClipboardList,faBell } from "@fortawesome/free-solid-svg-icons";
 
 const { Option } = Select;
 
@@ -93,7 +93,7 @@ export default function Profile() {
                 onClick={() => handleVerticalClick("tab2")}
                 active={verticalActive === "tab2"}
               >
-                Quản lý đơn hàng
+                <FontAwesomeIcon icon={faClipboardList} /> Quản lý đơn hàng
               </MDBTabsLink>
             </MDBTabsItem>
             <MDBTabsItem>
@@ -101,7 +101,7 @@ export default function Profile() {
                 onClick={() => handleVerticalClick("tab3")}
                 active={verticalActive === "tab3"}
               >
-                Thông báo
+                  <FontAwesomeIcon icon={faBell} /> Thông báo
               </MDBTabsLink>
             </MDBTabsItem>
           </MDBTabs>
