@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button,Breadcrumb } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
+import './History.css'  
 
 function HistoryOrder(props) {
 
@@ -56,8 +57,31 @@ function HistoryOrder(props) {
                     ]}
                 />
             </h6>
-            <h4>Lịch sử mua hàng</h4>
-            <Table columns={columns} dataSource={data} />
+            <h4 className="mobile-heading">Lịch sử mua hàng</h4>
+
+            {/* <Table columns={columns} dataSource={data} /> */}
+
+            <div className="table-container">
+      <table className="table">
+        <thead>
+          <tr>
+            {columns.map(column => (
+              <th key={column.key}>{column.title}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              {columns.map(column => (
+                <td key={column.key}>{item[column.dataIndex]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+                    {/*  */}
         </div>
     );
 }

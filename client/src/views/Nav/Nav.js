@@ -78,6 +78,10 @@ const App = (userDetails) => {
   const logout = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
   };
+  // tới profile
+  const profile = () => {
+    navigate('/profile');
+  };
   const host = (
     <Menu>
       <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
@@ -119,8 +123,7 @@ const App = (userDetails) => {
               height: "100%",
               backgroundColor: "none",
             }}
-            onClick={logout}
-          >
+            onClick={logout}>
             Đăng xuất
           </div>
           {/* Link to logout page */}
@@ -130,7 +133,18 @@ const App = (userDetails) => {
           <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
         </Menu.Item>
       )}
-
+        {user ? (
+        <Menu.Item key="2">
+          <div
+            onClick={profile}>
+           Tài khoản
+          </div>
+          {/* Link to profile */}
+        </Menu.Item>
+      ) : (
+        <Menu.Item>
+        </Menu.Item>
+      )}
       <Menu.Item key="3">
         <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
         {/* Link to checkSP */}
@@ -270,8 +284,8 @@ const App = (userDetails) => {
             </label>
             <ul className="menu__box">
               <li>
-                <a className="menu__item" href="#">
-                  home
+                <a className="menu__item" href="/">
+                  Trang chủ
                 </a>
               </li>
               <li>
