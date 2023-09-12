@@ -21,6 +21,11 @@ import { CartProvider } from './Cart/CartContext';
 import CheckSP from './Menu/CheckSP';
 import Profile from './Profile/Profile';
 import axios from 'axios';
+// 
+import Test from './Test/test';
+
+
+
 const App = () => {
 
   const [user, setUser] = useState(null);
@@ -62,14 +67,20 @@ const App = () => {
              <Route path="/profile" element={<Profile />} />       
              <Route path="/sale" element={<Sale />} />
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
-             <Route path="/cart" element={<Cart />} />
              <Route path='/order/json' element={<QLdonhang />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/test" element={<Test />} />
+         
+
           </Routes>
+          
         </header>
         <Footer />
       </CartProvider>
     </BrowserRouter>
+    
   </div>
+  
   );
 };
 

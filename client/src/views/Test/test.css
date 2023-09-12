@@ -46,13 +46,7 @@ body {
     box-sizing: border-box;
 } 
 
-.css-z54kij { 
-    box-sizing: border-box; 
-    margin: 0px; 
-    min-width: 0px; 
-    flex-wrap: wrap; 
-    display: flex;
-} 
+
 
 .css-66d1qu { 
     box-sizing: border-box; 
@@ -118,17 +112,11 @@ body {
 @media (min-width: 1024px){ 
   .css-1o3gs9x.teko-row { 
     -webkit-box-pack: center; 
-    /* justify-content: center; */
+
   } 
 }     
 
-.css-1o3gs9x.teko-row:before,.css-1o3gs9x.teko-row:after { 
-    display: flex;
-} 
 
-.css-ov1ktg { 
-    display: flex;
-}  
 
 .css-zzskb3 { 
     padding: 0px; 
@@ -193,6 +181,7 @@ a:not([href]),a:not([href]):hover {
 } 
 
 .css-jjszbd { 
+    width: 100%;
     border-style: none; 
     border-width: 1px; 
     border-color: unset; 
@@ -498,7 +487,7 @@ button {
     border-radius: 0.25rem; 
     background-color: rgb(210, 210, 210); 
     position: relative; 
-    display: flex; 
+ 
     -webkit-box-align: center; 
     align-items: center; 
     -webkit-box-pack: center; 
@@ -561,3 +550,12 @@ button {
    padding-left: 8px;  
     padding-right: 8px;  
 }  
+.col-9 {
+
+    width: 80%;
+}
+.col-3 {
+   
+    width: 20%;
+    margin-top: 20px;
+}
