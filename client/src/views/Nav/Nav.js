@@ -145,8 +145,6 @@ const App = (userDetails) => {
         <Menu.Item>
         </Menu.Item>
       )}
-    
-
       <Menu.Item key="3">
         <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
         {/* Link to checkSP */}
