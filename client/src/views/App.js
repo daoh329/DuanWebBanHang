@@ -69,14 +69,8 @@ const App = () => {
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
              <Route path='/order/json' element={<QLdonhang />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/test" element={<Test />} />
-           
-
-
-         
-
+            <Route path="/test" element={<Test />} />    
           </Routes>
-          
         </header>
         <Footer />
       </CartProvider>
