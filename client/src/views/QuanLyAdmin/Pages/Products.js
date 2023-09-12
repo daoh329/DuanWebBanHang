@@ -57,6 +57,19 @@ function Product() {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'action',
+            render: 
+                <span>
+                    {/* {record.status === 'discontinued' ? (
+                        <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
+                            discontinued
+                        </Button>
+                    ): record.status === '' (
+                        <Button className="confirm-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
+                            Xác nhận
+                        </Button>
+                    )} */}
+                </span>
+            
         },
     ];
 
