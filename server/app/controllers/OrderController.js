@@ -1,19 +1,14 @@
 const mysql = require("../../config/db/mySQL");
-const createOrdersTable = require("../../config/createTable");
 const { da } = require("date-fns/locale");
 
 class OrderController {
   // API /order/order
   async order(req, res) {
     const data = req.body;
-    console.log("abc");
 
     if (!data) {
       return res.status(400).json("Invalid data");
     }
-
-    // // Gọi hàm createOrdersTable để tạo bảng orders nếu chưa tồn tại
-    createOrdersTable();
 
     const query =
       "INSERT INTO orders (name, avatar, price, quantity, userName, city, selectedCity, selectedDistrict, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

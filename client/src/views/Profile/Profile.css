@@ -1,0 +1,561 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap'); 
+  body {  
+    font-size:0.875rem;
+    line-height:1.25rem;
+    font-family:'Roboto',sans-serif;
+    color:#333333;
+  }  
+body { 
+/* CSS Variables that may have been missed get put on body */ 
+    --divider-gap:  12px;  
+    --divider-border-style:  solid;  
+    --divider-color:  #E4E5F0;  
+    --divider-border-width:  1px;  
+} 
+
+* { 
+    box-sizing: border-box;
+} 
+
+body { 
+    margin: 0; 
+    font-size: 0.875rem; 
+    line-height: 1.25rem; 
+    -webkit-text-size-adjust: 100%; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+} 
+
+body { 
+    background-color: #f8f8fc; 
+    font-family: 'Roboto',sans-serif; 
+    line-height: 1.25rem; 
+    color: #333333; 
+    padding-bottom: 2px;
+} 
+
+.css-gjf6g1 { 
+    margin: 16px auto; 
+    width: 100%; 
+    padding-left: 1rem; 
+    padding-right: 1rem; 
+    max-width: 1264px; 
+    min-height: 77vh;
+} 
+
+*,:before,:after { 
+    box-sizing: border-box;
+} 
+
+
+
+.css-66d1qu { 
+    box-sizing: border-box; 
+    margin: 0px; 
+    min-width: 0px; 
+    width: 100%;
+} 
+
+@media screen and (min-width: 40em){ 
+  .css-66d1qu { 
+    width: 33.3333%;
+  } 
+}     
+
+@media screen and (min-width: 52em){ 
+  .css-66d1qu { 
+    width: 20%;
+  } 
+}     
+
+.css-hveu7a { 
+    box-sizing: border-box; 
+    margin: 0px; 
+    min-width: 0px; 
+    width: 100%;
+} 
+
+@media screen and (min-width: 40em){ 
+  .css-hveu7a { 
+    width: 66.6667%;
+  } 
+}     
+
+@media screen and (min-width: 52em){ 
+  .css-hveu7a { 
+    width: 80%;
+  } 
+}    
+@media screen and (max-width: 767px){ 
+    .css-hveu7a { 
+        display: flex;
+      max-width: 100%;
+    } 
+    .css-1o3gs9x.teko-row { 
+         justify-content: center;
+ 
+
+    } 
+  }  
+
+.css-u0wwqg { 
+    padding-right: 1rem;
+} 
+
+.css-1o3gs9x { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+
+@media (min-width: 1024px){ 
+  .css-1o3gs9x.teko-row { 
+    -webkit-box-pack: center; 
+
+  } 
+}     
+
+
+
+.css-zzskb3 { 
+    padding: 0px; 
+    margin: 0px; 
+    list-style: none;
+} 
+
+.css-gr7r8o { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+.css-gr7r8o.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+/*  */
+.css-gr7r8o.teko-col-8 { 
+    display: block; 
+    flex: 0 0 83%; 
+    max-width:100%;
+} 
+
+.css-gr7r8o.teko-col-4 { 
+    display: block; 
+    flex: 0 0 33.33%; 
+    max-width: 33.33%;
+} 
+
+.css-tubh1u { 
+    margin-left: 0.5rem;
+} 
+
+.css-11g9kr1 { 
+    text-decoration: none;
+} 
+
+a:not([href]) { 
+    color: inherit; 
+    -webkit-text-decoration: none; 
+    text-decoration: none;
+} 
+
+a:hover { 
+    color: #024dbc;
+} 
+/*  */
+a:not([href]),a:not([href]):hover { 
+    color: inherit; 
+    -webkit-text-decoration: none; 
+    text-decoration: none;
+} 
+
+.css-1jfhcvk { 
+    background-color: rgb(224, 224, 224); 
+    width: 100%; 
+    height: 1px; 
+    list-style: none;
+} 
+
+.css-jjszbd { 
+    width: 100%;
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    border-radius: 8px; 
+    background-color: rgb(255, 255, 255); 
+    position: relative; 
+    padding: 1rem;
+} 
+
+.css-9bi3ip { 
+    max-width: 100%; 
+    position: relative; 
+    overflow: hidden; 
+    flex: 1 0 auto; 
+    display: flex; 
+    cursor: unset; 
+    z-index: 0; 
+    margin: auto; 
+    border-radius: 0px; 
+    width: 44px; 
+    content-visibility: auto; 
+    height: 44px !important;
+} 
+
+h6 { 
+    margin-top: 0; 
+    margin-bottom: 0.5rem; 
+    font-weight: 500; 
+    line-height: 1.3;
+} 
+
+h6 { 
+    font-size: 1rem;
+} 
+
+.css-9x44fd { 
+    margin-bottom: 0px; 
+    font-weight: 400; 
+    font-size: 0.8rem;
+} 
+
+h5 { 
+    margin-top: 0; 
+    margin-bottom: 0.5rem; 
+    font-weight: 500; 
+    line-height: 1.3;
+} 
+
+h5 { 
+    font-size: 1.25rem;
+} 
+
+.css-11aljab { 
+    font-size: 1rem;
+} 
+
+.css-1tj8dpi { 
+    cursor: pointer; 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: justify; 
+    justify-content: space-between; 
+    padding: 4px 0px; 
+    margin: 8px 0px; 
+    background: unset; 
+    font-weight: 700 !important; 
+    color: rgb(20, 53, 195) !important;
+} 
+
+.css-1tj8dpi:hover { 
+    background-color: rgb(245, 245, 245);
+} 
+
+.css-1itrv06 { 
+    cursor: pointer; 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: justify; 
+    justify-content: space-between; 
+    padding: 4px 0px; 
+    margin: 8px 0px; 
+    background: unset;
+} 
+
+.css-1itrv06:hover { 
+    background-color: rgb(245, 245, 245);
+} 
+
+.css-1itrv06:hover { 
+    font-weight: 700 !important; 
+    color: rgb(20, 53, 195) !important;
+} 
+
+svg { 
+    vertical-align: middle;
+} 
+
+.css-rac23i { 
+    text-overflow: ellipsis; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: 1; 
+    overflow: hidden; 
+    margin: 0px 0.6rem; 
+    flex: 1 1 0%;
+} 
+
+.css-1o3gs9x.teko-row-space-between { 
+    -webkit-box-pack: justify; 
+    justify-content: space-between;
+} 
+
+.css-1x6y1s9 { 
+    top: 0px; 
+    bottom: 0px; 
+    left: 0px; 
+    position: fixed; 
+    pointer-events: none; 
+    transition: transform 0.3s ease-out 0s;
+} 
+
+.css-kgtmqg { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: rgb(130, 134, 158); 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-f1fyi0 { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    --divider-gap: 12px; 
+    display: flex; 
+    padding-top: var(--divider-gap); 
+    padding-bottom: var(--divider-gap);
+} 
+
+.css-16ptmp8 { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    max-width: 168px; 
+    margin-bottom: 1.5rem; 
+    display: inline; 
+    cursor: pointer; 
+    text-decoration: none; 
+    color: rgb(25, 144, 255) !important;
+} 
+
+.css-16ptmp8:hover { 
+    text-decoration: underline;
+} 
+
+img { 
+    vertical-align: middle;
+} 
+
+.css-hv3z8f { 
+    position: absolute; 
+    top: 0px; 
+    left: 0px; 
+    width: 100%; 
+    height: 100%; 
+    transition: transform 0.5s ease 0s;
+} 
+
+.css-vdbely { 
+    margin: 0px 0px 0.75rem; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: inherit; 
+    font-weight: 700; 
+    text-decoration: unset; 
+    font-size: 20px; 
+    line-height: 28px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-1umbfo7 { 
+    margin-bottom: 0.5rem;
+} 
+
+.css-1ago99h { 
+    width: 100%;
+} 
+
+.css-yae08c { 
+    --divider-border-style: solid; 
+    --divider-color: #E4E5F0; 
+    --divider-border-width: 1px; 
+    display: flex; 
+    width: 100%; 
+    border-top: var(--divider-border-width) var(--divider-border-style) var(--divider-color);
+} 
+
+.css-4mmgnd { 
+    margin: 0px 0px 0px 0.75rem; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: rgb(25, 144, 255); 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-16ptmp8 div  { 
+    display: inline;
+} 
+
+.css-1270aei { 
+    font-weight: 500; 
+    line-height: 24px; 
+    margin-bottom: 4px; 
+    font-size: 13px;
+} 
+
+.css-90j4a3 { 
+    display: block; 
+    width: 100%; 
+    border-radius: 4px; 
+    padding: 0.375rem 0.75rem; 
+    border: 1px solid rgb(224, 224, 224); 
+    min-height: 16px; 
+    height: 40px;
+} 
+
+label { 
+    display: inline-block; 
+    margin-bottom: 0.5rem;
+} 
+
+.css-ekrzeo { 
+    margin-right: 60px;
+} 
+
+button { 
+    border-radius: 0;
+} 
+
+button { 
+    margin: 0; 
+    font-family: inherit; 
+    font-size: inherit; 
+    line-height: inherit;
+} 
+
+button { 
+    overflow: visible;
+} 
+
+button { 
+    text-transform: none;
+} 
+
+
+.css-1nlo7xx { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    height: 2.5rem; 
+    padding: 0rem 1.25rem; 
+    border-radius: 0.25rem; 
+    background-color: rgb(210, 210, 210); 
+    position: relative; 
+ 
+    -webkit-box-align: center; 
+    align-items: center; 
+    -webkit-box-pack: center; 
+    justify-content: center; 
+    outline: none; 
+    min-width: 2.5rem; 
+    color: rgb(228, 229, 240); 
+    cursor: not-allowed; 
+    transition-duration: 80ms; 
+    transition-property: background-color;
+} 
+
+
+.css-gnd1m2 { 
+    margin: 0px; 
+    padding: 0px; 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1; 
+    color: rgb(167, 171, 195); 
+    font-weight: 400; 
+    text-decoration: unset; 
+    font-size: 13px; 
+    line-height: 20px; 
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: unset; 
+    max-width: unset; 
+    min-width: unset; 
+    transition: color 0.3s ease 0s;
+} 
+
+.css-157jl91 { 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    bottom: 0; 
+    left: 0; 
+    overflow: hidden; 
+    z-index: 0; 
+    border-radius: inherit;
+} 
+
+
+/* These were inline style tags. Uses id+class to override almost everything */
+#style-QHQSn.style-QHQSn {  
+   margin-left: -8px;  
+    margin-right: -8px;  
+}  
+#style-rBeFA.style-rBeFA {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-ADp6E.style-ADp6E {  
+   margin-left: 0px;  
+}  
+#style-qo2KB.style-qo2KB {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+.col-9 {
+
+    width: 80%;
+}
+.col-3 {
+   
+    width: 20%;
+    margin-top: 20px;
+}

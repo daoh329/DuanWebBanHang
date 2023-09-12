@@ -8,7 +8,6 @@ import './CheckSP.css'
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 
-
 const CheckSP = () => {
 
   // Đang sửa otp
@@ -112,20 +111,21 @@ const CheckSP = () => {
         ]}
       />
       </h6>
-      <div className="d1 step1 snipcss-Ko5VG">
+      
 
         <h4>Tra cứu thông tin đơn hàng</h4>
         <Form >
           <div className="input-area">
             <i className="iconoh-phone-blue input-icon"></i>
-            <input
-              onChange={(e) => setPhone(e.target.value)} value={phone}
-              type="tel"
-              name="txtPhoneNumber"
-              id="txtPhoneNumber"
-              onkeypress="ValidateOnlyNumber(event)"
-              placeholder="Nhập số điện thoại mua hàng"
-              autoComplete="off"
+      <Input size="large"
+           placeholder="Nhập số điện thoại"
+            prefix={<UserOutlined />} 
+            onChange={(e) => setPhone(e.target.value)} value={phone}
+            type="tel"
+            name="txtPhoneNumber"
+            id="txtPhoneNumber"
+            onkeypress="ValidateOnlyNumber(event)"
+            autoComplete="off"
               maxLength={15}
             />
           </div>
@@ -134,7 +134,7 @@ const CheckSP = () => {
             Tra cứu
           </Button>
         </Form>
-      </div>
+
     </div>
 
 

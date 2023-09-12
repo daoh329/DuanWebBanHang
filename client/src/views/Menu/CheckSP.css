@@ -109,6 +109,34 @@
       width: 100%; 
       box-sizing: border-box;
   } 
+
+  @media screen and (max-width: 767px) {
+
+    div > form > .input-area > .input-icon  { 
+        position: absolute; 
+        top: 50%; 
+        left: 25px; 
+        transform: translate(0,-50%);
+    }
+    div > form > .input-area  { 
+        position: relative; 
+        margin-bottom: 15px; 
+        width: 1502px; 
+        max-width: 100%;
+    } 
+    
   
+    div > form input  { 
+        border: 1px solid #e0e0e0; 
+        border-radius: 100px; 
+        height: 38px; 
+        padding: 0 50px; 
+        font-size: 15px; 
+        width: 100%; 
+        box-sizing: border-box;
+    } 
+  
+    
+  }
   
   
