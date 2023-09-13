@@ -6,48 +6,62 @@ class OrderController {
   // API /order/order
   async order(req, res) {
     const data = req.body;
-    console.log("abc");
+    console.log(data);
 
     if (!data) {
       return res.status(400).json("Invalid data");
     }
 
-    // // Gọi hàm createOrdersTable để tạo bảng orders nếu chưa tồn tại
-    createOrdersTable();
+    // // // // Gọi hàm createOrdersTable để tạo bảng orders nếu chưa tồn tại
+    // // createOrdersTable();
 
-    const query =
-      "INSERT INTO orders (name, avatar, price, quantity, userName, city, selectedCity, selectedDistrict, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // const query =
+    //   "INSERT INTO orders (name, avatar, price, quantity, userName, city, selectedCity, selectedDistrict, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    // Thực hiện truy vấn SQL
+    // // Thực hiện truy vấn SQL
 
-    mysql.query(
-      query,
-      [
-        data.name,
-        data.avatar,
-        data.price,
-        data.quantity,
-        data.userName,
-        data.city,
-        data.selectedCity,
-        data.selectedDistrict,
-        data.address,
-        data.deliveryMethod,
-        data.phone,
-        data.note,
-        data.status,
-        new Date(),
-      ],
-      (error, results, fields) => {
-        if (error) {
-          // Trả về mã trạng thái 500 nếu có lỗi xảy ra
-          res.status(500).send("Có lỗi xảy ra khi thêm thông tin cá nhân");
-        } else {
-          // Trả về mã trạng thái 200 nếu thêm thông tin cá nhân thành công
-          res.status(200).send("Thêm thông tin cá nhân thành công");
-        }
-      }
-    );
+    // mysql.query(
+    //   query,
+    //   [
+    //     data.name,
+    //     data.avatar,
+    //     data.price,
+    //     data.quantity,
+    //     data.userName,
+    //     data.city,
+    //     data.selectedCity,
+    //     data.selectedDistrict,
+    //     data.address,
+    //     data.deliveryMethod,
+    //     data.phone,
+    //     data.note,
+    //     data.status,
+    //     new Date(),
+    //   ],
+    //   (error, results, fields) => {
+    //     if (error) {
+    //       // Trả về mã trạng thái 500 nếu có lỗi xảy ra
+    //       res.status(500).send("Có lỗi xảy ra khi thêm thông tin cá nhân");
+    //     } else {
+    //       // Trả về mã trạng thái 200 nếu thêm thông tin cá nhân thành công
+    //       res.status(200).send("Thêm thông tin cá nhân thành công");
+    //     }
+    //   }
+    // );
+    const sql = `INSERT INTO orders (name, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
+    const values = [data.userName, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
+    mysql.query(sql, values, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+      const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
+      sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+      values = [data.productID, data.quantity, orderID];
+      mysql.query(sql, values, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send('Order details added...');
+      });
+    });
   }
 
   async json(req, res, next) {
