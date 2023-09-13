@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container-type-product{
+    width: 100%;
+    height: 100vh;
+}
+
+.type-group{
+    padding: 20px;
+}
+
+.btn-type{
+    width: 200px;
+    height: max-content;
+    padding: 10px;
+    border: none;
+    transition: all 0.3s ease-out;
+}
+
+.btn-type:hover{
+    background-color: blueviolet;
+    color: white;
+}
+
