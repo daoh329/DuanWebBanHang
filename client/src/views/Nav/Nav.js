@@ -12,7 +12,7 @@ const { Header } = Layout;
 
 const App = (userDetails) => {
   const user = userDetails.user;
-  console.log(user);
+
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
   const [cart, setCart] = useState(
     JSON.parse(sessionStorage.getItem("cart")) || []
@@ -62,7 +62,7 @@ const App = (userDetails) => {
     );
     setFilteredProducts(filtered);
   }, [searchQuery, products]);
-  console.log(">>>", searchQuery);
+
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
