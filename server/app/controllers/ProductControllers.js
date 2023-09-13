@@ -86,7 +86,73 @@ class Product {
       res.send(jsonResult);
     });
   }
+  Delete(req, res) {
+    const id = req.params.id;
+    if (!id) {
+      console.log("Không có id được request lên.");
+      res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
+      return;
+    }
 
+    // query delete
+    const sl_productDetails_ID = `
+      SELECT productdetails.id AS value
+      FROM product
+      INNER JOIN productdetails ON product.id = productdetails.product_id
+      WHERE product.id = 1;
+    `;
+    const dl_prodetailcolor = `
+    DELETE FROM prodetailcolor
+    WHERE ProductDetailId = ?;    
+    `;
+    const dl_productDetails = `
+      DELETE productdetails
+      FROM productdetails INNER JOIN product ON productdetails.product_id = product.id
+      WHERE product.id = ?;
+    `;
+    const dl_product = `
+      DELETE FROM product WHERE id = ?;
+    `;
+    // lấy id của bảng product details
+    mysql.query(sl_productDetails_ID, (e, results, fields) => {
+      if (e) {
+        console.log(e);
+        res.status(404).json("Xóa thất bại. Vui lòng thử lại sau.");
+        return;
+      }
+      const productDetails_ID = results[0].value;
+      // Xóa product color
+      mysql.query(
+        dl_prodetailcolor,
+        [productDetails_ID],
+        (e, results, fields) => {
+          if (e) {
+            console.log(e);
+            res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
+            return;
+          }
+          // Xóa product details
+          mysql.query(dl_productDetails, [id], (e, r, f) => {
+            if (e) {
+              console.log(e);
+              res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
+              return;
+            }
+            // xóa product
+            mysql.query(dl_product, [id], (e, r, f) => {
+              if (e) {
+                console.log(e);
+                res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
+                return;
+              }
+
+              res.status(200).json("Xóa thành công.");
+            });
+          });
+        }
+      );
+    });
+  }
 
 }
 module.exports = new Product;
