@@ -127,3 +127,7 @@
     color: white;
 }
 
+.ck-editor__editable {
+    height: 150px; /* Thiết lập chiều cao theo ý muốn */
+  }
+

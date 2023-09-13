@@ -18,6 +18,7 @@ function NewProduct() {
       demand: "",
       category: "laptop",
       quantity: 1,
+      images: "",
       status: false,
       cpu: "",
       screen: "",
@@ -128,6 +129,7 @@ function NewProduct() {
               <textarea
                 name="shortDescription"
                 id="shortDescription"
+                style={{height:'80px'}}
                 className="form-control"
                 value={formik.values.shortDescription}
                 onChange={formik.handleChange}
@@ -211,6 +213,20 @@ function NewProduct() {
                 className="form-control"
                 value={formik.values.quantity}
                 onChange={formik.handleChange}
+              ></input>
+              <span className="form-message"></span>
+            </div>
+            {/* image */}
+            <div className="form-group">
+              <label className="form-label">Hình ảnh</label>
+              <input
+                name="images"
+                id="images"
+                type="file"
+                className="form-control"
+                value={formik.values.images}
+                onChange={formik.handleChange}
+                multiple
               ></input>
               <span className="form-message"></span>
             </div>
@@ -422,7 +438,6 @@ function NewProduct() {
             name="description"
             id="description"
             data="Nhập mô tả chi tiết sản phẩm"
-            
           />
           <span className="form-message"></span>
         </div>
