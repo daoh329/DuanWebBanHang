@@ -8,6 +8,7 @@ import {
   MDBTabsPane,
   MDBRow,
   MDBCol,
+  MDBIcons,
 } from "mdb-react-ui-kit";
 import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
 
@@ -75,6 +76,15 @@ export default function Profile() {
     setVerticalActive(value);
   };
 
+  const [iconsActive, setIconsActive] = useState('tab1');
+
+  const handleIconsClick = (value: string) => {
+    if (value === iconsActive) {
+      return;
+    }
+
+    setIconsActive(value);
+  };
   return (
     <>
       <MDBRow>
@@ -243,12 +253,42 @@ export default function Profile() {
               {/*  */}
             </MDBTabsPane>
 
-            <MDBTabsPane show={verticalActive === "tab2"}>
-              Profile content
+            <MDBTabsPane className="tab-2" show={verticalActive === "tab2"}>
+            <h6 style={{display:'flex'}}>Quản lý đơn hàng</h6>
+          <MDBTabs className='mb-3'>
+          
+        <MDBTabsItem>
+           
+          <MDBTabsLink onClick={() => handleIconsClick('tab1')} active={iconsActive === 'tab1'}>
+            
+          Chờ xử lý
+          </MDBTabsLink>
+        </MDBTabsItem>
+        <MDBTabsItem>
+          <MDBTabsLink onClick={() => handleIconsClick('tab2')} active={iconsActive === 'tab2'}>
+           Đã xác nhận
+          </MDBTabsLink>
+        </MDBTabsItem>
+        <MDBTabsItem>
+          <MDBTabsLink onClick={() => handleIconsClick('tab3')} active={iconsActive === 'tab3'}>
+          Đã hoàn thành
+          </MDBTabsLink>
+        </MDBTabsItem>
+      </MDBTabs>
+
+      <MDBTabsContent>
+        <MDBTabsPane show={iconsActive === 'tab1'}>Tab 1 content</MDBTabsPane>
+        <MDBTabsPane show={iconsActive === 'tab2'}>Tab 2 content</MDBTabsPane>
+        <MDBTabsPane show={iconsActive === 'tab3'}>Tab 3 content</MDBTabsPane>
+      </MDBTabsContent>
+
+
+
+
             </MDBTabsPane>
 
             <MDBTabsPane show={verticalActive === "tab3"}>
-              Messages content
+            <h6 style={{display:'flex'}}>Thông báo dành cho bạn</h6>
             </MDBTabsPane>
           </MDBTabsContent>
         </MDBCol>
