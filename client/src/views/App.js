@@ -19,6 +19,7 @@ import OrderHistory from './OrderHistory/HistoryOrder';
 import Cart from './Cart/Cart';
 import { CartProvider } from './Cart/CartContext';
 import CheckSP from './Menu/CheckSP';
+import Profile from './Profile/Profile';
 import axios from 'axios';
 const App = () => {
 
@@ -50,14 +51,15 @@ const App = () => {
             <Route path="/" element={<Home />} />
              <Route path="/detail/:id" element={<Detail />} />
              <Route path="/login" element={user ? <Navigate to='/'/> :<Login />} />
-             <Route path="/adminPage" element={<AdminPage />} />
-             <Route path="/admin" element={<Admin />} />
+             {/* <Route path="/adminPage" element={<AdminPage />} />
+             <Route path="/admin" element={<Admin />} /> */}
              <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
              <Route path="/search" element={<Search />} />
              <Route path="/showroom" element={<ShowRoom />} />
              <Route path="/tin-tuc" element={<Tintuc />} />
              <Route path="/support" element={<Support />} />
              <Route path="/checkSP" element={<CheckSP />} />
+             <Route path="/profile" element={<Profile />} />       
              <Route path="/sale" element={<Sale />} />
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
              <Route path="/cart" element={<Cart />} />

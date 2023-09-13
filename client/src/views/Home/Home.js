@@ -467,7 +467,7 @@ const Home = () => {
                 ))}
             </div>
           </TabPane>
-          <TabPane tab="Ưu đãi ngon vl" key="2">
+          <TabPane tab="Ưu đãi Lớn" key="2">
             Content of Tab 2
           </TabPane>
           <TabPane tab="Flash Sales" key="3">
