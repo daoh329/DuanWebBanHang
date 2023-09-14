@@ -6,26 +6,16 @@ import axios from "axios";
 function Product() {
     const [Product, setProduct] = useState([]);
     const [TypeProduct, setTypeProduct] = useState([]);
+    
 
-    const fetchData = async () => {
-        
+    // useEffect(() => {
+    //     axios.get(`${process.env.REACT_APP_API_URL}/product/json`)
+    //         .then(res => {
+    //             setProduct(res.data);
+    //         })
+    //         .catch(error => console.log(error));
+    // }, []);
 
-        await axios.get(`${process.env.REACT_APP_API_URL}/product/json`)
-            .then((res) => {
-                console.log('API Response:', res.data);
-                const sortedOrders = res.data.sort((a, b) => new Date(b.Entry_Date) - new Date(a.Entry_Date));
-                setProduct(sortedOrders || []);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-            console.log(Product);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     // const handleConfirmOrder = async (record) => {
     //     console.log('Confirm order button clicked for order:', record.id);
@@ -67,6 +57,19 @@ function Product() {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'action',
+            render: 
+                <span>
+                    {/* {record.status === 'discontinued' ? (
+                        <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
+                            discontinued
+                        </Button>
+                    ): record.status === '' (
+                        <Button className="confirm-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
+                            Xác nhận
+                        </Button>
+                    )} */}
+                </span>
+            
         },
     ];
 

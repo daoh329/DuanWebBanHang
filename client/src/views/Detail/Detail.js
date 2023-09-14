@@ -85,22 +85,35 @@ function Detail() {
   };
   //lấy thông tin vào modal
   const { id } = useParams();
-  const [user, setUser] = useState({});
+  const [Detail, setDetail] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await axios.get(
-          `https://64df1e7171c3335b25821aef.mockapi.io/users/${id}`
-        );
-        setUser(res && res.data && res.data ? res.data : []);
-        console.log("check:", res);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-    fetchData();
-  }, [id]);
+    // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
+    axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
+      .then(response => {
+        // Lưu thông tin chi tiết của sản phẩm vào state
+        setDetail(response.data);
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, [id]); // Chạy useEffect này mỗi khi 'id' thay đổi
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const res = await axios.get(
+  //         `https://64df1e7171c3335b25821aef.mockapi.io/users/${id}`
+  //       );
+  //       setUser(res && res.data && res.data ? res.data : []);
+  //       console.log("check:", res);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [id]);
   // so luong sp
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
@@ -118,12 +131,12 @@ function Detail() {
 
   useEffect(() => {
     const fetchedProductDetail = {
-      productName: user.name,
-      price: parseFloat(user.Price), // Chuyển đổi user.Price thành số
+      productName: Detail.name,
+      price: parseFloat(Detail.Price), // Chuyển đổi user.Price thành số
     };
     setProductDetail(fetchedProductDetail);
-    console.log(user.Price);
-  }, [user]);
+    console.log(Detail.Price);
+  }, [Detail]);
 
   const handleSendOTP = () => {
     // Set up reCAPTCHA verifier
@@ -164,15 +177,9 @@ function Detail() {
     }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
-      name: user.name,
-      avatar: user.avatar,
-      price: productDetail.price * quantity,
       quantity: quantity,
-      userName: userName,
-      city: selectedCity.Name,
-      selectedCity: selectedDistrict.Name,
-      selectedDistrict: selectedWard.Name,
-      address: address,
+      name: userName,
+      address: `${selectedCity.Name}, ${selectedDistrict.Name}, ${selectedWard.Name}, ${address}`,
       deliveryMethod: deliveryMethod,
       phone: phone,
       note: note,
@@ -216,7 +223,7 @@ function Detail() {
                       <MDBCarouselItem
                         className="w-100 d-block"
                         itemId={1}
-                        src={user.avatar}
+                        src={Detail.avatar}
                         alt="..."
                       ></MDBCarouselItem>
                       <MDBCarouselItem
@@ -245,7 +252,7 @@ function Detail() {
                       ),
                   }}
                 >
-                  <Image width={80} src={user.avatar} />
+                  <Image width={80} src={Detail.avatar} />
                   <Image
                     width={80}
                     src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"
@@ -291,7 +298,7 @@ function Detail() {
             <div className="css-6b3ezu">
               {/* ten, mã , thương hiệu */}
               <div>
-                <h1 className="css-4kh4rf">{user.name}</h1>
+                <h1 className="css-4kh4rf">{Detail.name}</h1>
                 <div>
                   <div
                     type="caption"
@@ -323,7 +330,7 @@ function Detail() {
                   className="att-product-detail-latest-price css-oj899w"
                   color="primary500"
                 >
-                  {user.Price}₫
+                  {Detail.Price}₫
                 </div>
                 <div className="css-3mjppt">
                   <div
@@ -676,10 +683,10 @@ function Detail() {
               <h2>Thông tin sản phẩm</h2>
               <Form layout="vertical">
                 <Form.Item label="Tên sản phẩm">
-                  <Input className="product-name" value={user.name} disabled />
+                  <Input className="product-name" value={Detail.name} disabled />
                 </Form.Item>
                 <Form.Item label="Hình">
-                  <Image width={380} src={user.avatar}></Image>
+                  <Image width={380} src={Detail.avatar}></Image>
                 </Form.Item>
                 <Form.Item label="Giá">
                   <Input
