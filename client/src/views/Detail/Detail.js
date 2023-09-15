@@ -164,15 +164,9 @@ function Detail() {
     }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
-      name: user.name,
-      avatar: user.avatar,
-      price: productDetail.price * quantity,
       quantity: quantity,
-      userName: userName,
-      city: selectedCity.Name,
-      selectedCity: selectedDistrict.Name,
-      selectedDistrict: selectedWard.Name,
-      address: address,
+      name: userName,
+      address: `${selectedCity.Name}, ${selectedDistrict.Name}, ${selectedWard.Name}, ${address}`,
       deliveryMethod: deliveryMethod,
       phone: phone,
       note: note,
