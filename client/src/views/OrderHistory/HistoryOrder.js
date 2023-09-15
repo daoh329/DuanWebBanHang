@@ -61,7 +61,7 @@ function HistoryOrder(props) {
 
             {/* <Table columns={columns} dataSource={data} /> */}
 
-            <div className="table-container">
+      <div className="table-container">
       <table className="table">
         <thead>
           <tr>
@@ -81,6 +81,7 @@ function HistoryOrder(props) {
         </tbody>
       </table>
     </div>
+    
                     {/*  */}
         </div>
     );
