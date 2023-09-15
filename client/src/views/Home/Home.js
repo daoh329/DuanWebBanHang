@@ -6,8 +6,10 @@ import { Layout, Carousel, Tabs, Card, Button, Pagination } from "antd";
 import { LeftOutlined, RightOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { message } from "antd";
 import "./Home.scss";
+
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
 const { TabPane } = Tabs;
@@ -83,6 +85,46 @@ const products = [
     imageUrl:
       "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
   },
+  {
+    id: 11,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 12,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 13,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
+  {
+    id: 14,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  }, {
+    id: 15,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  }, {
+    id: 16,
+    name: "LapTop K",
+    price: 150,
+    imageUrl:
+      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
+  },
   // Thêm các sản phẩm khác vào đây
 ];
 const tuanlevang = [
@@ -140,16 +182,16 @@ const Home = () => {
 
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
-  if (!products.id) {
-    console.error('Product ID is undefined!');
-    return;
-  }
+    if (!products.id) {
+      console.error('Product ID is undefined!');
+      return;
+    }
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
     const historyproduct = {
       name: products.name,
-      Price: products.price,
+      price: products.price,
       avatar: products.thumbnail,
       id: products.id,
     };
@@ -213,11 +255,18 @@ const Home = () => {
 
   //---------------------------
   const sliderImages = [
-    "https://lh3.googleusercontent.com/Z4ALctQHIePEih7m2kbV-DyrS4NGkU3ba51_ELp9L7Y_UyJTvEWC1mLFDRss3v5UNrEO62ijjSuY4iWFum-j4oUyXgoGfz10dA=w1920-rw",
+    "https://lh3.googleusercontent.com/nV_K95Q26s6tERRT59QYqB3vD2h_SYomuwf2l1kvgazvydeWkAU2fORAQvYtwxnR6fq2bLCUvtpGnZEXOr8puo48_L2ythw=w1920-rw",
+    "https://lh3.googleusercontent.com/2-2QrEjqAfQPnLqeUBT_bVj4Zbg9IoEk_nfAQcmVQGE6JZ_GCBXLmiNQcW2lT540qrYw6cqCV8l1QNGTm_elc7-XfFsMC1dW=w1920-rw",
+    "https://lh3.googleusercontent.com/GinkeWEQkjkO4POE_srKxjJlYPFehSTUvihpc7Z7UGru7l8ukGwKKp5GSDRrW9MYI8OE-5YSN8lfMBsvVOaV_jXEfpGDp3iu4w=w1920-rw",
+    "https://lh3.googleusercontent.com/KU0g__QTkLdAAyt_Oa18jVsgyXlIkWGSoEZNHKSjLtSB91w-442-nKtaUDOFantvGyLslr22rM_kJVkWARby5s75UFrXWUo=w1920-rw",
+    "https://lh3.googleusercontent.com/qMzCAwc2541i_uOVjJVOgN8gfJxSC_98C6SrK8i03Q6nC4hZ-5NudPqCHc4Ft4_4Zrr5H5IO-7JLL5kWrwRk98pJKHgVoag=w1920-rw",
+    "https://lh3.googleusercontent.com/79pF1qvkAMR3L4Jm1kZdGb3AVvX2_zqj1nSyAnBlQDFi-KNi4F7FQAE-Gk14xb1OyKR0tMgLPmFDQ65n-3d2YKvtlcdnnrB3=w1920-rw",
+    "https://lh3.googleusercontent.com/97RCj73gv97txuAg7t5cSor_Fe1__KCT44INjmtKhxgb1ERLp2WSdXm-9mOfmmUM23CVLRj8BjpVW-E-27XLjUVLiDA3NYU=w1920-rw",
+    "https://lh3.googleusercontent.com/iZzrp_LqTVywcRoAVwQ0DpSKYt-HpqO-yicEFdjJMNsIjTUl89M0ORmRZijc3V9NcEiaea5BdpDcycfZ-A0jTQ-0G3ttaoMs=w1920-rw",
+    "https://lh3.googleusercontent.com/YSEh7mEEW8a_KbVD42Mut-z-NVGg_x9d8YBLcI8ZHZxX0PPVLz30TqanefsaJITaHRRimZ8W75k2SD6WXoqEogPcpqj4EePL=w1920-rw",
     "https://lh3.googleusercontent.com/l-97kfw2WWEm-jtK28TpqtA4T0jBKWm8eGn-FSJ4gI-pz83AXBScpf2VTtcZ4F2vn-hBSt45eDJmOziqesf08ru3FOHGJr0s=w1920-rw",
-    "https://lh3.googleusercontent.com/RT2pbxGYxAzqH_DxnDbb-WEduEFSwcovoemFsEFES4-bBMouDjR7fofm4-Oy7J4aK20lmmEJFYOxLPbH7hxUzdOHnmRkINhp=w1920-rw",
-    "https://lh3.googleusercontent.com/NEyGqAS4HkBmVGWbdLxRCJ7v4n7Xz-Xcfs6ffoxCNZMHBg0txwJk7L0FVyBvjZ9mwdFsV915-uAWlcX_JPHD1yJSq2EYfeV6=w1920-rw",
-    "https://lh3.googleusercontent.com/lM7nJ80Y4-I8JCuM7Er5mjeXtXJeFrct6cs93QTw3o-04B6-n6NENLb4PpQyYPE29MTIANsUle5mdn6WmMggxfVTx5CwfRk=w1920-rw",
+    "https://lh3.googleusercontent.com/7fLNK64SX-6-xlW1aHfS0kbJOs8XxPpVPvDJIhL_3PS34Vo9VXTZTzaFRRtdoY38r2_XYbjonorwEmSUQgYkZXnSuVqSTvmB=w1920-rw",
+    "https://lh3.googleusercontent.com/NEyGqAS4HkBmVGWbdLxRCJ7v4n7Xz-Xcfs6ffoxCNZMHBg0txwJk7L0FVyBvjZ9mwdFsV915-uAWlcX_JPHD1yJSq2EYfeV6=w1920-rw"
   ];
   const categories = [
     "Danh mục 1",
@@ -347,7 +396,7 @@ const Home = () => {
 
   // logic scroll button phone
   const containerRef = useRef(null);
-  
+
   const scrollLeft = () => {
     if (containerRef.current) {
       containerRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
@@ -359,6 +408,20 @@ const Home = () => {
       containerRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
+   // logic scroll button product
+   const ctnRef = useRef(null);
+
+   const scrollTrai = () => {
+     if (ctnRef.current) {
+      ctnRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
+     }
+   };
+ 
+   const scrollPhai = () => {
+     if (ctnRef.current) {
+      ctnRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
+     }
+   };
 
   return (
     <Layout>
@@ -378,7 +441,7 @@ const Home = () => {
         <div className="slider-overlay">
           <div className="slider-container">
             <div className="left-block">
-              <ul className="category-list">
+              {/* <div className="category-list">
                 {categories.map((category, index) => (
                   <li key={index} className="category-item">
                     {category}
@@ -389,23 +452,149 @@ const Home = () => {
                     </ul>
                   </li>
                 ))}
-              </ul>
+                
+              </div>  */}
+              <img
+                className="left-image"
+                src="https://lh3.googleusercontent.com/lLGsyYaAldy7EMkG5xrzuIwpryl3pd7xVFspeXUn_ZKU7QNXVzTnmaWHuVXXUf3cond-gv6X2maTfxZCgph9-h-X6wmjXbx0"
+                alt="Hình ảnh"
+              />
             </div>
             <div className="right-block">
               <img
                 className="right-image"
-                src="https://lh3.googleusercontent.com/sGc0CJYRiTBTlK6dbJ_qsFhIMvPpZqvD3KnHrWsK2azfSp3Wz515oh2QUMfyvsvu-kcH59ILjApX-1B_G5DcceDq5bfHrIRAaA=w300-rw"
+                src="https://lh3.googleusercontent.com/NMcRaUaWbe7V2eEwslmKNSvamonOIhbh5gDalyPC0GgizN2Mku2ITGyIcOksnDY0_O2_cZZb_AEZbcn4o3sUzclliTC_l_c=w300-rw"
                 alt="Hình ảnh"
               />
               <img
                 className="right-image"
-                src="https://lh3.googleusercontent.com/sGc0CJYRiTBTlK6dbJ_qsFhIMvPpZqvD3KnHrWsK2azfSp3Wz515oh2QUMfyvsvu-kcH59ILjApX-1B_G5DcceDq5bfHrIRAaA=w300-rw"
+                src="https://lh3.googleusercontent.com/_3-aKT2dKUecRCiOhoM7ztPmh0pasrYgz3ut3_jOKv4YvvW5TFdQWhfjTXEnYGyCLLoi_wHu9ppwxT58cAmgG8wnWV74b84myg=w300-rw"
+                alt="Hình ảnh"
+              />
+            </div>
+            {/* -------------------------- */}
+            <div className="bottom-block">
+              <img
+                className="bottom-image"
+                src="https://lh3.googleusercontent.com/kISWON9YK-BP8qB-aGzv9QxKH-RkQ1-jCCcS1UKUDJ7IWQ99u3uOTR6jcwAld5iACEIutxtPl0r7jmeOa1vpLjBA5z9CwPfq=w308-rw"
+                alt="Hình ảnh"
+              />
+              <img
+                className="bottom-image"
+                src="https://lh3.googleusercontent.com/oDN30aM8_2ONdSWg2JhRtDds2Eq9uayf8XQ_f62V5H_iQcJ5KLk1XgWXpYRlOEalt6DXJRWNMeqhhAX-wtASTmoUZaF7nmTx=w308-rw"
+                alt="Hình ảnh"
+              />
+              <img
+                className="bottom-image"
+                src="https://lh3.googleusercontent.com/A8lyRYwK0l77_1lJ0eePDAXPnQlFD2OzxkJzeASnBd5nLydK35I7nUA7GY5JQ7D8TO5ZazDDL6jnHzOPMoob-jcbnk5n2PjF=w308-rw"
+                alt="Hình ảnh"
+              />
+              <img
+                className="bottom-image"
+                src="https://lh3.googleusercontent.com/Szap3Ebx1l76oScrgcATfqDfw1N_XZVazepEa2htAovKkb2Y4Z5gzD9WmdMYM4u_gWLhx1E-CPeoKB2zdS0UoTMrEmJ_Bq8=w308-rw"
                 alt="Hình ảnh"
               />
             </div>
           </div>
         </div>
       </div>
+
+
+      {/* ---------------menu-------------------- */}
+      <nav style={{ color: '#333333', fontFamily: '-apple-system', fontSize: '13px', height: '63px', width: '100%', marginTop: '90px' }}>
+        <ul style={{
+          width: '80%', height: '100%', alignItems: 'center', backgroundColor: '#ae69dd', borderRadius: '5px', boxShadow: '#cccccc 0px 4px 6px 0px', color: '#333333',
+          display: 'flex', fontSize: '13px', justifyContent: 'center', textAlign: 'center', margin: '0 auto'
+        }}>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-mobile-phone" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Điện thoại</span>
+            </a>
+            <div className="sub-container" style={{ position: 'absolute', left: '0', top: "55px", zIndex: "199", paddingTop: '15px', display: 'none', opacity: '0', visibility: 'hidden', transition: 'opacity 200ms,visibility 200ms' }}>
+              abc
+            </div>
+          </li>
+
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-laptop" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Lap Top</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} className="fa-solid fa-icons" ></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Phụ kiện</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-keyboard" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Keyboard</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fas fa-rotate" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Máy cũ</span>
+            </a>
+          </li>
+
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Sửa chữa</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-bolt-lightning" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Ưu đãi</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-newspaper" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Tin tức</span>
+            </a>
+          </li>
+          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
+            <a style={{
+              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
+              justifyContent: 'center', textAlign: 'center',
+            }}>
+              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-headset" aria-hidden="true"></i>
+              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Dịch vụ</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
 
       {/* -------tabsPane---------- */}
       <div
@@ -419,7 +608,7 @@ const Home = () => {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           // borderRadius: "20px",
-          marginTop: "10px",
+          marginTop: "20px",
         }}
       >
         <Tabs
@@ -430,41 +619,32 @@ const Home = () => {
           onChange={handleTabChange}
         >
           <TabPane tab="Tuần lễ giảm giá" key="1">
-            <div
-              className="content"
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                width: "100%",
-                margin: "0 auto",
-                padding: "10px",
-                borderRadius:'0px'
-              }}
-            >
-              {tuanlevang &&
-                tuanlevang.length > 0 &&
-                tuanlevang.map((item, index) => (
-                  <Card
-                    key={item.id}
-                    hoverable
-                    style={{
-                      width: 230,
-                      boxSizing: "border-box",
-                      margin: "0 auto",
-                      marginTop: "10px",
-                      borderRadius:'0px'
-                    }}
-                   
-                  >
-                    <img alt={item.name} src={item.imageUrl} />
-                    <h3>{item.name}</h3>
-                    <p>{item.price}$</p>
-                    <Button
-                      type="primary"
-                      icon={<ShoppingCartOutlined />}
-                    ></Button>
-                  </Card>
+            <div className="scroll-control-phone" ref={containerRef}>
+              {topLaptop &&
+                topLaptop.length > 0 &&
+                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                  <div className="sanpham-card">
+                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        APPLE
+                      </div>
+                    </div>
+                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
+                        {item.name}
+                      </h3>
+                    </div>
+
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {item.price}₫
+                      </div>
+
+                    </div>
+                  </div>
                 ))}
+
             </div>
           </TabPane>
           <TabPane tab="Ưu đãi Lớn" key="2">
@@ -475,6 +655,9 @@ const Home = () => {
           </TabPane>
         </Tabs>
       </div>
+
+
+
 
       {/*-------- Danh mục nổi bật -----------*/}
       <div className='danhmucmobile' style={{
@@ -505,7 +688,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-
+      {/* 
       <div className='danhmucnoibat' style={{
         borderRadius: '20px', width: '80%',
         margin: '0 auto', marginTop: '20px',
@@ -533,6 +716,7 @@ const Home = () => {
           </MDBContainer>
         </div>
       </div >
+      
       <div className='danhmucnoibat' style={{ borderRadius: '20px', width: '80%', margin: '0 auto', marginTop: '20px', backgroundColor: 'white', padding: '10px' }}>
         <div>
           <div style={{ fontWeight: 'bold', fontSize: '20px', display: '-webkit-box' }}>Danh mục LapTop</div>
@@ -544,67 +728,53 @@ const Home = () => {
                 <MDBCol size='md' key={index}>
                   <div className="category-image-container">
                     <img src={danhmuc2.image} alt={danhmuc2.name} className="category-image-mdb" style={{ width: '90px' }} />
-                    {/* <p className="category-name">{danhmuc2.name}</p> */}
+                  
                   </div>
                 </MDBCol>
               ))}
             </MDBRow>
           </MDBContainer>
         </div>
-      </div>
+      </div> */}
 
 
       {/* ------------------box sản phẩm Laptop ------------------ */}
-      <div className='phone-group' >
-        <div>
-          <div className="phone-title">Top 5 Laptop bán chạy  </div>
-        </div>
-        <div className="scroll-group-phone">
+      {topLaptop && topLaptop.length > 0 ? (
+        <div className='phone-group' >
+          <div className="title-group">
+            <div className="phone-title">Top 5 Laptop bán chạy  </div>
+            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+          </div>
+          <div className="scroll-group-phone">
+            <div className="scroll-control-phone" ref={containerRef}>
+              {topLaptop &&
+                topLaptop.length > 0 &&
+                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                  <div className="sanpham-card">
+                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        APPLE
+                      </div>
+                    </div>
+                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
+                        {item.name}
+                      </h3>
+                    </div>
 
-          <div className="scroll-control-phone" ref={containerRef}>
-            {topLaptop &&
-              topLaptop.length > 0 &&
-              topLaptop.map((item, index) => (
-                <Card
-                  key={item.id}
-                  hoverable
-                  className="card-sp"
-                >
-                  <img src={item.avatar} style={{ width: "-webkit-fill-available", objectFit: "cover", }}></img>
-                  <div
-                    style={{
-                      flexGrow: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <a className="name-card">{item.name}</a>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p
-                        style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
-                      >
-                        {item.Price} ₫
-                      </p>
-                      <Button
-                        type="primary"
-                        icon={<ShoppingCartOutlined />}
-                        style={{ marginLeft: "auto" }}
-                        onClick={() => handleAddToCart(item)}
-                      ></Button>
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {item.price}₫
+                      </div>
+
                     </div>
                   </div>
-                </Card>
-              ))}
-          </div>
-          {/* button */}
-          {/* <button
+                ))}
+
+            </div>
+            {/* button */}
+            {/* <button
             className="scroll-button"
             id="scroll-left-button"
             onClick={scrollLeft}
@@ -618,245 +788,201 @@ const Home = () => {
           >
             <CaretRightOutlined />
           </button> */}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* ------------------box sản phẩm Điện thoại ------------------ */}
-      <div className="phone-group">
-        <div>
-          <div className="phone-title">Top 5 Điện Thoại bán chạy</div>
+      {products && products.length > 0 ? (
+        <div className="phone-group">
+          <div className="title-group">
+            <div className="phone-title">Top điện thoại bán chạy  </div>
+            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+          </div>
+          <div className="scroll-group-phone">
+
+            {/* content */}
+            <div className="scroll-control-phone" ref={containerRef}>
+
+              {products &&
+                products.length > 0 &&
+                products.slice(startIndex, endIndex).map((item, index) => (
+                  <div className="sanpham-card">
+                    <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        {item.brand}
+                      </div>
+                    </div>
+                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                        {item.name}
+                      </h3>
+                    </div>
+
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {item.price}₫
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+
+            </div>
+
+            <button
+              className="scroll-button"
+              id="scroll-left-button"
+              onClick={scrollLeft}
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+            <button
+              className="scroll-button"
+              id="scroll-right-button"
+              onClick={scrollRight}
+            >
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+          </div>
         </div>
-        <div className="scroll-group-phone">
-          {/* content */}
-          <div className="scroll-control-phone" ref={containerRef}>
+      ) : null}
+
+      {/* --------------------------------------- */}
+
+
+
+      {/* ------------------box sản phẩm ------------------ */}
+      {products && products.length > 0 ? (
+        <div
+          className="product-container"
+          style={{
+            width: "80%",
+            margin: "0 auto",
+            marginTop: "20px",
+            backgroundSize: "cover",
+            backgroundColor: "#ededed",
+          }}
+        >
+          <div className="title-group">
+            <div className="products-title">Sản phẩm  </div>
+            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+          </div>
+          <div className="scroll-control-product">
+
             {products &&
               products.length > 0 &&
-              products.map((item, index) => (
-                <Card
-                  key={item.id}
-                  hoverable
-                  className="product-card"
-                >
-                  <img src={item.imageUrl} style={{ width: "170px" }}></img>
-                  <h3>{item.name}</h3>
-                  <p>{item.price}$</p>
-                  <Button
-                    onClick={() => handleViewDetailProduct(item)}
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
-                  >
-                    {/* Biểu tượng mua hàng */}
-                  </Button>
-                </Card>
+              products.slice(startIndex, endIndex).map((item, index) => (
+                <div className="sanpham-card">
+                  <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                      {item.brand}
+                    </div>
+                  </div>
+                  <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                      {item.name}
+                    </h3>
+                  </div>
+
+                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                      {item.price}₫
+                    </div>
+
+                  </div>
+                </div>
               ))}
+
           </div>
-          {/* button */}
-          <button
+          {/* Phân trang */}
+          <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
+            <Pagination
+              current={currentPage}
+              total={products.length}
+              pageSize={itemsPerPage}
+              onChange={handlePageChange}
+            />
+          </div>
+        </div>
+      ) : null}
+
+      {/* ------------------Sản phẩm đã xem -----------------------*/}
+      {historysp && historysp.length > 0 ? (
+        <div
+          className="product-container"
+          style={{
+            borderRadius: "5px",
+            position:'relative',
+            width: "80%",
+            margin: "0 auto",
+            marginTop: "20px",          
+            backgroundColor: "white",
+          }}
+        >
+          <div>
+            <div
+              className="product-title"
+              style={{
+                fontWeight: "bold",
+                fontSize: "20px",
+                display: "-webkit-box",
+                padding: "20px",
+                color: "black",
+                borderBottom: '1px solid rgb(228, 229, 240)'
+              }}
+            >
+              Sản phẩm vừa xem
+            </div>
+          </div>
+          <div className="scroll-group-phone">
+            <div className="scroll-control-phone" ref={ctnRef}>
+              {historysp &&
+                historysp.length > 0 &&
+                historysp.slice(startIndex, endIndex).map((item, index) => (
+                  <div className="sanpham-card" style={{border: '1px solid rgb(228, 229, 240)', borderRadius:'5px',}}>
+                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        {item.brand}
+                      </div>
+                    </div>
+                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
+                        {item.name}
+                      </h3>
+                    </div>
+
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {item.price}₫
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+
+            </div>
+            {/* button */}
+            <button
             className="scroll-button"
             id="scroll-left-button"
-            onClick={scrollLeft}
+            onClick={scrollTrai}
           >
-            <LeftOutlined style={{fontSize:'32px'}} />
+            <CaretLeftOutlined />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
-            onClick={scrollRight}
+            onClick={scrollPhai}
           >
-            <RightOutlined style={{fontSize:'32px'}}/>
+            <CaretRightOutlined />
           </button>
-        </div>
-      </div>
-
-      {/* ------------------box sản phẩm ------------------ */}
-      <div
-        className="product-container"
-        style={{
-          borderRadius: "20px",
-          width: "80%",
-          margin: "0 auto",
-          marginTop: "20px",
-          backgroundSize: "cover",
-          backgroundColor: "white",
-        }}
-      >
-        <div>
-          <div
-            className="product-title"
-            style={{
-              fontWeight: "bold",
-              fontSize: "25px",
-              display: "-webkit-box",
-              padding: "20px",
-              color: "black",
-            }}
-          >
-            Sản phẩm
           </div>
         </div>
-        <div
-          className="product-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-            gap: "20px",
-          }}
-        >
-          {products &&
-            products.length > 0 &&
-            products.slice(startIndex, endIndex).map((item, index) => {
-              if (!item.id) {
-                console.error('Product ID is undefined for item at index:', index);
-                return null; // Trả về null để không render gì cả cho sản phẩm này
-              }
-          
-              return (<Card key={item.id} hoverable className="card-sp">
-              <img
-                src={item.thumbnail}
-                style={{
-                  width: "-webkit-fill-available",
-                  height: "170px",
-                  objectFit: "cover",
-                }}
-                alt={item.name}
-                onClick={() => handleViewDetailProduct(item)}
-              />
-              <div
-                style={{
-                  flexGrow: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <p>{item.brand}</p>
-                <a className="name-card">{item.name}</a>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <p
-                    style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
-                  >
-                    {item.price} ₫
-                  </p>
-                  <Button
-                    type="primary"
-                    icon={<ShoppingCartOutlined />}
-                    style={{ marginLeft: "auto" }}
-                    onClick={() => handleAddToCart(item)}
-                  ></Button>
-                </div>
-              </div>
-            </Card>);
-            }
-              
-            )}
-        </div>
-        {/* Phân trang */}
-        <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
-          <Pagination
-            current={currentPage}
-            total={products.length}
-            pageSize={itemsPerPage}
-            onChange={handlePageChange}
-          />
-        </div>
-      </div>
-
-      {/* ------------------Sản phẩm đã xem -----------------------*/}
-      <div
-        className="product-container"
-        style={{
-          borderRadius: "20px",
-          width: "80%",
-          margin: "0 auto",
-          marginTop: "20px",
-          backgroundSize: "cover",
-          backgroundColor: "white",
-        }}
-      >
-        <div>
-          <div
-            className="product-title"
-            style={{
-              fontWeight: "bold",
-              fontSize: "25px",
-              display: "-webkit-box",
-              padding: "20px",
-              color: "black",
-            }}
-          >
-            Sản phẩm đã xem
-          </div>
-        </div>
-        <div
-          className="product-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-            gap: "20px",
-          }}
-        >
-          {historysp &&
-            historysp.length > 0 &&
-            historysp.slice(startIndex, endIndex).map((item, index) => (
-              <Card key={item.id} hoverable className="card-sp">
-                <img
-                  src={item.avatar}
-                  style={{
-                    width: "-webkit-fill-available",
-                    height: "170px",
-                    objectFit: "cover",
-                  }}
-                  alt={item.name}
-                  onClick={() => handleViewDetailproducts(item)}
-                />
-                <div
-                  style={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <a className="name-card">{item.name}</a>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p
-                      style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
-                    >
-                      {item.Price} ₫
-                    </p>
-                    <Button
-                      type="primary"
-                      icon={<ShoppingCartOutlined />}
-                      style={{ marginLeft: "auto" }}
-                      onClick={() => handleAddToCart(item)}
-                    ></Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-        </div>
-        {/* Phân trang */}
-        <div className="pagination-container" sstyle={{ textAlign: "center", marginTop: "10px" }}>
-          <Pagination
-            current={currentPage}
-            total={products.length}
-            pageSize={itemsPerPage}
-            onChange={handlePageChange}
-          />
-        </div>
-      </div>
+      ) : null}
     </Layout>
   );
 };
