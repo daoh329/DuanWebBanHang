@@ -66,7 +66,7 @@ const App = () => {
              <Route path="/tin-tuc" element={<Tintuc />} />
              <Route path="/support" element={<Support />} />
              <Route path="/checkSP" element={<CheckSP />} />
-             <Route path="/profile" element={<Profile />} />       
+                
              <Route path="/sale" element={<Sale />} />
              <Route path="/orderhistory/:phone" element={<OrderHistory />} />
              <Route path='/order/json' element={<QLdonhang />} />
