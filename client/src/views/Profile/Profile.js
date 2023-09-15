@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import {
   MDBTabs,
@@ -8,12 +8,28 @@ import {
   MDBTabsPane,
   MDBRow,
   MDBCol,
+  MDBIcons,
 } from "mdb-react-ui-kit";
-import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  Avatar,
+  Space,
+} from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
-//
+//hỗ trợ icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faClipboardList,
+  faBell,
+} from "@fortawesome/free-solid-svg-icons";
 
 const { Option } = Select;
 
@@ -48,7 +64,10 @@ const tailFormItemLayout = {
   },
 };
 
-export default function Profile() {
+export default function Profile(props) {
+  const { user } = props;
+  console.log(props);
+
   const [form] = Form.useForm();
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
@@ -74,12 +93,40 @@ export default function Profile() {
 
     setVerticalActive(value);
   };
+  const [iconsActive, setIconsActive] = useState("tab1");
+
+  const handleIconsClick = (value: string) => {
+    if (value === iconsActive) {
+      return;
+    }
+    setIconsActive(value);
+  };
 
   return (
     <>
       <MDBRow>
         <MDBCol size="3">
           <MDBTabs className="flex-column text-center">
+            <MDBTabsItem>
+              <MDBTabsLink active={verticalActive === "tab1"}>
+                {user && user.name ? (
+                  <>
+                    <Avatar
+                      src={user.picture}
+                      size="large"
+                      style={{ marginRight: "10px" }}
+                    />
+                    {user.name}
+                  </>
+                ) : (
+                  <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    style={{ backgroundColor: "#ae69dd", margin: "30px" }}
+                  />
+                )}
+              </MDBTabsLink>
+            </MDBTabsItem>
             <MDBTabsItem>
               <MDBTabsLink
                 onClick={() => handleVerticalClick("tab1")}
@@ -93,7 +140,7 @@ export default function Profile() {
                 onClick={() => handleVerticalClick("tab2")}
                 active={verticalActive === "tab2"}
               >
-                Quản lý đơn hàng
+                <FontAwesomeIcon icon={faClipboardList} /> Quản lý đơn hàng
               </MDBTabsLink>
             </MDBTabsItem>
             <MDBTabsItem>
@@ -101,7 +148,7 @@ export default function Profile() {
                 onClick={() => handleVerticalClick("tab3")}
                 active={verticalActive === "tab3"}
               >
-                Thông báo
+                <FontAwesomeIcon icon={faBell} /> Thông báo
               </MDBTabsLink>
             </MDBTabsItem>
           </MDBTabs>
@@ -243,12 +290,50 @@ export default function Profile() {
               {/*  */}
             </MDBTabsPane>
 
-            <MDBTabsPane show={verticalActive === "tab2"}>
-              Profile content
+            <MDBTabsPane className="tab-2" show={verticalActive === "tab2"}>
+              <h6 style={{ display: "flex" }}>Quản lý đơn hàng</h6>
+              <MDBTabs className="mb-3">
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    onClick={() => handleIconsClick("tab1")}
+                    active={iconsActive === "tab1"}
+                  >
+                    Chờ xử lý
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    onClick={() => handleIconsClick("tab2")}
+                    active={iconsActive === "tab2"}
+                  >
+                    Đã xác nhận
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    onClick={() => handleIconsClick("tab3")}
+                    active={iconsActive === "tab3"}
+                  >
+                    Đã hoàn thành
+                  </MDBTabsLink>
+                </MDBTabsItem>
+              </MDBTabs>
+
+              <MDBTabsContent>
+                <MDBTabsPane show={iconsActive === "tab1"}>
+                  Tab 1 content
+                </MDBTabsPane>
+                <MDBTabsPane show={iconsActive === "tab2"}>
+                  Tab 2 content
+                </MDBTabsPane>
+                <MDBTabsPane show={iconsActive === "tab3"}>
+                  Tab 3 content
+                </MDBTabsPane>
+              </MDBTabsContent>
             </MDBTabsPane>
 
             <MDBTabsPane show={verticalActive === "tab3"}>
-              Messages content
+              <h6 style={{ display: "flex" }}>Thông báo dành cho bạn</h6>
             </MDBTabsPane>
           </MDBTabsContent>
         </MDBCol>
