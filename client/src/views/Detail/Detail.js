@@ -14,16 +14,19 @@ import {
   TreeSelect,
 } from "antd";
 // Thư viện mdb
-import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
+import { MDBCarousel, MDBCarouselItem, MDBContainer } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Form, Select } from "antd";
+import { Carousel } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
 //select
+
 function Detail() {
   // ------------------------------------------------------------------------------------------------------------------------main
   //Modal antd
@@ -69,7 +72,7 @@ function Detail() {
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
-//select district
+  //select district
   const handleDistrictChange = (value) => {
     const selectedDistrict = selectedCity.Districts.find(
       (district) => district.Id === value
@@ -125,7 +128,7 @@ function Detail() {
   const [note, setNote] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState('');
-// otp
+  // otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
@@ -141,7 +144,7 @@ function Detail() {
   const handleSendOTP = () => {
     // Set up reCAPTCHA verifier
     const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
-  
+
     // Send OTP to user's phone number
     signInWithPhoneNumber(auth, phone, verifier)
       .then((result) => {
@@ -183,7 +186,7 @@ function Detail() {
       deliveryMethod: deliveryMethod,
       phone: phone,
       note: note,
-      status:'Chưa xác nhận',
+      status: 'Chưa xác nhận',
     };
 
     // In ra giá trị của biến data
@@ -208,6 +211,22 @@ function Detail() {
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
+
+
+  const carouselRef = useRef(null);
+
+  const handlePreviousClick = () => {
+    if (carouselRef.current) {
+      carouselRef.current.prev();
+    }
+  };
+
+  const handleNextClick = () => {
+    if (carouselRef.current) {
+      carouselRef.current.next();
+    }
+  };
+
   return (
     <>
       <div>
@@ -216,51 +235,64 @@ function Detail() {
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
                 <div className="productDetailPreview style-FMPIO">
-                  <div width="100%">
-                    {/*  className="css-j4683g" */}
-                    {/* SLIder */}
-                    <MDBCarousel showControls showIndicators dark fade>
-                      <MDBCarouselItem
-                        className="w-100 d-block"
-                        itemId={1}
-                        src={Detail.avatar}
-                        alt="..."
-                      ></MDBCarouselItem>
-                      <MDBCarouselItem
-                        className="w-100 d-block"
-                        itemId={2}
-                        src="https://lh3.googleusercontent.com/wFaBZbSH4BXYvOzCWFAt3NO1HgblJ1ygVmXTUx1BCmd0qL_xZkkpcA9UEag8i79qneu2r0A9T526sXCbPzeFXkI4DGCtmbV-=rw"
-                        alt="..."
-                      ></MDBCarouselItem>
+                  <div width="100%" height="100%">
+                    <MDBContainer>
+                      {/* <MDBCarousel showControls showIndicators dark fade>
+                        {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
+                          <MDBCarouselItem
+                            key={index}
+                            itemId={index}
+                            src={thumbnail.thumbnail}
+                            alt={`Image ${index + 1}`}
+                          >
+                            <img
+                              className="d-block w-100"
+                              src={thumbnail.thumbnail}
+                              alt={`Image ${index + 1}`}
+                            />
+                          </MDBCarouselItem>
+                        ))}
+                      </MDBCarousel> */}
+                      <div style={{ width: '100%', position: 'relative' }}>
+                        <button className="scroll-btn" id="scroll-left-btn" onClick={handlePreviousClick}>
+                        <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button className="scroll-btn" id="scroll-right-btn" onClick={handleNextClick}>
+                        <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <Carousel autoplay ref={carouselRef}>
+                          {Detail &&
+                            Detail.thumbnails &&
+                            Detail.thumbnails.length > 0 &&
+                            Detail.thumbnails.map((thumbnail, index) => (
+                              <div key={index}>
+                                <img src={thumbnail.thumbnail} alt={`Image ${index + 1}`} />
+                              </div>
+                            ))}
 
-                      <MDBCarouselItem
-                        className="w-100 d-block"
-                        itemId={3}
-                        src="https://lh3.googleusercontent.com/lPsRWb6bFndzZQ9EFw-xVJO2WZUBqmpy5NGq2ueVdOSI89r8TFHSaNI_DcGHMyFK3mCj4cU8RoH7sXtcSLk89Tu0kBqkp6N8=rw"
-                        alt="..."
-                      ></MDBCarouselItem>
-                    </MDBCarousel>
+                        </Carousel>
+
+                      </div>
+
+                    </MDBContainer>
+
                   </div>
                 </div>
-                {/* slider hình nhỏ */}
-                {/* preview hình */}
-                <Image.PreviewGroup
-                  preview={{
-                    onChange: (current, prev) =>
-                      console.log(
-                        `current index: ${current}, prev index: ${prev}`
-                      ),
-                  }}
-                >
-                  <Image width={80} src={Detail.avatar} />
-                  <Image
-                    width={80}
-                    src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"
-                  />
-                </Image.PreviewGroup>
-              </div>
-              <div className="css-1o4pdv8">
-                <div width="100%" color="divider" className="css-1fm9yfq"></div>
+
+                {/* Slider hình nhỏ */}
+                <div className="thumbnail-slider">
+                  {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
+                    <Image.PreviewGroup
+                      key={index}
+                      preview={{
+                        onChange: (current, prev) =>
+                          console.log(`current index: ${current}, prev index: ${prev}`),
+                      }}
+                    >
+                      <Image width={80} src={thumbnail.thumbnail} />
+                    </Image.PreviewGroup>
+                  ))}
+                </div>
               </div>
               {/* hiển thị chi tiết  */}
 
@@ -312,7 +344,7 @@ function Detail() {
                       className="css-cbrxda"
                       href="/asus-brand.asus"
                     >
-                      <span className="css-n67qkj">ASUS</span>
+                      <span className="css-n67qkj"> {Detail.brand}</span>
                     </a>
                     <span className="css-1qgvt7n"></span>
                     SKU: 220300268
@@ -330,7 +362,7 @@ function Detail() {
                   className="att-product-detail-latest-price css-oj899w"
                   color="primary500"
                 >
-                  {Detail.Price}₫
+                  {Detail.price}₫
                 </div>
                 <div className="css-3mjppt">
                   <div
@@ -543,7 +575,7 @@ function Detail() {
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
                     onClick={showModal}
-                    // sự kiện cho modal
+                  // sự kiện cho modal
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
