@@ -58,14 +58,37 @@
   position: relative;
   display: flex;
   align-items: center;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .left-block {
-  position: absolute;
-  margin-left: 20px;
-  transform: translateY(-50%);
-  transition: width 0.3s ease;
+  // position: absolute;
+  // transform: translateY(-50%);
+  // transition: width 0.3s ease;
   /* Hiệu ứng khi hover */
+  position: absolute;
+  left: 0;
+  transform: translateY(-65%);
+  display: flex;
+  flex-direction: column;
+  /* Hiển thị các hình ảnh dọc */
+  align-items: flex-end;
+  /* Căn phải */
+  padding: 20px 0px 20px 0px;
+}
+
+.left-image {
+  max-width: 100%;
+  width: 156px;
+  height: auto;
+  transition: transform 0.3s ease;
+  /* Thêm hiệu ứng chuyển đổi */
+}
+
+.left-image:hover {
+  transform: scale(0.9);
+  /* Khi hover vào, phóng to lên 1.2 lần */
 }
 
 .category-list {
@@ -126,17 +149,18 @@
 .right-block {
   position: absolute;
   right: 0;
-  transform: translateY(-50%);
+  transform: translateY(-65%);
   display: flex;
   flex-direction: column;
   /* Hiển thị các hình ảnh dọc */
   align-items: flex-end;
   /* Căn phải */
-  padding: 20px;
+  padding: 20px 0px 20px 0px;
+  row-gap: 10px;
 }
 
 .right-image {
-  max-width: 90%;
+  max-width: 80%;
   height: auto;
   transition: transform 0.3s ease;
   /* Thêm hiệu ứng chuyển đổi */
@@ -147,6 +171,27 @@
   /* Khi hover vào, phóng to lên 1.2 lần */
 }
 
+.bottom-block {
+  position: absolute;
+  /* right: 0; */
+  transform: translateY(0%);
+  display: flex;
+  padding: 20px 0px 20px 0px;
+  column-gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.bottom-image {
+  max-width: 60%;
+  height: auto;
+  transition: transform 0.3s ease;
+  /* Thêm hiệu ứng chuyển đổi */
+}
+
+.bottom-image:hover {
+  transform: scale(0.9);
+  /* Khi hover vào, phóng to lên 1.2 lần */
+}
 
 // --- tab -----
 .ant-tabs-tab-active {
@@ -191,8 +236,10 @@
   margin-bottom: 8px;
 }
 
+:where(.css-dev-only-do-not-override-17a39f8).ant-carousel .slick-dots-bottom {
+  bottom: 70px;
+}
 
-/* CSS cho màn hình nhỏ hơn hoặc bằng iPhone 12 Pro */
 @media (max-width: 768px) {
   s .banner {
     border-radius: 20px;
@@ -231,6 +278,31 @@
     background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
   }
 
+  .title-group {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.561);
+  }
+  .scroll-control-product {
+    
+    color: #333333;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    column-gap: 12px;
+    row-gap: 12px;
+    line-height: 20px;
+    padding: 2px 0px;
+    height: auto;
+    /* Đảm bảo không bị tràn nội dung */
+  }
+  .products-title{
+    font-weight: bold;
+    font-size: 25px;
+    display: -webkit-box;
+    padding: 10px;
+    color: rgb(71, 66, 66);
+  }
   .phone-title {
     font-weight: bold;
     font-size: 25px;
@@ -239,23 +311,46 @@
     color: white;
   }
 
+  .views-all {
+    margin-left: auto;
+    padding: 10px;
+  }
+
+  .scroll-group-phone {
+    width: 100%;
+    overflow-x: hidden;
+
+  }
+
   .scroll-control-phone {
     display: flex;
     overflow-x: auto;
-    white-space: nowrap;
     width: 100%;
     height: 100%;
     scroll-behavior: smooth;
     margin-top: 10px;
+    column-gap: 5px;
     /* Đảm bảo không bị tràn nội dung */
   }
+  .sanpham-card {
 
+    background-color: #ffffff;
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 10px;
+    height: 362px;
+    margin-top: 0px;
+  }
   .scroll-control-phone::-webkit-scrollbar {
     display: none;
   }
 
   .product-container {
-    width: 100% !important;
+    width: 98% !important;
   }
 
   .card-sp {
@@ -304,6 +399,7 @@
 
 }
 
+// màn hình lớn 
 @media (min-width: 768px) {
   .danhmucmobile {
     display: none;
@@ -320,19 +416,35 @@
     background-image: url(https://lh3.googleusercontent.com/7Ir75Yug6lSI2YU2c2EqwwWpy6bMGX4RgX_MSQInk3aiBZThzQ_BRy-lADiOKFEOUh8eIFOeSjZzWANGmfV7zPyu23nOAcYt=w1232);
   }
 
+  .title-group {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.561);
+  }
   .phone-title {
     font-weight: bold;
     font-size: 25px;
     display: -webkit-box;
     padding: 10px;
     color: white;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.561);
+   
+  }
+  .products-title{
+    font-weight: bold;
+    font-size: 25px;
+    display: -webkit-box;
+    padding: 10px;
+    color: rgb(71, 66, 66);
+  }
+  .views-all {
+    margin-left: auto;
+    padding: 10px;
   }
 
   .scroll-group-phone {
     width: 100%;
     overflow-x: hidden;
-    padding-right: 10px;
+
   }
 
   .scroll-control-phone::-webkit-scrollbar {
@@ -343,10 +455,24 @@
     display: flex;
     overflow-x: scroll;
     margin: 10px;
-    white-space: nowrap;
-    width: 100%;
     height: 100%;
     scroll-behavior: smooth;
+    column-gap: 5px;
+    /* Đảm bảo không bị tràn nội dung */
+  }
+
+  
+  .scroll-control-product {
+    
+    color: #333333;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    gap: nowrnal 2px;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 2px 0px;
+    height: auto;
     /* Đảm bảo không bị tràn nội dung */
   }
 
@@ -390,5 +516,65 @@
     border-radius: 0px;
     padding: 5px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+
+  .sanpham {
+    color: #333333;
+    flex-basis: 83.33%;
+    font-size: 14px;
+    line-height: 20px;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 10px
+  }
+
+  .teko-row-start {
+
+    align-items: baseline;
+    background-color: #ffffff;
+    border-radius: 8px;
+    color: #333333;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    justify-content: flex-start;
+    line-height: 20px;
+    margin: 0px, 0px 4px;
+    padding: 12px 16px;
+    width: 100%
+  }
+
+  .sanpham-group {
+
+    background-color: #f6f6f6;
+    color: #333333;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    gap: nowrnal 2px;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 2px 0px;
+    height: auto;
+
+
+  }
+
+  .sanpham-card {
+
+    background-color: #ffffff;
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    justify-content: space-between;
+    line-height: 20px;
+    padding: 16px;
+    height: 362px;
+    margin-top: 5px;
+  }
+
+  .fa-mobile-phone:hover .sub-container {
+    display: block;
   }
 }
