@@ -28,14 +28,14 @@ export default function Buy() {
     <div className="teko-row css-q0e31u snipcss0-2-2-3 style-4Trly"
       id="style-4Trly">
         {/* main4 */}
-      <div  className="teko-col teko-col-8 css-gr7r8o snipcss0-3-3-4 style-yXGc7"
+      <div  className="teko-col teko-col-8 css-gr7r8o2 snipcss0-3-3-4 style-yXGc7"
         id="style-yXGc7">
           {/*  */}
           <div className="teko-card css-svl62k snipcss0-4-4-5">
           <div className="teko-card-body css-0 snipcss0-5-5-6">
-          <MDBTabs fill className='mb-3'>
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleFillClick('tab1')} active={fillActive === 'tab1'}>
+          <MDBTabs fill className='mb-3-buy'>
+        <MDBTabsItem  className='nav-tabs-buy'>
+          <MDBTabsLink className='nav-link-buy' onClick={() => handleFillClick('tab1')} active={fillActive === 'tab1'}>
             Nhận hàng tại nhà
           </MDBTabsLink>
         </MDBTabsItem>
@@ -47,7 +47,117 @@ export default function Buy() {
       </MDBTabs>
 
       <MDBTabsContent>
-        <MDBTabsPane show={fillActive === 'tab1'}>Tab 1 content</MDBTabsPane>
+        <MDBTabsPane show={fillActive === 'tab1'}>
+        <div
+  className="teko-row teko-row-start css-1v9diph snipcss-f7MJM style-Aergz"
+  id="style-Aergz"
+>
+  <div className="teko-col teko-col-6 css-gr7r8o style-bjeqp" id="style-bjeqp">
+    <div
+      data-content-region-name="shippingAddress"
+      data-track-content="true"
+      data-content-name="homeDelivery"
+      data-content-index={0}
+      data-content-target={79}
+      className="css-1014eaz style-tofZn"
+      id="style-tofZn"
+    >
+      <div>
+        <span id="style-owhaV" className="style-owhaV">
+          Nguyễn Đình minh
+        </span>
+        <div
+          data-content-region-name="shippingAddress"
+          data-track-content="true"
+          data-content-name="editAddress"
+          className="css-7kp13n"
+        >
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            size={20}
+            className="css-1e44j4b"
+            color="#848788"
+            height={20}
+            width={20}
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z"
+              fill="#82869E"
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div>0349551307</div>
+      <div id="style-GqGe8" className="style-GqGe8">
+        10, Phường 01, Quận 10, Thành phố Hồ Chí Minh
+      </div>
+      <div className="css-18wywdr"></div>
+      <span className="css-mpv07g">
+        <svg
+          fill="none"
+          viewBox="0 0 24 24"
+          size={20}
+          className="css-1kpmq"
+          color="#ffffff"
+          height={20}
+          width={20}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 12.4545L9.375 17L19 7"
+            stroke="#82869E"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></path>
+        </svg>
+      </span>
+    </div>
+  </div>
+  <div
+    data-content-region-name="addressShipping"
+    data-track-content="true"
+    data-content-name="addNewAddress"
+    className="teko-col teko-col-6 css-gr7r8o style-Jlvl6"
+    id="style-Jlvl6"
+  >
+    <button
+      height="100%"
+      className="css-162xo41 style-kRCXj"
+      type="button"
+      id="style-kRCXj"
+    >
+      <svg
+        fill="none"
+        viewBox="0 0 24 24"
+        size={25}
+        className="css-1e44j4b"
+        color="#848788"
+        height={25}
+        width={25}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+          fill="#82869E"
+        ></path>
+      </svg>
+      Thêm địa chỉ
+      <span id="style-EqcsP" className="style-EqcsP">
+        <div className="css-157jl91"></div>
+      </span>
+    </button>
+  </div>
+</div>
+
+
+        </MDBTabsPane>
         <MDBTabsPane show={fillActive === 'tab2'}>Tab 2 content</MDBTabsPane>
       </MDBTabsContent>
           </div>
@@ -97,7 +207,7 @@ export default function Buy() {
               id="style-RRpB6"
             >
               <div
-                className="teko-col teko-col-6 css-gr7r8o snipcss0-7-63-64 style-CCmWU"
+                className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-64 style-CCmWU"
                 id="style-CCmWU"
               >
                 <div
@@ -160,7 +270,7 @@ export default function Buy() {
                 </div>
               </div>
               <div
-                className="teko-col teko-col-6 css-gr7r8o snipcss0-7-63-75 style-keAdr"
+                className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                 id="style-keAdr"
               >
                 <div
@@ -190,7 +300,7 @@ export default function Buy() {
                 </div>
               </div>
               <div
-                className="teko-col teko-col-6 css-gr7r8o snipcss0-7-63-81 style-poooX"
+                className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
                 id="style-poooX"
               >
                 <div
@@ -290,7 +400,7 @@ export default function Buy() {
         </div>
       </div>
       <div
-        className="teko-col teko-col-4 css-gr7r8o tether-target-attached-top snipcss0-3-3-99 tether-element-attached-top tether-element-attached-center tether-target-attached-center style-FJLy3"
+        className="teko-col teko-col-4 css-gr7r8o2 tether-target-attached-top snipcss0-3-3-99 tether-element-attached-top tether-element-attached-center tether-target-attached-center style-FJLy3"
         id="style-FJLy3"
       >
         <div className="css-14xqo9c snipcss0-0-0-1 tether-target-attached-top snipcss0-4-99-100 tether-element-attached-top tether-element-attached-center tether-target-attached-center">
@@ -496,8 +606,8 @@ export default function Buy() {
         </div>
         <div className="snipcss0-4-99-155">
           <div className="css-1pnc6ez snipcss0-5-155-156">
-            <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x snipcss0-6-156-157">
-              <div className="teko-col css-gr7r8o snipcss0-7-157-158">
+            <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-156-157">
+              <div className="teko-col css-gr7r8o2 snipcss0-7-157-158">
                 <label className="check-box css-1arb6mh snipcss0-8-158-159">
                   <div className="css-l24w9c snipcss0-9-159-160">
                     <input
@@ -539,7 +649,7 @@ export default function Buy() {
                   </div>
                 </label>
               </div>
-              <div className="teko-col css-gr7r8o snipcss0-7-157-166">
+              <div className="teko-col css-gr7r8o2 snipcss0-7-157-166">
                 <div
                   type="subtitle"
                   color="primary600"
@@ -553,8 +663,8 @@ export default function Buy() {
         </div>
         <div className="snipcss0-4-99-168 style-orm2K" id="style-orm2K">
           <div className="css-1pnc6ez snipcss0-5-168-169">
-            <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x snipcss0-6-169-170">
-              <div className="teko-col css-gr7r8o snipcss0-7-170-171">
+            <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-169-170">
+              <div className="teko-col css-gr7r8o2 snipcss0-7-170-171">
                 <label className="check-box css-1arb6mh snipcss0-8-171-172">
                   <div className="css-l24w9c snipcss0-9-172-173">
                     <input
@@ -596,7 +706,7 @@ export default function Buy() {
                   </div>
                 </label>
               </div>
-              <div className="teko-col css-gr7r8o snipcss0-7-170-179">
+              <div className="teko-col css-gr7r8o2 snipcss0-7-170-179">
                 <div
                   type="subtitle"
                   color="primary600"
