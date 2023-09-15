@@ -125,7 +125,7 @@ const tuanlevang = [
 ];
 
 const Home = () => {
-  const [ListUsers, setListUsers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
   const navigate = useNavigate();
 
@@ -139,15 +139,20 @@ const Home = () => {
       .catch((error) => console.log(error));
   }, []);
 
-  const handleViewDetailuser = (user) => {
+  const handleViewDetailProduct = (products) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+  if (!products.id) {
+    console.error('Product ID is undefined!');
+    return;
+  }
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
     const historyproduct = {
-      name: user.name,
-      Price: user.Price,
-      avatar: user.avatar,
-      id: user.id,
+      name: products.name,
+      Price: products.price,
+      avatar: products.thumbnail,
+      id: products.id,
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
@@ -161,13 +166,13 @@ const Home = () => {
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
 
-    console.log("click oke");
-    navigate(`/detail/${user.id}`);
+    console.log('click')
+    navigate(`/detail/${products.id}`);
   };
 
-  const handleViewDetailproducts = (user) => {
+  const handleViewDetailproducts = (products) => {
     console.log("click oke");
-    navigate(`/detail/${user.id}`);
+    navigate(`/detail/${products.id}`);
   };
 
   const [historysp, sethistorysp] = useState([]);
@@ -180,18 +185,14 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        let res = await axios.get(
-          "https://64df1e7171c3335b25821aef.mockapi.io/users"
-        );
-        console.log("API Response:", res.data);
-        setListUsers(res && res.data && res.data ? res.data : []);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-    fetchData();
+    axios.get(`${process.env.REACT_APP_API_URL}/product/products`)
+      .then(response => {
+        setProducts(response.data);
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   }, []);
 
   // them giỏ hàng
@@ -331,7 +332,7 @@ const Home = () => {
   const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
 
   // Tính tổng số trang dựa trên số lượng sản phẩm và số sản phẩm trên mỗi trang
-  const totalPages = Math.ceil(ListUsers.length / itemsPerPage);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
 
   // State để lưu trang hiện tại
   const [currentPage, setCurrentPage] = useState(1);
@@ -641,7 +642,7 @@ const Home = () => {
                   <h3>{item.name}</h3>
                   <p>{item.price}$</p>
                   <Button
-                    onClick={() => handleViewDetailuser(item)}
+                    onClick={() => handleViewDetailProduct(item)}
                     type="primary"
                     icon={<ShoppingCartOutlined />}
                   >
@@ -702,57 +703,65 @@ const Home = () => {
             gap: "20px",
           }}
         >
-          {ListUsers &&
-            ListUsers.length > 0 &&
-            ListUsers.slice(startIndex, endIndex).map((item, index) => (
-              <Card key={item.id} hoverable className="card-sp">
-                <img
-                  src={item.avatar}
-                  style={{
-                    width: "-webkit-fill-available",
-                    height: "170px",
-                    objectFit: "cover",
-                  }}
-                  alt={item.name}
-                  onClick={() => handleViewDetailuser(item)}
-                />
+          {products &&
+            products.length > 0 &&
+            products.slice(startIndex, endIndex).map((item, index) => {
+              if (!item.id) {
+                console.error('Product ID is undefined for item at index:', index);
+                return null; // Trả về null để không render gì cả cho sản phẩm này
+              }
+          
+              return (<Card key={item.id} hoverable className="card-sp">
+              <img
+                src={item.thumbnail}
+                style={{
+                  width: "-webkit-fill-available",
+                  height: "170px",
+                  objectFit: "cover",
+                }}
+                alt={item.name}
+                onClick={() => handleViewDetailProduct(item)}
+              />
+              <div
+                style={{
+                  flexGrow: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <p>{item.brand}</p>
+                <a className="name-card">{item.name}</a>
                 <div
                   style={{
-                    flexGrow: 1,
                     display: "flex",
-                    flexDirection: "column",
                     justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <a className="name-card">{item.name}</a>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
+                  <p
+                    style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
                   >
-                    <p
-                      style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}
-                    >
-                      {item.Price} ₫
-                    </p>
-                    <Button
-                      type="primary"
-                      icon={<ShoppingCartOutlined />}
-                      style={{ marginLeft: "auto" }}
-                      onClick={() => handleAddToCart(item)}
-                    ></Button>
-                  </div>
+                    {item.price} ₫
+                  </p>
+                  <Button
+                    type="primary"
+                    icon={<ShoppingCartOutlined />}
+                    style={{ marginLeft: "auto" }}
+                    onClick={() => handleAddToCart(item)}
+                  ></Button>
                 </div>
-              </Card>
-            ))}
+              </div>
+            </Card>);
+            }
+              
+            )}
         </div>
         {/* Phân trang */}
         <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
           <Pagination
             current={currentPage}
-            total={ListUsers.length}
+            total={products.length}
             pageSize={itemsPerPage}
             onChange={handlePageChange}
           />
@@ -843,7 +852,7 @@ const Home = () => {
         <div className="pagination-container" sstyle={{ textAlign: "center", marginTop: "10px" }}>
           <Pagination
             current={currentPage}
-            total={ListUsers.length}
+            total={products.length}
             pageSize={itemsPerPage}
             onChange={handlePageChange}
           />

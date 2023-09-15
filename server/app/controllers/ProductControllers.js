@@ -154,5 +154,89 @@ class Product {
     });
   }
 
+  async QueryProducts(req, res) {
+    const query = `
+      SELECT product.id, product.name, product.price, productDetails.brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+        SELECT id, thumbnail, product_id
+        FROM (
+          SELECT id, thumbnail, product_id,
+                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+          FROM galery
+        ) tmp
+        WHERE rn = 1
+      ) galery ON product.id = galery.product_id;
+    `;
+
+  mysql.query(query, (error, results) => {
+    if (error) {
+      return res.json({ error });
+    }
+
+    res.json(results);
+  });
+  }
+
+  async DetailProducts(req, res) {
+    const { id } = req.params;
+
+    // Truy vấn để lấy thông tin chi tiết sản phẩm
+    const productQuery = `
+    SELECT p.*, c.name as category_name, pd.*, b.name as brand_name
+    FROM product p 
+    JOIN category c ON p.CategoryID = c.id
+    JOIN productDetails pd ON p.id = pd.product_id
+    JOIN brand b ON pd.brand = b.name
+    WHERE p.id = ?;
+    `;
+
+    // Thực hiện truy vấn
+    mysql.query(productQuery, [id], (error, productResults) => {
+    if (error) {
+      return res.json({ error });
+    }
+
+    // Truy vấn để lấy thông tin màu sắc
+    const colorQuery = `
+      SELECT id, Colorname
+      FROM ProdetailColor
+      WHERE ProductDetailId = ?
+      ORDER BY id ASC;
+    `;
+
+    // Truy vấn để lấy hình ảnh
+    const imageQuery = `
+      SELECT id, thumbnail
+      FROM galery
+      WHERE product_id = ?
+      ORDER BY id ASC;
+    `;
+
+    // Thực hiện truy vấn màu sắc và hình ảnh
+    mysql.query(colorQuery, [id], (error, colorResults) => {
+      if (error) {
+        return res.json({ error });
+      }
+
+      mysql.query(imageQuery, [id], (error, imageResults) => {
+        if (error) {
+          return res.json({ error });
+        }
+
+        // Kết hợp kết quả và gửi lại cho client
+        const results = {
+          ...productResults[0],
+          Colorname: colorResults.map(result => ({ id: result.id, Colorname: result.Colorname })),
+          thumbnails: imageResults.map(result => ({ id: result.id, thumbnail: result.thumbnail }))
+        };
+        
+        res.json(results);
+      });
+    });
+    });
+  }
+
 }
 module.exports = new Product;

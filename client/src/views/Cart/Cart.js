@@ -41,8 +41,8 @@ function Cart() {
             width: 50,
         },
         { title: 'Sản Phẩm', dataIndex: 'name', key: 'name' },
-        { title: 'Đơn giá', dataIndex: 'Price', key: 'Price' },
-        { title: 'Thành tiền', dataIndex: 'Price', key: 'Price' },
+        { title: 'Đơn giá', dataIndex: 'price', key: 'price' },
+        { title: 'Thành tiền', dataIndex: 'price', key: 'price' },
     ];
 
     const handleCheckboxChange = (selected) => {
