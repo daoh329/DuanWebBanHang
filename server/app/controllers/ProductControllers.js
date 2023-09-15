@@ -1,9 +1,13 @@
 const mysql = require("../../config/db/mySQL");
 const createTables = require("../../config/CrTables");
 
+
 class Product {
+  
   async Addproduct(req, res) {
-    const data = req.body
+    const data = req.body;
+    // console.log(data);
+    // console.log(req.files);
     const SELECTcategory = `SELECT * FROM banhangdientu.category where name = ?`
     mysql.query(SELECTcategory, data.category, (er, result) => {
       if (er) {
@@ -65,13 +69,6 @@ class Product {
     })
   }
 
-
-
-  // const newProductId = productInsertResult.insertId;
-
-
-
-
   async json(req, res) {
     // API: /product/json
     const query = `SELECT * FROM product`
@@ -86,6 +83,7 @@ class Product {
       res.send(jsonResult);
     });
   }
+
   Delete(req, res) {
     const id = req.params.id;
     if (!id) {

@@ -2,9 +2,8 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from "antd";
-import { LeftOutlined, RightOutlined, CaretLeftOutlined, CaretRightOutlined, } from "@ant-design/icons";
-import { ShoppingCartOutlined, LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
+import { Layout, Carousel, Tabs, Card, Button, Pagination } from "antd";
+import { LeftOutlined, RightOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";

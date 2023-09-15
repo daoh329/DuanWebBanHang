@@ -1,9 +1,21 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import "./style.css";
 import { useFormik } from "formik";
-import * as Yub from "yup";
+import * as Yup from "yup";
+import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { PlusOutlined } from "@ant-design/icons";
+import PreviewImage from "./PreviewImage";
+
+// firebase
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { storage } from "../../../../../firebaseConfig";
 
 function NewProduct() {
   const formik = useFormik({
@@ -18,7 +30,7 @@ function NewProduct() {
       demand: "",
       category: "laptop",
       quantity: 1,
-      images: "",
+      images: [],
       status: false,
       cpu: "",
       screen: "",
@@ -36,48 +48,145 @@ function NewProduct() {
       mass: "",
       description: "",
     },
-    validationSchema: Yub.object({
-      brand: Yub.string().required("Vui lòng chọn thương hiệu của sản phẩm."),
-      guarantee: Yub.string().required("Vui lòng nhập trường này."),
-      price: Yub.number().required("Vui lòng nhập giá sản phẩm"),
-      shortDescription: Yub.string().required("Vui lòng nhập trường này."),
-      series_laptop: Yub.string().required("Vui lòng nhập trường này."),
-      part_number: Yub.string().required("Vui lòng nhập trường này."),
-      color: Yub.string().required("Vui lòng nhập trường này."),
-      demand: Yub.string().required("Vui lòng nhập trường này."),
-      category: Yub.string().required("Vui lòng nhập trường này."),
-      quantity: Yub.string().required("Vui lòng nhập trường này."),
-      cpu: Yub.string().required("Vui lòng nhập trường này."),
-      screen: Yub.string().required("Vui lòng nhập trường này."),
-      ram: Yub.string().required("Vui lòng nhập trường này."),
-      vga: Yub.string().required("Vui lòng nhập trường này."),
-      rom: Yub.string().required("Vui lòng nhập trường này."),
-      maximum_number_of_storage_ports: Yub.string().required(
-        "Vui lòng nhập trường này."
+    validationSchema: Yup.object().shape({
+      brand: Yup.string().required("Vui lòng chọn thương hiệu của sản phẩm."),
+      // guarantee: Yup.string().required("Vui lòng nhập trường này."),
+      price: Yup.number().required("Vui lòng nhập giá sản phẩm"),
+      shortDescription: Yup.string().required("Vui lòng nhập trường này."),
+      // series_laptop: Yup.string().required("Vui lòng nhập trường này."),
+      // part_number: Yup.string().required("Vui lòng nhập trường này."),
+      // color: Yup.string().required("Vui lòng nhập trường này."),
+      // demand: Yup.string().required("Vui lòng nhập trường này."),
+      // category: Yup.string().required("Vui lòng nhập trường này."),
+      quantity: Yup.string().required("Vui lòng nhập trường này."),
+      images: Yup.array().of(
+        Yup.mixed()
+          .test(
+            "FILE_TYPE",
+            "Hình ảnh không đúng định dạng",
+            (value) =>
+              value &&
+              ["image/png", "image/jpeg", "image/jpg"].includes(value.type)
+          )
+          .test(
+            "FILE_SIZE",
+            "Tệp hình ảnh quá lớn!",
+            (value) => value && value.size < 2 * 1024 * 1024
+          )
       ),
-      M2_slot_type_supported: Yub.string().required(
-        "Vui lòng nhập trường này."
-      ),
-      output_port: Yub.string().required("Vui lòng nhập trường này."),
-      connector: Yub.string().required("Vui lòng nhập trường này."),
-      wireless_connectivity: Yub.string().required("Vui lòng nhập trường này."),
-      keyboard: Yub.string().required("Vui lòng nhập trường này."),
-      os: Yub.string().required("Vui lòng nhập trường này."),
-      pin: Yub.string().required("Vui lòng nhập trường này."),
-      mass: Yub.string().required("Vui lòng nhập trường này."),
-      description: Yub.string().required("Vui lòng nhập trường này."),
+      // cpu: Yup.string().required("Vui lòng nhập trường này."),
+      // screen: Yup.string().required("Vui lòng nhập trường này."),
+      // ram: Yup.string().required("Vui lòng nhập trường này."),
+      // vga: Yup.string().required("Vui lòng nhập trường này."),
+      // rom: Yup.string().required("Vui lòng nhập trường này."),
+      // maximum_number_of_storage_ports: Yup.string().required(
+      //   "Vui lòng nhập trường này."
+      // ),
+      // M2_slot_type_supported: Yup.string().required(
+      //   "Vui lòng nhập trường này."
+      // ),
+      // output_port: Yup.string().required("Vui lòng nhập trường này."),
+      // connector: Yup.string().required("Vui lòng nhập trường này."),
+      // wireless_connectivity: Yup.string().required("Vui lòng nhập trường này."),
+      // keyboard: Yup.string().required("Vui lòng nhập trường này."),
+      // os: Yup.string().required("Vui lòng nhập trường này."),
+      // pin: Yup.string().required("Vui lòng nhập trường này."),
+      // mass: Yup.string().required("Vui lòng nhập trường này."),
+      // description: Yup.string().required("Vui lòng nhập trường này."),
     }),
-    onSubmit: (values) => {
-      // console.log(values);
+    onSubmit: async (values) => {
+      const url = `${process.env.REACT_APP_API_URL}/product/Add`;
+      const formData = new FormData();
+
+      // Lặp qua các trường dữ liệu và thêm chúng vào formData
+      for (const fieldName in values) {
+        if (Object.prototype.hasOwnProperty.call(values, fieldName)) {
+          const fieldValue = values[fieldName];
+
+          // Kiểm tra nếu trường là một mảng ảnh (điều này phụ thuộc vào cách bạn tổ chức biểu mẫu của mình)
+          if (Array.isArray(fieldValue)) {
+            fieldValue.forEach((image) => {
+              formData.append(fieldName, image);
+            });
+          } else {
+            formData.append(fieldName, fieldValue);
+          }
+        }
+      }
+
+      // call API
+      await axios
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          // alert('Tạo sản phẩm thành công.')
+        })
+        .catch((e) => {
+          console.log(e);
+          alert("Tạo sản phẩm thất bại.");
+        });
     },
   });
-  console.log(formik.errors);
+  // console.log(formik.values);
+
+  // firebase
+  const [image, setImage] = useState(null);
+  const [url, setDownloadURL] = useState("");
+  const [progress, setUploadProgress] = useState(0);
+
+  const handleUpload = () => {
+    if (!image) return;
+
+    const imageRef = ref(storage, `image/${image.name}`);
+
+    const uploadTask = uploadBytesResumable(imageRef, image);
+    // Theo dõi tiến trình tải lên
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress(progress);
+      },
+      (error) => {
+        console.error("Error uploading file:", error);
+      },
+      () => {
+        // Tải lên hoàn thành
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setDownloadURL(downloadURL);
+        });
+      }
+    );
+  };
+
   return (
     <div className="container-content">
-      <form className="form" id="form-create-laptop" action="#" method="">
+      {/* Input để chọn hình ảnh */}
+      <input
+        type="file"
+        onChange={(e) => {
+          setImage(e.currentTarget.files[0]);
+        }}
+      />
+      {/* Nút để tải lên */}
+      <button onClick={handleUpload}>Upload</button>
+      {/* Hiển thị tiến trình tải lên */}
+      <h2>Uploading: {progress}%</h2>
+      {/* Hiển thị hình ảnh đã tải lên */}
+      {url && <img src={url} alt="Uploaded" />}
+      <form
+        className="form"
+        id="form-create-laptop"
+        onSubmit={formik.handleSubmit}
+      >
         <div className="page-group">
           <div className="page1-control">
-            <h3>Thông tin sản phẩm</h3>
+            <h3 style={{ fontWeight: "bold" }}>Thông tin sản phẩm</h3>
             {/* brand */}
             <div className="form-group">
               <label className="form-label">Thương hiệu</label>
@@ -93,7 +202,9 @@ function NewProduct() {
                 <option value="macbook">Macbook</option>
                 <option value="asus">Asus</option>
               </select>
-              <span className="form-message"></span>
+              {formik.errors.brand && (
+                <span className="form-message">{formik.errors.brand}</span>
+              )}
             </div>
             {/* Bảo hành */}
             <div className="form-group">
@@ -106,7 +217,9 @@ function NewProduct() {
                 value={formik.values.guarantee}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.guarantee && (
+                <span className="form-message">{formik.errors.guarantee}</span>
+              )}
             </div>
             {/* price */}
             <div className="form-group">
@@ -116,12 +229,13 @@ function NewProduct() {
                 id="price"
                 type="number"
                 min={0}
-                defaultValue={0}
                 className="form-control"
                 value={formik.values.price}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.price && (
+                <span className="form-message">{formik.errors.price}</span>
+              )}
             </div>
             {/* short description */}
             <div className="form-group">
@@ -129,12 +243,16 @@ function NewProduct() {
               <textarea
                 name="shortDescription"
                 id="shortDescription"
-                style={{height:'80px'}}
+                style={{ height: "80px" }}
                 className="form-control"
                 value={formik.values.shortDescription}
                 onChange={formik.handleChange}
               ></textarea>
-              <span className="form-message"></span>
+              {formik.errors.shortDescription && (
+                <span className="form-message">
+                  {formik.errors.shortDescription}
+                </span>
+              )}
             </div>
             {/* Series laptop */}
             <div className="form-group">
@@ -147,7 +265,11 @@ function NewProduct() {
                 value={formik.values.series_laptop}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.series_laptop && (
+                <span className="form-message">
+                  {formik.errors.series_laptop}
+                </span>
+              )}
             </div>
             {/* Part-number */}
             <div className="form-group">
@@ -160,7 +282,11 @@ function NewProduct() {
                 value={formik.values.part_number}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.part_number && (
+                <span className="form-message">
+                  {formik.errors.part_number}
+                </span>
+              )}
             </div>
             {/* Màu sắc */}
             <div className="form-group">
@@ -173,7 +299,9 @@ function NewProduct() {
                 value={formik.values.color}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.color && (
+                <span className="form-message">{formik.errors.color}</span>
+              )}
             </div>
             {/* Nhu cầu */}
             <div className="form-group">
@@ -186,7 +314,9 @@ function NewProduct() {
                 value={formik.values.demand}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.demand && (
+                <span className="form-message">{formik.errors.demand}</span>
+              )}
             </div>
             {/* type */}
             <div className="form-group">
@@ -197,9 +327,11 @@ function NewProduct() {
                 value="laptop"
                 className="form-control"
                 onChange={formik.handleChange}
-                readonly
+                readOnly
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.category && (
+                <span className="form-message">{formik.errors.category}</span>
+              )}
             </div>
             {/* quantity */}
             <div className="form-group">
@@ -209,26 +341,240 @@ function NewProduct() {
                 id="quantity"
                 type="number"
                 min={1}
-                defaultValue={1}
                 className="form-control"
                 value={formik.values.quantity}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.quantity && (
+                <span className="form-message">{formik.errors.quantity}</span>
+              )}
             </div>
             {/* image */}
             <div className="form-group">
               <label className="form-label">Hình ảnh</label>
-              <input
-                name="images"
-                id="images"
-                type="file"
-                className="form-control"
-                value={formik.values.images}
-                onChange={formik.handleChange}
-                multiple
-              ></input>
-              <span className="form-message"></span>
+              {/* col-image-1 */}
+              <div style={{ display: "flex" }}>
+                {/* image 1 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      if (
+                        !["image/png", "image/jpeg", "image/jpg"].includes(
+                          event.currentTarget.files[0].type
+                        )
+                      ) {
+                        alert("Vui lòng chọn đúng định dạng ảnh!");
+                      } else if (
+                        event.currentTarget.files[0].size >
+                        5 * 1024 * 1024
+                      ) {
+                        alert("Ảnh quá lớn!");
+                      } else {
+                        formik.setFieldValue("images", [
+                          ...formik.values.images,
+                          event.currentTarget.files[0],
+                        ]);
+                      }
+                    }}
+                  />
+                  {formik.values.images[0] && (
+                    <PreviewImage file={formik.values.images[0]} />
+                  )}
+                </div>
+                {/* image 2 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                      return;
+                    }}
+                  />
+                  {formik.values.images[1] && (
+                    <PreviewImage file={formik.values.images[1]} />
+                  )}
+                </div>
+                {/* image 3 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[2] && (
+                    <PreviewImage file={formik.values.images[2]} />
+                  )}
+                </div>
+                {/* image 4 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[3] && (
+                    <PreviewImage file={formik.values.images[3]} />
+                  )}
+                </div>
+                {/* image 5 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[4] && (
+                    <PreviewImage file={formik.values.images[4]} />
+                  )}
+                </div>
+              </div>
+              {/* col-image-2 */}
+              <div style={{ display: "flex" }}>
+                {/* image 1 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[5] && (
+                    <PreviewImage file={formik.values.images[5]} />
+                  )}
+                </div>
+                {/* image 2 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[6] && (
+                    <PreviewImage file={formik.values.images[6]} />
+                  )}
+                </div>
+                {/* image 3 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[7] && (
+                    <PreviewImage file={formik.values.images[7]} />
+                  )}
+                </div>
+                {/* image 4 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[8] && (
+                    <PreviewImage file={formik.values.images[8]} />
+                  )}
+                </div>
+                {/* image 5 */}
+                <div className="div-image-control">
+                  <PlusOutlined className="icon-control" />
+                  <input
+                    name="images"
+                    id="images"
+                    type="file"
+                    className="form-control image-control"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.currentTarget.files[0],
+                      ]);
+                    }}
+                  />
+                  {formik.values.images[9] && (
+                    <PreviewImage file={formik.values.images[9]} />
+                  )}
+                </div>
+              </div>
+              {formik.errors.images && (
+                <span className="form-message">{formik.errors.images}</span>
+              )}
             </div>
             {/* status */}
             <div className="form-group">
@@ -240,12 +586,14 @@ function NewProduct() {
                 value={formik.values.status}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.status && (
+                <span className="form-message">{formik.errors.status}</span>
+              )}
             </div>
           </div>
           {/* Cấu hình chi tiết */}
           <div className="page2-control">
-            <h3>Cấu hình chi tiết</h3>
+            <h3 style={{ fontWeight: "bold" }}>Cấu hình chi tiết</h3>
             {/* CPU */}
             <div className="form-group">
               <label className="form-label">CPU</label>
@@ -257,7 +605,9 @@ function NewProduct() {
                 value={formik.values.cpu}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.cpu && (
+                <span className="form-message">{formik.errors.cpu}</span>
+              )}
             </div>
             {/* screen */}
             <div className="form-group">
@@ -270,7 +620,9 @@ function NewProduct() {
                 value={formik.values.screen}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.screen && (
+                <span className="form-message">{formik.errors.screen}</span>
+              )}
             </div>
             {/* ram */}
             <div className="form-group">
@@ -283,7 +635,9 @@ function NewProduct() {
                 value={formik.values.ram}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.ram && (
+                <span className="form-message">{formik.errors.ram}</span>
+              )}
             </div>
             {/* vga */}
             <div className="form-group">
@@ -296,7 +650,9 @@ function NewProduct() {
                 value={formik.values.vga}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.vga && (
+                <span className="form-message">{formik.errors.vga}</span>
+              )}
             </div>
             {/* rom */}
             <div className="form-group">
@@ -309,7 +665,9 @@ function NewProduct() {
                 value={formik.values.rom}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.rom && (
+                <span className="form-message">{formik.errors.rom}</span>
+              )}
             </div>
             {/* cổng lưu trữ tối đa */}
             <div className="form-group">
@@ -322,7 +680,11 @@ function NewProduct() {
                 value={formik.values.maximum_number_of_storage_ports}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.maximum_number_of_storage_ports && (
+                <span className="form-message">
+                  {formik.errors.maximum_number_of_storage_ports}
+                </span>
+              )}
             </div>
             {/* Kiểu khe M.2 hỗ trợ */}
             <div className="form-group">
@@ -335,7 +697,11 @@ function NewProduct() {
                 value={formik.values.M2_slot_type_supported}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.M2_slot_type_supported && (
+                <span className="form-message">
+                  {formik.errors.M2_slot_type_supported}
+                </span>
+              )}
             </div>
             {/* Cổng xuất hình */}
             <div className="form-group">
@@ -348,7 +714,11 @@ function NewProduct() {
                 value={formik.values.output_port}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.output_port && (
+                <span className="form-message">
+                  {formik.errors.output_port}
+                </span>
+              )}
             </div>
             {/* Cổng kết nối */}
             <div className="form-group">
@@ -361,7 +731,9 @@ function NewProduct() {
                 value={formik.values.connector}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.connector && (
+                <span className="form-message">{formik.errors.connector}</span>
+              )}
             </div>
             {/* Kết nối không dây */}
             <div className="form-group">
@@ -374,7 +746,11 @@ function NewProduct() {
                 value={formik.values.wireless_connectivity}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.wireless_connectivity && (
+                <span className="form-message">
+                  {formik.errors.wireless_connectivity}
+                </span>
+              )}
             </div>
             {/* Bàn phím */}
             <div className="form-group">
@@ -387,7 +763,9 @@ function NewProduct() {
                 value={formik.values.keyboard}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.keyboard && (
+                <span className="form-message">{formik.errors.keyboard}</span>
+              )}
             </div>
             {/* OS */}
             <div className="form-group">
@@ -400,7 +778,9 @@ function NewProduct() {
                 value={formik.values.os}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.os && (
+                <span className="form-message">{formik.errors.os}</span>
+              )}
             </div>
             {/* pin */}
             <div className="form-group">
@@ -413,7 +793,9 @@ function NewProduct() {
                 value={formik.values.pin}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.pin && (
+                <span className="form-message">{formik.errors.pin}</span>
+              )}
             </div>
             {/* Khối lượng */}
             <div className="form-group">
@@ -426,7 +808,9 @@ function NewProduct() {
                 value={formik.values.mass}
                 onChange={formik.handleChange}
               ></input>
-              <span className="form-message"></span>
+              {formik.errors.mass && (
+                <span className="form-message">{formik.errors.mass}</span>
+              )}
             </div>
           </div>
         </div>
@@ -439,7 +823,7 @@ function NewProduct() {
             id="description"
             data="Nhập mô tả chi tiết sản phẩm"
           />
-          <span className="form-message"></span>
+          {/* {formik.errors.description && <span className="form-message" >{formik.errors.description}</span>} */}
         </div>
         <button type="submit" className="btn-submit-form">
           Xác nhận
