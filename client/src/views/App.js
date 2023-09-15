@@ -73,7 +73,7 @@ const App = () => {
              <Route path='/order/json' element={<QLdonhang />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/test" element={<Test />} />
-              <Route path="/profile" element={<Profile user={user} />} />
+            <Route path="/profile" element={<Profile user={user} />} />
             </Routes>
           </header>
           <Footer />
