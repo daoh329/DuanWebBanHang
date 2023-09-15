@@ -12,6 +12,7 @@ import {
   Radio,
   Modal,
   TreeSelect,
+  Carousel
 } from "antd";
 // Thư viện mdb
 import { MDBCarousel, MDBCarouselItem } from "mdb-react-ui-kit";
@@ -24,6 +25,14 @@ const { Option } = Select;
 //text area
 const { TextArea } = Input;
 //select
+//
+const contentStyle = {
+  height: '160px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: '#364d79',
+};
 function Detail() {
   // ------------------------------------------------------------------------------------------------------------------------main
   //Modal antd
@@ -86,6 +95,7 @@ function Detail() {
   //lấy thông tin vào modal
   const { id } = useParams();
   const [Detail, setDetail] = useState([]);
+  const [thumbnails, setThumbnails] = useState([]);
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
@@ -93,27 +103,23 @@ function Detail() {
       .then(response => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
-        console.log(response.data);
+
+        // Lấy danh sách các thumbnail từ response.data và lưu vào state
+        const productThumbnails = response.data.thumbnails;
+        setThumbnails(productThumbnails);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, [id]); // Chạy useEffect này mỗi khi 'id' thay đổi
+  }, [id]);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const res = await axios.get(
-  //         `https://64df1e7171c3335b25821aef.mockapi.io/users/${id}`
-  //       );
-  //       setUser(res && res.data && res.data ? res.data : []);
-  //       console.log("check:", res);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [id]);
+ // Tạo các mục cho Carousel từ danh sách thumbnails
+ const carouselItems = thumbnails.map(thumbnail => (
+  <div key={thumbnail.id}>
+    <img src={thumbnail.thumbnail} alt={`Thumbnail ${thumbnail.id}`} />
+  </div>
+));
+
   // so luong sp
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
@@ -132,10 +138,11 @@ function Detail() {
   useEffect(() => {
     const fetchedProductDetail = {
       productName: Detail.name,
-      price: parseFloat(Detail.Price), // Chuyển đổi user.Price thành số
+      price: parseFloat(Detail.price),
+    
+      // Các thông tin khác bạn muốn lấy từ cơ sở dữ liệu
     };
     setProductDetail(fetchedProductDetail);
-    console.log(Detail.Price);
   }, [Detail]);
 
   const handleSendOTP = () => {
@@ -215,36 +222,24 @@ function Detail() {
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
+                {/* day la de hinhf */}
                 <div className="productDetailPreview style-FMPIO">
                   <div width="100%">
-                    {/*  className="css-j4683g" */}
-                    {/* SLIder */}
-                    <MDBCarousel showControls showIndicators dark fade>
-                      <MDBCarouselItem
-                        className="w-100 d-block"
-                        itemId={1}
-                        src={Detail.avatar}
-                        alt="..."
-                      ></MDBCarouselItem>
-                      <MDBCarouselItem
-                        className="w-100 d-block"
-                        itemId={2}
-                        src="https://lh3.googleusercontent.com/wFaBZbSH4BXYvOzCWFAt3NO1HgblJ1ygVmXTUx1BCmd0qL_xZkkpcA9UEag8i79qneu2r0A9T526sXCbPzeFXkI4DGCtmbV-=rw"
-                        alt="..."
-                      ></MDBCarouselItem>
+                  <Carousel autoplay>
+        {thumbnails.map(thumbnail => (
+          <div key={thumbnail.id}>
+            <img src={thumbnail.thumbnail} alt={`Thumbnail ${thumbnail.id}`} />
+          </div>
+        ))}
+      </Carousel>
 
-                      <MDBCarouselItem
-                        className="w-100 d-block"
-                        itemId={3}
-                        src="https://lh3.googleusercontent.com/lPsRWb6bFndzZQ9EFw-xVJO2WZUBqmpy5NGq2ueVdOSI89r8TFHSaNI_DcGHMyFK3mCj4cU8RoH7sXtcSLk89Tu0kBqkp6N8=rw"
-                        alt="..."
-                      ></MDBCarouselItem>
-                    </MDBCarousel>
                   </div>
                 </div>
+
                 {/* slider hình nhỏ */}
                 {/* preview hình */}
                 <Image.PreviewGroup
+                className='slider-image'
                   preview={{
                     onChange: (current, prev) =>
                       console.log(
@@ -252,7 +247,7 @@ function Detail() {
                       ),
                   }}
                 >
-                  <Image width={80} src={Detail.avatar} />
+                  <Image width={80} src={Detail.thumbnail} />
                   <Image
                     width={80}
                     src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg"
@@ -264,7 +259,7 @@ function Detail() {
               </div>
               {/* hiển thị chi tiết  */}
 
-              <div className="css-1nv5d5l">
+              {/* <div className="css-1nv5d5l">
                 - CPU: AMD Ryzen 7 6800H
                 <br />
                 - Màn hình: 15.6" IPS (1920 x 1080),144Hz
@@ -293,7 +288,7 @@ function Detail() {
                 >
                   Xem thông tin chi tiết
                 </div>
-              </a>
+              </a> */}
             </div>
             <div className="css-6b3ezu">
               {/* ten, mã , thương hiệu */}
@@ -330,7 +325,7 @@ function Detail() {
                   className="att-product-detail-latest-price css-oj899w"
                   color="primary500"
                 >
-                  {Detail.Price}₫
+                  {Detail.price}₫
                 </div>
                 <div className="css-3mjppt">
                   <div
@@ -355,133 +350,6 @@ function Detail() {
               <div className="css-1gs5ebu">
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
-                {/* <div direction="column" className="css-cs5l6d">
-          <div
-            className="att-product-detail-default-promotion-478703 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-HrL9K" id="style-HrL9K">
-              <span className="css-1lfpde8">
-                1x Mã giảm thêm 5% tối đa 300.000đ cho toàn bộ sản phẩm Điện Máy
-                - Điện Gia Dụng
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-476721 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-nGnMb" id="style-nGnMb">
-              <span className="css-1lfpde8">
-                1x Mã giảm thêm 500.000đ cho tai nghe Sony Inzone H3 khi mua kèm
-                Laptop Gaming
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-465873 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-gFgtv" id="style-gFgtv">
-              <span className="css-1lfpde8">
-                1x Mã giảm thêm 150.000 cho một số chuột Logitech, MSI, Newmen,
-                tai nghe Zidli
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-465868 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-BQTnj" id="style-BQTnj">
-              <span className="css-1lfpde8">
-                1x Ưu đãi mua Chuột Logitech G903 Hero với giá 1.300.000
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-471793 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-2EOLF" id="style-2EOLF">
-              <span className="css-1lfpde8">
-                1x Bộ hòa mạng SKY89S (Quà tặng) 1x Hộp quà Sinh Nhật Phong Vũ
-                (Quà tặng)
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-479377 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-idjvb" id="style-idjvb">
-              <span className="css-1lfpde8">
-                1x Balo laptop Targus 15.6 TSB883 Black (Safire) (Quà tặng -
-                logo Phong Vũ)
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-465937 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-8Ho1C" id="style-8Ho1C">
-              <span className="css-1lfpde8">
-                1x Bộ nhớ/ Ram Laptop Kingston 8GB DDR5 4800MHz (KVR48S40BS6-8)
-                (Quà tặng)
-              </span>
-            </span>
-          </div>
-        </div> */}
               </div>
               <div className="css-30n8gl">
                 <div className="css-ixp6xz">
@@ -580,93 +448,11 @@ function Detail() {
               <div className="css-1o4pdv8">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="BOXKHUYENMAILIENQUAN css-1rggx5t">
-                <div className="css-mz7xyg">Khuyến mãi liên quan</div>
-                <ul>
-                  <li>
-                    <span>
-                      Tặng
-                      <strong>
-                        1 Bộ Voucher Sinh Nhật Phong Vũ (Quà tặng)
-                      </strong>
-                      cho đơn hàng từ
-                      <span className="css-htm2b9">
-                        10.000.000
-                        <span className="css-1ul6wk9">đ</span>
-                      </span>
-                      có sản phẩm này
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      Nhập mã
-                      <strong>PVASUS500K</strong>
-                      giảm
-                      <span className="css-6ohl53">500.000đ</span>
-                      cho đơn hàng có sản phẩm này
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      Nhập mã
-                      <strong>QRPV78</strong>
-                      <br />- Giảm
-                      <span id="style-Eaoys" className="style-Eaoys">
-                        50.000đ
-                      </span>
-                      cho đơn từ 2,500,000đ
-                      <br />- Giảm
-                      <span id="style-NCGYS" className="style-NCGYS">
-                        100.000đ
-                      </span>
-                      cho đơn từ 5,000,000đ
-                      <br />- Giảm
-                      <span id="style-E1gqK" className="style-E1gqK">
-                        350.000đ
-                      </span>
-                      cho đơn từ 15,000,000đ
-                      <br />
-                      khi thanh toán qua VNPAY-QR.
-                    </span>
-                    <a
-                      href="https://phongvu.vn/cong-nghe/uu-dai-vnpay/"
-                      target="blank"
-                      className="css-1ty6934"
-                    >
-                      Xem chi tiết
-                    </a>
-                  </li>
-                  <li>
-                    <span>
-                      Nhập mã
-                      <strong>SacomPV</strong>
-                      <br />
-                      1. Tặng ngay
-                      <span id="style-J4qOQ" className="style-J4qOQ">
-                        500.000đ
-                      </span>
-                      cho mỗi giao dịch thành công từ 10,000,000đ
-                      <br />
-                      2. Tặng ngay
-                      <span id="style-pQct2" className="style-pQct2">
-                        200.000đ
-                      </span>
-                      cho mỗi giao dịch thành công từ 5,000,000đ khi thanh toán
-                      qua thẻ tín dụng quốc tế Sacombank.
-                    </span>
-                    <a
-                      href="https://phongvu.vn/cong-nghe/uu-dai-ngan-hang/?nocache=true"
-                      target="blank"
-                      className="css-1ty6934"
-                    >
-                      Xem chi tiết
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="productAfterPromoBox"></div>
+
+
             </div>
           </div>
+ 
         </div>
 
         {/* modal */}
