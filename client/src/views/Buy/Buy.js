@@ -7,6 +7,10 @@ import {
   MDBTabsPane
 } from 'mdb-react-ui-kit';
 import './Buy.css'
+import { Radio,Input ,Checkbox } from 'antd';
+const onChange = (e) => {
+  console.log(`checked = ${e.target.checked}`);
+};
 export default function Buy() {
   const [fillActive, setFillActive] = useState('tab1');
 
@@ -39,8 +43,8 @@ export default function Buy() {
             Nhận hàng tại nhà
           </MDBTabsLink>
         </MDBTabsItem>
-        <MDBTabsItem>
-          <MDBTabsLink onClick={() => handleFillClick('tab2')} active={fillActive === 'tab2'}>
+        <MDBTabsItem className='nav-tabs-buy'>
+          <MDBTabsLink className='nav-link-buy' onClick={() => handleFillClick('tab2')} active={fillActive === 'tab2'}>
            Nhận hàng tại điểm
           </MDBTabsLink>
         </MDBTabsItem>
@@ -48,6 +52,7 @@ export default function Buy() {
 
       <MDBTabsContent>
         <MDBTabsPane show={fillActive === 'tab1'}>
+          <h7 >Thông tin nhận hàng</h7>
         <div
   className="teko-row teko-row-start css-1v9diph snipcss-f7MJM style-Aergz"
   id="style-Aergz"
@@ -160,29 +165,44 @@ export default function Buy() {
         </MDBTabsPane>
         <MDBTabsPane show={fillActive === 'tab2'}>Tab 2 content</MDBTabsPane>
       </MDBTabsContent>
-          </div>
-        </div>
-        {/*  */}
+      <div className='radio'>
+  <label>Phương thức giao hàng
 
-
-          {/*  */}
-
-        <div className="css-18c0ysw snipcss0-4-4-52">
+  <Radio defaultChecked>Giao hàng tiêu chuẩn</Radio>
+  </label>
+      
+</div>
+<div className="css-18c0ysw snipcss0-4-4-52">
           <div type="subtitle" className="css-1realo9 snipcss0-5-52-53">
-            Ghi chú cho đơn hàng
+           Nhập Mã Online, hóa đơn qua Email
           </div>
           <div className="css-boqvfl snipcss0-5-52-54">
             <div
               className="input-container css-icxbs1 snipcss0-6-54-55"
               height={40}
             >
-              <input
-                type="text"
-                placeholder="Nhập thông tin ghi chú cho nhà bán hàng"
-                maxLength={255}
-                className="css-1acir1a snipcss0-7-55-56"
-                defaultValue=""
-              />
+              <Input type="text" maxLength={255} placeholder="Email" />
+            </div>
+          </div>
+        </div>
+          </div>
+        
+        </div>
+        {/*  */}
+
+
+          {/*  */}
+
+          <div className="css-18c0ysw snipcss0-4-4-52">
+          <div type="subtitle" className="css-1realo9 snipcss0-5-52-53">
+          Ghi chú cho đơn hàng
+          </div>
+          <div className="css-boqvfl snipcss0-5-52-54">
+            <div
+              className="input-container css-icxbs1 snipcss0-6-54-55"
+              height={40}
+            >
+              <Input type="text" maxLength={255} placeholder="Ghi chú" />
             </div>
           </div>
         </div>
@@ -334,39 +354,16 @@ export default function Buy() {
             </div>
           </div>
         </div>
+
         <div className="teko-row teko-row-start teko-row-middle css-1dmv21i snipcss0-4-4-87">
           <label className="check-box css-1arb6mh snipcss0-5-87-88">
-            <div className="css-l24w9c snipcss0-6-88-89">
-              <input
-                type="checkbox"
-                className="att-vat-checkbox css-lc01j1 snipcss0-7-89-90"
-              />
-              <div className="checkbox-inner css-gfk8lf snipcss0-7-89-91">
-                <svg
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  size={12}
-                  className="css-u5ggi9 snipcss0-8-91-92"
-                  color="transparent"
-                  height={12}
-                  width={12}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M5 12.4545L9.375 17L19 7"
-                    stroke="#82869E"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </div>
-            </div>
+            <Checkbox onChange={onChange}></Checkbox>
           </label>
           <div type="body" className="css-1os8pr0 snipcss0-5-87-93">
-            Tôi muốn xuất hóa đơn
+            Tôi muốn xuất hóa đơn 
           </div>
         </div>
+
         <div
           data-content-region-name="staffCode"
           data-track-content="true"
@@ -374,29 +371,19 @@ export default function Buy() {
           data-content-target="checkout"
           className="css-18c0ysw snipcss0-4-4-94"
         >
-          <div type="subtitle" className="css-1realo9 snipcss0-5-94-95">
-            Mã nhân viên tư vấn
+<div className="css-18c0ysw snipcss0-4-4-52">
+          <div type="subtitle" className="css-1realo9 snipcss0-5-52-53">
+           Nhập mã nhân viên tư vấn
           </div>
-          <div
-            className="css-boqvfl snipcss0-5-94-96"
-            data-content-region-name="staffCode"
-            data-track-content="true"
-            data-content-name="referralCode"
-            data-content-target="checkout"
-          >
+          <div className="css-boqvfl snipcss0-5-52-54">
             <div
-              className="input-container css-icxbs1 snipcss0-6-96-97"
+              className="input-container css-icxbs1 snipcss0-6-54-55"
               height={40}
             >
-              <input
-                type="text"
-                placeholder="Đây là mã giới thiệu, không có tác dụng giảm giá cho đơn hàng"
-                maxLength={255}
-                className="css-1acir1a snipcss0-7-97-98"
-                defaultValue=""
-              />
+              <Input type="text" maxLength={255} placeholder="Đây là mã giới thiệu không có tác dụng cho đơn hàng" />
             </div>
           </div>
+        </div>
         </div>
       </div>
       <div
@@ -473,134 +460,7 @@ export default function Buy() {
                   </div>
                 </div>
               </div>
-              <div className="css-ov1ktg snipcss0-3-7-24 snipcss0-7-106-123">
-                <div className="css-1xjc5z snipcss0-4-24-25 snipcss0-8-123-124">
-                  <div className="css-1fmlnyw snipcss0-5-25-26 snipcss0-9-124-125">
-                    <div className="css-1axx38a snipcss0-6-26-27 snipcss0-10-125-126">
-                      <div
-                        height={16}
-                        width={16}
-                        className="css-xe0n85 snipcss0-7-27-28 snipcss0-11-126-127"
-                      >
-                        <img
-                          className="lazyload css-jdz5ak snipcss0-8-28-29 snipcss0-12-127-128"
-                          alt=""
-                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-                    <div className="css-5j9p1n snipcss0-6-26-30 snipcss0-10-125-129">
-                      1x Ba lô Acer Gaming SUV
-                    </div>
-                  </div>
-                  <div className="css-1fmlnyw snipcss0-5-25-31 snipcss0-9-124-130">
-                    <div className="css-1axx38a snipcss0-6-31-32 snipcss0-10-130-131">
-                      <div
-                        height={16}
-                        width={16}
-                        className="css-xe0n85 snipcss0-7-32-33 snipcss0-11-131-132"
-                      >
-                        <img
-                          className="lazyload css-jdz5ak snipcss0-8-33-34 snipcss0-12-132-133"
-                          alt=""
-                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-                    <div className="css-5j9p1n snipcss0-6-31-35 snipcss0-10-130-134">
-                      1x Bộ nhớ / RAM Laptop Lexar 8GB DDR4 3200Mhz
-                      (LD4AS008G-B3200GSST) (Quà Tặng)
-                    </div>
-                  </div>
-                  <div className="css-1fmlnyw snipcss0-5-25-36 snipcss0-9-124-135">
-                    <div className="css-1axx38a snipcss0-6-36-37 snipcss0-10-135-136">
-                      <div
-                        height={16}
-                        width={16}
-                        className="css-xe0n85 snipcss0-7-37-38 snipcss0-11-136-137"
-                      >
-                        <img
-                          className="lazyload css-jdz5ak snipcss0-8-38-39 snipcss0-12-137-138"
-                          alt=""
-                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-                    <div className="css-5j9p1n snipcss0-6-36-40 snipcss0-10-135-139">
-                      1x 1x Mã ưu đãi mua chuột Logitech G903 Hero với giá 1.5
-                      Triệu đồng
-                    </div>
-                  </div>
-                  <div className="css-1fmlnyw snipcss0-5-25-41 snipcss0-9-124-140">
-                    <div className="css-1axx38a snipcss0-6-41-42 snipcss0-10-140-141">
-                      <div
-                        height={16}
-                        width={16}
-                        className="css-xe0n85 snipcss0-7-42-43 snipcss0-11-141-142"
-                      >
-                        <img
-                          className="lazyload css-jdz5ak snipcss0-8-43-44 snipcss0-12-142-143"
-                          alt=""
-                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-                    <div className="css-5j9p1n snipcss0-6-41-45 snipcss0-10-140-144">
-                      1x Mã giảm thêm 150.000 cho một số chuột Logitech, MSI,
-                      Newmen, tai nghe Zidli
-                    </div>
-                  </div>
-                  <div className="css-1fmlnyw snipcss0-5-25-46 snipcss0-9-124-145">
-                    <div className="css-1axx38a snipcss0-6-46-47 snipcss0-10-145-146">
-                      <div
-                        height={16}
-                        width={16}
-                        className="css-xe0n85 snipcss0-7-47-48 snipcss0-11-146-147"
-                      >
-                        <img
-                          className="lazyload css-jdz5ak snipcss0-8-48-49 snipcss0-12-147-148"
-                          alt=""
-                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-                    <div className="css-5j9p1n snipcss0-6-46-50 snipcss0-10-145-149">
-                      1x Mã giảm thêm 5% tối đa 300.000đ cho toàn bộ sản phẩm
-                      Điện Máy - Điện Gia Dụng
-                    </div>
-                  </div>
-                  <div className="css-1fmlnyw snipcss0-5-25-51 snipcss0-9-124-150">
-                    <div className="css-1axx38a snipcss0-6-51-52 snipcss0-10-150-151">
-                      <div
-                        height={16}
-                        width={16}
-                        className="css-xe0n85 snipcss0-7-52-53 snipcss0-11-151-152"
-                      >
-                        <img
-                          className="lazyload css-jdz5ak snipcss0-8-53-54 snipcss0-12-152-153"
-                          alt=""
-                          src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    </div>
-                    <div className="css-5j9p1n snipcss0-6-51-55 snipcss0-10-150-154">
-                      Giảm 6.000.000₫ (áp dụng vào giá sản phẩm)
-                    </div>
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -608,56 +468,24 @@ export default function Buy() {
           <div className="css-1pnc6ez snipcss0-5-155-156">
             <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-156-157">
               <div className="teko-col css-gr7r8o2 snipcss0-7-157-158">
+
                 <label className="check-box css-1arb6mh snipcss0-8-158-159">
-                  <div className="css-l24w9c snipcss0-9-159-160">
-                    <input
-                      type="checkbox"
-                      className="css-lc01j1 snipcss0-10-160-161"
-                    />
-                    <div className="checkbox-inner css-gfk8lf snipcss0-10-160-162">
-                      <svg
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        size={12}
-                        className="css-u5ggi9 snipcss0-11-162-163"
-                        color="transparent"
-                        height={12}
-                        width={12}
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M5 12.4545L9.375 17L19 7"
-                          stroke="#82869E"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
+                  <Checkbox onChange={onChange}></Checkbox>              
                   <div
                     type="body"
                     className="checkbox-label css-10md8qb snipcss0-9-159-164 style-Aggjr"
                     id="style-Aggjr"
-                  >
+                  >             
                     <div
                       type="subtitle"
                       className="ellipsis css-1gcn5cj snipcss0-10-164-165"
                     >
-                      Cài đặt
+                      Cài đặt miễn phí
                     </div>
                   </div>
                 </label>
               </div>
-              <div className="teko-col css-gr7r8o2 snipcss0-7-157-166">
-                <div
-                  type="subtitle"
-                  color="primary600"
-                  className="css-1p7f0pr snipcss0-8-166-167"
-                >
-                  Miễn phí
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -665,33 +493,9 @@ export default function Buy() {
           <div className="css-1pnc6ez snipcss0-5-168-169">
             <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-169-170">
               <div className="teko-col css-gr7r8o2 snipcss0-7-170-171">
+
                 <label className="check-box css-1arb6mh snipcss0-8-171-172">
-                  <div className="css-l24w9c snipcss0-9-172-173">
-                    <input
-                      type="checkbox"
-                      className="css-lc01j1 snipcss0-10-173-174"
-                    />
-                    <div className="checkbox-inner css-gfk8lf snipcss0-10-173-175">
-                      <svg
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        size={12}
-                        className="css-u5ggi9 snipcss0-11-175-176"
-                        color="transparent"
-                        height={12}
-                        width={12}
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M5 12.4545L9.375 17L19 7"
-                          stroke="#82869E"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
+                <Checkbox onChange={onChange}></Checkbox>   
                   <div
                     type="body"
                     className="checkbox-label css-10md8qb snipcss0-9-172-177 style-aUwfK"
@@ -701,19 +505,10 @@ export default function Buy() {
                       type="subtitle"
                       className="ellipsis css-1gcn5cj snipcss0-10-177-178"
                     >
-                      Hỗ trợ kỹ thuật
+                      Hỗ trợ kỹ thuật miễn phí
                     </div>
                   </div>
                 </label>
-              </div>
-              <div className="teko-col css-gr7r8o2 snipcss0-7-170-179">
-                <div
-                  type="subtitle"
-                  color="primary600"
-                  className="css-1p7f0pr snipcss0-8-179-180"
-                >
-                  Miễn phí
-                </div>
               </div>
             </div>
           </div>
@@ -772,9 +567,7 @@ export default function Buy() {
                       </tr>
                     </tbody>
                   </table>
-                  <div className="css-b2d3vz snipcss0-9-185-201">
-                    (Đã bao gồm VAT)
-                  </div>
+                  
                 </div>
               </div>
               <div className="teko-card-footer css-0 snipcss0-7-183-202">

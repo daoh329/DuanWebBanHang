@@ -1678,3 +1678,24 @@ svg {
 #style-EqcsP.style-EqcsP {  
    margin-left: 0px;  
 }  
+.radio{
+   display: inline-grid;
+    margin-right: 70%;
+}
+.email{
+    display: inli;display: inline-grid;
+    margin-right: 60%;
+    margin-top: 20px;
+}
+:where(.css-dev-only-do-not-override-17a39f8).ant-input {
+    padding: 7px 0px;
+    color: rgba(0, 0, 0, 0.88);
+}
+.no-border {
+    border-collapse: collapse;
+    border: none; /* Ẩn đường viền của bảng */
+  }
+  
+  .no-border td, .no-border th {
+    border: none; /* Ẩn đường viền của các ô trong bảng */
+  }
