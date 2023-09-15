@@ -49,15 +49,15 @@ const App = () => {
 
   return (
     <div className='App'>
-    <BrowserRouter>
-      <CartProvider>
-        <Nav user={user} />
-        <header>
-          <Routes>
-            <Route path="/" element={<Home />} />
-             <Route path="/detail/:id" element={<Detail />} />
-             <Route path="/login" element={user ? <Navigate to='/'/> :<Login />} />
-             {/* <Route path="/adminPage" element={<AdminPage />} />
+      <BrowserRouter>
+        <CartProvider>
+          <Nav user={user} />
+          <header>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/detail/:id" element={<Detail />} />
+              <Route path="/login" element={user ? <Navigate to='/' /> : <Login />} />
+              {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
              <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
              <Route path="/search" element={<Search />} />
@@ -70,7 +70,6 @@ const App = () => {
              <Route path='/order/json' element={<QLdonhang />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/buy" element={<Buy />} />
-
               <Route path="/profile" element={<Profile user={user} />} />
             </Routes>
           </header>
@@ -78,6 +77,7 @@ const App = () => {
         </CartProvider>
       </BrowserRouter>
     </div>
+
   );
 };
 
