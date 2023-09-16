@@ -11,43 +11,8 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    // const query =
-    //   "INSERT INTO orders (name, avatar, price, quantity, userName, city, selectedCity, selectedDistrict, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    // const query =
-    //   "INSERT INTO orders (name, avatar, price, quantity, userName, city, selectedCity, selectedDistrict, address, deliveryMethod, phone, note, status ,created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    // // Thực hiện truy vấn SQL
-
-    // mysql.query(
-    //   query,
-    //   [
-    //     data.name,
-    //     data.avatar,
-    //     data.price,
-    //     data.quantity,
-    //     data.userName,
-    //     data.city,
-    //     data.selectedCity,
-    //     data.selectedDistrict,
-    //     data.address,
-    //     data.deliveryMethod,
-    //     data.phone,
-    //     data.note,
-    //     data.status,
-    //     new Date(),
-    //   ],
-    //   (error, results, fields) => {
-    //     if (error) {
-    //       // Trả về mã trạng thái 500 nếu có lỗi xảy ra
-    //       res.status(500).send("Có lỗi xảy ra khi thêm thông tin cá nhân");
-    //     } else {
-    //       // Trả về mã trạng thái 200 nếu thêm thông tin cá nhân thành công
-    //       res.status(200).send("Thêm thông tin cá nhân thành công");
-    //     }
-    //   }
-    // );
-    const sql = `INSERT INTO orders (name, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
-    const values = [data.userName, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
+    let sql = `INSERT INTO orders (name, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
+    let values = [data.userName, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(result);
@@ -57,71 +22,78 @@ class OrderController {
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
         console.log(result);
-        res.send('Order details added...');
+        sql = `UPDATE productdetails SET quantity = quantity - ? WHERE product_id = ?`; // Cập nhật số lượng sản phẩm trong bảng productdetails
+        values = [data.quantity, data.productID];
+        mysql.query(sql, values, (err, result) => {
+          if (err) throw err;
+          console.log(result);
+          res.send('Order details added and product quantity updated...');
+        });
       });
     });
   }
 
-  async json(req, res, next) {
-    // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
-    mysql.query("SELECT * FROM orders", (err, result) => {
-      if (err) throw err;
-
-      // Chuyển đổi kết quả truy vấn thành chuỗi JSON
-      const jsonResult = JSON.stringify(result);
-
-      // Gửi chuỗi JSON về cho client
-      res.send(jsonResult);
+  async quanlyOrder(req, res, next) {
+    const sql = `
+        SELECT o.id, o.phone, o.UserID, o.Username, o.address, o.note, o.created_at, o.status, odp.quantity, p.name, p.price
+        FROM orders o
+        JOIN orderDetailsProduct odp ON o.id = odp.orderID
+        JOIN product p ON odp.productID = p.id
+        ORDER BY o.created_at DESC
+    `;
+    mysql.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
     });
   }
 
   async confirmOrder(req, res) {
-    console.log("Confirm order request received");
-    const orderId = req.params.id;
-    // Thực hiện truy vấn SQL để cập nhật trạng thái đơn hàng thành 'Đã xác nhận'
-    const updateQuery = "UPDATE orders SET status = ? WHERE id = ?";
-    mysql.query(
-      updateQuery,
-      ["Đã xác nhận", orderId],
-      (error, results, fields) => {
-        if (error) {
-          console.error("Error updating order status:", error);
-          res
-            .status(500)
-            .send("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng");
-        } else {
-          res.status(200).send("Cập nhật trạng thái đơn hàng thành công");
-        }
-      }
-    );
+      const orderId = req.params.id;
+      const sql = 'UPDATE orders SET status = 1 WHERE id = ?';
+
+      mysql.query(sql, [orderId], (err, result) => {
+          if (err) {
+              console.error(err);
+              res.status(500).send('Error confirming order');
+          } else if (result.affectedRows === 0) {
+              res.status(404).send('No order found with the provided ID');
+          } else {
+              res.send('Order confirmed');
+          }
+      });
   }
 
   async cancelOrder(req, res) {
-    const orderId = req.params.id;
-    // Thực hiện truy vấn SQL để cập nhật trạng thái đơn hàng thành 'Đã hủy'
-    const updateQuery = "UPDATE orders SET status = ? WHERE id = ?";
-    mysql.query(updateQuery, ["Đã hủy", orderId], (error, results, fields) => {
-      if (error) {
-        console.error("Error updating order status:", error);
-        res.status(500).send("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng");
-      } else {
-        res.status(200).send("Cập nhật trạng thái đơn hàng thành công");
-      }
-    });
+      const orderId = req.params.id;
+      const sql = 'UPDATE orders SET status = 0 WHERE id = ?';
+
+      mysql.query(sql, [orderId], (err, result) => {
+          if (err) {
+              console.error(err);
+              res.status(500).send('Error canceling order');
+          } else if (result.affectedRows === 0) {
+              res.status(404).send('No order found with the provided ID');
+          } else {
+              res.send('Order canceled');
+          }
+      });
   }
 
   async orderHistory(req, res) {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
-    mysql.query(
-      "SELECT * FROM orders WHERE phone = ?",
-      [phone],
-      (error, results, fields) => {
-        if (error) throw error;
-        res.send(results);
-        console.log(results);
-      }
-    );
+    const sql = `
+        SELECT o.id, o.phone, o.UserID, o.Username, o.address, o.created_at, o.status, odp.quantity, p.name, p.price
+        FROM orders o
+        JOIN orderDetailsProduct odp ON o.id = odp.orderID
+        JOIN product p ON odp.productID = p.id
+        WHERE o.phone = ?
+        ORDER BY o.created_at DESC
+    `;
+    mysql.query(sql, [phone], (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
   }
 
   async topLaptop(req, res) {
