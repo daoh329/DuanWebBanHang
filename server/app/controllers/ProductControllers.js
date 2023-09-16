@@ -6,13 +6,34 @@ class Product {
   
   async Addproduct(req, res) {
     const data = req.body;
-    // console.log(data);
-    // console.log(req.files);
+    const arrImage = req.files;
+    var arrPathImage = [];
+    arrImage.forEach(image => {
+      arrPathImage.push(image.path) ;
+    });
+    const configuration = {
+      cpu: data.cpu,
+      ram:data.ram,
+      rom: data.rom,
+      screen:data.screen,
+      vga: data.vga,
+      os: data.os,
+      maximum_number_of_storage_ports: data.maximum_number_of_storage_ports,
+      M2_slot_type_supported: data.M2_slot_type_supported,
+      output_port: data.output_port,
+      connector: data.connector,
+      wireless_connectivity: data.wireless_connectivity,
+      keyboard: data.keyboard,
+      pin: data.pin,
+      mass: data.mass,
+    }
+
     const SELECTcategory = `SELECT * FROM banhangdientu.category where name = ?`
     mysql.query(SELECTcategory, data.category, (er, result) => {
       if (er) {
         res.status(500).send(`Lỗi kết nối server data`)
       }
+      
       // PRODUCT INSERT
       const insertProductQuery = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, 1)`;
       const productValues = [
@@ -27,7 +48,7 @@ class Product {
         // IMG INSERT
         const newProductId = resultP.insertId;
         const insertGaleryQuery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
-        for (const image of data.images) {
+        for (const image of arrPathImage) {
           const galeryValues = [image, newProductId]
           mysql.query(insertGaleryQuery, galeryValues, (er, result) => {
             if (er) {
@@ -36,7 +57,7 @@ class Product {
           })
         }
         // DETAIL PRODUCT
-        const configurationString = JSON.stringify(data.configuration);
+        const configurationString = JSON.stringify(configuration);
         
         const insertPdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
         const PdValues = [

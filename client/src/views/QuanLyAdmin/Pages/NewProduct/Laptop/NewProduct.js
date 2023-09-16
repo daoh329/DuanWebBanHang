@@ -9,13 +9,13 @@ import { PlusOutlined } from "@ant-design/icons";
 import PreviewImage from "./PreviewImage";
 
 // firebase
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  uploadBytesResumable,
-} from "firebase/storage";
-import { storage } from "../../../../../firebaseConfig";
+// import {
+//   ref,
+//   uploadBytes,
+//   getDownloadURL,
+//   uploadBytesResumable,
+// } from "firebase/storage";
+// import { storage } from "../../../../../firebaseConfig";
 
 function NewProduct() {
   const formik = useFormik({
@@ -32,6 +32,7 @@ function NewProduct() {
       quantity: 1,
       images: [],
       status: false,
+      description: "",
       cpu: "",
       screen: "",
       ram: "",
@@ -46,7 +47,6 @@ function NewProduct() {
       os: "",
       pin: "",
       mass: "",
-      description: "",
     },
     validationSchema: Yup.object().shape({
       brand: Yup.string().required("Vui lòng chọn thương hiệu của sản phẩm."),
@@ -103,12 +103,20 @@ function NewProduct() {
         if (Object.prototype.hasOwnProperty.call(values, fieldName)) {
           const fieldValue = values[fieldName];
 
-          // Kiểm tra nếu trường là một mảng ảnh (điều này phụ thuộc vào cách bạn tổ chức biểu mẫu của mình)
-          if (Array.isArray(fieldValue)) {
+          // Kiểm tra nếu trường là một mảng ảnh
+          if (Array.isArray(fieldValue) && fieldName === "images") {
             fieldValue.forEach((image) => {
               formData.append(fieldName, image);
             });
-          } else {
+          }
+          else if(fieldName === "color"){
+            const strColor = fieldValue.toString();
+            const arrColor = strColor.split(",");
+            arrColor.forEach(value => {
+              formData.append(fieldName, value.trim());
+            })
+          }
+          else {
             formData.append(fieldName, fieldValue);
           }
         }
@@ -123,6 +131,9 @@ function NewProduct() {
         })
         .then((res) => {
           console.log(res);
+          // if (res.status === ) {
+            
+          // }
           // alert('Tạo sản phẩm thành công.')
         })
         .catch((e) => {
@@ -131,54 +142,41 @@ function NewProduct() {
         });
     },
   });
-  // console.log(formik.values);
+  console.log(formik.values);
 
   // firebase
-  const [image, setImage] = useState(null);
-  const [url, setDownloadURL] = useState("");
-  const [progress, setUploadProgress] = useState(0);
+  // const [image, setImage] = useState(null);
+  // const [url, setDownloadURL] = useState("");
+  // const [progress, setUploadProgress] = useState(0);
 
-  const handleUpload = () => {
-    if (!image) return;
+  // const handleUpload = () => {
+  //   if (!image) return;
 
-    const imageRef = ref(storage, `image/${image.name}`);
+  //   const imageRef = ref(storage, `image/${image.name}`);
 
-    const uploadTask = uploadBytesResumable(imageRef, image);
-    // Theo dõi tiến trình tải lên
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(progress);
-      },
-      (error) => {
-        console.error("Error uploading file:", error);
-      },
-      () => {
-        // Tải lên hoàn thành
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setDownloadURL(downloadURL);
-        });
-      }
-    );
-  };
+  //   const uploadTask = uploadBytesResumable(imageRef, image);
+  //   // Theo dõi tiến trình tải lên
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {
+  //       const progress =
+  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       setUploadProgress(progress);
+  //     },
+  //     (error) => {
+  //       console.error("Error uploading file:", error);
+  //     },
+  //     () => {
+  //       // Tải lên hoàn thành
+  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //         setDownloadURL(downloadURL);
+  //       });
+  //     }
+  //   );
+  // };
 
   return (
     <div className="container-content">
-      {/* Input để chọn hình ảnh */}
-      <input
-        type="file"
-        onChange={(e) => {
-          setImage(e.currentTarget.files[0]);
-        }}
-      />
-      {/* Nút để tải lên */}
-      <button onClick={handleUpload}>Upload</button>
-      {/* Hiển thị tiến trình tải lên */}
-      <h2>Uploading: {progress}%</h2>
-      {/* Hiển thị hình ảnh đã tải lên */}
-      {url && <img src={url} alt="Uploaded" />}
       <form
         className="form"
         id="form-create-laptop"

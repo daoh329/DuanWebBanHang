@@ -971,14 +971,14 @@ const Home = () => {
             id="scroll-left-button"
             onClick={scrollTrai}
           >
-            <CaretLeftOutlined />
+            <LeftOutlined />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollPhai}
           >
-            <CaretRightOutlined />
+            <RightOutlined />
           </button>
           </div>
         </div>
