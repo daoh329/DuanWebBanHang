@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
 import PreviewImage from "./PreviewImage";
 
 // firebase
@@ -71,7 +71,7 @@ function NewProduct() {
           .test(
             "FILE_SIZE",
             "Tệp hình ảnh quá lớn!",
-            (value) => value && value.size < 2 * 1024 * 1024
+            (value) => value && value.size < 5 * 1024 * 1024
           )
       ),
       // cpu: Yup.string().required("Vui lòng nhập trường này."),
@@ -108,15 +108,13 @@ function NewProduct() {
             fieldValue.forEach((image) => {
               formData.append(fieldName, image);
             });
-          }
-          else if(fieldName === "color"){
+          } else if (fieldName === "color") {
             const strColor = fieldValue.toString();
             const arrColor = strColor.split(",");
-            arrColor.forEach(value => {
+            arrColor.forEach((value) => {
               formData.append(fieldName, value.trim());
-            })
-          }
-          else {
+            });
+          } else {
             formData.append(fieldName, fieldValue);
           }
         }
@@ -132,7 +130,7 @@ function NewProduct() {
         .then((res) => {
           console.log(res);
           // if (res.status === ) {
-            
+
           // }
           // alert('Tạo sản phẩm thành công.')
         })
@@ -142,7 +140,7 @@ function NewProduct() {
         });
     },
   });
-  console.log(formik.values);
+  // console.log(formik.values);
 
   // firebase
   // const [image, setImage] = useState(null);
@@ -174,6 +172,25 @@ function NewProduct() {
   //     }
   //   );
   // };
+
+  const checkImage = (event) => {
+    if (event.target.files.length === 0) {
+      return false;
+    }
+    if (
+      !["image/png", "image/jpeg", "image/jpg"].includes(
+        event.target.files[0].type
+      )
+    ){
+      alert("Vui lòng chọn đúng định dạng ảnh!");
+      return false;
+    }
+    if (event.target.files[0].size > 5 * 1024 * 1024) {
+      alert("Ảnh quá lớn!");
+      return false;
+    }
+    return true;
+  };
 
   return (
     <div className="container-content">
@@ -353,7 +370,10 @@ function NewProduct() {
               {/* col-image-1 */}
               <div style={{ display: "flex" }}>
                 {/* image 1 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[0] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -362,31 +382,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
-                      if (
-                        !["image/png", "image/jpeg", "image/jpg"].includes(
-                          event.currentTarget.files[0].type
-                        )
-                      ) {
-                        alert("Vui lòng chọn đúng định dạng ảnh!");
-                      } else if (
-                        event.currentTarget.files[0].size >
-                        5 * 1024 * 1024
-                      ) {
-                        alert("Ảnh quá lớn!");
-                      } else {
-                        formik.setFieldValue("images", [
-                          ...formik.values.images,
-                          event.currentTarget.files[0],
-                        ]);
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[0] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
                       }
+                      formik.setFieldValue("images", [
+                        ...formik.values.images,
+                        event.target.files[0],
+                      ]);
                     }}
                   />
                   {formik.values.images[0] && (
-                    <PreviewImage file={formik.values.images[0]} />
+                    <PreviewImage file={formik.values.images[0]} formik={formik} index={0} />
                   )}
                 </div>
                 {/* image 2 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[1] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -395,19 +412,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[1]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[1] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
-                      return;
                     }}
                   />
                   {formik.values.images[1] && (
-                    <PreviewImage file={formik.values.images[1]} />
+                    <PreviewImage formik={formik} index={1} file={formik.values.images[1]} />
                   )}
                 </div>
                 {/* image 3 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[2] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -416,18 +442,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[2] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[2] && (
-                    <PreviewImage file={formik.values.images[2]} />
+                    <PreviewImage formik={formik} index={2} file={formik.values.images[2]} />
                   )}
                 </div>
                 {/* image 4 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[3] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -436,18 +472,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[3] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[3] && (
-                    <PreviewImage file={formik.values.images[3]} />
+                    <PreviewImage formik={formik} index={3} file={formik.values.images[3]} />
                   )}
                 </div>
                 {/* image 5 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[4] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -456,21 +502,31 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[4] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[4] && (
-                    <PreviewImage file={formik.values.images[4]} />
+                    <PreviewImage formik={formik} index={4} file={formik.values.images[4]} />
                   )}
                 </div>
               </div>
               {/* col-image-2 */}
               <div style={{ display: "flex" }}>
                 {/* image 1 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[5] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -479,18 +535,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[5] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[5] && (
-                    <PreviewImage file={formik.values.images[5]} />
+                    <PreviewImage formik={formik} index={5} file={formik.values.images[5]} />
                   )}
                 </div>
                 {/* image 2 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[6] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -499,18 +565,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[6] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[6] && (
-                    <PreviewImage file={formik.values.images[6]} />
+                    <PreviewImage formik={formik} index={6} file={formik.values.images[6]} />
                   )}
                 </div>
                 {/* image 3 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[7] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -519,18 +595,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[7] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[7] && (
-                    <PreviewImage file={formik.values.images[7]} />
+                    <PreviewImage formik={formik} index={7} file={formik.values.images[7]} />
                   )}
                 </div>
                 {/* image 4 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[8] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -539,18 +625,28 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[8] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[8] && (
-                    <PreviewImage file={formik.values.images[8]} />
+                    <PreviewImage formik={formik} index={8} file={formik.values.images[8]} />
                   )}
                 </div>
                 {/* image 5 */}
-                <div className="div-image-control">
+                <div
+                  style={formik.values.images[9] ? { border: "none" } : {}}
+                  className="div-image-control"
+                >
                   <PlusOutlined className="icon-control" />
                   <input
                     name="images"
@@ -559,14 +655,21 @@ function NewProduct() {
                     className="form-control image-control"
                     accept="image/*"
                     onChange={(event) => {
+                      if (!checkImage(event)) return;
+                      if (formik.values.images[0]) {
+                        const updateImage = [...formik.values.images];
+                        updateImage[9] =  event.target.files[0];
+                        formik.setFieldValue("images", updateImage);
+                        return;
+                      }
                       formik.setFieldValue("images", [
                         ...formik.values.images,
-                        event.currentTarget.files[0],
+                        event.target.files[0],
                       ]);
                     }}
                   />
                   {formik.values.images[9] && (
-                    <PreviewImage file={formik.values.images[9]} />
+                    <PreviewImage formik={formik} index={9} file={formik.values.images[9]} />
                   )}
                 </div>
               </div>
