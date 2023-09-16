@@ -27,7 +27,6 @@ class Product {
       pin: data.pin,
       mass: data.mass,
     }
-    console.log(arrPathImage);
 
     // const SELECTcategory = `SELECT * FROM banhangdientu.category where name = ?`
     // mysql.query(SELECTcategory, data.category, (er, result) => {
