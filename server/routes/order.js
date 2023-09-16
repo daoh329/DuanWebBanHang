@@ -3,12 +3,13 @@ const router = express.Router();
 
 const OrderController = require("../app/controllers/OrderController");
 
-router.post('/order', OrderController.order);
+router.post('/pay', OrderController.order);
 // Trong routes.js hoặc tệp tương tự
-router.get('/json', OrderController.json);
+router.get('/quanlyOrder', OrderController.quanlyOrder);
 
 router.put(`/confirm/:id`, OrderController.confirmOrder);
 router.put(`/cancel/:id`, OrderController.cancelOrder);
+
 router.get('/orderhistory/:phone', OrderController.orderHistory);
 router.get('/laptopbanchay', OrderController.topLaptop);
 

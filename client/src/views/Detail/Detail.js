@@ -819,7 +819,7 @@ function Detail() {
                   },
                   {
                     title: "Tất cả ngày trong tuần",
-                    value: "WEEKED",
+                    value: "TCNTT",
                   },
                 ]}
               />
