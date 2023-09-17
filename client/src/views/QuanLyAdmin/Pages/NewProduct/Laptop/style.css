@@ -56,10 +56,6 @@
     flex-direction: column;
 }
 
-.form-label{
-    text-align: left;
-}
-
 .form-message {
     text-align: left;
     color: red;
@@ -71,6 +67,8 @@
     line-height: 1.8rem;
     font-size: 1rem;
     margin: 0;
+    text-align: left;
+    color: black;
 }
 
 .div-image-control{
@@ -199,6 +197,7 @@
     font-size: 14px;
     font-weight: 600;
     transition: all 0.3s ease-out;
+    margin-top: 50px;
 }
 
 .btn-submit-form:hover{
@@ -207,6 +206,6 @@
 }
 
 .ck-editor__editable {
-    height: 150px; /* Thiết lập chiều cao theo ý muốn */
+    height: 300px; /* Thiết lập chiều cao theo ý muốn */
 }
 

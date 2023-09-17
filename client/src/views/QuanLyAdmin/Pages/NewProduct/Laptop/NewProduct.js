@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import PreviewImage from "./PreviewImage";
 
 // firebase
@@ -181,7 +181,7 @@ function NewProduct() {
       !["image/png", "image/jpeg", "image/jpg"].includes(
         event.target.files[0].type
       )
-    ){
+    ) {
       alert("Vui lòng chọn đúng định dạng ảnh!");
       return false;
     }
@@ -305,7 +305,7 @@ function NewProduct() {
             </div>
             {/* Màu sắc */}
             <div className="form-group">
-              <label className="form-label">Màu sắc</label>
+              <label className="form-label">Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)</label>
               <input
                 type="text"
                 name="color"
@@ -313,6 +313,7 @@ function NewProduct() {
                 className="form-control"
                 value={formik.values.color}
                 onChange={formik.handleChange}
+                placeholder="VD: Trắng,Đen,..."
               ></input>
               {formik.errors.color && (
                 <span className="form-message">{formik.errors.color}</span>
@@ -385,7 +386,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[0] =  event.target.files[0];
+                        updateImage[0] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -396,7 +397,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[0] && (
-                    <PreviewImage file={formik.values.images[0]} formik={formik} index={0} />
+                    <PreviewImage
+                      file={formik.values.images[0]}
+                      formik={formik}
+                      index={0}
+                    />
                   )}
                 </div>
                 {/* image 2 */}
@@ -415,7 +420,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[1]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[1] =  event.target.files[0];
+                        updateImage[1] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -426,7 +431,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[1] && (
-                    <PreviewImage formik={formik} index={1} file={formik.values.images[1]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={1}
+                      file={formik.values.images[1]}
+                    />
                   )}
                 </div>
                 {/* image 3 */}
@@ -445,7 +454,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[2] =  event.target.files[0];
+                        updateImage[2] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -456,7 +465,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[2] && (
-                    <PreviewImage formik={formik} index={2} file={formik.values.images[2]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={2}
+                      file={formik.values.images[2]}
+                    />
                   )}
                 </div>
                 {/* image 4 */}
@@ -475,7 +488,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[3] =  event.target.files[0];
+                        updateImage[3] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -486,7 +499,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[3] && (
-                    <PreviewImage formik={formik} index={3} file={formik.values.images[3]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={3}
+                      file={formik.values.images[3]}
+                    />
                   )}
                 </div>
                 {/* image 5 */}
@@ -505,7 +522,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[4] =  event.target.files[0];
+                        updateImage[4] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -516,7 +533,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[4] && (
-                    <PreviewImage formik={formik} index={4} file={formik.values.images[4]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={4}
+                      file={formik.values.images[4]}
+                    />
                   )}
                 </div>
               </div>
@@ -538,7 +559,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[5] =  event.target.files[0];
+                        updateImage[5] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -549,7 +570,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[5] && (
-                    <PreviewImage formik={formik} index={5} file={formik.values.images[5]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={5}
+                      file={formik.values.images[5]}
+                    />
                   )}
                 </div>
                 {/* image 2 */}
@@ -568,7 +593,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[6] =  event.target.files[0];
+                        updateImage[6] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -579,7 +604,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[6] && (
-                    <PreviewImage formik={formik} index={6} file={formik.values.images[6]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={6}
+                      file={formik.values.images[6]}
+                    />
                   )}
                 </div>
                 {/* image 3 */}
@@ -598,7 +627,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[7] =  event.target.files[0];
+                        updateImage[7] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -609,7 +638,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[7] && (
-                    <PreviewImage formik={formik} index={7} file={formik.values.images[7]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={7}
+                      file={formik.values.images[7]}
+                    />
                   )}
                 </div>
                 {/* image 4 */}
@@ -628,7 +661,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[8] =  event.target.files[0];
+                        updateImage[8] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -639,7 +672,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[8] && (
-                    <PreviewImage formik={formik} index={8} file={formik.values.images[8]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={8}
+                      file={formik.values.images[8]}
+                    />
                   )}
                 </div>
                 {/* image 5 */}
@@ -658,7 +695,7 @@ function NewProduct() {
                       if (!checkImage(event)) return;
                       if (formik.values.images[0]) {
                         const updateImage = [...formik.values.images];
-                        updateImage[9] =  event.target.files[0];
+                        updateImage[9] = event.target.files[0];
                         formik.setFieldValue("images", updateImage);
                         return;
                       }
@@ -669,7 +706,11 @@ function NewProduct() {
                     }}
                   />
                   {formik.values.images[9] && (
-                    <PreviewImage formik={formik} index={9} file={formik.values.images[9]} />
+                    <PreviewImage
+                      formik={formik}
+                      index={9}
+                      file={formik.values.images[9]}
+                    />
                   )}
                 </div>
               </div>
@@ -678,9 +719,10 @@ function NewProduct() {
               )}
             </div>
             {/* status */}
-            <div className="form-group">
-              <label className="form-label">Trạng thái</label>
+            <div style={{flexDirection:'row', alignItems:'center'}} className="form-group">
+              <label className="form-label">Trạng thái: </label>
               <input
+              style={{width:'20px', marginLeft:'20px'}}
                 name="status"
                 id="status"
                 type="checkbox"
@@ -920,9 +962,22 @@ function NewProduct() {
           <label className="form-label">Mô tả chi tiết</label>
           <CKEditor
             editor={ClassicEditor}
-            name="description"
-            id="description"
-            data="Nhập mô tả chi tiết sản phẩm"
+            data={formik.values?.description}
+            onReady={(editor) => {
+              // You can store the "editor" and use when it is needed.
+              console.log("Editor is ready to use!", editor);
+            }}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              formik.setFieldValue("description", data);
+              // console.log({ event, editor, data });
+            }}
+            onBlur={(event, editor) => {
+              console.log("Blur.", editor);
+            }}
+            onFocus={(event, editor) => {
+              console.log("Focus.", editor);
+            }}
           />
           {/* {formik.errors.description && <span className="form-message" >{formik.errors.description}</span>} */}
         </div>
