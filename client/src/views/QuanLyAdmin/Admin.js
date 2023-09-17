@@ -20,7 +20,7 @@ import {
 import { Routes, Route, Link } from 'react-router-dom';
 import './Admin.css'
 import Dashboard from "./Pages/Dashboard";
-import NewProduct from "./Pages/NewProduct";
+import TypeProduct from "./Pages/NewProduct/Type/TypeProduct";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/Products";
 import QuanLyAdmin from "./QuanLyAdmin";
@@ -192,7 +192,7 @@ function Admin() {
         <Col className="custom-scrollbar" span={18} push={6} style={{ overflowY: 'scroll', height: '100vh' }}>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="newproduct" element={<NewProduct />} />
+            <Route path="newproduct" element={<TypeProduct />} />
             <Route path="newcoupon" element={<NewCoupon />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<OrderList />} />
