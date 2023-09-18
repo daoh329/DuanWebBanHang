@@ -164,6 +164,7 @@
 } 
 
 .css-1realo9 { 
+    display: flex;
     margin: 0px 0px 0.5rem; 
     padding: 0px; 
     border-style: none; 
@@ -176,7 +177,7 @@
     font-size: 13px; 
     line-height: 24px; 
     overflow: hidden; 
-    display: -webkit-box; 
+  
     -webkit-box-orient: vertical; 
     -webkit-line-clamp: unset; 
     max-width: unset; 
@@ -492,11 +493,6 @@ h5 {
     margin: 0px;
 } 
 
-a { 
-    color: #0d6efd; 
-    -webkit-text-decoration: underline; 
-    text-decoration: underline;
-} 
 
 .css-1euuut5 a  { 
     text-decoration: none;
@@ -1691,11 +1687,398 @@ svg {
     padding: 7px 0px;
     color: rgba(0, 0, 0, 0.88);
 }
-.no-border {
-    border-collapse: collapse;
-    border: none; /* Ẩn đường viền của bảng */
-  }
-  
-  .no-border td, .no-border th {
-    border: none; /* Ẩn đường viền của các ô trong bảng */
-  }
+.card-header {
+    --mdb-card-header-border-width: 2px;
+    --mdb-card-header-border-color: whitesmoke;
+    border-bottom: none;
+}
+
+  /* =--------------------- */
+  @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap'); 
+ 
+
+.css-gr7r8o { 
+    border-style: none; 
+    border-width: 1px; 
+    border-color: unset; 
+    opacity: 1;
+} 
+
+.css-gr7r8o.teko-col { 
+    position: relative; 
+    max-width: 100%; 
+    min-height: 1px;
+} 
+
+.css-11tnwen { 
+    padding: 16px; 
+    background: rgb(248, 248, 252); 
+    border-radius: 8px; 
+    line-height: 24px;
+} 
+
+*,:before,:after { 
+    box-sizing: border-box;
+} 
+
+.css-1xehz2l { 
+    margin-top: 16px; 
+    width: 100%; 
+    padding-left: 12px;
+} 
+
+.css-1hqpg { 
+    padding: 16px 16px 0px 0px; 
+    width: 100%;
+} 
+
+.css-au5p93 { 
+    font-weight: 500; 
+    font-size: 13px;
+} 
+
+.css-q55v4i { 
+    width: 30%; 
+    margin-left: -1px;
+} 
+
+.css-1x5w71s { 
+    display: flex; 
+    flex-flow: wrap; 
+    padding-left: 16px;
+} 
+
+.css-12bxpw5 { 
+    width: 100%;
+} 
+
+.css-1sks6na { 
+    width: 100%; 
+    display: flex; 
+    -webkit-box-pack: justify; 
+    justify-content: space-between; 
+    font-size: 13px; 
+    line-height: 24px;
+} 
+
+.css-en0qru { 
+    width: 100%;
+} 
+
+.css-43jsjt { 
+    visibility: hidden; 
+    z-index: 999;
+} 
+
+.css-ff84vc { 
+    cursor: pointer; 
+    overflow: hidden; 
+    line-height: 1rem; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    text-align: center; 
+    color: rgb(67, 70, 87); 
+    border-width: 1px; 
+    border-style: solid; 
+    user-select: none; 
+    text-decoration: none; 
+    flex-direction: row; 
+    position: relative; 
+    width: 100%; 
+    display: flex; 
+    -webkit-box-pack: justify; 
+    justify-content: space-between; 
+    padding: 0.5rem; 
+    background-color: white; 
+    border-radius: 0.25rem; 
+    border-color: rgb(224, 224, 224);
+} 
+
+button:not(:disabled),[type="button"]:not(:disabled) { 
+    cursor: pointer;
+} 
+
+.css-1x7vo2d { 
+    background-color: transparent; 
+    opacity: 0;
+} 
+
+.css-un3w91 { 
+    display: flex; 
+    -webkit-box-align: center; 
+    align-items: center; 
+    cursor: pointer;
+} 
+
+.css-1wr4ueo { 
+    margin-left: 36px; 
+    margin-top: 4px;
+} 
+
+.css-1denlqa { 
+    text-overflow: ellipsis; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: 1; 
+    overflow: hidden;
+} 
+
+.css-12bxpw5 button > span:first-child  { 
+    flex: 1 1 0%; 
+    text-align: left;
+} 
+
+.css-er4drj { 
+    -webkit-mask: url("https://shopfront-cdn.tekoapis.com/static/5a2fda8b57935427.svg") center center / contain no-repeat; 
+    mask: url("https://shopfront-cdn.tekoapis.com/static/5a2fda8b57935427.svg"); 
+    display: inline-block; 
+    width: 12px; 
+    height: 12px; 
+    background-color: var(--button-icon-color,       #757575); 
+    transition: transform 0.2s ease-in-out 0s; 
+    transform: rotate(180deg); 
+    position: relative; 
+    margin-left: 2px; 
+    -webkit-mask-repeat-x: no-repeat; 
+    -webkit-mask-repeat-y: no-repeat;
+} 
+
+ul { 
+    padding-left: 2rem;
+} 
+
+ul { 
+    margin-top: 0; 
+    margin-bottom: 1rem;
+} 
+
+.css-1ymolov { 
+    border-radius: 0.25rem; 
+    border: 1px solid rgb(224, 224, 224); 
+    list-style-type: none; 
+    padding: 0px; 
+    margin: 0px; 
+    max-height: 200px; 
+    background-color: white; 
+    box-shadow: rgba(0, 0, 0, 0.08) 2px 2px 0.8rem 0px; 
+    overflow-y: auto;
+} 
+
+.css-1a6d6qm { 
+    display: inline-block; 
+    position: relative; 
+    width: 16px; 
+    min-width: 16px; 
+    height: 16px; 
+    margin-right: 8px;
+} 
+
+.css-1yyu6fw { 
+    margin-left: 0.75rem; 
+    font-size: 13px; 
+    font-weight: 500; 
+    line-height: 1;
+} 
+
+.css-1fnfu41 { 
+    font-size: 0.875rem; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    flex: 1 1 0%; 
+    margin-right: 0.25rem; 
+    text-align: left;
+} 
+
+.css-zsmsql { 
+    padding: 0.6rem 0.8rem; 
+    font-size: 14px; 
+    color: inherit; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+} 
+
+.css-zsmsql:hover { 
+    background-color: rgb(247, 247, 247); 
+    color: rgb(20, 53, 195); 
+    cursor: pointer;
+} 
+
+.css-ip2e5w { 
+    padding: 0.6rem 0.8rem; 
+    font-size: 14px; 
+    background-color: rgb(247, 247, 247); 
+    color: rgb(20, 53, 195); 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+} 
+
+.css-ip2e5w:hover { 
+    background-color: rgb(247, 247, 247); 
+    color: rgb(20, 53, 195); 
+    cursor: pointer;
+} 
+
+input { 
+    margin: 0; 
+    font-family: inherit; 
+    font-size: inherit; 
+    line-height: inherit;
+} 
+
+input { 
+    overflow: visible;
+} 
+
+.css-1cjp49c { 
+    position: absolute; 
+    inset: 0px; 
+    z-index: 1; 
+    width: 100%; 
+    height: 100%; 
+    cursor: pointer; 
+    opacity: 0;
+} 
+
+.css-nyq1jm { 
+    position: absolute; 
+    inset: 0px; 
+    width: 100%; 
+    height: 100%; 
+    border: 1px solid rgb(20, 53, 195); 
+    border-radius: 50%; 
+    background-color: rgb(255, 255, 255);
+} 
+
+p { 
+    margin-top: 0; 
+    margin-bottom: 1rem;
+} 
+
+.css-1eud8hl { 
+    font-size: 0.8125rem; 
+    font-weight: 500; 
+    color: rgb(67, 70, 87); 
+    margin: 0px; 
+    line-height: 1;
+} 
+
+.css-1ef6d5l { 
+    position: absolute; 
+    inset: 0px; 
+    z-index: 1; 
+    width: 100%; 
+    height: 100%; 
+    cursor: pointer; 
+    opacity: 0;
+} 
+
+.css-1q3w26f { 
+    position: absolute; 
+    inset: 0px; 
+    width: 100%; 
+    height: 100%; 
+    border: 1px solid rgb(228, 229, 240); 
+    border-radius: 50%; 
+    background-color: rgb(255, 255, 255);
+} 
+
+.css-1q6g407 { 
+    position: absolute; 
+    width: 50%; 
+    height: 50%; 
+    border-radius: 50%; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    display: block; 
+    background-color: rgb(20, 53, 195);
+} 
+
+.css-j662fd { 
+    margin-bottom: 0.5rem;
+} 
+
+.css-1mdu17v { 
+    position: absolute; 
+    width: 50%; 
+    height: 50%; 
+    border-radius: 50%; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    display: none; 
+    background-color: rgb(20, 53, 195);
+} 
+
+
+/* These were inline style tags. Uses id+class to override almost everything */
+#style-F8tYz.style-F8tYz {  
+   position: absolute;  
+    inset: 0px auto auto 0px;  
+    width: 215.562px;  
+    transform: translate3d(43px, 116px, 0px);  
+}  
+#style-V8nJR.style-V8nJR {  
+   position: absolute;  
+    left: 0px;  
+    transform: translate3d(108px, 0px, 0px);  
+}  
+#style-R9YTz.style-R9YTz {  
+   margin-bottom: 12px;  
+}  
+#style-hxlik.style-hxlik {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-Jj6to.style-Jj6to {  
+   margin-bottom: 12px;  
+}  
+#style-y1k2b.style-y1k2b {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-H8Cjr.style-H8Cjr {  
+   margin-bottom: 12px;  
+}  
+#style-dwrd8.style-dwrd8 {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-CNont.style-CNont {  
+   margin-bottom: 12px;  
+}  
+#style-eGA26.style-eGA26 {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-Ed1mU.style-Ed1mU {  
+   margin-bottom: 12px;  
+}  
+#style-LFTP1.style-LFTP1 {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-HPgd2.style-HPgd2 {  
+   margin-bottom: 12px;  
+}  
+#style-dcaRg.style-dcaRg {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-Xt7gL.style-Xt7gL {  
+   margin-bottom: 12px;  
+}  
+#style-wkpDD.style-wkpDD {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
+#style-oIpVj.style-oIpVj {  
+   margin-bottom: 12px;  
+}  
+#style-sZmG5.style-sZmG5 {  
+   padding-left: 8px;  
+    padding-right: 8px;  
+}  
