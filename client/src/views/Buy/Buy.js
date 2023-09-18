@@ -38,8 +38,6 @@ export default function Buy() {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
