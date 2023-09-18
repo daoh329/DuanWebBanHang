@@ -297,7 +297,10 @@ label {
     -webkit-box-pack: center; 
     justify-content: center;
   } 
-}     
+}   
+.table-borderless>:not(caption)>*>* {
+    border: 0;
+}
 
 .css-80kmv8.teko-row-start { 
     -webkit-box-pack: start; 

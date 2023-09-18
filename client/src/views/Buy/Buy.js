@@ -5,8 +5,10 @@ import {
   MDBTabsItem,
   MDBTabsLink,
   MDBTabsContent,
-  MDBTabsPane
+  MDBTabsPane,
+  MDBTable, MDBTableHead, MDBTableBody 
 } from 'mdb-react-ui-kit';
+
 import './Buy.css'
 import { Radio,Input ,Checkbox,Modal,Button,Form, Select  } from 'antd';
 const { TextArea } = Input;
@@ -910,7 +912,7 @@ export default function Buy() {
             <div className="teko-card css-516rdm snipcss0-6-182-183">
               <div className="teko-card-body css-0 snipcss0-7-183-184">
                 <div className="css-nouyrl snipcss0-8-184-185">
-                  <table className="css-qc9cbn snipcss0-9-185-186">
+                  {/* <table className="css-qc9cbn snipcss0-9-185-186">
                     <tbody className="snipcss0-10-186-187">
                       <tr className="snipcss0-11-187-188">
                         <td
@@ -922,7 +924,7 @@ export default function Buy() {
                             <div className="css-1777v snipcss0-14-190-191"></div>
                           </div>
                         </td>
-                        {/* giá tiền */}
+                   
                         <td
                           data-att-label="Tổng tạm tính"
                           className="css-1xrkmkn snipcss0-12-188-192"
@@ -954,14 +956,30 @@ export default function Buy() {
                         >
                           Thành tiền
                         </td>
-                        {/* tổng tiền */}
+                  
                         <td className="att-final-price css-aafp0n snipcss0-12-198-200">
                           19.990.000&nbsp;₫
                         </td>
                       </tr>
                     </tbody>
-                  </table>
-                  
+                  </table> */}
+<MDBTable style={{border:'none'}} borderless>
+
+  <MDBTableBody>
+  <tr>
+      <td colSpan={1}>Tổng tiền tam tính</td>
+      <td colSpan={3}>Larry the Bird</td>
+    </tr>
+    <tr>
+      <td colSpan={1}>Phí vận chuyển</td>
+      <td colSpan={3}>Larry the Bird</td>
+    </tr>
+    <tr>
+      <td colSpan={1}>Thanh tiền</td>
+      <td colSpan={3}>Larry the Bird</td>
+    </tr>
+  </MDBTableBody>
+</MDBTable>
                 </div>
               </div>
               <div className="teko-card-footer css-0 snipcss0-7-183-202">
@@ -999,7 +1017,7 @@ export default function Buy() {
     </div>
   </div>
 </div>
-<Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+<Modal title="Thông tin khách hàng" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 {/* body */}
 <div className="css-1g8ztiq snipcss-lpZLl">
   <form className="teko-form-vertical css-kxydk6">

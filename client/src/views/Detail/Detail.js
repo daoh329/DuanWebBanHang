@@ -234,7 +234,7 @@ function Detail() {
               <div>
                 {/* day la de hinhf */}
                 <div className="productDetailPreview style-FMPIO">
-                  <div width="100%" height="100%">
+                  <div>
                     <MDBContainer>
                       {/* <MDBCarousel showControls showIndicators dark fade>
                         {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
@@ -485,11 +485,8 @@ function Detail() {
               <div className="css-1o4pdv8">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-
-
             </div>
           </div>
- 
         </div>
 
         {/* modal */}
