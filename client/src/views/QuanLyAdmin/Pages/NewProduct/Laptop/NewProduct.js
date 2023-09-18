@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -140,7 +140,25 @@ function NewProduct() {
         });
     },
   });
-  // console.log(formik.values);
+
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    getBrands();
+  },[]);
+
+  // call api get brands
+  const getBrands = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/brands`)
+      .then((response) => {
+        // console.log(response.data.results);
+        setBrands(response.data.results);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   // firebase
   // const [image, setImage] = useState(null);
@@ -213,9 +231,12 @@ function NewProduct() {
                 onChange={formik.handleChange}
               >
                 <option value="">-- Chọn thương hiệu --</option>
-                <option value="acer">Acer</option>
-                <option value="macbook">Macbook</option>
-                <option value="asus">Asus</option>
+                {brands &&
+                  brands.map((brand) => (
+                    <option key={brand.id} value={brand.name}>
+                      {brand.name}
+                    </option>
+                  ))}
               </select>
               {formik.errors.brand && (
                 <span className="form-message">{formik.errors.brand}</span>
@@ -305,7 +326,9 @@ function NewProduct() {
             </div>
             {/* Màu sắc */}
             <div className="form-group">
-              <label className="form-label">Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)</label>
+              <label className="form-label">
+                Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)
+              </label>
               <input
                 type="text"
                 name="color"
@@ -719,10 +742,13 @@ function NewProduct() {
               )}
             </div>
             {/* status */}
-            <div style={{flexDirection:'row', alignItems:'center'}} className="form-group">
+            <div
+              style={{ flexDirection: "row", alignItems: "center" }}
+              className="form-group"
+            >
               <label className="form-label">Trạng thái: </label>
               <input
-              style={{width:'20px', marginLeft:'20px'}}
+                style={{ width: "20px", marginLeft: "20px" }}
                 name="status"
                 id="status"
                 type="checkbox"
@@ -965,7 +991,7 @@ function NewProduct() {
             data={formik.values?.description}
             onReady={(editor) => {
               // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
+              // console.log("Editor is ready to use!", editor);
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
