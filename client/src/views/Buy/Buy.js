@@ -775,8 +775,7 @@ export default function Buy() {
       </div>
       <div
         className="teko-col teko-col-4 css-gr7r8o2 tether-target-attached-top snipcss0-3-3-99 tether-element-attached-top tether-element-attached-center tether-target-attached-center style-FJLy3"
-        id="style-FJLy3"
-      >
+        id="style-FJLy3">
         <div className="css-14xqo9c snipcss0-0-0-1 tether-target-attached-top snipcss0-4-99-100 tether-element-attached-top tether-element-attached-center tether-target-attached-center">
           <div className="card-header css-0 snipcss0-1-1-2 snipcss0-5-100-101">
             <div className="css-1euuut5 snipcss0-2-2-3 snipcss0-6-101-102">
