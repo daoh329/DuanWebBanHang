@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import {
   MDBTabs,
   MDBTabsItem,
@@ -7,12 +8,70 @@ import {
   MDBTabsPane
 } from 'mdb-react-ui-kit';
 import './Buy.css'
-import { Radio,Input ,Checkbox } from 'antd';
+import { Radio,Input ,Checkbox,Modal,Button,Form, Select  } from 'antd';
 const { TextArea } = Input;
+const { Option } = Select;
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
 export default function Buy() {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
+  // modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  // select mới
+  const [city, setCity] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+        );
+        setCity(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  // select city
+  const handleCityChange = (value) => {
+    const selectedCity = city.find((city) => city.Id === value);
+    setSelectedCity(selectedCity);
+    setSelectedDistrict(null);
+  };
+  //select district
+  const handleDistrictChange = (value) => {
+    const selectedDistrict = selectedCity.Districts.find(
+      (district) => district.Id === value
+    );
+    setSelectedDistrict(selectedDistrict);
+  };
+  //select ward
+  const handleWardChange = (value) => {
+    const selectedWard = selectedDistrict.Wards.find(
+      (ward) => ward.Id === value
+    );
+    setSelectedWard(selectedWard);
+  };
   const [fillActive, setFillActive] = useState('tab1');
 
   const handleFillClick = (value: string) => {
@@ -136,6 +195,7 @@ export default function Buy() {
       className="css-162xo41 style-kRCXj"
       type="button"
       id="style-kRCXj"
+      onClick={showModal}
     >
       <svg
         fill="none"
@@ -172,12 +232,7 @@ export default function Buy() {
            Nhập Mã Online, hóa đơn qua Email
           </div>
           <div className="css-boqvfl snipcss0-5-52-54">
-            <div
-              className="input-container css-icxbs1 snipcss0-6-54-55"
-              height={40}
-            >
               <Input type="text" maxLength={255} placeholder="Email" />
-            </div>
           </div>
         </div>
 
@@ -520,16 +575,7 @@ export default function Buy() {
     Số điện thoại
     <Input placeholder="Số điện thoại" allowClear onChange={onChange} />
   </label>
-</div>
-
-        
-        
-        
-        
-        
-        
-        
-        
+</div> 
         </MDBTabsPane>
       </MDBTabsContent>
   
@@ -547,12 +593,9 @@ export default function Buy() {
           Ghi chú cho đơn hàng
           </div>
           <div className="css-boqvfl snipcss0-5-52-54">
-            <div
-              className="input-container css-icxbs1 snipcss0-6-54-55"
-              height={40}
-            >
+
               <Input type="text" maxLength={255} placeholder="Ghi chú" />
-            </div>
+
           </div>
         </div>
         <div className="teko-card css-t9nop0 snipcss0-4-4-57">
@@ -725,12 +768,7 @@ export default function Buy() {
            Nhập mã nhân viên tư vấn
           </div>
           <div className="css-boqvfl snipcss0-5-52-54">
-            <div
-              className="input-container css-icxbs1 snipcss0-6-54-55"
-              height={40}
-            >
               <Input type="text" maxLength={255} placeholder="Đây là mã giới thiệu không có tác dụng cho đơn hàng" />
-            </div>
           </div>
         </div>
         </div>
@@ -954,7 +992,245 @@ export default function Buy() {
     </div>
   </div>
 </div>
+<Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+{/* body */}
+<div className="css-1g8ztiq snipcss-lpZLl">
+  <form className="teko-form-vertical css-kxydk6">
+    <div className="teko-row teko-form-item css-hsl6pk">
+      <div className="teko-col teko-form-item-label css-1mmulcy">
+        <label
+          htmlFor="name"
+          className="teko-form-item-no-colon teko-form-item-required css-15ognui style-HFi9o"
+          id="style-HFi9o"
+        >
+          <div type="body" color="textTitle" className="css-1ohipf9">
+            Họ tên
+          </div>
+        </label>
+      </div>
+      <div className="teko-col teko-form-item-control css-10ikb73">
+            <div className="teko-form-item-control-input">
+              <div className="teko-form-item-control-input-content">
+                <div className="css-5xvlco">
+                  <Input type="text" maxLength={255} placeholder="Vui lòng nhập tên người nhận" />      
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div className="teko-row teko-row-space-between css-1o3gs9x">
+      <div className="teko-col css-gr7r8o style-kSbpZ" id="style-kSbpZ">
+        <div className="teko-row teko-form-item css-hsl6pk">
+          <div className="teko-col teko-form-item-label css-1mmulcy">
+            <label
+              htmlFor="telephone"
+              className="teko-form-item-no-colon teko-form-item-required css-15ognui style-gDaoi"
+              id="style-gDaoi"
+            >
+              <div type="body" color="textTitle" className="css-1ohipf9">
+                Số điện thoại
+              </div>
+            </label>
+          </div>
+          <div className="teko-col teko-form-item-control css-10ikb73">
+            <div className="teko-form-item-control-input">
+              <div className="teko-form-item-control-input-content">
+                <div className="css-5xvlco">
+                  <Input type="text" maxLength={255} placeholder="Nhập số điện thoại" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="teko-col css-gr7r8o style-ZI6gN" id="style-ZI6gN">
+        <div className="teko-row teko-form-item css-hsl6pk">
+          <div className="teko-col teko-form-item-label css-1mmulcy">
+            <label
+              htmlFor="email"
+              className="teko-form-item-no-colon teko-form-item-required css-15ognui style-MGwiV"
+              id="style-MGwiV"
+            >
+              <div type="body" color="textTitle" className="css-1ohipf9">
+                Email
+              </div>
+            </label>
+          </div>
+          <div className="teko-col teko-form-item-control css-10ikb73">
+            <div className="teko-form-item-control-input">
+              <div className="teko-form-item-control-input-content">
+                <div className="css-5xvlco">
+                 <Input type="text" maxLength={255} placeholder="Nhập Email" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="css-f1fyi0">
+      <div width="100%" color="divider" className="css-yae08c"></div>
+    </div>
+    <div type="title" className="css-3zo42j">
+      Địa chỉ nhận hàng
+    </div>
+    <div className="teko-row teko-row-space-between css-1o3gs9x">
+      <div className="teko-col css-gr7r8o style-Tgoyv" id="style-Tgoyv">
+        <div className="teko-row teko-form-item css-hsl6pk">
+          <div className="teko-col teko-form-item-label css-1mmulcy">
+            <label
+              htmlFor="provinceCode"
+              className="teko-form-item-no-colon teko-form-item-required css-15ognui style-MvFDT"
+              id="style-MvFDT"
+            >
+              <div type="body" color="textTitle" className="css-1ohipf9">
+                Tỉnh/Thành phố
+              </div>
+            </label>
+          </div>
+{/*  */}
+<Form.Item>
+              <Select onChange={handleCityChange}>
+                {city.map((city) => (
+                  <Option key={city.Id} value={city.Id}>
+                    {city.Name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+        </div>
+      </div>
+      <div className="teko-col css-gr7r8o style-9gr1p" id="style-9gr1p">
+        <div className="teko-row teko-form-item css-hsl6pk">
+          <div className="teko-col teko-form-item-label css-1mmulcy">
+            <label
+              htmlFor="districtCode"
+              className="teko-form-item-no-colon teko-form-item-required css-15ognui style-EyAQH"
+              id="style-EyAQH"
+            >
+              <div type="body" color="textTitle" className="css-1ohipf9">
+                Quận/Huyện
+              </div>
+            </label>
+          </div>
+          <Form.Item>
+              <Select onChange={handleDistrictChange}>
+                {selectedCity &&
+                  selectedCity.Districts.map((district) => (
+                    <Option key={district.Id} value={district.Id}>
+                      {district.Name}
+                    </Option>
+                  ))}
+              </Select>
+            </Form.Item>
+        </div>
+      </div>
+    </div>
+    <div className="teko-row teko-row-space-between css-1c33opk">
+      <div className="teko-col css-gr7r8o style-AUdNr" id="style-AUdNr">
+        <div className="teko-row teko-form-item css-hsl6pk">
+          <div className="teko-col teko-form-item-label css-1mmulcy">
+            <label
+              htmlFor="wardCode"
+              className="teko-form-item-no-colon teko-form-item-required css-15ognui style-vhZwt"
+              id="style-vhZwt"
+            >
+              <div type="body" color="textTitle" className="css-1ohipf9">
+                Phường/Xã
+              </div>
+            </label>
+          </div>
 
+          <Form.Item>
+              <Select onChange={handleWardChange}>
+                {selectedDistrict &&
+                  selectedDistrict.Wards.map((ward) => (
+                    <Option key={ward.Id} value={ward.Id}>
+                      {ward.Name}
+                    </Option>
+                  ))}
+              </Select>
+            </Form.Item>
+        </div>
+      </div>
+      <div className="teko-col css-gr7r8o style-yGp84" id="style-yGp84">
+        <div className="teko-row teko-form-item css-hsl6pk">
+          <div className="teko-col teko-form-item-label css-1mmulcy">
+            <label
+              htmlFor="address"
+              className="teko-form-item-no-colon teko-form-item-required css-15ognui style-qMHr5"
+              id="style-qMHr5"
+            >
+              <div type="body" color="textTitle" className="css-1ohipf9">
+                Địa chỉ cụ thể
+              </div>
+            </label>
+          </div>
+          <div className="teko-col teko-form-item-control css-10ikb73">
+            <div className="teko-form-item-control-input">
+              <div className="teko-form-item-control-input-content">
+                <div className="css-5xvlco">
+                  <Input type="text" maxLength={255} placeholder="Số nhà,ngõ,tên đường..." />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="teko-row teko-row-end css-1o3gs9x">
+      <div className="teko-row teko-form-item css-hsl6pk">
+        <div className="teko-col teko-form-item-control css-10ikb73">
+          <div className="teko-form-item-control-input">
+            <div className="teko-form-item-control-input-content">
+              <label
+                value="false"
+                id="isDefault"
+                className="check-box css-1arb6mh"
+              >
+                <div className="css-l24w9c">
+                  <input type="checkbox" className="css-lc01j1" />
+                  <div className="checkbox-inner css-gfk8lf">
+                    <svg
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      size={12}
+                      className="css-u5ggi9"
+                      color="transparent"
+                      height={12}
+                      width={12}
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 12.4545L9.375 17L19 7"
+                        stroke="#82869E"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  type="body"
+                  className="checkbox-label css-10md8qb style-8YjM4"
+                  id="style-8YjM4"
+                >
+                  Đặt làm mặc định
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Form.Item>
+              <Button>Xác nhận</Button>
+            </Form.Item>
+  </form>
+</div>
+
+      </Modal>
     </>
   );
 }
