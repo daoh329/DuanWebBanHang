@@ -561,6 +561,7 @@ a:hover {
 } 
 
 .css-1v9diph { 
+    display: -webkit-box;
     border-style: none; 
     border-width: 1px; 
     border-color: unset; 
@@ -568,24 +569,7 @@ a:hover {
     margin-bottom: 1rem; 
     padding-left: 2rem;
 } 
-
-.css-1v9diph.teko-row { 
-    display: flex; 
-    flex-flow: wrap;
-} 
-
-@media (min-width: 1024px){ 
-  .css-1v9diph.teko-row { 
-    -webkit-box-pack: center; 
-    justify-content: center;
-  } 
-}     
-
-.css-1v9diph.teko-row-start { 
-    -webkit-box-pack: start; 
-    margin-top: 10px;
-    justify-content: flex-start;
-} 
+  
 
 .css-1v9diph.teko-row:before,.css-1v9diph.teko-row:after { 
     display: flex;
@@ -1549,26 +1533,6 @@ img {
     min-height: 1px;
 } 
 
-.css-1v9diph { 
-    border-style: none; 
-    border-width: 1px; 
-    border-color: unset; 
-    opacity: 1; 
-    margin-bottom: 1rem; 
-    padding-left: 2rem;
-} 
-
-.css-1v9diph.teko-row { 
-    display: flex; 
-    flex-flow: wrap;
-} 
-
- 
-
-.css-1v9diph.teko-row-start { 
-    -webkit-box-pack: start; 
-    justify-content: flex-start;
-} 
 
 .css-1v9diph.teko-row:before,.css-1v9diph.teko-row:after { 
     display: flex;
