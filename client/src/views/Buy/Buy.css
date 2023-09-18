@@ -35,7 +35,21 @@
   .css-d00g6r { 
     width: 1232px;
   } 
-}     
+}  
+@media screen and (max-width: 767px) {
+    .teko-col{
+        display: contents;
+    }
+    .css-18c0ysw {
+        width: 100%;
+    }
+    .snipcss0-4-99-155{
+        width: 100%;
+    }
+    .snipcss0-4-99-168{
+        width: 100%;
+    }
+}  
 
 .css-q0e31u { 
     border-style: none; 
@@ -60,7 +74,7 @@
 
 .css-q0e31u.teko-row:before,.css-q0e31u.teko-row:after { 
     display: flex;
-} 
+} ss-gr7r8o2.teko-col-4 
 
 .css-gr7r8o2 { 
     border-style: none; 
@@ -76,13 +90,13 @@
 } 
 
 .css-gr7r8o2.teko-col-8 { 
-    display: block; 
+
     flex: 0 0 66.66%; 
     max-width: 66.66%;
 } 
 
 .css-gr7r8o2.teko-col-4 { 
-    display: block; 
+
     flex: 0 0 33.33%; 
     max-width: 33.33%;
 } 
