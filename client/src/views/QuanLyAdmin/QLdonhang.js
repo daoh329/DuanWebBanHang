@@ -70,9 +70,9 @@ function OrderList() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : 'orange'
+                    color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
                 }}>
-                    {status === 1 ? 'Đã xác nhận' : 'Chưa xác nhận'}
+                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
                 </span>
             )
         },
