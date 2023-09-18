@@ -4,7 +4,7 @@ const express = require('express');
 const route = require('./routes')
 const bodyParser = require('body-parser');
 require('./config/db/mySQL');
-
+const path = require('path');
 const cors = require("cors");
 const passport = require("passport");
 const authRoute = require("./routes/auth");
@@ -34,6 +34,7 @@ app.use("/auth", authRoute);
 // Sử dụng bodyParser để phân tích cú pháp các yêu cầu đến
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
+app.use(express.static(path.join(__dirname, './src/public')));
 
 // Định nghĩa các tuyến (routes)
 route(app);

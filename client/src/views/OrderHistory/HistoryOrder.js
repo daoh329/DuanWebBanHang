@@ -20,25 +20,30 @@ function HistoryOrder(props) {
     }, []);
 
     const columns = [
-        { title: 'Người mua', dataIndex: 'userName', key: 'userName' },
+        { title: 'Người mua', dataIndex: 'Username', key: 'Username' },
         { title: 'SDT', dataIndex: 'phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
-        { title: 'Giá', dataIndex: 'price', key: 'price' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-
-        { title: 'Ghi chú', dataIndex: 'note', key: 'note' },
+        { title: 'Giá', dataIndex: 'price', key: 'price' },
         {
             title: 'Thời gian tạo',
             dataIndex: 'created_at',
             key: 'created_at',
-            render: created_at => format(new Date(created_at), 'dd/MM/yyyy HH:mm:ss'), // Định dạng lại thời gian
         },
         {
-            title: 'Trạng thái', dataIndex: 'status', key: 'status', render: status => <span style={{
-                fontWeight: 'bold', color: status === 'Đã xác nhận' ? 'green' : status === 'Chưa xác nhận' ? 'orange' : 'red'
-            }}>{status}</span>
-        },
+          title: 'Trạng thái', 
+          dataIndex: 'status', 
+          key: 'status', 
+          render: status => (
+              <span style={{
+                  fontWeight: 'bold', 
+                  color: status === 1 ? 'green' : 'orange'
+              }}>
+                  {status === 1 ? 'Đã xác nhận' : 'Chưa xác nhận'}
+              </span>
+          )
+        },      
     ]
 
     return (
@@ -61,26 +66,9 @@ function HistoryOrder(props) {
 
             {/* <Table columns={columns} dataSource={data} /> */}
 
-      <div className="table-container">
-      <table className="table">
-        <thead>
-          <tr>
-            {columns.map(column => (
-              <th key={column.key}>{column.title}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              {columns.map(column => (
-                <td key={column.key}>{item[column.dataIndex]}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        <div>
+          <Table columns={columns} dataSource={data} />
+        </div>
     
                     {/*  */}
         </div>

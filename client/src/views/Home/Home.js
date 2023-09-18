@@ -2,9 +2,8 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination } from "antd";
-import { LeftOutlined, RightOutlined, CaretLeftOutlined, CaretRightOutlined, } from "@ant-design/icons";
-import { ShoppingCartOutlined, LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
+import { Layout, Carousel, Tabs, Card, Button, Pagination } from "antd";
+import { LeftOutlined, RightOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -944,7 +943,7 @@ const Home = () => {
                 historysp.length > 0 &&
                 historysp.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" style={{border: '1px solid rgb(228, 229, 240)', borderRadius:'5px',}}>
-                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img onClick={() => handleViewDetailproducts(item)} src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
@@ -972,14 +971,14 @@ const Home = () => {
             id="scroll-left-button"
             onClick={scrollTrai}
           >
-            <CaretLeftOutlined />
+            <LeftOutlined />
           </button>
           <button
             className="scroll-button"
             id="scroll-right-button"
             onClick={scrollPhai}
           >
-            <CaretRightOutlined />
+            <RightOutlined />
           </button>
           </div>
         </div>
