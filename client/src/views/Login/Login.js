@@ -1,4 +1,4 @@
-  import React, { useState } from "react";
+  import React, { useState,useEffect } from "react";
   import {
     FacebookOutlined,
     GoogleOutlined,
@@ -7,6 +7,9 @@
   import "./login.css";
 
   const Login = () => {
+    useEffect(() => {
+      window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+    }, []);
     const [check, setCheck] = useState(false);
 
     const handleCheckbox = () => {
