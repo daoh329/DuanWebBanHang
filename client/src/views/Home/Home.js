@@ -433,7 +433,7 @@ const Home = () => {
                 className='banner'
                 src={image}
                 alt={`Slide ${index}`}
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: "100%", height: "500px" }}
               />
             </div>
           ))}
