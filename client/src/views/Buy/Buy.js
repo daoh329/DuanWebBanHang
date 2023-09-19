@@ -5,8 +5,10 @@ import {
   MDBTabsItem,
   MDBTabsLink,
   MDBTabsContent,
-  MDBTabsPane
+  MDBTabsPane,
+  MDBTable, MDBTableHead, MDBTableBody 
 } from 'mdb-react-ui-kit';
+
 import './Buy.css'
 import { Radio,Input ,Checkbox,Modal,Button,Form, Select  } from 'antd';
 const { TextArea } = Input;
@@ -36,8 +38,6 @@ export default function Buy() {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -129,8 +129,10 @@ export default function Buy() {
     >
       <div>
         <span id="style-owhaV" className="style-owhaV">
+          {/* user name */}
           Nguyễn Đình minh
         </span>
+        {/* icon */}
         <div
           data-content-region-name="shippingAddress"
           data-track-content="true"
@@ -156,7 +158,9 @@ export default function Buy() {
           </svg>
         </div>
       </div>
+      {/* sdt */}
       <div>0349551307</div>
+      {/* addres */}
       <div id="style-GqGe8" className="style-GqGe8">
         10, Phường 01, Quận 10, Thành phố Hồ Chí Minh
       </div>
@@ -814,6 +818,7 @@ export default function Buy() {
                     aria-label="Image"
                     className="css-587jha snipcss0-5-15-16 snipcss0-9-114-115"
                   >
+                    {/* tên sp */}
                     <div
                       type="body"
                       color="textPrimary"
@@ -823,6 +828,7 @@ export default function Buy() {
                       (NH.QENSV.003) (i5-11400H) (Đen)
                     </div>
                   </a>
+                  {/* số lượng */}
                   <div
                     type="caption"
                     color="textSecondary"
@@ -830,6 +836,7 @@ export default function Buy() {
                   >
                     Số lượng 1
                   </div>
+                  {/* giá sp */}
                   <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
                     19.990.000
                     <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
@@ -837,11 +844,10 @@ export default function Buy() {
                     </span>
                   </span>
                   <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
+                    {/* giá km */}
                     <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
-                      25.990.000
-                      <span className="css-1ul6wk9 snipcss0-7-22-23 snipcss0-11-121-122">
-                        đ
-                      </span>
+                      25.990.000 đ
+                 
                     </span>
                   </div>
                 </div>
@@ -904,7 +910,7 @@ export default function Buy() {
             <div className="teko-card css-516rdm snipcss0-6-182-183">
               <div className="teko-card-body css-0 snipcss0-7-183-184">
                 <div className="css-nouyrl snipcss0-8-184-185">
-                  <table className="css-qc9cbn snipcss0-9-185-186">
+                  {/* <table className="css-qc9cbn snipcss0-9-185-186">
                     <tbody className="snipcss0-10-186-187">
                       <tr className="snipcss0-11-187-188">
                         <td
@@ -916,6 +922,7 @@ export default function Buy() {
                             <div className="css-1777v snipcss0-14-190-191"></div>
                           </div>
                         </td>
+                   
                         <td
                           data-att-label="Tổng tạm tính"
                           className="css-1xrkmkn snipcss0-12-188-192"
@@ -947,13 +954,30 @@ export default function Buy() {
                         >
                           Thành tiền
                         </td>
+                  
                         <td className="att-final-price css-aafp0n snipcss0-12-198-200">
                           19.990.000&nbsp;₫
                         </td>
                       </tr>
                     </tbody>
-                  </table>
-                  
+                  </table> */}
+<MDBTable style={{border:'none'}} borderless>
+
+  <MDBTableBody>
+  <tr>
+      <td colSpan={1}>Tổng tiền tam tính</td>
+      <td colSpan={3}>Larry the Bird</td>
+    </tr>
+    <tr>
+      <td colSpan={1}>Phí vận chuyển</td>
+      <td colSpan={3}>Larry the Bird</td>
+    </tr>
+    <tr>
+      <td colSpan={1}>Thanh tiền</td>
+      <td colSpan={3}>Larry the Bird</td>
+    </tr>
+  </MDBTableBody>
+</MDBTable>
                 </div>
               </div>
               <div className="teko-card-footer css-0 snipcss0-7-183-202">
@@ -991,7 +1015,7 @@ export default function Buy() {
     </div>
   </div>
 </div>
-<Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+<Modal title="Thông tin khách hàng" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 {/* body */}
 <div className="css-1g8ztiq snipcss-lpZLl">
   <form className="teko-form-vertical css-kxydk6">

@@ -14,7 +14,7 @@ import {
   Carousel
 } from "antd";
 // Thư viện mdb
-import { MDBCarousel, MDBCarouselItem, MDBContainer } from "mdb-react-ui-kit";
+import { MDBCarousel, MDBCarouselItem, MDBContainer,  MDBTable, MDBTableBody  } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
 import axios from "axios";
@@ -31,17 +31,23 @@ function Detail() {
   // ------------------------------------------------------------------------------------------------------------------------main
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
   // sự kiện mở modal
   const showModal = () => {
     setIsModalOpen(true);
   };
+  const showModal2 = () => {
+    setIsModalOpen2(true);
+  };
   //sự kiện ok
   const handleOk = () => {
     setIsModalOpen(false);
+    setIsModalOpen2(false);
   };
   //sự kiện đóng
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsModalOpen2(false);
   };
   // select mới
   const [city, setCity] = useState([]);
@@ -228,13 +234,13 @@ function Detail() {
   return (
     <>
       <div>
-        <div className="css-rfz8yf snipcss-lgA99 style-BooKL" id="style-BooKL">
+        <div className="css-rfz8yf snipcss-lgA99 style-BooKL">
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
                 {/* day la de hinhf */}
                 <div className="productDetailPreview style-FMPIO">
-                  <div width="100%" height="100%">
+                  <div>
                     <MDBContainer>
                       {/* <MDBCarousel showControls showIndicators dark fade>
                         {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
@@ -295,37 +301,6 @@ function Detail() {
                 </div>
               </div>
               {/* hiển thị chi tiết  */}
-
-              {/* <div className="css-1nv5d5l">
-                - CPU: AMD Ryzen 7 6800H
-                <br />
-                - Màn hình: 15.6" IPS (1920 x 1080),144Hz
-                <br />
-                - RAM: 1 x 8GB DDR5 4800MHz
-                <br />
-                - Đồ họa: RTX 3050 4GB GDDR6 / AMD Radeon 680M
-                <br />
-                - Lưu trữ: 512GB SSD M.2 NVMe /
-                <br />
-                - Hệ điều hành: Windows 11 Home
-                <br />
-                - Pin: 4 cell 56 Wh Pin liền
-                <br />- Khối lượng: 2.1kg
-              </div>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="css-gmt3b"
-                color="link500"
-              >
-                <div
-                  type="body"
-                  className="button-text css-msc1w4"
-                  color="link500"
-                >
-                  Xem thông tin chi tiết
-                </div>
-              </a> */}
             </div>
             <div className="css-6b3ezu">
               {/* ten, mã , thương hiệu */}
@@ -485,16 +460,77 @@ function Detail() {
               <div className="css-1o4pdv8">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-
-
             </div>
           </div>
- 
         </div>
+        <div className="style-2">
+          <div className="fle-x">
 
+          <div className="mo-ta">
+          <div className="title-mo">Mô tả sản phâm</div>
+          </div>
+
+                      <div className="chi-tiet">
+                        <div className="title-tiet">Thông tin chi tiết</div>
+                        <div className="khoi-tiet-cha">
+
+                      <MDBTable className="table-tiet" borderless>
+                      <MDBTableBody>
+                      <tr>
+                          <td colSpan={1}>Thương hiệu</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
+                          <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={1}>Màu sắc</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={1}>Thế hệ CPU</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={1}>Chíp đồ họa</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                      </MDBTableBody>
+                      </MDBTable>
+                        </div>
+                        <div onClick={showModal2} className="xem-tiet">Xem chi tiết cấu hình</div>
+
+                      </div>
+
+                      </div>
+        </div>
+        {/* <div className="style-2"></div> */}
+{/* main */}
         {/* modal */}
         <Modal
-          title="Basic Modal"
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -639,6 +675,124 @@ function Detail() {
               <Button onClick={handleConfirm}>Xác nhận</Button>
             </Form.Item>
           </Form>
+        </Modal>
+        {/* modal xem-chi-tiet */}
+                <Modal
+          open={isModalOpen2}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={700} >
+          {/* body */}
+          <div className="khoi-tiet-cha">
+            <div className="title-modal-cha">
+              <div className="title-modal-con">Thông số kỹ thuật</div>
+           </div>
+
+<MDBTable className="table-tiet" borderless>
+<MDBTableBody>
+<tr>
+    <td colSpan={1}>Thương hiệu</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
+    <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Màu sắc</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Thế hệ CPU</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Chíp đồ họa</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Màn hình</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Lưu trữ</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Số cổng lưu chữ tối đa</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khe hở M.2 hỗ trợ</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Cổng xuất hình</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Cổng kết nối</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Kết nối không dây</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bàn phím</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Hệ điều hành</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Kích thước</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Pin</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khối lượng</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Đèn LED trên máy</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>
+  </tr>
+</MDBTableBody>
+</MDBTable>
+  </div>
         </Modal>
         {/*  */}
       </div>
