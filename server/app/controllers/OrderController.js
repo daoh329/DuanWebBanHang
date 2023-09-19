@@ -11,8 +11,8 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    let sql = `INSERT INTO orders (name, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
-    let values = [data.userName, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
+    let sql = `INSERT INTO orders (Username, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
+    let values = [data.name, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(result);
@@ -48,24 +48,24 @@ class OrderController {
   }
 
   async confirmOrder(req, res) {
-      const orderId = req.params.id;
-      const sql = 'UPDATE orders SET status = 1 WHERE id = ?';
-
-      mysql.query(sql, [orderId], (err, result) => {
-          if (err) {
-              console.error(err);
-              res.status(500).send('Error confirming order');
-          } else if (result.affectedRows === 0) {
-              res.status(404).send('No order found with the provided ID');
-          } else {
-              res.send('Order confirmed');
-          }
-      });
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 1, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+            res.send('Order confirmed');
+        }
+    });
   }
 
   async cancelOrder(req, res) {
       const orderId = req.params.id;
-      const sql = 'UPDATE orders SET status = 0 WHERE id = ?';
+      const sql = 'UPDATE orders SET status = 2, updated_at = NOW() WHERE id = ?';
 
       mysql.query(sql, [orderId], (err, result) => {
           if (err) {
@@ -113,6 +113,49 @@ class OrderController {
     });
   }
   
+  async dashboard(req, res) {
+    let sql = 'SELECT status, DATE(updated_at) as updated_date, COUNT(*) as count FROM orders GROUP BY status, DATE(updated_at)';
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const dateExists = acc.find(data => data.updated_date === item.updated_date);
+        
+        if(dateExists){
+          switch(item.status) {
+            case 0:
+              dateExists.unconfirm = item.count;
+              break;
+            case 1:
+              dateExists.confirm = item.count;
+              break;
+            case 2:
+              dateExists.cancel = item.count;
+              break;
+          }
+        } else {
+          let newItem = {updated_date: item.updated_date};
+          switch(item.status) {
+            case 0:
+              newItem.unconfirm = item.count;
+              break;
+            case 1:
+              newItem.confirm = item.count;
+              break;
+            case 2:
+              newItem.cancel = item.count;
+              break;
+          }
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);
+  
+      res.send(convertedData);
+    });
+  }  
 }
 
 module.exports = new OrderController();

@@ -1,27 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { PlusOutlined } from "@ant-design/icons";
-import PreviewImage from "./PreviewImage";
-
-// firebase
-// import {
-//   ref,
-//   uploadBytes,
-//   getDownloadURL,
-//   uploadBytesResumable,
-// } from "firebase/storage";
-// import { storage } from "../../../../../firebaseConfig";
+import ImageInput from "../ImageComponent/ImageInput";
 
 function NewProduct() {
   const formik = useFormik({
     initialValues: {
       brand: "",
       guarantee: "",
+      name:"",
       price: 0,
       shortDescription: "",
       series_laptop: "",
@@ -128,11 +119,11 @@ function NewProduct() {
           },
         })
         .then((res) => {
-          console.log(res);
-          // if (res.status === ) {
-
-          // }
-          // alert('Tạo sản phẩm thành công.')
+          if (res.status === 200) {
+            alert('Tạo sản phẩm thành công!')
+          }else{
+            alert("Tạo sản phẩm thất bại!")
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -140,57 +131,25 @@ function NewProduct() {
         });
     },
   });
-  // console.log(formik.values);
 
-  // firebase
-  // const [image, setImage] = useState(null);
-  // const [url, setDownloadURL] = useState("");
-  // const [progress, setUploadProgress] = useState(0);
+  const [brands, setBrands] = useState([]);
 
-  // const handleUpload = () => {
-  //   if (!image) return;
-
-  //   const imageRef = ref(storage, `image/${image.name}`);
-
-  //   const uploadTask = uploadBytesResumable(imageRef, image);
-  //   // Theo dõi tiến trình tải lên
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       const progress =
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       setUploadProgress(progress);
-  //     },
-  //     (error) => {
-  //       console.error("Error uploading file:", error);
-  //     },
-  //     () => {
-  //       // Tải lên hoàn thành
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         setDownloadURL(downloadURL);
-  //       });
-  //     }
-  //   );
-  // };
-
-  const checkImage = (event) => {
-    if (event.target.files.length === 0) {
-      return false;
-    }
-    if (
-      !["image/png", "image/jpeg", "image/jpg"].includes(
-        event.target.files[0].type
-      )
-    ) {
-      alert("Vui lòng chọn đúng định dạng ảnh!");
-      return false;
-    }
-    if (event.target.files[0].size > 5 * 1024 * 1024) {
-      alert("Ảnh quá lớn!");
-      return false;
-    }
-    return true;
+  // function call api get brands
+  const getBrands = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/brands`)
+      .then((response) => {
+        setBrands(response.data.results);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
+
+  useEffect(() => {
+    // get brands data
+    getBrands();
+  },[]);
 
   return (
     <div className="container-content">
@@ -213,9 +172,12 @@ function NewProduct() {
                 onChange={formik.handleChange}
               >
                 <option value="">-- Chọn thương hiệu --</option>
-                <option value="acer">Acer</option>
-                <option value="macbook">Macbook</option>
-                <option value="asus">Asus</option>
+                {brands &&
+                  brands.map((brand) => (
+                    <option key={brand.name} value={brand.name}>
+                      {brand.name}
+                    </option>
+                  ))}
               </select>
               {formik.errors.brand && (
                 <span className="form-message">{formik.errors.brand}</span>
@@ -305,7 +267,9 @@ function NewProduct() {
             </div>
             {/* Màu sắc */}
             <div className="form-group">
-              <label className="form-label">Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)</label>
+              <label className="form-label">
+                Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)
+              </label>
               <input
                 type="text"
                 name="color"
@@ -366,363 +330,15 @@ function NewProduct() {
               )}
             </div>
             {/* image */}
-            <div className="form-group">
-              <label className="form-label">Hình ảnh</label>
-              {/* col-image-1 */}
-              <div style={{ display: "flex" }}>
-                {/* image 1 */}
-                <div
-                  style={formik.values.images[0] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[0] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[0] && (
-                    <PreviewImage
-                      file={formik.values.images[0]}
-                      formik={formik}
-                      index={0}
-                    />
-                  )}
-                </div>
-                {/* image 2 */}
-                <div
-                  style={formik.values.images[1] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[1]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[1] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[1] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={1}
-                      file={formik.values.images[1]}
-                    />
-                  )}
-                </div>
-                {/* image 3 */}
-                <div
-                  style={formik.values.images[2] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[2] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[2] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={2}
-                      file={formik.values.images[2]}
-                    />
-                  )}
-                </div>
-                {/* image 4 */}
-                <div
-                  style={formik.values.images[3] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[3] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[3] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={3}
-                      file={formik.values.images[3]}
-                    />
-                  )}
-                </div>
-                {/* image 5 */}
-                <div
-                  style={formik.values.images[4] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[4] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[4] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={4}
-                      file={formik.values.images[4]}
-                    />
-                  )}
-                </div>
-              </div>
-              {/* col-image-2 */}
-              <div style={{ display: "flex" }}>
-                {/* image 1 */}
-                <div
-                  style={formik.values.images[5] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[5] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[5] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={5}
-                      file={formik.values.images[5]}
-                    />
-                  )}
-                </div>
-                {/* image 2 */}
-                <div
-                  style={formik.values.images[6] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[6] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[6] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={6}
-                      file={formik.values.images[6]}
-                    />
-                  )}
-                </div>
-                {/* image 3 */}
-                <div
-                  style={formik.values.images[7] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[7] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[7] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={7}
-                      file={formik.values.images[7]}
-                    />
-                  )}
-                </div>
-                {/* image 4 */}
-                <div
-                  style={formik.values.images[8] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[8] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[8] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={8}
-                      file={formik.values.images[8]}
-                    />
-                  )}
-                </div>
-                {/* image 5 */}
-                <div
-                  style={formik.values.images[9] ? { border: "none" } : {}}
-                  className="div-image-control"
-                >
-                  <PlusOutlined className="icon-control" />
-                  <input
-                    name="images"
-                    id="images"
-                    type="file"
-                    className="form-control image-control"
-                    accept="image/*"
-                    onChange={(event) => {
-                      if (!checkImage(event)) return;
-                      if (formik.values.images[0]) {
-                        const updateImage = [...formik.values.images];
-                        updateImage[9] = event.target.files[0];
-                        formik.setFieldValue("images", updateImage);
-                        return;
-                      }
-                      formik.setFieldValue("images", [
-                        ...formik.values.images,
-                        event.target.files[0],
-                      ]);
-                    }}
-                  />
-                  {formik.values.images[9] && (
-                    <PreviewImage
-                      formik={formik}
-                      index={9}
-                      file={formik.values.images[9]}
-                    />
-                  )}
-                </div>
-              </div>
-              {formik.errors.images && (
-                <span className="form-message">{formik.errors.images}</span>
-              )}
-            </div>
+              <ImageInput formik={formik}/>
             {/* status */}
-            <div style={{flexDirection:'row', alignItems:'center'}} className="form-group">
+            <div
+              style={{ flexDirection: "row", alignItems: "center" }}
+              className="form-group"
+            >
               <label className="form-label">Trạng thái: </label>
               <input
-              style={{width:'20px', marginLeft:'20px'}}
+                style={{ width: "20px", marginLeft: "20px" }}
                 name="status"
                 id="status"
                 type="checkbox"
@@ -965,7 +581,7 @@ function NewProduct() {
             data={formik.values?.description}
             onReady={(editor) => {
               // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
+              // console.log("Editor is ready to use!", editor);
             }}
             onChange={(event, editor) => {
               const data = editor.getData();

@@ -11,7 +11,30 @@ class Product {
     arrImage.forEach(image => {
       arrPathImage.push(image.path) ;
     });
-    const configuration = {
+
+    const configuration = data.category === "Điện thoại" ? {
+      screen: data.screen,
+      resolution: data.resolution,
+      chip: data.chip,
+      ram:data.ram,
+      rom: data.rom,
+      screen:data.screen,
+      os: data.os,
+      pin: data.pin,
+      charging_port: data.charging_port,
+      sim_type: data.sim_type,
+      mobile_network: data.mobile_network,
+      rear_camera: data.rear_camera,
+      front_camera: data.front_camera,
+      wifi: data.wifi,
+      gps: data.gps,
+      bluetooth: data.bluetooth,
+      headphone_jack: data.headphone_jack,
+      size: data.size,
+      mass: data.mass,
+
+
+    } : {
       cpu: data.cpu,
       ram:data.ram,
       rom: data.rom,
@@ -28,7 +51,9 @@ class Product {
       mass: data.mass,
     }
 
-    // const SELECTcategory = `SELECT * FROM banhangdientu.category where name = ?`
+    res.status(200).json("success");
+
+    // const SELECTcategory = `SELECT * FROM category where name = ?`
     // mysql.query(SELECTcategory, data.category, (er, result) => {
     //   if (er) {
     //     res.status(500).send(`Lỗi kết nối server data`)
@@ -74,7 +99,6 @@ class Product {
     //           mysql.query(insertProDetailColorQuery, colorValues, (er, result) => {
     //             if (er) {
     //               console.log('color: ' + er);
-                
     //             }
     //           })
     //         }
@@ -255,6 +279,19 @@ class Product {
       });
     });
     });
+  }
+
+  // getBrand, API: /product/brands 
+  getBrand(req, res){
+    const query = `SELECT * FROM brand`;
+    mysql.query(query, (e, results, fields) => {
+      if (e){
+        console.log(e);
+        res.status(500).json("Lỗi lấy dữ liệu brands!")
+      } 
+      res.status(200).json({results})
+    });
+
   }
 
 }
