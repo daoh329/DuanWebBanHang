@@ -29,8 +29,7 @@ import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import axios from "axios";
-
-import Test from "./test1/test";
+import Buy from "./Buy/Buy";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -62,6 +61,7 @@ const App = () => {
               <Route path="/login" element={user ? <Navigate to='/' /> : <Login />} />
               {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
+
               <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
               <Route path="/search" element={<Search />} />
               <Route path="/showroom" element={<ShowRoom />} />
@@ -72,7 +72,7 @@ const App = () => {
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
               <Route path='/quanly/orders' element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/test" element={<Test />} />
+              <Route path="/buy" element={<Buy />} />
               <Route path="/profile" element={<Profile user={user} />} />
               <Route path="/tat-ca-san-pham" element={<AllProduct />} />
             </Routes>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./style.css";
+import "../Laptop/style.css"
 import { CloseOutlined } from "@ant-design/icons";
 
 function PreviewImage({ file, formik, index }) {

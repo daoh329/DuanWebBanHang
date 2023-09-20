@@ -8,4 +8,5 @@ router.get('/detail/:id', ProductControllers.DetailProducts);
 router.post('/Add', upload.array('images', 10), ProductControllers.Addproduct);
 router.post('/Delete/:id', ProductControllers.Delete);
 router.get('/json', ProductControllers.json);
+router.get('/brands', ProductControllers.getBrand);
 module.exports = router;

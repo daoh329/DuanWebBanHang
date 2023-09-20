@@ -433,7 +433,9 @@ const Home = () => {
 
                 src={image}
                 alt={`Slide ${index}`}
+
                 style={{ width: "100%", height: "auto", objectFitfit: 'cover' }}
+
               />
             </div>
           ))}

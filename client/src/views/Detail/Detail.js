@@ -8,19 +8,19 @@ import {
   Button,
   Checkbox,
   Input,
-  InputNumber,
   Radio,
   Modal,
   TreeSelect,
+  Carousel
 } from "antd";
 // Thư viện mdb
-import { MDBCarousel, MDBCarouselItem, MDBContainer } from "mdb-react-ui-kit";
+import { MDBCarousel, MDBCarouselItem, MDBContainer,  MDBTable, MDBTableBody  } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Form, Select } from "antd";
-import { Carousel } from 'antd';
+
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 const { Option } = Select;
 //text area
@@ -31,17 +31,23 @@ function Detail() {
   // ------------------------------------------------------------------------------------------------------------------------main
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
   // sự kiện mở modal
   const showModal = () => {
     setIsModalOpen(true);
   };
+  const showModal2 = () => {
+    setIsModalOpen2(true);
+  };
   //sự kiện ok
   const handleOk = () => {
     setIsModalOpen(false);
+    setIsModalOpen2(false);
   };
   //sự kiện đóng
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsModalOpen2(false);
   };
   // select mới
   const [city, setCity] = useState([]);
@@ -89,6 +95,7 @@ function Detail() {
   //lấy thông tin vào modal
   const { id } = useParams();
   const [Detail, setDetail] = useState([]);
+  const [thumbnails, setThumbnails] = useState([]);
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
@@ -96,27 +103,23 @@ function Detail() {
       .then(response => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
-        console.log(response.data);
+
+        // Lấy danh sách các thumbnail từ response.data và lưu vào state
+        const productThumbnails = response.data.thumbnails;
+        setThumbnails(productThumbnails);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, [id]); // Chạy useEffect này mỗi khi 'id' thay đổi
+  }, [id]);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const res = await axios.get(
-  //         `https://64df1e7171c3335b25821aef.mockapi.io/users/${id}`
-  //       );
-  //       setUser(res && res.data && res.data ? res.data : []);
-  //       console.log("check:", res);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [id]);
+ // Tạo các mục cho Carousel từ danh sách thumbnails
+ const carouselItems = thumbnails.map(thumbnail => (
+  <div key={thumbnail.id}>
+    <img src={thumbnail.thumbnail} alt={`Thumbnail ${thumbnail.id}`} />
+  </div>
+));
+
   // so luong sp
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
@@ -135,10 +138,11 @@ function Detail() {
   useEffect(() => {
     const fetchedProductDetail = {
       productName: Detail.name,
-      price: parseFloat(Detail.Price), // Chuyển đổi user.Price thành số
+      price: parseFloat(Detail.price),
+    
+      // Các thông tin khác bạn muốn lấy từ cơ sở dữ liệu
     };
     setProductDetail(fetchedProductDetail);
-    console.log(Detail.Price);
   }, [Detail]);
 
   const handleSendOTP = () => {
@@ -230,12 +234,13 @@ function Detail() {
   return (
     <>
       <div>
-        <div className="css-rfz8yf snipcss-lgA99 style-BooKL" id="style-BooKL">
+        <div className="css-rfz8yf snipcss-lgA99 style-BooKL">
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
+                {/* day la de hinhf */}
                 <div className="productDetailPreview style-FMPIO">
-                  <div width="100%" height="100%">
+                  <div>
                     <MDBContainer>
                       {/* <MDBCarousel showControls showIndicators dark fade>
                         {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
@@ -255,10 +260,10 @@ function Detail() {
                       </MDBCarousel> */}
                       <div style={{ width: '100%', position: 'relative' }}>
                         <button className="scroll-btn" id="scroll-left-btn" onClick={handlePreviousClick}>
-                        <i class="fa-solid fa-chevron-right"></i>
+                        <i class="fa-solid fa-chevron-left"></i>
                         </button>
                         <button className="scroll-btn" id="scroll-right-btn" onClick={handleNextClick}>
-                        <i class="fa-solid fa-chevron-left"></i>
+                        <i class="fa-solid fa-chevron-right"></i>
                         </button>
                         <Carousel autoplay ref={carouselRef}>
                           {Detail &&
@@ -279,6 +284,7 @@ function Detail() {
                   </div>
                 </div>
 
+
                 {/* Slider hình nhỏ */}
                 <div className="thumbnail-slider">
                   {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
@@ -295,37 +301,6 @@ function Detail() {
                 </div>
               </div>
               {/* hiển thị chi tiết  */}
-
-              <div className="css-1nv5d5l">
-                - CPU: AMD Ryzen 7 6800H
-                <br />
-                - Màn hình: 15.6" IPS (1920 x 1080),144Hz
-                <br />
-                - RAM: 1 x 8GB DDR5 4800MHz
-                <br />
-                - Đồ họa: RTX 3050 4GB GDDR6 / AMD Radeon 680M
-                <br />
-                - Lưu trữ: 512GB SSD M.2 NVMe /
-                <br />
-                - Hệ điều hành: Windows 11 Home
-                <br />
-                - Pin: 4 cell 56 Wh Pin liền
-                <br />- Khối lượng: 2.1kg
-              </div>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                className="css-gmt3b"
-                color="link500"
-              >
-                <div
-                  type="body"
-                  className="button-text css-msc1w4"
-                  color="link500"
-                >
-                  Xem thông tin chi tiết
-                </div>
-              </a>
             </div>
             <div className="css-6b3ezu">
               {/* ten, mã , thương hiệu */}
@@ -387,133 +362,6 @@ function Detail() {
               <div className="css-1gs5ebu">
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
-                {/* <div direction="column" className="css-cs5l6d">
-          <div
-            className="att-product-detail-default-promotion-478703 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-HrL9K" id="style-HrL9K">
-              <span className="css-1lfpde8">
-                1x Mã giảm thêm 5% tối đa 300.000đ cho toàn bộ sản phẩm Điện Máy
-                - Điện Gia Dụng
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-476721 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-nGnMb" id="style-nGnMb">
-              <span className="css-1lfpde8">
-                1x Mã giảm thêm 500.000đ cho tai nghe Sony Inzone H3 khi mua kèm
-                Laptop Gaming
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-465873 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-gFgtv" id="style-gFgtv">
-              <span className="css-1lfpde8">
-                1x Mã giảm thêm 150.000 cho một số chuột Logitech, MSI, Newmen,
-                tai nghe Zidli
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-465868 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-BQTnj" id="style-BQTnj">
-              <span className="css-1lfpde8">
-                1x Ưu đãi mua Chuột Logitech G903 Hero với giá 1.300.000
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-471793 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-2EOLF" id="style-2EOLF">
-              <span className="css-1lfpde8">
-                1x Bộ hòa mạng SKY89S (Quà tặng) 1x Hộp quà Sinh Nhật Phong Vũ
-                (Quà tặng)
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-479377 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-idjvb" id="style-idjvb">
-              <span className="css-1lfpde8">
-                1x Balo laptop Targus 15.6 TSB883 Black (Safire) (Quà tặng -
-                logo Phong Vũ)
-              </span>
-            </span>
-          </div>
-          <div
-            className="att-product-detail-default-promotion-465937 css-ixczt2"
-            direction="row"
-          >
-            <div className="css-67qlqa">
-              <img
-                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                height={25}
-                width={25}
-              />
-            </div>
-            <span className="css-f0vs3e style-8Ho1C" id="style-8Ho1C">
-              <span className="css-1lfpde8">
-                1x Bộ nhớ/ Ram Laptop Kingston 8GB DDR5 4800MHz (KVR48S40BS6-8)
-                (Quà tặng)
-              </span>
-            </span>
-          </div>
-        </div> */}
               </div>
               <div className="css-30n8gl">
                 <div className="css-ixp6xz">
@@ -612,98 +460,77 @@ function Detail() {
               <div className="css-1o4pdv8">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="BOXKHUYENMAILIENQUAN css-1rggx5t">
-                <div className="css-mz7xyg">Khuyến mãi liên quan</div>
-                <ul>
-                  <li>
-                    <span>
-                      Tặng
-                      <strong>
-                        1 Bộ Voucher Sinh Nhật Phong Vũ (Quà tặng)
-                      </strong>
-                      cho đơn hàng từ
-                      <span className="css-htm2b9">
-                        10.000.000
-                        <span className="css-1ul6wk9">đ</span>
-                      </span>
-                      có sản phẩm này
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      Nhập mã
-                      <strong>PVASUS500K</strong>
-                      giảm
-                      <span className="css-6ohl53">500.000đ</span>
-                      cho đơn hàng có sản phẩm này
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      Nhập mã
-                      <strong>QRPV78</strong>
-                      <br />- Giảm
-                      <span id="style-Eaoys" className="style-Eaoys">
-                        50.000đ
-                      </span>
-                      cho đơn từ 2,500,000đ
-                      <br />- Giảm
-                      <span id="style-NCGYS" className="style-NCGYS">
-                        100.000đ
-                      </span>
-                      cho đơn từ 5,000,000đ
-                      <br />- Giảm
-                      <span id="style-E1gqK" className="style-E1gqK">
-                        350.000đ
-                      </span>
-                      cho đơn từ 15,000,000đ
-                      <br />
-                      khi thanh toán qua VNPAY-QR.
-                    </span>
-                    <a
-                      href="https://phongvu.vn/cong-nghe/uu-dai-vnpay/"
-                      target="blank"
-                      className="css-1ty6934"
-                    >
-                      Xem chi tiết
-                    </a>
-                  </li>
-                  <li>
-                    <span>
-                      Nhập mã
-                      <strong>SacomPV</strong>
-                      <br />
-                      1. Tặng ngay
-                      <span id="style-J4qOQ" className="style-J4qOQ">
-                        500.000đ
-                      </span>
-                      cho mỗi giao dịch thành công từ 10,000,000đ
-                      <br />
-                      2. Tặng ngay
-                      <span id="style-pQct2" className="style-pQct2">
-                        200.000đ
-                      </span>
-                      cho mỗi giao dịch thành công từ 5,000,000đ khi thanh toán
-                      qua thẻ tín dụng quốc tế Sacombank.
-                    </span>
-                    <a
-                      href="https://phongvu.vn/cong-nghe/uu-dai-ngan-hang/?nocache=true"
-                      target="blank"
-                      className="css-1ty6934"
-                    >
-                      Xem chi tiết
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="productAfterPromoBox"></div>
             </div>
           </div>
         </div>
+        <div className="style-2">
+          <div className="fle-x">
 
+          <div className="mo-ta">
+          <div className="title-mo">Mô tả sản phâm</div>
+          </div>
+
+                      <div className="chi-tiet">
+                        <div className="title-tiet">Thông tin chi tiết</div>
+                        <div className="khoi-tiet-cha">
+
+                      <MDBTable className="table-tiet" borderless>
+                      <MDBTableBody>
+                      <tr>
+                          <td colSpan={1}>Thương hiệu</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
+                          <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={1}>Màu sắc</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={1}>Thế hệ CPU</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td colSpan={1}>Chíp đồ họa</td>
+                          <td colSpan={3}>Larry the Bird</td>
+                        </tr>
+                        <tr>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                        </tr>
+                      </MDBTableBody>
+                      </MDBTable>
+                        </div>
+                        <div onClick={showModal2} className="xem-tiet">Xem chi tiết cấu hình</div>
+
+                      </div>
+
+                      </div>
+        </div>
+        {/* <div className="style-2"></div> */}
+{/* main */}
         {/* modal */}
         <Modal
-          title="Basic Modal"
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -848,6 +675,124 @@ function Detail() {
               <Button onClick={handleConfirm}>Xác nhận</Button>
             </Form.Item>
           </Form>
+        </Modal>
+        {/* modal xem-chi-tiet */}
+                <Modal
+          open={isModalOpen2}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={700} >
+          {/* body */}
+          <div className="khoi-tiet-cha">
+            <div className="title-modal-cha">
+              <div className="title-modal-con">Thông số kỹ thuật</div>
+           </div>
+
+<MDBTable className="table-tiet" borderless>
+<MDBTableBody>
+<tr>
+    <td colSpan={1}>Thương hiệu</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
+    <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Màu sắc</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Thế hệ CPU</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Chíp đồ họa</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Màn hình</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Lưu trữ</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Số cổng lưu chữ tối đa</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khe hở M.2 hỗ trợ</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Cổng xuất hình</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Cổng kết nối</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Kết nối không dây</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bàn phím</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Hệ điều hành</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Kích thước</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td colSpan={1}>Pin</td>
+    <td colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khối lượng</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
+  </tr>
+  <tr>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Đèn LED trên máy</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+  </tr>
+  <tr>
+    <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>
+  </tr>
+</MDBTableBody>
+</MDBTable>
+  </div>
         </Modal>
         {/*  */}
       </div>

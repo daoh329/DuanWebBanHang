@@ -1,4 +1,7 @@
+
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap');
+
+
 
 body {
     font-size: 0.875rem;
@@ -39,6 +42,119 @@ body {
 .css-rfz8yf {
     background: white;
     border-radius: 8px;
+    padding: 24px;
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+.style-2{
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+.fle-x{
+        box-sizing: border-box;
+        margin: 0px;
+        min-width: 0px;
+        display: flex;
+}
+.mo-ta{
+
+        box-sizing: border-box;
+        margin: 0px;
+        min-width: 0px;
+        width: 65%;
+        padding-right: 16px;
+
+}
+.chi-tiet{
+        box-sizing: border-box;
+        margin: 0px;
+            width: 35%;
+            align-items:center;
+}
+.title-tiet{
+    color:#1b1d29 ;
+    display: -webkit-box;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+}
+.title-mo{
+    color:
+#1b1d29;
+display:
+-webkit-box;
+font-size:
+20px;
+font-weight:
+700;
+line-height:
+28px
+}
+.khoi-tiet-cha{
+
+}
+.table-tiet{
+    font-size: 13px;
+}
+.style-tin-chung{
+    color:
+#82869e;
+display:
+-webkit-box;
+font-size:
+13px;
+font-weight:
+700;
+line-height:
+20px;
+padding:
+12px 16px;
+}
+.back-gr-tiet{
+    background-color:
+#f6f6f6;
+}
+/* table */
+.xem-tiet{
+    color:
+#1435c3;
+font-size:
+13px;
+padding:
+24px;
+}
+.title-modal-cha{
+    color:
+#333333;
+font-size:
+14px;
+line-height:
+20px;
+padding:
+16px;
+text-align:
+center;
+}
+.title-modal-con{
+    color:
+#1b1d29;
+font-family:
+Roboto;
+font-size:
+20px;
+font-weight:
+500;
+line-height:
+26px;
+text-align:
+center;
 }
 
 *,
@@ -65,7 +181,6 @@ body {
 .css-6b3ezu {
     box-sizing: border-box;
     margin: 0px;
-    min-width: 0px;
     width: 59.5%;
 }
 
@@ -721,16 +836,11 @@ strong {
     color: rgb(237, 33, 1);
     font-weight: 500;
 }
-
-
-/* These were inline style tags. Uses id+class to override almost everything */
-#style-BooKL.style-BooKL {
-    padding: 24px;
+.productDetailPreview{
+    width: 100%;
     height: 100%;
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 30px;
 }
+
 
 #style-FMPIO.style-FMPIO {
     cursor: pointer;
@@ -892,4 +1002,42 @@ strong {
     right: 0;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
+}
+
+ @media screen and (max-width: 767px) {
+    .css-6b3ezu {
+        width: 100%; /* Thay đổi giá trị width thành 100% */
+    }
+    .css-rfz8yf {
+        border-radius: 8px;
+        height: 100%;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 30px;
+    }  
+    .style-2 {
+        border-radius: 8px;
+        height: 100%;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 30px;
+    }  
+    .fle-x{
+        flex-flow: column;
+    }
+    .chi-tiet{
+        width: 100%;
+    }
+    .thumbnail-slider{
+        display: none;
+    }
+    .css-1i1dodm{
+       width: 100%;
+
+    }
+    .css-4cffwv {
+        flex-flow: column;
+
+    }
+    
 }
