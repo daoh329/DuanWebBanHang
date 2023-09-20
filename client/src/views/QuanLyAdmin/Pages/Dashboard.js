@@ -8,9 +8,16 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/dashboard`);
-      setData(result.data);
+      
+      // Chuyển đổi updated_date từ timestamp về chuỗi ngày tháng
+      const convertedData = result.data.map(item => ({
+        ...item,
+        updated_date: new Date(item.updated_date * 1000).toISOString().slice(0, 19).replace('T', ' ')
+      }));
+  
+      setData(convertedData);
     };
-
+  
     fetchData();
   }, []);
 

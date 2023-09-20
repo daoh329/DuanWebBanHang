@@ -11,7 +11,7 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    let sql = `INSERT INTO orders (Username, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
+    let sql = `INSERT INTO orders (nameOrder, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
     let values = [data.name, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
@@ -35,7 +35,7 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.Username, o.address, o.note, o.created_at, o.status, odp.quantity, p.name, p.price
+        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.note, o.created_at, o.status, odp.quantity, p.name, p.price
         FROM orders o
         JOIN orderDetailsProduct odp ON o.id = odp.orderID
         JOIN product p ON odp.productID = p.id
@@ -83,7 +83,7 @@ class OrderController {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.Username, o.address, o.created_at, o.status, odp.quantity, p.name, p.price
+        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.created_at, o.status, odp.quantity, p.name, p.price
         FROM orders o
         JOIN orderDetailsProduct odp ON o.id = odp.orderID
         JOIN product p ON odp.productID = p.id
@@ -97,24 +97,38 @@ class OrderController {
   }
 
   async topLaptop(req, res) {
-    const query = `SELECT name, avatar, price, created_at, COUNT(*)
-    FROM orders
-    WHERE created_at >= DATE_ADD(CURDATE(), INTERVAL -1 MONTH)
-    GROUP BY name, avatar, price, created_at
-    ORDER BY COUNT(*) DESC
-    LIMIT 5;      
-    `;
-    mysql.query(query, (error, results) => {
-      if (error) {
-        res.status(500).send(error);
-      } else {
-        res.send(results);
-      }
-    });
+    const query = `
+      SELECT product.id, product.name, product.price, MAX(productDetails.brand) as brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+          SELECT id, thumbnail, product_id
+          FROM (
+            SELECT id, thumbnail, product_id,
+                  ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+            FROM galery
+          ) tmp
+          WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
+      JOIN orders ON orderDetailsProduct.orderID = orders.id
+      WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
+      GROUP BY product.id, galery.thumbnail
+      ORDER BY SUM(orderDetailsProduct.quantity) DESC
+      LIMIT 10;
+      `;
+
+      mysql.query(query, (error, results) => {
+        if (error) {
+          return res.json({ error });
+        }
+    
+        res.json(results);
+      });
   }
   
   async dashboard(req, res) {
-    let sql = 'SELECT status, DATE(updated_at) as updated_date, COUNT(*) as count FROM orders GROUP BY status, DATE(updated_at)';
+    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -155,7 +169,7 @@ class OrderController {
   
       res.send(convertedData);
     });
-  }  
+  }
 }
 
 module.exports = new OrderController();
