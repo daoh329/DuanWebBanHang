@@ -4,6 +4,7 @@ import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination,message } from 
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useCart } from '../Cart/CartContext';
+import './Search.css'
 const Search = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -87,6 +88,7 @@ const Search = () => {
   return (
     <div
       style={{
+        display:'block',
         borderRadius: "20px",
         width: "80%",
         margin: "0 auto",
@@ -95,21 +97,69 @@ const Search = () => {
         backgroundColor: "white",
       }}
     >
-      <div>
-        <div
-          style={{
-            fontWeight: "bold",
-            fontSize: "25px",
-            display: "-webkit-box",
-            padding: "20px",
-            color: "black",
-          }}
-        >
-          Kết quả tìm kiếm
+      <div className="khoi-main">
+
+      <div className="khoi-left">
+        <div className="body-left">
+          <div className="sub-title-left">
+            Khoảng giá
+          </div>
+          <div className="css-ngang">
+            <div className="css-ngang-1"></div>
+          </div>
+          <div className="css-0">
+
+<div className="style-sub">
+  <div className="sub-title-left">Nhà sản suất chipset</div>
+  <svg fill="none" viewBox="0 0 24 24" class="active css-500jnn" color="textPrimary" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M5 8.5L12 15.5L19 8.5" stroke="#82869E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div className="active-left">
+<div className="row-active">
+  <div style={{minWidth:'50%'}}>
+<span style={{display:'flex'}}><div>AMD</div></span>
+</div>
+
+  <div style={{minWidth:'50%'}}>
+  <span style={{display:'flex'}}><div>NVIDIA</div></span>
+  </div>
+</div>
+
+
+</div>
+
+
+
+          </div>
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+<div className="khoi-right">
+      <div className="khoi-1-search">
+        <div className="title-search">
+          <div className="sub-title">Sắp xếp theo</div>
+          <div className="sort">Khuyến mãi tốt nhất</div>
+          <div className="sort">Giá giảm dần</div>
+          <div className="sort">Giá tăng dần</div>
+          <div className="sort">Sản phẩm mới nhất</div>
+          <div className="sort">Sản phẩm bán chạy nhất</div>
+         
         </div>
       </div>
       <div
         style={{
+          width:'100%',
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
           gap: "20px",
@@ -150,6 +200,8 @@ const Search = () => {
               </div>
             </Card>
           ))}
+      </div>
+      </div>
       </div>
       {/* Phân trang */}
       {/* <div style={{ textAlign: 'center', marginTop: '10px' }}>
