@@ -20,6 +20,7 @@ import "./Detail.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Form, Select } from "antd";
+import { message } from "antd";
 
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 const { Option } = Select;
@@ -230,6 +231,37 @@ function Detail() {
       carouselRef.current.next();
     }
   };
+
+  // them giỏ hàng
+  const handleAddToCart = () => {
+    // Lấy giỏ hàng hiện tại từ session
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
+    let item = {
+        id: Detail.id,
+        thumbnail: Detail.thumbnails[0].thumbnail,
+        name: Detail.name,
+        price: Detail.price,
+        brand: Detail.brand
+    };
+
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    if (cart.some(cartItem => cartItem.name === item.name)) {
+        message.error("Sản phẩm đã có trong giỏ hàng");
+    } else {
+        // Thêm sản phẩm vào giỏ hàng
+        cart.push(item);
+        message.success("Sản phẩm đã được thêm vào giỏ hàng");
+
+        // Lưu giỏ hàng đã cập nhật vào session
+        sessionStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    console.log(">>>", cart);
+  };
+
+
 
   return (
     <>
@@ -447,6 +479,7 @@ function Detail() {
                     color="primary500"
                     className="css-1cxhzy5"
                     type="button"
+                    onClick={handleAddToCart}
                   >
                     <div type="subtitle" className="css-ueraml">
                       THÊM VÀO GIỎ HÀNG

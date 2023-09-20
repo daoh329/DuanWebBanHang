@@ -33,10 +33,11 @@ function Cart() {
         },
         {
             title: '',
-            dataIndex: 'avatar',
-            key: 'avatar',
+            dataIndex: 'thumbnail',
+            key: 'thumbnail',
+      
             render: (_, record) => (
-                <img src={record.avatar} alt="Avatar" style={{ width: '50px', height: '50px' }} />
+                <img src={record.thumbnail} alt="thumbnail" style={{ width: '200px', height: '50px' }} />
             ),
             width: 50,
         },
