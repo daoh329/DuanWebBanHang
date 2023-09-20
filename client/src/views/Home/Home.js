@@ -408,32 +408,32 @@ const Home = () => {
       containerRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
-   // logic scroll button product
-   const ctnRef = useRef(null);
+  // logic scroll button product
+  const ctnRef = useRef(null);
 
-   const scrollTrai = () => {
-     if (ctnRef.current) {
+  const scrollTrai = () => {
+    if (ctnRef.current) {
       ctnRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
- 
-   const scrollPhai = () => {
-     if (ctnRef.current) {
+    }
+  };
+
+  const scrollPhai = () => {
+    if (ctnRef.current) {
       ctnRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
+    }
+  };
 
   return (
     <Layout>
       <div className="content">
         <Carousel autoplay>
           {sliderImages.map((image, index) => (
-            <div key={index}>
+            <div className='banner' key={index}>
               <img
-                className='banner'
+
                 src={image}
                 alt={`Slide ${index}`}
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: "100%", height: "auto", objectFitfit: 'cover' }}
               />
             </div>
           ))}
@@ -501,95 +501,65 @@ const Home = () => {
 
 
       {/* ---------------menu-------------------- */}
-      <nav style={{ color: '#333333', fontFamily: '-apple-system', fontSize: '13px', height: '63px', width: '100%', marginTop: '90px' }}>
-        <ul style={{
-          width: '80%', height: '100%', alignItems: 'center', backgroundColor: '#ae69dd', borderRadius: '5px', boxShadow: '#cccccc 0px 4px 6px 0px', color: '#333333',
-          display: 'flex', fontSize: '13px', justifyContent: 'center', textAlign: 'center', margin: '0 auto'
-        }}>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-mobile-phone" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Điện thoại</span>
+      <nav className="menu-nav" >
+        <ul className="menu-nav-ul">
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-mobile-phone" aria-hidden="true"></i>
+              <span className="name-menu">Điện thoại</span>
             </a>
             <div className="sub-container" style={{ position: 'absolute', left: '0', top: "55px", zIndex: "199", paddingTop: '15px', display: 'none', opacity: '0', visibility: 'hidden', transition: 'opacity 200ms,visibility 200ms' }}>
               abc
             </div>
           </li>
 
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-laptop" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Lap Top</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-laptop" aria-hidden="true"></i>
+              <span className="name-menu">Lap Top</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} className="fa-solid fa-icons" ></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Phụ kiện</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-icons" ></i>
+              <span className="name-menu">Phụ kiện</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-keyboard" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Keyboard</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-keyboard" aria-hidden="true"></i>
+              <span className="name-menu">Keyboard</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fas fa-rotate" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Máy cũ</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-rotate" aria-hidden="true"></i>
+              <span className="name-menu">Máy cũ</span>
             </a>
           </li>
 
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Sửa chữa</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-screwdriver-wrench" aria-hidden="true"></i>
+              <span className="name-menu">Sửa chữa</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-bolt-lightning" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Ưu đãi</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-bolt-lightning" aria-hidden="true"></i>
+              <span className="name-menu">Ưu đãi</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-newspaper" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Tin tức</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-newspaper" aria-hidden="true"></i>
+              <span className="name-menu">Tin tức</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-headset" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Dịch vụ</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-headset" aria-hidden="true"></i>
+              <span className="name-menu">Dịch vụ</span>
             </a>
           </li>
 
@@ -660,7 +630,7 @@ const Home = () => {
 
 
       {/*-------- Danh mục nổi bật -----------*/}
-      <div className='danhmucmobile' style={{
+      {/* <div className='danhmucmobile' style={{
         borderRadius: '20px',
         width: '100%',
         margin: '0 auto',
@@ -687,7 +657,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* 
       <div className='danhmucnoibat' style={{
         borderRadius: '20px', width: '80%',
@@ -743,7 +713,10 @@ const Home = () => {
         <div className='phone-group' >
           <div className="title-group">
             <div className="phone-title">Top 5 Laptop bán chạy  </div>
-            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+            <div className="views-all">
+              <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+              <i class="fa fa-chevron-right"></i>
+            </div>
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRef}>
@@ -915,10 +888,10 @@ const Home = () => {
           className="product-container"
           style={{
             borderRadius: "5px",
-            position:'relative',
+            position: 'relative',
             width: "80%",
             margin: "0 auto",
-            marginTop: "20px",          
+            marginTop: "20px",
             backgroundColor: "white",
           }}
         >
@@ -942,7 +915,7 @@ const Home = () => {
               {historysp &&
                 historysp.length > 0 &&
                 historysp.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card" style={{border: '1px solid rgb(228, 229, 240)', borderRadius:'5px',}}>
+                  <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
                     <img onClick={() => handleViewDetailproducts(item)} src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -967,19 +940,19 @@ const Home = () => {
             </div>
             {/* button */}
             <button
-            className="scroll-button"
-            id="scroll-left-button"
-            onClick={scrollTrai}
-          >
-            <LeftOutlined />
-          </button>
-          <button
-            className="scroll-button"
-            id="scroll-right-button"
-            onClick={scrollPhai}
-          >
-            <RightOutlined />
-          </button>
+              className="scroll-button"
+              id="scroll-left-button"
+              onClick={scrollTrai}
+            >
+              <LeftOutlined />
+            </button>
+            <button
+              className="scroll-button"
+              id="scroll-right-button"
+              onClick={scrollPhai}
+            >
+              <RightOutlined />
+            </button>
           </div>
         </div>
       ) : null}

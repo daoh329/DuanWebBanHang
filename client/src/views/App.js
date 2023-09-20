@@ -26,6 +26,8 @@ import Cart from "./Cart/Cart";
 import { CartProvider } from "./Cart/CartContext";
 import CheckSP from "./Menu/CheckSP";
 import Profile from "./Profile/Profile";
+import MobileNav from "./Nav/MobileNav";
+import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import axios from "axios";
 
 import Test from "./test1/test";
@@ -72,8 +74,10 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               <Route path="/test" element={<Test />} />
               <Route path="/profile" element={<Profile user={user} />} />
+              <Route path="/tat-ca-san-pham" element={<AllProduct />} />
             </Routes>
           </header>
+          <MobileNav user={user} />
           <Footer />
         </CartProvider>
       </BrowserRouter>
