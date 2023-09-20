@@ -97,6 +97,8 @@ function Detail() {
   const [Detail, setDetail] = useState([]);
   const [thumbnails, setThumbnails] = useState([]);
 
+
+
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
     axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
@@ -112,13 +114,6 @@ function Detail() {
         console.error('There was an error!', error);
       });
   }, [id]);
-
- // Tạo các mục cho Carousel từ danh sách thumbnails
- const carouselItems = thumbnails.map(thumbnail => (
-  <div key={thumbnail.id}>
-    <img src={thumbnail.thumbnail} alt={`Thumbnail ${thumbnail.id}`} />
-  </div>
-));
 
   // so luong sp
   const [quantity, setQuantity] = useState(1);
@@ -238,7 +233,6 @@ function Detail() {
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
-                {/* day la de hinhf */}
                 <div className="productDetailPreview style-FMPIO">
                   <div>
                     <MDBContainer>
@@ -478,7 +472,7 @@ function Detail() {
                       <MDBTableBody>
                       <tr>
                           <td colSpan={1}>Thương hiệu</td>
-                          <td colSpan={3}>Larry the Bird</td>
+                          <td colSpan={3}>{Detail.brand}</td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
@@ -493,7 +487,14 @@ function Detail() {
                         </tr>
                         <tr>
                           <td colSpan={1}>Màu sắc</td>
-                          <td colSpan={3}>Larry the Bird</td>
+                          <td colSpan={3}>
+  {Detail.color.map((color, index) => (
+    <span key={index}>
+      {color}
+      {index < Detail.color.length - 1 ? ', ' : ''}
+    </span>
+  ))}
+</td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
@@ -692,7 +693,7 @@ function Detail() {
 <MDBTableBody>
 <tr>
     <td colSpan={1}>Thương hiệu</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>{Detail.brand}</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
