@@ -134,27 +134,3 @@ function Cart() {
 
 export default Cart;
 
-//    <div className="app-container">  
-// <Space className="responsive-container">
-//   <h2 style={{ textAlign: 'left' }}>Giỏ hàng</h2>
-//   <div className="responsive-row">
-//     <div className="responsive-col1">
-//       <Table columns={columns} dataSource={sortedCart} />
-//     </div>
-//     <div className="responsive-col2">
-//       <Card
-//         className="responsive-card"
-//         title="Thanh toán"
-//         bordered={false}
-//       >
-//         <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
-//           Tổng tiền tính tạm:
-//           <span style={{ color: 'green', fontWeight: 'bold' }}> 100000 vnd</span>
-//         </p>
-//         <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>Tiếp tục</Button>
-//       </Card>
-//     </div>
-//   </div>
-// </Space>
-// </div> 
-
