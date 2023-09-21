@@ -74,6 +74,7 @@ function Cart() {
       </th>
       <th scope="col">Hình</th>
       <th scope="col">Sản Phẩm</th>
+      <th scope="col">Số lượng</th>
       <th scope="col">Đơn giá</th>
       <th scope="col">Thành tiền</th>
     </tr>
@@ -89,10 +90,10 @@ function Cart() {
           className="image-tiet"
             src={item.thumbnail}
             alt="thumbnail"
-            
           />
         </td>
         <td style={{lineHeight:'15px',fontSize:'12px'}}>{item.name}</td>
+        <td>{item.quantity}</td>
         <td>{item.price}</td>
         <td>{item.price}</td>
       </tr>
@@ -105,7 +106,6 @@ function Cart() {
           <div className="chi-tiet">
             <div className="title-thanh">Thanh Toán</div>
              <div className="khoi-tiet-cha">
-
                 <MDBTable className="table-tiet" borderless>
                 <MDBTableBody>
                 {cart.map((item, index) => (
@@ -118,9 +118,6 @@ function Cart() {
                 <td>Thanh Toán</td>
                 <th>{item.price}</th>
                 </tr>))}  
-                
-               
-
                       </MDBTableBody>
                       </MDBTable>
                       <button className="btn-thanh">Tiếp tục</button>
