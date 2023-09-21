@@ -95,8 +95,10 @@ function Detail() {
   };
   //lấy thông tin vào modal
   const { id } = useParams();
-  const [Detail, setDetail] = useState([]);
   const [thumbnails, setThumbnails] = useState([]);
+  const [Detail, setDetail] = useState({});
+  const [configuration, setConfiguration] = useState({});
+
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
@@ -104,6 +106,9 @@ function Detail() {
       .then(response => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
+        
+        const configurationData = JSON.parse(response.data.configuration);
+        setConfiguration(configurationData);
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
         const productThumbnails = response.data.thumbnails;
@@ -113,13 +118,6 @@ function Detail() {
         console.error('There was an error!', error);
       });
   }, [id]);
-
- // Tạo các mục cho Carousel từ danh sách thumbnails
- const carouselItems = thumbnails.map(thumbnail => (
-  <div key={thumbnail.id}>
-    <img src={thumbnail.thumbnail} alt={`Thumbnail ${thumbnail.id}`} />
-  </div>
-));
 
   // so luong sp
   const [quantity, setQuantity] = useState(1);
@@ -270,7 +268,6 @@ function Detail() {
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
-                {/* day la de hinhf */}
                 <div className="productDetailPreview style-FMPIO">
                   <div>
                     <MDBContainer>
@@ -511,45 +508,56 @@ function Detail() {
                       <MDBTableBody>
                       <tr>
                           <td colSpan={1}>Thương hiệu</td>
-                          <td colSpan={3}>Larry the Bird</td>
+                          <td colSpan={3}>{Detail.brand}</td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
-                          <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}>Larry the Bird</td>
+                          <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}></td>
                         </tr>
                         <tr>
                           <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
                         </tr>
                         <tr>
                           <td colSpan={1}>Màu sắc</td>
-                          <td colSpan={3}>Larry the Bird</td>
+                          <td colSpan={3}>
+                          {Detail.color ? (
+                            Detail.color.map((color, index) => (
+                              <span key={index}>
+                                {color}
+                                {index < Detail.color.length - 1 ? ', ' : ''}
+                              </span>
+                            ))
+                          ) : (
+                            <span>Loading...</span>
+                          )}
+                        </td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{Detail.shortDescription}</td>
                         </tr>
                         <tr>
                           <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
                         </tr>
                         <tr>
                           <td colSpan={1}>Thế hệ CPU</td>
-                          <td colSpan={3}>Larry the Bird</td>
+                          <td colSpan={3}>{configuration.CPU}</td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.CPU}</td>
                         </tr>
                         <tr>
                           <td colSpan={1}>Chíp đồ họa</td>
-                          <td colSpan={3}>Larry the Bird</td>
+                          <td colSpan={3}>{configuration['Card đồ họa']}</td>
                         </tr>
                         <tr>
                           <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.RAM}</td>
                         </tr>
                       </MDBTableBody>
                       </MDBTable>
@@ -725,100 +733,111 @@ function Detail() {
 <MDBTableBody>
 <tr>
     <td colSpan={1}>Thương hiệu</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>{Detail.brand}</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
-    <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}></td>
   </tr>
   <tr>
     <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td colSpan={1}>Màu sắc</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>
+    {Detail.color ? (
+      Detail.color.map((color, index) => (
+        <span key={index}>
+          {color}
+          {index < Detail.color.length - 1 ? ', ' : ''}
+        </span>
+      ))
+    ) : (
+      <span>Loading...</span>
+    )}
+  </td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{Detail.shortDescription}</td>
   </tr>
   <tr>
     <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
   </tr>
   <tr>
     <td colSpan={1}>Thế hệ CPU</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>{configuration.CPU}</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.CPU}</td>
   </tr>
   <tr>
     <td colSpan={1}>Chíp đồ họa</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>{configuration['Card đồ họa']}</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.RAM}</td>
   </tr>
   <tr>
     <td colSpan={1}>Màn hình</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>{configuration['Màn hình']}</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Lưu trữ</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration['Ổ cứng']}</td>
   </tr>
   <tr>
     <td colSpan={1}>Số cổng lưu chữ tối đa</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}></td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khe hở M.2 hỗ trợ</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td colSpan={1}>Cổng xuất hình</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}></td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Cổng kết nối</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td colSpan={1}>Kết nối không dây</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}></td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bàn phím</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td colSpan={1}>Hệ điều hành</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}>{configuration['Hệ điều hành']}</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Kích thước</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td colSpan={1}>Pin</td>
-    <td colSpan={3}>Larry the Bird</td>
+    <td colSpan={3}></td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khối lượng</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
   </tr>
   <tr>
     <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Đèn LED trên máy</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>Larry the Bird</td>
+    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
   </tr>
   <tr>
     <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>

@@ -1,0 +1,202 @@
+.title-search{
+
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        height: 100%;
+        padding-left: 1rem;
+        display: flex;
+        flex-flow: row;
+        gap: 1rem;
+        -webkit-box-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        align-items: center;
+    
+
+}
+.khoi-1-search{
+    
+        border-style: none none solid;
+        border-width: 1px;
+        border-top-color: unset;
+        border-right-color: unset;
+        border-left-color: unset;
+        opacity: 1;
+        display: flex;
+        flex-flow: row;
+        gap: 0rem;
+        -webkit-box-align: baseline;
+        align-items: baseline;
+        width: 100%;
+        height: 64px;
+        border-bottom-color: rgb(234, 234, 234);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        font-size: 14px;
+    
+}
+.sub-title{
+  
+        margin: 0px 2rem 0px 0px;
+        padding: 0px;
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        color: inherit;
+        font-weight: 500;
+        text-decoration: unset;
+        font-size: 13px;
+        line-height: 24px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: unset;
+        max-width: unset;
+        min-width: unset;
+        transition: color 0.3s ease 0s;
+    
+}
+.sort{
+  
+        border-radius: 4px;
+        display: inline-block;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: solid 1px #e0e0e0;
+        background-color: #fff;
+        padding: 0.5rem 1.25rem;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    
+}
+.khoi-main{
+    display: flex;
+}
+.khoi-left{
+ 
+        display: block;
+        flex: 0 0 16.66%;
+        max-width: 16.66%;
+    
+}
+.khoi-right{
+    
+        display: block;
+        flex: 0 0 83.33%;
+        max-width: 83.33%;
+    
+}
+.body-left{
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        background: #FFFFFF;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+}
+.sub-title-left{
+        margin: 0px;
+        padding: 0px;
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        color: inherit;
+        font-weight: 500;
+        text-decoration: unset;
+        font-size: 13px;
+        line-height: 24px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: unset;
+        max-width: unset;
+        min-width: unset;
+       transition: color 0.3s ease 0s;
+    
+    
+}
+.active-left{
+ 
+        margin-top: 0.75rem;
+        height: auto;
+    
+}
+
+.row-active{
+  
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        display: flex;
+        flex-flow: wrap;
+        gap: 0rem;
+        -webkit-box-pack: start;
+        justify-content: flex-start;
+        -webkit-box-align: baseline;
+        align-items: baseline;
+    
+}
+.css-ngang{
+    
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        --divider-gap: 12px;
+        display: flex;
+        padding-top: var(--divider-gap);
+        padding-bottom: var(--divider-gap);
+    
+}
+.css-ngang-1{
+    
+        --divider-border-style: solid;
+        --divider-color: #E4E5F0;
+        --divider-border-width: 1px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        width: 100%;
+        border-top: var(--divider-border-width) var(--divider-border-style) var(--divider-color);
+    
+}
+.style-sub{
+ 
+ 
+        display: flex;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+        height: 1.5rem;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+@media screen and (max-width: 767px) {
+
+
+
+    
+}
