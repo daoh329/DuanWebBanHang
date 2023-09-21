@@ -1,5 +1,4 @@
 .style-2{
-  background: white;
   border-radius: 8px;
   padding: 24px;
   height: 100%;
@@ -9,24 +8,49 @@
 }
 .fle-x{
       box-sizing: border-box;
-      margin: 0px;
-      min-width: 0px;
       display: flex;
+      font-size: 14px;
 }
 .mo-ta{
 
       box-sizing: border-box;
-      margin: 0px;
-      min-width: 0px;
       width: 75%;
       padding-right: 16px;
+      /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
 
 }
 .chi-tiet{
-      box-sizing: border-box;
-      margin: 0px;
-          width: 30%;
-          align-items:center;
+    width: 30%;
+    background-color:
+    #ffffff;
+    border-radius:
+    8px;
+    margin:
+    16px 0px 0px;
+    padding:
+    16px;
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
+}
+.btn-thanh{
+background-color:
+#1435c3;
+border-radius:
+4px;
+color:
+#ffffff;
+display:
+inline-flex;
+font-family:
+Roboto;
+font-size:
+14px;
+line-height:
+16px;
+margin:
+16px 0px 0px;
+padding:
+11.2px 125px;
+border-color: #ffffff;
 }
 .title-tiet{
   color:#1b1d29 ;
@@ -34,6 +58,18 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 28px;
+}
+.title-thanh{
+  color:
+  #333333;
+  font-family:
+  Roboto;
+  font-weight:
+  500;
+  line-height:
+  20.8px;
+  margin:
+  0px 0px 8px;
 }
 .title-mo{
   color:
@@ -106,9 +142,43 @@ line-height:
 text-align:
 center;
 }
+.image-tiet{
 
+  height: auto;
+}
 *,
 :before,
 :after {
   box-sizing: border-box;
+}
+@media screen and (max-width: 767px) {
+
+  .style-2 {
+      border-radius: 8px;
+      height: 100%;
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 30px;
+  }  
+  .fle-x{
+      flex-flow: column;
+  }
+  .chi-tiet{
+      width: 100%;
+       box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+       border-radius: 8px;
+  }
+  .mo-ta{
+    width: 100%;
+  }
+  .khoi-tiet-cha{
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .image-tiet{
+    max-width: 250%;
+  }
+ 
+
+  
 }

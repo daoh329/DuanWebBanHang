@@ -66,84 +66,65 @@ function Cart() {
 
             <div className="khoi-tiet-cha">
               
-              <MDBTable borderless>
-                <MDBTableHead light>
-                  <tr>
-                    <th scope="col">{/* <MDBCheckbox></MDBCheckbox> */}</th>
-                    <th scope="col">Hình</th>
-                    <th scope="col">Tên sản phẩm</th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Thanh tiền</th>
-                  </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                  <tr>
-                    <th scope="col">
-                      <MDBCheckbox></MDBCheckbox>
-                    </th>
-                    <td >Hinh</td>
-                    <td>Tên</td>
-                    <td>số lượng</td>
-                    <td>Thanh tiền</td>
-                  </tr>
-                </MDBTableBody>
-              </MDBTable>
-              
+            <MDBTable borderless>
+  <MDBTableHead light>
+    <tr>
+      <th scope="col">
+        <MDBCheckbox></MDBCheckbox>
+      </th>
+      <th scope="col">Hình</th>
+      <th scope="col">Sản Phẩm</th>
+      <th scope="col">Đơn giá</th>
+      <th scope="col">Thành tiền</th>
+    </tr>
+  </MDBTableHead>
+  <MDBTableBody>
+    {cart.map((item, index) => (
+      <tr key={index}>
+        <td>
+          <MDBCheckbox></MDBCheckbox>
+        </td>
+        <td  style={{width:'20%'}}>
+          <img
+          className="image-tiet"
+            src={item.thumbnail}
+            alt="thumbnail"
+            
+          />
+        </td>
+        <td style={{lineHeight:'15px',fontSize:'12px'}}>{item.name}</td>
+        <td>{item.price}</td>
+        <td>{item.price}</td>
+      </tr>
+    ))}
+  </MDBTableBody>
+</MDBTable>
             </div>
           </div>
 
           <div className="chi-tiet">
-            <div className="title-tiet">Thông tin chi tiết</div>
-            {/* <div className="khoi-tiet-cha">
+            <div className="title-thanh">Thanh Toán</div>
+             <div className="khoi-tiet-cha">
 
-                      <MDBTable className="table-tiet" borderless>
-                      <MDBTableBody>
-                      <tr>
-                          <td colSpan={1}>Thương hiệu</td>
-                          <td colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
-                          <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td colSpan={1}>Màu sắc</td>
-                          <td colSpan={3}>
-                        </td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={1}>Thế hệ CPU</td>
-                          <td colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td colSpan={1}>Chíp đồ họa</td>
-                          <td colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-                        </tr>
+                <MDBTable className="table-tiet" borderless>
+                <MDBTableBody>
+                {cart.map((item, index) => (
+                <tr key={index}>
+                <td>Tạm tính</td>
+                <th>{item.price}</th>
+                </tr>))} 
+                {cart.map((item, index) => (
+                <tr key={index}>
+                <td>Thanh Toán</td>
+                <th>{item.price}</th>
+                </tr>))}  
+                
+               
+
                       </MDBTableBody>
                       </MDBTable>
-                        </div> */}
+                      <button className="btn-thanh">Tiếp tục</button>
+                        </div> 
           </div>
         </div>
       </div>
@@ -152,28 +133,28 @@ function Cart() {
 }
 
 export default Cart;
-{
-  /* <div className="app-container">  
-<Space className="responsive-container">
-  <h2 style={{ textAlign: 'left' }}>Giỏ hàng</h2>
-  <div className="responsive-row">
-    <div className="responsive-col1">
-      <Table columns={columns} dataSource={sortedCart} />
-    </div>
-    <div className="responsive-col2">
-      <Card
-        className="responsive-card"
-        title="Thanh toán"
-        bordered={false}
-      >
-        <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
-          Tổng tiền tính tạm:
-          <span style={{ color: 'green', fontWeight: 'bold' }}> 100000 vnd</span>
-        </p>
-        <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>Tiếp tục</Button>
-      </Card>
-    </div>
-  </div>
-</Space>
-</div> */
-}
+
+//    <div className="app-container">  
+// <Space className="responsive-container">
+//   <h2 style={{ textAlign: 'left' }}>Giỏ hàng</h2>
+//   <div className="responsive-row">
+//     <div className="responsive-col1">
+//       <Table columns={columns} dataSource={sortedCart} />
+//     </div>
+//     <div className="responsive-col2">
+//       <Card
+//         className="responsive-card"
+//         title="Thanh toán"
+//         bordered={false}
+//       >
+//         <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
+//           Tổng tiền tính tạm:
+//           <span style={{ color: 'green', fontWeight: 'bold' }}> 100000 vnd</span>
+//         </p>
+//         <Button type="primary" style={{ width: '100%', marginTop: '10px' }}>Tiếp tục</Button>
+//       </Card>
+//     </div>
+//   </div>
+// </Space>
+// </div> 
+
