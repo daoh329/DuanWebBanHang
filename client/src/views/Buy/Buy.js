@@ -17,6 +17,7 @@ const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
 export default function Buy() {
+
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
