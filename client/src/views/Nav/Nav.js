@@ -401,13 +401,13 @@ const App = (userDetails) => {
                     dataSource={cart}
                     renderItem={(selectedItems) => (
                       <List.Item
-                        actions={[
-                          <Button
-                            type="danger"
-                            icon={<DeleteOutlined />}
-                            onClick={() => removeFromCart(selectedItems.id)}
-                          ></Button>,
-                        ]}
+                        // actions={[
+                        //   <Button
+                        //     type="danger"
+                        //     icon={<DeleteOutlined />}
+                        //     onClick={() => removeFromCart(selectedItems.id)}
+                        //   ></Button>,
+                        // ]}
                       >
                         <List.Item.Meta
                           avatar={<Avatar src={selectedItems.thumbnail} />}
