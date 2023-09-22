@@ -490,7 +490,7 @@ const Home = () => {
         <div className='phone-group' >
           <div className="title-group">
 
-            <div className="phone-title">Top 5 Laptop bán chạy  </div>
+            <div className="phone-title">Sản phẩm mới ra mắt</div>
             <div className="views-all">
               <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
               <i class="fa fa-chevron-right"></i>
