@@ -1,127 +1,184 @@
-/* CSS cho màn hình máy tính */
-@media (min-width: 768px) {
-    /* Dàn ngang */
-    .responsive-container {
-      display: block;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-    
-    .responsive-col {
-      flex: 1;
-    }
-    
-    .responsive-card {
-      width: 300px;
-      margin-left: 10px;
-    }
-  }
-  
-  /* CSS cho màn hình máy tính */
-@media (min-width: 768px) {
-    /* Dàn ngang */
-    .responsive-container {
-     
-      flex-direction: row;
-    }
-    
-    .responsive-cart {
-      flex: 1;
-    }
-    
-    .responsive-payment {
-      flex: 1;
-    }
-    .responsive-row{
-        display: flex;
-    }
-    .responsive-col1{
-      flex: 1;
-    }
-    .responsive-col1{
-      flex: 2;
-    }
-  }
-  
-  /* CSS cho điện thoại di động */
-  @media (max-width: 767px) {
-    /* Dàn dọc */
-    .responsive-container {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .responsive-cart {
+.style-2{
+  border-radius: 8px;
+  padding: 24px;
+  height: 100%;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+.fle-x{
+      box-sizing: border-box;
+      display: flex;
+      font-size: 14px;
+}
+.mo-ta{
+
+      box-sizing: border-box;
+      width: 75%;
+      padding-right: 16px;
+      /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
+
+}
+.chi-tiet{
+    width: 30%;
+    background-color:
+    #ffffff;
+    border-radius:
+    8px;
+    margin:
+    16px 0px 0px;
+    padding:
+    16px;
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
+}
+.btn-thanh{
+background-color:
+#1435c3;
+border-radius:
+4px;
+color:
+#ffffff;
+display:
+inline-flex;
+font-family:
+Roboto;
+font-size:
+14px;
+line-height:
+16px;
+margin:
+16px 0px 0px;
+padding:
+11.2px 125px;
+border-color: #ffffff;
+}
+.title-tiet{
+  color:#1b1d29 ;
+  display: -webkit-box;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+.title-thanh{
+  color:
+  #333333;
+  font-family:
+  Roboto;
+  font-weight:
+  500;
+  line-height:
+  20.8px;
+  margin:
+  0px 0px 8px;
+}
+.title-mo{
+  color:
+#1b1d29;
+display:
+-webkit-box;
+font-size:
+20px;
+font-weight:
+700;
+line-height:
+28px
+}
+.khoi-tiet-cha{
+
+}
+.table-tiet{
+  font-size: 13px;
+}
+.style-tin-chung{
+  color:
+#82869e;
+display:
+-webkit-box;
+font-size:
+13px;
+font-weight:
+700;
+line-height:
+20px;
+padding:
+12px 16px;
+}
+.back-gr-tiet{
+  background-color:
+#f6f6f6;
+}
+/* table */
+.xem-tiet{
+  color:
+#1435c3;
+font-size:
+13px;
+padding:
+24px;
+}
+.title-modal-cha{
+  color:
+#333333;
+font-size:
+14px;
+line-height:
+20px;
+padding:
+16px;
+text-align:
+center;
+}
+.title-modal-con{
+  color:
+#1b1d29;
+font-family:
+Roboto;
+font-size:
+20px;
+font-weight:
+500;
+line-height:
+26px;
+text-align:
+center;
+}
+.image-tiet{
+
+  height: auto;
+}
+*,
+:before,
+:after {
+  box-sizing: border-box;
+}
+@media screen and (max-width: 767px) {
+
+  .style-2 {
+      border-radius: 8px;
+      height: 100%;
       width: 100%;
-    }
-    
-    .responsive-payment {
+      margin: 0 auto;
+      margin-top: 30px;
+  }  
+  .fle-x{
+      flex-flow: column;
+  }
+  .chi-tiet{
       width: 100%;
-      margin-top: 10px;
-    }
-    .responsive-col{
-        flex-direction: column;
-        align-items: center;
-    }
+       box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+       border-radius: 8px;
   }
-  /* App.css */
-.app-container {
-  padding: 20px;
-}
-
-.responsive-container {
-  width: 100%;
-}
-
-.responsive-row {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.responsive-col1 {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.responsive-col2 {
-  flex: 0 0 300px;
-}
-
-/* Điểm ngắt: Điều chỉnh bố cục cho màn hình nhỏ hơn 768px */
-@media (max-width: 768px) {
-  .responsive-row {
-    flex-direction: column;
-  }
-
-  .responsive-col1 {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-
-  .responsive-col2 {
+  .mo-ta{
     width: 100%;
   }
-}
-
-@media (min-width: 769px) {
-  .app-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
+  .khoi-tiet-cha{
+    overflow-x: auto;
+    max-width: 100%;
   }
-
-  .responsive-col1 {
-    width: 70%; /* Điều chỉnh kích thước cột 1 tùy theo nhu cầu */
+  .image-tiet{
+    max-width: 250%;
   }
+ 
 
-  .responsive-col2 {
-    width: 30%; /* Điều chỉnh kích thước cột 2 tùy theo nhu cầu */
-  }
-
-  .responsive-container {
-    display: flex;
-    flex-direction: column;
-  }
+  
 }

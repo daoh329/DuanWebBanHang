@@ -9,173 +9,23 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { message } from "antd";
 import "./Home.scss";
+import {parse, stringify} from 'flatted';
 
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
 const { TabPane } = Tabs;
-
-const products = [
-  {
-    id: 1,
-    name: "LapTop A",
-    price: 100000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 2,
-    name: "LapTop B",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 3,
-    name: "LapTop C",
-    price: 200000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 4,
-    name: "LapTop D",
-    price: 260000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 5,
-    name: "LapTop E",
-    price: 50000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 6,
-    name: "LapTop F",
-    price: 170000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 7,
-    name: "LapTop G",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 8,
-    name: "LapTop H",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 9,
-    name: "LapTop Y",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 10,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 11,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 12,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 13,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 14,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  }, {
-    id: 15,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  }, {
-    id: 16,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  // Thêm các sản phẩm khác vào đây
-];
-const tuanlevang = [
-  {
-    id: 1,
-    name: "LapTop A",
-    price: 100000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 2,
-    name: "LapTop B",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 3,
-    name: "LapTop C",
-    price: 200000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 4,
-    name: "LapTop D",
-    price: 260000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 5,
-    name: "LapTop E",
-    price: 50000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-];
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
   const navigate = useNavigate();
 
-  //top 5 laptop bán chạy
+  //top 10 laptop bán chạy
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
+    axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
         setTopLaptop(res.data);
+        console.log(res.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -229,7 +79,6 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/products`)
       .then(response => {
         setProducts(response.data);
-        console.log(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -520,8 +369,33 @@ const Home = () => {
 
             </div>
           </TabPane>
-          <TabPane tab="Ưu đãi Lớn" key="2">
-            Content of Tab 2
+          <TabPane tab="Sản phẩm bán chạy" key="2">
+          <div className="scroll-control-phone" ref={containerRef}>
+          {topLaptop &&
+                topLaptop.length > 0 &&
+                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                  <div className="sanpham-card">
+                    <img src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        APPLE
+                      </div>
+                    </div>
+                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
+                        {item.name}
+                      </h3>
+                    </div>
+
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {item.price}₫
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+            </div>
           </TabPane>
           <TabPane tab="Flash Sales" key="3">
             Content of Tab 3
@@ -611,10 +485,11 @@ const Home = () => {
       </div> */}
 
 
-      {/* ------------------box sản phẩm Laptop ------------------ */}
+      {/* ------------------box sản phẩm mới ra mắt ------------------ */}
       {topLaptop && topLaptop.length > 0 ? (
         <div className='phone-group' >
           <div className="title-group">
+
             <div className="phone-title">Top 5 Laptop bán chạy  </div>
             <div className="views-all">
               <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
@@ -668,11 +543,11 @@ const Home = () => {
         </div>
       ) : null}
 
-      {/* ------------------box sản phẩm Điện thoại ------------------ */}
-      {products && products.length > 0 ? (
+      {/* ------------------box sản phẩm laptop bán chạy ------------------ */}
+      {topLaptop && topLaptop.length > 0 ? (
         <div className="phone-group">
           <div className="title-group">
-            <div className="phone-title">Top điện thoại bán chạy  </div>
+            <div className="phone-title">Danh mục nổi bật</div>
             <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
           </div>
           <div className="scroll-group-phone">
@@ -680,9 +555,9 @@ const Home = () => {
             {/* content */}
             <div className="scroll-control-phone" ref={containerRef}>
 
-              {products &&
-                products.length > 0 &&
-                products.slice(startIndex, endIndex).map((item, index) => (
+              {topLaptop &&
+                topLaptop.length > 0 &&
+                topLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card">
                     <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
