@@ -95,7 +95,8 @@ function Cart() {
         <td style={{lineHeight:'15px',fontSize:'12px'}}>{item.name}</td>
         <td>{item.quantity}</td>
         <td>{item.price}</td>
-        <td>{item.price}</td>
+        <td>{item.totalPrice }</td>
+        
       </tr>
     ))}
   </MDBTableBody>
