@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from "antd";
-import { format } from "date-fns";
 import axios from "axios";
 import { useCart } from "../Cart/CartContext";
 import "./Cart.css";
@@ -17,6 +16,7 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 function Cart() {
+
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
   const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
@@ -38,8 +38,6 @@ function Cart() {
     // Cập nhật danh sách các sản phẩm được chọn
     setSelectedProducts(updatedSelectedProducts);
   };
-
-
 
 
   const calculateTotalPrice = () => {
@@ -139,8 +137,10 @@ function Cart() {
 
 
 
+
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
+ 
 
   // useEffect(() => {
   //   // Sắp xếp dữ liệu sản phẩm theo thời gian mới nhất đầu tiên
@@ -149,6 +149,11 @@ function Cart() {
   //   });
   //   setSortedCart(sortedProducts);
   // }, [cart]);
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -232,7 +237,6 @@ function Cart() {
                     <th scope="col">Đơn giá</th>
                     <th scope="col">Thành tiền</th>
                   </tr>
-
                 </MDBTableHead>
                 <MDBTableBody>
                   {cart.map((item, index) => (
@@ -260,14 +264,14 @@ function Cart() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-plus"></i>
+                               <i class="fa-solid fa-minus"></i>
                           </a>
                           <span>{item.quantity}</span>
                           <a
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-minus"></i>
+                          <i class="fa-solid fa-plus"></i>
                           </a>
                         </div>
                       </td>
@@ -311,7 +315,6 @@ function Cart() {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
