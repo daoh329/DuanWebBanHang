@@ -135,9 +135,6 @@ function Cart() {
     sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-
-
-
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
  
