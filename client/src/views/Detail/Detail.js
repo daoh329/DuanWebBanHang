@@ -515,7 +515,9 @@ function Detail() {
           <div className="fle-x">
 
             <div className="mo-ta">
-              <div className="title-mo">Mô tả sản phâm</div>
+              <div className="title-mo">Mô tả sản phẩm</div>
+              
+
             </div>
 
             <div className="chi-tiet">
@@ -530,14 +532,14 @@ function Detail() {
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}></td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration['Bảo hành']}</td>
                     </tr>
                     <tr>
                       <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Series laptop']}</td>
                     </tr>
                     <tr>
                       <td colSpan={1}>Màu sắc</td>
@@ -755,14 +757,14 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration['Báo hành']}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Series laptop']}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Màu sắc</td>
@@ -792,7 +794,7 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.CPU}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['CPU']}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Chíp đồ họa</td>
@@ -812,27 +814,27 @@ function Detail() {
                 </tr>
                 <tr>
                   <td colSpan={1}>Số cổng lưu chữ tối đa</td>
-                  <td colSpan={3}></td>
+                  <td colSpan={3}>{configuration['Số cổng lưu chữ tối đa']}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khe hở M.2 hỗ trợ</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Khe hở M.2 hỗ trợ']}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Cổng xuất hình</td>
-                  <td colSpan={3}></td>
+                  <td colSpan={3}>{configuration['Cổng xuất hình']}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Cổng kết nối</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Cổng kết nối']}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Kết nối không dây</td>
-                  <td colSpan={3}></td>
+                  <td colSpan={3}>{configuration['Kết nối không dây']}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bàn phím</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Bàn phím']}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Hệ điều hành</td>
@@ -840,7 +842,7 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Kích thước</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Kích thước']}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Pin</td>
@@ -848,14 +850,14 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khối lượng</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Khối lượng']}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Đèn LED trên máy</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Đèn LED trên máy']}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>

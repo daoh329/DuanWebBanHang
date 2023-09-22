@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import "./Profile.css";
 import {
   MDBTabs,
@@ -109,7 +109,7 @@ export default function Profile(props) {
           <MDBTabs className="flex-column text-center">
             <MDBTabsItem>
               <MDBTabsLink active={verticalActive === "tab1"}>
-                {user && user.name ? (
+                {user? (
                   <>
                     <Avatar
                       src={user.picture}
@@ -117,6 +117,7 @@ export default function Profile(props) {
                       style={{ marginRight: "10px" }}
                     />
                     {user.name}
+                    
                   </>
                 ) : (
                   <Avatar
@@ -201,9 +202,16 @@ export default function Profile(props) {
                                     required: true,
                                     message: "Vui lòng nhập E-mail!",
                                   },
-                                ]}
-                              >
-                                <Input />
+                                ]}>
+                                {user && (
+                                <div>
+                                <Input
+                                disabled
+                                value={user.email}
+                                style={{ marginRight: "10px" }}
+                                />
+                                </div>
+                                )}                              
                               </Form.Item>
 
                               {/* name */}
@@ -212,7 +220,14 @@ export default function Profile(props) {
                                 label="Tên người dùng"
                                 tooltip="Bạn muốn chúng tôi gọi bạn như thế nào."
                               >
-                                <Input />
+                               {user && (
+                                <div>
+                                <Input
+                                value={user.given_name}
+                                style={{ marginRight: "10px" }}
+                                />
+                                </div>
+                                )}       
                               </Form.Item>
 
                               {/* phone */}
