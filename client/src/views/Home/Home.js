@@ -9,161 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { message } from "antd";
 import "./Home.scss";
+import {parse, stringify} from 'flatted';
 
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
 const { TabPane } = Tabs;
-
-const products = [
-  {
-    id: 1,
-    name: "LapTop A",
-    price: 100000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 2,
-    name: "LapTop B",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 3,
-    name: "LapTop C",
-    price: 200000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 4,
-    name: "LapTop D",
-    price: 260000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 5,
-    name: "LapTop E",
-    price: 50000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 6,
-    name: "LapTop F",
-    price: 170000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 7,
-    name: "LapTop G",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 8,
-    name: "LapTop H",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 9,
-    name: "LapTop Y",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 10,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 11,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 12,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 13,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 14,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  }, {
-    id: 15,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  }, {
-    id: 16,
-    name: "LapTop K",
-    price: 150,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  // Thêm các sản phẩm khác vào đây
-];
-const tuanlevang = [
-  {
-    id: 1,
-    name: "LapTop A",
-    price: 100000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 2,
-    name: "LapTop B",
-    price: 150000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 3,
-    name: "LapTop C",
-    price: 200000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 4,
-    name: "LapTop D",
-    price: 260000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-  {
-    id: 5,
-    name: "LapTop E",
-    price: 50000,
-    imageUrl:
-      "https://lh3.googleusercontent.com/PjhHXXreUCNNLITAJ3gfR2heYwi7JRjbjIwC4Rh-zDi8cUqQT0CoVQVQ0WzoOuKG487h__xpEZQ_zQDXfWvRWWrKDYFSmc0wZA=w230-rw",
-  },
-];
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -267,109 +117,6 @@ const Home = () => {
     "https://lh3.googleusercontent.com/7fLNK64SX-6-xlW1aHfS0kbJOs8XxPpVPvDJIhL_3PS34Vo9VXTZTzaFRRtdoY38r2_XYbjonorwEmSUQgYkZXnSuVqSTvmB=w1920-rw",
     "https://lh3.googleusercontent.com/NEyGqAS4HkBmVGWbdLxRCJ7v4n7Xz-Xcfs6ffoxCNZMHBg0txwJk7L0FVyBvjZ9mwdFsV915-uAWlcX_JPHD1yJSq2EYfeV6=w1920-rw"
   ];
-  const categories = [
-    "Danh mục 1",
-    "Danh mục 2",
-    "Danh mục 3",
-    "Danh mục 4",
-    "Danh mục 5",
-  ];
-  const subCategories = {
-    "Danh mục 1": ["Danh mục con 1.1", "Danh mục con 1.2", "Danh mục con 1.3"],
-    "Danh mục 2": ["Danh mục con 2.1", "Danh mục con 2.2", "Danh mục con 2.3"],
-    // ... Thêm các danh mục con khác
-  };
-  const danhmuc1 = [
-    {
-      name: "Apple",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/09/07/logoooooooooooooooo.png",
-    },
-    {
-      name: "SamSung",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/samsung-logo-transparent.png",
-    },
-    {
-      name: "PC",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/07/18/xiaomi-logo.png",
-    },
-    {
-      name: "Card Màn Hình",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(3).png",
-    },
-    {
-      name: "CPU",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(6).png",
-    },
-    {
-      name: "Ram",
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/12/rog.png",
-    },
-    {
-      name: "Ổ cứng",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(4).png",
-    },
-    {
-      name: "Màn Hình",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/vivo-logo.png",
-    },
-    {
-      name: "Chuột Máy tính",
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/02/tecno.png",
-    },
-  ];
-  const danhmuc2 = [
-    {
-      name: "Bàn Phím",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/09/07/logoooooooooooooooo.png",
-    },
-    {
-      name: "IPhone",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/11/asu-logo.png",
-    },
-    {
-      name: "Ipad",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/dell-logo.png",
-    },
-    {
-      name: "Loa",
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/18/oooo.png",
-    },
-    {
-      name: "Phụ kiện chung",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/05/30/logo-acer-inkythuatso-2-01-27-15-50-00.jpg",
-    },
-    {
-      name: "Điện thoại",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/01/15/anh-chup-man-hinh-2022-01-15-luc-08-49-50.png",
-    },
-    {
-      name: "Máy tính bảng",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/11/microsoft-logo-inkythuatso-01-29-10-05-20.jpg",
-    },
-    {
-      name: "Máy in",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/lenovo-logo-png-1_638218133437530990.png",
-    },
-    {
-      name: "TV",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/2560px-lg-logo-2015-svg.png",
-    },
-  ];
   const [activeTab, setActiveTab] = useState("1"); // State to keep track of active tab
 
   const handleTabChange = (key) => {
@@ -407,32 +154,34 @@ const Home = () => {
       containerRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
     }
   };
-   // logic scroll button product
-   const ctnRef = useRef(null);
+  // logic scroll button product
+  const ctnRef = useRef(null);
 
-   const scrollTrai = () => {
-     if (ctnRef.current) {
+  const scrollTrai = () => {
+    if (ctnRef.current) {
       ctnRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
- 
-   const scrollPhai = () => {
-     if (ctnRef.current) {
+    }
+  };
+
+  const scrollPhai = () => {
+    if (ctnRef.current) {
       ctnRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
+    }
+  };
 
   return (
     <Layout>
       <div className="content">
         <Carousel autoplay>
           {sliderImages.map((image, index) => (
-            <div key={index}>
+            <div className='banner' key={index}>
               <img
-                className='banner'
+
                 src={image}
                 alt={`Slide ${index}`}
-                style={{ width: "100%", height: "500px" }}
+
+                style={{ width: "100%", height: "auto", objectFitfit: 'cover' }}
+
               />
             </div>
           ))}
@@ -500,99 +249,73 @@ const Home = () => {
 
 
       {/* ---------------menu-------------------- */}
-      <nav style={{ color: '#333333', fontFamily: '-apple-system', fontSize: '13px', height: '63px', width: '100%', marginTop: '90px' }}>
-        <ul style={{
-          width: '80%', height: '100%', alignItems: 'center', backgroundColor: '#ae69dd', borderRadius: '5px', boxShadow: '#cccccc 0px 4px 6px 0px', color: '#333333',
-          display: 'flex', fontSize: '13px', justifyContent: 'center', textAlign: 'center', margin: '0 auto'
-        }}>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-mobile-phone" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Điện thoại</span>
+      <nav className="menu-nav" >
+        <div>
+
+       
+        <ul className="menu-nav-ul">
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-mobile-phone" aria-hidden="true"></i>
+              <span className="name-menu">Điện thoại</span>
             </a>
             <div className="sub-container" style={{ position: 'absolute', left: '0', top: "55px", zIndex: "199", paddingTop: '15px', display: 'none', opacity: '0', visibility: 'hidden', transition: 'opacity 200ms,visibility 200ms' }}>
               abc
             </div>
           </li>
 
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-laptop" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Lap Top</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-laptop" aria-hidden="true"></i>
+              <span className="name-menu">Lap Top</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} className="fa-solid fa-icons" ></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Phụ kiện</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-icons" ></i>
+              <span className="name-menu">Phụ kiện</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-keyboard" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Keyboard</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i className="fa fa-keyboard" aria-hidden="true"></i>
+              <span className="name-menu">Keyboard</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fas fa-rotate" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Máy cũ</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-rotate" aria-hidden="true"></i>
+              <span className="name-menu">Máy cũ</span>
             </a>
           </li>
 
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Sửa chữa</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-screwdriver-wrench" aria-hidden="true"></i>
+              <span className="name-menu">Sửa chữa</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-bolt-lightning" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Ưu đãi</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-bolt-lightning" aria-hidden="true"></i>
+              <span className="name-menu">Ưu đãi</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-newspaper" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Tin tức</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-newspaper" aria-hidden="true"></i>
+              <span className="name-menu">Tin tức</span>
             </a>
           </li>
-          <li style={{ display: 'inline-flex', margin: "8px 14px 4px 14px" }}>
-            <a style={{
-              width: '54px', height: '51px', alignItems: 'center', color: '#ffffff', fontFamily: '-apple-system', fontSize: '13px',
-              justifyContent: 'center', textAlign: 'center',
-            }}>
-              <i style={{ color: '#ffffff', display: 'inline', fontSize: '26px', margin: '0 auto', textAlign: 'center' }} class="fa fa-headset" aria-hidden="true"></i>
-              <span style={{ width: '54px', height: '13px', color: '#ffffff', fontSize: '10px', textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap', display: 'block' }}>Dịch vụ</span>
+          <li className="menu-nav-ul-li">
+            <a className="li-a">
+              <i class="fa fa-headset" aria-hidden="true"></i>
+              <span className="name-menu">Dịch vụ</span>
             </a>
           </li>
 
         </ul>
+        </div>
       </nav>
 
       {/* -------tabsPane---------- */}
@@ -684,7 +407,7 @@ const Home = () => {
 
 
       {/*-------- Danh mục nổi bật -----------*/}
-      <div className='danhmucmobile' style={{
+      {/* <div className='danhmucmobile' style={{
         borderRadius: '20px',
         width: '100%',
         margin: '0 auto',
@@ -711,7 +434,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* 
       <div className='danhmucnoibat' style={{
         borderRadius: '20px', width: '80%',
@@ -766,8 +489,13 @@ const Home = () => {
       {topLaptop && topLaptop.length > 0 ? (
         <div className='phone-group' >
           <div className="title-group">
+
             <div className="phone-title">Sản phẩm mới ra mắt</div>
-            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+            <div className="views-all">
+              <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+              <i class="fa fa-chevron-right"></i>
+            </div>
+
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRef}>
@@ -891,7 +619,10 @@ const Home = () => {
         >
           <div className="title-group">
             <div className="products-title">Sản phẩm  </div>
-            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+            <div className="views-all">
+            <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+               <i class="fa fa-chevron-right"></i> 
+               </div>
           </div>
           <div className="scroll-control-product">
 
@@ -915,7 +646,7 @@ const Home = () => {
                     <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
                       {item.price}₫
                     </div>
-
+          
                   </div>
                 </div>
               ))}
@@ -939,10 +670,10 @@ const Home = () => {
           className="product-container"
           style={{
             borderRadius: "5px",
-            position:'relative',
+            position: 'relative',
             width: "80%",
             margin: "0 auto",
-            marginTop: "20px",          
+            marginTop: "20px",
             backgroundColor: "white",
           }}
         >
@@ -966,7 +697,7 @@ const Home = () => {
               {historysp &&
                 historysp.length > 0 &&
                 historysp.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card" style={{border: '1px solid rgb(228, 229, 240)', borderRadius:'5px',}}>
+                  <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
                     <img onClick={() => handleViewDetailproducts(item)} src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -991,19 +722,19 @@ const Home = () => {
             </div>
             {/* button */}
             <button
-            className="scroll-button"
-            id="scroll-left-button"
-            onClick={scrollTrai}
-          >
-            <LeftOutlined />
-          </button>
-          <button
-            className="scroll-button"
-            id="scroll-right-button"
-            onClick={scrollPhai}
-          >
-            <RightOutlined />
-          </button>
+              className="scroll-button"
+              id="scroll-left-button"
+              onClick={scrollTrai}
+            >
+              <LeftOutlined />
+            </button>
+            <button
+              className="scroll-button"
+              id="scroll-right-button"
+              onClick={scrollPhai}
+            >
+              <RightOutlined />
+            </button>
           </div>
         </div>
       ) : null}
