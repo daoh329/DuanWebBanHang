@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from "antd";
+import { format } from "date-fns";
 import axios from "axios";
 import { useCart } from "../Cart/CartContext";
 import "./Cart.css";
@@ -16,28 +17,66 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 function Cart() {
-
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
   const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
   const [cart, setCart] = useState(initialCart);
+
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+
   // Hàm này được gọi khi checkbox thay đổi trạng thái
   const handleCheckboxChange = (productId) => {
     const updatedSelectedProducts = [...selectedProducts];
     const index = updatedSelectedProducts.indexOf(productId);
 
     if (index === -1) {
-      // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
       updatedSelectedProducts.push(productId);
     } else {
-      // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
       updatedSelectedProducts.splice(index, 1);
     }
 
-    // Cập nhật danh sách các sản phẩm được chọn
     setSelectedProducts(updatedSelectedProducts);
+
+    // Lưu trạng thái checkbox vào sessionStorage
+    const checkboxData = {
+      selectAll,
+      selectedProducts: updatedSelectedProducts,
+    };
+    sessionStorage.setItem('checkboxData', JSON.stringify(checkboxData));
   };
+
+  // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
+  const handleSelectAllChange = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+
+    if (newSelectAll) {
+      const allProductIds = cart.map((item) => item.id);
+      setSelectedProducts(allProductIds);
+    } else {
+      setSelectedProducts([]);
+    }
+
+    // Lưu trạng thái selectAll và selectedProducts vào sessionStorage
+    const checkboxData = {
+      selectAll: newSelectAll,
+      selectedProducts: newSelectAll ? cart.map((item) => item.id) : [],
+    };
+    sessionStorage.setItem('checkboxData', JSON.stringify(checkboxData));
+  };
+
+  useEffect(() => {
+    // Kiểm tra nếu có dữ liệu trong sessionStorage
+    const savedCheckboxData = sessionStorage.getItem('checkboxData');
+
+    if (savedCheckboxData) {
+      const { selectAll: savedSelectAll, selectedProducts: savedSelectedProducts } = JSON.parse(savedCheckboxData);
+      setSelectAll(savedSelectAll);
+      setSelectedProducts(savedSelectedProducts);
+    }
+  }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
+
 
 
   const calculateTotalPrice = () => {
@@ -78,20 +117,9 @@ function Cart() {
     window.location.reload();
   };
 
-  const [selectAll, setSelectAll] = useState(false);
-  const handleSelectAllChange = () => {
-    const newSelectAll = !selectAll;
-    setSelectAll(newSelectAll);
 
-    if (newSelectAll) {
-      // Nếu chọn tất cả, thêm tất cả sản phẩm vào danh sách các sản phẩm được chọn
-      const allProductIds = cart.map((item) => item.id);
-      setSelectedProducts(allProductIds);
-    } else {
-      // Nếu bỏ chọn tất cả, xóa tất cả sản phẩm khỏi danh sách các sản phẩm được chọn
-      setSelectedProducts([]);
-    }
-  };
+
+
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = (productId) => {
@@ -137,10 +165,8 @@ function Cart() {
 
 
 
-
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
- 
 
   // useEffect(() => {
   //   // Sắp xếp dữ liệu sản phẩm theo thời gian mới nhất đầu tiên
@@ -149,11 +175,6 @@ function Cart() {
   //   });
   //   setSortedCart(sortedProducts);
   // }, [cart]);
-
-
-  useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
-  }, []);
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -210,7 +231,7 @@ function Cart() {
 
     // Lưu thông tin vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(buys));
-    console.log('buys',buys )
+    console.log('buys', buys)
     // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
     navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
   };
@@ -237,6 +258,7 @@ function Cart() {
                     <th scope="col">Đơn giá</th>
                     <th scope="col">Thành tiền</th>
                   </tr>
+
                 </MDBTableHead>
                 <MDBTableBody>
                   {cart.map((item, index) => (
@@ -264,14 +286,14 @@ function Cart() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                               <i class="fa-solid fa-minus"></i>
+                            <i class="fa-solid fa-plus"></i>
                           </a>
                           <span>{item.quantity}</span>
                           <a
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                          <i class="fa-solid fa-plus"></i>
+                            <i class="fa-solid fa-minus"></i>
                           </a>
                         </div>
                       </td>
@@ -315,6 +337,7 @@ function Cart() {
               </button>
             </div>
           </div>
+
         </div>
       </div>
     </div>
