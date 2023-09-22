@@ -6,8 +6,13 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
+import { Modal, Spin, notification } from "antd";
 
 function NewPhone() {
+  // Tạo modal show tiến trình thêm sản phẩm (Call API)
+  // Tạo biến trạng thái của modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       brand: "",
@@ -41,6 +46,7 @@ function NewPhone() {
       headphone_jack: "",
       size: "",
       mass: "",
+      accessory: "",
     },
     validationSchema: Yup.object().shape({
       brand: Yup.string().required("Vui lòng chọn thương hiệu của sản phẩm."),
@@ -89,6 +95,9 @@ function NewPhone() {
       // description: Yup.string().required("Vui lòng nhập trường này."),
     }),
     onSubmit: async (values) => {
+      // Mở modal
+      setIsModalOpen(true);
+
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
 
@@ -113,7 +122,6 @@ function NewPhone() {
           }
         }
       }
-
       // call API
       await axios
         .post(url, formData, {
@@ -123,14 +131,41 @@ function NewPhone() {
         })
         .then((res) => {
           if (res.status === 200) {
-            alert("Tạo sản phẩm thành công!");
+            const timer = setTimeout(() => {
+              setIsModalOpen(false);
+              // Hiển thị thông báo thành công
+              notification.success({
+                message: "Thành công",
+                description: "Dữ liệu đã được lưu thành công!",
+              });
+            }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
+            // Xóa timer khi component bị hủy
+            return () => clearTimeout(timer);
           } else {
-            alert("Tạo sản phẩm thất bại!");
+            const timer = setTimeout(() => {
+              setIsModalOpen(false);
+              // Hiển thị thông báo lỗi
+              notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi lưu dữ liệu!",
+              });
+            }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
+            // Xóa timer khi component bị hủy
+            return () => clearTimeout(timer);
           }
         })
         .catch((e) => {
           console.log(e);
-          alert("Tạo sản phẩm thất bại.");
+          const timer = setTimeout(() => {
+            setIsModalOpen(false);
+            // Hiển thị thông báo lỗi
+            notification.error({
+              message: "Lỗi",
+              description: "Có lỗi xảy ra khi lưu dữ liệu!",
+            });
+          }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
+          // Xóa timer khi component bị hủy
+          return () => clearTimeout(timer);
         });
     },
   });
@@ -615,6 +650,21 @@ function NewPhone() {
                 <span className="form-message">{formik.errors.mass}</span>
               )}
             </div>
+            {/* accessory: Phụ kiện đi kèm */}
+            <div className="form-group">
+              <label className="form-label">Phụ kiện đi kèm</label>
+              <input
+                type="text"
+                name="accessory"
+                id="accessory"
+                className="form-control"
+                value={formik.values.accessory}
+                onChange={formik.handleChange}
+              ></input>
+              {formik.errors.accessory && (
+                <span className="form-message">{formik.errors.accessory}</span>
+              )}
+            </div>
           </div>
         </div>
         {/* description */}
@@ -644,6 +694,15 @@ function NewPhone() {
         <button type="submit" className="btn-submit-form">
           Xác nhận
         </button>
+        <Modal
+          open={isModalOpen}
+          footer={null}
+          closeIcon={null}
+        >
+          <Spin tip="Đang tải lên..." spinning={true}>
+            <div style={{minHeight:"50px"}} className="content" />
+          </Spin>
+        </Modal>
       </form>
     </div>
   );
