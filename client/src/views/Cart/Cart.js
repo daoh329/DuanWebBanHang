@@ -20,18 +20,42 @@ function Cart() {
   const [selectedProducts, setSelectedProducts] = useState([]);
   // Hàm này được gọi khi checkbox thay đổi trạng thái
   const handleCheckboxChange = (productId) => {
-    const index = selectedProducts.indexOf(productId);
+    const updatedSelectedProducts = [...selectedProducts];
+    const index = updatedSelectedProducts.indexOf(productId);
+  
     if (index === -1) {
-      // Nếu sản phẩm chưa được chọn, thêm vào mảng selectedProducts
-      setSelectedProducts([...selectedProducts, productId]);
+      // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
+      updatedSelectedProducts.push(productId);
     } else {
-      // Nếu sản phẩm đã được chọn, loại bỏ khỏi mảng selectedProducts
-      const updatedSelectedProducts = [...selectedProducts];
+      // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
       updatedSelectedProducts.splice(index, 1);
-      setSelectedProducts(updatedSelectedProducts);
     }
-  }
-
+  
+    // Cập nhật danh sách các sản phẩm được chọn
+    setSelectedProducts(updatedSelectedProducts);
+  };
+  
+  
+  const calculateTotalPrice = () => {
+    // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
+    const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
+  
+    // Tính tổng tiền của các sản phẩm được chọn
+    const total = selectedItems.reduce((acc, item) => {
+      return acc + item.totalPrice;
+    }, 0);
+  
+    return total;
+  };
+  
+  useEffect(() => {
+    // Tính tổng tiền của các sản phẩm được chọn
+    const total = calculateTotalPrice();
+  
+    // Cập nhật biến state tổng tiền
+    setTotalPrice(total);
+  }, [selectedProducts, cart]);
+  
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
@@ -45,17 +69,6 @@ function Cart() {
   // }, [cart]);
 
   const [totalPrice, setTotalPrice] = useState(0);
-  useEffect(() => {
-    // Tính tổng tiền của tất cả sản phẩm trong giỏ hàng
-    const cartTotalPrice = cart.reduce((total, item) => {
-      return total + item.totalPrice;
-    }, 0);
-
-    // Cập nhật biến state tổng tiền
-    setTotalPrice(cartTotalPrice);
-  }, [cart]);
-
-
 
   const columns = [
     {
