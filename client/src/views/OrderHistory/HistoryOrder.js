@@ -20,7 +20,7 @@ function HistoryOrder(props) {
     }, []);
 
     const columns = [
-        { title: 'Người mua', dataIndex: 'Username', key: 'Username' },
+        { title: 'Người mua', dataIndex: 'nameOrder', key: 'Username' },
         { title: 'SDT', dataIndex: 'phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
