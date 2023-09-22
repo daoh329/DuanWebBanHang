@@ -3,22 +3,21 @@ const createTables = require("../../config/CrTables");
 
 
 class Product {
-  
+
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
     var arrPathImage = [];
     arrImage.forEach(image => {
-      arrPathImage.push(image.path) ;
+      arrPathImage.push(image.path);
     });
-
     const configuration = data.category === "Điện thoại" ? {
       screen: data.screen,
       resolution: data.resolution,
       chip: data.chip,
-      ram:data.ram,
+      ram: data.ram,
       rom: data.rom,
-      screen:data.screen,
+      screen: data.screen,
       os: data.os,
       pin: data.pin,
       charging_port: data.charging_port,
@@ -32,13 +31,13 @@ class Product {
       headphone_jack: data.headphone_jack,
       size: data.size,
       mass: data.mass,
-
+      accessory: data.accessory,
 
     } : {
       cpu: data.cpu,
-      ram:data.ram,
+      ram: data.ram,
       rom: data.rom,
-      screen:data.screen,
+      screen: data.screen,
       vga: data.vga,
       os: data.os,
       maximum_number_of_storage_ports: data.maximum_number_of_storage_ports,
@@ -49,69 +48,76 @@ class Product {
       keyboard: data.keyboard,
       pin: data.pin,
       mass: data.mass,
+      accessory: data.accessory,
     }
 
-    res.status(200).json("success");
+    const SELECTcategory = `SELECT * FROM category where name = ?`
+    const category_name = data.category
+    if (category_name == "Điện Thoại") {
+      category_name = "phone"
+    }
+    mysql.query(SELECTcategory, category_name, (er, result) => {
+      if (er) {
+        res.status(500).send(`Lỗi kết nối server data`)
+      }
 
-    // const SELECTcategory = `SELECT * FROM category where name = ?`
-    // mysql.query(SELECTcategory, data.category, (er, result) => {
-    //   if (er) {
-    //     res.status(500).send(`Lỗi kết nối server data`)
-    //   }
-      
-    //   // PRODUCT INSERT
-    //   const insertProductQuery = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, 1)`;
-    //   const productValues = [
-    //     data.name, data.price, data.shortDescription, result[0].id
-    //   ]
-    //   mysql.query(insertProductQuery, productValues, (er, resultP) => {
-    //     if(er){
-    //       console.log("product:"+er);
-    //       res.status(500).send(`lỗi thêm sản phẩm: ` + er)
-          
-    //     }
-    //     // IMG INSERT
-    //     const newProductId = resultP.insertId;
-    //     const insertGaleryQuery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
-    //     for (const image of arrPathImage) {
-    //       const galeryValues = [image, newProductId]
-    //       mysql.query(insertGaleryQuery, galeryValues, (er, result) => {
-    //         if (er) {
-    //           console.log('img: ' + er);
-    //         }
-    //       })
-    //     }
-    //     // DETAIL PRODUCT
-    //     const configurationString = JSON.stringify(configuration);
-        
-    //     const insertPdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
-    //     const PdValues = [
-    //       data.quantity, data.brand, configurationString, data.description, newProductId
-    //     ]
-    //     mysql.query(insertPdetail, PdValues, (er, resultPd) => {
-    //       if (!er) {
-    //         // Truy vấn SQL thành công
-    //         const idPD = resultPd.insertId;
-    //         // COLOR INSERT
-    //         const insertProDetailColorQuery = 'INSERT prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
-    //         for (const x of data.color) {
-    //           const colorValues = [idPD, x];
-    //           mysql.query(insertProDetailColorQuery, colorValues, (er, result) => {
-    //             if (er) {
-    //               console.log('color: ' + er);
-    //             }
-    //           })
-    //         }
-    //         res.status(200).send('thành công')
-    //       } else {
-    //         // Truy vấn SQL thất bại
-    //         console.log(er);
-    //       }
-    //     });
-  
-    //   })
-  
-    // })
+      // PRODUCT INSERT
+      let nameProduct = '';
+      if (data.name == '') {
+        nameProduct = '' + data.brand + '' + data.series
+      } else { nameProduct = data.name }
+      const insertProductQuery = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, 1)`;
+      const productValues = [
+        nameProduct, data.price, data.shortDescription, result[0].id
+      ]
+      mysql.query(insertProductQuery, productValues, (er, resultP) => {
+        if (er) {
+          console.log("product:" + er);
+          res.status(500).send(`lỗi thêm sản phẩm: ` + er)
+
+        }
+        // IMG INSERT
+        const newProductId = resultP.insertId;
+        const insertGaleryQuery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
+        for (const image of arrPathImage) {
+          const galeryValues = [image, newProductId]
+          mysql.query(insertGaleryQuery, galeryValues, (er, result) => {
+            if (er) {
+              console.log('img: ' + er);
+            }
+          })
+        }
+        // DETAIL PRODUCT
+        const configurationString = JSON.stringify(configuration);
+
+        const insertPdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
+        const PdValues = [
+          data.quantity, data.brand, configurationString, data.description, newProductId
+        ]
+        mysql.query(insertPdetail, PdValues, (er, resultPd) => {
+          if (!er) {
+            // Truy vấn SQL thành công
+            const idPD = resultPd.insertId;
+            // COLOR INSERT
+            const insertProDetailColorQuery = 'INSERT prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
+            for (const x of data.color) {
+              const colorValues = [idPD, x];
+              mysql.query(insertProDetailColorQuery, colorValues, (er, result) => {
+                if (er) {
+                  console.log('color: ' + er);
+                }
+              })
+            }
+            res.status(200).send('thành công')
+          } else {
+            // Truy vấn SQL thất bại
+            console.log(er);
+          }
+        });
+
+      })
+
+    })
   }
 
   async json(req, res) {
@@ -213,13 +219,13 @@ class Product {
       ) galery ON product.id = galery.product_id;
     `;
 
-  mysql.query(query, (error, results) => {
-    if (error) {
-      return res.json({ error });
-    }
+    mysql.query(query, (error, results) => {
+      if (error) {
+        return res.json({ error });
+      }
 
-    res.json(results);
-  });
+      res.json(results);
+    });
   }
 
   async DetailProducts(req, res) {
@@ -237,59 +243,59 @@ class Product {
 
     // Thực hiện truy vấn
     mysql.query(productQuery, [id], (error, productResults) => {
-    if (error) {
-      return res.json({ error });
-    }
+      if (error) {
+        return res.json({ error });
+      }
 
-    // Truy vấn để lấy thông tin màu sắc
-    const colorQuery = `
+      // Truy vấn để lấy thông tin màu sắc
+      const colorQuery = `
       SELECT id, Colorname
       FROM ProdetailColor
       WHERE ProductDetailId = ?
       ORDER BY id ASC;
     `;
 
-    // Truy vấn để lấy hình ảnh
-    const imageQuery = `
+      // Truy vấn để lấy hình ảnh
+      const imageQuery = `
       SELECT id, thumbnail
       FROM galery
       WHERE product_id = ?
       ORDER BY id ASC;
     `;
 
-    // Thực hiện truy vấn màu sắc và hình ảnh
-    mysql.query(colorQuery, [id], (error, colorResults) => {
-      if (error) {
-        return res.json({ error });
-      }
-
-      mysql.query(imageQuery, [id], (error, imageResults) => {
+      // Thực hiện truy vấn màu sắc và hình ảnh
+      mysql.query(colorQuery, [id], (error, colorResults) => {
         if (error) {
           return res.json({ error });
         }
 
-        // Kết hợp kết quả và gửi lại cho client
-        const results = {
-          ...productResults[0],
-          Colorname: colorResults.map(result => ({ id: result.id, Colorname: result.Colorname })),
-          thumbnails: imageResults.map(result => ({ id: result.id, thumbnail: result.thumbnail }))
-        };
-        
-        res.json(results);
+        mysql.query(imageQuery, [id], (error, imageResults) => {
+          if (error) {
+            return res.json({ error });
+          }
+
+          // Kết hợp kết quả và gửi lại cho client
+          const results = {
+            ...productResults[0],
+            Colorname: colorResults.map(result => ({ id: result.id, Colorname: result.Colorname })),
+            thumbnails: imageResults.map(result => ({ id: result.id, thumbnail: result.thumbnail }))
+          };
+
+          res.json(results);
+        });
       });
-    });
     });
   }
 
   // getBrand, API: /product/brands 
-  getBrand(req, res){
+  getBrand(req, res) {
     const query = `SELECT * FROM brand`;
     mysql.query(query, (e, results, fields) => {
-      if (e){
+      if (e) {
         console.log(e);
         res.status(500).json("Lỗi lấy dữ liệu brands!")
-      } 
-      res.status(200).json({results})
+      }
+      res.status(200).json({ results })
     });
 
   }
