@@ -64,6 +64,7 @@ useEffect(() => {
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
+  const [quantity, setQuantity] = useState([]);
 
   // useEffect(() => {
   //   // Sắp xếp dữ liệu sản phẩm theo thời gian mới nhất đầu tiên
@@ -73,31 +74,31 @@ useEffect(() => {
   //   setSortedCart(sortedProducts);
   // }, [cart]);
 
-  const handleIncreaseQuantity = (productId) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        item.quantity += 1;
-        item.totalPrice = item.quantity * item.price;
-      }
-      return item;
-    });
+  // const handleIncreaseQuantity = (productId) => {
+  //   const updatedCart = cart.map((item) => {
+  //     if (item.id === productId) {
+  //       item.quantity += 1;
+  //       item.totalPrice = item.quantity * item.price;
+  //     }
+  //     return item;
+  //   });
 
-    setCart(updatedCart);
-  };
+  //   setCart(updatedCart);
+  // };
 
-  const handleDecreaseQuantity = (productId) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        if (item.quantity > 1) {
-          item.quantity -= 1;
-          item.totalPrice = item.quantity * item.price;
-        }
-      }
-      return item;
-    });
+  // const handleDecreaseQuantity = (productId) => {
+  //   const updatedCart = cart.map((item) => {
+  //     if (item.id === productId) {
+  //       if (item.quantity > 1) {
+  //         item.quantity -= 1;
+  //         item.totalPrice = item.quantity * item.price;
+  //       }
+  //     }
+  //     return item;
+  //   });
 
-    setCart(updatedCart);
-  };
+  //   setCart(updatedCart);
+  // };
 
 
   const handleRecalculateTotal = () => {
@@ -147,9 +148,13 @@ useEffect(() => {
                       </td>
                       <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.name}</td>
                      <td>
-        {item.quantity}
-        <button onClick={() => handleIncreaseQuantity(item.id)}>+</button>
-        <button onClick={() => handleDecreaseQuantity(item.id)}>-</button>
+        <button onClick={() => setQuantity(quantity - 1)}>
+          <p>-</p>
+        </button>
+        {quantity}
+        <button onClick={() => setQuantity(quantity + 1)}>
+          <p>+</p>
+        </button>
       </td>
                     <td>{item.price}</td>
                     <td>{item.quantity * item.price}</td> 
