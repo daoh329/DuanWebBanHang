@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination,message } from "antd";
+import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useCart } from '../Cart/CartContext';
@@ -11,15 +11,15 @@ const Search = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const navigate = useNavigate();
-    // them giỏ hàng
-    const { addToCart } = useCart();
-    const handleAddToCart = (product) => {
-        addToCart(product);
-        message.success('Sản phẩm đã được thêm vào giỏ hàng');
-    };
+  // them giỏ hàng
+  const { addToCart } = useCart();
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    message.success('Sản phẩm đã được thêm vào giỏ hàng');
+  };
   useEffect(() => {
     // Tải dữ liệu từ API khi component được render
-    fetch("https://64df1e7171c3335b25821aef.mockapi.io/users")
+    fetch(`${process.env.REACT_APP_API_URL}/product/products`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -45,14 +45,20 @@ const Search = () => {
     }
   }, [query, products]);
 
-  const handleViewDetailuser = (user) => {
+  const handleViewDetailProduct = (products) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+    if (!products.id) {
+      console.error('Product ID is undefined!');
+      return;
+    }
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
     const historyproduct = {
-      name: user.name,
-      price: user.Price,
-      imageUrl: user.avatar,
+      name: products.name,
+      price: products.price,
+      avatar: products.thumbnail,
+      id: products.id,
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
@@ -66,8 +72,8 @@ const Search = () => {
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
 
-    console.log("click oke");
-    navigate(`/detail/${user.id}`);
+    console.log('click')
+    navigate(`/detail/${products.id}`);
   };
   const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
 
@@ -117,38 +123,27 @@ const Search = () => {
       >
         {filteredProducts &&
           filteredProducts.length > 0 &&
-          filteredProducts.slice(startIndex, endIndex).map((product, index) => (
-            <Card key={product.id} hoverable className="card-sp">
-              <img
-                src={product.avatar}
-                style={{ width: "170px", height: "170px", objectFit: "cover" }}
-                alt={product.name}
-                onClick={() => handleViewDetailuser(product)}
-              />
-              <div
-                style={{
-                  flexGrow: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <a className="name-card">{product.name}</a>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <p style={{ color: "rgb(20, 53, 195)", fontWeight: "bold" }}>
-                    {product.Price} ₫
-                  </p>
-                  <Button type="primary" icon={<ShoppingCartOutlined />} style={{ marginLeft: 'auto' }} onClick={() => handleAddToCart(product)}>
-                                        </Button>
+          filteredProducts.slice(startIndex, endIndex).map((item, index) => (
+            <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
+              <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+              <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                  {item.brand}
                 </div>
               </div>
-            </Card>
+              <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                  {item.name}
+                </h3>
+              </div>
+
+              <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                  {item.price}₫
+                </div>
+
+              </div>
+            </div>
           ))}
       </div>
       {/* Phân trang */}

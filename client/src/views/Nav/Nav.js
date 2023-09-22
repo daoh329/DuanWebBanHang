@@ -44,7 +44,7 @@ const App = (userDetails) => {
 
   useEffect(() => {
     // Tải dữ liệu từ API khi component được render
-    fetch("https://64df1e7171c3335b25821aef.mockapi.io/users")
+    fetch(`${process.env.REACT_APP_API_URL}/product/products`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

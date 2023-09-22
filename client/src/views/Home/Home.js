@@ -268,109 +268,6 @@ const Home = () => {
     "https://lh3.googleusercontent.com/7fLNK64SX-6-xlW1aHfS0kbJOs8XxPpVPvDJIhL_3PS34Vo9VXTZTzaFRRtdoY38r2_XYbjonorwEmSUQgYkZXnSuVqSTvmB=w1920-rw",
     "https://lh3.googleusercontent.com/NEyGqAS4HkBmVGWbdLxRCJ7v4n7Xz-Xcfs6ffoxCNZMHBg0txwJk7L0FVyBvjZ9mwdFsV915-uAWlcX_JPHD1yJSq2EYfeV6=w1920-rw"
   ];
-  const categories = [
-    "Danh mục 1",
-    "Danh mục 2",
-    "Danh mục 3",
-    "Danh mục 4",
-    "Danh mục 5",
-  ];
-  const subCategories = {
-    "Danh mục 1": ["Danh mục con 1.1", "Danh mục con 1.2", "Danh mục con 1.3"],
-    "Danh mục 2": ["Danh mục con 2.1", "Danh mục con 2.2", "Danh mục con 2.3"],
-    // ... Thêm các danh mục con khác
-  };
-  const danhmuc1 = [
-    {
-      name: "Apple",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/09/07/logoooooooooooooooo.png",
-    },
-    {
-      name: "SamSung",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/samsung-logo-transparent.png",
-    },
-    {
-      name: "PC",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/07/18/xiaomi-logo.png",
-    },
-    {
-      name: "Card Màn Hình",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(3).png",
-    },
-    {
-      name: "CPU",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(6).png",
-    },
-    {
-      name: "Ram",
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/12/rog.png",
-    },
-    {
-      name: "Ổ cứng",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/09/14/brand%20(4).png",
-    },
-    {
-      name: "Màn Hình",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2020/11/30/vivo-logo.png",
-    },
-    {
-      name: "Chuột Máy tính",
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/02/tecno.png",
-    },
-  ];
-  const danhmuc2 = [
-    {
-      name: "Bàn Phím",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/09/07/logoooooooooooooooo.png",
-    },
-    {
-      name: "IPhone",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/11/asu-logo.png",
-    },
-    {
-      name: "Ipad",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/dell-logo.png",
-    },
-    {
-      name: "Loa",
-      image: "https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/18/oooo.png",
-    },
-    {
-      name: "Phụ kiện chung",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/05/30/logo-acer-inkythuatso-2-01-27-15-50-00.jpg",
-    },
-    {
-      name: "Điện thoại",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2022/01/15/anh-chup-man-hinh-2022-01-15-luc-08-49-50.png",
-    },
-    {
-      name: "Máy tính bảng",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2021/11/11/microsoft-logo-inkythuatso-01-29-10-05-20.jpg",
-    },
-    {
-      name: "Máy in",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/lenovo-logo-png-1_638218133437530990.png",
-    },
-    {
-      name: "TV",
-      image:
-        "https://cdn.hoanghamobile.com/i/cat/Uploads/2023/06/08/2560px-lg-logo-2015-svg.png",
-    },
-  ];
   const [activeTab, setActiveTab] = useState("1"); // State to keep track of active tab
 
   const handleTabChange = (key) => {
@@ -504,6 +401,9 @@ const Home = () => {
 
       {/* ---------------menu-------------------- */}
       <nav className="menu-nav" >
+        <div>
+
+       
         <ul className="menu-nav-ul">
           <li className="menu-nav-ul-li">
             <a className="li-a">
@@ -566,6 +466,7 @@ const Home = () => {
           </li>
 
         </ul>
+        </div>
       </nav>
 
       {/* -------tabsPane---------- */}
@@ -842,7 +743,10 @@ const Home = () => {
         >
           <div className="title-group">
             <div className="products-title">Sản phẩm  </div>
-            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+            <div className="views-all">
+            <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+               <i class="fa fa-chevron-right"></i> 
+               </div>
           </div>
           <div className="scroll-control-product">
 
@@ -866,7 +770,7 @@ const Home = () => {
                     <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
                       {item.price}₫
                     </div>
-
+          
                   </div>
                 </div>
               ))}
