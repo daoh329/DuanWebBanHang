@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
@@ -12,17 +13,20 @@ import {
   MDBCheckbox,
 } from "mdb-react-ui-kit";
 const { Header, Footer, Sider, Content } = Layout;
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 function Cart() {
-
+  const navigate = useNavigate();
   // Lấy dữ liệu từ session
-  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
+  const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  const [cart, setCart] = useState(initialCart);
   const [selectedProducts, setSelectedProducts] = useState([]);
   // Hàm này được gọi khi checkbox thay đổi trạng thái
   const handleCheckboxChange = (productId) => {
     const updatedSelectedProducts = [...selectedProducts];
     const index = updatedSelectedProducts.indexOf(productId);
-  
+
     if (index === -1) {
       // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
       updatedSelectedProducts.push(productId);
@@ -30,32 +34,110 @@ function Cart() {
       // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
       updatedSelectedProducts.splice(index, 1);
     }
-  
+
     // Cập nhật danh sách các sản phẩm được chọn
     setSelectedProducts(updatedSelectedProducts);
   };
-  
-  
+
+
+
+
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
-  
+
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
       return acc + item.totalPrice;
     }, 0);
-  
+
     return total;
   };
-  
+
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-  
+
     // Cập nhật biến state tổng tiền
     setTotalPrice(total);
   }, [selectedProducts, cart]);
-  
+
+  //xóa sp
+  const removeFromCart = (productId) => {
+    // Tìm sản phẩm cần xóa trong giỏ hàng
+    const updatedCart = cart.filter((item) => item.id !== productId);
+
+    // Cập nhật danh sách giỏ hàng
+    setCart(updatedCart);
+
+    // Cập nhật danh sách sản phẩm được chọn (nếu sản phẩm bị xóa đang được chọn)
+    setSelectedProducts((prevSelected) =>
+      prevSelected.filter((productId) => productId !== productId)
+    );
+
+    // Lưu danh sách giỏ hàng đã cập nhật vào session
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+    window.location.reload();
+  };
+
+  const [selectAll, setSelectAll] = useState(false);
+  const handleSelectAllChange = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+
+    if (newSelectAll) {
+      // Nếu chọn tất cả, thêm tất cả sản phẩm vào danh sách các sản phẩm được chọn
+      const allProductIds = cart.map((item) => item.id);
+      setSelectedProducts(allProductIds);
+    } else {
+      // Nếu bỏ chọn tất cả, xóa tất cả sản phẩm khỏi danh sách các sản phẩm được chọn
+      setSelectedProducts([]);
+    }
+  };
+
+  // Hàm tăng số lượng sản phẩm trong giỏ hàng
+  const increaseQuantity = (productId) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id === productId) {
+        // Tăng số lượng sản phẩm lên 1
+        item.quantity += 1;
+        // Cập nhật tổng tiền của sản phẩm
+        item.totalPrice = item.quantity * item.price;
+      }
+      return item;
+    });
+    // Cập nhật giỏ hàng
+    setCart(updatedCart);
+    // Cập nhật tổng tiền
+    const total = calculateTotalPrice();
+    setTotalPrice(total);
+
+    // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  // Hàm giảm số lượng sản phẩm trong giỏ hàng
+  const decreaseQuantity = (productId) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id === productId) {
+        // Giảm số lượng sản phẩm đi 1, nhưng không thấp hơn 1
+        item.quantity = Math.max(item.quantity - 1, 1);
+        // Cập nhật tổng tiền của sản phẩm
+        item.totalPrice = item.quantity * item.price;
+      }
+      return item;
+    });
+    // Cập nhật giỏ hàng
+    setCart(updatedCart);
+    // Cập nhật tổng tiền
+    const total = calculateTotalPrice();
+    setTotalPrice(total);
+
+    // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
@@ -70,49 +152,79 @@ function Cart() {
 
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const columns = [
-    {
-      title: "",
-      dataIndex: "checkbox",
-      key: "checkbox",
-      render: (_, record) => <Checkbox />,
-      width: 50,
-    },
-    {
-      title: "",
-      dataIndex: "thumbnail",
-      key: "thumbnail",
 
-      render: (_, record) => (
-        <img
-          src={record.thumbnail}
-          alt="thumbnail"
-          style={{ width: "200px", height: "50px" }}
-        />
-      ),
-      width: 50,
-    },
-    { title: "Sản Phẩm", dataIndex: "name", key: "name" },
-    { title: "Đơn giá", dataIndex: "price", key: "price" },
-    { title: "Thành tiền", dataIndex: "price", key: "price" },
-  ];
+  const handleViewDetailProduct = (products) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+    if (!products.id) {
+      console.error('Product ID is undefined!');
+      return;
+    }
+    // Lấy danh sách các sản phẩm đã xem từ session storage
+    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
+    // Tạo đối tượng sản phẩm mới
+    const historyproduct = {
+      name: products.name,
+      price: products.price,
+      avatar: products.thumbnail,
+      id: products.id,
+    };
+    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+    const isViewed = historysp.some(
+      (product) => product.name === historyproduct.name
+    );
+    // Nếu sản phẩm mới chưa được xem
+    if (!isViewed) {
+      // Thêm đối tượng sản phẩm mới vào cuối danh sách
+      historysp.push(historyproduct);
+      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+      sessionStorage.setItem("products", JSON.stringify(historysp));
+    }
+
+    console.log('click')
+    navigate(`/detail/${products.id}`);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;
+  // Hàm xử lý khi nút "Tiếp tục" được ấn
+  const handleContinueClick = () => {
+    // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
+    const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
+
+    // Tính tổng tiền của các sản phẩm được chọn
+    const total = calculateTotalPrice();
+
+    // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
+    const buys = {
+      selectedItems,
+      total,
+    };
+
+    // Lưu thông tin vào sessionStorage
+    sessionStorage.setItem("buys", JSON.stringify(buys));
+    console.log('buys',buys )
+    // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
+    navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
+  };
+
   return (
     <div>
       <div className="style-2">
         <div className="fle-x">
           <div className="mo-ta">
-            <div className="title-mo">Mô tả sản phâm</div>
+            <div className="title-mo">Giỏ hàng</div>
             <div className="khoi-tiet-cha">
               <MDBTable borderless>
                 <MDBTableHead light>
                   <tr>
                     <th scope="col">
+                      <Checkbox
+                        onChange={handleSelectAllChange}
+                        checked={selectAll}>
+                      </Checkbox>
                     </th>
                     <th scope="col">Hình</th>
                     <th scope="col">Sản Phẩm</th>
@@ -134,15 +246,38 @@ function Cart() {
                       </td>
                       <td style={{ width: '20%' }}>
                         <img
+                          onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
                           src={item.thumbnail}
                           alt="thumbnail"
                         />
                       </td>
                       <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.name}</td>
-                      <td>{item.quantity}</td>
-                      <td>{item.price}</td>
-                      <td>{item.totalPrice}</td>
+
+                      <td>
+                        <div className="quantity-control">
+                          <a
+                            onClick={() => decreaseQuantity(item.id)}
+                            className="quantity-button"
+                          >
+                            <i class="fa-solid fa-plus"></i>
+                          </a>
+                          <span>{item.quantity}</span>
+                          <a
+                            onClick={() => increaseQuantity(item.id)}
+                            className="quantity-button"
+                          >
+                            <i class="fa-solid fa-minus"></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>{formatCurrency(item.price)}</td>
+                      <td>{formatCurrency(item.totalPrice)}</td>
+                      <td>
+                        <a onClick={() => removeFromCart(item.id)}>
+                          <i class="fa-solid fa-xmark"></i>
+                        </a>
+                      </td>
                     </tr>
                   ))}
                 </MDBTableBody>
@@ -157,17 +292,23 @@ function Cart() {
                   <tr>
                     <td>Tạm tính</td>
 
-                    <th>{totalPrice}</th>
+                    <th>{formatCurrency(totalPrice)}</th>
                   </tr>
                   <tr>
                     <td>Tổng tiền</td>
 
-                    <th>{totalPrice}</th>
+                    <th>{formatCurrency(totalPrice)}</th>
                   </tr>
                 </MDBTableBody>
               </MDBTable>
               {/* Nút "Tiếp tục" sẽ được disabled nếu isChecked là false */}
-              <button className="btn-thanh" disabled={isContinueButtonDisabled}>Tiếp tục</button>
+              <button
+                className="btn-thanh"
+                disabled={isContinueButtonDisabled}
+                onClick={handleContinueClick} // Gọi hàm khi nút được ấn
+              >
+                Tiếp tục
+              </button>
             </div>
           </div>
 

@@ -182,3 +182,14 @@ center;
 
   
 }
+.quantity-control{
+  display: flex;
+  gap: 5;
+ 
+}
+.quantity-button {
+ 
+  margin: 0 10px 0 10px ; 
+  font-size: 16px; 
+  cursor: pointer;
+}
