@@ -84,7 +84,6 @@ export default function Buy() {
   };
 
   const [buysData, setBuysData] = useState(null);
-
   // Lấy dữ liệu từ sessionStorage khi component được tải
   useEffect(() => {
     const buysDataFromSession = sessionStorage.getItem("buys");
@@ -808,7 +807,7 @@ export default function Buy() {
 
 
                 <div className="card-body css-0 snipcss0-1-1-6 snipcss0-5-100-105">
-                  {buysData && (
+                {buysData && buysData.selectedItems.map((item, index) => (
                     <div className="css-9op68y snipcss0-2-6-7 snipcss0-6-105-106">
                       <div className="css-ov1ktg snipcss0-3-7-8 snipcss0-7-106-107">
                         <div className="snipcss0-4-8-9 snipcss0-8-107-108">
@@ -821,7 +820,7 @@ export default function Buy() {
                               <img
                                 className="lazyload css-jdz5ak snipcss0-7-11-14 snipcss0-11-110-113"
                                 alt="product"
-                                src={buysData.selectedItems[0].thumbnail} // Lấy URL ảnh từ dữ liệu
+                                src={item.thumbnail} // Lấy URL ảnh từ dữ liệu
                                 loading="lazy"
                                 decoding="async"
                               />
@@ -830,8 +829,8 @@ export default function Buy() {
                         </div>
                         <div className="css-f0vs3e snipcss0-4-8-15 snipcss0-8-107-114">
                           <a
-                            target="_blank"
-                            href={`/products/${buysData.selectedItems[0].id}`} // Lấy ID sản phẩm từ dữ liệu
+                            
+                            href={`/detail/${buysData.selectedItems[0].id}`} // Lấy ID sản phẩm từ dữ liệu
                             aria-label="Image"
                             className="css-587jha snipcss0-5-15-16 snipcss0-9-114-115"
                           >
@@ -841,7 +840,7 @@ export default function Buy() {
                               color="textPrimary"
                               className="css-l4bwcr snipcss0-6-16-17 snipcss0-10-115-116"
                             >
-                              {buysData.selectedItems[0].name}
+                              {item.name}
                             </div>
                           </a>
                           {/* Số lượng */}
@@ -850,11 +849,11 @@ export default function Buy() {
                             color="textSecondary"
                             className="css-1qm2d75 snipcss0-5-15-18 snipcss0-9-114-117"
                           >
-                            Số lượng {buysData.selectedItems[0].quantity}
+                            Số lượng {item.quantity}
                           </div>
                           {/* Giá sản phẩm */}
                           <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
-                            {buysData.selectedItems[0].price}
+                            {item.totalPrice}
                             <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
                               đ
                             </span>
@@ -862,13 +861,13 @@ export default function Buy() {
                           <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
                             {/* Giá khuyến mãi */}
                             <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
-                              {buysData.selectedItems[0].promoPrice} đ
+                              {item.promoPrice} đ
                             </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
+                  ))}
                 </div>
 
 
@@ -987,7 +986,7 @@ export default function Buy() {
                             </tr>
                             <tr>
                               <td colSpan={1}>Phí vận chuyển</td>
-                              <td colSpan={3}>Larry the Bird</td>
+                              <td colSpan={3}>Miễn Phí</td>
                             </tr>
                             <tr>
                               <td colSpan={1}>Thanh tiền</td>

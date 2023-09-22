@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from "antd";
 import axios from "axios";
 import { useCart } from "../Cart/CartContext";
-import { useNavigate } from "react-router-dom";
 import "./Cart.css";
 import {
   MDBBtn,
@@ -265,14 +264,14 @@ function Cart() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-plus"></i>
+                               <i class="fa-solid fa-minus"></i>
                           </a>
                           <span>{item.quantity}</span>
                           <a
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-minus"></i>
+                          <i class="fa-solid fa-plus"></i>
                           </a>
                         </div>
                       </td>
