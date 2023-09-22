@@ -38,8 +38,8 @@ function Cart() {
 const Buy = () => {
   // Chuyển trang tới đường dẫn /buy khi nút "Tiếp tục" được nhấn
   window.location.href = '/buy';
-}
-  };
+};
+  
   
   
   const calculateTotalPrice = () => {
@@ -104,6 +104,7 @@ const Buy = () => {
                   </tr>
 
 
+
                 </MDBTableHead>
                 <MDBTableBody>
                   {cart.map((item, index) => (
@@ -131,6 +132,7 @@ const Buy = () => {
                 </MDBTableBody>
               </MDBTable>
             </div>
+
           </div>
           <div className="chi-tiet-cart">
             <div className="title-thanh">Thanh Toán</div>
