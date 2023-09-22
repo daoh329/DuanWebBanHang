@@ -495,6 +495,7 @@ const Home = () => {
               <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
               <i class="fa fa-chevron-right"></i>
             </div>
+
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRef}>

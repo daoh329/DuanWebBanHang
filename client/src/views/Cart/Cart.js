@@ -12,17 +12,19 @@ import {
   MDBCheckbox,
 } from "mdb-react-ui-kit";
 const { Header, Footer, Sider, Content } = Layout;
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 function Cart() {
 
   // Lấy dữ liệu từ session
-  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-
+ const [cart, setCart] = useState(JSON.parse(sessionStorage.getItem("cart")) || []);
   const [selectedProducts, setSelectedProducts] = useState([]);
   // Hàm này được gọi khi checkbox thay đổi trạng thái
   const handleCheckboxChange = (productId) => {
     const updatedSelectedProducts = [...selectedProducts];
     const index = updatedSelectedProducts.indexOf(productId);
-  
+
     if (index === -1) {
       // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
       updatedSelectedProducts.push(productId);
@@ -30,32 +32,52 @@ function Cart() {
       // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
       updatedSelectedProducts.splice(index, 1);
     }
-  
+
     // Cập nhật danh sách các sản phẩm được chọn
     setSelectedProducts(updatedSelectedProducts);
   };
+ 
+
   
-  
+
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
-  
+
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
       return acc + item.totalPrice;
     }, 0);
-  
+
     return total;
   };
-  
+
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-  
+
     // Cập nhật biến state tổng tiền
     setTotalPrice(total);
   }, [selectedProducts, cart]);
+
+  //xóa sp
+  const removeFromCart = (productId) => {
+    // Tìm sản phẩm cần xóa trong giỏ hàng
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    
+    // Cập nhật danh sách giỏ hàng
+    setCart(updatedCart);
+    
+    // Cập nhật danh sách sản phẩm được chọn (nếu sản phẩm bị xóa đang được chọn)
+    setSelectedProducts((prevSelected) =>
+      prevSelected.filter((productId) => productId !== productId)
+    );
   
+    // Lưu danh sách giỏ hàng đã cập nhật vào session
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+  
+
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
@@ -141,8 +163,13 @@ function Cart() {
                       </td>
                       <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.name}</td>
                       <td>{item.quantity}</td>
-                      <td>{item.price}</td>
-                      <td>{item.totalPrice}</td>
+                      <td>{formatCurrency(item.price)}</td>
+                      <td>{formatCurrency(item.totalPrice)}</td>
+                      <td>
+                        <a onClick={() => removeFromCart(item.id)}>
+                        <i class="fa-solid fa-xmark"></i>
+                        </a>
+                      </td>
                     </tr>
                   ))}
                 </MDBTableBody>
@@ -157,12 +184,12 @@ function Cart() {
                   <tr>
                     <td>Tạm tính</td>
 
-                    <th>{totalPrice}</th>
+                    <th>{formatCurrency(totalPrice)}</th>
                   </tr>
                   <tr>
                     <td>Tổng tiền</td>
 
-                    <th>{totalPrice}</th>
+                    <th>{formatCurrency(totalPrice)}</th>
                   </tr>
                 </MDBTableBody>
               </MDBTable>
