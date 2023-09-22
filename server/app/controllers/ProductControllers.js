@@ -32,8 +32,7 @@ class Product {
       headphone_jack: data.headphone_jack,
       size: data.size,
       mass: data.mass,
-
-
+      accessory: data.accessory,
     } : {
       cpu: data.cpu,
       ram:data.ram,
@@ -49,6 +48,7 @@ class Product {
       keyboard: data.keyboard,
       pin: data.pin,
       mass: data.mass,
+      accessory: data.accessory,
     }
 
     res.status(200).json("success");

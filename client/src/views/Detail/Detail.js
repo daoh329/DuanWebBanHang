@@ -230,34 +230,41 @@ function Detail() {
     }
   };
 
-  // them giỏ hàng
-  const handleAddToCart = () => {
-    // Lấy giỏ hàng hiện tại từ session
-    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+// them giỏ hàng
+const handleAddToCart = () => {
+  // Lấy giỏ hàng hiện tại từ session
+  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-    // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
-    let item = {
-        id: Detail.id,
-        thumbnail: Detail.thumbnails[0].thumbnail,
-        name: Detail.name,
-        price: Detail.price,
-        brand: Detail.brand
-    };
-
-    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    if (cart.some(cartItem => cartItem.name === item.name)) {
-        message.error("Sản phẩm đã có trong giỏ hàng");
-    } else {
-        // Thêm sản phẩm vào giỏ hàng
-        cart.push(item);
-        message.success("Sản phẩm đã được thêm vào giỏ hàng");
-
-        // Lưu giỏ hàng đã cập nhật vào session
-        sessionStorage.setItem("cart", JSON.stringify(cart));
-    }
-
-    console.log(">>>", cart);
+  // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
+  let item = {
+    id: Detail.id,
+    thumbnail: Detail.thumbnails[0].thumbnail,
+    name: Detail.name,
+    price: Detail.price,
+    brand: Detail.brand,
+    quantity: 1 // Thêm thuộc tính quantity với giá trị ban đầu là 1
   };
+
+  // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+  const existingItem = cart.find(cartItem => cartItem.name === item.name);
+
+  if (existingItem) {
+    // Sản phẩm đã tồn tại trong giỏ hàng, cộng dồn quantity
+    existingItem.quantity += 1;
+    existingItem.totalPrice = existingItem.quantity * existingItem.price;
+    message.success("Sản phẩm đã được thêm vào giỏ hàng");
+  } else {
+    // Thêm sản phẩm vào giỏ hàng
+    item.totalPrice = item.quantity * item.price; 
+    cart.push(item);
+    message.success("Sản phẩm đã được thêm vào giỏ hàng");
+  }
+
+  // Lưu giỏ hàng đã cập nhật vào session
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+
+  console.log(">>>", cart);
+};
 
 
 

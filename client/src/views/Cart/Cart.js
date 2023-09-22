@@ -13,8 +13,49 @@ import {
 } from "mdb-react-ui-kit";
 const { Header, Footer, Sider, Content } = Layout;
 function Cart() {
-  // Lấy giỏ hàng hiện tại từ session
+
+  // Lấy dữ liệu từ session
   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  // Hàm này được gọi khi checkbox thay đổi trạng thái
+  const handleCheckboxChange = (productId) => {
+    const updatedSelectedProducts = [...selectedProducts];
+    const index = updatedSelectedProducts.indexOf(productId);
+  
+    if (index === -1) {
+      // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
+      updatedSelectedProducts.push(productId);
+    } else {
+      // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
+      updatedSelectedProducts.splice(index, 1);
+    }
+  
+    // Cập nhật danh sách các sản phẩm được chọn
+    setSelectedProducts(updatedSelectedProducts);
+  };
+  
+  
+  const calculateTotalPrice = () => {
+    // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
+    const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
+  
+    // Tính tổng tiền của các sản phẩm được chọn
+    const total = selectedItems.reduce((acc, item) => {
+      return acc + item.totalPrice;
+    }, 0);
+  
+    return total;
+  };
+  
+  useEffect(() => {
+    // Tính tổng tiền của các sản phẩm được chọn
+    const total = calculateTotalPrice();
+  
+    // Cập nhật biến state tổng tiền
+    setTotalPrice(total);
+  }, [selectedProducts, cart]);
+  
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
@@ -26,6 +67,8 @@ function Cart() {
   //   });
   //   setSortedCart(sortedProducts);
   // }, [cart]);
+
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const columns = [
     {
@@ -57,72 +100,77 @@ function Cart() {
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
+  // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
+  const isContinueButtonDisabled = selectedProducts.length === 0;
   return (
     <div>
       <div className="style-2">
         <div className="fle-x">
           <div className="mo-ta">
             <div className="title-mo">Mô tả sản phâm</div>
-
             <div className="khoi-tiet-cha">
-              
-            <MDBTable borderless>
-  <MDBTableHead light>
-    <tr>
-      <th scope="col">
-        <MDBCheckbox></MDBCheckbox>
-      </th>
-      <th scope="col">Hình</th>
-      <th scope="col">Sản Phẩm</th>
-      <th scope="col">Số lượng</th>
-      <th scope="col">Đơn giá</th>
-      <th scope="col">Thành tiền</th>
-    </tr>
-  </MDBTableHead>
-  <MDBTableBody>
-    {cart.map((item, index) => (
-      <tr key={index}>
-        <td>
-          <MDBCheckbox></MDBCheckbox>
-        </td>
-        <td  style={{width:'20%'}}>
-          <img
-          className="image-tiet"
-            src={item.thumbnail}
-            alt="thumbnail"
-          />
-        </td>
-        <td style={{lineHeight:'15px',fontSize:'12px'}}>{item.name}</td>
-        <td>{item.quantity}</td>
-        <td>{item.price}</td>
-        <td>{item.price}</td>
-      </tr>
-    ))}
-  </MDBTableBody>
-</MDBTable>
+              <MDBTable borderless>
+                <MDBTableHead light>
+                  <tr>
+                    <th scope="col">
+                    </th>
+                    <th scope="col">Hình</th>
+                    <th scope="col">Sản Phẩm</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Đơn giá</th>
+                    <th scope="col">Thành tiền</th>
+                  </tr>
+
+                </MDBTableHead>
+                <MDBTableBody>
+                  {cart.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedProducts.includes(item.id)}
+                          onChange={() => handleCheckboxChange(item.id)}
+                        />
+                      </td>
+                      <td style={{ width: '20%' }}>
+                        <img
+                          className="image-tiet"
+                          src={item.thumbnail}
+                          alt="thumbnail"
+                        />
+                      </td>
+                      <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.name}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.price}</td>
+                      <td>{item.totalPrice}</td>
+                    </tr>
+                  ))}
+                </MDBTableBody>
+              </MDBTable>
+            </div>
+          </div>
+          <div className="chi-tiet-cart">
+            <div className="title-thanh">Thanh Toán</div>
+            <div className="khoi-tiet-cha">
+              <MDBTable className="table-tiet" borderless>
+                <MDBTableBody>
+                  <tr>
+                    <td>Tạm tính</td>
+
+                    <th>{totalPrice}</th>
+                  </tr>
+                  <tr>
+                    <td>Tổng tiền</td>
+
+                    <th>{totalPrice}</th>
+                  </tr>
+                </MDBTableBody>
+              </MDBTable>
+              {/* Nút "Tiếp tục" sẽ được disabled nếu isChecked là false */}
+              <button className="btn-thanh" disabled={isContinueButtonDisabled}>Tiếp tục</button>
             </div>
           </div>
 
-          <div className="chi-tiet">
-            <div className="title-thanh">Thanh Toán</div>
-             <div className="khoi-tiet-cha">
-                <MDBTable className="table-tiet" borderless>
-                <MDBTableBody>
-                {cart.map((item, index) => (
-                <tr key={index}>
-                <td>Tạm tính</td>
-                <th>{item.price}</th>
-                </tr>))} 
-                {cart.map((item, index) => (
-                <tr key={index}>
-                <td>Thanh Toán</td>
-                <th>{item.price}</th>
-                </tr>))}  
-                      </MDBTableBody>
-                      </MDBTable>
-                      <button className="btn-thanh">Tiếp tục</button>
-                        </div> 
-          </div>
         </div>
       </div>
     </div>
