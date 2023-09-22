@@ -31,6 +31,10 @@ const handleCheckboxChange = (productId) => {
     setSelectedProducts(updatedSelectedProducts);
   }
 }
+const Buy = () => {
+  // Chuyển trang tới đường dẫn /buy khi nút "Tiếp tục" được nhấn
+  window.location.href = '/buy';
+}
 
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -44,32 +48,7 @@ const handleCheckboxChange = (productId) => {
   //   setSortedCart(sortedProducts);
   // }, [cart]);
 
-  const columns = [
-    {
-      title: "",
-      dataIndex: "checkbox",
-      key: "checkbox",
-      render: (_, record) => <Checkbox />,
-      width: 50,
-    },
-    {
-      title: "",
-      dataIndex: "thumbnail",
-      key: "thumbnail",
 
-      render: (_, record) => (
-        <img
-          src={record.thumbnail}
-          alt="thumbnail"
-          style={{ width: "200px", height: "50px" }}
-        />
-      ),
-      width: 50,
-    },
-    { title: "Sản Phẩm", dataIndex: "name", key: "name" },
-    { title: "Đơn giá", dataIndex: "price", key: "price" },
-    { title: "Thành tiền", dataIndex: "price", key: "price" },
-  ];
 
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
@@ -132,10 +111,14 @@ alt="thumbnail"
     <td>Tạm tính</td>
     <th>{cart.length > 0 ? cart[0].price : 0}</th>
   </tr>
+  <tr>
+    <td>Tổng tiền</td>
+    <th>{cart.length > 0 ? cart[0].price : 0}</th>
+  </tr>
 </MDBTableBody>
 </MDBTable>
           {/* Nút "Tiếp tục" sẽ được disabled nếu isChecked là false */}
-          <button className="btn-thanh" disabled={isContinueButtonDisabled}>Tiếp tục</button>
+          <button className="btn-thanh" onClick={Buy} disabled={isContinueButtonDisabled}>Tiếp tục</button>
         </div>
           </div>
      
