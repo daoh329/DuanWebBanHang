@@ -14,14 +14,14 @@ import {
   Carousel
 } from "antd";
 // Thư viện mdb
-import { MDBCarousel, MDBCarouselItem, MDBContainer,  MDBTable, MDBTableBody  } from "mdb-react-ui-kit";
+import { MDBCarousel, MDBCarouselItem, MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Form, Select } from "antd";
 import { message } from "antd";
-
+import { CartProvider } from "../Cart/CartContext";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 const { Option } = Select;
 //text area
@@ -106,7 +106,7 @@ function Detail() {
       .then(response => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
-        
+
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
 
@@ -138,7 +138,7 @@ function Detail() {
     const fetchedProductDetail = {
       productName: Detail.name,
       price: parseFloat(Detail.price),
-    
+
       // Các thông tin khác bạn muốn lấy từ cơ sở dữ liệu
     };
     setProductDetail(fetchedProductDetail);
@@ -230,41 +230,52 @@ function Detail() {
     }
   };
 
-// them giỏ hàng
-const handleAddToCart = () => {
-  // Lấy giỏ hàng hiện tại từ session
-  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  // them giỏ hàng
+  const [cart, setCart] = useState(JSON.parse(sessionStorage.getItem("cart")) || []);
 
-  // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
-  let item = {
-    id: Detail.id,
-    thumbnail: Detail.thumbnails[0].thumbnail,
-    name: Detail.name,
-    price: Detail.price,
-    brand: Detail.brand,
-    quantity: 1 // Thêm thuộc tính quantity với giá trị ban đầu là 1
+  const handleAddToCart = () => {
+    // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
+    const newItem = {
+      id: Detail.id,
+      thumbnail: Detail.thumbnails[0].thumbnail,
+      name: Detail.name,
+      price: Detail.price,
+      brand: Detail.brand,
+      quantity: 1,
+      totalPrice: Detail.price // Tính giá trị tổng tiền cho sản phẩm
+    };
+
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    const existingItemIndex = cart.findIndex((cartItem) => cartItem.name === newItem.name);
+
+    if (existingItemIndex !== -1) {
+      // Sản phẩm đã tồn tại trong giỏ hàng, cộng dồn quantity
+      const updatedCart = [...cart];
+      updatedCart[existingItemIndex].quantity += 1;
+      updatedCart[existingItemIndex].totalPrice += newItem.price; // Cập nhật tổng tiền
+      setCart(updatedCart);
+      message.success("Sản phẩm đã được thêm vào giỏ hàng");
+      window.location.reload();
+      // Lưu giỏ hàng đã cập nhật vào sessionStorage
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+    } else {
+      // Thêm sản phẩm vào giỏ hàng
+      const updatedCart = [...cart, newItem];
+      setCart(updatedCart);
+      message.success("Sản phẩm đã được thêm vào giỏ hàng");
+      window.location.reload();
+      // Lưu giỏ hàng đã cập nhật vào sessionStorage
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+    }
   };
 
-  // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-  const existingItem = cart.find(cartItem => cartItem.name === item.name);
+// const {AddToCart}= CartProvider();
+// const handleAddToCart = () => {
+  
+//   AddToCart();
+//   message.success("Sản phẩm đã được thêm vào giỏ hàng");
+// };
 
-  if (existingItem) {
-    // Sản phẩm đã tồn tại trong giỏ hàng, cộng dồn quantity
-    existingItem.quantity += 1;
-    existingItem.totalPrice = existingItem.quantity * existingItem.price;
-    message.success("Sản phẩm đã được thêm vào giỏ hàng");
-  } else {
-    // Thêm sản phẩm vào giỏ hàng
-    item.totalPrice = item.quantity * item.price; 
-    cart.push(item);
-    message.success("Sản phẩm đã được thêm vào giỏ hàng");
-  }
-
-  // Lưu giỏ hàng đã cập nhật vào session
-  sessionStorage.setItem("cart", JSON.stringify(cart));
-
-  console.log(">>>", cart);
-};
 
 
 
@@ -296,10 +307,10 @@ const handleAddToCart = () => {
                       </MDBCarousel> */}
                       <div style={{ width: '100%', position: 'relative' }}>
                         <button className="scroll-btn" id="scroll-left-btn" onClick={handlePreviousClick}>
-                        <i class="fa-solid fa-chevron-left"></i>
+                          <i class="fa-solid fa-chevron-left"></i>
                         </button>
                         <button className="scroll-btn" id="scroll-right-btn" onClick={handleNextClick}>
-                        <i class="fa-solid fa-chevron-right"></i>
+                          <i class="fa-solid fa-chevron-right"></i>
                         </button>
                         <Carousel autoplay ref={carouselRef}>
                           {Detail &&
@@ -503,80 +514,80 @@ const handleAddToCart = () => {
         <div className="style-2">
           <div className="fle-x">
 
-          <div className="mo-ta">
-          <div className="title-mo">Mô tả sản phâm</div>
+            <div className="mo-ta">
+              <div className="title-mo">Mô tả sản phâm</div>
+            </div>
+
+            <div className="chi-tiet">
+              <div className="title-tiet">Thông tin chi tiết</div>
+              <div className="khoi-tiet-cha">
+
+                <MDBTable className="table-tiet" borderless>
+                  <MDBTableBody>
+                    <tr>
+                      <td colSpan={1}>Thương hiệu</td>
+                      <td colSpan={3}>{Detail.brand}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}></td>
+                    </tr>
+                    <tr>
+                      <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+                    </tr>
+                    <tr>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                    </tr>
+                    <tr>
+                      <td colSpan={1}>Màu sắc</td>
+                      <td colSpan={3}>
+                        {Detail.color ? (
+                          Detail.color.map((color, index) => (
+                            <span key={index}>
+                              {color}
+                              {index < Detail.color.length - 1 ? ', ' : ''}
+                            </span>
+                          ))
+                        ) : (
+                          <span>Loading...</span>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Nhu cầu</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.shortDescription}</td>
+                    </tr>
+                    <tr>
+                      <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+                    </tr>
+                    <tr>
+                      <td colSpan={1}>Thế hệ CPU</td>
+                      <td colSpan={3}>{configuration.CPU}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.CPU}</td>
+                    </tr>
+                    <tr>
+                      <td colSpan={1}>Chíp đồ họa</td>
+                      <td colSpan={3}>{configuration['Card đồ họa']}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.RAM}</td>
+                    </tr>
+                  </MDBTableBody>
+                </MDBTable>
+              </div>
+              <div onClick={showModal2} className="xem-tiet">Xem chi tiết cấu hình</div>
+
+            </div>
+
           </div>
-
-                      <div className="chi-tiet">
-                        <div className="title-tiet">Thông tin chi tiết</div>
-                        <div className="khoi-tiet-cha">
-
-                      <MDBTable className="table-tiet" borderless>
-                      <MDBTableBody>
-                      <tr>
-                          <td colSpan={1}>Thương hiệu</td>
-                          <td colSpan={3}>{Detail.brand}</td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
-                          <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-                        </tr>
-                        <tr>
-                          <td colSpan={1}>Màu sắc</td>
-                          <td colSpan={3}>
-                          {Detail.color ? (
-                            Detail.color.map((color, index) => (
-                              <span key={index}>
-                                {color}
-                                {index < Detail.color.length - 1 ? ', ' : ''}
-                              </span>
-                            ))
-                          ) : (
-                            <span>Loading...</span>
-                          )}
-                        </td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{Detail.shortDescription}</td>
-                        </tr>
-                        <tr>
-                          <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={1}>Thế hệ CPU</td>
-                          <td colSpan={3}>{configuration.CPU}</td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.CPU}</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={1}>Chíp đồ họa</td>
-                          <td colSpan={3}>{configuration['Card đồ họa']}</td>
-                        </tr>
-                        <tr>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
-                          <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.RAM}</td>
-                        </tr>
-                      </MDBTableBody>
-                      </MDBTable>
-                        </div>
-                        <div onClick={showModal2} className="xem-tiet">Xem chi tiết cấu hình</div>
-
-                      </div>
-
-                      </div>
         </div>
         {/* <div className="style-2"></div> */}
-{/* main */}
+        {/* main */}
         {/* modal */}
         <Modal
           open={isModalOpen}
@@ -725,7 +736,7 @@ const handleAddToCart = () => {
           </Form>
         </Modal>
         {/* modal xem-chi-tiet */}
-                <Modal
+        <Modal
           open={isModalOpen2}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -734,124 +745,124 @@ const handleAddToCart = () => {
           <div className="khoi-tiet-cha">
             <div className="title-modal-cha">
               <div className="title-modal-con">Thông số kỹ thuật</div>
-           </div>
+            </div>
 
-<MDBTable className="table-tiet" borderless>
-<MDBTableBody>
-<tr>
-    <td colSpan={1}>Thương hiệu</td>
-    <td colSpan={3}>{Detail.brand}</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bảo hành</td>
-    <td style={{backgroundColor:'#f6f6f6'}}  className="back-gr-tiet" colSpan={3}></td>
-  </tr>
-  <tr>
-    <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Series laptop</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Màu sắc</td>
-    <td colSpan={3}>
-    {Detail.color ? (
-      Detail.color.map((color, index) => (
-        <span key={index}>
-          {color}
-          {index < Detail.color.length - 1 ? ', ' : ''}
-        </span>
-      ))
-    ) : (
-      <span>Loading...</span>
-    )}
-  </td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Nhu cầu</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{Detail.shortDescription}</td>
-  </tr>
-  <tr>
-    <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Thế hệ CPU</td>
-    <td colSpan={3}>{configuration.CPU}</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>CPU</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.CPU}</td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Chíp đồ họa</td>
-    <td colSpan={3}>{configuration['Card đồ họa']}</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Ram</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration.RAM}</td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Màn hình</td>
-    <td colSpan={3}>{configuration['Màn hình']}</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Lưu trữ</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}>{configuration['Ổ cứng']}</td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Số cổng lưu chữ tối đa</td>
-    <td colSpan={3}></td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khe hở M.2 hỗ trợ</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Cổng xuất hình</td>
-    <td colSpan={3}></td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Cổng kết nối</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Kết nối không dây</td>
-    <td colSpan={3}></td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Bàn phím</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Hệ điều hành</td>
-    <td colSpan={3}>{configuration['Hệ điều hành']}</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Kích thước</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td colSpan={1}>Pin</td>
-    <td colSpan={3}></td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Khối lượng</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
-  </tr>
-  <tr>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={1}>Đèn LED trên máy</td>
-    <td style={{backgroundColor:'#f6f6f6'}} colSpan={3}></td>
-  </tr>
-  <tr>
-    <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>
-  </tr>
-</MDBTableBody>
-</MDBTable>
-  </div>
+            <MDBTable className="table-tiet" borderless>
+              <MDBTableBody>
+                <tr>
+                  <td colSpan={1}>Thương hiệu</td>
+                  <td colSpan={3}>{Detail.brand}</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Màu sắc</td>
+                  <td colSpan={3}>
+                    {Detail.color ? (
+                      Detail.color.map((color, index) => (
+                        <span key={index}>
+                          {color}
+                          {index < Detail.color.length - 1 ? ', ' : ''}
+                        </span>
+                      ))
+                    ) : (
+                      <span>Loading...</span>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Nhu cầu</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.shortDescription}</td>
+                </tr>
+                <tr>
+                  <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Thế hệ CPU</td>
+                  <td colSpan={3}>{configuration.CPU}</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.CPU}</td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Chíp đồ họa</td>
+                  <td colSpan={3}>{configuration['Card đồ họa']}</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.RAM}</td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Màn hình</td>
+                  <td colSpan={3}>{configuration['Màn hình']}</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Lưu trữ</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Ổ cứng']}</td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Số cổng lưu chữ tối đa</td>
+                  <td colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khe hở M.2 hỗ trợ</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Cổng xuất hình</td>
+                  <td colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Cổng kết nối</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Kết nối không dây</td>
+                  <td colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bàn phím</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Hệ điều hành</td>
+                  <td colSpan={3}>{configuration['Hệ điều hành']}</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Kích thước</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>Pin</td>
+                  <td colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khối lượng</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
+                </tr>
+                <tr>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Đèn LED trên máy</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}></td>
+                </tr>
+                <tr>
+                  <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>
+                </tr>
+              </MDBTableBody>
+            </MDBTable>
+          </div>
         </Modal>
         {/*  */}
       </div>

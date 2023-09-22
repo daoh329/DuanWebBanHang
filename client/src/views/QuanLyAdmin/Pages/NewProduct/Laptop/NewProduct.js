@@ -6,13 +6,18 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
+import { Modal, notification, Spin } from "antd";
 
 function NewProduct() {
+  // Tạo modal show tiến trình thêm sản phẩm (Call API)
+  // Tạo biến trạng thái của modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       brand: "",
       guarantee: "",
-      name:"",
+      name: "",
       price: 0,
       shortDescription: "",
       series_laptop: "",
@@ -38,6 +43,7 @@ function NewProduct() {
       os: "",
       pin: "",
       mass: "",
+      accessory: "",
     },
     validationSchema: Yup.object().shape({
       brand: Yup.string().required("Vui lòng chọn thương hiệu của sản phẩm."),
@@ -86,14 +92,13 @@ function NewProduct() {
       // description: Yup.string().required("Vui lòng nhập trường này."),
     }),
     onSubmit: async (values) => {
+      setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
-
       // Lặp qua các trường dữ liệu và thêm chúng vào formData
       for (const fieldName in values) {
         if (Object.prototype.hasOwnProperty.call(values, fieldName)) {
           const fieldValue = values[fieldName];
-
           // Kiểm tra nếu trường là một mảng ảnh
           if (Array.isArray(fieldValue) && fieldName === "images") {
             fieldValue.forEach((image) => {
@@ -110,7 +115,6 @@ function NewProduct() {
           }
         }
       }
-
       // call API
       await axios
         .post(url, formData, {
@@ -120,18 +124,46 @@ function NewProduct() {
         })
         .then((res) => {
           if (res.status === 200) {
-            alert('Tạo sản phẩm thành công!')
-          }else{
-            alert("Tạo sản phẩm thất bại!")
+            const timer = setTimeout(() => {
+              setIsModalOpen(false);
+              // Hiển thị thông báo thành công
+              notification.success({
+                message: "Thành công",
+                description: "Dữ liệu đã được lưu thành công!",
+              });
+            }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
+            // Xóa timer khi component bị hủy
+            return () => clearTimeout(timer);
+          } else {
+            const timer = setTimeout(() => {
+              setIsModalOpen(false);
+              // Hiển thị thông báo lỗi
+              notification.error({
+                message: "Lỗi",
+                description: "Có lỗi xảy ra khi lưu dữ liệu!",
+              });
+            }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
+            // Xóa timer khi component bị hủy
+            return () => clearTimeout(timer);
           }
         })
         .catch((e) => {
-          console.log(e);
-          alert("Tạo sản phẩm thất bại.");
+          const timer = setTimeout(() => {
+            console.log(e);
+            setIsModalOpen(false);
+            // Hiển thị thông báo lỗi
+            notification.error({
+              message: "Lỗi",
+              description: "Có lỗi xảy ra khi lưu dữ liệu!",
+            });
+          }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
+          // Xóa timer khi component bị hủy
+          return () => clearTimeout(timer);
         });
     },
   });
 
+  // Tạo mảng chứa brands lấy từ database
   const [brands, setBrands] = useState([]);
 
   // function call api get brands
@@ -149,7 +181,7 @@ function NewProduct() {
   useEffect(() => {
     // get brands data
     getBrands();
-  },[]);
+  }, []);
 
   return (
     <div className="container-content">
@@ -330,7 +362,7 @@ function NewProduct() {
               )}
             </div>
             {/* image */}
-              <ImageInput formik={formik}/>
+            <ImageInput formik={formik} />
             {/* status */}
             <div
               style={{ flexDirection: "row", alignItems: "center" }}
@@ -571,6 +603,21 @@ function NewProduct() {
                 <span className="form-message">{formik.errors.mass}</span>
               )}
             </div>
+            {/* accessory: Phụ kiện đi kèm */}
+            <div className="form-group">
+              <label className="form-label">Phụ kiện đi kèm</label>
+              <input
+                type="text"
+                name="accessory"
+                id="accessory"
+                className="form-control"
+                value={formik.values.accessory}
+                onChange={formik.handleChange}
+              ></input>
+              {formik.errors.accessory && (
+                <span className="form-message">{formik.errors.accessory}</span>
+              )}
+            </div>
           </div>
         </div>
         {/* description */}
@@ -600,6 +647,15 @@ function NewProduct() {
         <button type="submit" className="btn-submit-form">
           Xác nhận
         </button>
+        <Modal
+          open={isModalOpen}
+          footer={null}
+          closeIcon={null}
+        >
+          <Spin tip="Đang tải lên..." spinning={true}>
+            <div style={{minHeight:"50px"}} className="content" />
+          </Spin>
+        </Modal>
       </form>
     </div>
   );
