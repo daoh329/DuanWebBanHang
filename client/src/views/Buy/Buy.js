@@ -622,67 +622,36 @@ export default function Buy() {
               className="teko-row teko-row-start css-80kmv8 snipcss0-6-62-63 style-RRpB6"
               id="style-RRpB6"
             >
-              <div
-                className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-64 style-CCmWU"
-                id="style-CCmWU"
+       <div
+                className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
+                id="style-keAdr"
               >
                 <div
                   data-content-region-name="paymentMethod"
                   data-track-content="true"
-                  data-content-name="VNPAY_GATEWAY"
-                  data-content-target="VNPAY_GATEWAY"
-                  className="css-1014eaz snipcss0-8-64-65 style-OdjZ8"
-                  id="style-OdjZ8"
+                  data-content-name="COD"
+                  data-content-target="COD"
+                  className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                  id="style-UMMoQ"
                 >
-                  <div type="subtitle" className="css-qat15y snipcss0-9-65-66">
-                    Thanh toán VNPAY-QR
+                  <div type="subtitle" className="css-qat15y snipcss0-9-76-77">
+                    Thanh toán QR_PAY
                     <span
-                      className="snipcss0-10-66-67 style-9jvjF"
-                      id="style-9jvjF"
-                    >
-                      <span className="css-1fh7f3v snipcss0-11-67-68">
-                        <div
-                          type="caption"
-                          color="white"
-                          className="css-7496ip snipcss0-12-68-69"
-                        >
-                          Khuyên dùng
-                        </div>
-                      </span>
-                    </span>
+                      className="snipcss0-10-77-78 style-NANX3"
+                      id="style-NANX3"
+                    ></span>
                   </div>
                   <div
                     type="body"
                     color="textSecondary"
-                    className="css-ngriz3 snipcss0-9-65-70"
-                  >
-                    Thanh toán qua Internet Banking, Visa, Master, JCB, VNPAY-QR
-                  </div>
+                    className="css-ngriz3 snipcss0-9-76-79"
+                  ></div>
                   <div
                     type="body"
-                    className="css-9o8e5m snipcss0-9-65-71"
-                  ></div>
-                  <div className="css-18wywdr snipcss0-9-65-72"></div>
-                  <span className="css-mpv07g snipcss0-9-65-73">
-                    <svg
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      size={20}
-                      className="css-1kpmq snipcss0-10-73-74"
-                      color="#ffffff"
-                      height={20}
-                      width={20}
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 12.4545L9.375 17L19 7"
-                        stroke="#82869E"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
-                  </span>
+                    className="css-9o8e5m snipcss0-9-76-80"
+                  >
+                    Thanh toán qua Internet Banking, Visa, Master, JCB, VNPAY-QR q
+                  </div>
                 </div>
               </div>
               <div
@@ -708,11 +677,15 @@ export default function Buy() {
                     type="body"
                     color="textSecondary"
                     className="css-ngriz3 snipcss0-9-76-79"
-                  ></div>
+                  >
+                    
+                  </div>
                   <div
                     type="body"
                     className="css-9o8e5m snipcss0-9-76-80"
-                  ></div>
+                  >
+                    
+                  </div>
                 </div>
               </div>
               <div
