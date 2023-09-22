@@ -13,55 +13,55 @@ import {
 } from "mdb-react-ui-kit";
 const { Header, Footer, Sider, Content } = Layout;
 function Cart() {
-
+  const [cart1, setCart] = useState([])
   // Lấy dữ liệu từ session
   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  
   // Hàm này được gọi khi checkbox thay đổi trạng thái
-  const handleCheckboxChange = (productId) => {
-    const updatedSelectedProducts = [...selectedProducts];
-    const index = updatedSelectedProducts.indexOf(productId);
-  
-    if (index === -1) {
-      // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
-      updatedSelectedProducts.push(productId);
-    } else {
-      // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
-      updatedSelectedProducts.splice(index, 1);
-    }
-  
-    // Cập nhật danh sách các sản phẩm được chọn
-    setSelectedProducts(updatedSelectedProducts);
+    const handleCheckboxChange = (productId) => {
+      const updatedSelectedProducts = [...selectedProducts];
+      const index = updatedSelectedProducts.indexOf(productId);
+    
+      if (index === -1) {
+        // Nếu sản phẩm chưa được chọn, thêm vào danh sách các sản phẩm được chọn
+        updatedSelectedProducts.push(productId);
+      } else {
+        // Nếu sản phẩm đã được chọn, loại bỏ khỏi danh sách các sản phẩm được chọn
+        updatedSelectedProducts.splice(index, 1);
+      }
+    
+      // Cập nhật danh sách các sản phẩm được chọn
+      setSelectedProducts(updatedSelectedProducts);
 
-}
+  }
+  const isContinueButtonDisabled = selectedProducts.length === 0;
+
 const Buy = () => {
   // Chuyển trang tới đường dẫn /buy khi nút "Tiếp tục" được nhấn
   window.location.href = '/buy';
 };
   
   
-  
-  const calculateTotalPrice = () => {
-    // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
-    const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
-  
-    // Tính tổng tiền của các sản phẩm được chọn
-    const total = selectedItems.reduce((acc, item) => {
-      return acc + item.totalPrice;
-    }, 0);
-  
-    return total;
-  };
-  
-  useEffect(() => {
-    // Tính tổng tiền của các sản phẩm được chọn
-    const total = calculateTotalPrice();
-  
-    // Cập nhật biến state tổng tiền
-    setTotalPrice(total);
-  }, [selectedProducts, cart]);
-  
+const calculateTotalPrice = () => {
+  // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
+  const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
+  // Tính tổng tiền của các sản phẩm được chọn
+  const total = selectedItems.reduce((acc, item) => {
+    return acc + item.totalPrice;
+  }, 0);
+  return total;
+};
+
+useEffect(() => {
+  // Tính tổng tiền của các sản phẩm được chọn
+  const total = calculateTotalPrice();
+  // Cập nhật biến state tổng tiền
+  setTotalPrice(total);
+}, [selectedProducts, cart]);
+
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
 
@@ -73,17 +73,42 @@ const Buy = () => {
   //   setSortedCart(sortedProducts);
   // }, [cart]);
 
+  const handleIncreaseQuantity = (productId) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id === productId) {
+        item.quantity += 1;
+        item.totalPrice = item.quantity * item.price;
+      }
+      return item;
+    });
+
+    setCart(updatedCart);
+  };
+
+  const handleDecreaseQuantity = (productId) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id === productId) {
+        if (item.quantity > 1) {
+          item.quantity -= 1;
+          item.totalPrice = item.quantity * item.price;
+        }
+      }
+      return item;
+    });
+
+    setCart(updatedCart);
+  };
 
 
-  const [totalPrice, setTotalPrice] = useState(0);
-
-
-
+  const handleRecalculateTotal = () => {
+    const total = calculateTotalPrice();
+    setTotalPrice(total);
+  };
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
-  const isContinueButtonDisabled = selectedProducts.length === 0;
+
   return (
     <div>
       <div className="style-2">
@@ -102,9 +127,6 @@ const Buy = () => {
                     <th scope="col">Đơn giá</th>
                     <th scope="col">Thành tiền</th>
                   </tr>
-
-
-
                 </MDBTableHead>
                 <MDBTableBody>
                   {cart.map((item, index) => (
@@ -124,9 +146,13 @@ const Buy = () => {
                         />
                       </td>
                       <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.name}</td>
-                      <td>{item.quantity}</td>
-                      <td>{item.price}</td>
-                      <td>{item.totalPrice}</td>
+                     <td>
+        {item.quantity}
+        <button onClick={() => handleIncreaseQuantity(item.id)}>+</button>
+        <button onClick={() => handleDecreaseQuantity(item.id)}>-</button>
+      </td>
+                    <td>{item.price}</td>
+                    <td>{item.quantity * item.price}</td> 
                     </tr>
                   ))}
                 </MDBTableBody>
@@ -152,7 +178,7 @@ const Buy = () => {
                 </MDBTableBody>
               </MDBTable>
               {/* Nút "Tiếp tục" sẽ được disabled nếu isChecked là false */}
-              <button className="btn-thanh" disabled={isContinueButtonDisabled}>Tiếp tục</button>
+              <button className="btn-thanh" onClick={Buy} disabled={isContinueButtonDisabled}>Tiếp tục</button>
             </div>
           </div>
 
