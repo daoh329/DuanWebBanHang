@@ -19,6 +19,7 @@
     const handleOnClickFB = () => {
       if (check) {
         // Call API
+        alert("Tính năng đang phát triển.");
         return;
       }
       return alert('Vui lòng đồng ý với chính sách điều khoản và bảo mật của chúng tôi.');
@@ -39,6 +40,7 @@
     const handleOnClickNumberPhone = () => {
       if (check) {
         // Call API
+        alert("Tính năng đang phát triển.");
         return;
       }
       return alert('Vui lòng đồng ý với chính sách điều khoản và bảo mật của chúng tôi.');
