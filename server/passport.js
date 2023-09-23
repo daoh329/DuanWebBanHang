@@ -1,6 +1,6 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passport = require("passport");
-const mysql = require("./config/db/mySQL");
+const { query } = require("./util/callbackToPromise");
 const createTable = require("./config/CrTables");
 
 passport.use(
@@ -11,7 +11,7 @@ passport.use(
       callbackURL: "/auth/google/callback",
       scope: ["profile", "email"],
     },
-    function (accessToken, refreshToken, profile, callback) {
+    async function (accessToken, refreshToken, profile, callback) {
       // Cấu trúc trong trường _json của profile
       /* _json: { 
 				sub: '103355502763555668042',  
@@ -24,42 +24,26 @@ passport.use(
 				locale: 'vi'
 			} */
 
-      // Chạy hàm tạo bảng User
-      createTable.createUserTable();
-
       // lệnh thêm người dùng
       const queryInsertUser = `INSERT INTO users (name, email)
 			VALUES (?, ?)`;
 
-      // lệnh kiểm tra email người dùng đã tồn tại chưa (đã đăng nhập 1 ít nhất 1 lần)
+      // lệnh kiểm tra email người dùng đã tồn tại chưa (đã đăng nhập ít nhất 1 lần)
       const queryCheckEmail = `SELECT COUNT(*) AS count FROM users WHERE email = ?`;
-      
+
       // Lấy thông tin tên và email từ profile
       const nameProfile = profile._json.name;
       const emailProfile = profile._json.email;
-      
-      // chạy lệnh  kiểm tra, nếu đã tồn tại thì bỏ qua, nếu chưa thì thêm vào db
-      mysql.query(queryCheckEmail, [emailProfile], (error, results, fields) => {
-        
-        // Kiểm tra, nếu không lỗi thì tiếp tục
-        if (!error) {
-          
-          // Kiểm tra, nếu không có hàng (rows) nào được trả về thì thêm user
-          if ((results[0].count === 0)) {
-            mysql.query(
-              queryInsertUser,
-              [nameProfile, emailProfile],
-              (error, results, fields) => {
-                if (error) {
-                  return console.log(error);
-                }
-              }
-            );
-          }
-        } else {
-          console.log(error);
+      try {
+        const results = await query(queryCheckEmail, [emailProfile]);
+
+        if (results.length === 0) {
+          await query(queryInsertUser, [nameProfile, emailProfile]);
         }
-      });
+      } catch (error) {
+        console.log(error);
+      }
+
       callback(null, profile);
     }
   )
@@ -69,6 +53,20 @@ passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser((user, done) => {
+passport.deserializeUser(async (user, done) => {
+  // Câu lệnh lấy dữ liệu người dùng
+  const queryCheckEmail = `SELECT * FROM users WHERE email = ?`;
+  await query(queryCheckEmail, [user._json.email])
+  .then((results) => {
+    user._json.name = results[0].name;
+    user._json.email = results[0].email;
+    user._json.phone = results[0].phone;
+  })
+  .catch((error) => {
+    if (error) {
+      return console.log(error);
+    }
+  })
+
   done(null, user);
 });
