@@ -6,15 +6,12 @@ import {
   PhoneOutlined,
 } from "@ant-design/icons";
 import { Modal, notification } from "antd";
-import {
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import OtpInput from "otp-input-react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import axios from "axios";
 
 const Login = () => {
   useEffect(() => {
@@ -61,10 +58,9 @@ const Login = () => {
 
   const handleOnClickNumberPhone = () => {
     if (check) {
-      setOpenModal(true);
-      return;
+      return setOpenModal(true);
     }
-    return alert(
+    alert(
       "Vui lòng đồng ý với chính sách điều khoản và bảo mật của chúng tôi."
     );
   };
@@ -89,67 +85,83 @@ const Login = () => {
     setOpenModal(false);
     setOpenInputOTP(false);
     setErrorNumberPhone("");
+    // Đặt lại trạng thái số điện thoại và mã OTP
+    setNumberPhone("+84");
+    setOTP("");
+    setConfirmLoading(false);
+  };
+
+  const cancelInputPhoneNumber = () => {
+    // Đặt lại trạng thái mã OTP
+    setOTP("");
+    setOpenInputOTP(false);
+    setConfirmLoading(false);
   };
 
   const onSignup = () => {
-    try {
-      if (numberPhone.length <= 0) {
-        return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
-      }
-      setConfirmLoading(true);
-
-      onCaptchVerify(); // open capcha
-      const appVerifier = window.recaptchaVerifier;
-
-      const formatPhone = "+" + numberPhone;
-      signInWithPhoneNumber(auth, formatPhone, appVerifier).then(
-        (confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          setTimeout(() => {
-            setConfirmLoading(false);
-            setOpenInputOTP(true);
-            setErrorNumberPhone("");
-            notification.success({
-              message: "Thành công",
-              description: "Đã gửi mã OTP!",
-            });
-          }, 2000);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      setConfirmLoading(false);
-      notification.error({
-        message: "Thất bại",
-        description: "Không thể gửi mã OTP!",
-      });
+    if (numberPhone.length <= 0) {
+      return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
     }
+    setConfirmLoading(true);
+
+    onCaptchVerify(); // open capcha
+    const appVerifier = window.recaptchaVerifier;
+
+    const formatPhone = "+" + numberPhone;
+
+    signInWithPhoneNumber(auth, formatPhone, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        setTimeout(() => {
+          setConfirmLoading(false);
+          setOpenInputOTP(true);
+          setErrorNumberPhone("");
+          notification.success({
+            message: "Thành công",
+            description: "Đã gửi mã OTP!",
+          });
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleConfirmOTP = () => {
-    try {
-      if (OTP.length <= 0) {
-        return setErrorNumberPhone("Vui lòng nhập mã OTP của bạn!");
-      }
-      setConfirmLoading(true);
-      window.confirmationResult.confirm(OTP).then(async (res) => {
+    if (OTP.length <= 0) {
+      return setErrorNumberPhone("Vui lòng nhập mã OTP của bạn!");
+    }
+    setConfirmLoading(true);
+    window.confirmationResult
+      .confirm(OTP)
+      .then(async (res) => {
+        // console.log(res.user);
         setTimeout(() => {
           setConfirmLoading(false);
+          setOpenModal(false);
           setErrorNumberPhone("");
           notification.success({
             message: "Thành công",
             description: "Xác nhận thành công!",
           });
         }, 2000);
+        await axios
+          .post(`${process.env.REACT_APP_API_URL}/auth/login-otp`, {
+            phoneNumber: res.user.phoneNumber,
+          })
+          .then((response) => {})
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        setConfirmLoading(false);
+        notification.error({
+          message: "Thất bại",
+          description: "Xác nhận thất bại!",
+        });
       });
-    } catch (error) {
-      console.log(error);
-      setConfirmLoading(false);
-      notification.error({
-        message: "Thất bại",
-        description: "Xác nhận thất bại!",
-      });
-    }
   };
 
   return (
@@ -159,6 +171,7 @@ const Login = () => {
         Chào mừng bạn đến với PhongVu.vn | Laptop, PC, Màn hình, điện thoại,
         linh kiện Chính Hãng!
       </p>
+      <div id="recaptcha-container"></div>
       {/* btn login fb */}
       <button onClick={handleOnClickFB} className="btn-login-fb">
         <FacebookOutlined className="icon-fb" />
@@ -179,7 +192,6 @@ const Login = () => {
         <PhoneOutlined className="icon-number-phone" />
         Tiếp tục với số điện thoại
       </button>
-      <div id="recaptcha-container"></div>
       <Modal
         title={
           openInputOTP
@@ -189,7 +201,8 @@ const Login = () => {
         open={openModal}
         onOk={openInputOTP ? handleConfirmOTP : onSignup}
         confirmLoading={confirmLoading}
-        onCancel={handleCancel}
+        onCancel={openInputOTP ? cancelInputPhoneNumber : handleCancel}
+        cancelText={openInputOTP ? "Trở lại" : "Hủy bỏ"}
         closeIcon={false}
       >
         {openInputOTP ? (

@@ -33,13 +33,12 @@ import Buy from "./Buy/Buy";
 
 const App = () => {
   const [user, setUser] = useState(null);
-
+  
   const getUser = async () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
-      setUser(data.user._json);
-      // alert(data)
+      setUser(data.user);
     } catch (e) {
       console.log(e);
     }
