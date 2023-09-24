@@ -46,7 +46,7 @@
     font-weight: 500;
     position: relative;
 
-    &::before {
+    /* &::before {
         content: "";
         position: absolute;
         bottom: -6px;
@@ -58,7 +58,7 @@
         opacity: 0;
         transition: .3s;
 
-    }
+    } */
 }
 .nav-item:not(.is-active):hover::before {
     opacity: 1;
