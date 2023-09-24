@@ -1,9 +1,8 @@
 const mysql = require("../../config/db/mySQL");
+const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
 
-
 class Product {
-
   async Addproduct(req, res) {
     const data = req.body;
     console.log(data);
@@ -118,7 +117,7 @@ class Product {
 
   async json(req, res) {
     // API: /product/json
-    const query = `SELECT * FROM product`
+    const query = `SELECT * FROM product`;
     // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
     mysql.query(query, (err, result) => {
       if (err) throw err;
@@ -130,21 +129,15 @@ class Product {
       res.send(jsonResult);
     });
   }
-
-  Delete(req, res) {
-    const id = req.params.id;
-    if (!id) {
-      console.log("Không có id được request lên.");
-      res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-      return;
-    }
+  // API: /product/delete/:id
+  async Delete(req, res)  {
 
     // query delete
     const sl_productDetails_ID = `
       SELECT productdetails.id AS value
       FROM product
       INNER JOIN productdetails ON product.id = productdetails.product_id
-      WHERE product.id = 1;
+      WHERE product.id = ?;
     `;
     const dl_prodetailcolor = `
     DELETE FROM prodetailcolor
@@ -158,45 +151,29 @@ class Product {
     const dl_product = `
       DELETE FROM product WHERE id = ?;
     `;
-    // lấy id của bảng product details
-    mysql.query(sl_productDetails_ID, (e, results, fields) => {
-      if (e) {
-        console.log(e);
-        res.status(404).json("Xóa thất bại. Vui lòng thử lại sau.");
-        return;
-      }
-      const productDetails_ID = results[0].value;
-      // Xóa product color
-      mysql.query(
-        dl_prodetailcolor,
-        [productDetails_ID],
-        (e, results, fields) => {
-          if (e) {
-            console.log(e);
-            res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-            return;
-          }
-          // Xóa product details
-          mysql.query(dl_productDetails, [id], (e, r, f) => {
-            if (e) {
-              console.log(e);
-              res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-              return;
-            }
-            // xóa product
-            mysql.query(dl_product, [id], (e, r, f) => {
-              if (e) {
-                console.log(e);
-                res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-                return;
-              }
+    // Hàm sử lí lỗi tập chung
+    const handleError = (e, res, message) => {
+      console.log(e);
+      return res.status(500).json(message);
+    };
 
-              res.status(200).json("Xóa thành công.");
-            });
-          });
-        }
-      );
-    });
+    try {
+      // Lấy id từ client request lên
+      const id = req.params.id;
+
+      const arrayProductDetail_id = await query(sl_productDetails_ID, [id]);
+      const productDetails_ID = arrayProductDetail_id[0].value;
+
+      await Promise.all([
+        query(dl_prodetailcolor, [productDetails_ID]),
+        query(dl_productDetails, [id]),
+        query(dl_product, [id]),
+      ]);
+
+      res.json({ status: "success" });
+    } catch (error) {
+      handleError(error, res, { status: "failed" });
+    }
   }
 
   async QueryProducts(req, res) {
@@ -273,8 +250,14 @@ class Product {
           // Kết hợp kết quả và gửi lại cho client
           const results = {
             ...productResults[0],
-            Colorname: colorResults.map(result => ({ id: result.id, Colorname: result.Colorname })),
-            thumbnails: imageResults.map(result => ({ id: result.id, thumbnail: result.thumbnail }))
+            Colorname: colorResults.map((result) => ({
+              id: result.id,
+              Colorname: result.Colorname,
+            })),
+            thumbnails: imageResults.map((result) => ({
+              id: result.id,
+              thumbnail: result.thumbnail,
+            })),
           };
 
           res.json(results);
@@ -289,12 +272,10 @@ class Product {
     mysql.query(query, (e, results, fields) => {
       if (e) {
         console.log(e);
-        res.status(500).json("Lỗi lấy dữ liệu brands!")
+        res.status(500).json("Lỗi lấy dữ liệu brands!");
       }
-      res.status(200).json({ results })
+      res.status(200).json({ results });
     });
-
   }
-
 }
-module.exports = new Product;
+module.exports = new Product();
