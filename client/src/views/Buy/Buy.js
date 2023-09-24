@@ -77,12 +77,6 @@ export default function Buy() {
     setSelectedWard(selectedWard);
   };
 
-
-
-
-
-
-  
   const [fillActive, setFillActive] = useState('tab1');
 
   const handleFillClick = (value: string) => {
@@ -650,7 +644,7 @@ export default function Buy() {
                       className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                       id="style-keAdr"
                     >
-                      <div
+                      <Button
                         data-content-region-name="paymentMethod"
                         data-track-content="true"
                         data-content-name="COD"
@@ -676,13 +670,13 @@ export default function Buy() {
                         >
                           Thanh toán qua Internet Banking, Visa, Master, JCB, VNPAY-QR
                         </div>
-                      </div>
+                      </Button>
                     </div>
                     <div
                       className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                       id="style-keAdr"
                     >
-                      <div
+                      <Button
                         data-content-region-name="paymentMethod"
                         data-track-content="true"
                         data-content-name="COD"
@@ -706,13 +700,13 @@ export default function Buy() {
                           type="body"
                           className="css-9o8e5m snipcss0-9-76-80"
                         ></div>
-                      </div>
+                      </Button>
                     </div>
                     <div
                       className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
                       id="style-poooX"
                     >
-                      <div
+                      <Button
                         data-content-region-name="paymentMethod"
                         data-track-content="true"
                         data-content-name="ZALOPAY_GATEWAY"
@@ -738,7 +732,8 @@ export default function Buy() {
                           type="body"
                           className="css-9o8e5m snipcss0-9-82-86"
                         ></div>
-                      </div>
+                      </Button>
+                      
                     </div>
                   </div>
                 </div>
@@ -903,58 +898,7 @@ export default function Buy() {
                 <div className="css-27abj6 snipcss0-5-181-182">
                   <div className="teko-card css-516rdm snipcss0-6-182-183">
                     <div className="teko-card-body css-0 snipcss0-7-183-184">
-                      <div className="css-nouyrl snipcss0-8-184-185">
-                        {/* <table className="css-qc9cbn snipcss0-9-185-186">
-                    <tbody className="snipcss0-10-186-187">
-                      <tr className="snipcss0-11-187-188">
-                        <td
-                          color="#848788"
-                          className="css-8ogxmh snipcss0-12-188-189"
-                        >
-                          <div className="css-99sejg snipcss0-13-189-190">
-                            Tổng tạm tính &nbsp;
-                            <div className="css-1777v snipcss0-14-190-191"></div>
-                          </div>
-                        </td>
-                   
-                        <td
-                          data-att-label="Tổng tạm tính"
-                          className="css-1xrkmkn snipcss0-12-188-192"
-                        >
-                          19.990.000₫
-                        </td>
-                      </tr>
-                      <tr className="snipcss0-11-187-193">
-                        <td
-                          color="#848788"
-                          className="css-13izjcd snipcss0-12-193-194"
-                        >
-                          <div className="css-99sejg snipcss0-13-194-195">
-                            Phí vận chuyển &nbsp;
-                            <div className="css-1777v snipcss0-14-195-196"></div>
-                          </div>
-                        </td>
-                        <td
-                          data-att-label="Phí vận chuyển"
-                          className="css-fsu5pb snipcss0-12-193-197"
-                        >
-                          Miễn phí
-                        </td>
-                      </tr>
-                      <tr className="snipcss0-11-187-198">
-                        <td
-                          color="#848788"
-                          className="css-13izjcd snipcss0-12-198-199"
-                        >
-                          Thành tiền
-                        </td>
-                  
-                        <td className="att-final-price css-aafp0n snipcss0-12-198-200">
-                          19.990.000&nbsp;₫
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table> */}
+                      <div className="css-nouyrl snipcss0-8-184-185">                 
                         <MDBTable style={{ border: 'none' }} borderless>
                         {buysData && buysData.total && (
                           <MDBTableBody>
