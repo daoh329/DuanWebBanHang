@@ -20,6 +20,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+auth.useDeviceLanguage();
 // Initialize Cloud Storage and get a reference to the service
 const storage = getStorage(app);
 export { auth,storage };

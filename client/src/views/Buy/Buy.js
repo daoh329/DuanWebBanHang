@@ -16,6 +16,9 @@ const { Option } = Select;
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 export default function Buy() {
 
   useEffect(() => {
@@ -94,6 +97,7 @@ export default function Buy() {
     }
   }, []);
 
+  
 
   return (
     <>
@@ -852,15 +856,15 @@ export default function Buy() {
                           </div>
                           {/* Giá sản phẩm */}
                           <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
-                            {item.totalPrice}
-                            <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
+                            {formatCurrency(item.totalPrice)}
+                            {/* <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
                               đ
-                            </span>
+                            </span> */}
                           </span>
                           <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
                             {/* Giá khuyến mãi */}
                             <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
-                              {item.promoPrice} đ
+                              {formatCurrency(item.promoPrice)}
                             </span>
                           </div>
                         </div>
@@ -977,7 +981,7 @@ export default function Buy() {
                     </tbody>
                   </table> */}
                         <MDBTable style={{ border: 'none' }} borderless>
-
+                        {buysData && buysData.total && (
                           <MDBTableBody>
                             <tr>
                               <td colSpan={1}>Tổng tiền tam tính</td>
@@ -989,9 +993,10 @@ export default function Buy() {
                             </tr>
                             <tr>
                               <td colSpan={1}>Thanh tiền</td>
-                              <td colSpan={3}>Larry the Bird</td>
+                              <td colSpan={3}>{formatCurrency(buysData.total)}</td>
                             </tr>
                           </MDBTableBody>
+                        )}
                         </MDBTable>
                       </div>
                     </div>

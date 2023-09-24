@@ -30,7 +30,7 @@ const createTables = () => {
     note TEXT,
     status boolean,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
-    FOREIGN KEY (UserID) REFERENCES user (id)
+    FOREIGN KEY (UserID) REFERENCES users (id)
   );
   `;
   const deliveryMethod = `CREATE TABLE IF NOT EXISTS deliveryMethod (
@@ -83,7 +83,7 @@ const createTables = () => {
   );
   `;
   const user = `
-    CREATE TABLE IF NOT EXISTS user (
+    CREATE TABLE IF NOT EXISTS users (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255),
     phone varchar(255),

@@ -1,54 +1,57 @@
 const mysql = require("../../config/db/mySQL");
+const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
 
-
 class Product {
-
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
     var arrPathImage = [];
-    arrImage.forEach(image => {
+    arrImage.forEach((image) => {
       arrPathImage.push(image.path);
     });
-    const configuration = data.category === "Điện thoại" ? {
-      screen: data.screen,
-      resolution: data.resolution,
-      chip: data.chip,
-      ram: data.ram,
-      rom: data.rom,
-      screen: data.screen,
-      os: data.os,
-      pin: data.pin,
-      charging_port: data.charging_port,
-      sim_type: data.sim_type,
-      mobile_network: data.mobile_network,
-      rear_camera: data.rear_camera,
-      front_camera: data.front_camera,
-      wifi: data.wifi,
-      gps: data.gps,
-      bluetooth: data.bluetooth,
-      headphone_jack: data.headphone_jack,
-      size: data.size,
-      mass: data.mass,
-      accessory: data.accessory,
-    } : {
-      cpu: data.cpu,
-      ram: data.ram,
-      rom: data.rom,
-      screen: data.screen,
-      vga: data.vga,
-      os: data.os,
-      maximum_number_of_storage_ports: data.maximum_number_of_storage_ports,
-      M2_slot_type_supported: data.M2_slot_type_supported,
-      output_port: data.output_port,
-      connector: data.connector,
-      wireless_connectivity: data.wireless_connectivity,
-      keyboard: data.keyboard,
-      pin: data.pin,
-      mass: data.mass,
-      accessory: data.accessory,
-    }
+    const configuration =
+      data.category === "Điện thoại"
+        ? {
+            screen: data.screen,
+            resolution: data.resolution,
+            chip: data.chip,
+            ram: data.ram,
+            rom: data.rom,
+            screen: data.screen,
+            os: data.os,
+            pin: data.pin,
+            charging_port: data.charging_port,
+            sim_type: data.sim_type,
+            mobile_network: data.mobile_network,
+            rear_camera: data.rear_camera,
+            front_camera: data.front_camera,
+            wifi: data.wifi,
+            gps: data.gps,
+            bluetooth: data.bluetooth,
+            headphone_jack: data.headphone_jack,
+            size: data.size,
+            mass: data.mass,
+            accessory: data.accessory,
+          }
+        : {
+            cpu: data.cpu,
+            ram: data.ram,
+            rom: data.rom,
+            screen: data.screen,
+            vga: data.vga,
+            os: data.os,
+            maximum_number_of_storage_ports:
+              data.maximum_number_of_storage_ports,
+            M2_slot_type_supported: data.M2_slot_type_supported,
+            output_port: data.output_port,
+            connector: data.connector,
+            wireless_connectivity: data.wireless_connectivity,
+            keyboard: data.keyboard,
+            pin: data.pin,
+            mass: data.mass,
+            accessory: data.accessory,
+          };
 
     res.status(200).json("success");
 
@@ -57,7 +60,7 @@ class Product {
     //   if (er) {
     //     res.status(500).send(`Lỗi kết nối server data`)
     //   }
-      
+
     //   // PRODUCT INSERT
     //   const insertProductQuery = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, 1)`;
     //   const productValues = [
@@ -67,7 +70,7 @@ class Product {
     //     if(er){
     //       console.log("product:"+er);
     //       res.status(500).send(`lỗi thêm sản phẩm: ` + er)
-          
+
     //     }
     //     // IMG INSERT
     //     const newProductId = resultP.insertId;
@@ -82,7 +85,7 @@ class Product {
     //     }
     //     // DETAIL PRODUCT
     //     const configurationString = JSON.stringify(configuration);
-        
+
     //     const insertPdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
     //     const PdValues = [
     //       data.quantity, data.brand, configurationString, data.description, newProductId
@@ -107,15 +110,15 @@ class Product {
     //         console.log(er);
     //       }
     //     });
-  
+
     //   })
-  
+
     // })
   }
 
   async json(req, res) {
     // API: /product/json
-    const query = `SELECT * FROM product`
+    const query = `SELECT * FROM product`;
     // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
     mysql.query(query, (err, result) => {
       if (err) throw err;
@@ -128,20 +131,14 @@ class Product {
     });
   }
 
-  Delete(req, res) {
-    const id = req.params.id;
-    if (!id) {
-      console.log("Không có id được request lên.");
-      res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-      return;
-    }
-
+  // API: /product/delete/:id
+  async Delete(req, res) {
     // query delete
     const sl_productDetails_ID = `
       SELECT productdetails.id AS value
       FROM product
       INNER JOIN productdetails ON product.id = productdetails.product_id
-      WHERE product.id = 1;
+      WHERE product.id = ?;
     `;
     const dl_prodetailcolor = `
     DELETE FROM prodetailcolor
@@ -155,45 +152,30 @@ class Product {
     const dl_product = `
       DELETE FROM product WHERE id = ?;
     `;
-    // lấy id của bảng product details
-    mysql.query(sl_productDetails_ID, (e, results, fields) => {
-      if (e) {
-        console.log(e);
-        res.status(404).json("Xóa thất bại. Vui lòng thử lại sau.");
-        return;
-      }
-      const productDetails_ID = results[0].value;
-      // Xóa product color
-      mysql.query(
-        dl_prodetailcolor,
-        [productDetails_ID],
-        (e, results, fields) => {
-          if (e) {
-            console.log(e);
-            res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-            return;
-          }
-          // Xóa product details
-          mysql.query(dl_productDetails, [id], (e, r, f) => {
-            if (e) {
-              console.log(e);
-              res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-              return;
-            }
-            // xóa product
-            mysql.query(dl_product, [id], (e, r, f) => {
-              if (e) {
-                console.log(e);
-                res.status(500).json("Xóa thất bại. Vui lòng thử lại sau.");
-                return;
-              }
 
-              res.status(200).json("Xóa thành công.");
-            });
-          });
-        }
-      );
-    });
+    // Hàm sử lí lỗi tập chung
+    const handleError = (e, res, message) => {
+      console.log(e);
+      return res.status(500).json(message);
+    };
+
+    try {
+      // Lấy id từ client request lên
+      const id = req.params.id;
+
+      const arrayProductDetail_id = await query(sl_productDetails_ID, [id]);
+      const productDetails_ID = arrayProductDetail_id[0].value;
+
+      await Promise.all([
+        query(dl_prodetailcolor, [productDetails_ID]),
+        query(dl_productDetails, [id]),
+        query(dl_product, [id]),
+      ]);
+
+      res.json({ status: "success" });
+    } catch (error) {
+      handleError(error, res, { status: "failed" });
+    }
   }
 
   async QueryProducts(req, res) {
@@ -270,8 +252,14 @@ class Product {
           // Kết hợp kết quả và gửi lại cho client
           const results = {
             ...productResults[0],
-            Colorname: colorResults.map(result => ({ id: result.id, Colorname: result.Colorname })),
-            thumbnails: imageResults.map(result => ({ id: result.id, thumbnail: result.thumbnail }))
+            Colorname: colorResults.map((result) => ({
+              id: result.id,
+              Colorname: result.Colorname,
+            })),
+            thumbnails: imageResults.map((result) => ({
+              id: result.id,
+              thumbnail: result.thumbnail,
+            })),
           };
 
           res.json(results);
@@ -280,18 +268,16 @@ class Product {
     });
   }
 
-  // getBrand, API: /product/brands 
+  // getBrand, API: /product/brands
   getBrand(req, res) {
     const query = `SELECT * FROM brand`;
     mysql.query(query, (e, results, fields) => {
       if (e) {
         console.log(e);
-        res.status(500).json("Lỗi lấy dữ liệu brands!")
+        res.status(500).json("Lỗi lấy dữ liệu brands!");
       }
-      res.status(200).json({ results })
+      res.status(200).json({ results });
     });
-
   }
-
 }
-module.exports = new Product;
+module.exports = new Product();

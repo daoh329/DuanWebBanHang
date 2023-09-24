@@ -157,6 +157,8 @@
   /* Căn phải */
   padding: 20px 0px 20px 0px;
   row-gap: 10px;
+
+
 }
 
 .right-image {
@@ -173,16 +175,21 @@
 
 .bottom-block {
   position: absolute;
-  /* right: 0; */
-  transform: translateY(0%);
-  display: flex;
-  padding: 20px 0px 20px 0px;
+  // transform: translateY(0%);
+  // display: flex;
+  // padding: 20px 0px 20px 0px;
   column-gap: 15px;
-  flex-wrap: nowrap;
+  // flex-wrap: nowrap;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .bottom-image {
-  max-width: 60%;
+  max-width: 30%;
   height: auto;
   transition: transform 0.3s ease;
   /* Thêm hiệu ứng chuyển đổi */
@@ -241,7 +248,7 @@
   :where(.css-dev-only-do-not-override-17a39f8).ant-carousel .slick-dots-bottom {
     bottom: 2px;
   }
-  
+
   .banner {
     border-radius: 20px;
     overflow: hidden;
@@ -315,9 +322,11 @@
     padding: 0px 0px 0px 0px;
     color: white;
   }
-  .fa-chevron-right{
+
+  .fa-chevron-right {
     font-size: 15px !important;
   }
+
   .views-all {
     margin-left: auto;
     padding: 10px;
@@ -406,6 +415,7 @@
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
   }
+
   .menu-nav {
     color: #333333;
     font-family: -apple-system;
@@ -473,13 +483,17 @@
 
 // màn hình lớn 
 @media (min-width: 768px) {
-  :where(.css-dev-only-do-not-override-17a39f8).ant-carousel .slick-dots-bottom {
-    bottom: 70px;
+  :where(.css-dev-only-do-not-override-1vr7spz).ant-carousel .slick-dots-bottom {
+    bottom: 70px !important;
   }
-  
+
   .danhmucmobile {
     display: none;
 
+  }
+
+  .slider-overlay {
+    margin-top: 10px;
   }
 
   .phone-group {
@@ -719,7 +733,8 @@
     white-space: nowrap;
     display: block;
   }
-  .fa-chevron-right{
+
+  .fa-chevron-right {
     font-size: 15px !important;
   }
 
