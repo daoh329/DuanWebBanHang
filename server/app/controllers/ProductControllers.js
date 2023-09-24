@@ -5,7 +5,6 @@ const createTables = require("../../config/CrTables");
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
-    console.log(data);
     const arrImage = req.files;
     var arrPathImage = [];
     arrImage.forEach(image => {
@@ -109,9 +108,7 @@ class Product {
             res.status(500).send('thất bại')
           }
         });
-  
       })
-  
     })
   }
 

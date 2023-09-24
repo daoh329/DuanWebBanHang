@@ -284,7 +284,7 @@ function NewPhone() {
             </div>
             {/* Series */}
             <div className="form-group">
-              <label className="form-label">Series laptop</label>
+              <label className="form-label">Series</label>
               <input
                 type="text"
                 name="series"
