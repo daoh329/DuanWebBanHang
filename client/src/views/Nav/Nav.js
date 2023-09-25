@@ -454,9 +454,9 @@ const App = (userDetails) => {
                           <List.Item.Meta
                             avatar={<Avatar src={selectedItems.thumbnail} />}
                             title={
-                              selectedItems.name.length > 20
-                                ? selectedItems.name.substring(0, 20) + "..."
-                                : selectedItems.name
+                              selectedItems.shortDescription.length > 20
+                                ? selectedItems.shortDescription.substring(0, 20) + "..."
+                                : selectedItems.shortDescription
                             }
                             description={
                               <>
