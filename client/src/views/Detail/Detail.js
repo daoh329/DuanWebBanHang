@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 import { auth } from "../../firebaseConfig";
 // import firebase from 'firebase'
 import {
@@ -98,7 +101,7 @@ function Detail() {
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
   const [configuration, setConfiguration] = useState({});
-
+  const htmlContent = Detail.description;
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
@@ -245,10 +248,10 @@ function Detail() {
       quantity: 1,
       totalPrice: Detail.price // Tính giá trị tổng tiền cho sản phẩm
     };
-  
+
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingItemIndex = cart.findIndex((cartItem) => cartItem.id === newItem.id);
-  
+
     if (existingItemIndex !== -1) {
       // Sản phẩm đã tồn tại trong giỏ hàng, chỉ hiển thị thông báo
       message.success("Sản phẩm đã có trong giỏ hàng");
@@ -263,12 +266,12 @@ function Detail() {
     }
   };
 
-// const {AddToCart}= CartProvider();
-// const handleAddToCart = () => {
-  
-//   AddToCart();
-//   message.success("Sản phẩm đã được thêm vào giỏ hàng");
-// };
+  // const {AddToCart}= CartProvider();
+  // const handleAddToCart = () => {
+
+  //   AddToCart();
+  //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
+  // };
 
 
 
@@ -312,7 +315,7 @@ function Detail() {
                             Detail.thumbnails.length > 0 &&
                             Detail.thumbnails.map((thumbnail, index) => (
                               <div key={index}>
-                                <img src={process.env.REACT_APP_API_URL+thumbnail.thumbnail} alt={`Image ${index + 1}`} />
+                                <img src={process.env.REACT_APP_API_URL + thumbnail.thumbnail} alt={`Image ${index + 1}`} />
                               </div>
                             ))}
 
@@ -336,7 +339,7 @@ function Detail() {
                           console.log(`current index: ${current}, prev index: ${prev}`),
                       }}
                     >
-                      <Image width={80} src={process.env.REACT_APP_API_URL+thumbnail.thumbnail} />
+                      <Image width={80} src={process.env.REACT_APP_API_URL + thumbnail.thumbnail} />
                     </Image.PreviewGroup>
                   ))}
                 </div>
@@ -510,7 +513,7 @@ function Detail() {
 
             <div className="mo-ta">
               <div className="title-mo">Mô tả sản phẩm</div>
-              
+              <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
 
             </div>
 
