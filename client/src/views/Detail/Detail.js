@@ -510,8 +510,7 @@ function Detail() {
 
             <div className="mo-ta">
               <div className="title-mo">Mô tả sản phẩm</div>
-              
-
+              {Detail.description}
             </div>
 
             <div className="chi-tiet">
