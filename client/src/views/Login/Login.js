@@ -66,6 +66,7 @@ const Login = () => {
   };
 
   function onCaptchVerify() {
+    window.recaptchaVerifier = null;
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(
         auth,
@@ -78,8 +79,92 @@ const Login = () => {
           "expired-callback": () => {},
         }
       );
+    } else {
+      onSignup();
     }
   }
+
+  const onSignup = () => {
+    if (numberPhone.length <= 0) {
+      return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
+    }
+    setConfirmLoading(true);
+
+    onCaptchVerify(); // open capcha
+    const appVerifier = window.recaptchaVerifier;
+
+    const formatPhone = "+" + numberPhone;
+    
+    signInWithPhoneNumber(auth, formatPhone, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        setTimeout(() => {
+          setConfirmLoading(false);
+          setOpenInputOTP(true);
+          setErrorNumberPhone("");
+          notification.success({
+            message: "Thành công",
+            description: "Đã gửi mã OTP!",
+          });
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+          setErrorNumberPhone("");
+          setConfirmLoading(false);
+        notification.error({
+          message: "Thất bại",
+          description: "Gửi mã OTP không thành công!",
+        });
+      });
+  };
+
+  const handleConfirmOTP = () => {
+    if (OTP.length <= 0) {
+      return setErrorNumberPhone("Vui lòng nhập mã OTP của bạn!");
+    }
+    setConfirmLoading(true);
+    window.confirmationResult
+      .confirm(OTP)
+      .then(async (res) => {
+        // console.log(res.user);
+
+        await axios
+          .post(`${process.env.REACT_APP_API_URL}/auth/login-otp`, {
+            phoneNumber: res.user.phoneNumber,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              setTimeout(() => {
+                setConfirmLoading(false);
+                setOpenModal(false);
+                setOpenInputOTP(false);
+                setErrorNumberPhone("");
+                notification.success({
+                  message: "Thành công",
+                  description: "Xác nhận thành công!",
+                });
+              }, 2000);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            setConfirmLoading(false);
+            notification.error({
+              message: "Thất bại",
+              description: "Xác nhận thất bại!",
+            });
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        setConfirmLoading(false);
+        notification.error({
+          message: "Thất bại",
+          description: "Xác nhận thất bại!",
+        });
+      });
+  };
 
   const handleCancel = () => {
     setOpenModal(false);
@@ -96,72 +181,6 @@ const Login = () => {
     setOTP("");
     setOpenInputOTP(false);
     setConfirmLoading(false);
-  };
-
-  const onSignup = () => {
-    if (numberPhone.length <= 0) {
-      return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
-    }
-    setConfirmLoading(true);
-
-    onCaptchVerify(); // open capcha
-    const appVerifier = window.recaptchaVerifier;
-
-    const formatPhone = "+" + numberPhone;
-
-    signInWithPhoneNumber(auth, formatPhone, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setTimeout(() => {
-          setConfirmLoading(false);
-          setOpenInputOTP(true);
-          setErrorNumberPhone("");
-          notification.success({
-            message: "Thành công",
-            description: "Đã gửi mã OTP!",
-          });
-        }, 2000);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleConfirmOTP = () => {
-    if (OTP.length <= 0) {
-      return setErrorNumberPhone("Vui lòng nhập mã OTP của bạn!");
-    }
-    setConfirmLoading(true);
-    window.confirmationResult
-      .confirm(OTP)
-      .then(async (res) => {
-        // console.log(res.user);
-        setTimeout(() => {
-          setConfirmLoading(false);
-          setOpenModal(false);
-          setErrorNumberPhone("");
-          notification.success({
-            message: "Thành công",
-            description: "Xác nhận thành công!",
-          });
-        }, 2000);
-        await axios
-          .post(`${process.env.REACT_APP_API_URL}/auth/login-otp`, {
-            phoneNumber: res.user.phoneNumber,
-          })
-          .then((response) => {})
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-        setConfirmLoading(false);
-        notification.error({
-          message: "Thất bại",
-          description: "Xác nhận thất bại!",
-        });
-      });
   };
 
   return (

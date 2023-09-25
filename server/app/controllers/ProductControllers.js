@@ -87,6 +87,7 @@ class Product {
     } catch (error) {
       handleError(error, res, { status: "failed" });
     }
+
   }
 
   async json(req, res) {
