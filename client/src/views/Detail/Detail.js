@@ -311,7 +311,7 @@ function Detail() {
                             Detail.thumbnails.length > 0 &&
                             Detail.thumbnails.map((thumbnail, index) => (
                               <div key={index}>
-                                <img src={thumbnail.thumbnail} alt={`Image ${index + 1}`} />
+                                <img src={process.env.REACT_APP_API_URL+thumbnail.thumbnail} alt={`Image ${index + 1}`} />
                               </div>
                             ))}
 
@@ -335,7 +335,7 @@ function Detail() {
                           console.log(`current index: ${current}, prev index: ${prev}`),
                       }}
                     >
-                      <Image width={80} src={thumbnail.thumbnail} />
+                      <Image width={80} src={process.env.REACT_APP_API_URL+thumbnail.thumbnail} />
                     </Image.PreviewGroup>
                   ))}
                 </div>
