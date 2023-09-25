@@ -194,7 +194,7 @@ const AllProduct = () => {
                   <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                   <FormControlLabel value="ACER" control={<Radio />} label="ACER" />
                   <FormControlLabel value="MSI" control={<Radio />} label="MSI" />
-                  <FormControlLabel value="DELL" control={<Radio />} label="DELL" />
+                  <FormControlLabel value="Dell" control={<Radio />} label="Dell" />
                 </RadioGroup>
 
               </FormControl>
