@@ -283,14 +283,14 @@ function Cart() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-plus"></i>
+                            <i class="fa-solid fa-minus"></i>
                           </a>
                           <span>{item.quantity}</span>
                           <a
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-minus"></i>
+                            <i class="fa-solid fa-plus"></i>
                           </a>
                         </div>
                       </td>
