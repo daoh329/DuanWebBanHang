@@ -179,7 +179,6 @@ export default function Profile(props) {
                                 Thông tin tài khoản
                               </div>
                             </div>
-
                             <Form
                               {...formItemLayout}
                               form={form}
@@ -207,7 +206,6 @@ export default function Profile(props) {
                                 <Input
                                 disabled
                                 value={user.email}
-                                
                                 />
                                 </div>
                                 )}                              
