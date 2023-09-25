@@ -22,6 +22,7 @@ import {
   Space,
 } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 //hỗ trợ icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -67,6 +68,49 @@ const tailFormItemLayout = {
 export default function Profile(props) {
   const { user } = props;
   console.log(props);
+    // select mới
+    const [city, setCity] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [selectedWard, setSelectedWard] = useState(null);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+          );
+          setCity(response.data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+  
+      fetchData();
+    }, []);
+    // select city
+    const handleCityChange = (value) => {
+      const selectedCity = city.find((city) => city.Id === value);
+      setSelectedCity(selectedCity);
+      setSelectedDistrict(null);
+    };
+    //select district
+    const handleDistrictChange = (value) => {
+      const selectedDistrict = selectedCity.Districts.find(
+        (district) => district.Id === value
+      );
+      setSelectedDistrict(selectedDistrict);
+    };
+    //select ward
+    const handleWardChange = (value) => {
+      const selectedWard = selectedDistrict.Wards.find(
+        (ward) => ward.Id === value
+      );
+      setSelectedWard(selectedWard);
+    };
+    //
 
   const [form] = Form.useForm();
   const onFinish = (values) => {
@@ -246,17 +290,37 @@ export default function Profile(props) {
                                 />
                               </Form.Item>
                               {/* Thành phố */}
-                              <Form.Item name="TP" label="Thành Phố">
-                                <Input />
+                              <Form.Item label="Thành phố" name='TP'>
+                                <Select onChange={handleCityChange}>
+                                  {city.map((city) => (
+                                    <Option key={city.Id} value={city.Id}>
+                                      {city.Name}
+                                    </Option>
+                                  ))}
+                                </Select>
                               </Form.Item>
                               {/* Huyện */}
-                              <Form.Item name="HUYEN" label="Huyện">
-                                <Input />
-                              </Form.Item>
+                              <Form.Item label="Huyện" name="HUYEN">
+                              <Select onChange={handleDistrictChange}>
+                                {selectedCity &&
+                                  selectedCity.Districts.map((district) => (
+                                    <Option key={district.Id} value={district.Id}>
+                                      {district.Name}
+                                    </Option>
+                                  ))}
+                              </Select>
+                            </Form.Item>
                               {/* Xã */}
-                              <Form.Item name="XA" label="Xã">
-                                <Input />
-                              </Form.Item>
+                              <Form.Item label="Xã" name="XA">
+                              <Select onChange={handleWardChange}>
+                                {selectedDistrict &&
+                                  selectedDistrict.Wards.map((ward) => (
+                                    <Option key={ward.Id} value={ward.Id}>
+                                      {ward.Name}
+                                    </Option>
+                                  ))}
+                              </Select>
+                            </Form.Item>
                               {/* capcha */}
                               <Form.Item
                                 label="Captcha"
