@@ -352,7 +352,7 @@ function Detail() {
             <div className="css-6b3ezu">
               {/* ten, mã , thương hiệu */}
               <div>
-                <h1 className="css-4kh4rf">{Detail.name}</h1>
+                <h1 className="css-4kh4rf">{Detail.shortDescription}</h1>
                 <div>
                   <div
                     type="caption"
