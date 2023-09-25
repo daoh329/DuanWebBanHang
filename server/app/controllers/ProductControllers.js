@@ -1,14 +1,15 @@
 const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
-
+const path = require('path')
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
     var arrPathImage = [];
     arrImage.forEach(image => {
-      arrPathImage.push(image.path);
+      const pathImage = `/images/${path.basename(image.path)}` ;
+      arrPathImage.push(pathImage);
     });
     const configuration = data.category === "Điện thoại" ? {
       screen: data.screen,
@@ -48,68 +49,44 @@ class Product {
       mass: data.mass,
       accessory: data.accessory,
     }
-
-    // res.status(200).json("success");
+    const configurationString = JSON.stringify(configuration);
     let nameP;
     if(data.name==null||data.name==''){
       nameP=data.brand+data.series_laptop+'';
     }else{nameP=data.name}
+    
+    const sl_categoryid = `SELECT id AS Value FROM category where name = ?`
+    const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
+    const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
+    const is_productdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
+    const is_ProDetailColor = 'INSERT INTO prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
 
-    const SELECTcategory = `SELECT * FROM category where name = ?`
-    mysql.query(SELECTcategory, data.category, (er, result) => {
-      if (er) {
-        res.status(500).send(`Lỗi kết nối server data`)
+    // Hàm sử lí lỗi tập chung
+    const handleError = (e, res, message) => {
+      console.log(e);
+      return res.status(500).json(message);
+    };
+
+    try {
+      const arrayCategoryid = await query(sl_categoryid,data.category)
+      const productValues = [nameP, data.price, data.shortDescription, arrayCategoryid[0].Value, data.status?1:0]
+      const resultP = await query(is_product,productValues)
+      const id_Product = resultP.insertId
+      for(const image of arrPathImage){
+        const galeryValues = [image, id_Product]
+        query(is_galery,galeryValues)
       }
-      
-      // PRODUCT INSERT
-      const insertProductQuery = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
-      const productValues = [
-        nameP, data.price, data.shortDescription, result[0].id, data.status?1:0
-      ]
-      mysql.query(insertProductQuery, productValues, (er, resultP) => {
-        if(er){
-          console.log("product:"+er);
-        }
-        // IMG INSERT
-        const newProductId = resultP.insertId;
-        const insertGaleryQuery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
-        for (const image of arrPathImage) {
-          const galeryValues = [image, newProductId]
-          mysql.query(insertGaleryQuery, galeryValues, (er, result) => {
-            if (er) {
-              console.log('img: ' + er);
+      const PdValues = [data.quantity, data.brand, configurationString, data.description, id_Product]
+      const resultPD = await query(is_productdetail,PdValues)
+      const id_PD = resultPD.insertId
+      for (const x of data.color) {
+              const colorValues = [id_PD, x];
+              query(is_ProDetailColor,colorValues)
             }
-          })
-        }
-        // DETAIL PRODUCT
-        const configurationString = JSON.stringify(configuration);
-        
-        const insertPdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
-        const PdValues = [
-          data.quantity, data.brand, configurationString, data.description, newProductId
-        ]
-        mysql.query(insertPdetail, PdValues, (er, resultPd) => {
-          if (!er) {
-            const idPD = resultPd.insertId;
-            // COLOR INSERT
-            const insertProDetailColorQuery = 'INSERT prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
-            for (const x of data.color) {
-              const colorValues = [idPD, x];
-              mysql.query(insertProDetailColorQuery, colorValues, (er, result) => {
-                if (er) {
-                  console.log('color: ' + er);
-                }
-              })
-            }
-            res.status(200).send('thành công')
-          } else {
-            // Truy vấn SQL thất bại
-            console.log(er);
-            res.status(500).send('thất bại')
-          }
-        });
-      })
-    })
+      res.status(200).send('success')
+    } catch (error) {
+      handleError(error, res, { status: "failed" });
+    }
   }
 
   async json(req, res) {
@@ -126,9 +103,9 @@ class Product {
       res.send(jsonResult);
     });
   }
-  // API: /product/delete/:id
-  async Delete(req, res)  {
 
+  // API: /product/delete/:id
+  async Delete(req, res) {
     // query delete
     const sl_productDetails_ID = `
       SELECT productdetails.id AS value
@@ -148,6 +125,7 @@ class Product {
     const dl_product = `
       DELETE FROM product WHERE id = ?;
     `;
+
     // Hàm sử lí lỗi tập chung
     const handleError = (e, res, message) => {
       console.log(e);
@@ -175,7 +153,7 @@ class Product {
 
   async QueryProducts(req, res) {
     const query = `
-      SELECT product.id, product.name, product.price, productDetails.brand, galery.thumbnail
+      SELECT product.*, productDetails.brand, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -263,7 +241,7 @@ class Product {
     });
   }
 
-  // getBrand, API: /product/brands 
+  // getBrand, API: /product/brands
   getBrand(req, res) {
     const query = `SELECT * FROM brand`;
     mysql.query(query, (e, results, fields) => {

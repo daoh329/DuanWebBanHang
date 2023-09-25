@@ -186,7 +186,7 @@ function Cart() {
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
     const historyproduct = {
-      name: products.name,
+      shortDescription: products.shortDescription,
       price: products.price,
       avatar: products.thumbnail,
       id: products.id,
@@ -275,7 +275,7 @@ function Cart() {
                           alt="thumbnail"
                         />
                       </td>
-                      <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.name}</td>
+                      <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.shortDescription}</td>
 
                       <td>
                         <div className="quantity-control">
@@ -283,14 +283,14 @@ function Cart() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-plus"></i>
+                            <i class="fa-solid fa-minus"></i>
                           </a>
                           <span>{item.quantity}</span>
                           <a
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-minus"></i>
+                            <i class="fa-solid fa-plus"></i>
                           </a>
                         </div>
                       </td>
