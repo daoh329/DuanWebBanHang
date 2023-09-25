@@ -21,6 +21,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import './Admin.css'
 import Dashboard from "./Pages/Dashboard";
 import TypeProduct from "./Pages/NewProduct/Type/TypeProduct";
+import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/Products";
 import QuanLyAdmin from "./QuanLyAdmin";
@@ -81,6 +82,7 @@ function Admin() {
           icon: <OrderedListOutlined />,
           label: 'Danh mục',
           type: 'item',
+          route: 'ListCate',
         },
         {
           key: '6',
@@ -196,6 +198,7 @@ function Admin() {
             <Route path="newcoupon" element={<NewCoupon />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<OrderList />} />
+            <Route path="ListCate" element={<TypeList/>}/>
           </Routes>
         </Col>
         <Col span={6} pull={18}>

@@ -20,6 +20,8 @@ class Product {
       screen: data.screen,
       os: data.os,
       pin: data.pin,
+      guarantee: data.guarantee,
+      demand: data.demand,
       charging_port: data.charging_port,
       sim_type: data.sim_type,
       mobile_network: data.mobile_network,
@@ -33,6 +35,8 @@ class Product {
       mass: data.mass,
       accessory: data.accessory,
     } : {
+      guarantee: data.guarantee,
+      demand: data.demand,
       cpu: data.cpu,
       ram: data.ram,
       rom: data.rom,
