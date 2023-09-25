@@ -40,7 +40,7 @@ const Home = () => {
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
     const historyproduct = {
-      name: products.name,
+      shortDescription: products.shortDescription,
       price: products.price,
       avatar: products.thumbnail,
       id: products.id,
@@ -354,7 +354,7 @@ const Home = () => {
                     </div>
                     <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
                       <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
-                        {item.name}
+                        {item.shortDescription}
                       </h3>
                     </div>
 
@@ -638,7 +638,7 @@ const Home = () => {
                   </div>
                   <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
                     <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.name}
+                      {item.shortDescription}
                     </h3>
                   </div>
 
@@ -706,7 +706,7 @@ const Home = () => {
                     </div>
                     <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
                       <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
-                        {item.name}
+                        {item.shortDescription}
                       </h3>
                     </div>
 

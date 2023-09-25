@@ -175,7 +175,7 @@ class Product {
 
   async QueryProducts(req, res) {
     const query = `
-      SELECT product.id, product.name, product.price, productDetails.brand, galery.thumbnail
+      SELECT product.id, product.shortDescription, product.price, productDetails.brand, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
