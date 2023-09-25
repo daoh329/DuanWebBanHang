@@ -71,7 +71,7 @@ const App = () => {
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
               <Route path='/quanly/orders' element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/buy" element={<Buy />} />
+              <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/profile" element={<Profile user={user} />} />
               <Route path="/tat-ca-san-pham" element={<AllProduct />} />
             </Routes>

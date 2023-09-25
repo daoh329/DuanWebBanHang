@@ -114,7 +114,6 @@ export default function Profile(props) {
                     <Avatar
                       src={user.picture}
                       size="large"
-                      style={{ marginRight: "10px" }}
                     />
                     {user.name}
                     
@@ -208,7 +207,7 @@ export default function Profile(props) {
                                 <Input
                                 disabled
                                 value={user.email}
-                                style={{ marginRight: "10px" }}
+                                
                                 />
                                 </div>
                                 )}                              
@@ -224,7 +223,7 @@ export default function Profile(props) {
                                 <div>
                                 <Input
                                 value={user.given_name}
-                                style={{ marginRight: "10px" }}
+            
                                 />
                                 </div>
                                 )}       
