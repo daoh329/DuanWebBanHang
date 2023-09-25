@@ -513,7 +513,9 @@ function Detail() {
 
             <div className="mo-ta">
               <div className="title-mo">Mô tả sản phẩm</div>
+
               <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+
 
             </div>
 
@@ -529,7 +531,7 @@ function Detail() {
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration['Bảo hành']}</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration.guarantee}</td>
                     </tr>
                     <tr>
                       <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
@@ -754,7 +756,7 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration['Báo hành']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration.guarantee}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
@@ -780,7 +782,7 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Nhu cầu</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.shortDescription}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.demand}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>

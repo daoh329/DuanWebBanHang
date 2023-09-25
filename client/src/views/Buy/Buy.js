@@ -113,6 +113,9 @@ export default function Buy(props) {
   const handleBuyClick = () => {
     navigate("/");
   };
+  const handleAddClick = () => {
+    navigate("/profile");
+  };
 
   return (
     <>
@@ -264,43 +267,77 @@ export default function Buy(props) {
                             </Button>
                           )}
                         </div>
+                        
                         <div
                           data-content-region-name="addressShipping"
                           data-track-content="true"
                           data-content-name="addNewAddress"
                           className="teko-col teko-col-6 css-gr7r8o style-Jlvl6"
-                          id="style-Jlvl6"
-                        >
+                          id="style-Jlvl6">
+                          {user ? (
                           <button
-                            height="100%"
-                            className="css-162xo41 style-kRCXj"
-                            type="button"
-                            id="style-kRCXj"
-                            onClick={showModal}
+                          height="100%"
+                          className="css-162xo41 style-kRCXj"
+                          type="button"
+                          id="style-kRCXj"
+                          onClick={handleAddClick}
                           >
-                            <svg
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              size={25}
-                              className="css-1e44j4b"
-                              color="#848788"
-                              height={25}
-                              width={25}
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                fill="#82869E"
-                              ></path>
-                            </svg>
-                            Thêm địa chỉ
-                            <span id="style-EqcsP" className="style-EqcsP">
-                              <div className="css-157jl91"></div>
-                            </span>
+                          <svg
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          size={25}
+                          className="css-1e44j4b"
+                          color="#848788"
+                          height={25}
+                          width={25}
+                          xmlns="http://www.w3.org/2000/svg"
+                          >
+                          <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                          fill="#82869E"
+                          ></path>
+                          </svg>
+                          Thêm địa chỉ
+                          <span id="style-EqcsP" className="style-EqcsP">
+                          <div className="css-157jl91"></div>
+                          </span>
                           </button>
+                          ) : (
+                          <button
+                          height="100%"
+                          className="css-162xo41 style-kRCXj"
+                          type="button"
+                          id="style-kRCXj">
+                          <svg
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          size={25}
+                          className="css-1e44j4b"
+                          color="#848788"
+                          height={25}
+                          width={25}
+                          xmlns="http://www.w3.org/2000/svg"
+                          >
+                          <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                          fill="#82869E"
+                          ></path>
+                          </svg>
+                          Thêm địa chỉ
+                          <span id="style-EqcsP" className="style-EqcsP">
+                          <div className="css-157jl91"></div>
+                          </span>
+                          </button>
+
+                          )}
+                        
                         </div>
+
+
                       </div>
                       <div className="radio">
                         <label>
