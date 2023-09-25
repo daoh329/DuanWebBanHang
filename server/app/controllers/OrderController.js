@@ -35,7 +35,7 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.note, o.created_at, o.status, odp.quantity, p.name, p.price
+        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.note, o.created_at, o.status, odp.quantity, p*
         FROM orders o
         JOIN orderDetailsProduct odp ON o.id = odp.orderID
         JOIN product p ON odp.productID = p.id
@@ -83,7 +83,7 @@ class OrderController {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.created_at, o.status, odp.quantity, p.shortDescription, p.price
+        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.created_at, o.status, odp.quantity, p.*
         FROM orders o
         JOIN orderDetailsProduct odp ON o.id = odp.orderID
         JOIN product p ON odp.productID = p.id
@@ -98,7 +98,7 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT product.id, product.shortDescription, product.price, MAX(productDetails.brand) as brand, galery.thumbnail
+      SELECT product*, MAX(productDetails.brand) as brand, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (

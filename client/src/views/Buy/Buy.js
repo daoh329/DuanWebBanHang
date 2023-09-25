@@ -153,6 +153,7 @@ export default function Buy(props) {
                       </MDBTabsLink>
                     </MDBTabsItem>
                   </MDBTabs>
+
                   <MDBTabsContent>
                     <MDBTabsPane show={fillActive === "tab1"}>
                       <h7>Thông tin nhận hàng</h7>

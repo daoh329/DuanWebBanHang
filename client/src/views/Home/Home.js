@@ -383,7 +383,7 @@ const Home = () => {
                     </div>
                     <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
                       <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
-                        {item.name}
+                        {item.shortDescription}
                       </h3>
                     </div>
 
@@ -568,7 +568,7 @@ const Home = () => {
                     </div>
                     <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
                       <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                        {item.name}
+                        {item.shortDescription}
                       </h3>
                     </div>
 
