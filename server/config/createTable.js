@@ -22,7 +22,7 @@ const createTables = () => {
     UserID int,
     deliveryMethod varchar(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
     status boolean,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
@@ -49,7 +49,7 @@ const createTables = () => {
     configuration longtext,
     description longtext,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     product_id int,
     FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (brand)  REFERENCES brand (name)
