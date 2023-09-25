@@ -33,7 +33,7 @@ const Search = () => {
     if (query) {
       // Lọc sản phẩm dựa trên từ khóa tìm kiếm
       const filtered = products.filter((product) =>
-        product.name.toLowerCase().includes(query.toLowerCase())
+        product.shortDescription.toLowerCase().includes(query.toLowerCase())
       );
 
       // Loại bỏ sự trùng lặp bằng cách sử dụng Set để đảm bảo duy nhất
@@ -55,14 +55,14 @@ const Search = () => {
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
     const historyproduct = {
-      name: products.name,
+      shortDescription: products.shortDescription,
       price: products.price,
       avatar: products.thumbnail,
       id: products.id,
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.name === historyproduct.name
+      (product) => product.shortDescription === historyproduct.shortDescription
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
@@ -133,7 +133,7 @@ const Search = () => {
               </div>
               <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
                 <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                  {item.name}
+                  {item.shortDescription}
                 </h3>
               </div>
 

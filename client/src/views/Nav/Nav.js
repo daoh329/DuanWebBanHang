@@ -103,7 +103,7 @@ const App = (userDetails) => {
   useEffect(() => {
     // Lọc sản phẩm dựa trên từ khóa tìm kiếm
     const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredProducts(filtered);
   }, [searchQuery, products]);
@@ -454,9 +454,9 @@ const App = (userDetails) => {
                           <List.Item.Meta
                             avatar={<Avatar src={selectedItems.thumbnail} />}
                             title={
-                              selectedItems.name.length > 20
-                                ? selectedItems.name.substring(0, 20) + "..."
-                                : selectedItems.name
+                              selectedItems.shortDescription.length > 20
+                                ? selectedItems.shortDescription.substring(0, 20) + "..."
+                                : selectedItems.shortDescription
                             }
                             description={
                               <>
