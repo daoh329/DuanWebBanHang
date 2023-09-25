@@ -23,7 +23,7 @@ function HistoryOrder(props) {
         { title: 'Người mua', dataIndex: 'nameOrder', key: 'Username' },
         { title: 'SDT', dataIndex: 'phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
-        { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
+        { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
         { title: 'Giá', dataIndex: 'price', key: 'price' },
         {
