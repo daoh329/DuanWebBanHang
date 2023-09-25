@@ -47,7 +47,7 @@ const Home = () => {
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.name === historyproduct.name
+      (product) => product.id === historyproduct.id
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {

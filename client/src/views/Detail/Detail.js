@@ -246,7 +246,7 @@ function Detail() {
     };
   
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    const existingItemIndex = cart.findIndex((cartItem) => cartItem.shortDescription === newItem.shortDescription);
+    const existingItemIndex = cart.findIndex((cartItem) => cartItem.id === newItem.id);
   
     if (existingItemIndex !== -1) {
       // Sản phẩm đã tồn tại trong giỏ hàng, chỉ hiển thị thông báo
