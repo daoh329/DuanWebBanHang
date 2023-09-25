@@ -125,81 +125,6 @@
   border-color: #ae69dd;
 }
 
-@media (max-width: 768px) {
-  .tracuu {
-    display: none;
-  }
-
-  .thongbao {
-    display: none;
-  }
-
-  .header {
-    padding: 5px;
-    height: 50px;
-
-  }
-
-  .logo {
-    display: none;
-  }
-
-  .danhmuc {
-    display: none;
-  }
-
-  .avt-user {
-    display: none;
-  }
-
-  .navgation {
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .search-container {
-    flex: auto;
-    display: flex;
-    justify-content: center;
-    max-width: 100%;
-
-  }
-
-  .hd-logo {
-    width: 100%;
-    background-color: #f8f8fc;
-    display: flex;
-    align-items: center;
-    padding: 0px 10px 0px 10px;
-  }
-
-  .logo-mobile {
-    font-size: 24px;
-    width: 50px;
-    line-height: 30px;
-    flex: 1;
-  }
-
-  .logo-span {
-    display: flex;
-    justify-content: flex-start;
-    width: 50px;
-  }
-
-  .user-mobile {
-    position: relative;
-    width: 40px;
-    font-size: 26px;
-    line-height: 30px;
-    margin: 0 auto;
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-  }
-}
 
 @media (min-width:768px) {
   .hd-logo {
@@ -365,4 +290,79 @@
 
 .menu__item:hover {
   background-color: rgb(255 255 255 / 55%);
+}
+@media (max-width: 768px) {
+  .tracuu {
+    display: none;
+  }
+
+  .thongbao {
+    display: none;
+  }
+
+  .header {
+    padding: 5px;
+    height: 50px;
+
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .danhmuc {
+    display: none;
+  }
+
+  .avt-user {
+    display: none;
+  }
+
+  .navgation {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .search-container {
+    flex: auto;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+
+  }
+
+  .hd-logo {
+    width: 100%;
+    background-color: #f8f8fc;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px 0px 10px;
+  }
+
+  .logo-mobile {
+    font-size: 24px;
+    width: 50px;
+    line-height: 30px;
+    flex: 1;
+  }
+
+  .logo-span {
+    display: flex;
+    justify-content: flex-start;
+    width: 50px;
+  }
+
+  .user-mobile {
+    position: relative;
+    width: 40px;
+    font-size: 26px;
+    line-height: 30px;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
