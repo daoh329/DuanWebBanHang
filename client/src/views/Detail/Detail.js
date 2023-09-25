@@ -109,6 +109,7 @@ function Detail() {
 
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
+        console.log("Detail: " + response.data.configuration)
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
         const productThumbnails = response.data.thumbnails;
@@ -311,7 +312,7 @@ function Detail() {
                             Detail.thumbnails.length > 0 &&
                             Detail.thumbnails.map((thumbnail, index) => (
                               <div key={index}>
-                                <img src={thumbnail.thumbnail} alt={`Image ${index + 1}`} />
+                                <img src={process.env.REACT_APP_API_URL+thumbnail.thumbnail} alt={`Image ${index + 1}`} />
                               </div>
                             ))}
 
@@ -335,7 +336,7 @@ function Detail() {
                           console.log(`current index: ${current}, prev index: ${prev}`),
                       }}
                     >
-                      <Image width={80} src={thumbnail.thumbnail} />
+                      <Image width={80} src={process.env.REACT_APP_API_URL+thumbnail.thumbnail} />
                     </Image.PreviewGroup>
                   ))}
                 </div>
@@ -532,7 +533,7 @@ function Detail() {
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Series laptop']}</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.name}</td>
                     </tr>
                     <tr>
                       <td colSpan={1}>Màu sắc</td>
@@ -545,7 +546,7 @@ function Detail() {
                             </span>
                           ))
                         ) : (
-                          <span>Loading...</span>
+                          <span></span>
                         )}
                       </td>
                     </tr>
@@ -558,19 +559,19 @@ function Detail() {
                     </tr>
                     <tr>
                       <td colSpan={1}>Thế hệ CPU</td>
-                      <td colSpan={3}>{configuration.CPU}</td>
+                      <td colSpan={3}>{configuration.cpu}</td>
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.CPU}</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.cpu}</td>
                     </tr>
                     <tr>
                       <td colSpan={1}>Chíp đồ họa</td>
-                      <td colSpan={3}>{configuration['Card đồ họa']}</td>
+                      <td colSpan={3}>{configuration.vga}</td>
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.RAM}</td>
+                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.ram}</td>
                     </tr>
                   </MDBTableBody>
                 </MDBTable>
@@ -757,7 +758,7 @@ function Detail() {
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Series laptop']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.name}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Màu sắc</td>
@@ -770,7 +771,7 @@ function Detail() {
                         </span>
                       ))
                     ) : (
-                      <span>Loading...</span>
+                      <span></span>
                     )}
                   </td>
                 </tr>
@@ -783,77 +784,70 @@ function Detail() {
                 </tr>
                 <tr>
                   <td colSpan={1}>Thế hệ CPU</td>
-                  <td colSpan={3}>{configuration.CPU}</td>
+                  <td colSpan={3}>{configuration.cpu}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['CPU']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.cpu}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Chíp đồ họa</td>
-                  <td colSpan={3}>{configuration['Card đồ họa']}</td>
+                  <td colSpan={3}>{configuration.vga}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.RAM}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.ram}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Màn hình</td>
-                  <td colSpan={3}>{configuration['Màn hình']}</td>
+                  <td colSpan={3}>{configuration.screen}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Lưu trữ</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Ổ cứng']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.rom}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Số cổng lưu chữ tối đa</td>
-                  <td colSpan={3}>{configuration['Số cổng lưu chữ tối đa']}</td>
+                  <td colSpan={3}>{configuration.maximum_number_of_storage_ports}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khe hở M.2 hỗ trợ</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Khe hở M.2 hỗ trợ']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.M2_slot_type_supported}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Cổng xuất hình</td>
-                  <td colSpan={3}>{configuration['Cổng xuất hình']}</td>
+                  <td colSpan={3}>{configuration.output_port}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Cổng kết nối</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Cổng kết nối']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.connector}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Kết nối không dây</td>
-                  <td colSpan={3}>{configuration['Kết nối không dây']}</td>
+                  <td colSpan={3}>{configuration.wireless_connectivity}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bàn phím</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Bàn phím']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.keyboard}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Hệ điều hành</td>
-                  <td colSpan={3}>{configuration['Hệ điều hành']}</td>
-                </tr>
-                <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Kích thước</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Kích thước']}</td>
+                  <td colSpan={3}>{configuration.os}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Pin</td>
-                  <td colSpan={3}></td>
+                  <td colSpan={3}>{configuration.pin}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khối lượng</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Khối lượng']}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.mass}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Đèn LED trên máy</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration['Đèn LED trên máy']}</td>
-                </tr>
-                <tr>
-                  <td className="style-tin-chung" colSpan={1}>Thông tin kích thước</td>
+                  <td className="style-tin-chung" colSpan={1}>Phụ kiện đi kèm</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.accessory}</td>
                 </tr>
               </MDBTableBody>
             </MDBTable>
