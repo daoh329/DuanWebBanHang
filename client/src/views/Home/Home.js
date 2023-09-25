@@ -25,7 +25,7 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
         setTopLaptop(res.data);
-        console.log(res.data);
+        console.log("Laptopbanchay: " +res.data);
       })
       .catch((error) => console.log(error));
   }, []);

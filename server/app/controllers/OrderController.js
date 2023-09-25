@@ -98,15 +98,15 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT product*, MAX(productDetails.brand) as brand, galery.thumbnail
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
           SELECT id, thumbnail, product_id
           FROM (
-            SELECT id, thumbnail, product_id,
-                  ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
-            FROM galery
+              SELECT id, thumbnail, product_id,
+              ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+              FROM galery
           ) tmp
           WHERE rn = 1
       ) galery ON product.id = galery.product_id
@@ -115,7 +115,7 @@ class OrderController {
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       GROUP BY product.id, galery.thumbnail
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
-      LIMIT 10;
+      LIMIT 10;    
       `;
 
       mysql.query(query, (error, results) => {
