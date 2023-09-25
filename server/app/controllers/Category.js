@@ -2,7 +2,7 @@ const mysql = require("../../config/db/mySQL");
 const createTables = require("../../config/CrTables");
 
 class Category{
-  // '/category/add/:id'
+  // '/category/add'
   async add(req,res){
     try {
       const { name } = req.body.name;
