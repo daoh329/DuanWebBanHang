@@ -126,9 +126,9 @@ class Product {
       res.send(jsonResult);
     });
   }
-  // API: /product/delete/:id
-  async Delete(req, res)  {
 
+  // API: /product/delete/:id
+  async Delete(req, res) {
     // query delete
     const sl_productDetails_ID = `
       SELECT productdetails.id AS value
@@ -148,6 +148,7 @@ class Product {
     const dl_product = `
       DELETE FROM product WHERE id = ?;
     `;
+
     // Hàm sử lí lỗi tập chung
     const handleError = (e, res, message) => {
       console.log(e);
@@ -175,7 +176,7 @@ class Product {
 
   async QueryProducts(req, res) {
     const query = `
-      SELECT product.id, product.shortDescription, product.price, productDetails.brand, galery.thumbnail
+      SELECT product.*, productDetails.brand, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -263,7 +264,7 @@ class Product {
     });
   }
 
-  // getBrand, API: /product/brands 
+  // getBrand, API: /product/brands
   getBrand(req, res) {
     const query = `SELECT * FROM brand`;
     mysql.query(query, (e, results, fields) => {

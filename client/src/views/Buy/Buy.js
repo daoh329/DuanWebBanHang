@@ -127,6 +127,7 @@ export default function Buy() {
                       </MDBTabsLink>
                     </MDBTabsItem>
                   </MDBTabs>
+
                   <MDBTabsContent>
                     <MDBTabsPane show={fillActive === 'tab1'}>
                       <h7 >Thông tin nhận hàng</h7>
