@@ -52,8 +52,8 @@ const createTables = () => {
     brand varchar(255),
     configuration longtext,
     description longtext,
-    created_at date,
-    updated_at date,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     product_id int,
     FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (brand)  REFERENCES brand (name)
