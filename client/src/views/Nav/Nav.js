@@ -103,7 +103,7 @@ const App = (userDetails) => {
   useEffect(() => {
     // Lọc sản phẩm dựa trên từ khóa tìm kiếm
     const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredProducts(filtered);
   }, [searchQuery, products]);
