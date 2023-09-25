@@ -20,13 +20,9 @@ const createTables = () => {
   const orders = `CREATE TABLE IF NOT EXISTS orders (
     id int PRIMARY KEY AUTO_INCREMENT,
     UserID int,
-    name varchar(255),
-    phone varchar(255),
-    address varchar(255),
-    email varchar(255),
     deliveryMethod varchar(255),
-    created_at date,
-    updated_at date,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     note TEXT,
     status boolean,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
@@ -52,8 +48,8 @@ const createTables = () => {
     brand varchar(255),
     configuration longtext,
     description longtext,
-    created_at date,
-    updated_at date,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     product_id int,
     FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (brand)  REFERENCES brand (name)

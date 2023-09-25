@@ -1,14 +1,15 @@
 const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
-
+const path = require('path')
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
     var arrPathImage = [];
     arrImage.forEach(image => {
-      arrPathImage.push(image.path);
+      const pathImage = `/images/${path.basename(image.path)}` ;
+      arrPathImage.push(pathImage);
     });
     const configuration = data.category === "Điện thoại" ? {
       screen: data.screen,
@@ -58,7 +59,7 @@ class Product {
     const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
     const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
     const is_productdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
-    const is_ProDetailColor = 'INSERT prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
+    const is_ProDetailColor = 'INSERT INTO prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
 
     // Hàm sử lí lỗi tập chung
     const handleError = (e, res, message) => {
