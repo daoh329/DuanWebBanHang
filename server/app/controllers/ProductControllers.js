@@ -156,7 +156,8 @@ class Product {
     }
   }
 
-  async QueryProducts(req, res) {
+  //Truy Vấn Laptop hiển thị Home
+  async QueryProductsLaptop(req, res) {
     const query = `
       SELECT product.*, productDetails.brand, galery.thumbnail
       FROM product
@@ -169,7 +170,35 @@ class Product {
           FROM galery
         ) tmp
         WHERE rn = 1
-      ) galery ON product.id = galery.product_id;
+      ) galery ON product.id = galery.product_id
+      WHERE product.CategoryID = 1;
+    `;
+
+    mysql.query(query, (error, results) => {
+      if (error) {
+        return res.json({ error });
+      }
+
+      res.json(results);
+    });
+  }
+
+  //Truy vấn điện thoại hiển thị Home
+  async QueryProductsDienThoai(req, res) {
+    const query = `
+      SELECT product.*, productDetails.brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+        SELECT id, thumbnail, product_id
+        FROM (
+          SELECT id, thumbnail, product_id,
+                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+          FROM galery
+        ) tmp
+        WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      WHERE product.CategoryID = 2;
     `;
 
     mysql.query(query, (error, results) => {
