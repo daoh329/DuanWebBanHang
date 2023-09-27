@@ -295,32 +295,32 @@ const Home = () => {
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-rotate" aria-hidden="true"></i>
+              <i className="fa fa-rotate" aria-hidden="true"></i>
               <span className="name-menu">Máy cũ</span>
             </a>
           </li>
 
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-screwdriver-wrench" aria-hidden="true"></i>
+              <i className="fa fa-screwdriver-wrench" aria-hidden="true"></i>
               <span className="name-menu">Sửa chữa</span>
             </a>
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-bolt-lightning" aria-hidden="true"></i>
+              <i className="fa fa-bolt-lightning" aria-hidden="true"></i>
               <span className="name-menu">Ưu đãi</span>
             </a>
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-newspaper" aria-hidden="true"></i>
+              <i className="fa fa-newspaper" aria-hidden="true"></i>
               <span className="name-menu">Tin tức</span>
             </a>
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-headset" aria-hidden="true"></i>
+              <i className="fa fa-headset" aria-hidden="true"></i>
               <span className="name-menu">Dịch vụ</span>
             </a>
           </li>
@@ -504,7 +504,7 @@ const Home = () => {
             <div className="phone-title">Sản phẩm mới ra mắt</div>
             <div className="views-all">
               <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
-              <i class="fa fa-chevron-right"></i>
+              <i className="fa fa-chevron-right"></i>
             </div>
 
           </div>
@@ -560,7 +560,7 @@ const Home = () => {
         <div className="phone-group">
           <div className="title-group">
             <div className="phone-title">Danh mục nổi bật</div>
-            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+            <div className="views-all">Xem tất cả <i className="fa fa-chevron-right"></i> </div>
           </div>
           <div className="scroll-group-phone">
 
@@ -599,14 +599,14 @@ const Home = () => {
               id="scroll-left-button"
               onClick={scrollLeft}
             >
-              <i class="fa-solid fa-chevron-right"></i>
+              <i className="fa-solid fa-chevron-right"></i>
             </button>
             <button
               className="scroll-button"
               id="scroll-right-button"
               onClick={scrollRight}
             >
-              <i class="fa-solid fa-chevron-left"></i>
+              <i className="fa-solid fa-chevron-left"></i>
             </button>
           </div>
         </div>
@@ -630,7 +630,7 @@ const Home = () => {
             <div className="products-title">Sản phẩm  </div>
             <div className="views-all">
             <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
-               <i class="fa fa-chevron-right"></i> 
+               <i className="fa fa-chevron-right"></i> 
                </div>
           </div>
           <div className="scroll-control-product">
@@ -691,7 +691,7 @@ const Home = () => {
             <div className="products-title">Sản phẩm  </div>
             <div className="views-all">
             <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
-               <i class="fa fa-chevron-right"></i> 
+               <i className="fa fa-chevron-right"></i> 
                </div>
           </div>
           <div className="scroll-control-product">
