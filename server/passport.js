@@ -67,6 +67,5 @@ passport.deserializeUser(async (user, done) => {
       return console.log(error);
     }
   })
-
   done(null, user);
 });
