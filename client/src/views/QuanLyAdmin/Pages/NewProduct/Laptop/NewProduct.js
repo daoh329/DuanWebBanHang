@@ -130,6 +130,7 @@ function NewProduct() {
               notification.success({
                 message: "Thành công",
                 description: "Dữ liệu đã được lưu thành công!",
+
               });
             }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
             // Xóa timer khi component bị hủy
@@ -141,6 +142,7 @@ function NewProduct() {
               notification.error({
                 message: "Lỗi",
                 description: "Có lỗi xảy ra khi lưu dữ liệu!",
+
               });
             }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
             // Xóa timer khi component bị hủy

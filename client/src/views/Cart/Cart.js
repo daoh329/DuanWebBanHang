@@ -283,14 +283,14 @@ function Cart() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-minus"></i>
+                            <i className="fa-solid fa-minus"></i>
                           </a>
                           <span>{item.quantity}</span>
                           <a
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
-                            <i class="fa-solid fa-plus"></i>
+                            <i className="fa-solid fa-plus"></i>
                           </a>
                         </div>
                       </td>
@@ -298,7 +298,7 @@ function Cart() {
                       <td>{formatCurrency(item.totalPrice)}</td>
                       <td>
                         <a onClick={() => removeFromCart(item.id)}>
-                          <i class="fa-solid fa-xmark"></i>
+                          <i className="fa-solid fa-xmark"></i>
                         </a>
                       </td>
                     </tr>
