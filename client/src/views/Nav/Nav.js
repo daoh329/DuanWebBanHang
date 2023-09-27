@@ -49,7 +49,7 @@ const App = (userDetails) => {
       const editName = name.substring(0, firstSpace) + ' ' + name.split(' ')[1];
       // Nếu name dài hơn 15 kí tự, lấy 15 kí tự đầu tiên của editName + ...
       // Nếu name ngắn hơn 15 kí tự, giữ nguyên editName
-      return name.length > 15 ? editName.substring(0, 15) + "..." : editName;
+      return name.length > 15 ? editName.substring(0, 15)+"...": editName;
     } else {
       // Không có khoảng trắng
       // Nếu name dài hơn 15 kí tự, lấy 15 ký tự đầu tiên + ...
@@ -89,7 +89,7 @@ const App = (userDetails) => {
 
   useEffect(() => {
     // Tải dữ liệu từ API khi component được render
-    fetch(`${process.env.REACT_APP_API_URL}/product/products`)
+    fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -204,10 +204,51 @@ const App = (userDetails) => {
       <Affix offsetTop={0}>
         <div>
 
+        
+        <div className="danhmuc">
+          <a
+            href="/sale"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <TagOutlined style={{ marginRight: "8px" }} />
+            Khuyến mãi
+          </a>
+          <a
+            href="/showroom"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
+            showroom
+          </a>
+          <a
+            href="/support"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
+            nghiệp
+          </a>
 
-          <div className="danhmuc">
+          <Dropdown overlay={host} placement="bottomRight">
             <a
-              href="/sale"
+              href="/host"
               style={{
                 marginRight: "20px",
                 color: "#333",
@@ -216,112 +257,71 @@ const App = (userDetails) => {
                 alignItems: "center",
               }}
             >
-              <TagOutlined style={{ marginRight: "8px" }} />
-              Khuyến mãi
+              <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
             </a>
-            <a
-              href="/showroom"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
-              showroom
-            </a>
-            <a
-              href="/support"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
-              nghiệp
-            </a>
+          </Dropdown>
+          <a
+            href="/tin-tuc"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
+          </a>
+        </div>
 
-            <Dropdown menu={host} placement="bottomRight">
-              <a
-                href="/host"
-                style={{
-                  marginRight: "20px",
-                  color: "#333",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
-              </a>
-            </Dropdown>
-            <a
-              href="/tin-tuc"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
-            </a>
+        <div className="hd-logo">
+          <div className="logo-mobile">
+            <span className="logo-span">
+              {" "}
+              <NavLink to="/">
+                <img src={Hinh} style={{ width: "100%" }} alt="Logo"></img>
+              </NavLink>
+            </span>
           </div>
+          <div className="user-mobile">
+            <Dropdown overlay={menu}>
+              {user ? (
+                <Avatar src={user.picture} />
+              ) : (
+                <Avatar
+                  icon={<UserOutlined />}
+                  style={{ backgroundColor: "#ae69dd" }}
+                />
+              )}
+            </Dropdown>
+          </div>
+        </div>
 
-          <div className="hd-logo">
-            <div className="logo-mobile">
-              <span className="logo-span">
+        <Header
+          className="header"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "#ffffff",
+          }}
+        >
+          <div className="navgation">
+            <div
+              className="logo"
+              style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
+            >
+              <span style={{ position: "relative" }}>
                 {" "}
                 <NavLink to="/">
-                  <img src={Hinh} style={{ width: "100%" }} alt="Logo"></img>
+                  <img
+                    src={Hinh}
+                    style={{ width: "130%", height: "130%" }}
+                  ></img>
                 </NavLink>
               </span>
             </div>
-            <div className="user-mobile">
-              <Dropdown menu={menu} >
-                {user ? (
-                  <Avatar src={user.picture} />
-                ) : (
-                  <Avatar
-                    icon={<UserOutlined />}
-                    style={{ backgroundColor: "#ae69dd" }}
-                  />
-                )}
-              </Dropdown>
-            </div>
-          </div>
-
-          <Header
-            className="header"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              backgroundColor: "#ffffff",
-            }}
-          >
-            <div className="navgation">
-              <div
-                className="logo"
-                style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
-              >
-                <span style={{ position: "relative" }}>
-                  {" "}
-                  <NavLink to="/">
-                    <img
-                      src={Hinh}
-                      style={{ width: "130%", height: "130%" }}
-                    ></img>
-                  </NavLink>
-                </span>
-              </div>
-              {/* <div
+            {/* <div
             className="search-container"
             style={{
               flex: "auto",
@@ -337,7 +337,7 @@ const App = (userDetails) => {
             />
           </div> */}
 
-              {/* <div className="hamburger-menu">
+            {/* <div className="hamburger-menu">
             <input id="menu__toggle" type="checkbox" />
             <label className="menu__btn" htmlFor="menu__toggle">
               <span />
@@ -373,7 +373,7 @@ const App = (userDetails) => {
             </ul>
           </div> */}
 
-              {/* <div className="timkiem">
+            {/* <div className="timkiem">
             <Input
               placeholder="Tìm kiếm"
               className="custom-timkiem"
@@ -398,152 +398,152 @@ const App = (userDetails) => {
             <input placeholder="search" type="search" className="input" />
           </div> */}
 
-              <div className="search-container">
-                <Input.Search
-                  placeholder="Tìm kiếm"
-                  className="custom-input-search"
-                  value={searchQuery}
-                  onChange={handleInputChange}
-                  onSearch={handleSearch}
+            <div className="search-container">
+              <Input.Search
+                placeholder="Tìm kiếm"
+                className="custom-input-search"
+                value={searchQuery}
+                onChange={handleInputChange}
+                onSearch={handleSearch}
+              />
+            </div>
+            <div
+              className="right-icons"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <Badge
+                className="thongbao"
+                count={5}
+                style={{
+                  marginTop: "10px",
+                  marginRight: "10px",
+                  backgroundColor: "#f50",
+                  color: "#fff",
+                }}
+              >
+                <BellOutlined
+                  style={{ fontSize: "24px", color: "#ae69dd", margin: "10px" }}
                 />
-              </div>
-              <div
-                className="right-icons"
-                style={{ display: "flex", alignItems: "center" }}
+              </Badge>
+              <Popover
+                content={
+                  <div
+                    style={{
+                      width: "300px",
+                      maxHeight: "200px",
+                      overflowY: "auto",
+                      scrollbarWidth: "none",
+                    }}
+                  >
+                    <Button
+                      type="primary"
+                      style={{ width: "100%", marginTop: "10px" }}
+                    >
+                      <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                    </Button>
+                    <List
+                      itemLayout="horizontal"
+                      dataSource={cart}
+                      renderItem={(selectedItems) => (
+                        <List.Item
+                          actions={[
+                            <Button
+                              type="danger"
+                              icon={<DeleteOutlined />}
+                              onClick={() => removeFromCart(selectedItems.id)}
+                            ></Button>,
+                          ]}
+                        >
+                          <List.Item.Meta
+                            avatar={<Avatar src={selectedItems.thumbnail} />}
+                            title={
+                              selectedItems.shortDescription.length > 20
+                                ? selectedItems.shortDescription.substring(0, 20) + "..."
+                                : selectedItems.shortDescription
+                            }
+                            description={
+                              <>
+                                <div>Giá: {selectedItems.price} ₫</div>
+                                <div>
+                                  Số lượng: {selectedItems.quantity}
+                                </div>{" "}
+                                {/* Hiển thị số lượng */}
+                              </>
+                            }
+                          />
+                        </List.Item>
+                      )}
+                    />
+                    <Button
+                      type="primary"
+                      style={{ width: "100%", marginTop: "10px" }}
+                    >
+                      <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                    </Button>
+                  </div>
+                }
+                title="Giỏ hàng"
+                trigger="hover"
               >
                 <Badge
-                  className="thongbao"
-                  count={5}
-                  style={{
-                    marginTop: "10px",
-                    marginRight: "10px",
-                    backgroundColor: "#f50",
-                    color: "#fff",
-                  }}
+                  count={cart.length}
+                  style={{ marginRight: "10px", marginTop: "10px" }}
                 >
-                  <BellOutlined
-                    style={{ fontSize: "24px", color: "#ae69dd", margin: "10px" }}
+                  <ShoppingCartOutlined
+                    style={{
+                      fontSize: "30px",
+                      color: "#ae69dd",
+                      margin: "10px",
+                    }}
                   />
                 </Badge>
-                <Popover
-                  content={
-                    <div
-                      style={{
-                        width: "300px",
-                        maxHeight: "200px",
-                        overflowY: "auto",
-                        scrollbarWidth: "none",
-                      }}
-                    >
-                      <Button
-                        type="primary"
-                        style={{ width: "100%", marginTop: "10px" }}
-                      >
-                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
-                      </Button>
-                      <List
-                        itemLayout="horizontal"
-                        dataSource={cart}
-                        renderItem={(selectedItems) => (
-                          <List.Item
-                            actions={[
-                              <Button
-                                type="danger"
-                                icon={<DeleteOutlined />}
-                                onClick={() => removeFromCart(selectedItems.id)}
-                              ></Button>,
-                            ]}
-                          >
-                            <List.Item.Meta
-                              avatar={<Avatar src={selectedItems.thumbnail} />}
-                              title={
-                                selectedItems.shortDescription.length > 20
-                                  ? selectedItems.shortDescription.substring(0, 20) + "..."
-                                  : selectedItems.shortDescription
-                              }
-                              description={
-                                <>
-                                  <div>Giá: {selectedItems.price} ₫</div>
-                                  <div>
-                                    Số lượng: {selectedItems.quantity}
-                                  </div>{" "}
-                                  {/* Hiển thị số lượng */}
-                                </>
-                              }
-                            />
-                          </List.Item>
-                        )}
-                      />
-                      <Button
-                        type="primary"
-                        style={{ width: "100%", marginTop: "10px" }}
-                      >
-                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
-                      </Button>
-                    </div>
-                  }
-                  title="Giỏ hàng"
-                  trigger="hover"
-                >
-                  <Badge
-                    count={cart.length}
-                    style={{ marginRight: "10px", marginTop: "10px" }}
+              </Popover>
+              <Badge
+                className="tracuu"
+                style={{
+                  marginTop: "10px",
+                  marginRight: "10px",
+                  backgroundColor: "#f50",
+                  color: "#fff",
+                }}
+              >
+                <NavLink to="/checkSP">
+                  <SolutionOutlined
+                    style={{
+                      fontSize: "24px",
+                      color: "#ae69dd",
+                      margin: "10px",
+                    }}
+                  />
+                </NavLink>
+              </Badge>
+              <Dropdown overlay={menu} className="avt-user">
+                {user ? (
+                  <div
+                    style={{
+                     
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
                   >
-                    <ShoppingCartOutlined
-                      style={{
-                        fontSize: "30px",
-                        color: "#ae69dd",
-                        margin: "10px",
-                      }}
-                    />
-                  </Badge>
-                </Popover>
-                <Badge
-                  className="tracuu"
-                  style={{
-                    marginTop: "10px",
-                    marginRight: "10px",
-                    backgroundColor: "#f50",
-                    color: "#fff",
-                  }}
-                >
-                  <NavLink to="/checkSP">
-                    <SolutionOutlined
-                      style={{
-                        fontSize: "24px",
-                        color: "#ae69dd",
-                        margin: "10px",
-                      }}
-                    />
-                  </NavLink>
-                </Badge>
-                <Dropdown menu={menu} className="avt-user">
-                  {user ? (
-                    <div
-                      style={{
+                    <Avatar src={user.picture} />
+                    <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
+                      {
+                        formatUserName(user.name)
+                      }
+                    </span>
+                  </div>
+                ) : (
+                  <Avatar
+                    icon={<UserOutlined />}
+                    style={{ backgroundColor: "#ae69dd", margin: "10px" }}
+                  />
+                )}
+              </Dropdown>
+            </div>
 
-                        justifyContent: "center",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <Avatar src={user.picture} />
-                      <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                        {
-                          formatUserName(user.name)
-                        }
-                      </span>
-                    </div>
-                  ) : (
-                    <Avatar
-                      icon={<UserOutlined />}
-                      style={{ backgroundColor: "#ae69dd", margin: "10px" }}
-                    />
-                  )}
-                </Dropdown>
-              </div>
-
-              {/* <Menu
+            {/* <Menu
                         theme="dark"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
@@ -564,8 +564,8 @@ const App = (userDetails) => {
                             <Menu.Item key="4">Danh mục 4</Menu.Item>
                         </Menu.SubMenu>
                     </Menu> */}
-            </div>
-          </Header>
+          </div>
+        </Header>
         </div>
       </Affix>
     </Layout>
