@@ -196,6 +196,7 @@ const App = (userDetails) => {
   return (
     <Layout>
       <Affix offsetTop={0}>
+        <div>
         <div className="danhmuc">
           <a
             href="/sale"
@@ -562,6 +563,7 @@ const App = (userDetails) => {
                     </Menu> */}
           </div>
         </Header>
+        </div>
       </Affix>
     </Layout>
   );
