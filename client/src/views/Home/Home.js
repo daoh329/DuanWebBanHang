@@ -26,7 +26,7 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
         setTopLaptop(res.data);
-        console.log("Laptopbanchay: " +res.data);
+        // console.log("Laptopbanchay: " +res.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -295,32 +295,32 @@ const Home = () => {
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-rotate" aria-hidden="true"></i>
+              <i className="fa fa-rotate" aria-hidden="true"></i>
               <span className="name-menu">Máy cũ</span>
             </a>
           </li>
 
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-screwdriver-wrench" aria-hidden="true"></i>
+              <i className="fa fa-screwdriver-wrench" aria-hidden="true"></i>
               <span className="name-menu">Sửa chữa</span>
             </a>
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-bolt-lightning" aria-hidden="true"></i>
+              <i className="fa fa-bolt-lightning" aria-hidden="true"></i>
               <span className="name-menu">Ưu đãi</span>
             </a>
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-newspaper" aria-hidden="true"></i>
+              <i className="fa fa-newspaper" aria-hidden="true"></i>
               <span className="name-menu">Tin tức</span>
             </a>
           </li>
           <li className="menu-nav-ul-li">
             <a className="li-a">
-              <i class="fa fa-headset" aria-hidden="true"></i>
+              <i className="fa fa-headset" aria-hidden="true"></i>
               <span className="name-menu">Dịch vụ</span>
             </a>
           </li>
@@ -356,7 +356,7 @@ const Home = () => {
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card">
+                  <div className="sanpham-card" key={index}>
                     <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -385,7 +385,7 @@ const Home = () => {
           {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card">
+                  <div className="sanpham-card" key={index}>
                     <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -504,7 +504,7 @@ const Home = () => {
             <div className="phone-title">Sản phẩm mới ra mắt</div>
             <div className="views-all">
               <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
-              <i class="fa fa-chevron-right"></i>
+              <i className="fa fa-chevron-right"></i>
             </div>
 
           </div>
@@ -513,7 +513,7 @@ const Home = () => {
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card">
+                  <div className="sanpham-card" key={index}>
                     <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -560,7 +560,7 @@ const Home = () => {
         <div className="phone-group">
           <div className="title-group">
             <div className="phone-title">Danh mục nổi bật</div>
-            <div className="views-all">Xem tất cả <i class="fa fa-chevron-right"></i> </div>
+            <div className="views-all">Xem tất cả <i className="fa fa-chevron-right"></i> </div>
           </div>
           <div className="scroll-group-phone">
 
@@ -570,7 +570,7 @@ const Home = () => {
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card">
+                  <div className="sanpham-card" key={index}>
                     <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -599,14 +599,14 @@ const Home = () => {
               id="scroll-left-button"
               onClick={scrollLeft}
             >
-              <i class="fa-solid fa-chevron-right"></i>
+              <i className="fa-solid fa-chevron-right"></i>
             </button>
             <button
               className="scroll-button"
               id="scroll-right-button"
               onClick={scrollRight}
             >
-              <i class="fa-solid fa-chevron-left"></i>
+              <i className="fa-solid fa-chevron-left"></i>
             </button>
           </div>
         </div>
@@ -630,7 +630,7 @@ const Home = () => {
             <div className="products-title">Sản phẩm  </div>
             <div className="views-all">
             <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
-               <i class="fa fa-chevron-right"></i> 
+               <i className="fa fa-chevron-right"></i> 
                </div>
           </div>
           <div className="scroll-control-product">
@@ -638,7 +638,7 @@ const Home = () => {
             {productsPhone &&
               productsPhone.length > 0 &&
               productsPhone.slice(startIndex, endIndex).map((item, index) => (
-                <div className="sanpham-card">
+                <div className="sanpham-card" key={index}>
                   <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                   <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                     <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -691,7 +691,7 @@ const Home = () => {
             <div className="products-title">Sản phẩm  </div>
             <div className="views-all">
             <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
-               <i class="fa fa-chevron-right"></i> 
+               <i className="fa fa-chevron-right"></i> 
                </div>
           </div>
           <div className="scroll-control-product">
@@ -699,7 +699,7 @@ const Home = () => {
             {products &&
               products.length > 0 &&
               products.slice(startIndex, endIndex).map((item, index) => (
-                <div className="sanpham-card">
+                <div className="sanpham-card" key={index}>
                   <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                   <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                     <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -767,7 +767,7 @@ const Home = () => {
               {historysp &&
                 historysp.length > 0 &&
                 historysp.slice(startIndex, endIndex).map((item, index) => (
-                  <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
+                  <div className="sanpham-card" key={index} style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
                     <img onClick={() => handleViewDetailproducts(item)} src={process.env.REACT_APP_API_URL+item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>

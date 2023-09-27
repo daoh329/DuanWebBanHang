@@ -304,10 +304,10 @@ function Detail() {
                       </MDBCarousel> */}
                       <div style={{ width: '100%', position: 'relative' }}>
                         <button className="scroll-btn" id="scroll-left-btn" onClick={handlePreviousClick}>
-                          <i class="fa-solid fa-chevron-left"></i>
+                          <i className="fa-solid fa-chevron-left"></i>
                         </button>
                         <button className="scroll-btn" id="scroll-right-btn" onClick={handleNextClick}>
-                          <i class="fa-solid fa-chevron-right"></i>
+                          <i className="fa-solid fa-chevron-right"></i>
                         </button>
                         <Carousel autoplay ref={carouselRef}>
                           {Detail &&
@@ -514,7 +514,7 @@ function Detail() {
             <div className="mo-ta">
               <div className="title-mo">Mô tả sản phẩm</div>
 
-              <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+              <div style={{textAlign:'start'}} dangerouslySetInnerHTML={{ __html: htmlContent }} />
 
 
             </div>

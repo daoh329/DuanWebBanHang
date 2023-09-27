@@ -41,7 +41,6 @@ router.get(
 );
 
 router.get("/logout", (req, res, next) => {
-
   req.logout(function (err) {
     if (err) {
       return next(err);
@@ -57,7 +56,7 @@ router.post("/login-otp", async (req, res, next) => {
 
   // format kiểu số điện thoại (nếu người dùng không nhập số 0 đằng trước thì thêm số 0);
   // Loại bỏ các ký tự không phải số (nếu có)
-  phoneNumber = phoneNumber.replace(/\D/g, "");
+  phoneNumber = phoneNumber.replace(/\D/g, "").substring(2);
 
   // Kiểm tra xem số đầu tiên có phải là số 0 hay không
   if (phoneNumber.charAt(0) !== "0") phoneNumber = "0" + phoneNumber;
@@ -68,27 +67,30 @@ router.post("/login-otp", async (req, res, next) => {
   // lệnh thêm người dùng
   const queryInsertPhone = `INSERT INTO users (phone) VALUES (?)`;
   try {
-    const userData = await query(queryCheckPhone, phoneNumber);
+    const userData = await query(queryCheckPhone, [phoneNumber]);
 
     if (userData.length === 0) {
-      await query(queryInsertPhone, phoneNumber);
+      await query(queryInsertPhone, [phoneNumber]);
       req.session.user = {
         phoneNumber: phoneNumber,
         name: "",
         email: "",
         picture: "",
       };
-      
-      res.redirect(process.env.CLIENT_URL);
+      setTimeout(()=>{
+        return res.status(200).json({message: "success"});
+      },1000);
     }
 
     req.session.user = {
       phoneNumber: phoneNumber,
-      name: userData[0].name,
-      email: userData[0].email,
+      name: userData[0].name ? userData[0].name : "",
+      email: userData[0].email ? userData[0].email : "",
       picture: "",
     };
-    res.redirect(process.env.CLIENT_URL);
+    setTimeout(()=>{
+      return res.status(200).json({message: "success"});
+    },1000);
   } catch (error) {
     console.log(error);
     res.status(500).json({ status: "failed" });

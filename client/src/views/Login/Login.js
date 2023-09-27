@@ -5,18 +5,18 @@ import {
   GoogleOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
-import { Modal, notification } from "antd";
+import { Input, Modal, message } from "antd";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import OtpInput from "otp-input-react";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
+  let navigate = useNavigate();
 
   const [check, setCheck] = useState(false);
 
@@ -79,9 +79,13 @@ const Login = () => {
     );
   }
 
-  const onSignup = () => {
+  const onSignup = async () => {
     if (numberPhone.length <= 0) {
       return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
+    }
+    const regex = new RegExp(/^(0[2-9])([0-9]{8})$/);
+    if (!regex.test(numberPhone)) {
+      return setErrorNumberPhone("Vui lòng nhập đúng định dạng số điện thoại!");
     }
     setConfirmLoading(true);
 
@@ -90,29 +94,23 @@ const Login = () => {
     }
     const appVerifier = window.recaptchaVerifier;
 
-    const formatPhone = "+" + numberPhone;
+    const formatPhone = "+84" + numberPhone;
 
-    signInWithPhoneNumber(auth, formatPhone, appVerifier)
+    await signInWithPhoneNumber(auth, formatPhone, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setTimeout(() => {
           setConfirmLoading(false);
           setOpenInputOTP(true);
           setErrorNumberPhone("");
-          notification.success({
-            message: "Thành công",
-            description: "Đã gửi mã OTP!",
-          });
+          message.success("Đã gửi mã OTP!");
         }, 2000);
       })
       .catch((error) => {
         console.log(error);
         setErrorNumberPhone("");
         setConfirmLoading(false);
-        notification.error({
-          message: "Thất bại",
-          description: "Gửi mã OTP không thành công!",
-        });
+        message.error("Gửi mã OTP không thành công!");
       });
   };
 
@@ -135,19 +133,18 @@ const Login = () => {
           setOpenModal(false);
           setOpenInputOTP(false);
           setErrorNumberPhone("");
-          notification.success({
-            message: "Thành công",
-            description: "Xác nhận thành công!",
-          });
+          setOTP("");
+          message.success("Xác nhận thành công!");
+        }, 1000);
+        setTimeout(() => {
+          navigate("/");
+          window.location.reload();
         }, 2000);
       }
     } catch (error) {
       console.log(error);
       setConfirmLoading(false);
-      notification.error({
-        message: "Thất bại",
-        description: "Xác nhận thất bại!",
-      });
+      message.success("Xác nhận thất bại!");
     }
   };
 
@@ -155,16 +152,7 @@ const Login = () => {
     setOpenModal(false);
     setOpenInputOTP(false);
     setErrorNumberPhone("");
-    // Đặt lại trạng thái số điện thoại và mã OTP
-    setNumberPhone("+84");
     setOTP("");
-    setConfirmLoading(false);
-  };
-
-  const cancelInputPhoneNumber = () => {
-    // Đặt lại trạng thái mã OTP
-    setOTP("");
-    setOpenInputOTP(false);
     setConfirmLoading(false);
   };
 
@@ -205,8 +193,8 @@ const Login = () => {
         open={openModal}
         onOk={openInputOTP ? handleConfirmOTP : onSignup}
         confirmLoading={confirmLoading}
-        onCancel={openInputOTP ? cancelInputPhoneNumber : handleCancel}
-        cancelText={openInputOTP ? "Trở lại" : "Hủy bỏ"}
+        onCancel={handleCancel}
+        cancelText={"Đóng"}
         closeIcon={false}
       >
         {openInputOTP ? (
@@ -216,13 +204,16 @@ const Login = () => {
             OTPLength={6}
             otpType="number"
             disabled={false}
+            className="input-otp"
           />
         ) : (
-          <PhoneInput
+          <Input
             value={numberPhone}
-            onChange={setNumberPhone}
+            onChange={(e) => {
+              setNumberPhone(e.target.value);
+            }}
             placeholder="Nhập số điện thoại tại đây."
-            country={"vn"}
+            className="input-phone"
           />
         )}
 
