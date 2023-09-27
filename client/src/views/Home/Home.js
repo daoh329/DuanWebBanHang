@@ -17,6 +17,7 @@ const { TabPane } = Tabs;
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
   const navigate = useNavigate();
 
@@ -76,9 +77,19 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/product/products`)
+    axios.get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then(response => {
         setProducts(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
+      .then(response => {
+        setProductsPhone(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -603,9 +614,68 @@ const Home = () => {
 
       {/* --------------------------------------- */}
 
+      {/* ------------------box sản phẩm Dien thoai------------------ */}
+      {productsPhone && productsPhone.length > 0 ? (
+        <div
+          className="product-container"
+          style={{
+            width: "80%",
+            margin: "0 auto",
+            marginTop: "20px",
+            backgroundSize: "cover",
+            backgroundColor: "#ededed",
+          }}
+        >
+          <div className="title-group">
+            <div className="products-title">Sản phẩm  </div>
+            <div className="views-all">
+            <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+               <i class="fa fa-chevron-right"></i> 
+               </div>
+          </div>
+          <div className="scroll-control-product">
+
+            {productsPhone &&
+              productsPhone.length > 0 &&
+              productsPhone.slice(startIndex, endIndex).map((item, index) => (
+                <div className="sanpham-card">
+                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                      {item.brand}
+                    </div>
+                  </div>
+                  <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                      {item.shortDescription}
+                    </h3>
+                  </div>
+
+                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                      {item.price}₫
+                    </div>
+          
+                  </div>
+                </div>
+              ))}
+
+          </div>
+          {/* Phân trang */}
+          <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
+            <Pagination
+              current={currentPage}
+              total={productsPhone.length}
+              pageSize={itemsPerPage}
+              onChange={handlePageChange}
+            />
+          </div>
+        </div>
+      ) : null}
 
 
-      {/* ------------------box sản phẩm ------------------ */}
+
+      {/* ------------------box sản phẩm laptop------------------ */}
       {products && products.length > 0 ? (
         <div
           className="product-container"
