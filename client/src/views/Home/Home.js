@@ -14,7 +14,9 @@ import {parse, stringify} from 'flatted';
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
 const { TabPane } = Tabs;
-
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
@@ -644,9 +646,8 @@ const Home = () => {
 
                   <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
                     <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {item.price}₫
+                      {formatCurrency(item.price)}
                     </div>
-          
                   </div>
                 </div>
               ))}
