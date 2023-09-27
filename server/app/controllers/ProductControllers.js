@@ -1,69 +1,77 @@
 const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
-const path = require('path')
+const path = require("path");
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
     var arrPathImage = [];
-    arrImage.forEach(image => {
-      const pathImage = `/images/${path.basename(image.path)}` ;
+    arrImage.forEach((image) => {
+      const pathImage = `/images/${path.basename(image.path)}`;
       arrPathImage.push(pathImage);
     });
-    const configuration = data.category === "Điện thoại" ? {
-      screen: data.screen,
-      resolution: data.resolution,
-      chip: data.chip,
-      ram: data.ram,
-      rom: data.rom,
-      screen: data.screen,
-      os: data.os,
-      pin: data.pin,
-      guarantee: data.guarantee,
-      demand: data.demand,
-      charging_port: data.charging_port,
-      sim_type: data.sim_type,
-      mobile_network: data.mobile_network,
-      rear_camera: data.rear_camera,
-      front_camera: data.front_camera,
-      wifi: data.wifi,
-      gps: data.gps,
-      bluetooth: data.bluetooth,
-      headphone_jack: data.headphone_jack,
-      size: data.size,
-      mass: data.mass,
-      accessory: data.accessory,
-    } : {
-      guarantee: data.guarantee,
-      demand: data.demand,
-      cpu: data.cpu,
-      ram: data.ram,
-      rom: data.rom,
-      screen: data.screen,
-      vga: data.vga,
-      os: data.os,
-      maximum_number_of_storage_ports: data.maximum_number_of_storage_ports,
-      M2_slot_type_supported: data.M2_slot_type_supported,
-      output_port: data.output_port,
-      connector: data.connector,
-      wireless_connectivity: data.wireless_connectivity,
-      keyboard: data.keyboard,
-      pin: data.pin,
-      mass: data.mass,
-      accessory: data.accessory,
-    }
+    const configuration =
+      data.category === "Điện thoại"
+        ? {
+            screen: data.screen,
+            resolution: data.resolution,
+            chip: data.chip,
+            ram: data.ram,
+            rom: data.rom,
+            screen: data.screen,
+            os: data.os,
+            pin: data.pin,
+            guarantee: data.guarantee,
+            demand: data.demand,
+            charging_port: data.charging_port,
+            sim_type: data.sim_type,
+            mobile_network: data.mobile_network,
+            rear_camera: data.rear_camera,
+            front_camera: data.front_camera,
+            wifi: data.wifi,
+            gps: data.gps,
+            bluetooth: data.bluetooth,
+            headphone_jack: data.headphone_jack,
+            size: data.size,
+            mass: data.mass,
+            accessory: data.accessory,
+          }
+        : {
+            guarantee: data.guarantee,
+            demand: data.demand,
+            cpu: data.cpu,
+            ram: data.ram,
+            rom: data.rom,
+            screen: data.screen,
+            vga: data.vga,
+            os: data.os,
+            maximum_number_of_storage_ports:
+              data.maximum_number_of_storage_ports,
+            M2_slot_type_supported: data.M2_slot_type_supported,
+            output_port: data.output_port,
+            connector: data.connector,
+            wireless_connectivity: data.wireless_connectivity,
+            keyboard: data.keyboard,
+            pin: data.pin,
+            mass: data.mass,
+            accessory: data.accessory,
+          };
     const configurationString = JSON.stringify(configuration);
     let nameP;
-    if(data.name==null||data.name==''){
-      nameP=data.brand+data.series_laptop+'';
-    }else{nameP=data.name}
-    
-    const sl_categoryid = `SELECT id AS Value FROM category where name = ?`
+    if (data.name == null || data.name == "") {
+      nameP = data.brand + data.series_laptop + "";
+    } else {
+      nameP = data.name;
+    }
+
+    const sl_categoryid = `SELECT id AS Value FROM category where name = ?`;
     const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
     const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
-    const is_productdetail = 'INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);'
-    const is_ProDetailColor = 'INSERT INTO prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);';
+    const is_productdetail =
+      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);";
+    const is_ProDetailColor =
+      "INSERT INTO prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);";
 
     // Hàm sử lí lỗi tập chung
     const handleError = (e, res, message) => {
@@ -72,22 +80,34 @@ class Product {
     };
 
     try {
-      const arrayCategoryid = await query(sl_categoryid,data.category)
-      const productValues = [nameP, data.price, data.shortDescription, arrayCategoryid[0].Value, data.status?1:0]
-      const resultP = await query(is_product,productValues)
-      const id_Product = resultP.insertId
-      for(const image of arrPathImage){
-        const galeryValues = [image, id_Product]
-        query(is_galery,galeryValues)
+      const arrayCategoryid = await query(sl_categoryid, data.category);
+      const productValues = [
+        nameP,
+        data.price,
+        data.shortDescription,
+        arrayCategoryid[0].Value,
+        data.status ? 1 : 0,
+      ];
+      const resultP = await query(is_product, productValues);
+      const id_Product = resultP.insertId;
+      for (const image of arrPathImage) {
+        const galeryValues = [image, id_Product];
+        query(is_galery, galeryValues);
       }
-      const PdValues = [data.quantity, data.brand, configurationString, data.description, id_Product]
-      const resultPD = await query(is_productdetail,PdValues)
-      const id_PD = resultPD.insertId
+      const PdValues = [
+        data.quantity,
+        data.brand,
+        configurationString,
+        data.description,
+        id_Product,
+      ];
+      const resultPD = await query(is_productdetail, PdValues);
+      const id_PD = resultPD.insertId;
       for (const x of data.color) {
-              const colorValues = [id_PD, x];
-              query(is_ProDetailColor,colorValues)
-            }
-      res.status(200).send('success')
+        const colorValues = [id_PD, x];
+        query(is_ProDetailColor, colorValues);
+      }
+      res.status(200).send("success");
     } catch (error) {
       handleError(error, res, { status: "failed" });
     }
@@ -95,9 +115,14 @@ class Product {
 
   async json(req, res) {
     // API: /product/json
-    const query = `SELECT * FROM product`;
+    const queryProduct = `SELECT product.id, product.name, product.price, product.status, productDetails.quantity, productDetails.created_at, category.name as category
+    FROM product
+    JOIN productDetails
+    JOIN category
+    ON product.id = productDetails.product_id and product.CategoryID = category.id;
+    `;
     // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
-    mysql.query(query, (err, result) => {
+    mysql.query(queryProduct, (err, result) => {
       if (err) throw err;
 
       // Chuyển đổi kết quả truy vấn thành chuỗi JSON
@@ -284,6 +309,29 @@ class Product {
       }
       res.status(200).json({ results });
     });
+  }
+
+  // disable product, API: /product/disable-and-enable
+  async disable (req, res){
+    try {
+      const {id, status} = req.body;
+      const queryDisable = `UPDATE product SET status = ? WHERE id = ?`
+      if (status === 0) {
+        await query(queryDisable, [1,id]);
+      }
+      else{
+        await query(queryDisable, [0,id]);
+      }
+      setTimeout(() => {
+        res.status(200).json({message: "success"});
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        res.status(500).json({message: "error"});
+      }, 1000);
+    }
+    
   }
 }
 module.exports = new Product();
