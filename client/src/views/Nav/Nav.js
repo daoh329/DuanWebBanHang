@@ -195,9 +195,7 @@ const App = (userDetails) => {
 
   return (
     <Layout>
-      <Affix offsetTop={0}>
-        <div>
-        <div className="danhmuc">
+              <div className="danhmuc">
           <a
             href="/sale"
             style={{
@@ -238,12 +236,6 @@ const App = (userDetails) => {
             nghiệp
           </a>
 
-
-
-
-
-
-
           <Dropdown overlay={
     <Menu>
     <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
@@ -262,14 +254,7 @@ const App = (userDetails) => {
             >
               <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
             </a>
-
-            
           </Dropdown>
-
-
-          
-          
-          
           <a
             href="/tin-tuc"
             style={{
@@ -283,6 +268,9 @@ const App = (userDetails) => {
             <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
           </a>
         </div>
+      <Affix offsetTop={0}>
+        <div>
+
 
           {/* <div className="hd-logo">
             <div className="logo-mobile">
