@@ -58,7 +58,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 1234px;
   margin: 0 auto;
 }
 
@@ -69,7 +69,7 @@
   /* Hiệu ứng khi hover */
   position: absolute;
   left: 0;
-  transform: translateY(-65%);
+  transform: translateY(-115%);
   display: flex;
   flex-direction: column;
   /* Hiển thị các hình ảnh dọc */
@@ -149,7 +149,7 @@
 .right-block {
   position: absolute;
   right: 0;
-  transform: translateY(-65%);
+  transform: translateY(-115%);
   display: flex;
   flex-direction: column;
   /* Hiển thị các hình ảnh dọc */
@@ -180,12 +180,13 @@
   // padding: 20px 0px 20px 0px;
   column-gap: 15px;
   // flex-wrap: nowrap;
-  width: 100%;
+  width: 1234px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .bottom-image {
@@ -498,7 +499,7 @@
 
   .phone-group {
     position: relative;
-    width: 80%;
+    width: 1234px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin: 0 auto;
     margin-top: 20px;
@@ -562,7 +563,7 @@
     display: flex;
     flex-wrap: wrap;
     font-size: 14px;
-    gap: nowrnal 2px;
+    gap: 5px;
     justify-content: space-between;
     line-height: 20px;
     padding: 2px 0px;
@@ -683,7 +684,7 @@
 
   .menu-nav-ul {
 
-    width: 80%;
+    width: 1234px;
     height: 100%;
     align-items: center;
     background-color: #ae69dd;
