@@ -2,6 +2,7 @@ require("dotenv").config();
 require("./config/createTable");
 const express = require("express");
 const route = require("./routes");
+const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 require("./config/db/mySQL");
 const path = require("path");
@@ -20,6 +21,7 @@ app.use(
   })
 );
 
+app.set('view engine', 'jade');
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -31,7 +33,7 @@ app.use(
   })
 );
 
-
+app.use(cookieParser());
 // Sử dụng bodyParser để phân tích cú pháp các yêu cầu đến
 app.use(bodyParser.json({ limit: "5mb" }));
 app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
