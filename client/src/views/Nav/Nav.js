@@ -9,9 +9,9 @@ import {
   Button,
   Popover,
   List,
+  Dropdown,
   Typography,
 } from "antd";
-import { Dropdown, Space } from "antd";
 import {
   DownOutlined,
   SmileOutlined,
@@ -125,12 +125,6 @@ const App = (userDetails) => {
   const profile = () => {
     navigate("/profile");
   };
-  const host = (
-    <Menu>
-      <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
-      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
-    </Menu>
-  );
   //
   const items = [
     {
@@ -202,6 +196,7 @@ const App = (userDetails) => {
   return (
     <Layout>
       <Affix offsetTop={0}>
+        <div>
         <div className="danhmuc">
           <a
             href="/sale"
@@ -243,7 +238,12 @@ const App = (userDetails) => {
             nghiệp
           </a>
 
-          <Dropdown overlay={host} placement="bottomRight">
+          <Dropdown overlay={
+    <Menu>
+    <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
+      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
+    </Menu>
+  } placement="bottomRight">
             <a
               href="/host"
               style={{
@@ -563,6 +563,7 @@ const App = (userDetails) => {
                     </Menu> */}
           </div>
         </Header>
+        </div>
       </Affix>
     </Layout>
   );
