@@ -201,7 +201,8 @@ const Home = () => {
         </Carousel>
         <div className="slider-overlay">
           <div className="slider-container">
-            <div className="left-block">
+            <div style={{width:'1234px', transform: 'translateY(-65%)',margin:'0 auto'}}>
+               <div className="left-block">
               {/* <div className="category-list">
                 {categories.map((category, index) => (
                   <li key={index} className="category-item">
@@ -233,6 +234,8 @@ const Home = () => {
                 alt="Hình ảnh"
               />
             </div>
+            </div>
+           
             {/* -------------------------- */}
             <div className="bottom-block">
               <img
@@ -264,8 +267,6 @@ const Home = () => {
       {/* ---------------menu-------------------- */}
       <nav className="menu-nav" >
         <div>
-
-       
         <ul className="menu-nav-ul">
           <li className="menu-nav-ul-li">
             <a className="li-a">
@@ -335,7 +336,7 @@ const Home = () => {
       <div
         className="tabsPane"
         style={{
-          width: "80%",
+          width: "1232px",
           margin: "0 auto",
           backgroundImage:
             "url('https://lh3.googleusercontent.com/kNQJhjNgt5WnorADIKUr1lQIkwlxmWnUfOARFP5TfYXldzRRkfFw3hbzbXEBZo-20klJuDRkUZkDWbypz2UmFj0LesbRckx-=rw-w1920')",
@@ -621,7 +622,7 @@ const Home = () => {
         <div
           className="product-container"
           style={{
-            width: "80%",
+            width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
             backgroundSize: "cover",
@@ -682,7 +683,7 @@ const Home = () => {
         <div
           className="product-container"
           style={{
-            width: "80%",
+            width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
             backgroundSize: "cover",
@@ -742,7 +743,7 @@ const Home = () => {
           style={{
             borderRadius: "5px",
             position: 'relative',
-            width: "80%",
+            width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
             backgroundColor: "white",

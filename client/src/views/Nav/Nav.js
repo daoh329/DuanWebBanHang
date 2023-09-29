@@ -49,7 +49,7 @@ const App = (userDetails) => {
       const editName = name.substring(0, firstSpace) + ' ' + name.split(' ')[1];
       // Nếu name dài hơn 15 kí tự, lấy 15 kí tự đầu tiên của editName + ...
       // Nếu name ngắn hơn 15 kí tự, giữ nguyên editName
-      return name.length > 15 ? editName.substring(0, 15)+"...": editName;
+      return name.length > 15 ? editName.substring(0, 15) + "..." : editName;
     } else {
       // Không có khoảng trắng
       // Nếu name dài hơn 15 kí tự, lấy 15 ký tự đầu tiên + ...
@@ -204,51 +204,10 @@ const App = (userDetails) => {
       <Affix offsetTop={0}>
         <div>
 
-        
-        <div className="danhmuc">
-          <a
-            href="/sale"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <TagOutlined style={{ marginRight: "8px" }} />
-            Khuyến mãi
-          </a>
-          <a
-            href="/showroom"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
-            showroom
-          </a>
-          <a
-            href="/support"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
-            nghiệp
-          </a>
 
-          <Dropdown overlay={host} placement="bottomRight">
+          <div className="danhmuc">
             <a
-              href="/host"
+              href="/sale"
               style={{
                 marginRight: "20px",
                 color: "#333",
@@ -257,71 +216,112 @@ const App = (userDetails) => {
                 alignItems: "center",
               }}
             >
-              <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+              <TagOutlined style={{ marginRight: "8px" }} />
+              Khuyến mãi
             </a>
-          </Dropdown>
-          <a
-            href="/tin-tuc"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
-          </a>
-        </div>
-
-        <div className="hd-logo">
-          <div className="logo-mobile">
-            <span className="logo-span">
-              {" "}
-              <NavLink to="/">
-                <img src={Hinh} style={{ width: "100%" }} alt="Logo"></img>
-              </NavLink>
-            </span>
-          </div>
-          <div className="user-mobile">
-            <Dropdown overlay={menu}>
-              {user ? (
-                <Avatar src={user.picture} />
-              ) : (
-                <Avatar
-                  icon={<UserOutlined />}
-                  style={{ backgroundColor: "#ae69dd" }}
-                />
-              )}
-            </Dropdown>
-          </div>
-        </div>
-
-        <Header
-          className="header"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            backgroundColor: "#ffffff",
-          }}
-        >
-          <div className="navgation">
-            <div
-              className="logo"
-              style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
+            <a
+              href="/showroom"
+              style={{
+                marginRight: "20px",
+                color: "#333",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              <span style={{ position: "relative" }}>
+              <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
+              showroom
+            </a>
+            <a
+              href="/support"
+              style={{
+                marginRight: "20px",
+                color: "#333",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
+              nghiệp
+            </a>
+
+            <Dropdown overlay={host} placement="bottomRight">
+              <a
+                href="/host"
+                style={{
+                  marginRight: "20px",
+                  color: "#333",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+              </a>
+            </Dropdown>
+            <a
+              href="/tin-tuc"
+              style={{
+                marginRight: "20px",
+                color: "#333",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
+            </a>
+          </div>
+
+          {/* <div className="hd-logo">
+            <div className="logo-mobile">
+              <span className="logo-span">
                 {" "}
                 <NavLink to="/">
-                  <img
-                    src={Hinh}
-                    style={{ width: "130%", height: "130%" }}
-                  ></img>
+                  <img src={Hinh} style={{ width: "100%" }} alt="Logo"></img>
                 </NavLink>
               </span>
             </div>
-            {/* <div
+            <div className="user-mobile">
+              <Dropdown overlay={menu}>
+                {user ? (
+                  <Avatar src={user.picture} />
+                ) : (
+                  <Avatar
+                    icon={<UserOutlined />}
+                    style={{ backgroundColor: "#ae69dd" }}
+                  />
+                )}
+              </Dropdown>
+            </div>
+          </div> */}
+
+          <Header
+            className="header"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              backgroundColor: "#ffffff",
+            }}
+          >
+            <div className="navgation">
+              <div
+                className="logo"
+                style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
+              >
+                <span style={{ position: "relative" }}>
+                  {" "}
+                  <NavLink to="/">
+                    <img
+                      src={Hinh}
+                      style={{ width: "130%", height: "130%" }}
+                    ></img>
+                  </NavLink>
+                </span>
+              </div>
+              {/* <div
             className="search-container"
             style={{
               flex: "auto",
@@ -337,7 +337,7 @@ const App = (userDetails) => {
             />
           </div> */}
 
-            {/* <div className="hamburger-menu">
+              {/* <div className="hamburger-menu">
             <input id="menu__toggle" type="checkbox" />
             <label className="menu__btn" htmlFor="menu__toggle">
               <span />
@@ -373,7 +373,7 @@ const App = (userDetails) => {
             </ul>
           </div> */}
 
-            {/* <div className="timkiem">
+              {/* <div className="timkiem">
             <Input
               placeholder="Tìm kiếm"
               className="custom-timkiem"
@@ -398,7 +398,7 @@ const App = (userDetails) => {
             <input placeholder="search" type="search" className="input" />
           </div> */}
 
-            <div className="search-container">
+              {/* <div className="search-container">
               <Input.Search
                 placeholder="Tìm kiếm"
                 className="custom-input-search"
@@ -406,144 +406,169 @@ const App = (userDetails) => {
                 onChange={handleInputChange}
                 onSearch={handleSearch}
               />
-            </div>
-            <div
-              className="right-icons"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <Badge
-                className="thongbao"
-                count={5}
-                style={{
-                  marginTop: "10px",
-                  marginRight: "10px",
-                  backgroundColor: "#f50",
-                  color: "#fff",
-                }}
-              >
-                <BellOutlined
-                  style={{ fontSize: "24px", color: "#ae69dd", margin: "10px" }}
-                />
-              </Badge>
-              <Popover
-                content={
-                  <div
-                    style={{
-                      width: "300px",
-                      maxHeight: "200px",
-                      overflowY: "auto",
-                      scrollbarWidth: "none",
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      style={{ width: "100%", marginTop: "10px" }}
-                    >
-                      <NavLink to="/cart">Xem giỏ hàng</NavLink>
-                    </Button>
-                    <List
-                      itemLayout="horizontal"
-                      dataSource={cart}
-                      renderItem={(selectedItems) => (
-                        <List.Item
-                          actions={[
-                            <Button
-                              type="danger"
-                              icon={<DeleteOutlined />}
-                              onClick={() => removeFromCart(selectedItems.id)}
-                            ></Button>,
-                          ]}
-                        >
-                          <List.Item.Meta
-                            avatar={<Avatar src={selectedItems.thumbnail} />}
-                            title={
-                              selectedItems.shortDescription.length > 20
-                                ? selectedItems.shortDescription.substring(0, 20) + "..."
-                                : selectedItems.shortDescription
-                            }
-                            description={
-                              <>
-                                <div>Giá: {selectedItems.price} ₫</div>
-                                <div>
-                                  Số lượng: {selectedItems.quantity}
-                                </div>{" "}
-                                {/* Hiển thị số lượng */}
-                              </>
-                            }
-                          />
-                        </List.Item>
-                      )}
-                    />
-                    <Button
-                      type="primary"
-                      style={{ width: "100%", marginTop: "10px" }}
-                    >
-                      <NavLink to="/cart">Xem giỏ hàng</NavLink>
-                    </Button>
+            </div> */}
+              <div style={{ padding: "8px", minWidth: 0, flex: "1 1 auto" }} className="teko-col css-388q1u">
+                <div className="css-cssveg">
+                  <div className="css-17xgviv">
+                    <div data-content-region-name="headerBar" data-track-content="true" data-content-name="searchBox" className="css-7wh3a0">
+                      <input
+                        className="search-input css-7jjcju"
+                        placeholder="Nhập từ khoá cần tìm"
+                        role="searchbox"
+                        aria-label="Search"
+                        value={searchQuery}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div data-content-region-name="headerBar" data-track-content="true" data-content-name="searchButton" className="css-7kp13n">
+                      <button className="search-icon css-193nd6m" aria-label="Search" onClick={handleSearch}>
+                        <span size="26" color="#616161" className="css-1dn5jdn"></span>
+                      </button>
+                    </div>
                   </div>
-                }
-                title="Giỏ hàng"
-                trigger="hover"
+                  <div className="css-1nb0ewh"></div>
+                </div>
+              </div>
+
+              <div
+                className="right-icons"
+                style={{ display: "flex", alignItems: "center" , gap:'1px'}}
               >
+                  <Dropdown overlay={menu} className="avt-user">
+                  {user ? (
+                    <div
+                      style={{
+
+                        justifyContent: "center",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        
+                      }}
+                    >
+                      <Avatar src={user.picture} />
+                      <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
+                        {
+                          formatUserName(user.name)
+                        }
+                      </span>
+                    </div>
+                  ) : (
+                    <Avatar
+                      icon={<UserOutlined />}
+                      style={{ backgroundColor: "#ae69dd", margin: "10px" ,fontSize:'24px'}}
+                    />
+                  )}
+                </Dropdown>
                 <Badge
-                  count={cart.length}
-                  style={{ marginRight: "10px", marginTop: "10px" }}
+                  className="thongbao"
+                  count={5}
+                  style={{
+                    marginTop: "10px",
+                    marginRight: "10px",
+                    backgroundColor: "#f50",
+                    color: "#fff",
+                  }}
                 >
-                  <ShoppingCartOutlined
-                    style={{
-                      fontSize: "30px",
-                      color: "#ae69dd",
-                      margin: "10px",
-                    }}
+                  <BellOutlined
+                    style={{ fontSize: "30px", color: "#ae69dd", margin: "10px" }}
                   />
                 </Badge>
-              </Popover>
-              <Badge
-                className="tracuu"
-                style={{
-                  marginTop: "10px",
-                  marginRight: "10px",
-                  backgroundColor: "#f50",
-                  color: "#fff",
-                }}
-              >
-                <NavLink to="/checkSP">
-                  <SolutionOutlined
-                    style={{
-                      fontSize: "24px",
-                      color: "#ae69dd",
-                      margin: "10px",
-                    }}
-                  />
-                </NavLink>
-              </Badge>
-              <Dropdown overlay={menu} className="avt-user">
-                {user ? (
-                  <div
-                    style={{
-                     
-                      justifyContent: "center",
-                      alignItems: "center",
-                      cursor: "pointer",
-                    }}
+                <Popover
+                  content={
+                    <div
+                      style={{
+                        width: "300px",
+                        maxHeight: "200px",
+                        overflowY: "auto",
+                        scrollbarWidth: "none",
+                      }}
+                    >
+                      <Button
+                        type="primary"
+                        style={{ width: "100%", marginTop: "10px" }}
+                      >
+                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                      </Button>
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={cart}
+                        renderItem={(selectedItems) => (
+                          <List.Item
+                            actions={[
+                              <Button
+                                type="danger"
+                                icon={<DeleteOutlined />}
+                                onClick={() => removeFromCart(selectedItems.id)}
+                              ></Button>,
+                            ]}
+                          >
+                            <List.Item.Meta
+                              avatar={<Avatar src={selectedItems.thumbnail} />}
+                              title={
+                                selectedItems.shortDescription.length > 20
+                                  ? selectedItems.shortDescription.substring(0, 20) + "..."
+                                  : selectedItems.shortDescription
+                              }
+                              description={
+                                <>
+                                  <div>Giá: {selectedItems.price} ₫</div>
+                                  <div>
+                                    Số lượng: {selectedItems.quantity}
+                                  </div>{" "}
+                                  {/* Hiển thị số lượng */}
+                                </>
+                              }
+                            />
+                          </List.Item>
+                        )}
+                      />
+                      <Button
+                        type="primary"
+                        style={{ width: "100%", marginTop: "10px" }}
+                      >
+                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                      </Button>
+                    </div>
+                  }
+                  title="Giỏ hàng"
+                  trigger="hover"
+                >
+                  <Badge
+                    count={cart.length}
+                    style={{ marginRight: "10px", marginTop: "10px" }}
                   >
-                    <Avatar src={user.picture} />
-                    <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                      {
-                        formatUserName(user.name)
-                      }
-                    </span>
-                  </div>
-                ) : (
-                  <Avatar
-                    icon={<UserOutlined />}
-                    style={{ backgroundColor: "#ae69dd", margin: "10px" }}
-                  />
-                )}
-              </Dropdown>
-            </div>
+                    <ShoppingCartOutlined
+                      style={{
+                        fontSize: "30px",
+                        color: "#ae69dd",
+                        margin: "10px",
+                      }}
+                    />
+                  </Badge>
+                </Popover>
+                {/* <Badge
+                  className="tracuu"
+                  style={{
+                    marginTop: "10px",
+                    marginRight: "10px",
+                    backgroundColor: "#f50",
+                    color: "#fff",
+                  }}
+                >
+                  <NavLink to="/checkSP">
+                    <SolutionOutlined
+                      style={{
+                        fontSize: "24px",
+                        color: "#ae69dd",
+                        margin: "10px",
+                      }}
+                    />
+                  </NavLink>
+                </Badge> */}
+              
+              </div>
 
-            {/* <Menu
+              {/* <Menu
                         theme="dark"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
@@ -564,8 +589,8 @@ const App = (userDetails) => {
                             <Menu.Item key="4">Danh mục 4</Menu.Item>
                         </Menu.SubMenu>
                     </Menu> */}
-          </div>
-        </Header>
+            </div>
+          </Header>
         </div>
       </Affix>
     </Layout>
