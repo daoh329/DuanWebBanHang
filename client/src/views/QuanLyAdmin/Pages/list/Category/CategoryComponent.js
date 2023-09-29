@@ -3,8 +3,8 @@ import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Modal, notification, Spin, Table } from "antd";
-
+import { Modal, notification, Spin, Table, Button } from "antd";
+import {DeleteOutlined,EditOutlined} from '@ant-design/icons';
 function Category() {
   // Tạo modal show tiến trình thêm sản phẩm (Call API)
   // Tạo biến trạng thái của modal
@@ -12,33 +12,22 @@ function Category() {
 
   const formik = useFormik({
     initialValues: {
-      category:"",
+      name: "",
     },
     validationSchema: Yup.object().shape({
-      category: Yup.string().required("Vui lòng nhập tên category"),
+      name: Yup.string().required("Vui lòng nhập tên category"),
     }),
     onSubmit: async (values) => {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/category/add`;
-      const formData = new FormData();
-      // Lặp qua các trường dữ liệu và thêm chúng vào formData
-      for (const fieldName in values) {
-        if (Object.prototype.hasOwnProperty.call(values, fieldName)) {
-          const fieldValue = values[fieldName];
-          formData.append(fieldName, fieldValue);
-        }
-      }
       // call API
       await axios
-        .post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(url, values)
         .then((res) => {
           if (res.status === 200) {
             const timer = setTimeout(() => {
               setIsModalOpen(false);
+              getcategory()
               // Hiển thị thông báo thành công
               notification.success({
                 message: "Thành công",
@@ -102,19 +91,13 @@ function Category() {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'action',
-      render:
-        <span>
-          {/* {record.status === 'discontinued' ? (
-                    <Button className="cancel-button" style={{ backgroundcategory: 'red', category: 'white' }} onClick={() => handleCancelOrder(record)}>
-                        discontinued
-                    </Button>
-                ): record.status === '' (
-                    <Button className="confirm-button" style={{ backgroundcategory: 'green', category: 'white' }} onClick={() => handleConfirmOrder(record)}>
-                        Xác nhận
-                    </Button>
-                )} */}
-        </span>
-
+      render:()=>(<span>
+          <Button type={{backgroundcolor:'green'}} > <EditOutlined />
+          </Button>
+          <Button className="confirm-button" > <DeleteOutlined />
+          </Button>
+        </span>)
+        
     },
   ];
 
@@ -127,40 +110,45 @@ function Category() {
           <h3 style={{ fontWeight: "bold" }}>Category</h3>
           <Table columns={columns} dataSource={category} />
         </div>
-        {/* form */}
-        <form
-          className="form"
-          id="form-create-category"
-          onSubmit={formik.handleSubmit}
-        >
-          <div className="page2-control">
-            <h3 style={{ fontWeight: "bold" }}>Thêm màu</h3>
+        <div className="page2-control">
+          {/* form */}
+          <form
+            className="form"
+            id="form-create-category"
+            onSubmit={formik.handleSubmit}
+          >
+
+            <h3 style={{ fontWeight: "bold" }}>Thêm danh mục</h3>
             {/* category */}
             <div className="form-group">
               <label className="form-label">category</label>
               <input
                 type="text"
-                name="category"
-                id="category"
+                name="name"
+                id="name"
                 className="form-control"
-                value={formik.values.category}
+                value={formik.values.name}
                 onChange={formik.handleChange}
               ></input>
-              {formik.errors.category && (
-                <span className="form-message">{formik.errors.category}</span>
+              {formik.errors.name && (
+                <span className="form-message">{formik.errors.name}</span>
               )}
-            </div>
-          </div>
-          <Modal
-            open={isModalOpen}
-            footer={null}
-            closeIcon={null}
-          >
-            <Spin tip="Đang tải lên..." spinning={true}>
-              <div style={{ minHeight: "50px" }} className="content" />
-            </Spin>
-          </Modal>
-        </form>
+            </div><button type="submit" className="btn-submit-form">
+              Xác nhận
+            </button>
+
+
+            <Modal
+              open={isModalOpen}
+              footer={null}
+              closeIcon={null}
+            >
+              <Spin tip="Đang tải lên..." spinning={true}>
+                <div style={{ minHeight: "50px" }} className="content" />
+              </Spin>
+            </Modal>
+          </form>
+        </div>
       </div>
     </div>
   );

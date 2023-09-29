@@ -10,13 +10,13 @@ class Color {
         return res.status(400).json({ message: 'Tên màu không được để trống' });
       }
 
-      const sql = 'INSERT INTO colors (name) VALUES (?)';
+      const sql = 'INSERT INTO color (name) VALUES (?)';
       mysql.query(sql, [name], (error, results) => {
         if (error) {
           console.error('Lỗi khi thêm màu:', error);
           return res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm màu' });
         }
-        return res.status(201).json({ message: 'Màu đã được thêm thành công'});
+        return res.status(200).json('success');
       });
     } catch (error) {
       console.error('Lỗi:', error);
@@ -27,14 +27,14 @@ class Color {
   // '/color/update/:oldname'
   async update(req, res) {
     try {
-      const { olname } = req.params;
+      const { oldname } = req.params;
       const { nwname } = req.body;
 
       if (!nwname) {
         return res.status(400).json({ message: 'Tên màu không được để trống' });
       }
 
-      const sql = 'UPDATE colors SET name = ? WHERE name = ?';
+      const sql = 'UPDATE color SET name = ? WHERE name = ?';
       mysql.query(sql, [nwname, olname], (error, results) => {
         if (error) {
           console.error('Lỗi khi sửa màu:', error);
@@ -58,7 +58,7 @@ class Color {
     try {
       const { name } = req.params;
 
-      const sql = 'DELETE FROM colors WHERE name = ?';
+      const sql = 'DELETE FROM color WHERE name = ?';
       mysql.query(sql, [id], (error, results) => {
         if (error) {
           console.error('Lỗi khi xóa màu:', error);
@@ -77,17 +77,17 @@ class Color {
     }
   }
 
-  // '/color/get'
+  // '/color'
   async get(req, res) {
     try {
-      const sql = 'SELECT * FROM colors';
+      const sql = 'SELECT * FROM color';
       mysql.query(sql, (error, results) => {
         if (error) {
           console.error('Danh sách màu:', error);
           return res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy danh sách màu' });
         }
 
-        return res.status(200).json({ message: 'Danh sách màu đã được lấy thành công', colors: results });
+        return res.status(200).json({ results });
       });
     } catch (error) {
       console.error('Lỗi:', error);

@@ -12,31 +12,20 @@ function Brand() {
 
   const formik = useFormik({
     initialValues: {
-      brand:"",
+      name: "",
     },
     validationSchema: Yup.object().shape({
-      brand: Yup.string().required("Vui lòng nhập tên brand"),
+      name: Yup.string().required("Vui lòng nhập tên brand"),
     }),
     onSubmit: async (values) => {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/brand/add`;
-      const formData = new FormData();
-      // Lặp qua các trường dữ liệu và thêm chúng vào formData
-      for (const fieldName in values) {
-        if (Object.prototype.hasOwnProperty.call(values, fieldName)) {
-          const fieldValue = values[fieldName];
-          formData.append(fieldName, fieldValue);
-        }
-      }
       // call API
       await axios
-        .post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(url, values)
         .then((res) => {
           if (res.status === 200) {
+            getbrand()
             const timer = setTimeout(() => {
               setIsModalOpen(false);
               // Hiển thị thông báo thành công
@@ -46,6 +35,7 @@ function Brand() {
               });
             }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
             // Xóa timer khi component bị hủy
+
             return () => clearTimeout(timer);
           } else {
             const timer = setTimeout(() => {
@@ -102,18 +92,20 @@ function Brand() {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'action',
-      render:
+      render: () => (
         <span>
-          {/* {record.status === 'discontinued' ? (
-                    <Button className="cancel-button" style={{ backgroundbrand: 'red', brand: 'white' }} onClick={() => handleCancelOrder(record)}>
-                        discontinued
-                    </Button>
-                ): record.status === '' (
-                    <Button className="confirm-button" style={{ backgroundbrand: 'green', brand: 'white' }} onClick={() => handleConfirmOrder(record)}>
-                        Xác nhận
-                    </Button>
-                )} */}
+
+          {/* <Button className="cancel-button" style={{ backgroundbrand: 'red', brand: 'white' }}>
+            discontinued
+          </Button>
+
+          <Button className="confirm-button" style={{ backgroundbrand: 'green', brand: 'white' }}>
+            Xác nhận
+          </Button> */}
+
         </span>
+      )
+
 
     },
   ];
@@ -124,43 +116,48 @@ function Brand() {
       <div className="page-group">
         {/* list */}
         <div className="page1-control">
-          <h3 style={{ fontWeight: "bold" }}>brand</h3>
+          <h3 style={{ fontWeight: "bold" }}>Brand</h3>
           <Table columns={columns} dataSource={brand} />
         </div>
         {/* form */}
-        <form
-          className="form"
-          id="form-create-brand"
-          onSubmit={formik.handleSubmit}
-        >
-          <div className="page2-control">
-            <h3 style={{ fontWeight: "bold" }}>Thêm màu</h3>
+        <div className="page2-control">
+          <form
+            className="form"
+            id="form-create-brand"
+            onSubmit={formik.handleSubmit}
+          >
+
+            <h3 style={{ fontWeight: "bold" }}>Thêm Brand</h3>
             {/* brand */}
             <div className="form-group">
               <label className="form-label">brand</label>
               <input
                 type="text"
-                name="brand"
-                id="brand"
+                name="name"
+                id="name"
                 className="form-control"
-                value={formik.values.brand}
+                value={formik.values.name}
                 onChange={formik.handleChange}
               ></input>
-              {formik.errors.brand && (
-                <span className="form-message">{formik.errors.brand}</span>
+              {formik.errors.name && (
+                <span className="form-message">{formik.errors.name}</span>
               )}
+
             </div>
-          </div>
-          <Modal
-            open={isModalOpen}
-            footer={null}
-            closeIcon={null}
-          >
-            <Spin tip="Đang tải lên..." spinning={true}>
-              <div style={{ minHeight: "50px" }} className="content" />
-            </Spin>
-          </Modal>
-        </form>
+            <button type="submit" className="btn-submit-form">
+              Xác nhận
+            </button>
+            <Modal
+              open={isModalOpen}
+              footer={null}
+              closeIcon={null}
+            >
+              <Spin tip="Đang tải lên..." spinning={true}>
+                <div style={{ minHeight: "50px" }} className="content" />
+              </Spin>
+            </Modal>
+          </form>
+        </div>
       </div>
     </div>
   );

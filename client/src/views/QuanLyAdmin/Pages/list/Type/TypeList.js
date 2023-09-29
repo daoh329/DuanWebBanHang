@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./style.css";
-import Color from "../Category/CategoryComponent";
-import Category from "../Color/ColorComponent";
+import Category from "../Category/CategoryComponent";
+import Color from "../ColorComponent/ColorComponent";
 import Brand from "../Brand/BrandComponent"
 function TypeProduct() {
   const [state, setState] = useState("");
