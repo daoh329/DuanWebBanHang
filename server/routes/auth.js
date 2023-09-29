@@ -4,7 +4,6 @@ const { query } = require("../util/callbackToPromise");
 
 // LOGIN GOOGLE
 router.get("/login/success", (req, res) => {
-  console.log(req.session.user);
   if (req.user) {
     res.status(200).json({
       error: false,

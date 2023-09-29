@@ -180,6 +180,14 @@ class Product {
     }
   }
 
+  // Cập nhật sản phẩm
+  async Update(req, res){
+    // API: /product/update/:id
+    console.log(req.body);
+    console.log(req.params.id);
+    res.status(200).json({message: "success"});
+  }
+
   //Truy Vấn Laptop hiển thị Home
   async QueryProductsLaptop(req, res) {
     const query = `

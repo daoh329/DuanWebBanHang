@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Tag, Popconfirm, Modal } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
-import InputFrom from "./InputFrom";
+import LaptopInputFrom from "./LaptopUpdate/LaptopInputFrom";
 
 function Product() {
   const [Product, setProduct] = useState([]);
@@ -14,7 +14,6 @@ function Product() {
       .get(`${process.env.REACT_APP_API_URL}/product/json`)
       .then((res) => {
         setProduct(res.data);
-        console.log(res.data);
       })
       .catch((error) => console.log(error));
   };
@@ -69,14 +68,14 @@ function Product() {
     },
     {
       title: "Hành động",
-      key: "id",
-      dataIndex: "id",
-      render: (id, record) => {
+      key: "action",
+      // dataIndex: "id",
+      render: (_, record) => {
         async function handleDisableAndEnable() {
           try {
             await axios.post(
               `${process.env.REACT_APP_API_URL}/product/disable-and-enable`,
-              { id, status: record.status }
+              { id: record.id, status: record.status }
             );
             window.location.reload();
           } catch (error) {
@@ -118,12 +117,12 @@ function Product() {
             ) : (
               <Popconfirm
                 title="Cảnh báo!!!"
-                description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
+                description="Bạn có chắc chắn muốn kích hoạt sản phẩm này?"
                 onConfirm={handleDisableAndEnable}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button danger>Kích hoạt</Button>
+                <Button >Kích hoạt</Button>
               </Popconfirm>
             )}
             <Button className="confirm-button" onClick={handleUpdate}>
@@ -135,7 +134,7 @@ function Product() {
               onCancel={handleCancel}
               footer={false}
             >
-              <InputFrom/>
+              {/* <LaptopInputFrom idProduct={}/> */}
             </Modal>
           </div>
         );
