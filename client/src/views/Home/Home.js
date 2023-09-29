@@ -193,7 +193,7 @@ const Home = () => {
                 src={image}
                 alt={`Slide ${index}`}
 
-                style={{ width: "100%", height: "auto", objectFitfit: 'cover' }}
+                style={{ width: "100%", height: "450px", objectFitfit: 'cover' }}
 
               />
             </div>

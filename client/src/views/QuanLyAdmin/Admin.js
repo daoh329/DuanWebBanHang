@@ -160,9 +160,7 @@ function Admin() {
 
       ],
     },
-    {
-      type: 'divider',
-    },
+    
   ];
 
   const menuItems = menuData.map((item) => {
@@ -182,8 +180,6 @@ function Admin() {
           <Link to={item.route}>{item.label}</Link>
         </Menu.Item>
       );
-    } else if (item.type === 'divider') {
-      return <Menu.Divider key={item.key} />;
     }
     return null;
   });
