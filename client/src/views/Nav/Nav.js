@@ -452,7 +452,7 @@ const App = (userDetails) => {
                           ]}
                         >
                           <List.Item.Meta
-                            avatar={<Avatar src={selectedItems.thumbnail} />}
+                            avatar={<Avatar src={process.env.REACT_APP_API_URL+selectedItems.thumbnail} />}
                             title={
                               selectedItems.shortDescription.length > 20
                                 ? selectedItems.shortDescription.substring(0, 20) + "..."
