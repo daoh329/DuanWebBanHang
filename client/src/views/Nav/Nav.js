@@ -29,7 +29,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
-import Hinh from "../../../src/assets/logo4.png";
+import Hinh from "../../../src/assets/DINHMINH.VN.gif";
 import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
@@ -195,81 +195,82 @@ const App = (userDetails) => {
 
   return (
     <Layout>
+      <div className="danhmuc">
+        <a
+          href="/sale"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <TagOutlined style={{ marginRight: "8px" }} />
+          Khuyến mãi
+        </a>
+        <a
+          href="/showroom"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
+          showroom
+        </a>
+        <a
+          href="/support"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
+          nghiệp
+        </a>
+
+        <Dropdown overlay={
+          <Menu>
+            <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
+            <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
+          </Menu>
+        } placement="bottomRight">
+          <a
+            href="/host"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
+          </a>
+        </Dropdown>
+        <a
+          href="/tin-tuc"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
+        </a>
+      </div>
+
       <Affix offsetTop={0}>
         <div>
-        <div className="danhmuc">
-          <a
-            href="/sale"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <TagOutlined style={{ marginRight: "8px" }} />
-            Khuyến mãi
-          </a>
-          <a
-            href="/showroom"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
-            showroom
-          </a>
-          <a
-            href="/support"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
-            nghiệp
-          </a>
-
-          <Dropdown overlay={
-    <Menu>
-    <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
-      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
-    </Menu>
-  } placement="bottomRight">
-            <a
-              href="/host"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
-            </a>
-          </Dropdown>
-          <a
-            href="/tin-tuc"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
-          </a>
-        </div>
 
           {/* <div className="hd-logo">
             <div className="logo-mobile">
@@ -304,20 +305,23 @@ const App = (userDetails) => {
             }}
           >
             <div className="navgation">
-              <div
-                className="logo"
-                style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
-              >
-                <span style={{ position: "relative" }}>
-                  {" "}
+              <div className="logo" style={{ width: "200px", marginRight: "16px", color: "#ffffff" }}>
+                <span style={{ position: "relative", display: "block", width: "100%", height: "100%" }}>
                   <NavLink to="/">
                     <img
                       src={Hinh}
-                      style={{ width: "130%", height: "130%" }}
-                    ></img>
+                      style={{
+                        maxWidth: "100%", // Giới hạn chiều rộng tối đa của ảnh
+                        height: "50px", // Tự động tính tỷ lệ chiều cao dựa trên tỷ lệ chiều rộng
+                        objectFit: "cover", // Cắt và thay đổi tỷ lệ hình ảnh để vừa với phần tử cha
+                        width: "100%", // Đảm bảo ảnh chiếm toàn bộ chiều rộng của phần tử cha
+                      }}
+                      alt="Logo"
+                    />
                   </NavLink>
                 </span>
               </div>
+
               {/* <div
             className="search-container"
             style={{
@@ -429,9 +433,9 @@ const App = (userDetails) => {
 
               <div
                 className="right-icons"
-                style={{ display: "flex", alignItems: "center" , gap:'1px'}}
+                style={{ display: "flex", alignItems: "center", gap: '1px' }}
               >
-                  <Dropdown overlay={menu} className="avt-user">
+                <Dropdown overlay={menu} className="avt-user">
                   {user ? (
                     <div
                       style={{
@@ -439,7 +443,7 @@ const App = (userDetails) => {
                         justifyContent: "center",
                         alignItems: "center",
                         cursor: "pointer",
-                        
+
                       }}
                     >
                       <Avatar src={user.picture} />
@@ -452,7 +456,7 @@ const App = (userDetails) => {
                   ) : (
                     <Avatar
                       icon={<UserOutlined />}
-                      style={{ backgroundColor: "#ae69dd", margin: "10px" ,fontSize:'24px'}}
+                      style={{ backgroundColor: "#ae69dd", margin: "10px", fontSize: '24px' }}
                     />
                   )}
                 </Dropdown>
@@ -500,7 +504,7 @@ const App = (userDetails) => {
                             ]}
                           >
                             <List.Item.Meta
-                              avatar={<Avatar src={selectedItems.thumbnail} />}
+                              avatar={<Avatar src={process.env.REACT_APP_API_URL + selectedItems.thumbnail} />}
                               title={
                                 selectedItems.shortDescription.length > 20
                                   ? selectedItems.shortDescription.substring(0, 20) + "..."
@@ -562,7 +566,7 @@ const App = (userDetails) => {
                     />
                   </NavLink>
                 </Badge> */}
-              
+
               </div>
 
               {/* <Menu
