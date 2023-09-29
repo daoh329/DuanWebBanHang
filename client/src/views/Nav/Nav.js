@@ -9,9 +9,9 @@ import {
   Button,
   Popover,
   List,
+  Dropdown,
   Typography,
 } from "antd";
-import { Dropdown, Space } from "antd";
 import {
   DownOutlined,
   SmileOutlined,
@@ -125,12 +125,6 @@ const App = (userDetails) => {
   const profile = () => {
     navigate("/profile");
   };
-  const host = (
-    <Menu>
-      <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
-      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
-    </Menu>
-  );
   //
   const items = [
     {
@@ -203,11 +197,55 @@ const App = (userDetails) => {
     <Layout>
       <Affix offsetTop={0}>
         <div>
+        <div className="danhmuc">
+          <a
+            href="/sale"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <TagOutlined style={{ marginRight: "8px" }} />
+            Khuyến mãi
+          </a>
+          <a
+            href="/showroom"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
+            showroom
+          </a>
+          <a
+            href="/support"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
+            nghiệp
+          </a>
 
-
-          <div className="danhmuc">
+          <Dropdown overlay={
+    <Menu>
+    <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
+      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
+    </Menu>
+  } placement="bottomRight">
             <a
-              href="/sale"
+              href="/host"
               style={{
                 marginRight: "20px",
                 color: "#333",
@@ -216,63 +254,22 @@ const App = (userDetails) => {
                 alignItems: "center",
               }}
             >
-              <TagOutlined style={{ marginRight: "8px" }} />
-              Khuyến mãi
+              <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
             </a>
-            <a
-              href="/showroom"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
-              showroom
-            </a>
-            <a
-              href="/support"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
-              nghiệp
-            </a>
-
-            <Dropdown overlay={host} placement="bottomRight">
-              <a
-                href="/host"
-                style={{
-                  marginRight: "20px",
-                  color: "#333",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
-              </a>
-            </Dropdown>
-            <a
-              href="/tin-tuc"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
-            </a>
-          </div>
+          </Dropdown>
+          <a
+            href="/tin-tuc"
+            style={{
+              marginRight: "20px",
+              color: "#333",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
+          </a>
+        </div>
 
           {/* <div className="hd-logo">
             <div className="logo-mobile">
@@ -589,8 +586,10 @@ const App = (userDetails) => {
                             <Menu.Item key="4">Danh mục 4</Menu.Item>
                         </Menu.SubMenu>
                     </Menu> */}
+
             </div>
           </Header>
+
         </div>
       </Affix>
     </Layout>

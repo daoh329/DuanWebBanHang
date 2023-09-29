@@ -130,7 +130,7 @@ export default function Profile(props) {
 
   const [verticalActive, setVerticalActive] = useState("tab1");
 
-  const handleVerticalClick = (value: String) => {
+  const handleVerticalClick = (value) => {
     if (value === verticalActive) {
       return;
     }
@@ -139,7 +139,7 @@ export default function Profile(props) {
   };
   const [iconsActive, setIconsActive] = useState("tab1");
 
-  const handleIconsClick = (value: string) => {
+  const handleIconsClick = (value) => {
     if (value === iconsActive) {
       return;
     }
