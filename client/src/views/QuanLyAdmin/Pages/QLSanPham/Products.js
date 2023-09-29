@@ -13,6 +13,7 @@ function Product() {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/json`)
       .then((res) => {
+        console.log(res.data);
         setProduct(res.data);
       })
       .catch((error) => console.log(error));
@@ -134,7 +135,7 @@ function Product() {
               onCancel={handleCancel}
               footer={false}
             >
-              {/* <LaptopInputFrom idProduct={}/> */}
+              <LaptopInputFrom Product={record}/>
             </Modal>
           </div>
         );

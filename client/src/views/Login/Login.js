@@ -227,7 +227,7 @@ const Login = () => {
           type="checkbox"
           checked={check}
         />
-        <p className="p-terms-privacy">
+        <div className="p-terms-privacy">
           Bằng việc đánh dấu vào ô này, Tôi xác nhận:
           <p style={{ margin: "0" }}>
             i. Đã đọc và đồng ý với{" "}
@@ -247,7 +247,7 @@ const Login = () => {
             hợp pháp, chính xác, đầy đủ, hợp lệ và đã được sự đồng ý của Bên thứ
             ba (nếu có cung cấp thông tin của bên thứ ba)
           </p>
-        </p>
+        </div>
       </div>
     </div>
   );

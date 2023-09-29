@@ -2,6 +2,7 @@ const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
 const path = require("path");
+const { da } = require("date-fns/locale");
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
@@ -115,22 +116,60 @@ class Product {
 
   async json(req, res) {
     // API: /product/json
-    const queryProduct = `SELECT product.id, product.name, product.price, product.status, productDetails.quantity, productDetails.created_at, category.name as category
+    const queryProduct = `SELECT 
+    product.id,
+    product.name,
+    product.price,
+    product.status,
+    product.shortDescription,
+    SUM(productDetails.quantity) as total_quantity,
+    productDetails.created_at,
+    productDetails.configuration,
+    category.name as category,
+    CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color
     FROM product
-    JOIN productDetails
-    JOIN category
-    ON product.id = productDetails.product_id and product.CategoryID = category.id;
+    JOIN productDetails ON product.id = productDetails.product_id
+    JOIN category ON product.CategoryID = category.id
+    LEFT JOIN prodetailcolor ON productdetails.id = prodetailcolor.ProductDetailId
+    GROUP BY product.id, product.name, product.price, product.status, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
     `;
-    // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
-    mysql.query(queryProduct, (err, result) => {
-      if (err) throw err;
 
-      // Chuyển đổi kết quả truy vấn thành chuỗi JSON
-      const jsonResult = JSON.stringify(result);
+    // Hàm sử lí lỗi tập chung
+    const handleError = (e, res, message) => {
+      console.log(e);
+      return res.status(500).json(message);
+    };
 
-      // Gửi chuỗi JSON về cho client
-      res.send(jsonResult);
-    });
+    try {
+      const getProduct = await query(queryProduct);
+      // const getProduct = await query(queryProduct);
+      getProduct.forEach((data) => {
+        // sử lí color
+        data.color = JSON.parse(data.color);
+        const colors = data.color;
+        data.color = [];
+        for(const color in colors){
+          if (colors.hasOwnProperty(color)) {
+            data.color.push(colors[color].color);
+          }
+        }
+        // sử lí configuration
+        data.configuration = JSON.parse(data.configuration);
+      })
+      res.status(200).send(getProduct);
+    } catch (error) {
+      handleError(error, res, { message: "Get product details failed!!!" });
+    }
+    // // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
+    // mysql.query(queryProduct, (err, result) => {
+    //   if (err) throw err;
+
+    //   // Chuyển đổi kết quả truy vấn thành chuỗi JSON
+    //   const jsonResult = JSON.stringify(result);
+
+    //   // Gửi chuỗi JSON về cho client
+    //   res.send(jsonResult);
+    // });
   }
 
   // API: /product/delete/:id
@@ -174,18 +213,18 @@ class Product {
         query(dl_product, [id]),
       ]);
 
-      res.json({ status: "success" });
+      res.json({ message: "success" });
     } catch (error) {
-      handleError(error, res, { status: "failed" });
+      handleError(error, res, { message: "failed" });
     }
   }
 
   // Cập nhật sản phẩm
-  async Update(req, res){
+  async Update(req, res) {
     // API: /product/update/:id
     console.log(req.body);
     console.log(req.params.id);
-    res.status(200).json({message: "success"});
+    res.status(200).json({ message: "success" });
   }
 
   //Truy Vấn Laptop hiển thị Home
@@ -320,26 +359,24 @@ class Product {
   }
 
   // disable product, API: /product/disable-and-enable
-  async disable (req, res){
+  async disable(req, res) {
     try {
-      const {id, status} = req.body;
-      const queryDisable = `UPDATE product SET status = ? WHERE id = ?`
+      const { id, status } = req.body;
+      const queryDisable = `UPDATE product SET status = ? WHERE id = ?`;
       if (status === 0) {
-        await query(queryDisable, [1,id]);
-      }
-      else{
-        await query(queryDisable, [0,id]);
+        await query(queryDisable, [1, id]);
+      } else {
+        await query(queryDisable, [0, id]);
       }
       setTimeout(() => {
-        res.status(200).json({message: "success"});
+        res.status(200).json({ message: "success" });
       }, 1000);
     } catch (error) {
       console.log(error);
       setTimeout(() => {
-        res.status(500).json({message: "error"});
+        res.status(500).json({ message: "error" });
       }, 1000);
     }
-    
   }
 }
 module.exports = new Product();

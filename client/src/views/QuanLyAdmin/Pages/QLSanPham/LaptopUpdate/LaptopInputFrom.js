@@ -10,7 +10,8 @@ import {
 } from "antd";
 import axios from "axios";
 
-function LaptopInputFrom({ idProduct }) {
+function LaptopInputFrom({ Product }) {
+  const idProduct = Product.id;
   // function select element
   const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,7 +100,7 @@ function LaptopInputFrom({ idProduct }) {
           },
         ]}
       >
-        <Select>
+        <Select placeholder="Chọn thương hiệu">
           {brands.map((brand) => (
             <Select.Option key={brand.name} value={brand.name}>
               {brand.name}
@@ -110,7 +111,7 @@ function LaptopInputFrom({ idProduct }) {
 
       {/* bảo hành */}
       <Form.Item label="Bảo hành" name="guarantee">
-        <Input />
+        <Input placeholder="Nhập thời gian bảo hành"/>
       </Form.Item>
 
       {/* tên */}
@@ -121,7 +122,7 @@ function LaptopInputFrom({ idProduct }) {
         name="name"
         rules={[{ required: true, message: "Vui lòng nhập trường này!" }]}
       >
-        <Input />
+        <Input placeholder="Nhập tên sản phẩm"/>
       </Form.Item>
 
       {/* Giá */}
@@ -135,9 +136,10 @@ function LaptopInputFrom({ idProduct }) {
           { type: "number", min: 0, message: "'Giá' không phải là số hợp" },
         ]}
       >
-        <InputNumber style={{ width: "100%" }} />
+        <InputNumber style={{ width: "100%" }} placeholder="Nhập giá sản phẩm"/>
       </Form.Item>
 
+        {/* Mô tả ngắn */}
       <Form.Item
         hasFeedback
         validateDebounce={1000}
@@ -145,27 +147,29 @@ function LaptopInputFrom({ idProduct }) {
         name="shortDescription"
         rules={[{ required: true, message: "Vui lòng nhập trường này!" }]}
       >
-        <Input />
+        <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)"/>
       </Form.Item>
 
+{/* Series */}
       <Form.Item label="Series" name="series_laptop">
-        <Input />
+        <Input placeholder="Nhập Series sản phẩm"/>
       </Form.Item>
 
+{/* Part number */}
       <Form.Item label="Part_number" name="part_number">
-        <Input />
+        <Input placeholder="Nhập part number sản phẩm"/>
       </Form.Item>
 
       <Form.Item label="Màu" name="color">
-        <Input />
+        <Input placeholder="Nhập màu sắc sản phẩm"/>
       </Form.Item>
 
       <Form.Item label="Nhu cầu" name="demand">
-        <Input />
+        <Input placeholder="Nhập nhu cầu sử dụng sản phẩm"/>
       </Form.Item>
 
       <Form.Item label="Số lượng" name="quantity">
-        <InputNumber />
+        <InputNumber placeholder="Nhập số lượng sản phẩm đang bán"/>
       </Form.Item>
 
       {/* ====================================== */}
@@ -174,27 +178,27 @@ function LaptopInputFrom({ idProduct }) {
 
       {/* CPU */}
       <Form.Item label="CPU" name="cpu">
-        <Input />
+        <Input placeholder="Nhập thông số CPU sản phẩm"/>
       </Form.Item>
 
       {/* màn hình */}
       <Form.Item label="Màn hình" name="screen">
-        <Input />
+        <Input placeholder="Nhập thông tin màn hình"/>
       </Form.Item>
 
       {/* ram */}
       <Form.Item label="RAM" name="ram">
-        <Input />
+        <Input placeholder="Nhập dung lượng ram"/>
       </Form.Item>
 
       {/* vga */}
       <Form.Item label="Đồ họa" name="vga">
-        <Input />
+        <Input placeholder="Nhập thông tin card đồ họa"/>
       </Form.Item>
 
       {/* rom */}
       <Form.Item label="Bộ nhớ" name="rom">
-        <Input />
+        <Input placeholder="Nhập dung lượng bộ nhớ lưu trữ"/>
       </Form.Item>
 
       {/* số cổng lưu trữ tối đa */}
@@ -202,52 +206,52 @@ function LaptopInputFrom({ idProduct }) {
         label="Số cổng lưu trữ tối đa"
         name="maximum_number_of_storage_ports"
       >
-        <Input />
+        <Input placeholder="Nhập số lượng cổng lưu trữ tối đa"/>
       </Form.Item>
 
       {/* Kiểu khe M.2 hỗ trợ */}
       <Form.Item label="Kiểu khe M.2 hỗ trợ" name="M2_slot_type_supported">
-        <Input />
+        <Input placeholder="Nhập kiểu khe M.2 hỗ trợ"/>
       </Form.Item>
 
       {/* Cổng xuất hình */}
       <Form.Item label="Cổng xuất hình" name="output_port">
-        <Input />
+        <Input placeholder="Nhập thông tin cổng xuất hình"/>
       </Form.Item>
 
       {/* Cổng kết nối */}
       <Form.Item label="Cổng kết nối" name="connector">
-        <Input />
+        <Input placeholder="Nhập thông tin cổng kết nối"/>
       </Form.Item>
 
       {/* Kết nối không dây */}
       <Form.Item label="Kết nối không dây" name="wireless_connectivity">
-        <Input />
+        <Input placeholder="Nhập thông tin công nghệ kết nối không dây"/>
       </Form.Item>
 
       {/* Bàn phím */}
       <Form.Item label="Bàn phím" name="keyboard">
-        <Input />
+        <Input placeholder="Nhập thông tin bàn phím"/>
       </Form.Item>
 
       {/* Hệ điều hành */}
       <Form.Item label="Hệ điều hành" name="os">
-        <Input />
+        <Input placeholder="Nhập thông tin hệ điều hành"/>
       </Form.Item>
 
       {/* Pin */}
       <Form.Item label="Pin" name="pin">
-        <Input />
+        <Input placeholder="Nhập thông tin pin sản phẩm"/>
       </Form.Item>
 
       {/* Khối lượng */}
       <Form.Item label="Khối lượng" name="mass">
-        <Input />
+        <Input placeholder="Nhập khối lượng sản phẩm"/>
       </Form.Item>
 
       {/* Phụ kiện đi kèm */}
       <Form.Item label="Phụ kiện đi kèm" name="accessory">
-        <Input />
+        <Input placeholder="Nhập các phụ kiện đi kèm của sản phẩm"/>
       </Form.Item>
 
       {/* Trạng thái */}
