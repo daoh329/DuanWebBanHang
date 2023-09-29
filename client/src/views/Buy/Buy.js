@@ -12,9 +12,12 @@ import {
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import "./Buy.css";
-import { Radio, Input, Checkbox, Modal, Button, Form, Select } from "antd";
+import { ExclamationCircleFilled } from '@ant-design/icons';
+import { Radio, Input, Checkbox, Modal, Button, Form, Select,Space } from "antd";
+import Icon from "@ant-design/icons/lib/components/Icon";
 const { TextArea } = Input;
 const { Option } = Select;
+
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
@@ -24,6 +27,8 @@ function formatCurrency(value) {
     currency: "VND",
   }).format(value);
 }
+//
+
 export default function Buy(props) {
   const { user } = props;
   console.log(props);
@@ -92,12 +97,28 @@ export default function Buy(props) {
 
   const [fillActive, setFillActive] = useState("tab1");
 
-  const handleFillClick = (value: string) => {
+  const handleFillClick = (value) => {
     if (value === fillActive) {
       return;
     }
     setFillActive(value);
   };
+  //
+  const { confirm } = Modal;
+const showConfirm = () => {
+  confirm({
+    title: 'Bạn chưa đăng nhập?',
+    icon: <ExclamationCircleFilled />,
+    content: 'Hãy đăng nhập để sửa dụng tính năng này!',
+    onOk() {
+      console.log('Đăng nhập');
+      navigate("/login");
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+  });
+};
 
   const [buysData, setBuysData] = useState(null);
   // Lấy dữ liệu từ sessionStorage khi component được tải
@@ -231,6 +252,7 @@ export default function Buy(props) {
                               data-content-target={79}
                               className="css-1014eaz style-tofZn"
                               id="style-tofZn"
+                              onClick={showConfirm}
                             >
                               <div>
                                 <span id="style-owhaV" className="style-owhaV">
@@ -1123,7 +1145,9 @@ export default function Buy(props) {
                               </div>
                             </button>
                           ) : (
-                            <button className="att-checkout-button css-v463h2 snipcss0-9-203-204">
+                            <button
+                            onClick={showConfirm}
+                             className="att-checkout-button css-v463h2 snipcss0-9-203-204">
                               <div className="css-1lqe6yk snipcss0-10-204-205">
                                 THANH TOÁN
                               </div>
@@ -1437,5 +1461,6 @@ export default function Buy(props) {
         </div>
       </Modal>
     </>
+    
   );
 }

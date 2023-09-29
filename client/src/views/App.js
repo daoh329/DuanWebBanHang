@@ -30,7 +30,6 @@ import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import axios from "axios";
 import Buy from "./Buy/Buy";
-
 const App = () => {
   const [user, setUser] = useState(null);
   
