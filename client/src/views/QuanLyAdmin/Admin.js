@@ -23,7 +23,7 @@ import Dashboard from "./Pages/Dashboard";
 import TypeProduct from "./Pages/NewProduct/Type/TypeProduct";
 import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
-import Products from "./Pages/Products";
+import Products from "./Pages/QLSanPham/Products";
 import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
 function Admin() {
@@ -191,12 +191,12 @@ function Admin() {
   return (
     <>
       <Row>
-        <Col className="custom-scrollbar" span={18} push={6} style={{ overflowY: 'scroll', height: '100vh' }}>
+        <Col className="custom-scrollbar" span={18} push={5} style={{ overflowY: 'scroll', height: '100vh' }}>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="newproduct" element={<TypeProduct />} />
             <Route path="newcoupon" element={<NewCoupon />} />
-            <Route path="products" element={<Products />} />
+            <Route path="products" element={<Products style={{marginRight:"20px"}} />} />
             <Route path="orders" element={<OrderList />} />
             <Route path="ListCate" element={<TypeList/>}/>
           </Routes>

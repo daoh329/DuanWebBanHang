@@ -218,7 +218,7 @@ const AllProduct = () => {
             Tất cả sản phẩm
           </div>
           <div className='arrange-products'>
-            <div class="css-arrange">
+            <div className="css-arrange">
               Xắp xếp theo
               <button className="sort-button" onClick={() => handleSortChange('priceLowToHigh')}>Giá thấp đến cao</button>
               <button className="sort-button" onClick={() => handleSortChange('priceHighToLow')}>Giá cao đến thấp</button>
