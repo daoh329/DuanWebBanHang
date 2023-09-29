@@ -160,6 +160,164 @@
     max-width: 60%;
 
   }
+  .css-17xgviv {
+    height: 50px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #F5F5F5;
+    border: 1px solid #F5F5F5;
+    padding: 1px;
+    border-radius: var(--search-bar-border-radius, 8px);
+    --button-icon-border-radius: var(--search-bar-border-radius, 8px);
+    border: 1px solid #eaeaea
+}
+.css-7wh3a0 {
+    display: inline-block;
+    width: 100%;
+}
+.css-7jjcju {
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e0e0e0;
+    min-height: 16px;
+    border: 0;
+    background-color: transparent;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    height: 100%;
+}
+
+.css-7jjcju:focus {
+    outline: 0;
+}
+
+.css-7jjcju:-webkit-outer-spin-button,
+.css-7jjcju input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.css-7jjcju[type='number'] {
+    -moz-appearance: textfield;
+}
+.css-7kp13n {
+    display: inline-block;
+}
+.css-193nd6m {
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    line-height: 1rem;
+    padding: .365rem .75rem;
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #EEEEEE;
+    border-color: #EEEEEE;
+    color: #212121;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    position: relative;
+    height: 36px;
+    width: 36px;
+    border-radius: 8px;
+    padding: 0;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    border: 0;
+    background-color: transparent;
+}
+
+undefined .css-193nd6m:focus {
+    outline: 0;
+}
+.css-1dn5jdn {
+    -webkit-mask: url("https://shopfront-cdn.tekoapis.com/static/dc6de02b661eb31c.svg");
+    mask: url("https://shopfront-cdn.tekoapis.com/static/dc6de02b661eb31c.svg");
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background-color: var(--button-icon-color,
+            #616161);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+.css-1nb0ewh {
+    position: absolute;
+    background: #fff;
+    width: 120%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0.8rem;
+    z-index: 1000;
+    display: none;
+}
+.css-6qpo60 {
+    min-width: 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.css-ym4rx5 {
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #848788;
+}
+
+.css-ym4rx5:hover {
+    color: #1435c3;
+}
+.css-rqjzpt {
+    border-style: none;
+    border-width: 1px;
+    border-color: unset;
+    opacity: 1;
+    color: black;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #848788;
+}
+
+
+.css-rqjzpt:hover {
+    color: #1435c3;
+}
 }
 
 
@@ -291,6 +449,7 @@
 .menu__item:hover {
   background-color: rgb(255 255 255 / 55%);
 }
+
 @media (max-width: 768px) {
   .tracuu {
     display: none;
@@ -365,4 +524,169 @@
     display: flex;
     justify-content: flex-end;
   }
+
+
+  .css-17xgviv {
+    height: 40px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #F5F5F5;
+    border: 1px solid #F5F5F5;
+    padding: 1px;
+    border-radius: var(--search-bar-border-radius, 8px);
+    --button-icon-border-radius: var(--search-bar-border-radius, 8px);
+    border: 1px solid #eaeaea;
+    align-items: center;
+    width: 150%;
+    flex-direction: row-reverse;
+}
+.css-7wh3a0 {
+    display: inline-block;
+    width: 100%;
+}
+.css-7jjcju {
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e0e0e0;
+    min-height: 16px;
+    border: 0;
+    background-color: transparent;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    height: 100%;
+}
+
+.css-7jjcju:focus {
+    outline: 0;
+}
+
+.css-7jjcju:-webkit-outer-spin-button,
+.css-7jjcju input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.css-7jjcju[type='number'] {
+    -moz-appearance: textfield;
+}
+.css-7kp13n {
+    display: inline-block;
+    height: 50px;
+}
+.css-193nd6m {
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    line-height: 1rem;
+    padding: .365rem .75rem;
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #EEEEEE;
+    border-color: #EEEEEE;
+    color: #212121;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    position: relative;
+    height: 36px;
+    width: 36px;
+    border-radius: 8px;
+    padding: 0;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    border: 0;
+    background-color: transparent;
+}
+
+undefined .css-193nd6m:focus {
+    outline: 0;
+}
+.css-1dn5jdn {
+    -webkit-mask: url("https://shopfront-cdn.tekoapis.com/static/dc6de02b661eb31c.svg");
+    mask: url("https://shopfront-cdn.tekoapis.com/static/dc6de02b661eb31c.svg");
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background-color: var(--button-icon-color,
+            #616161);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+.css-1nb0ewh {
+    position: absolute;
+    background: #fff;
+    width: 120%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0.8rem;
+    z-index: 1000;
+    display: none;
+}
+.css-6qpo60 {
+    min-width: 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.css-ym4rx5 {
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #848788;
+}
+
+.css-ym4rx5:hover {
+    color: #1435c3;
+}
+.css-rqjzpt {
+    border-style: none;
+    border-width: 1px;
+    border-color: unset;
+    opacity: 1;
+    color: black;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: #848788;
+}
+
+
+.css-rqjzpt:hover {
+    color: #1435c3;
+}
+  
 }

@@ -14,7 +14,9 @@ import {parse, stringify} from 'flatted';
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
 const { TabPane } = Tabs;
-
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
@@ -199,7 +201,8 @@ const Home = () => {
         </Carousel>
         <div className="slider-overlay">
           <div className="slider-container">
-            <div className="left-block">
+            <div style={{width:'1234px', transform: 'translateY(-65%)',margin:'0 auto'}}>
+               <div className="left-block">
               {/* <div className="category-list">
                 {categories.map((category, index) => (
                   <li key={index} className="category-item">
@@ -231,6 +234,8 @@ const Home = () => {
                 alt="Hình ảnh"
               />
             </div>
+            </div>
+           
             {/* -------------------------- */}
             <div className="bottom-block">
               <img
@@ -262,8 +267,6 @@ const Home = () => {
       {/* ---------------menu-------------------- */}
       <nav className="menu-nav" >
         <div>
-
-       
         <ul className="menu-nav-ul">
           <li className="menu-nav-ul-li">
             <a className="li-a">
@@ -333,7 +336,7 @@ const Home = () => {
       <div
         className="tabsPane"
         style={{
-          width: "80%",
+          width: "1232px",
           margin: "0 auto",
           backgroundImage:
             "url('https://lh3.googleusercontent.com/kNQJhjNgt5WnorADIKUr1lQIkwlxmWnUfOARFP5TfYXldzRRkfFw3hbzbXEBZo-20klJuDRkUZkDWbypz2UmFj0LesbRckx-=rw-w1920')",
@@ -619,7 +622,7 @@ const Home = () => {
         <div
           className="product-container"
           style={{
-            width: "80%",
+            width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
             backgroundSize: "cover",
@@ -680,7 +683,7 @@ const Home = () => {
         <div
           className="product-container"
           style={{
-            width: "80%",
+            width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
             backgroundSize: "cover",
@@ -714,9 +717,8 @@ const Home = () => {
 
                   <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
                     <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {item.price}₫
+                      {formatCurrency(item.price)}
                     </div>
-          
                   </div>
                 </div>
               ))}
@@ -741,7 +743,7 @@ const Home = () => {
           style={{
             borderRadius: "5px",
             position: 'relative',
-            width: "80%",
+            width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
             backgroundColor: "white",
