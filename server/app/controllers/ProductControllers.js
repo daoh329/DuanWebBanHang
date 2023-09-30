@@ -123,7 +123,7 @@ class Product {
     product.price,
     product.status,
     product.shortDescription,
-    SUM(productDetails.quantity) as total_quantity,
+    productDetails.quantity,
     productDetails.created_at,
     productDetails.configuration,
     category.name as category,
@@ -132,7 +132,7 @@ class Product {
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
     LEFT JOIN prodetailcolor ON productdetails.id = prodetailcolor.ProductDetailId
-    GROUP BY product.id, product.name, product.price, product.status, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
+    GROUP BY product.id, product.name, product.price, product.status, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
     `;
 
     // Hàm sử lí lỗi tập chung
@@ -225,7 +225,8 @@ class Product {
 
       // select imagePath galery
       const arrayImagePath = await query(sl_galery, [id]);
-      // const imagePath = arrayImagePath[0].value;
+
+      // check nếu có ảnh thì mới xóa trong server và sql
       if (arrayImagePath.length != 0) {
         await arrayImagePath.forEach(async (imagePath) => {
           // Đường dẫn tới thư mục public chứa hình ảnh
@@ -235,7 +236,7 @@ class Product {
             "public",
             imagePath.imagePath
           );
-          console.log(publicImagePath);
+          // Thực hiện xóa image trong server
           fs.unlink(publicImagePath, (err) => {
             if (err) {
               console.error("Lỗi khi xóa hình ảnh:", err);
@@ -243,12 +244,16 @@ class Product {
             }
           });
         });
+
+        // nếu xóa image trên server thành công thì xóa trên sql
+        await query(dl_galery, [id]).catch((error) => {
+          handleError(error, res, { message: "Xóa ảnh trên csdl thất bại." });
+        });
       }
 
       await Promise.all([
         query(dl_prodetailcolor, [productDetails_ID]),
         query(dl_productDetails, [id]),
-        query(dl_galery, [id]),
         query(dl_product, [id]),
       ]);
 
