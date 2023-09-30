@@ -30,8 +30,8 @@ function formatCurrency(value) {
 //
 
 export default function Buy(props) {
+  
   const { user } = props;
-  console.log(props);
 
   const navigate = useNavigate();
 
