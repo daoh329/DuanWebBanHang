@@ -36,14 +36,12 @@ passport.use(
       const emailProfile = profile._json.email;
       try {
         const results = await query(queryCheckEmail, [emailProfile]);
-
-        if (results.length === 0) {
+        if (results[0].count === 0) {
           await query(queryInsertUser, [nameProfile, emailProfile]);
         }
       } catch (error) {
         console.log(error);
       }
-
       callback(null, profile);
     }
   )
@@ -61,6 +59,7 @@ passport.deserializeUser(async (user, done) => {
     user._json.name = results[0].name;
     user._json.email = results[0].email;
     user._json.phone = results[0].phone;
+    user._json.id = results[0].id;
   })
   .catch((error) => {
     if (error) {
