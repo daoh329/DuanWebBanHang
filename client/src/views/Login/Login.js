@@ -160,7 +160,7 @@ const Login = () => {
     <div className="login">
       {/* title */}
       <p className="title-login">
-        Chào mừng bạn đến với PhongVu.vn | Laptop, PC, Màn hình, điện thoại,
+        Chào mừng bạn đến với DinhMinh.vn | Laptop, PC, Màn hình, điện thoại,
         linh kiện Chính Hãng!
       </p>
       <div id="recaptcha-container"></div>

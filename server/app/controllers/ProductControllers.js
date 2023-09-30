@@ -2,6 +2,7 @@ const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
 const path = require("path");
+const fs = require("fs");
 const { da } = require("date-fns/locale");
 class Product {
   async Addproduct(req, res) {
@@ -93,7 +94,7 @@ class Product {
       const id_Product = resultP.insertId;
       for (const image of arrPathImage) {
         const galeryValues = [image, id_Product];
-        query(is_galery, galeryValues);
+        await query(is_galery, galeryValues);
       }
       const PdValues = [
         data.quantity,
@@ -106,7 +107,7 @@ class Product {
       const id_PD = resultPD.insertId;
       for (const x of data.color) {
         const colorValues = [id_PD, x];
-        query(is_ProDetailColor, colorValues);
+        await query(is_ProDetailColor, colorValues);
       }
       res.status(200).send("success");
     } catch (error) {
@@ -148,14 +149,14 @@ class Product {
         data.color = JSON.parse(data.color);
         const colors = data.color;
         data.color = [];
-        for(const color in colors){
+        for (const color in colors) {
           if (colors.hasOwnProperty(color)) {
             data.color.push(colors[color].color);
           }
         }
         // sử lí configuration
         data.configuration = JSON.parse(data.configuration);
-      })
+      });
       res.status(200).send(getProduct);
     } catch (error) {
       handleError(error, res, { message: "Get product details failed!!!" });
@@ -181,6 +182,13 @@ class Product {
       INNER JOIN productdetails ON product.id = productdetails.product_id
       WHERE product.id = ?;
     `;
+    // query get path image
+    const sl_galery = `
+      SELECT galery.thumbnail AS imagePath
+      FROM galery
+      INNER JOIN product ON product.id = galery.product_id
+      WHERE product.id = ?;
+    `;
     const dl_prodetailcolor = `
     DELETE FROM prodetailcolor
     WHERE ProductDetailId = ?;    
@@ -188,6 +196,11 @@ class Product {
     const dl_productDetails = `
       DELETE productdetails
       FROM productdetails INNER JOIN product ON productdetails.product_id = product.id
+      WHERE product.id = ?;
+    `;
+    const dl_galery = `
+      DELETE galery
+      FROM galery INNER JOIN product ON galery.product_id = product.id
       WHERE product.id = ?;
     `;
     const dl_product = `
@@ -203,13 +216,39 @@ class Product {
     try {
       // Lấy id từ client request lên
       const id = req.params.id;
-
+      if (!id) {
+        return res.status();
+      }
+      // select productDetails id
       const arrayProductDetail_id = await query(sl_productDetails_ID, [id]);
       const productDetails_ID = arrayProductDetail_id[0].value;
+
+      // select imagePath galery
+      const arrayImagePath = await query(sl_galery, [id]);
+      // const imagePath = arrayImagePath[0].value;
+      if (arrayImagePath.length != 0) {
+        await arrayImagePath.forEach(async (imagePath) => {
+          // Đường dẫn tới thư mục public chứa hình ảnh
+          const publicImagePath = path.join(
+            __dirname,
+            "../../src",
+            "public",
+            imagePath.imagePath
+          );
+          console.log(publicImagePath);
+          fs.unlink(publicImagePath, (err) => {
+            if (err) {
+              console.error("Lỗi khi xóa hình ảnh:", err);
+              return res.status(500).json({ message: "Lỗi khi xóa hình ảnh." });
+            }
+          });
+        });
+      }
 
       await Promise.all([
         query(dl_prodetailcolor, [productDetails_ID]),
         query(dl_productDetails, [id]),
+        query(dl_galery, [id]),
         query(dl_product, [id]),
       ]);
 

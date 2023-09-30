@@ -87,9 +87,8 @@ const App = (userDetails) => {
   };
   //------giỏ hàng---------------
 
-  useEffect(() => {
-    // Tải dữ liệu từ API khi component được render
-    fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+  async function getData() {
+    await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -98,6 +97,12 @@ const App = (userDetails) => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  }
+
+  useEffect(() => {
+    // Tải dữ liệu từ API khi component được render
+    getData();
+    
   }, []);
 
   useEffect(() => {

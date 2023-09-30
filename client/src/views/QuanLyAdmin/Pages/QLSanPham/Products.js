@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Tag, Popconfirm, Modal } from "antd";
+import {
+  Table,
+  Button,
+  Tag,
+  Popconfirm,
+  Modal,
+  notification,
+  message,
+} from "antd";
 import { format } from "date-fns";
 import axios from "axios";
 import LaptopInputFrom from "./LaptopUpdate/LaptopInputFrom";
 
 function Product() {
   const [Product, setProduct] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const getProduct = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/json`)
       .then((res) => {
-        console.log(res.data);
         setProduct(res.data);
       })
       .catch((error) => console.log(error));
@@ -51,7 +57,7 @@ function Product() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => {
+      render: (status, record) => {
         var color;
         if (status === 1) {
           color = "green";
@@ -74,28 +80,45 @@ function Product() {
       render: (_, record) => {
         async function handleDisableAndEnable() {
           try {
-            await axios.post(
+            const result = await axios.post(
               `${process.env.REACT_APP_API_URL}/product/disable-and-enable`,
               { id: record.id, status: record.status }
             );
-            window.location.reload();
+            // window.location.reload();
+            if (result.status === 200) {
+              message.success("Vô hiệu hóa thành công.");
+              return getProduct();
+            }
+            return message.error("Vô hiệu hóa thất bại.");
           } catch (error) {
             console.log(error);
+            message.error("Vô hiệu hóa thất bại.");
           }
         }
 
         async function handleUpdate() {
-          setIsLoading(true);
           setOpenModal(true);
-
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 1500);
         }
 
         const handleCancel = () => {
           setOpenModal(false);
         };
+
+        async function handleDelete() {
+          // /product/delete/:id
+          try {
+            const result = await axios.delete(
+              `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`
+            );
+            if (result.status === 200) {
+              message.success("Đã xóa sản phẩm.");
+              return getProduct();
+            }
+            return message.success("Đã xóa sản phẩm.");
+          } catch (error) {
+            message.error("Xóa sản phẩm thất bại.");
+          }
+        }
 
         return (
           <div
@@ -105,13 +128,14 @@ function Product() {
               justifyContent: "space-around",
             }}
           >
+            {/* enable & disable */}
             {record.status === 1 ? (
               <Popconfirm
                 title="Cảnh báo!!!"
                 description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
                 onConfirm={handleDisableAndEnable}
-                okText="Yes"
-                cancelText="No"
+                okText="Xác nhận"
+                cancelText="Trở lại"
               >
                 <Button danger>Vô hiệu hóa</Button>
               </Popconfirm>
@@ -120,23 +144,32 @@ function Product() {
                 title="Cảnh báo!!!"
                 description="Bạn có chắc chắn muốn kích hoạt sản phẩm này?"
                 onConfirm={handleDisableAndEnable}
-                okText="Yes"
-                cancelText="No"
+                okText="Xác nhận"
+                cancelText="Trở lại"
               >
-                <Button >Kích hoạt</Button>
+                <Button>Kích hoạt</Button>
               </Popconfirm>
             )}
-            <Button className="confirm-button" onClick={handleUpdate}>
-              Cập nhật
-            </Button>
+            {/* update */}
+            <Button onClick={handleUpdate}>Cập nhật</Button>
             <Modal
               open={openModal}
               title="Cập nhật sản phẩm"
               onCancel={handleCancel}
               footer={false}
             >
-              <LaptopInputFrom Product={record}/>
+              <LaptopInputFrom Product={record} />
             </Modal>
+            {/* delete */}
+            <Popconfirm
+              title="Cảnh báo!!!"
+              description="Bạn có chắc chắn muốn XÓA sản phẩm này?"
+              onConfirm={handleDelete}
+              okText="Xóa"
+              cancelText="Trở lại"
+            >
+              <Button>Xóa</Button>
+            </Popconfirm>
           </div>
         );
       },
@@ -169,7 +202,6 @@ function Product() {
   return (
     <div>
       <h1>Quản lý Sản Phẩm</h1>
-
       <Table columns={columns} dataSource={Product} />
     </div>
   );

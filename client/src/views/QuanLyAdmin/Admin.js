@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Col, Row, Menu } from "antd";
 import {
-  AppstoreOutlined,
   TagsOutlined,
   SettingOutlined,
   ReadOutlined,
@@ -25,14 +24,13 @@ import TypeProduct from "./Pages/NewProduct/Type/TypeProduct";
 import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/QLSanPham/Products";
-import QuanLyAdmin from "./QuanLyAdmin";
+// import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
   const onClick = (e) => {
-    console.log("click ", e);
-    setCurrentPath(e.route);
+    setCurrentPath(e.key);
   };
 
   const menuData = [
@@ -40,28 +38,27 @@ function Admin() {
       key: "grp",
       icon: <UserOutlined />,
       label: "Admin",
-      type: "group",
       children: [
         {
           key: "1",
           icon: <HomeOutlined />,
-          label: "Bảng điều khiển",
-          type: "item",
-          route: "dashboard",
+          label: (
+            <Link to="dashboard">Bảng điều khiển</Link>
+          ),
         },
         {
           key: "2",
           icon: <AppstoreAddOutlined />,
-          label: "Sản phẩm mới",
-          type: "item",
-          route: "newproduct",
+          label: (
+            <Link to="newproduct">Tạo sản phẩm mới</Link>
+          ),
         },
         {
           key: "3",
           icon: <GiftOutlined />,
-          label: "Mã giảm giá",
-          type: "item",
-          route: "newcoupon",
+          label: (
+            <Link to="newcoupon">Tạo mã giảm giá</Link>
+          ),
         },
       ],
     },
@@ -69,33 +66,30 @@ function Admin() {
       key: "g1",
       icon: <ProfileOutlined />,
       label: "Mục lục",
-      type: "group",
       children: [
         {
           key: "4",
           icon: <ShoppingOutlined />,
-          label: "Tất cả sản phẩm",
-          type: "item",
-          route: "products",
+          label: (
+            <Link to="products">Tất cả sản phẩm</Link>
+          ),
         },
         {
           key: "5",
           icon: <OrderedListOutlined />,
-          label: "Danh mục",
-          type: "item",
-          route: "ListCate",
+          label: (
+            <Link to="ListCate">Danh mục</Link>
+          ),
         },
         {
           key: "6",
           icon: <BookOutlined />,
           label: "Bộ sưu tập",
-          type: "item",
         },
         {
           key: "7",
           icon: <DatabaseOutlined />,
           label: "Thuộc tính",
-          type: "item",
         },
       ],
     },
@@ -103,14 +97,15 @@ function Admin() {
       key: "sub4",
       icon: <DollarCircleOutlined />,
       label: "Doanh thu",
-      type: "group",
       children: [
         {
           key: "8",
           icon: <ShoppingCartOutlined />,
-          label: "Đơn đặt hàng",
-          type: "item",
-          route: "orders",
+          label: (
+            // <Link to="orders">Đơn đặt hàng</Link>
+            "Đơn đặt hàng"
+          ),
+
         },
       ],
     },
@@ -118,12 +113,10 @@ function Admin() {
       key: "sub5",
       icon: <GiftOutlined />,
       label: "Khuyến mãi",
-      type: "group",
       children: [
         {
           key: "9",
           label: "Phiếu giảm giá",
-          type: "item",
           icon: <TagsOutlined />,
         },
       ],
@@ -132,12 +125,10 @@ function Admin() {
       key: "sub6",
       icon: <ReadOutlined />,
       label: "CMS",
-      type: "group",
       children: [
         {
           key: "10",
           label: "Trang",
-          type: "item",
           icon: <FileProtectOutlined />,
         },
       ],
@@ -146,17 +137,14 @@ function Admin() {
       key: "sub2",
       icon: <SettingOutlined />,
       label: "Setting",
-      type: "group",
       children: [
         {
           key: "11",
           label: "Option 1",
-          type: "item",
         },
         {
           key: "12",
           label: "Option 2",
-          type: "item",
         },
       ],
     },
@@ -165,28 +153,28 @@ function Admin() {
     },
   ];
 
-  const menuItems = menuData.map((item) => {
-    if (item.type === "group") {
-      return (
-        <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
-          {item.children.map((childItem) => (
-            <Menu.Item key={childItem.key} icon={childItem.icon}>
-              <Link to={childItem.route}>{childItem.label}</Link>
-            </Menu.Item>
-          ))}
-        </Menu.SubMenu>
-      );
-    } else if (item.type === "item") {
-      return (
-        <Menu.Item key={item.key} icon={item.icon}>
-          <Link to={item.route}>{item.label}</Link>
-        </Menu.Item>
-      );
-    } else if (item.type === "divider") {
-      return <Menu.Divider key={item.key} />;
-    }
-    return null;
-  });
+  // const menuItems = menuData.map((item) => {
+  //   if (item.type === "group") {
+  //     return (
+  //       <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
+  //         {item.children.map((childItem) => (
+  //           <Menu.Item key={childItem.key} icon={childItem.icon}>
+  //             <Link to={childItem.route}>{childItem.label}</Link>
+  //           </Menu.Item>
+  //         ))}
+  //       </Menu.SubMenu>
+  //     );
+  //   } else if (item.type === "item") {
+  //     return (
+  //       <Menu.Item key={item.key} icon={item.icon}>
+  //         <Link to={item.route}>{item.label}</Link>
+  //       </Menu.Item>
+  //     );
+  //   } else if (item.type === "divider") {
+  //     return <Menu.Divider key={item.key} />;
+  //   }
+  //   return null;
+  // });
 
   return (
     <>
@@ -197,6 +185,13 @@ function Admin() {
           push={5}
           style={{ overflowY: "scroll", height: "100vh" }}
         >
+          {/* {currentPath === "1" && <Dashboard />}
+          {currentPath === "2" && <TypeProduct />}
+          {currentPath === "3" && <NewCoupon />}
+          {currentPath === "4" && <Products />}
+          {currentPath === "5" && <TypeList />} */}
+          {/* {currentPath === "8" && <OrderList />} */}
+          
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="newproduct" element={<TypeProduct />} />
@@ -216,8 +211,9 @@ function Admin() {
               width: 256,
             }}
             mode="inline"
+            selectedKeys={[currentPath]}
+            items={menuData}
           >
-            {menuItems}
           </Menu>
         </Col>
       </Row>
