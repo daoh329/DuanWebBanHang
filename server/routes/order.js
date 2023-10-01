@@ -3,6 +3,7 @@ const router = express.Router();
 
 const OrderController = require("../app/controllers/OrderController");
 
+router.post('/create_payment_url', OrderController.payment);
 router.post('/pay', OrderController.order);
 // Trong routes.js hoặc tệp tương tự
 router.get('/quanlyOrder', OrderController.quanlyOrder);

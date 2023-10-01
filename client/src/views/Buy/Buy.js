@@ -138,6 +138,11 @@ const showConfirm = () => {
     navigate("/profile");
   };
 
+  const handleBuyVNpay = () => {
+    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url`;
+  };
+  
+
   return (
     <>
       {/* main */}
@@ -837,6 +842,7 @@ const showConfirm = () => {
                         data-content-target="COD"
                         className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
                         id="style-UMMoQ"
+                        onClick={handleBuyVNpay}
                       >
                         <div
                           type="subtitle"

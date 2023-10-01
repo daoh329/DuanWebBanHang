@@ -29,7 +29,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
-import Hinh from "../../../src/assets/logo4.png";
+import Hinh from "../../../src/assets/DINHMINH.VN.gif";
 import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
@@ -41,12 +41,12 @@ const App = (userDetails) => {
   function formatUserName(name) {
     // Kiểm tra xem tên có khoảng trắng hay không.
     name = name.trim();
-    const spaceIndex = name.indexOf(' ');
+    const spaceIndex = name.indexOf(" ");
     if (spaceIndex !== -1) {
       // Có khoảng trắng
       // Lấy 2 từ đầu tiên bằng cách cắt chuỗi theo khoảng trắng.
-      const firstSpace = name.indexOf(' ');
-      const editName = name.substring(0, firstSpace) + ' ' + name.split(' ')[1];
+      const firstSpace = name.indexOf(" ");
+      const editName = name.substring(0, firstSpace) + " " + name.split(" ")[1];
       // Nếu name dài hơn 15 kí tự, lấy 15 kí tự đầu tiên của editName + ...
       // Nếu name ngắn hơn 15 kí tự, giữ nguyên editName
       return name.length > 15 ? editName.substring(0, 15) + "..." : editName;
@@ -87,9 +87,8 @@ const App = (userDetails) => {
   };
   //------giỏ hàng---------------
 
-  useEffect(() => {
-    // Tải dữ liệu từ API khi component được render
-    fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+  async function getData() {
+    await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -98,6 +97,12 @@ const App = (userDetails) => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  }
+
+  useEffect(() => {
+    // Tải dữ liệu từ API khi component được render
+    getData();
+    
   }, []);
 
   useEffect(() => {
@@ -154,109 +159,109 @@ const App = (userDetails) => {
       disabled: true,
     },
   ];
-  //
 
-  const menu = (
-    <Menu>
-      {user ? (
-        <Menu.Item key="1">
-          <div
-            style={{
-              border: "none",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "none",
-            }}
-            onClick={logout}
-          >
-            Đăng xuất
-          </div>
-          {/* Link to logout page */}
-        </Menu.Item>
+  const menuAccount = [
+    {
+      key: "1",
+      label: user ? (
+        <Button
+          style={{
+            border: "none",
+            width: "100%",
+            height: "100%",
+            background: "none",
+          }}
+          onClick={logout}
+        >
+          Đăng xuất
+        </Button>
       ) : (
-        <Menu.Item key="1">
-          <NavLink to="/login">Đăng nhập</NavLink> {/* Link to login page */}
-        </Menu.Item>
-      )}
-      {user ? (
-        <Menu.Item key="2">
-          <div onClick={profile}>Tài khoản</div>
-          {/* Link to profile */}
-        </Menu.Item>
-      ) : (
-        <Menu.Item></Menu.Item>
-      )}
-      <Menu.Item key="3">
-        <NavLink to="/checkSP">Tra cứu đơn hàng</NavLink>{" "}
-        {/* Link to checkSP */}
-      </Menu.Item>
-    </Menu>
-  );
+        <Button
+          style={{
+            border: "none",
+            width: "100%",
+            height: "100%",
+            background: "none",
+          }}
+        >
+          <NavLink to="/login">Đăng nhập</NavLink>
+        </Button>
+      ),
+    },
+    {
+      key: "2",
+      label: user && (
+        <Button
+          onClick={profile}
+          style={{
+            border: "none",
+            width: "100%",
+            height: "100%",
+            background: "none",
+          }}
+        >
+          Tài khoản
+        </Button>
+      ),
+    },
+  ];
+
+  const menuContact = [
+    {
+      key: "1",
+      label: <Button>Chăm sóc khách hàng: 18006569</Button>,
+    },
+    {
+      key: "2",
+      label: <Button>Tư vấn khách hàng: 18006569</Button>,
+    },
+  ];
 
   return (
     <Layout>
-              <div className="danhmuc">
-          <a
-            href="/sale"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <TagOutlined style={{ marginRight: "8px" }} />
-            Khuyến mãi
-          </a>
-          <a
-            href="/showroom"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
-            showroom
-          </a>
-          <a
-            href="/support"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh
-            nghiệp
-          </a>
+      <div className="danhmuc">
+        <a
+          href="/sale"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <TagOutlined style={{ marginRight: "8px" }} />
+          Khuyến mãi
+        </a>
+        <a
+          href="/showroom"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
+          showroom
+        </a>
+        <a
+          href="/support"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh nghiệp
+        </a>
 
-          <Dropdown overlay={
-    <Menu>
-    <Menu.Item key="1">Chăm sóc khách hàng: 18006569</Menu.Item>
-      <Menu.Item key="2">Tư vấn khách hàng: 18006569</Menu.Item>
-    </Menu>
-  } placement="bottomRight">
-            <a
-              href="/host"
-              style={{
-                marginRight: "20px",
-                color: "#333",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
-            </a>
-          </Dropdown>
+        <Dropdown menu={{ items: menuContact }} placement="bottomRight">
           <a
-            href="/tin-tuc"
+            href="/host"
             style={{
               marginRight: "20px",
               color: "#333",
@@ -265,13 +270,25 @@ const App = (userDetails) => {
               alignItems: "center",
             }}
           >
-            <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
+            <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
           </a>
-        </div>
+        </Dropdown>
+        <a
+          href="/tin-tuc"
+          style={{
+            marginRight: "20px",
+            color: "#333",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
+        </a>
+      </div>
+
       <Affix offsetTop={0}>
         <div>
-
-
           {/* <div className="hd-logo">
             <div className="logo-mobile">
               <span className="logo-span">
@@ -282,7 +299,7 @@ const App = (userDetails) => {
               </span>
             </div>
             <div className="user-mobile">
-              <Dropdown overlay={menu}>
+              <Dropdown menu={menu}>
                 {user ? (
                   <Avatar src={user.picture} />
                 ) : (
@@ -307,18 +324,35 @@ const App = (userDetails) => {
             <div className="navgation">
               <div
                 className="logo"
-                style={{ width: "80px", marginRight: "16px", color: "#ffffff" }}
+                style={{
+                  width: "200px",
+                  marginRight: "16px",
+                  color: "#ffffff",
+                }}
               >
-                <span style={{ position: "relative" }}>
-                  {" "}
+                <span
+                  style={{
+                    position: "relative",
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
                   <NavLink to="/">
                     <img
                       src={Hinh}
-                      style={{ width: "130%", height: "130%" }}
-                    ></img>
+                      style={{
+                        maxWidth: "100%", // Giới hạn chiều rộng tối đa của ảnh
+                        height: "50px", // Tự động tính tỷ lệ chiều cao dựa trên tỷ lệ chiều rộng
+                        objectFit: "cover", // Cắt và thay đổi tỷ lệ hình ảnh để vừa với phần tử cha
+                        width: "100%", // Đảm bảo ảnh chiếm toàn bộ chiều rộng của phần tử cha
+                      }}
+                      alt="Logo"
+                    />
                   </NavLink>
                 </span>
               </div>
+
               {/* <div
             className="search-container"
             style={{
@@ -404,11 +438,20 @@ const App = (userDetails) => {
                 onChange={handleInputChange}
                 onSearch={handleSearch}
               />
+
             </div> */}
-              <div style={{ padding: "8px", minWidth: 0, flex: "1 1 auto" }} className="teko-col css-388q1u">
+              <div
+                style={{ padding: "8px", minWidth: 0, flex: "1 1 auto" }}
+                className="teko-col css-388q1u"
+              >
                 <div className="css-cssveg">
                   <div className="css-17xgviv">
-                    <div data-content-region-name="headerBar" data-track-content="true" data-content-name="searchBox" className="css-7wh3a0">
+                    <div
+                      data-content-region-name="headerBar"
+                      data-track-content="true"
+                      data-content-name="searchBox"
+                      className="css-7wh3a0"
+                    >
                       <input
                         className="search-input css-7jjcju"
                         placeholder="Nhập từ khoá cần tìm"
@@ -418,9 +461,22 @@ const App = (userDetails) => {
                         onChange={handleInputChange}
                       />
                     </div>
-                    <div data-content-region-name="headerBar" data-track-content="true" data-content-name="searchButton" className="css-7kp13n">
-                      <button className="search-icon css-193nd6m" aria-label="Search" onClick={handleSearch}>
-                        <span size="26" color="#616161" className="css-1dn5jdn"></span>
+                    <div
+                      data-content-region-name="headerBar"
+                      data-track-content="true"
+                      data-content-name="searchButton"
+                      className="css-7kp13n"
+                    >
+                      <button
+                        className="search-icon css-193nd6m"
+                        aria-label="Search"
+                        onClick={handleSearch}
+                      >
+                        <span
+                          size="26"
+                          color="#616161"
+                          className="css-1dn5jdn"
+                        ></span>
                       </button>
                     </div>
                   </div>
@@ -430,30 +486,30 @@ const App = (userDetails) => {
 
               <div
                 className="right-icons"
-                style={{ display: "flex", alignItems: "center" , gap:'1px'}}
+                style={{ display: "flex", alignItems: "center", gap: "1px" }}
               >
-                  <Dropdown overlay={menu} className="avt-user">
+                <Dropdown menu={{ items: menuAccount }} className="avt-user">
                   {user ? (
                     <div
                       style={{
-
                         justifyContent: "center",
                         alignItems: "center",
                         cursor: "pointer",
-                        
                       }}
                     >
                       <Avatar src={user.picture} />
                       <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                        {
-                          formatUserName(user.name)
-                        }
+                        {formatUserName(user.name)}
                       </span>
                     </div>
                   ) : (
                     <Avatar
                       icon={<UserOutlined />}
-                      style={{ backgroundColor: "#ae69dd", margin: "10px" ,fontSize:'24px'}}
+                      style={{
+                        backgroundColor: "#ae69dd",
+                        margin: "10px",
+                        fontSize: "24px",
+                      }}
                     />
                   )}
                 </Dropdown>
@@ -468,7 +524,11 @@ const App = (userDetails) => {
                   }}
                 >
                   <BellOutlined
-                    style={{ fontSize: "30px", color: "#ae69dd", margin: "10px" }}
+                    style={{
+                      fontSize: "30px",
+                      color: "#ae69dd",
+                      margin: "10px",
+                    }}
                   />
                 </Badge>
                 <Popover
@@ -501,10 +561,20 @@ const App = (userDetails) => {
                             ]}
                           >
                             <List.Item.Meta
-                              avatar={<Avatar src={selectedItems.thumbnail} />}
+                              avatar={
+                                <Avatar
+                                  src={
+                                    process.env.REACT_APP_API_URL +
+                                    selectedItems.thumbnail
+                                  }
+                                />
+                              }
                               title={
                                 selectedItems.shortDescription.length > 20
-                                  ? selectedItems.shortDescription.substring(0, 20) + "..."
+                                  ? selectedItems.shortDescription.substring(
+                                      0,
+                                      20
+                                    ) + "..."
                                   : selectedItems.shortDescription
                               }
                               description={
@@ -563,7 +633,6 @@ const App = (userDetails) => {
                     />
                   </NavLink>
                 </Badge> */}
-              
               </div>
 
               {/* <Menu
@@ -587,10 +656,8 @@ const App = (userDetails) => {
                             <Menu.Item key="4">Danh mục 4</Menu.Item>
                         </Menu.SubMenu>
                     </Menu> */}
-
             </div>
           </Header>
-
         </div>
       </Affix>
     </Layout>
