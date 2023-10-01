@@ -160,7 +160,7 @@ const Login = () => {
     <div className="login">
       {/* title */}
       <p className="title-login">
-        Chào mừng bạn đến với PhongVu.vn | Laptop, PC, Màn hình, điện thoại,
+        Chào mừng bạn đến với DinhMinh.vn | Laptop, PC, Màn hình, điện thoại,
         linh kiện Chính Hãng!
       </p>
       <div id="recaptcha-container"></div>
@@ -227,7 +227,7 @@ const Login = () => {
           type="checkbox"
           checked={check}
         />
-        <p className="p-terms-privacy">
+        <div className="p-terms-privacy">
           Bằng việc đánh dấu vào ô này, Tôi xác nhận:
           <p style={{ margin: "0" }}>
             i. Đã đọc và đồng ý với{" "}
@@ -247,7 +247,7 @@ const Login = () => {
             hợp pháp, chính xác, đầy đủ, hợp lệ và đã được sự đồng ý của Bên thứ
             ba (nếu có cung cấp thông tin của bên thứ ba)
           </p>
-        </p>
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ const { query } = require("../util/callbackToPromise");
 
 // LOGIN GOOGLE
 router.get("/login/success", (req, res) => {
-  console.log(req.session.user);
   if (req.user) {
     res.status(200).json({
       error: false,
@@ -19,7 +18,7 @@ router.get("/login/success", (req, res) => {
       user,
     });
   } else {
-    res.status(403).json({ error: true, message: "Not Authorized" });
+    res.status(403).json({ message: "Not Authorized" });
   }
 });
 

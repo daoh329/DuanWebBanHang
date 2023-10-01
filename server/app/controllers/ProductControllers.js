@@ -2,6 +2,8 @@ const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
 const createTables = require("../../config/CrTables");
 const path = require("path");
+const fs = require("fs");
+const { da } = require("date-fns/locale");
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
@@ -92,7 +94,7 @@ class Product {
       const id_Product = resultP.insertId;
       for (const image of arrPathImage) {
         const galeryValues = [image, id_Product];
-        query(is_galery, galeryValues);
+        await query(is_galery, galeryValues);
       }
       const PdValues = [
         data.quantity,
@@ -105,7 +107,7 @@ class Product {
       const id_PD = resultPD.insertId;
       for (const x of data.color) {
         const colorValues = [id_PD, x];
-        query(is_ProDetailColor, colorValues);
+        await query(is_ProDetailColor, colorValues);
       }
       res.status(200).send("success");
     } catch (error) {
@@ -115,22 +117,60 @@ class Product {
 
   async json(req, res) {
     // API: /product/json
-    const queryProduct = `SELECT product.id, product.name, product.price, product.status, productDetails.quantity, productDetails.created_at, category.name as category
+    const queryProduct = `SELECT 
+    product.id,
+    product.name,
+    product.price,
+    product.status,
+    product.shortDescription,
+    productDetails.quantity,
+    productDetails.created_at,
+    productDetails.configuration,
+    category.name as category,
+    CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color
     FROM product
-    JOIN productDetails
-    JOIN category
-    ON product.id = productDetails.product_id and product.CategoryID = category.id;
+    JOIN productDetails ON product.id = productDetails.product_id
+    JOIN category ON product.CategoryID = category.id
+    LEFT JOIN prodetailcolor ON productdetails.id = prodetailcolor.ProductDetailId
+    GROUP BY product.id, product.name, product.price, product.status, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
     `;
-    // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
-    mysql.query(queryProduct, (err, result) => {
-      if (err) throw err;
 
-      // Chuyển đổi kết quả truy vấn thành chuỗi JSON
-      const jsonResult = JSON.stringify(result);
+    // Hàm sử lí lỗi tập chung
+    const handleError = (e, res, message) => {
+      console.log(e);
+      return res.status(500).json(message);
+    };
 
-      // Gửi chuỗi JSON về cho client
-      res.send(jsonResult);
-    });
+    try {
+      const getProduct = await query(queryProduct);
+      // const getProduct = await query(queryProduct);
+      getProduct.forEach((data) => {
+        // sử lí color
+        data.color = JSON.parse(data.color);
+        const colors = data.color;
+        data.color = [];
+        for (const color in colors) {
+          if (colors.hasOwnProperty(color)) {
+            data.color.push(colors[color].color);
+          }
+        }
+        // sử lí configuration
+        data.configuration = JSON.parse(data.configuration);
+      });
+      res.status(200).send(getProduct);
+    } catch (error) {
+      handleError(error, res, { message: "Get product details failed!!!" });
+    }
+    // // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
+    // mysql.query(queryProduct, (err, result) => {
+    //   if (err) throw err;
+
+    //   // Chuyển đổi kết quả truy vấn thành chuỗi JSON
+    //   const jsonResult = JSON.stringify(result);
+
+    //   // Gửi chuỗi JSON về cho client
+    //   res.send(jsonResult);
+    // });
   }
 
   // API: /product/delete/:id
@@ -142,6 +182,13 @@ class Product {
       INNER JOIN productdetails ON product.id = productdetails.product_id
       WHERE product.id = ?;
     `;
+    // query get path image
+    const sl_galery = `
+      SELECT galery.thumbnail AS imagePath
+      FROM galery
+      INNER JOIN product ON product.id = galery.product_id
+      WHERE product.id = ?;
+    `;
     const dl_prodetailcolor = `
     DELETE FROM prodetailcolor
     WHERE ProductDetailId = ?;    
@@ -149,6 +196,11 @@ class Product {
     const dl_productDetails = `
       DELETE productdetails
       FROM productdetails INNER JOIN product ON productdetails.product_id = product.id
+      WHERE product.id = ?;
+    `;
+    const dl_galery = `
+      DELETE galery
+      FROM galery INNER JOIN product ON galery.product_id = product.id
       WHERE product.id = ?;
     `;
     const dl_product = `
@@ -164,9 +216,40 @@ class Product {
     try {
       // Lấy id từ client request lên
       const id = req.params.id;
-
+      if (!id) {
+        return res.status();
+      }
+      // select productDetails id
       const arrayProductDetail_id = await query(sl_productDetails_ID, [id]);
       const productDetails_ID = arrayProductDetail_id[0].value;
+
+      // select imagePath galery
+      const arrayImagePath = await query(sl_galery, [id]);
+
+      // check nếu có ảnh thì mới xóa trong server và sql
+      if (arrayImagePath.length != 0) {
+        await arrayImagePath.forEach(async (imagePath) => {
+          // Đường dẫn tới thư mục public chứa hình ảnh
+          const publicImagePath = path.join(
+            __dirname,
+            "../../src",
+            "public",
+            imagePath.imagePath
+          );
+          // Thực hiện xóa image trong server
+          fs.unlink(publicImagePath, (err) => {
+            if (err) {
+              console.error("Lỗi khi xóa hình ảnh:", err);
+              return res.status(500).json({ message: "Lỗi khi xóa hình ảnh." });
+            }
+          });
+        });
+
+        // nếu xóa image trên server thành công thì xóa trên sql
+        await query(dl_galery, [id]).catch((error) => {
+          handleError(error, res, { message: "Xóa ảnh trên csdl thất bại." });
+        });
+      }
 
       await Promise.all([
         query(dl_prodetailcolor, [productDetails_ID]),
@@ -174,10 +257,18 @@ class Product {
         query(dl_product, [id]),
       ]);
 
-      res.json({ status: "success" });
+      res.json({ message: "success" });
     } catch (error) {
-      handleError(error, res, { status: "failed" });
+      handleError(error, res, { message: "failed" });
     }
+  }
+
+  // Cập nhật sản phẩm
+  async Update(req, res) {
+    // API: /product/update/:id
+    console.log(req.body);
+    console.log(req.params.id);
+    res.status(200).json({ message: "success" });
   }
 
   //Truy Vấn Laptop hiển thị Home
@@ -312,26 +403,24 @@ class Product {
   }
 
   // disable product, API: /product/disable-and-enable
-  async disable (req, res){
+  async disable(req, res) {
     try {
-      const {id, status} = req.body;
-      const queryDisable = `UPDATE product SET status = ? WHERE id = ?`
+      const { id, status } = req.body;
+      const queryDisable = `UPDATE product SET status = ? WHERE id = ?`;
       if (status === 0) {
-        await query(queryDisable, [1,id]);
-      }
-      else{
-        await query(queryDisable, [0,id]);
+        await query(queryDisable, [1, id]);
+      } else {
+        await query(queryDisable, [0, id]);
       }
       setTimeout(() => {
-        res.status(200).json({message: "success"});
+        res.status(200).json({ message: "success" });
       }, 1000);
     } catch (error) {
       console.log(error);
       setTimeout(() => {
-        res.status(500).json({message: "error"});
+        res.status(500).json({ message: "error" });
       }, 1000);
     }
-    
   }
 }
 module.exports = new Product();
