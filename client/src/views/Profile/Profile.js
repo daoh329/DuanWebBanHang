@@ -234,17 +234,7 @@ export default function Profile(props) {
                               <Form.Item
                                 name="email"
                                 label="E-mail"
-                                rules={[
-                                  {
-                                    type: "email",
-                                    message:
-                                      "Định dạng E-mail không chính xác!",
-                                  },
-                                  {
-                                    required: true,
-                                    message: "Vui lòng nhập E-mail!",
-                                  },
-                                ]}>
+                                >
                                 {user && (
                                 <div>
                                 <Input
@@ -275,12 +265,6 @@ export default function Profile(props) {
                               <Form.Item
                                 name="phone"
                                 label="Số điện thoại"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Vui lòng nhập số điện thoại!",
-                                  },
-                                ]}
                               >
                                 <Input
                                   addonBefore={prefixSelector}
