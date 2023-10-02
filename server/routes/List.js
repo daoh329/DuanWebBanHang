@@ -5,5 +5,5 @@ const ListController = require("../app/controllers/List");
 router.post('/add/:table', ListController.add);
 router.post('/delete/:table/:key', ListController.delete);
 router.get('/:table', ListController.get);
-router.put('/update/:olkey', ListController.update);
+router.put('/update/:table', ListController.update);
 module.exports = router;

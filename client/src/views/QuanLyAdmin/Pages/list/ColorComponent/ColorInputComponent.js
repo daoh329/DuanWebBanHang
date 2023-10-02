@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {Button,Form,Input,notification,} from "antd";
+import {
+    Button,
+    Checkbox,
+    Form,
+    Input,
+    InputNumber,
+    Select,
+    notification,
+} from "antd";
 import axios from "axios";
 
-function FormInputBrand({ name,onUpdated }) {
-    const ol = name;
+function FormInputColor({ name,onUpdated }) {
+    const [ol, setol] = useState('')
     // function select element
     const [isLoading, setIsLoading] = useState(false);
+ 
     useEffect(() => {
+        setol(name)
     }, []);
 
     const onFinish = async (values) => {
@@ -14,7 +24,7 @@ function FormInputBrand({ name,onUpdated }) {
 
         try {
             const result = await axios.put(
-                `${process.env.REACT_APP_API_URL}/List/update/brand`,
+                `${process.env.REACT_APP_API_URL}/List/update/color`,
                 [values.name, ol]
             );
 
@@ -54,23 +64,21 @@ function FormInputBrand({ name,onUpdated }) {
         <Form
             style={{ maxWidth: 800, textAlign: "start" }}
             initialValues={{ remember: true }}
-            // labelCol={{ span: 8 }}
-            // wrapperCol={{ span: 16 }}
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
             <hr />
-            <h6 style={{ margin: "20px 0 10px 0" }}>Sửa Thương hiệu </h6>
-            {/* thương hiệu */}
+            <h6 style={{ margin: "20px 0 10px 0" }}>Sửa Màu</h6>
+            {/* Màu */}
             <Form.Item
                 hasFeedback
                 validateDebounce={1000}
-                label="Thương hiệu"
+                label="Màu"
                 name="name"
             >
-                <Input placeholder="nhập thương hiệu" />
+                <Input placeholder="nhập Màu" />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={isLoading}>
@@ -81,4 +89,4 @@ function FormInputBrand({ name,onUpdated }) {
     );
 }
 
-export default FormInputBrand;
+export default FormInputColor ;

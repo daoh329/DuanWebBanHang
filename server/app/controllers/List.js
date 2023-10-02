@@ -23,19 +23,13 @@ class List {
             return res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm danh mục' });
         }
     }
-    // '/List/update/:olkey'
+    // '/List/update/:table'
     async update(req, res) {
         try {
-            const olkey = req.params.olkey;
-            const { name, table } = req.body;
-
-            if (!name) {
-                return res.status(400).json({ message: 'Tên danh mục không được để trống' });
-            }
-
+            const table = req.params.table;
             // Thực hiện truy vấn SQL để sửa danh mục trong cơ sở dữ liệu
             const sql = `UPDATE ${table} SET name = ? WHERE name = ?`;
-            mysql.query(sql, [ name, olkey], (error, results) => {
+            mysql.query(sql, req.body, (error, results) => {
                 if (error) {
                     console.error('Lỗi khi sửa danh mục:', error);
                     return res.status(500).json({ message: 'Đã xảy ra lỗi khi sửa danh mục' });

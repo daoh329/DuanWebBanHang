@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import { useFormik } from "formik";
+import { Form, useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import FormInputBrand from './BrandInputComponent';
 
 function Brand() {
-  // Tạo modal show tiến trình thêm sản phẩm (Call API)
-  // Tạo biến trạng thái của modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const table = 'brand'
+  const [openModals, setOpenModals] = useState({});
+  const table = 'brand';
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -21,160 +21,135 @@ function Brand() {
     onSubmit: async (values) => {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/${table}`;
-      // call API
-      await axios
-        .post(url, values)
-        .then((res) => {
-          if (res.status === 200) {
-            getbrand()
-            const timer = setTimeout(() => {
-              setIsModalOpen(false);
-              // Hiển thị thông báo thành công
-              notification.success({
-                message: "Thành công",
-                description: "Dữ liệu đã được lưu thành công!",
-              });
-            }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
-            // Xóa timer khi component bị hủy
-
-            return () => clearTimeout(timer);
-          } else {
-            const timer = setTimeout(() => {
-              setIsModalOpen(false);
-              // Hiển thị thông báo lỗi
-              notification.error({
-                message: "Lỗi",
-                description: "Có lỗi xảy ra khi lưu dữ liệu!",
-              });
-            }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
-            // Xóa timer khi component bị hủy
-            return () => clearTimeout(timer);
-          }
-        })
-        .catch((e) => {
+      try {
+        const res = await axios.post(url, values);
+        if (res.status === 200) {
+          getBrands();
           const timer = setTimeout(() => {
-            console.log(e);
             setIsModalOpen(false);
-            // Hiển thị thông báo lỗi
+            notification.success({
+              message: "Thành công",
+              description: "Dữ liệu đã được lưu thành công!",
+            });
+          }, 1000);
+          return () => clearTimeout(timer);
+        } else {
+          const timer = setTimeout(() => {
+            setIsModalOpen(false);
             notification.error({
               message: "Lỗi",
               description: "Có lỗi xảy ra khi lưu dữ liệu!",
             });
-          }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
-          // Xóa timer khi component bị hủy
+          }, 1000);
           return () => clearTimeout(timer);
-        });
+        }
+      } catch (e) {
+        const timer = setTimeout(() => {
+          console.log(e);
+          setIsModalOpen(false);
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+          });
+        }, 1000);
+        return () => clearTimeout(timer);
+      }
     },
   });
 
-  // Tạo mảng chứa brand lấy từ database
-  const [brand, setbrand] = useState([]);
+  const [brand, setBrand] = useState([]);
 
-  // function call api get brand
-  const getbrand = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}/List/${table}`)
-      .then((response) => {
-        setbrand(response.data.results);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const getBrands = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/${table}`);
+      setBrand(response.data.results);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
-    // get brand data
-    getbrand();
+    getBrands();
   }, []);
-
+  
   const columns = [
     { title: 'Tên danh mục', dataIndex: 'name', key: 'name' },
     {
       title: 'Hành động',
       dataIndex: 'name',
       key: 'action',
-      render: (name, record) => {
-        async function handleDelete() {
-          try {
-            await axios.post(
-              `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`
-            );
-            getbrand()
-          } catch (error) {
-            console.log(error);
-          }
-        }
-
-        async function handleUpdate() {
-          // setIsLoading(true);
-          setIsModalOpen(true);
-
-          // setTimeout(() => {
-          //   setIsLoading(false);
-          // }, 1500);
-        }
-
-        const handleCancel = () => {
-          setIsModalOpen(false);
-        };
-
-        return (
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-around",
-            }}
+      render: (name, record) => (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
+          <Button className="confirm-button" onClick={() => handleUpdate(name)}><EditOutlined /> Edit </Button>
+          <Modal
+            open={openModals[name]}
+            title="Cập nhật sản phẩm"
+            onCancel={() => handleCancel(name)}
+            footer={false}
           >
-            <Button className="confirm-button"onClick={handleUpdate}><EditOutlined /> Edit </Button>
-            <Popconfirm
-              title="Cảnh báo!!!"
-              description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
-              onConfirm={handleDelete}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button danger>
-                <DeleteOutlined /> Delete
-              </Button>
-            </Popconfirm>
-
-
-            <Modal
-              open={isModalOpen}
-              title="Cập nhật sản phẩm"
-              onCancel={handleCancel}
-              footer={false}
-              
-            >
-            </Modal>
-          </div>
-        )
-      }
-
-
-    },
+            <FormInputBrand name={name} onUpdated={handleBrandUpdated} />
+          </Modal>
+          <Popconfirm
+            title="Cảnh báo!!!"
+            description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
+            onConfirm={() => handleDelete(name)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger><DeleteOutlined /> Delete</Button>
+          </Popconfirm>
+        </div>
+      )
+    }
   ];
+
+  const handleUpdate = (name) => {
+    setOpenModals({
+      ...openModals,
+      [name]: true,
+    });
+  };
+
+  const handleCancel = (name) => {
+    setOpenModals({
+      ...openModals,
+      [name]: false,
+    });
+  };
+
+  const handleBrandUpdated = () => {
+    getBrands();
+  };
+
+  const handleDelete = async (name) => {
+    try {
+      await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`);
+      getBrands();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container-content">
-
       <div className="page-group">
-        {/* list */}
         <div className="page1-control">
           <h3 style={{ fontWeight: "bold" }}>Brand</h3>
           <Table columns={columns} dataSource={brand} />
         </div>
-        {/* form */}
         <div className="page2-control">
           <form
             className="form"
             id="form-create-brand"
             onSubmit={formik.handleSubmit}
           >
-
             <h3 style={{ fontWeight: "bold" }}>Thêm Brand</h3>
-            {/* brand */}
             <div className="form-group">
               <label className="form-label">brand</label>
               <input
@@ -188,7 +163,6 @@ function Brand() {
               {formik.errors.name && (
                 <span className="form-message">{formik.errors.name}</span>
               )}
-
             </div>
             <button type="submit" className="btn-submit-form">
               Xác nhận
@@ -208,4 +182,5 @@ function Brand() {
     </div>
   );
 }
+
 export default Brand;
