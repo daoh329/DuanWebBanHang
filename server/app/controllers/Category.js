@@ -54,11 +54,11 @@ class Category{
   // '/category/delete/:id'
   async delete(req,res){
     try {
-      const { name } = req.body;
+      const id = req.params.id
   
       // Thực hiện truy vấn SQL để xóa danh mục từ cơ sở dữ liệu
       const sql = 'DELETE FROM category WHERE id = ?';
-      mysql.query(sql, [name], (error, results) => {
+      mysql.query(sql, [id], (error, results) => {
         if (error) {
           console.error('Lỗi khi xóa danh mục:', error);
           return res.status(500).json({ message: 'Đã xảy ra lỗi khi xóa danh mục' });

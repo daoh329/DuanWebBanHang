@@ -3,8 +3,8 @@ import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Modal, notification, Spin, Table, Button } from "antd";
-import {DeleteOutlined,EditOutlined} from '@ant-design/icons';
+import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 function Category() {
   // Tạo modal show tiến trình thêm sản phẩm (Call API)
   // Tạo biến trạng thái của modal
@@ -89,15 +89,65 @@ function Category() {
     { title: 'Tên danh mục', dataIndex: 'name', key: 'name' },
     {
       title: 'Hành động',
-      dataIndex: 'action',
-      key: 'action',
-      render:()=>(<span>
-          <Button type={{backgroundcolor:'green'}} > <EditOutlined />
-          </Button>
-          <Button className="confirm-button" > <DeleteOutlined />
-          </Button>
-        </span>)
-        
+      dataIndex: 'id',
+      key: 'id',
+      render: (id, record) => {
+        async function handleDelete() {
+          try {
+            await axios.post(
+              `${process.env.REACT_APP_API_URL}/category/delete/${id}`
+            );
+            window.location.reload(); 
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        async function handleUpdate() {
+          // setIsLoading(true);
+          setIsModalOpen(true);
+
+          // setTimeout(() => {
+          //   setIsLoading(false);
+          // }, 1500);
+        }
+
+        const handleCancel = () => {
+          setIsModalOpen(false);
+        };
+
+        return (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Button className="confirm-button"onClick={handleUpdate}><EditOutlined /> Edit </Button>
+            <Popconfirm
+              title="Cảnh báo!!!"
+              description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
+              onConfirm={handleDelete}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>
+                <DeleteOutlined /> Delete
+              </Button>
+            </Popconfirm>
+
+
+            <Modal
+              open={isModalOpen}
+              title="Cập nhật sản phẩm"
+              onCancel={handleCancel}
+              footer={false}
+            >
+            </Modal>
+          </div>
+        )
+      }
     },
   ];
 
