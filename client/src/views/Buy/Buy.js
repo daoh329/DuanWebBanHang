@@ -139,8 +139,9 @@ const showConfirm = () => {
   };
 
   const handleBuyVNpay = () => {
-    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url`;
-  };
+    const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
+};
   
 
   return (
@@ -1003,7 +1004,7 @@ const showConfirm = () => {
                                 <img
                                   className="lazyload css-jdz5ak snipcss0-7-11-14 snipcss0-11-110-113"
                                   alt="product"
-                                  src={item.thumbnail} // Lấy URL ảnh từ dữ liệu
+                                  src={process.env.REACT_APP_API_URL+item.thumbnail} // Lấy URL ảnh từ dữ liệu
                                   loading="lazy"
                                   decoding="async"
                                 />

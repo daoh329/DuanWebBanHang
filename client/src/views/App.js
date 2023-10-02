@@ -30,6 +30,7 @@ import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import axios from "axios";
 import Buy from "./Buy/Buy";
+import CreateOrder from "./VnPay/CreateOrder";
 const App = () => {
   const [user, setUser] = useState(null);
   
@@ -55,6 +56,11 @@ const App = () => {
           <Nav user={user} />
           <header>
             <Routes>
+            <Route path="/test" element={<Test />} />
+
+
+
+
               <Route path="/" element={<Home />} />
               <Route path="/detail/:id" element={<Detail />} />
               <Route path="/login" element={user ? <Navigate to='/' /> : <Login />} />
@@ -74,6 +80,7 @@ const App = () => {
               <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/profile" element={<Profile user={user} />} />
               <Route path="/tat-ca-san-pham" element={<AllProduct />} />
+              <Route path="/createorder" element={<CreateOrder />} />
             </Routes>
           </header>
           <MobileNav user={user} />
