@@ -189,12 +189,10 @@ const Home = () => {
           {sliderImages.map((image, index) => (
             <div className='banner' key={index}>
               <img
-
                 src={image}
                 alt={`Slide ${index}`}
-
-                style={{ width: "100%", height: "450px", objectFitfit: 'cover' }}
-
+               
+                className="imgSliders"
               />
             </div>
           ))}
