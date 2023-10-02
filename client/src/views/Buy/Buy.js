@@ -119,17 +119,32 @@ const showConfirm = () => {
     },
   });
 };
+const [buysData, setBuysData] = useState(null);
+const [data, setData] = useState([]);
+// Lấy dữ liệu từ sessionStorage khi component được tải
+useEffect(() => {
+  const buysDataFromSession = sessionStorage.getItem("buys");
+  if (buysDataFromSession) {
+    // Chuyển dữ liệu từ chuỗi JSON thành đối tượng JavaScript
+    const parsedBuysData = JSON.parse(buysDataFromSession);
+    setBuysData(parsedBuysData);
 
-  const [buysData, setBuysData] = useState(null);
-  // Lấy dữ liệu từ sessionStorage khi component được tải
-  useEffect(() => {
-    const buysDataFromSession = sessionStorage.getItem("buys");
-    if (buysDataFromSession) {
-      // Chuyển dữ liệu từ chuỗi JSON thành đối tượng JavaScript
-      const parsedBuysData = JSON.parse(buysDataFromSession);
-      setBuysData(parsedBuysData);
-    }
-  }, []);
+    //mới
+    const selectedItems = parsedBuysData.selectedItems;
+    const quantities = []; // Mảng chứa số lượng
+
+    selectedItems.forEach((item) => {
+      const quantity = item.quantity;
+      quantities.push(quantity); // Thêm số lượng vào mảng
+    });
+
+    // Lưu mảng chứa số lượng vào biến data
+    setData(quantities);
+  }
+}, []);
+
+
+  console.log("data",data);
 
   const handleBuyClick = () => {
     navigate("/");
@@ -992,6 +1007,7 @@ const showConfirm = () => {
                 <div className="card-body css-0 snipcss0-1-1-6 snipcss0-5-100-105">
                   {buysData &&
                     buysData.selectedItems.map((item, index) => (
+                      <div key={index}>
                       <div className="css-9op68y snipcss0-2-6-7 snipcss0-6-105-106">
                         <div className="css-ov1ktg snipcss0-3-7-8 snipcss0-7-106-107">
                           <div className="snipcss0-4-8-9 snipcss0-8-107-108">
@@ -1049,6 +1065,7 @@ const showConfirm = () => {
                             </div>
                           </div>
                         </div>
+                      </div>
                       </div>
                     ))}
                 </div>

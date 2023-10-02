@@ -56,10 +56,6 @@ const App = () => {
           <Nav user={user} />
           <header>
             <Routes>
-            <Route path="/test" element={<Test />} />
-
-
-
 
               <Route path="/" element={<Home />} />
               <Route path="/detail/:id" element={<Detail />} />

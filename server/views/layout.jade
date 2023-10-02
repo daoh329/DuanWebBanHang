@@ -1,20 +1,32 @@
 doctype html
-html
+html(lang="en")
   head
-    title=title
-    link(rel='stylesheet', href='/stylesheets/jumbotron-narrow.css')
-    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-  body
-    div.container
-      div.header.clearfix
-        ul.nav.nav-pills.pull-right
-          li(role="presentation").active
-            a(href='/pay/create_payment_url') Tạo mới GD thanh toán
-          li(role="presentation").active
-            a(href='/pay/querydr') API truy vấn kết quả thanh toán
-          li(role="presentation").active
-            a(href='/pay/refund') API hoàn tiền giao dịch
-        h3.text-muted VNPAY DEMO
-      block content
-      footer.footer
-        p &copy; VNPAY #{new Date().getFullYear()}
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Document
+  body 
+
+div.container(style="max-width: 1200px; margin: 0 auto; padding: 20px;")
+  div.header.clearfix(style=" padding: 10px;")
+    ul.nav.nav-pills.pull-right(style="list-style: none; padding: 0;display:flex;margin: 0px 14%;")
+      li(role="presentation" style="margin-left:10%;border:solid 1px white ;padding: 10px;background-color: aquamarine;").active
+        a(href='/pay/create_payment_url' style="text-decoration: none;color: black;") Tạo mới GD thanh toán
+
+      li(role="presentation" style="margin-left:10%;border:solid 1px white ;padding: 10px;background-color: aquamarine;").active
+        a(href='/pay/querydr' style="text-decoration: none;color: black; ") API truy vấn kết quả thanh toán
+
+      li(role="presentation" style="margin-left:10%;border:solid 1px white ;padding: 10px;background-color: aquamarine;").active
+        a(href='/pay/refund' style="text-decoration: none;color: black; ") API hoàn tiền giao dịch
+
+    //- h3.text-muted(style="margin: 0; font-size: 24px;") VNPAY DEMO
+
+
+
+
+
+  block content
+
+
+
+  footer.footer(style="text-align: center; background-color: #333; color: #fff; padding: 10px 0;")
+    p &copy; VNPAY #{new Date().getFullYear()}
