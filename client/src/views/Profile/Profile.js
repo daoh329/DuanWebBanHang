@@ -265,12 +265,6 @@ export default function Profile(props) {
                               <Form.Item
                                 name="phone"
                                 label="Số điện thoại"
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Vui lòng nhập số điện thoại!",
-                                  },
-                                ]}
                               >
                                 <Input
                                   addonBefore={prefixSelector}
