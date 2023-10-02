@@ -5,7 +5,8 @@ const moment = require('moment');
 
 class PayController {
     async create_payment_url(req, res){
-        res.render('order', {title: 'Tạo mới đơn hàng', amount: 10000})
+        const amount = req.query.amount; // Lấy giá trị amount từ tham số truy vấn
+        res.render('order', {title: 'Tạo mới đơn hàng', amount: amount}) // Sử dụng giá trị amount để render trang
     }
 
     async OrderList(req, res){
