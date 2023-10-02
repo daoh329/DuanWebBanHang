@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { message } from "antd";
 import "./Home.scss";
 import {parse, stringify} from 'flatted';
+import CountdownTimer from './CountdownTimer';
 
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
@@ -18,6 +19,9 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 const Home = () => {
+//
+const initialTime = 11300;
+
   const [products, setProducts] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
@@ -193,7 +197,7 @@ const Home = () => {
                 src={image}
                 alt={`Slide ${index}`}
 
-                style={{ width: "100%", height: "auto", objectFitfit: 'cover' }}
+                style={{ width: "100%", height: "450px", objectFitfit: 'cover' }}
 
               />
             </div>
@@ -355,10 +359,12 @@ const Home = () => {
           onChange={handleTabChange}
         >
           <TabPane tab="Tuần lễ giảm giá" key="1">
+          <h1>Khuyến mãi sắp kết thúc sau:</h1>
+          
             <div className="scroll-control-phone" ref={containerRef}>
-              {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+              {products &&
+                products.length > 0 &&
+                products.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
                     <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
@@ -380,8 +386,12 @@ const Home = () => {
                     </div>
                   </div>
                 ))}
+               
 
             </div>
+            <div className="countdown-timer">
+        <CountdownTimer initialTime={initialTime} />
+      </div>
           </TabPane>
           <TabPane tab="Sản phẩm bán chạy" key="2">
           <div className="scroll-control-phone" ref={containerRef}>

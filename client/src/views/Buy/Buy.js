@@ -30,8 +30,8 @@ function formatCurrency(value) {
 //
 
 export default function Buy(props) {
+  
   const { user } = props;
-  console.log(props);
 
   const navigate = useNavigate();
 
@@ -137,6 +137,12 @@ const showConfirm = () => {
   const handleAddClick = () => {
     navigate("/profile");
   };
+
+  const handleBuyVNpay = () => {
+    const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
+};
+  
 
   return (
     <>
@@ -837,6 +843,7 @@ const showConfirm = () => {
                         data-content-target="COD"
                         className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
                         id="style-UMMoQ"
+                        onClick={handleBuyVNpay}
                       >
                         <div
                           type="subtitle"
@@ -997,7 +1004,7 @@ const showConfirm = () => {
                                 <img
                                   className="lazyload css-jdz5ak snipcss0-7-11-14 snipcss0-11-110-113"
                                   alt="product"
-                                  src={item.thumbnail} // Lấy URL ảnh từ dữ liệu
+                                  src={process.env.REACT_APP_API_URL+item.thumbnail} // Lấy URL ảnh từ dữ liệu
                                   loading="lazy"
                                   decoding="async"
                                 />

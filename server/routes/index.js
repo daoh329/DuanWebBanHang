@@ -4,6 +4,7 @@ const Product = require('./Product.js')
 const category = require('./category.js')
 const color = require('./color.js')
 const brand = require('./brand.js')
+const pay = require('./pay')
 function route(app){
     // app.use('/x',cx);
     app.use('/order', orderRouter);
@@ -11,5 +12,6 @@ function route(app){
     app.use('/category', category);
     app.use('/color',color);
     app.use('/brand',brand);
+    app.use('/pay', pay);
 }
-module.exports= route;
+module.exports = route;

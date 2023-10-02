@@ -271,7 +271,7 @@ function Cart() {
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
-                          src={item.thumbnail}
+                          src={process.env.REACT_APP_API_URL+item.thumbnail}
                           alt="thumbnail"
                         />
                       </td>
