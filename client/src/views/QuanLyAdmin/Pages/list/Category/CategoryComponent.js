@@ -97,7 +97,7 @@ function Category() {
             await axios.post(
               `${process.env.REACT_APP_API_URL}/category/delete/${id}`
             );
-            window.location.reload(); 
+            getcategory()
           } catch (error) {
             console.log(error);
           }

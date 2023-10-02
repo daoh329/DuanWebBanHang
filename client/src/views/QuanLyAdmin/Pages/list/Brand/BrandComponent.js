@@ -3,13 +3,14 @@ import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Modal, notification, Spin, Table } from "antd";
+import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 function Brand() {
   // Tạo modal show tiến trình thêm sản phẩm (Call API)
   // Tạo biến trạng thái của modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const table = 'brand'
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -19,7 +20,7 @@ function Brand() {
     }),
     onSubmit: async (values) => {
       setIsModalOpen(true);
-      const url = `${process.env.REACT_APP_API_URL}/brand/add`;
+      const url = `${process.env.REACT_APP_API_URL}/List/add/${table}`;
       // call API
       await axios
         .post(url, values)
@@ -72,7 +73,7 @@ function Brand() {
   // function call api get brand
   const getbrand = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/brand`)
+      .get(`${process.env.REACT_APP_API_URL}/List/${table}`)
       .then((response) => {
         setbrand(response.data.results);
       })
@@ -90,21 +91,66 @@ function Brand() {
     { title: 'Tên danh mục', dataIndex: 'name', key: 'name' },
     {
       title: 'Hành động',
-      dataIndex: 'action',
+      dataIndex: 'name',
       key: 'action',
-      render: () => (
-        <span>
+      render: (name, record) => {
+        async function handleDelete() {
+          try {
+            await axios.post(
+              `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`
+            );
+            getbrand()
+          } catch (error) {
+            console.log(error);
+          }
+        }
 
-          {/* <Button className="cancel-button" style={{ backgroundbrand: 'red', brand: 'white' }}>
-            discontinued
-          </Button>
+        async function handleUpdate() {
+          // setIsLoading(true);
+          setIsModalOpen(true);
 
-          <Button className="confirm-button" style={{ backgroundbrand: 'green', brand: 'white' }}>
-            Xác nhận
-          </Button> */}
+          // setTimeout(() => {
+          //   setIsLoading(false);
+          // }, 1500);
+        }
 
-        </span>
-      )
+        const handleCancel = () => {
+          setIsModalOpen(false);
+        };
+
+        return (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Button className="confirm-button"onClick={handleUpdate}><EditOutlined /> Edit </Button>
+            <Popconfirm
+              title="Cảnh báo!!!"
+              description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
+              onConfirm={handleDelete}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>
+                <DeleteOutlined /> Delete
+              </Button>
+            </Popconfirm>
+
+
+            <Modal
+              open={isModalOpen}
+              title="Cập nhật sản phẩm"
+              onCancel={handleCancel}
+              footer={false}
+              
+            >
+            </Modal>
+          </div>
+        )
+      }
 
 
     },
