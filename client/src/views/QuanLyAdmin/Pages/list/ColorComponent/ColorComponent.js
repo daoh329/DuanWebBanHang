@@ -20,7 +20,7 @@ function Color() {
     }),
     onSubmit: async (values) => {
       setIsModalOpen(true);
-      const url = `${process.env.REACT_APP_API_URL}/color/add`;
+      const url = `${process.env.REACT_APP_API_URL}/List/add/color`;
       try {
         const res = await axios.post(url, values);
         if (res.status === 200) {
@@ -54,7 +54,7 @@ function Color() {
 
   const getColors = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/color`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/color`);
       setColor(response.data.results);
     } catch (e) {
       console.log(e);

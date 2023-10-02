@@ -20,7 +20,7 @@ function Category() {
     }),
     onSubmit: async (values) => {
       setIsModalOpen(true);
-      const url = `${process.env.REACT_APP_API_URL}/category/add`;
+      const url = `${process.env.REACT_APP_API_URL}/List/add/category`;
       try {
         const res = await axios.post(url, values);
         if (res.status === 200) {
