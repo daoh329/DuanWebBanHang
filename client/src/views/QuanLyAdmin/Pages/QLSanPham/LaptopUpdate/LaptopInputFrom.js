@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  notification,
-} from "antd";
+import { Button, Form, Input, InputNumber, Select, notification } from "antd";
 import axios from "axios";
 
 function LaptopInputFrom({ Product }) {
   const idProduct = Product.id;
   const product = Product;
   // console.log(product);
+
+  // console.log(product);
   // function select element
   const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [form] = Form.useForm(); // use set default values
 
   const getBrands = async () => {
     await axios
@@ -31,19 +24,72 @@ function LaptopInputFrom({ Product }) {
       });
   };
 
-  async function setDefaultValues(product) {
-    form.setFieldsValue({ brand: product.brand }, { name: product.name });
-  }
-
   useEffect(() => {
     getBrands();
-    setDefaultValues(product);
   }, []);
 
   const onFinish = async (values) => {
     setIsLoading(true);
-    console.log(values);
     try {
+      // kiểm tra nếu "" thì set là undefined
+      // (undefined không được đưa lên server)
+      var checkValuesChange = false;
+
+      const fieldsConfiguraton = [
+        "M2_slot_type_supported",
+        "accessory",
+        "connector",
+        "cpu",
+        "demand",
+        "guarantee",
+        "keyboard",
+        "mass",
+        "maximum_number_of_storage_ports",
+        "os",
+        "output_port",
+        "part_number",
+        "pin",
+        "ram",
+        "rom",
+        "screen",
+        "series",
+        "vga",
+        "wireless_connectivity",
+      ];
+
+      values.configuration = values.configuration || {};
+      for (const fieldName in values) {
+        if (!values[fieldName]) {
+
+          if (values[fieldName] === undefined && fieldsConfiguraton.includes(fieldName)) {
+            values.configuration[fieldName] = product.configuration[fieldName];
+          }
+          else if (values[fieldName] === "") {
+            values[fieldName] = undefined;
+          }
+        }
+        else if (values[fieldName]) {
+          if (fieldsConfiguraton.includes(fieldName)) {
+            values.configuration[fieldName] = values[fieldName];
+            delete values[fieldName];
+          }
+          if (fieldName === "color") {
+            const strColor = values[fieldName].toString();
+            const arrColor = strColor.split(",");
+            values[fieldName] = arrColor;
+          }
+          checkValuesChange = true;
+        }
+      }
+
+      if (!checkValuesChange) {
+        setIsLoading(false);
+        return notification.warning({
+          message: "Không có dữ liệu được thay đổi",
+        });
+      }
+
+      // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${idProduct}`,
         values
@@ -91,18 +137,10 @@ function LaptopInputFrom({ Product }) {
       <h6 style={{ margin: "20px 0 10px 0" }}>Thông tin chung</h6>
       {/* thương hiệu */}
       <Form.Item
-        hasFeedback
-        validateDebounce={1000}
         label="Thương hiệu"
         name="brand"
-        rules={[
-          {
-            required: true,
-            message: "Vui lòng chọn thương hiệu của sản phẩm!",
-          },
-        ]}
       >
-        <Select placeholder="Chọn thương hiệu">
+        <Select defaultValue={product.brand} placeholder="Chọn thương hiệu">
           {brands.map((brand) => (
             <Select.Option key={brand.name} value={brand.name}>
               {brand.name}
@@ -125,7 +163,6 @@ function LaptopInputFrom({ Product }) {
         validateDebounce={1000}
         label="Tên"
         name="name"
-        rules={[{ required: true, message: "Vui lòng nhập trường này!" }]}
       >
         <Input
           defaultValue={product ? product.name : null}
@@ -135,14 +172,8 @@ function LaptopInputFrom({ Product }) {
 
       {/* Giá */}
       <Form.Item
-        hasFeedback
-        validateDebounce={1000}
         label="Giá"
         name="price"
-        rules={[
-          { required: true, message: "Vui lòng nhập trường này!" },
-          { type: "number", min: 0, message: "'Giá' không phải là số hợp" },
-        ]}
       >
         <InputNumber
           defaultValue={product ? product.price : null}
@@ -153,11 +184,8 @@ function LaptopInputFrom({ Product }) {
 
       {/* Mô tả ngắn */}
       <Form.Item
-        hasFeedback
-        validateDebounce={1000}
         label="Mô tả ngắn"
         name="shortDescription"
-        rules={[{ required: true, message: "Vui lòng nhập trường này!" }]}
       >
         <Input.TextArea
           defaultValue={product ? product.shortDescription : null}
@@ -336,11 +364,6 @@ function LaptopInputFrom({ Product }) {
           defaultValue={product ? product.configuration.accessory : null}
           placeholder="Nhập các phụ kiện đi kèm của sản phẩm"
         />
-      </Form.Item>
-
-      {/* Trạng thái */}
-      <Form.Item name="status" valuePropName="checked">
-        <Checkbox checked={true}>Trạng thái</Checkbox>
       </Form.Item>
 
       <Form.Item>

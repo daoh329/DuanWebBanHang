@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Table,
-  Button,
-  Tag,
-  Popconfirm,
-  Modal,
-  message,
-} from "antd";
+import { Table, Button, Tag, Popconfirm, Modal, message } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
 import LaptopInputFrom from "./LaptopUpdate/LaptopInputFrom";
@@ -157,7 +150,9 @@ function Product() {
               onCancel={handleCancel}
               footer={false}
             >
-              <LaptopInputFrom Product={record} />
+              {record.category === "laptop" && (
+                <LaptopInputFrom Product={record} />
+              )}
             </Modal>
             {/* delete */}
             <Popconfirm
@@ -201,7 +196,7 @@ function Product() {
   return (
     <div>
       <h1>Quản lý Sản Phẩm</h1>
-      <Table columns={columns} dataSource={Product}/>
+      <Table columns={columns} dataSource={Product} />
     </div>
   );
 }

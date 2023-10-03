@@ -270,9 +270,53 @@ class Product {
   // Cập nhật sản phẩm
   async Update(req, res) {
     // API: /product/update/:id
-    console.log(req.body);
-    console.log(req.params.id);
-    res.status(200).json({ message: "success" });
+    const id = req.params.id;
+    const dataUpdate = req.body;
+
+    const fieldsProduct = ["name", "price", "shortDescription"];
+    var dataGroupTableProduct = {};
+
+    const fieldsProductDetails = ["quantity", "brand", "configuration", "description"];
+    var dataGroupTableProductDetails = {};
+
+    const fieldsColor = ["color"];
+    var dataGroupTableProDetailColor = {};
+
+    const fieldsGalery = ["galery"];
+    var dataGroupTableGalery = {};
+
+    try {
+      for (const fieldName in dataUpdate) {
+        // data product
+        if (fieldsProduct.includes(fieldName)) {
+          dataGroupTableProduct[fieldName] = dataUpdate[fieldName];
+        }
+        // details
+        if (fieldsProductDetails.includes(fieldName)) {
+          dataGroupTableProductDetails[fieldName] = dataUpdate[fieldName];
+        }
+        // color details
+        if (fieldsColor.includes(fieldName)) {
+          dataGroupTableProDetailColor[fieldName] = dataUpdate[fieldName];
+        }
+        // galery
+        if (fieldsGalery.includes(fieldName)) {
+          dataGroupTableGalery[fieldName] = dataUpdate[fieldName];
+        }
+      }
+
+      console.log("product: ", dataGroupTableProduct);
+      console.log("details: ", dataGroupTableProductDetails);
+      console.log("color: ", dataGroupTableProDetailColor);
+      console.log("galery: ", dataGroupTableGalery);
+
+      const queryUpdate = `UPDATE product SET ? WHERE id = ?`;
+
+      res.status(200).json({ message: "success" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "failed" });
+    }
   }
 
   //Truy Vấn Laptop hiển thị Home

@@ -7,7 +7,7 @@ router.get('/productslaptop', ProductControllers.QueryProductsLaptop);
 router.get('/productsPhone', ProductControllers.QueryProductsDienThoai);
 router.get('/detail/:id', ProductControllers.DetailProducts);
 router.post('/Add', upload.array('images', 10), ProductControllers.Addproduct);
-router.delete('/delete/:id', ProductControllers.Delete);
+router.delete('/delete/:id',upload.array('images', 10), ProductControllers.Delete);
 router.put('/update/:id', ProductControllers.Update);
 router.get('/json', ProductControllers.json);
 router.get('/brands', ProductControllers.getBrand);
