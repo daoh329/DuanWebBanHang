@@ -16,6 +16,7 @@ class Product {
     const configuration =
       data.category === "Điện thoại"
         ? {
+            series: data.series,
             screen: data.screen,
             resolution: data.resolution,
             chip: data.chip,
@@ -40,6 +41,8 @@ class Product {
             accessory: data.accessory,
           }
         : {
+            series: data.series,
+            part_number: data.part_number,
             guarantee: data.guarantee,
             demand: data.demand,
             cpu: data.cpu,
@@ -123,6 +126,7 @@ class Product {
     product.price,
     product.status,
     product.shortDescription,
+    productDetails.brand,
     productDetails.quantity,
     productDetails.created_at,
     productDetails.configuration,
@@ -132,7 +136,7 @@ class Product {
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
     LEFT JOIN prodetailcolor ON productdetails.id = prodetailcolor.ProductDetailId
-    GROUP BY product.id, product.name, product.price, product.status, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
+    GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
     `;
 
     // Hàm sử lí lỗi tập chung

@@ -5,7 +5,6 @@ import {
   Tag,
   Popconfirm,
   Modal,
-  notification,
   message,
 } from "antd";
 import { format } from "date-fns";
@@ -202,7 +201,7 @@ function Product() {
   return (
     <div>
       <h1>Quản lý Sản Phẩm</h1>
-      <Table columns={columns} dataSource={Product} />
+      <Table columns={columns} dataSource={Product}/>
     </div>
   );
 }
