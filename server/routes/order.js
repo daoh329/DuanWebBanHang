@@ -8,6 +8,8 @@ router.post('/pay', OrderController.order);
 // Trong routes.js hoặc tệp tương tự
 router.get('/quanlyOrder', OrderController.quanlyOrder);
 
+router.get('/revenue', OrderController.Revenue);
+
 router.get('/dashboard', OrderController.dashboard);
 
 router.put(`/confirm/:id`, OrderController.confirmOrder);

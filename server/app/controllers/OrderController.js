@@ -129,6 +129,42 @@ class OrderController {
       });
   }
   
+  async Revenue(req, res) {
+    let sql = `
+        SELECT 
+            DATE_FORMAT(o.updated_at, '%Y-%m') as updated_month, 
+            SUM(p.price * od.quantity) as revenue
+        FROM 
+            orders o
+        JOIN 
+            orderDetailsProduct od ON o.id = od.orderID
+        JOIN 
+            product p ON od.productID = p.id
+        GROUP BY 
+            DATE_FORMAT(o.updated_at, '%Y-%m')
+    `;
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const monthExists = acc.find(data => data.updated_month === item.updated_month);
+        
+        if(monthExists){
+          monthExists.revenue += item.revenue;
+        } else {
+          let newItem = {updated_month: item.updated_month, revenue: item.revenue};
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);
+  
+      res.send(convertedData);
+    });
+  }
+
+
   async dashboard(req, res) {
     let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {

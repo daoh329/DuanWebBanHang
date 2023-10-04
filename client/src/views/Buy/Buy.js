@@ -451,7 +451,7 @@ export default function Buy(props) {
                             <label>
                               <input
                                 type="checkbox"
-                                value="Tất cả các ngày trong tuần "
+                                value="Tất cả các ngày trong tuần"
                                 checked={deliveryMethod === 'Tất cả ngày trong tuần'}
                                 onChange={(e) => setDeliveryMethod(e.target.checked ? e.target.value : '')}
                               />
