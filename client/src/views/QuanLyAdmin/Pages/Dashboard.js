@@ -28,12 +28,12 @@ const Dashboard = () => {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/dashboard`);
       
       // Chuyển đổi updated_date từ timestamp về chuỗi ngày tháng
-      const convertData = result.data.map(item => ({
+      const convertedData = result.data.map(item => ({
         ...item,
         updated_date: new Date(item.updated_date * 1000).toISOString().slice(0, 19).replace('T', ' ')
       }));
 
-      setData(convertData);
+      setData(convertedData);
     };
 
     fetchData();
@@ -59,7 +59,7 @@ const Dashboard = () => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="revenue" stroke="#8884d8" activeDot={{ r: 10 }} dot={{ stroke: '#8884d8', strokeWidth: 2 }} />
+          <Line type="monotone" dataKey="Revenue" stroke="#8884d8" activeDot={{ r: 10 }} dot={{ stroke: '#8884d8', strokeWidth: 2 }} />
         </LineChart>
       </div>
     <h4>Biểu đồ doanh thu đơn đặt hàng</h4>
@@ -80,9 +80,9 @@ const Dashboard = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="unconfirm" stroke="#FFD700" activeDot={{ r: 10 }} dot={{ stroke: '#FFD700', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="confirm" stroke="#008000" activeDot={{ r: 10 }} dot={{ stroke: '#008000', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="cancel" stroke="#FF0000" activeDot={{ r: 10 }} dot={{ stroke: '#FF0000', strokeWidth: 2 }} />
+        <Line type="monotone" dataKey="Unconfirm" stroke="#FFD700" activeDot={{ r: 10 }} dot={{ stroke: '#FFD700', strokeWidth: 2 }} />
+        <Line type="monotone" dataKey="Confirm" stroke="#008000" activeDot={{ r: 10 }} dot={{ stroke: '#008000', strokeWidth: 2 }} />
+        <Line type="monotone" dataKey="Cancel" stroke="#FF0000" activeDot={{ r: 10 }} dot={{ stroke: '#FF0000', strokeWidth: 2 }} />
       </LineChart>
       </div>
     </>
