@@ -16,6 +16,7 @@ class Product {
     const configuration =
       data.category === "Điện thoại"
         ? {
+            series: data.series,
             screen: data.screen,
             resolution: data.resolution,
             chip: data.chip,
@@ -40,6 +41,8 @@ class Product {
             accessory: data.accessory,
           }
         : {
+            series: data.series,
+            part_number: data.part_number,
             guarantee: data.guarantee,
             demand: data.demand,
             cpu: data.cpu,
@@ -62,7 +65,7 @@ class Product {
     const configurationString = JSON.stringify(configuration);
     let nameP;
     if (data.name == null || data.name == "") {
-      nameP = data.brand + data.series_laptop + "";
+      nameP = data.brand + " " + data.series;
     } else {
       nameP = data.name;
     }
@@ -73,7 +76,7 @@ class Product {
     const is_productdetail =
       "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);";
     const is_ProDetailColor =
-      "INSERT INTO prodetailcolor (`ProductDetailId`,`Colorname`) VALUES (?,?);";
+      "INSERT INTO prodetailcolor (`product_id`,`Colorname`) VALUES (?,?);";
 
     // Hàm sử lí lỗi tập chung
     const handleError = (e, res, message) => {
@@ -103,12 +106,16 @@ class Product {
         data.description,
         id_Product,
       ];
-      const resultPD = await query(is_productdetail, PdValues);
-      const id_PD = resultPD.insertId;
-      for (const x of data.color) {
-        const colorValues = [id_PD, x];
-        await query(is_ProDetailColor, colorValues);
+      await query(is_productdetail, PdValues);
+
+      if (Array.isArray(data.color)) {
+        for (const x of data.color) {
+          await query(is_ProDetailColor, [id_Product, x]);
+        }
+      } else {
+        await query(is_ProDetailColor, [id_Product, data.color]);
       }
+
       res.status(200).send("success");
     } catch (error) {
       handleError(error, res, { status: "failed" });
@@ -123,16 +130,18 @@ class Product {
     product.price,
     product.status,
     product.shortDescription,
+    productDetails.brand,
     productDetails.quantity,
     productDetails.created_at,
     productDetails.configuration,
+    productDetails.description,
     category.name as category,
     CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color
     FROM product
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
-    LEFT JOIN prodetailcolor ON productdetails.id = prodetailcolor.ProductDetailId
-    GROUP BY product.id, product.name, product.price, product.status, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, category.name;
+    LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
+    GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
     `;
 
     // Hàm sử lí lỗi tập chung
@@ -143,7 +152,6 @@ class Product {
 
     try {
       const getProduct = await query(queryProduct);
-      // const getProduct = await query(queryProduct);
       getProduct.forEach((data) => {
         // sử lí color
         data.color = JSON.parse(data.color);
@@ -161,27 +169,10 @@ class Product {
     } catch (error) {
       handleError(error, res, { message: "Get product details failed!!!" });
     }
-    // // Thực hiện truy vấn SELECT để lấy dữ liệu từ bảng
-    // mysql.query(queryProduct, (err, result) => {
-    //   if (err) throw err;
-
-    //   // Chuyển đổi kết quả truy vấn thành chuỗi JSON
-    //   const jsonResult = JSON.stringify(result);
-
-    //   // Gửi chuỗi JSON về cho client
-    //   res.send(jsonResult);
-    // });
   }
 
   // API: /product/delete/:id
   async Delete(req, res) {
-    // query delete
-    const sl_productDetails_ID = `
-      SELECT productdetails.id AS value
-      FROM product
-      INNER JOIN productdetails ON product.id = productdetails.product_id
-      WHERE product.id = ?;
-    `;
     // query get path image
     const sl_galery = `
       SELECT galery.thumbnail AS imagePath
@@ -191,7 +182,7 @@ class Product {
     `;
     const dl_prodetailcolor = `
     DELETE FROM prodetailcolor
-    WHERE ProductDetailId = ?;    
+    WHERE product_id = ?;    
     `;
     const dl_productDetails = `
       DELETE productdetails
@@ -219,9 +210,6 @@ class Product {
       if (!id) {
         return res.status();
       }
-      // select productDetails id
-      const arrayProductDetail_id = await query(sl_productDetails_ID, [id]);
-      const productDetails_ID = arrayProductDetail_id[0].value;
 
       // select imagePath galery
       const arrayImagePath = await query(sl_galery, [id]);
@@ -252,7 +240,7 @@ class Product {
       }
 
       await Promise.all([
-        query(dl_prodetailcolor, [productDetails_ID]),
+        query(dl_prodetailcolor, [id]),
         query(dl_productDetails, [id]),
         query(dl_product, [id]),
       ]);
@@ -266,9 +254,103 @@ class Product {
   // Cập nhật sản phẩm
   async Update(req, res) {
     // API: /product/update/:id
-    console.log(req.body);
-    console.log(req.params.id);
-    res.status(200).json({ message: "success" });
+    const id = req.params.id;
+    const dataUpdate = req.body;
+    const arrImage = req.files;
+    var arrPathImage = [];
+
+    if (arrImage) {
+      arrImage.forEach((image) => {
+        const pathImage = `/images/${path.basename(image.path)}`;
+        arrPathImage.push(pathImage);
+      });
+    }
+
+    const fieldsProduct = ["name", "price", "shortDescription"];
+    const fieldsColor = ["color"];
+    const fieldsProductDetails = [
+      "quantity",
+      "brand",
+      "configuration",
+      "description",
+    ];
+    var dataGroupTableProduct = {};
+    var dataGroupTableProductDetails = {};
+    var dataGroupTableProDetailColor = {};
+
+    try {
+      for (const fieldName in dataUpdate) {
+        // product
+        if (fieldsProduct.includes(fieldName)) {
+          dataGroupTableProduct[fieldName] = dataUpdate[fieldName];
+        }
+        // details
+        if (fieldsProductDetails.includes(fieldName)) {
+          if (fieldName === "configuration") {
+            dataGroupTableProductDetails[fieldName] = JSON.stringify(
+              dataUpdate[fieldName]
+            );
+          } else {
+            dataGroupTableProductDetails[fieldName] = dataUpdate[fieldName];
+          }
+        }
+        // color details
+        if (fieldsColor.includes(fieldName)) {
+          dataGroupTableProDetailColor[fieldName] = dataUpdate[fieldName];
+        }
+      }
+
+      // console.log("product: ", dataGroupTableProduct);
+      // console.log("details: ", dataGroupTableProductDetails);
+      // console.log("color: ", dataGroupTableProDetailColor);
+      // console.log("galery: ", arrPathImage);
+
+      // update product
+      if (Object.values(dataGroupTableProduct).length != 0) {
+        const queryUpdateProduct = `UPDATE product SET ? WHERE id = ?`;
+        await query(queryUpdateProduct, [dataGroupTableProduct, id]);
+      }
+
+      // update product details
+      if (Object.values(dataGroupTableProductDetails).length != 0) {
+        const queryUpdateProductDetails = `UPDATE productdetails SET ? WHERE product_id = ?`;
+        await query(queryUpdateProductDetails, [
+          dataGroupTableProductDetails,
+          id,
+        ]);
+      }
+
+      // update color details
+      if (Object.values(dataGroupTableProDetailColor).length != 0) {
+        const dl_prodetailcolor = `
+        DELETE FROM prodetailcolor
+        WHERE product_id = ?;
+        `;
+        await query(dl_prodetailcolor, [id]);
+        const queryUpdateProDetailsColor = `INSERT INTO prodetailcolor (Colorname, product_id) VALUES (?,?)`;
+        dataGroupTableProDetailColor.color.forEach(async (color) => {
+          await query(queryUpdateProDetailsColor, [color, id]);
+        });
+      }
+
+      // update galery
+      if (arrPathImage.length != 0) {
+        const dl_galery = `
+        DELETE FROM galery
+        WHERE product_id = ?;
+        `;
+        await query(dl_galery, [id]);
+        const queryUpdateGalery = `INSERT INTO galery (thumbnail, product_id) VALUES (?,?)`;
+        arrPathImage.forEach(async (image) => {
+          await query(queryUpdateGalery, [image, id]);
+        });
+      }
+
+      res.status(200).json({ message: "success" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "failed" });
+    }
   }
 
   //Truy Vấn Laptop hiển thị Home
@@ -348,7 +430,7 @@ class Product {
       const colorQuery = `
       SELECT id, Colorname
       FROM ProdetailColor
-      WHERE ProductDetailId = ?
+      WHERE product_id = ?
       ORDER BY id ASC;
     `;
 
@@ -391,7 +473,7 @@ class Product {
   }
 
   // getBrand, API: /product/brands
-  getBrand(req, res) {
+  getBrands(req, res) {
     const query = `SELECT * FROM brand`;
     mysql.query(query, (e, results, fields) => {
       if (e) {

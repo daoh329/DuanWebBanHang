@@ -20,11 +20,11 @@ function NewProduct() {
       name: "",
       price: 0,
       shortDescription: "",
-      series_laptop: "",
+      series: "",
       part_number: "",
       color: "",
       demand: "",
-      category: "laptop",
+      category: "Laptop",
       quantity: 1,
       images: [],
       status: false,
@@ -50,7 +50,7 @@ function NewProduct() {
       // guarantee: Yup.string().required("Vui lòng nhập trường này."),
       price: Yup.number().required("Vui lòng nhập giá sản phẩm"),
       shortDescription: Yup.string().required("Vui lòng nhập trường này."),
-      // series_laptop: Yup.string().required("Vui lòng nhập trường này."),
+      // series: Yup.string().required("Vui lòng nhập trường này."),
       // part_number: Yup.string().required("Vui lòng nhập trường này."),
       // color: Yup.string().required("Vui lòng nhập trường này."),
       // demand: Yup.string().required("Vui lòng nhập trường này."),
@@ -270,15 +270,15 @@ function NewProduct() {
               <label className="form-label">Series laptop</label>
               <input
                 type="text"
-                name="series_laptop"
-                id="series_laptop"
+                name="series"
+                id="series"
                 className="form-control"
-                value={formik.values.series_laptop}
+                value={formik.values.series}
                 onChange={formik.handleChange}
               ></input>
-              {formik.errors.series_laptop && (
+              {formik.errors.series && (
                 <span className="form-message">
-                  {formik.errors.series_laptop}
+                  {formik.errors.series}
                 </span>
               )}
             </div>
@@ -338,7 +338,7 @@ function NewProduct() {
               <input
                 name="category"
                 id="category"
-                value="laptop"
+                value="Laptop"
                 className="form-control"
                 onChange={formik.handleChange}
                 readOnly

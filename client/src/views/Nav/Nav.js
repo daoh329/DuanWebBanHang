@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Layout,
-  Menu,
-  Input,
   Badge,
   Avatar,
   Affix,
@@ -10,27 +8,23 @@ import {
   Popover,
   List,
   Dropdown,
-  Typography,
 } from "antd";
 import {
-  DownOutlined,
   SmileOutlined,
   BellOutlined,
   ShoppingCartOutlined,
   UserOutlined,
-  SearchOutlined,
   TagOutlined,
   EnvironmentOutlined,
   CommentOutlined,
   PhoneOutlined,
   DeleteOutlined,
-  SolutionOutlined,
 } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
 import Hinh from "../../../src/assets/DINHMINH.VN.gif";
-import { useCart } from "../Cart/CartContext";
+// import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
 
@@ -102,7 +96,6 @@ const App = (userDetails) => {
   useEffect(() => {
     // Tải dữ liệu từ API khi component được render
     getData();
-
   }, []);
 
   useEffect(() => {
@@ -131,38 +124,54 @@ const App = (userDetails) => {
     navigate("/profile");
   };
   //
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          Chăm sóc khách hàng: 18006569
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          Tư vấn khách hàng: 18006569
-        </a>
-      ),
-      icon: <SmileOutlined />,
-      disabled: true,
-    },
-  ];
+  // const items = [
+  //   {
+  //     key: "1",
+  //     label: (
+  //       <a
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //         href="https://www.antgroup.com"
+  //       >
+  //         Chăm sóc khách hàng: 18006569
+  //       </a>
+  //     ),
+  //   },
+  //   {
+  //     key: "2",
+  //     label: (
+  //       <a
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //         href="https://www.aliyun.com"
+  //       >
+  //         Tư vấn khách hàng: 18006569
+  //       </a>
+  //     ),
+  //     icon: <SmileOutlined />,
+  //     disabled: true,
+  //   },
+  // ];
 
   const menuAccount = [
     {
       key: "1",
+      label: user && (
+        <Button
+          onClick={profile}
+          style={{
+            border: "none",
+            width: "100%",
+            height: "100%",
+            background: "none",
+          }}
+        >
+          Tài khoản
+        </Button>
+      ),
+    },
+    {
+      key: "2",
       label: user ? (
         <Button
           style={{
@@ -185,22 +194,6 @@ const App = (userDetails) => {
           }}
         >
           <NavLink to="/login">Đăng nhập</NavLink>
-        </Button>
-      ),
-    },
-    {
-      key: "2",
-      label: user && (
-        <Button
-          onClick={profile}
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            background: "none",
-          }}
-        >
-          Tài khoản
         </Button>
       ),
     },
@@ -491,8 +484,8 @@ const App = (userDetails) => {
                         cursor: "pointer",
                       }}
                     >
-                      <Avatar src={user.picture} />
-                      <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
+                      <Avatar src={user.picture} style={{cursor:"pointer",}}/>
+                      <span style={{ fontWeight: "bold", marginLeft: "5px",cursor:"pointer", }}>
                         {formatUserName(user.name)}
                       </span>
                     </div>
@@ -503,6 +496,7 @@ const App = (userDetails) => {
                         backgroundColor: "#ae69dd",
                         margin: "10px",
                         fontSize: "24px",
+                        cursor:"pointer",
                       }}
                     />
                   )}
