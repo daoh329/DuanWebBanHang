@@ -21,10 +21,11 @@ const createTables = () => {
     id int PRIMARY KEY AUTO_INCREMENT,
     UserID int,
     deliveryMethod varchar(255),
+    paymentMethod tinyint(1),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
-    status boolean,
+    status tinyint(1),
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
     FOREIGN KEY (UserID) REFERENCES users (id)
   );
