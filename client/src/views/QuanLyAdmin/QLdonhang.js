@@ -10,7 +10,7 @@ function OrderList() {
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
             .then(res => {
-                const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                const sortedOrders = res.data.sort((a, b) => new Date(b.order_updated_at) - new Date(a.order_updated_at));
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
@@ -23,10 +23,10 @@ function OrderList() {
 
     // Hàm xác nhận đơn hàng
     const handleConfirmOrder = async (record) => {
-        if (record.id) {
-            console.log('Confirm order button clicked for order:', record.id);
+        if (record.order_id) {
+            console.log('Confirm order button clicked for order:', record.order_id);
             try {
-                await axios.put(`${process.env.REACT_APP_API_URL}/order/confirm/${record.id}`);
+                await axios.put(`${process.env.REACT_APP_API_URL}/order/confirm/${record.order_id}`);
                 loadData();  // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
             } catch (error) {
                 console.error("Error confirming order:", error);
@@ -38,9 +38,9 @@ function OrderList() {
 
     // Hàm hủy đơn hàng
     const handleCancelOrder = async (record) => {
-        if (record.id) {
+        if (record.order_id) {
             try {
-                await axios.put(`${process.env.REACT_APP_API_URL}/order/cancel/${record.id}`);
+                await axios.put(`${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`);
                 loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
             } catch (error) {
                 console.error("Error canceling order:", error);
@@ -51,21 +51,44 @@ function OrderList() {
     };
 
     const columns = [
-        { title: 'Người mua', dataIndex: 'nameOrder', key: 'Username' },
-        { title: 'SDT', dataIndex: 'phone', key: 'phone' },
+        { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
+        { title: 'SDT', dataIndex: 'user_phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
-        { title: 'Giá', dataIndex: 'price', key: 'price' },
+        { 
+            title: 'Tổng giá',
+            key: 'totalPrice',
+            render: (text, record) => (
+                <p>{record.price * record.quantity}</p>
+            ),
+        },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'Ghi chú', dataIndex: 'note', key: 'note' },
+        { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
+
+        {
+            title: 'PTTT', 
+            dataIndex: 'paymentMethod', 
+            key: 'paymentMethod', 
+            render: status => (
+                <span style={{
+                    fontWeight: 'bold', 
+                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                }}>
+                    {status === 1 ? 'COD' : (status === 2 ? 'MOMO' : 'VNPAY')}
+                </span>
+            )
+        },
+
+        { title: 'Ghi chú', dataIndex: 'order_note', key: 'note' },
         {
             title: 'Thời gian tạo',
-            dataIndex: 'created_at',
-            key: 'created_at',
+            dataIndex: 'order_updated_at',
+            key: 'updated_at',
         },
+
         {
             title: 'Trạng thái', 
-            dataIndex: 'status', 
+            dataIndex: 'order_status', 
             key: 'status', 
             render: status => (
                 <span style={{
@@ -82,7 +105,7 @@ function OrderList() {
             key: 'action',
             render: (_, record) => (
                 <span>
-                    {record.status === 1 ? (
+                    {record.order_status === 1 ? (
                         <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
                             Hủy
                         </Button>

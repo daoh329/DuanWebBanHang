@@ -9,12 +9,14 @@ import {
   MDBTable,
   MDBTableHead,
   MDBTableBody,
+  TreeSelect
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import "./Buy.css";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Radio, Input, Checkbox, Modal, Button, Form, Select,Space } from "antd";
 import Icon from "@ant-design/icons/lib/components/Icon";
+import { message } from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -60,6 +62,11 @@ export default function Buy(props) {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
+  const [deliveryMethod, setDeliveryMethod] = useState('');
+  const [note, setNote] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState([]);
+  const [quantity, setQuantity] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -105,49 +112,95 @@ export default function Buy(props) {
   };
   //
   const { confirm } = Modal;
-const showConfirm = () => {
-  confirm({
-    title: 'Bạn chưa đăng nhập?',
-    icon: <ExclamationCircleFilled />,
-    content: 'Hãy đăng nhập để sửa dụng tính năng này!',
-    onOk() {
-      console.log('Đăng nhập');
-      navigate("/login");
-    },
-    onCancel() {
-      console.log('Cancel');
-    },
-  });
-};
-const [buysData, setBuysData] = useState(null);
-const [data, setData] = useState([]);
-// Lấy dữ liệu từ sessionStorage khi component được tải
-useEffect(() => {
-  const buysDataFromSession = sessionStorage.getItem("buys");
-  if (buysDataFromSession) {
-    // Chuyển dữ liệu từ chuỗi JSON thành đối tượng JavaScript
-    const parsedBuysData = JSON.parse(buysDataFromSession);
-    setBuysData(parsedBuysData);
-
-    //mới
-    const selectedItems = parsedBuysData.selectedItems;
-    const quantities = []; // Mảng chứa số lượng
-
-    selectedItems.forEach((item) => {
-      const quantity = item.quantity;
-      quantities.push(quantity); // Thêm số lượng vào mảng
+  const showConfirm = () => {
+    confirm({
+      title: 'Bạn chưa đăng nhập?',
+      icon: <ExclamationCircleFilled />,
+      content: 'Hãy đăng nhập để sửa dụng tính năng này!',
+      onOk() {
+        console.log('Đăng nhập');
+        navigate("/login");
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
     });
+  };
 
-    // Lưu mảng chứa số lượng vào biến data
-    setData(quantities);
+  const [buysData, setBuysData] = useState(null);
+  // Lấy dữ liệu từ sessionStorage khi component được tải
+  useEffect(() => {
+    const buysDataFromSession = sessionStorage.getItem("buys");
+    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    if (buysDataFromSession) {
+      const parsedBuysData = JSON.parse(buysDataFromSession);
+      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      setBuysData(parsedBuysData);
+       console.log('dữ liệu buys:', parsedBuysData)
+    }
+   
+  }, []);
+
+  let productID = null;
+  if (buysData && buysData.selectedItems && buysData.selectedItems.length > 0) {
+    productID = buysData.selectedItems[0].id;
   }
-}, []);
 
+  
+  // Cập nhật quantity mỗi khi nó thay đổi
+  useEffect(() => {
+    if (buysData && buysData.selectedItems) {
+      // Tính toán tổng quantity từ selectedItems
+      const totalQuantity = buysData.selectedItems.reduce((total, item) => total + item.quantity, 0);
+      
+      // Cập nhật biến trạng thái quantity
+      setQuantity(totalQuantity);
+    }
+  }, [buysData]);
 
-  console.log("data",data);
+  // Cập nhật sessionStorage mỗi khi quantity thay đổi
+  useEffect(() => {
+    // Lưu quantity vào sessionStorage
+    sessionStorage.setItem("quantity", JSON.stringify(quantity));
+  }, [quantity]);
+  
+  const handleBuyClick = async () => {
+    // Lấy thông tin cá nhân của người dùng từ state hoặc form
+    const data = {
+      UserID: user.id,
+      productID: productID,
+      quantity: quantity,
+      deliveryMethod: deliveryMethod,
+      paymentMethod: paymentMethod,
+      note: note,
+      status: 0,
+    };
 
-  const handleBuyClick = () => {
-    navigate("/");
+    if (!deliveryMethod) {
+      message.error("Vui lòng chọn phương thức giao hàng");
+      return;
+    } else if(!paymentMethod){
+      message.error("Vui lòng chọn phương thức thanh toán");
+      return;
+    }
+    // In ra giá trị của biến data
+    console.log("Data:", data);
+    // Gửi thông tin đăng ký lên server
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/order/pay`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    // Xử lý kết quả trả về từ server NodeJS
+    if (response.ok) {
+      // Thông báo thành công
+      message.success("Thanh toán đơn hàng thành công");
+    } else {
+      // Thông báo lỗi
+      message.error("Thanh toán đơn hàng thất bại");
+    }
   };
   const handleAddClick = () => {
     navigate("/profile");
@@ -155,8 +208,19 @@ useEffect(() => {
 
   const handleBuyVNpay = () => {
     const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    setPaymentMethod(1); // Cập nhật phương thức thanh toán
     window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
-};
+  }
+  
+  const handleBuyCOD = () => {
+    // Xử lý cho phương thức thanh toán COD
+    setPaymentMethod(2); // Cập nhật phương thức thanh toán
+  }
+  
+  const handleBuyMoMoPay = () => {
+    // Xử lý cho phương thức thanh toán ZaloPay
+    setPaymentMethod(3); // Cập nhật phương thức thanh toán
+  }
   
 
   return (
@@ -385,7 +449,26 @@ useEffect(() => {
                       <div className="radio">
                         <label>
                           Phương thức giao hàng
-                          <Radio defaultChecked>Giao hàng tiêu chuẩn</Radio>
+                          <div>
+                            <label>
+                              <input
+                                type="checkbox"
+                                value="Tất cả các ngày trong tuần"
+                                checked={deliveryMethod === 'Tất cả ngày trong tuần'}
+                                onChange={(e) => setDeliveryMethod(e.target.checked ? e.target.value : '')}
+                              />
+                              Tất cả ngày trong tuần
+                            </label>
+                            <label>
+                              <input
+                                type="checkbox"
+                                value="Chủ nhật"
+                                checked={deliveryMethod === 'Chủ nhật'}
+                                onChange={(e) => setDeliveryMethod(e.target.checked ? e.target.value : '')}
+                              />
+                              Chủ nhật
+                            </label>
+                          </div>
                         </label>
                       </div>
 
@@ -824,7 +907,8 @@ useEffect(() => {
                   Ghi chú cho đơn hàng
                 </div>
                 <div className="css-boqvfl snipcss0-5-52-54">
-                  <Input type="text" maxLength={255} placeholder="Ghi chú" />
+                  <Input type="text" maxLength={255} placeholder="Ghi chú" onChange={(e) => setNote(e.target.value)}
+                value={note}/>
                 </div>
               </div>
               <div className="teko-card css-t9nop0 snipcss0-4-4-57">
@@ -895,6 +979,7 @@ useEffect(() => {
                         data-content-target="COD"
                         className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
                         id="style-UMMoQ"
+                        onClick={handleBuyCOD}
                       >
                         <div
                           type="subtitle"
@@ -928,23 +1013,17 @@ useEffect(() => {
                         data-content-target="ZALOPAY_GATEWAY"
                         className="css-64rk53 snipcss0-8-81-82 style-OQooy"
                         id="style-OQooy"
+                        onClick={handleBuyMoMoPay}
                       >
                         <div
                           type="subtitle"
                           className="css-qat15y snipcss0-9-82-83"
                         >
-                          Thanh toán QR Code ZaloPay
+                          Thanh toán QR Code Momo
                           <span
                             className="snipcss0-10-83-84 style-DJQy2"
                             id="style-DJQy2"
                           ></span>
-                        </div>
-                        <div
-                          type="body"
-                          color="textSecondary"
-                          className="css-ngriz3 snipcss0-9-82-85"
-                        >
-                          Thanh toán QR Code ZaloPay
                         </div>
                         <div
                           type="body"
