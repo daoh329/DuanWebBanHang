@@ -208,18 +208,19 @@ export default function Buy(props) {
 
   const handleBuyVNpay = () => {
     const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
-    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(0); // Cập nhật phương thức thanh toán
+    // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
     window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
   }
   
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
-    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
   }
   
   const handleBuyMoMoPay = () => {
     // Xử lý cho phương thức thanh toán ZaloPay
-    setPaymentMenthod(3); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
   }
   
 
