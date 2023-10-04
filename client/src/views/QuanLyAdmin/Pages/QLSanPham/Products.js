@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Tag, Popconfirm, Modal, message } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
-import LaptopInputFrom from "./LaptopUpdate/LaptopInputFrom";
 import ActionButton from "./ActionComponent/ActionButton";
 
 function Product() {
