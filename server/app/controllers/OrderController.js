@@ -35,7 +35,7 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMethod, o.updated_at AS order_updated_at, o.note AS order_note, o.status AS order_status, 
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.updated_at AS order_updated_at, o.note AS order_note, o.status AS order_status, 
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, odp.*, p.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
