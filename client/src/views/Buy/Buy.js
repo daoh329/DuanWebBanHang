@@ -209,8 +209,8 @@ export default function Buy(props) {
   const handleBuyVNpay = () => {
     const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
     setPaymentMenthod(0); // Cập nhật phương thức thanh toán
-    navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
-    // window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
+    // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
+    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
   }
   
   const handleBuyCOD = () => {
