@@ -259,10 +259,12 @@ class Product {
     const arrImage = req.files;
     var arrPathImage = [];
 
-    arrImage.forEach((image) => {
-      const pathImage = `/images/${path.basename(image.path)}`;
-      arrPathImage.push(pathImage);
-    });
+    if (arrImage) {
+      arrImage.forEach((image) => {
+        const pathImage = `/images/${path.basename(image.path)}`;
+        arrPathImage.push(pathImage);
+      });
+    }
 
     const fieldsProduct = ["name", "price", "shortDescription"];
     const fieldsColor = ["color"];
@@ -428,7 +430,7 @@ class Product {
       const colorQuery = `
       SELECT id, Colorname
       FROM ProdetailColor
-      WHERE ProductDetailId = ?
+      WHERE product_id = ?
       ORDER BY id ASC;
     `;
 
