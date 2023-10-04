@@ -5,7 +5,7 @@ const createTables = () => {
   CREATE TABLE IF NOT EXISTS product (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255) UNIQUE,
-    price float,
+    price NUMERIC,
     shortDescription varchar(255),
     CategoryID int,
     status boolean,
@@ -65,9 +65,9 @@ const createTables = () => {
   `;
   const ProdetailColor = `CREATE TABLE IF NOT EXISTS ProdetailColor (
     id int PRIMARY KEY AUTO_INCREMENT,
-    ProductDetailId int,
+    product_id int,
     Colorname varchar(255),
-    FOREIGN KEY (ProductDetailId) REFERENCES productDetails (id),
+    FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (Colorname) REFERENCES color (name)
   );
   `;
