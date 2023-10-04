@@ -136,7 +136,9 @@ export default function Buy(props) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
       console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
       setBuysData(parsedBuysData);
+       console.log('dữ liệu buys:', parsedBuysData)
     }
+   
   }, []);
 
   let productID = null;

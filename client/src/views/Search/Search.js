@@ -4,46 +4,62 @@ import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination, message } from
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useCart } from '../Cart/CartContext';
+
+const { Content } = Layout;
+
 const Search = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
-  const [products, setProducts] = useState([]);
+
+  const [laptopProducts, setLaptopProducts] = useState([]);
+  const [phoneProducts, setPhoneProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  
   const navigate = useNavigate();
-  // them giỏ hàng
   const { addToCart } = useCart();
+
   const handleAddToCart = (product) => {
     addToCart(product);
     message.success('Sản phẩm đã được thêm vào giỏ hàng');
   };
+
   useEffect(() => {
-    // Tải dữ liệu từ API khi component được render
-    fetch(`${process.env.REACT_APP_API_URL}/product/products`)
+    fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data);
+        setLaptopProducts(data);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching laptop data:", error);
+      });
+
+    fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
+      .then((response) => response.json())
+      .then((data) => {
+        setPhoneProducts(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching phone data:", error);
       });
   }, []);
 
   useEffect(() => {
     if (query) {
-      // Lọc sản phẩm dựa trên từ khóa tìm kiếm
-      const filtered = products.filter((product) =>
+      const filteredLaptopProducts = laptopProducts.filter((product) =>
+        product.shortDescription.toLowerCase().includes(query.toLowerCase())
+      );
+      const filteredPhoneProducts = phoneProducts.filter((product) =>
         product.shortDescription.toLowerCase().includes(query.toLowerCase())
       );
 
-      // Loại bỏ sự trùng lặp bằng cách sử dụng Set để đảm bảo duy nhất
-      const uniqueFiltered = [...new Set(filtered)];
+      const combinedResults = [...filteredLaptopProducts, ...filteredPhoneProducts];
 
-      setFilteredProducts(uniqueFiltered);
+      setFilteredProducts(combinedResults);
     } else {
-      setFilteredProducts([]); // Đặt lại mảng khi không có query
+      setFilteredProducts([]);
     }
-  }, [query, products]);
+  }, [query, laptopProducts, phoneProducts])
 
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
@@ -94,7 +110,7 @@ const Search = () => {
     <div
       style={{
         borderRadius: "20px",
-        width: "80%",
+        width: "1234px",
         margin: "0 auto",
         marginTop: "20px",
         backgroundSize: "cover",
@@ -125,7 +141,7 @@ const Search = () => {
           filteredProducts.length > 0 &&
           filteredProducts.slice(startIndex, endIndex).map((item, index) => (
             <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
-              <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+              <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' , margin:'0 auto'}}></img>
               <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                 <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                   {item.brand}
