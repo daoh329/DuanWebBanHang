@@ -55,9 +55,15 @@ function OrderList() {
         { title: 'SDT', dataIndex: 'user_phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
-        { title: 'Giá', dataIndex: 'price', key: 'price' },
+        { 
+            title: 'Tổng giá',
+            key: 'totalPrice',
+            render: (text, record) => (
+                <p>{record.price * record.quantity}</p>
+            ),
+        },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'PGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
+        { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
 
         {
             title: 'PTTT', 
