@@ -11,8 +11,8 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    let sql = `INSERT INTO orders (nameOrder, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
-    let values = [data.name, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
+    let sql = `INSERT INTO orders (UserID, deliveryMethod, paymentMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, NOW(), NOW(), ?, ?)`;
+    let values = [data.UserID, data.deliveryMethod, data.paymentMethod, data.note, data.status];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(result);
@@ -35,11 +35,13 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.note, o.created_at, o.status, odp.quantity, p*
-        FROM orders o
-        JOIN orderDetailsProduct odp ON o.id = odp.orderID
-        JOIN product p ON odp.productID = p.id
-        ORDER BY o.created_at DESC
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMethod, o.updated_at AS order_updated_at, o.note AS order_note, o.status AS order_status, 
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN product p ON odp.productID = p.id
+      ORDER BY o.created_at DESC
     `;
     mysql.query(sql, (err, result) => {
         if (err) throw err;

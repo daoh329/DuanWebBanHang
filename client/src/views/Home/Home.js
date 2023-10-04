@@ -366,7 +366,7 @@ const initialTime = 11300;
                 products.length > 0 &&
                 products.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -527,7 +527,7 @@ const initialTime = 11300;
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -584,7 +584,7 @@ const initialTime = 11300;
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
