@@ -67,8 +67,8 @@ function OrderList() {
 
         {
             title: 'PTTT', 
-            dataIndex: 'paymentMethod', 
-            key: 'paymentMethod', 
+            dataIndex: 'paymentMenthod', 
+            key: 'paymentMenthod', 
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
