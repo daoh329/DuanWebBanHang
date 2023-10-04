@@ -97,7 +97,7 @@ const createTables = () => {
     Street varchar(255),
     email varchar(255),
     phone varchar(255),
-    FOREIGN KEY (idUser) REFERENCES user (id)
+    FOREIGN KEY (idUser) REFERENCES users (id)
   );`
 
   mysql2.query(deliveryMethod, (error, results, fields) => {
