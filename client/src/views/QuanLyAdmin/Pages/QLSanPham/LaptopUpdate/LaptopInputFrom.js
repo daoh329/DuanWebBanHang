@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Select, notification } from "antd";
 import axios from "axios";
 
-function LaptopInputFrom({ Product }) {
-  const idProduct = Product.id;
-  const product = Product;
-  // console.log(product);
-
-  // console.log(product);
+function LaptopInputFrom({ data }) {
+  const product = data;
   // function select element
   const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +12,7 @@ function LaptopInputFrom({ Product }) {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
       .then((response) => {
-        const datas = response.data.results;
+        const datas = response.data.result;
         setBrands(datas);
       })
       .catch((e) => {
@@ -60,15 +56,15 @@ function LaptopInputFrom({ Product }) {
       values.configuration = values.configuration || {};
       for (const fieldName in values) {
         if (!values[fieldName]) {
-
-          if (values[fieldName] === undefined && fieldsConfiguraton.includes(fieldName)) {
+          if (
+            values[fieldName] === undefined &&
+            fieldsConfiguraton.includes(fieldName)
+          ) {
             values.configuration[fieldName] = product.configuration[fieldName];
-          }
-          else if (values[fieldName] === "") {
+          } else if (values[fieldName] === "") {
             values[fieldName] = undefined;
           }
-        }
-        else if (values[fieldName]) {
+        } else if (values[fieldName]) {
           if (fieldsConfiguraton.includes(fieldName)) {
             values.configuration[fieldName] = values[fieldName];
             delete values[fieldName];
@@ -91,7 +87,7 @@ function LaptopInputFrom({ Product }) {
 
       // call API update
       const result = await axios.put(
-        `${process.env.REACT_APP_API_URL}/product/update/${idProduct}`,
+        `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
         values
       );
 
@@ -127,25 +123,24 @@ function LaptopInputFrom({ Product }) {
   return (
     <Form
       style={{ maxWidth: 800, textAlign: "start" }}
-      initialValues={{ remember: true }}
       layout="vertical"
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <hr />
-      <h6 style={{ margin: "20px 0 10px 0" }}>Thông tin chung</h6>
+      <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+        Thông tin chung
+      </h6>
       {/* thương hiệu */}
-      <Form.Item
-        label="Thương hiệu"
-        name="brand"
-      >
+      <Form.Item label="Thương hiệu" name="brand">
         <Select defaultValue={product.brand} placeholder="Chọn thương hiệu">
-          {brands.map((brand) => (
-            <Select.Option key={brand.name} value={brand.name}>
-              {brand.name}
-            </Select.Option>
-          ))}
+          {brands &&
+            brands.map((brand) => (
+              <Select.Option key={brand.name} value={brand.name}>
+                {brand.name}
+              </Select.Option>
+            ))}
         </Select>
       </Form.Item>
 
@@ -158,12 +153,7 @@ function LaptopInputFrom({ Product }) {
       </Form.Item>
 
       {/* tên */}
-      <Form.Item
-        hasFeedback
-        validateDebounce={1000}
-        label="Tên"
-        name="name"
-      >
+      <Form.Item label="Tên" name="name">
         <Input
           defaultValue={product ? product.name : null}
           placeholder="Nhập tên sản phẩm"
@@ -171,10 +161,7 @@ function LaptopInputFrom({ Product }) {
       </Form.Item>
 
       {/* Giá */}
-      <Form.Item
-        label="Giá"
-        name="price"
-      >
+      <Form.Item label="Giá" name="price">
         <InputNumber
           defaultValue={product ? product.price : null}
           style={{ width: "100%" }}
@@ -183,10 +170,7 @@ function LaptopInputFrom({ Product }) {
       </Form.Item>
 
       {/* Mô tả ngắn */}
-      <Form.Item
-        label="Mô tả ngắn"
-        name="shortDescription"
-      >
+      <Form.Item label="Mô tả ngắn" name="shortDescription">
         <Input.TextArea
           defaultValue={product ? product.shortDescription : null}
           placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)"
@@ -224,16 +208,17 @@ function LaptopInputFrom({ Product }) {
       </Form.Item>
 
       <Form.Item label="Số lượng" name="quantity">
-        <Input
+        <InputNumber
           defaultValue={product ? product.quantity : null}
-          Number
           placeholder="Nhập số lượng sản phẩm đang bán"
         />
       </Form.Item>
 
       {/* ====================================== */}
       <hr />
-      <h6 style={{ margin: "20px 0 10px 0" }}>Thông tin chi tiết</h6>
+      <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+        Thông tin chi tiết
+      </h6>
 
       {/* CPU */}
       <Form.Item label="CPU" name="cpu">

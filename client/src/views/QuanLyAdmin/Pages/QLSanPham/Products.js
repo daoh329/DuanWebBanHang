@@ -3,10 +3,11 @@ import { Table, Button, Tag, Popconfirm, Modal, message } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
 import LaptopInputFrom from "./LaptopUpdate/LaptopInputFrom";
+import ActionButton from "./ActionComponent/ActionButton";
 
 function Product() {
   const [Product, setProduct] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+
 
   const getProduct = async () => {
     await axios
@@ -68,105 +69,7 @@ function Product() {
     {
       title: "Hành động",
       key: "action",
-      // dataIndex: "id",
-      render: (_, record) => {
-        async function handleDisableAndEnable() {
-          try {
-            const result = await axios.post(
-              `${process.env.REACT_APP_API_URL}/product/disable-and-enable`,
-              { id: record.id, status: record.status }
-            );
-            // window.location.reload();
-            if (result.status === 200) {
-              message.success("Vô hiệu hóa thành công.");
-              return getProduct();
-            }
-            return message.error("Vô hiệu hóa thất bại.");
-          } catch (error) {
-            console.log(error);
-            message.error("Vô hiệu hóa thất bại.");
-          }
-        }
-
-        async function handleUpdate() {
-          setOpenModal(true);
-        }
-
-        const handleCancel = () => {
-          setOpenModal(false);
-        };
-
-        async function handleDelete() {
-          // /product/delete/:id
-          try {
-            const result = await axios.delete(
-              `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`
-            );
-            if (result.status === 200) {
-              message.success("Đã xóa sản phẩm.");
-              return getProduct();
-            }
-            return message.success("Đã xóa sản phẩm.");
-          } catch (error) {
-            message.error("Xóa sản phẩm thất bại.");
-          }
-        }
-
-        return (
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            {/* enable & disable */}
-            {record.status === 1 ? (
-              <Popconfirm
-                title="Cảnh báo!!!"
-                description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
-                onConfirm={handleDisableAndEnable}
-                okText="Xác nhận"
-                cancelText="Trở lại"
-              >
-                <Button danger>Vô hiệu hóa</Button>
-              </Popconfirm>
-            ) : (
-              <Popconfirm
-                title="Cảnh báo!!!"
-                description="Bạn có chắc chắn muốn kích hoạt sản phẩm này?"
-                onConfirm={handleDisableAndEnable}
-                okText="Xác nhận"
-                cancelText="Trở lại"
-              >
-                <Button>Kích hoạt</Button>
-              </Popconfirm>
-            )}
-            {/* update */}
-            <Button onClick={handleUpdate}>Cập nhật</Button>
-            <Modal
-              open={openModal}
-              title="Cập nhật sản phẩm"
-              onCancel={handleCancel}
-              footer={false}
-            >
-              {record.category === "laptop" && (
-                <LaptopInputFrom Product={record} />
-              )}
-            </Modal>
-            {/* delete */}
-            <Popconfirm
-              title="Cảnh báo!!!"
-              description="Bạn có chắc chắn muốn XÓA sản phẩm này?"
-              onConfirm={handleDelete}
-              okText="Xóa"
-              cancelText="Trở lại"
-            >
-              <Button>Xóa</Button>
-            </Popconfirm>
-          </div>
-        );
-      },
+      render: (_, record) => (<ActionButton getProduct={getProduct} record={record}/>),
     },
     {
       title: "Ngày tạo",
@@ -196,7 +99,7 @@ function Product() {
   return (
     <div>
       <h1>Quản lý Sản Phẩm</h1>
-      <Table columns={columns} dataSource={Product} />
+      <Table columns={columns} dataSource={Product}/>
     </div>
   );
 }

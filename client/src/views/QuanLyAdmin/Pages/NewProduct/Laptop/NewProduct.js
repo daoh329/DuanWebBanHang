@@ -24,7 +24,7 @@ function NewProduct() {
       part_number: "",
       color: "",
       demand: "",
-      category: "laptop",
+      category: "Laptop",
       quantity: 1,
       images: [],
       status: false,
@@ -338,7 +338,7 @@ function NewProduct() {
               <input
                 name="category"
                 id="category"
-                value="laptop"
+                value="Laptop"
                 className="form-control"
                 onChange={formik.handleChange}
                 readOnly
