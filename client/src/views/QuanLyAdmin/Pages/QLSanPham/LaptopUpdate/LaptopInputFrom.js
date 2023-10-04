@@ -12,7 +12,7 @@ function LaptopInputFrom({ data }) {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
       .then((response) => {
-        const datas = response.data.result;
+        const datas = response.data;
         setBrands(datas);
       })
       .catch((e) => {

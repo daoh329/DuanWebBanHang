@@ -177,7 +177,7 @@ function NewPhone() {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
       .then((response) => {
-        setBrands(response.data.results);
+        setBrands(response.data);
       })
       .catch((e) => {
         console.log(e);

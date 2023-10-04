@@ -8,6 +8,7 @@ class Product {
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
+    console.log(data);
     var arrPathImage = [];
     arrImage.forEach((image) => {
       const pathImage = `/images/${path.basename(image.path)}`;
@@ -480,7 +481,19 @@ class Product {
         console.log(e);
         res.status(500).json("Lỗi lấy dữ liệu brands!");
       }
-      res.status(200).json({ results });
+      res.status(200).send(results);
+    });
+  }
+
+  // getColors, API: /product/colors
+  getColors(req, res) {
+    const query = `SELECT * FROM color`;
+    mysql.query(query, (e, results, fields) => {
+      if (e) {
+        console.log(e);
+        res.status(500).json("Lỗi lấy dữ liệu brands!");
+      }
+      res.status(200).send(results);
     });
   }
 
