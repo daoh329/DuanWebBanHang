@@ -112,20 +112,20 @@ export default function Buy(props) {
   };
   //
   const { confirm } = Modal;
-const showConfirm = () => {
-  confirm({
-    title: 'Bạn chưa đăng nhập?',
-    icon: <ExclamationCircleFilled />,
-    content: 'Hãy đăng nhập để sửa dụng tính năng này!',
-    onOk() {
-      console.log('Đăng nhập');
-      navigate("/login");
-    },
-    onCancel() {
-      console.log('Cancel');
-    },
-  });
-};
+  const showConfirm = () => {
+    confirm({
+      title: 'Bạn chưa đăng nhập?',
+      icon: <ExclamationCircleFilled />,
+      content: 'Hãy đăng nhập để sửa dụng tính năng này!',
+      onOk() {
+        console.log('Đăng nhập');
+        navigate("/login");
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
 
   const [buysData, setBuysData] = useState(null);
   // Lấy dữ liệu từ sessionStorage khi component được tải
@@ -1084,6 +1084,7 @@ const showConfirm = () => {
                 <div className="card-body css-0 snipcss0-1-1-6 snipcss0-5-100-105">
                   {buysData &&
                     buysData.selectedItems.map((item, index) => (
+                      <div key={index}>
                       <div className="css-9op68y snipcss0-2-6-7 snipcss0-6-105-106">
                         <div className="css-ov1ktg snipcss0-3-7-8 snipcss0-7-106-107">
                           <div className="snipcss0-4-8-9 snipcss0-8-107-108">
@@ -1141,6 +1142,7 @@ const showConfirm = () => {
                             </div>
                           </div>
                         </div>
+                      </div>
                       </div>
                     ))}
                 </div>

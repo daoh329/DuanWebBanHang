@@ -21,11 +21,11 @@ const createTables = () => {
     id int PRIMARY KEY AUTO_INCREMENT,
     UserID int,
     deliveryMethod varchar(255),
-    paymentMethod tinyint(1),
+    paymentMenthod tinyint,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
-    status tinyint(1),
+    status tinyint,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
     FOREIGN KEY (UserID) REFERENCES users (id)
   );
@@ -87,7 +87,18 @@ const createTables = () => {
     address varchar(255),
     email varchar(255) UNIQUE
   );`
-
+  const delivery_address =`CREATE TABLE IF NOT EXISTS delivery_address (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    idUser int,
+    name int,
+    city varchar(255),
+    District varchar(255),
+    Commune varchar(255),
+    Street varchar(255),
+    email varchar(255),
+    phone varchar(255),
+    FOREIGN KEY (idUser) REFERENCES user (id)
+  );`
 
   mysql2.query(deliveryMethod, (error, results, fields) => {
     if (error) {
@@ -146,6 +157,11 @@ const createTables = () => {
     }
   });
   mysql2.query(orderDetailsProduct, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(delivery_address, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
