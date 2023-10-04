@@ -9,12 +9,21 @@ import {
   MDBTable,
   MDBTableHead,
   MDBTableBody,
-  TreeSelect
+  TreeSelect,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import "./Buy.css";
-import { ExclamationCircleFilled } from '@ant-design/icons';
-import { Radio, Input, Checkbox, Modal, Button, Form, Select,Space } from "antd";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import {
+  Radio,
+  Input,
+  Checkbox,
+  Modal,
+  Button,
+  Form,
+  Select,
+  Space,
+} from "antd";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import { message } from "antd";
 const { TextArea } = Input;
@@ -32,7 +41,6 @@ function formatCurrency(value) {
 //
 
 export default function Buy(props) {
-  
   const { user } = props;
 
   const navigate = useNavigate();
@@ -62,8 +70,8 @@ export default function Buy(props) {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
-  const [deliveryMethod, setDeliveryMethod] = useState('');
-  const [note, setNote] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [note, setNote] = useState("");
   const [paymentMenthod, setPaymentMenthod] = useState([]);
   const [quantity, setQuantity] = useState(0);
 
@@ -114,15 +122,15 @@ export default function Buy(props) {
   const { confirm } = Modal;
   const showConfirm = () => {
     confirm({
-      title: 'Bạn chưa đăng nhập?',
+      title: "Bạn chưa đăng nhập?",
       icon: <ExclamationCircleFilled />,
-      content: 'Hãy đăng nhập để sửa dụng tính năng này!',
+      content: "Hãy đăng nhập để sửa dụng tính năng này!",
       onOk() {
-        console.log('Đăng nhập');
+        console.log("Đăng nhập");
         navigate("/login");
       },
       onCancel() {
-        console.log('Cancel');
+        console.log("Cancel");
       },
     });
   };
@@ -136,9 +144,8 @@ export default function Buy(props) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
       console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
       setBuysData(parsedBuysData);
-       console.log('dữ liệu buys:', parsedBuysData)
+      console.log("dữ liệu buys:", parsedBuysData);
     }
-   
   }, []);
 
   let productID = null;
@@ -146,13 +153,15 @@ export default function Buy(props) {
     productID = buysData.selectedItems[0].id;
   }
 
-  
   // Cập nhật quantity mỗi khi nó thay đổi
   useEffect(() => {
     if (buysData && buysData.selectedItems) {
       // Tính toán tổng quantity từ selectedItems
-      const totalQuantity = buysData.selectedItems.reduce((total, item) => total + item.quantity, 0);
-      
+      const totalQuantity = buysData.selectedItems.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+
       // Cập nhật biến trạng thái quantity
       setQuantity(totalQuantity);
     }
@@ -163,7 +172,7 @@ export default function Buy(props) {
     // Lưu quantity vào sessionStorage
     sessionStorage.setItem("quantity", JSON.stringify(quantity));
   }, [quantity]);
-  
+
   const handleBuyClick = async () => {
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
@@ -179,7 +188,7 @@ export default function Buy(props) {
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
-    } else if(!paymentMenthod){
+    } else if (!paymentMenthod) {
       message.error("Vui lòng chọn phương thức thanh toán");
       return;
     }
@@ -208,21 +217,21 @@ export default function Buy(props) {
 
   const handleBuyVNpay = () => {
     const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
-    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(0); // Cập nhật phương thức thanh toán
+    // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
     window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
-  }
-  
+  };
+
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
-    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
   }
   
   const handleBuyMoMoPay = () => {
     // Xử lý cho phương thức thanh toán ZaloPay
-    setPaymentMenthod(3); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
   }
   
-
   return (
     <>
       {/* main */}
@@ -374,77 +383,75 @@ export default function Buy(props) {
                             </Button>
                           )}
                         </div>
-                        
+
                         <div
                           data-content-region-name="addressShipping"
                           data-track-content="true"
                           data-content-name="addNewAddress"
                           className="teko-col teko-col-6 css-gr7r8o style-Jlvl6"
-                          id="style-Jlvl6">
+                          id="style-Jlvl6"
+                        >
                           {user ? (
-                          <button
-                          height="100%"
-                          className="css-162xo41 style-kRCXj"
-                          type="button"
-                          id="style-kRCXj"
-                          onClick={handleAddClick}
-                          >
-                          <svg
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          size={25}
-                          className="css-1e44j4b"
-                          color="#848788"
-                          height={25}
-                          width={25}
-                          xmlns="http://www.w3.org/2000/svg"
-                          >
-                          <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                          fill="#82869E"
-                          ></path>
-                          </svg>
-                          Thêm địa chỉ
-                          <span id="style-EqcsP" className="style-EqcsP">
-                          <div className="css-157jl91"></div>
-                          </span>
-                          </button>
+                            <button
+                              height="100%"
+                              className="css-162xo41 style-kRCXj"
+                              type="button"
+                              id="style-kRCXj"
+                              onClick={handleAddClick}
+                            >
+                              <svg
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                size={25}
+                                className="css-1e44j4b"
+                                color="#848788"
+                                height={25}
+                                width={25}
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                                  fill="#82869E"
+                                ></path>
+                              </svg>
+                              Thêm địa chỉ
+                              <span id="style-EqcsP" className="style-EqcsP">
+                                <div className="css-157jl91"></div>
+                              </span>
+                            </button>
                           ) : (
-                          <button
-                          height="100%"
-                          className="css-162xo41 style-kRCXj"
-                          type="button"
-                          id="style-kRCXj">
-                          <svg
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          size={25}
-                          className="css-1e44j4b"
-                          color="#848788"
-                          height={25}
-                          width={25}
-                          xmlns="http://www.w3.org/2000/svg"
-                          >
-                          <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                          fill="#82869E"
-                          ></path>
-                          </svg>
-                          Thêm địa chỉ
-                          <span id="style-EqcsP" className="style-EqcsP">
-                          <div className="css-157jl91"></div>
-                          </span>
-                          </button>
-
+                            <button
+                              height="100%"
+                              className="css-162xo41 style-kRCXj"
+                              type="button"
+                              id="style-kRCXj"
+                            >
+                              <svg
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                size={25}
+                                className="css-1e44j4b"
+                                color="#848788"
+                                height={25}
+                                width={25}
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                                  fill="#82869E"
+                                ></path>
+                              </svg>
+                              Thêm địa chỉ
+                              <span id="style-EqcsP" className="style-EqcsP">
+                                <div className="css-157jl91"></div>
+                              </span>
+                            </button>
                           )}
-                        
                         </div>
-
-
                       </div>
                       <div className="radio">
                         <label>
@@ -454,8 +461,14 @@ export default function Buy(props) {
                               <input
                                 type="checkbox"
                                 value="Tất cả các ngày trong tuần"
-                                checked={deliveryMethod === 'Tất cả ngày trong tuần'}
-                                onChange={(e) => setDeliveryMethod(e.target.checked ? e.target.value : '')}
+                                checked={
+                                  deliveryMethod === "Tất cả ngày trong tuần"
+                                }
+                                onChange={(e) =>
+                                  setDeliveryMethod(
+                                    e.target.checked ? e.target.value : ""
+                                  )
+                                }
                               />
                               Tất cả ngày trong tuần
                             </label>
@@ -463,8 +476,12 @@ export default function Buy(props) {
                               <input
                                 type="checkbox"
                                 value="Chủ nhật"
-                                checked={deliveryMethod === 'Chủ nhật'}
-                                onChange={(e) => setDeliveryMethod(e.target.checked ? e.target.value : '')}
+                                checked={deliveryMethod === "Chủ nhật"}
+                                onChange={(e) =>
+                                  setDeliveryMethod(
+                                    e.target.checked ? e.target.value : ""
+                                  )
+                                }
                               />
                               Chủ nhật
                             </label>
@@ -907,10 +924,16 @@ export default function Buy(props) {
                   Ghi chú cho đơn hàng
                 </div>
                 <div className="css-boqvfl snipcss0-5-52-54">
-                  <Input type="text" maxLength={255} placeholder="Ghi chú" onChange={(e) => setNote(e.target.value)}
-                value={note}/>
+                  <Input
+                    type="text"
+                    maxLength={255}
+                    placeholder="Ghi chú"
+                    onChange={(e) => setNote(e.target.value)}
+                    value={note}
+                  />
                 </div>
               </div>
+
               <div className="teko-card css-t9nop0 snipcss0-4-4-57">
                 <div className="teko-card-header css-0 snipcss0-5-57-58">
                   <div className="snipcss0-6-58-59">
@@ -931,106 +954,220 @@ export default function Buy(props) {
                     className="teko-row teko-row-start css-80kmv8 snipcss0-6-62-63 style-RRpB6"
                     id="style-RRpB6"
                   >
-                    <div
-                      className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
-                      id="style-keAdr"
-                    >
-                      <Button
-                        data-content-region-name="paymentMethod"
-                        data-track-content="true"
-                        data-content-name="COD"
-                        data-content-target="COD"
-                        className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
-                        id="style-UMMoQ"
-                        onClick={handleBuyVNpay}
+                    {/* pt1 */}
+                    {user ? (
+                      <div
+                        className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
+                        id="style-keAdr"
                       >
-                        <div
-                          type="subtitle"
-                          className="css-qat15y snipcss0-9-76-77"
+                        <Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="COD"
+                          data-content-target="COD"
+                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                          id="style-UMMoQ"
+                          onClick={handleBuyVNpay}
                         >
-                          Thanh toán VNPAY-QR
-                          <span
-                            className="snipcss0-10-77-78 style-NANX3"
-                            id="style-NANX3"
-                          ></span>
-                        </div>
-                        <div
-                          type="body"
-                          color="textSecondary"
-                          className="css-ngriz3 snipcss0-9-76-79"
-                        ></div>
-                        <div
-                          type="body"
-                          className="css-9o8e5m snipcss0-9-76-80"
-                        >
-                          Thanh toán qua Internet Banking, Visa, Master, JCB,
-                          VNPAY-QR
-                        </div>
-                      </Button>
-                    </div>
-                    <div
-                      className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
-                      id="style-keAdr"
-                    >
-                      <Button
-                        data-content-region-name="paymentMethod"
-                        data-track-content="true"
-                        data-content-name="COD"
-                        data-content-target="COD"
-                        className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
-                        id="style-UMMoQ"
-                        onClick={handleBuyCOD}
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-76-77"
+                          >
+                            Thanh toán VNPAY-QR
+                            <span
+                              className="snipcss0-10-77-78 style-NANX3"
+                              id="style-NANX3"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            color="textSecondary"
+                            className="css-ngriz3 snipcss0-9-76-79"
+                          ></div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-76-80"
+                          >
+                            Thanh toán qua Internet Banking, Visa, Master, JCB,
+                            VNPAY-QR
+                          </div>
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
+                        id="style-keAdr"
                       >
-                        <div
-                          type="subtitle"
-                          className="css-qat15y snipcss0-9-76-77"
+                        <Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="COD"
+                          data-content-target="COD"
+                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                          id="style-UMMoQ"
+                          onClick={showConfirm}
                         >
-                          Thanh toán khi nhận hàng
-                          <span
-                            className="snipcss0-10-77-78 style-NANX3"
-                            id="style-NANX3"
-                          ></span>
-                        </div>
-                        <div
-                          type="body"
-                          color="textSecondary"
-                          className="css-ngriz3 snipcss0-9-76-79"
-                        ></div>
-                        <div
-                          type="body"
-                          className="css-9o8e5m snipcss0-9-76-80"
-                        ></div>
-                      </Button>
-                    </div>
-                    <div
-                      className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
-                      id="style-poooX"
-                    >
-                      <Button
-                        data-content-region-name="paymentMethod"
-                        data-track-content="true"
-                        data-content-name="ZALOPAY_GATEWAY"
-                        data-content-target="ZALOPAY_GATEWAY"
-                        className="css-64rk53 snipcss0-8-81-82 style-OQooy"
-                        id="style-OQooy"
-                        onClick={handleBuyMoMoPay}
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-76-77"
+                          >
+                            Thanh toán VNPAY-QR
+                            <span
+                              className="snipcss0-10-77-78 style-NANX3"
+                              id="style-NANX3"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            color="textSecondary"
+                            className="css-ngriz3 snipcss0-9-76-79"
+                          ></div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-76-80"
+                          >
+                            Thanh toán qua Internet Banking, Visa, Master, JCB,
+                            VNPAY-QR
+                          </div>
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* pt2 */}
+                    {user ? (
+                      <div
+                        className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
+                        id="style-keAdr"
                       >
-                        <div
-                          type="subtitle"
-                          className="css-qat15y snipcss0-9-82-83"
+                        <Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="COD"
+                          data-content-target="COD"
+                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                          id="style-UMMoQ"
+                          onClick={handleBuyCOD}
                         >
-                          Thanh toán QR Code Momo
-                          <span
-                            className="snipcss0-10-83-84 style-DJQy2"
-                            id="style-DJQy2"
-                          ></span>
-                        </div>
-                        <div
-                          type="body"
-                          className="css-9o8e5m snipcss0-9-82-86"
-                        ></div>
-                      </Button>
-                    </div>
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-76-77"
+                          >
+                            Thanh toán khi nhận hàng
+                            <span
+                              className="snipcss0-10-77-78 style-NANX3"
+                              id="style-NANX3"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            color="textSecondary"
+                            className="css-ngriz3 snipcss0-9-76-79"
+                          ></div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-76-80"
+                          ></div>
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
+                        id="style-keAdr"
+                      >
+                        <Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="COD"
+                          data-content-target="COD"
+                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                          id="style-UMMoQ"
+                          onClick={showConfirm}
+                        >
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-76-77"
+                          >
+                            Thanh toán khi nhận hàng
+                            <span
+                              className="snipcss0-10-77-78 style-NANX3"
+                              id="style-NANX3"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            color="textSecondary"
+                            className="css-ngriz3 snipcss0-9-76-79"
+                          ></div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-76-80"
+                          ></div>
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* pt3 */}
+                    {user ? (
+                      <div
+                        className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
+                        id="style-poooX"
+                      >
+                        <Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="ZALOPAY_GATEWAY"
+                          data-content-target="ZALOPAY_GATEWAY"
+                          className="css-64rk53 snipcss0-8-81-82 style-OQooy"
+                          id="style-OQooy"
+                          onClick={handleBuyMoMoPay}
+                        >
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-82-83"
+                          >
+                            Thanh toán QR Code Momo
+                            <span
+                              className="snipcss0-10-83-84 style-DJQy2"
+                              id="style-DJQy2"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-82-86"
+                          ></div>
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
+                        id="style-poooX"
+                      >
+                        <Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="ZALOPAY_GATEWAY"
+                          data-content-target="ZALOPAY_GATEWAY"
+                          className="css-64rk53 snipcss0-8-81-82 style-OQooy"
+                          id="style-OQooy"
+                          onClick={showConfirm}
+                        >
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-82-83"
+                          >
+                            Thanh toán QR Code Momo
+                            <span
+                              className="snipcss0-10-83-84 style-DJQy2"
+                              id="style-DJQy2"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-82-86"
+                          ></div>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1087,64 +1224,67 @@ export default function Buy(props) {
                   {buysData &&
                     buysData.selectedItems.map((item, index) => (
                       <div key={index}>
-                      <div className="css-9op68y snipcss0-2-6-7 snipcss0-6-105-106">
-                        <div className="css-ov1ktg snipcss0-3-7-8 snipcss0-7-106-107">
-                          <div className="snipcss0-4-8-9 snipcss0-8-107-108">
-                            <div
-                              height={80}
-                              width={80}
-                              className="css-17nqxzh snipcss0-5-9-10 snipcss0-9-108-109"
-                            >
-                              <picture className="snipcss0-6-10-11 snipcss0-10-109-110">
-                                <img
-                                  className="lazyload css-jdz5ak snipcss0-7-11-14 snipcss0-11-110-113"
-                                  alt="product"
-                                  src={process.env.REACT_APP_API_URL+item.thumbnail} // Lấy URL ảnh từ dữ liệu
-                                  loading="lazy"
-                                  decoding="async"
-                                />
-                              </picture>
-                            </div>
-                          </div>
-                          <div className="css-f0vs3e snipcss0-4-8-15 snipcss0-8-107-114">
-                            <a
-                              href={`/detail/${buysData.selectedItems[0].id}`} // Lấy ID sản phẩm từ dữ liệu
-                              aria-label="Image"
-                              className="css-587jha snipcss0-5-15-16 snipcss0-9-114-115"
-                            >
-                              {/* Tên sản phẩm */}
+                        <div className="css-9op68y snipcss0-2-6-7 snipcss0-6-105-106">
+                          <div className="css-ov1ktg snipcss0-3-7-8 snipcss0-7-106-107">
+                            <div className="snipcss0-4-8-9 snipcss0-8-107-108">
                               <div
-                                type="body"
-                                color="textPrimary"
-                                className="css-l4bwcr snipcss0-6-16-17 snipcss0-10-115-116"
+                                height={80}
+                                width={80}
+                                className="css-17nqxzh snipcss0-5-9-10 snipcss0-9-108-109"
                               >
-                                {item.name}
+                                <picture className="snipcss0-6-10-11 snipcss0-10-109-110">
+                                  <img
+                                    className="lazyload css-jdz5ak snipcss0-7-11-14 snipcss0-11-110-113"
+                                    alt="product"
+                                    src={
+                                      process.env.REACT_APP_API_URL +
+                                      item.thumbnail
+                                    } // Lấy URL ảnh từ dữ liệu
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                </picture>
                               </div>
-                            </a>
-                            {/* Số lượng */}
-                            <div
-                              type="caption"
-                              color="textSecondary"
-                              className="css-1qm2d75 snipcss0-5-15-18 snipcss0-9-114-117"
-                            >
-                              Số lượng {item.quantity}
                             </div>
-                            {/* Giá sản phẩm */}
-                            <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
-                              {formatCurrency(item.totalPrice)}
-                              {/* <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
+                            <div className="css-f0vs3e snipcss0-4-8-15 snipcss0-8-107-114">
+                              <a
+                                href={`/detail/${buysData.selectedItems[0].id}`} // Lấy ID sản phẩm từ dữ liệu
+                                aria-label="Image"
+                                className="css-587jha snipcss0-5-15-16 snipcss0-9-114-115"
+                              >
+                                {/* Tên sản phẩm */}
+                                <div
+                                  type="body"
+                                  color="textPrimary"
+                                  className="css-l4bwcr snipcss0-6-16-17 snipcss0-10-115-116"
+                                >
+                                  {item.name}
+                                </div>
+                              </a>
+                              {/* Số lượng */}
+                              <div
+                                type="caption"
+                                color="textSecondary"
+                                className="css-1qm2d75 snipcss0-5-15-18 snipcss0-9-114-117"
+                              >
+                                Số lượng {item.quantity}
+                              </div>
+                              {/* Giá sản phẩm */}
+                              <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
+                                {formatCurrency(item.totalPrice)}
+                                {/* <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
                               đ
                             </span> */}
-                            </span>
-                            <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
-                              {/* Giá khuyến mãi */}
-                              <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
-                                {formatCurrency(item.promoPrice)}
                               </span>
+                              <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
+                                {/* Giá khuyến mãi */}
+                                <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
+                                  {formatCurrency(item.promoPrice)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
                       </div>
                     ))}
                 </div>
@@ -1243,8 +1383,9 @@ export default function Buy(props) {
                             </button>
                           ) : (
                             <button
-                            onClick={showConfirm}
-                             className="att-checkout-button css-v463h2 snipcss0-9-203-204">
+                              onClick={showConfirm}
+                              className="att-checkout-button css-v463h2 snipcss0-9-203-204"
+                            >
                               <div className="css-1lqe6yk snipcss0-10-204-205">
                                 THANH TOÁN
                               </div>
@@ -1558,6 +1699,5 @@ export default function Buy(props) {
         </div>
       </Modal>
     </>
-    
   );
 }
