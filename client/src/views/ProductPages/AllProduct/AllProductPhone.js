@@ -21,7 +21,7 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
-const AllProduct = () => {
+const AllProductPhone = () => {
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState(() => {
     // Lấy giá trị từ localStorage khi trang web được tải
@@ -39,7 +39,7 @@ const AllProduct = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+      .get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => {
         setProducts(response.data);
         // Ban đầu hiển thị tất cả sản phẩm
@@ -188,8 +188,8 @@ const AllProduct = () => {
                   onChange={handleBrandChange}
                 >
                   <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                  <FormControlLabel value="ACER" control={<Radio />} label="ACER" />
-                  <FormControlLabel value="MSI" control={<Radio />} label="MSI" />
+                  <FormControlLabel value="SAMSUNG" control={<Radio />} label="SAMSUNG" />
+                  <FormControlLabel value="APPLE" control={<Radio />} label="APPLE" />
                   <FormControlLabel value="Dell" control={<Radio />} label="Dell" />
                 </RadioGroup>
               </FormControl>
@@ -352,4 +352,4 @@ const AllProduct = () => {
   )
 }
 
-export default AllProduct;
+export default AllProductPhone;

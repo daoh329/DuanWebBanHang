@@ -28,6 +28,7 @@ import CheckSP from "./Menu/CheckSP";
 import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
+import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import axios from "axios";
 import Buy from "./Buy/Buy";
 import CreateOrder from "./VnPay/CreateOrder";
@@ -56,11 +57,6 @@ const App = () => {
           <Nav user={user} />
           <header>
             <Routes>
-            <Route path="/test" element={<Test />} />
-
-
-
-
               <Route path="/" element={<Home />} />
               <Route path="/detail/:id" element={<Detail />} />
               <Route path="/login" element={user ? <Navigate to='/' /> : <Login />} />
@@ -79,7 +75,8 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/profile" element={<Profile user={user} />} />
-              <Route path="/tat-ca-san-pham" element={<AllProduct />} />
+              <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
+              <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
               <Route path="/createorder" element={<CreateOrder />} />
             </Routes>
           </header>

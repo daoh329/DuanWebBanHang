@@ -128,7 +128,9 @@ const showConfirm = () => {
       // Chuyển dữ liệu từ chuỗi JSON thành đối tượng JavaScript
       const parsedBuysData = JSON.parse(buysDataFromSession);
       setBuysData(parsedBuysData);
+       console.log('dữ liệu buys:', parsedBuysData)
     }
+   
   }, []);
 
   const handleBuyClick = () => {
