@@ -64,7 +64,7 @@ export default function Buy(props) {
   const [selectedWard, setSelectedWard] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [note, setNote] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState([]);
+  const [paymentMenthod, setPaymentMenthod] = useState([]);
   const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
@@ -171,7 +171,7 @@ export default function Buy(props) {
       productID: productID,
       quantity: quantity,
       deliveryMethod: deliveryMethod,
-      paymentMethod: paymentMethod,
+      paymentMenthod: paymentMenthod,
       note: note,
       status: 0,
     };
@@ -179,7 +179,7 @@ export default function Buy(props) {
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
-    } else if(!paymentMethod){
+    } else if(!paymentMenthod){
       message.error("Vui lòng chọn phương thức thanh toán");
       return;
     }
@@ -208,18 +208,18 @@ export default function Buy(props) {
 
   const handleBuyVNpay = () => {
     const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
-    setPaymentMethod(1); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
     window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
   }
   
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
-    setPaymentMethod(2); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
   }
   
   const handleBuyMoMoPay = () => {
     // Xử lý cho phương thức thanh toán ZaloPay
-    setPaymentMethod(3); // Cập nhật phương thức thanh toán
+    setPaymentMenthod(3); // Cập nhật phương thức thanh toán
   }
   
 
