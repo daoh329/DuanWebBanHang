@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { message } from "antd";
 import "./Home.scss";
 import {parse, stringify} from 'flatted';
+import CountdownTimer from './CountdownTimer';
 
 import { useCart } from "../Cart/CartContext";
 const { Header } = Layout;
@@ -22,6 +23,7 @@ const Home = () => {
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
   const navigate = useNavigate();
+  const initialTime = 111300;
 
   //top 10 laptop bán chạy
   useEffect(() => {
@@ -353,7 +355,12 @@ const Home = () => {
           onChange={handleTabChange}
         >
           <TabPane tab="Tuần lễ giảm giá" key="1">
+
+       
             <div className="scroll-control-phone" ref={containerRef}>
+            <div >
+               <CountdownTimer initialTime={initialTime} />
+          </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
