@@ -100,6 +100,7 @@ function Detail() {
   const { id } = useParams();
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
+  console.log(Detail)
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
 
@@ -240,7 +241,7 @@ function Detail() {
   const handleAddToCart = () => {
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
-      id: Detail.id,
+      id: Detail.p_ID,
       thumbnail: Detail.thumbnails[0].thumbnail,
       shortDescription: Detail.shortDescription,
       price: Detail.price,

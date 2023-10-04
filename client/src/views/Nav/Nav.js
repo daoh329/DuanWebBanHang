@@ -213,71 +213,65 @@ const App = (userDetails) => {
   return (
     <Layout>
       <div className="danhmuc">
-        <a
-          href="/sale"
-          style={{
-            marginRight: "20px",
-            color: "#333",
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <TagOutlined style={{ marginRight: "8px" }} />
-          Khuyến mãi
-        </a>
-        <a
-          href="/showroom"
-          style={{
-            marginRight: "20px",
-            color: "#333",
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <EnvironmentOutlined style={{ marginRight: "8px" }} /> Hệ thống
-          showroom
-        </a>
-        <a
-          href="/support"
-          style={{
-            marginRight: "20px",
-            color: "#333",
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <CommentOutlined style={{ marginRight: "8px" }} /> Tư vẫn doanh nghiệp
-        </a>
-
-        <Dropdown menu={{ items: menuContact }} placement="bottomRight">
-          <a
-            href="/host"
-            style={{
-              marginRight: "20px",
-              color: "#333",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <PhoneOutlined style={{ marginRight: "8px" }} /> Liên hệ
-          </a>
-        </Dropdown>
-        <a
-          href="/tin-tuc"
-          style={{
-            marginRight: "20px",
-            color: "#333",
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <CommentOutlined style={{ marginRight: "8px" }} /> Tin tức
-        </a>
+        <img style={{width:'100%', height:"56px",objectFit:'cover'}} src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"></img>
+      </div>
+      <div className="menu-container">
+        <div className="menu1">
+          <div className="css-1e7ahm9">
+            <a
+              href="/sale"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} /> Khuyến mãi
+            </a>
+            <a
+              href="/showroom"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <EnvironmentOutlined style={{ marginRight: "8px", color: "#fff" }} /> Hệ thống showroom
+            </a>
+            <a
+              href="/support"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} /> Tư vẫn doanh nghiệp
+            </a>
+            <Dropdown menu={{ items: menuContact }} placement="bottomRight">
+              <a
+                href="/host"
+                style={{
+                  marginRight: "20px",
+                  color: "#fff", // Chữ màu trắng
+                  textDecoration: "none",
+                }}
+              >
+                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} /> Liên hệ
+              </a>
+            </Dropdown>
+            <a
+              href="/tin-tuc"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} /> Tin tức
+            </a>
+          </div>
+        </div>
       </div>
 
       <Affix offsetTop={0}>
@@ -566,9 +560,9 @@ const App = (userDetails) => {
                               title={
                                 selectedItems.shortDescription.length > 20
                                   ? selectedItems.shortDescription.substring(
-                                      0,
-                                      20
-                                    ) + "..."
+                                    0,
+                                    20
+                                  ) + "..."
                                   : selectedItems.shortDescription
                               }
                               description={

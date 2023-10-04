@@ -43,11 +43,14 @@ class PayController {
         let orderId = moment(date).format('DDHHmmss');
         let amount = req.body.amount;
         let bankCode = req.body.bankCode;
+
+        console.log('bank: '+bankCode)
         
         let locale = req.body.language;
         if(locale === null || locale === ''){
             locale = 'vn';
         }
+        console.log(locale)
         let currCode = 'VND';
         let vnp_Params = {};
         vnp_Params['vnp_Version'] = '2.1.0';

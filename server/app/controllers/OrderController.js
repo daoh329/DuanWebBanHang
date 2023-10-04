@@ -11,8 +11,8 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    let sql = `INSERT INTO orders (nameOrder, phone, address, email, deliveryMethod, created_at, updated_at, note, status) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)`;
-    let values = [data.name, data.phone, data.address, data.email, data.deliveryMethod, data.note, data.status];
+    let sql = `INSERT INTO orders (UserID, deliveryMethod, paymentMenthod, created_at, updated_at, note, status) VALUES (?, ?, ?, NOW(), NOW(), ?, ?)`;
+    let values = [data.UserID, data.deliveryMethod, data.paymentMenthod, data.note, data.status];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(result);
@@ -35,11 +35,13 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.note, o.created_at, o.status, odp.quantity, p*
-        FROM orders o
-        JOIN orderDetailsProduct odp ON o.id = odp.orderID
-        JOIN product p ON odp.productID = p.id
-        ORDER BY o.created_at DESC
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.updated_at AS order_updated_at, o.note AS order_note, o.status AS order_status, 
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN product p ON odp.productID = p.id
+      ORDER BY o.created_at DESC
     `;
     mysql.query(sql, (err, result) => {
         if (err) throw err;
@@ -127,6 +129,42 @@ class OrderController {
       });
   }
   
+  async Revenue(req, res) {
+    let sql = `
+        SELECT 
+            DATE_FORMAT(o.updated_at, '%Y-%m') as updated_month, 
+            SUM(p.price * od.quantity) as Revenue
+        FROM 
+            orders o
+        JOIN 
+            orderDetailsProduct od ON o.id = od.orderID
+        JOIN 
+            product p ON od.productID = p.id
+        GROUP BY 
+            DATE_FORMAT(o.updated_at, '%Y-%m')
+    `;
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const monthExists = acc.find(data => data.updated_month === item.updated_month);
+        
+        if(monthExists){
+          monthExists.Revenue += item.Revenue;
+        } else {
+          let newItem = {updated_month: item.updated_month, Revenue: item.Revenue};
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);
+  
+      res.send(convertedData);
+    });
+  }
+
+
   async dashboard(req, res) {
     let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {
@@ -139,26 +177,26 @@ class OrderController {
         if(dateExists){
           switch(item.status) {
             case 0:
-              dateExists.unconfirm = item.count;
+              dateExists.Unconfirm = item.count;
               break;
             case 1:
-              dateExists.confirm = item.count;
+              dateExists.Confirm = item.count;
               break;
             case 2:
-              dateExists.cancel = item.count;
+              dateExists.Cancel = item.count;
               break;
           }
         } else {
           let newItem = {updated_date: item.updated_date};
           switch(item.status) {
             case 0:
-              newItem.unconfirm = item.count;
+              newItem.Unconfirm = item.count;
               break;
             case 1:
-              newItem.confirm = item.count;
+              newItem.Confirm = item.count;
               break;
             case 2:
-              newItem.cancel = item.count;
+              newItem.Cancel = item.count;
               break;
           }
           acc.push(newItem);

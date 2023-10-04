@@ -378,7 +378,7 @@ class Product {
 
     // Truy vấn để lấy thông tin chi tiết sản phẩm
     const productQuery = `
-    SELECT p.*, c.name as category_name, pd.*, b.name as brand_name
+    SELECT p.id AS p_ID, p.name, p.price, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
     FROM product p 
     JOIN category c ON p.CategoryID = c.id
     JOIN productDetails pd ON p.id = pd.product_id

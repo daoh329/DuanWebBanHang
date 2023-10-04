@@ -15,6 +15,12 @@
     width: 100%;
     margin-left: 11%;
   }
+
+  .imgSliders {
+    width: 100%;
+    height: auto;
+    object-fit: cover
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -37,7 +43,88 @@
   /* Đảm bảo không bị tràn ra ngoài khung */
   margin-left: 11%;
 }
+.p_km{
+  color: rgb(255, 255, 255);
+  text-align: center;
+  font-size: 1rem;
+}
+.div_main_km{
+    position: relative;
+    left: 0rem;
+    bottom: 0px;
+    top:8rem;
+}
 
+.div_km {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.div_ngay {
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  font-weight: bold;
+  margin-right: 8px;
+  color: white;
+  border-radius: 5px;
+  background-image: linear-gradient(rgb(74, 74, 74), rgb(35, 34, 34));
+}
+.div_gio {
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  font-weight: bold;
+  margin-right: 8px;
+  color: white;
+  border-radius: 5px;
+  background-image: linear-gradient(rgb(74, 74, 74), rgb(35, 34, 34));
+}
+.div_phut {
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  font-weight: bold;
+  margin-right: 8px;
+  color: white;
+  border-radius: 5px;
+  background-image: linear-gradient(rgb(74, 74, 74), rgb(35, 34, 34));
+}
+.div_giay {
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  font-weight: bold;
+  margin-right: 8px;
+  color: white;
+  border-radius: 5px;
+  background-image: linear-gradient(rgb(74, 74, 74), rgb(35, 34, 34));
+}
 .product-image img {
   width: 100%;
   /* Đảm bảo hình ảnh điền vào khung */
@@ -496,7 +583,11 @@
   .slider-overlay {
     margin-top: 10px;
   }
-
+  .imgSliders {
+    width: 100%;
+    height: 450px;
+    object-fit: cover
+  }
   .phone-group {
     position: relative;
     width: 1234px;
@@ -545,6 +636,7 @@
   .scroll-control-phone::-webkit-scrollbar {
     display: none;
   }
+
 
   .scroll-control-phone {
     display: flex;

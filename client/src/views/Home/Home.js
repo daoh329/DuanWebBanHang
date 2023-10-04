@@ -19,13 +19,11 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 const Home = () => {
-//
-const initialTime = 11300;
-
   const [products, setProducts] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
   const navigate = useNavigate();
+  const initialTime = 111300;
 
   //top 10 laptop bán chạy
   useEffect(() => {
@@ -193,12 +191,10 @@ const initialTime = 11300;
           {sliderImages.map((image, index) => (
             <div className='banner' key={index}>
               <img
-
                 src={image}
                 alt={`Slide ${index}`}
-
-                style={{ width: "100%", height: "450px", objectFitfit: 'cover' }}
-
+               
+                className="imgSliders"
               />
             </div>
           ))}
@@ -359,14 +355,17 @@ const initialTime = 11300;
           onChange={handleTabChange}
         >
           <TabPane tab="Tuần lễ giảm giá" key="1">
-          <h1>Khuyến mãi sắp kết thúc sau:</h1>
-          
+
+       
             <div className="scroll-control-phone" ref={containerRef}>
-              {products &&
-                products.length > 0 &&
-                products.slice(startIndex, endIndex).map((item, index) => (
+            <div >
+               <CountdownTimer initialTime={initialTime} />
+          </div>
+              {topLaptop &&
+                topLaptop.length > 0 &&
+                topLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -386,12 +385,8 @@ const initialTime = 11300;
                     </div>
                   </div>
                 ))}
-               
 
             </div>
-            <div className="countdown-timer">
-        <CountdownTimer initialTime={initialTime} />
-      </div>
           </TabPane>
           <TabPane tab="Sản phẩm bán chạy" key="2">
           <div className="scroll-control-phone" ref={containerRef}>
@@ -527,7 +522,7 @@ const initialTime = 11300;
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -584,7 +579,7 @@ const initialTime = 11300;
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img onClick={() => handleViewDetailProduct(item)} src={item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
@@ -642,7 +637,7 @@ const initialTime = 11300;
           <div className="title-group">
             <div className="products-title">Sản phẩm  </div>
             <div className="views-all">
-            <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+            <a href="/tat-ca-san-pham-phone" style={{color:'white'}}>Xem tất cả</a>
                <i className="fa fa-chevron-right"></i> 
                </div>
           </div>
@@ -703,7 +698,7 @@ const initialTime = 11300;
           <div className="title-group">
             <div className="products-title">Sản phẩm  </div>
             <div className="views-all">
-            <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+            <a href="/tat-ca-san-pham-laptop" style={{color:'white'}}>Xem tất cả</a>
                <i className="fa fa-chevron-right"></i> 
                </div>
           </div>

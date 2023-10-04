@@ -21,6 +21,7 @@ function Cart() {
   // Lấy dữ liệu từ session
   const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
   const [cart, setCart] = useState(initialCart);
+  console.log(cart)
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
