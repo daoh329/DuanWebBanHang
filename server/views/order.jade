@@ -3,12 +3,29 @@
 extends layout
 
 block content
-    h3=title
-    div.table-responsive(style="max-width: 708px;display: flex;margin: 0 auto;padding-left: 30px; padding-right: 30px;  flex-direction: column;")
-        form#createOrder(action='create_payment_url', method='POST')
-            div.form-group(style="margin-top: 10px; padding: 5px;padding-left:24px;padding-right:24px")
-                    label(style="padding-top:10px") Số tiền
-                   div(style="margin-top: 10px; border: 1px solid #ccc; padding: 5px;padding-left:24px;padding-right:24px")#[input.form-control#amount(name='amount',style='border:none;', type="input" value=amount, readonly)]
+    div(style="max-width: 708px;padding-right: 30px; padding-left: 30px;margin: 10px auto;display: flex;justify-content: center;font-size: 20px;")=title
+
+    //- //-     
+    //- display: flex;
+    //- margin: 0 auto;
+    //- padding-left: 30px;
+    //- padding-right: 30px;
+    //- flex-direction: column;
+
+    
+    div.table-responsive(style="max-width: 1200px;display: flex;margin: 0 auto;padding-left: 30px; padding-right: 30px;  flex-direction: column;")
+        form#createOrder(action='create_payment_url', method='POST',style="display:flex;")
+            div.form-group(style="margin-top: 10px;background-color: #f5f7f9;")
+
+
+                    label(style="padding-top:10px;margin-left: 30px;font-weight: 600;font-size: 20px;") Thông tin đơn hàng
+                    
+                    div.controlslabel(style="padding-top:30px") Số tiền thanh toán
+                    
+                    
+                        div(style="margin-top: 10px; border: 1px solid #ccc; padding: 5px;padding-left:24px;padding-right:24px")#[input.form-control#amount(name='amount',style='border:none;', type="input" value=amount, readonly)]
+                    div.controlslabel(style="padding-top:10px") Phí giao dịch
+                    div.controlslabel(style="padding-top:10px;padding-left: 25px;") 0VNĐ
 
             div.form-group(style="padding-left:24px;padding-right:24px;color:#21262c;-webkit-box-sizing: border-box;")
                 label(style="font-size:18px")  Chọn Phương thức thanh toán:
@@ -30,10 +47,10 @@ block content
                 label.control-label
                 div.controls
                 label.radio-inline
-                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;margin-right: 80%;")#[input(type="radio", name="language", id="vnLanguage", value="vn", checked="true")] Tiếng việt
+                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="language", id="vnLanguage", value="vn", checked="true")] Tiếng việt
                 div.controls
                 label.radio-inline
-                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;margin-right: 80%;")#[input(type="radio", name="language", id="enLanguage", value="en")] Tiếng anh
+                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="language", id="enLanguage", value="en")] Tiếng anh
             button.btn.btn-default#btnPopup(type='submit', style='background:cyan;border: 1px solid #ccc; padding: 10px; padding-left:25px;padding-right:25px;font-size: 15px;margin:25px') Thanh toán
     p&nbsp;
     
