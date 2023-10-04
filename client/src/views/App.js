@@ -71,7 +71,7 @@ const App = () => {
               <Route path="/checkSP" element={<CheckSP />} />
               <Route path="/sale" element={<Sale />} />
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
-              <Route path='/quanly/orders' element={<QLdonhang />} />
+              <Route path='/orders' element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/profile" element={<Profile user={user} />} />
