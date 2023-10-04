@@ -8,20 +8,24 @@ block content
         form(action='refund', method='POST')
             div.form-group
                 label Mã giao dịch (vnp_TxnRef):
-                input.form-control(name='orderId')
+                div
+                input.form-control(name='orderId',style='border: 1px solid #ccc; padding: 10px; font-size: 16px;')
             div.form-group
                 label Số tiền hoàn:
-                input.form-control(name='amount')
+                div
+                input.form-control(name='amount',style='border: 1px solid #ccc; padding: 10px; font-size: 16px;')
             div.form-group
                 label Kiểu hoàn tiền (vnp_TransactionType):
-                select.form-control(name='transType')
+                select.form-control(name='transType',style='border: 1px solid #ccc; padding: 10px; font-size: 16px;')
                     option(value='02') Hoàn toàn phần
                     option(value='03') Hoàn một phần
             div.form-group
                 label Thời gian tạo giao dịch (vnp_TransactionDate)
-                input.form-control(name='transDate', placeholder='yyyyMMddHHmmss')
+                div
+                input.form-control(name='transDate', placeholder='yyyyMMddHHmmss',style='border: 1px solid #ccc; padding: 10px; font-size: 16px;')
             div.form-group
                 label User thực hiện hoàn (vnp_CreateBy)
-                input.form-control(name='user')
-            button.btn.btn-default(type='submit') Refund
+                div
+                input.form-control(name='user',style='border: 1px solid #ccc; padding: 10px; font-size: 16px;')
+            button.btn.btn-default(type='submit', style='background:cyan;border: 1px solid #ccc; padding: 10px; padding-left:25px;padding-right:25px;font-size: 15px;margin:25px') Refund
     p&nbsp;
