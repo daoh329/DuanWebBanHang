@@ -353,6 +353,7 @@ const Home = () => {
           onChange={handleTabChange}
         >
           <TabPane tab="Tuần lễ giảm giá" key="1">
+            
             <div className="scroll-control-phone" ref={containerRef}>
               {topLaptop &&
                 topLaptop.length > 0 &&
