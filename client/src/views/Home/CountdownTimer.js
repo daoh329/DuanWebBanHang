@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import './Home.scss'
 class CountdownTimer extends Component {
   constructor(props) {
     super(props);
@@ -49,8 +49,20 @@ class CountdownTimer extends Component {
     const { days, hours, minutes, seconds } = this.convertSecondsToTime(timeLeft);
 
     return (
-      <div>
-        <p>Thời gian còn lại: {days} ngày {hours} giờ {minutes} phút {seconds} giây</p>
+      <div className='div_main_km'>
+        <p className='p_km'>Khuyến mãi còn lại:</p>
+      <div className='div_km'> 
+
+      <div className='div_ngay'>{days}  </div>
+      
+      <div className='div_gio'>{hours}  </div>
+      
+      <div className='div_phut'>{minutes}  </div>
+      
+      <div className='div_giay'>{seconds} </div>
+      
+      
+      </div>
       </div>
     );
   }

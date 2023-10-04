@@ -7,38 +7,7 @@ function Test() {
 
   return (
     <div >
-<header></header>
-<section>
-  <div class="wrapper">
-
-    <div id="countdown">
-      <div class="cd-box">
-        <p class="numbers days">00</p>
-        <p class="strings timeRefDays">Days</p>
-      </div>
-      <div class="cd-box">
-        <p class="numbers hours">00</p>
-        <p class="strings timeRefHours">Hours</p>
-      </div>
-      <div class="cd-box">
-        <p class="numbers minutes">00</p>
-        <p class="strings timeRefMinutes">Minutes</p>
-      </div>
-      <div class="cd-box">
-        <p class="numbers seconds">00</p>
-        <p class="strings timeRefSeconds">Seconds</p>
-      </div>
-    </div>
-   
-
-
-  </div>
-
-</section>
-     
-   
-       
-  
+      
     </div>
   );
 }

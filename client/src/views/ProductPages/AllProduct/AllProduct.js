@@ -143,7 +143,7 @@ const AllProduct = () => {
       historysp.push(historyproduct);
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
-
+    
     navigate(`/detail/${product.id}`);
   };
 
