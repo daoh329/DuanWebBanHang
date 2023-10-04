@@ -318,6 +318,34 @@ undefined .css-193nd6m:focus {
 .css-rqjzpt:hover {
     color: #1435c3;
 }
+
+.menu-container {
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  background-color: #1435c3; /* Màu nền xanh dương */
+  color: #fff; /* Màu chữ trên menu */
+  padding: 10px; /* Khoảng cách giữa nội dung và viền menu */
+  text-align: center; /* Canh giữa nội dung menu */
+}
+
+.menu1 {
+  display: inline-block;
+}
+
+.css-1e7ahm9 {
+  display: flex;
+}
+
+.css-1e7ahm9 a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.css-1e7ahm9 a:last-child {
+  margin-right: 0;
+}
+
 }
 
 
@@ -688,7 +716,7 @@ undefined .css-193nd6m:focus {
 .css-rqjzpt:hover {
     color: #1435c3;
 }
-  
+
 }
 .headers {
   background-color: #f1f1f1;
