@@ -224,7 +224,6 @@ export default function Buy(props) {
 
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
-
     setPaymentMenthod(1); // Cập nhật phương thức thanh toán
   }
   
@@ -233,7 +232,6 @@ export default function Buy(props) {
     setPaymentMenthod(2); // Cập nhật phương thức thanh toán
   }
   
-
   return (
     <>
       {/* main */}
