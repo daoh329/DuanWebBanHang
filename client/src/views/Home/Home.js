@@ -216,7 +216,7 @@ const Home = () => {
               </div>  */}
               <img
                 className="left-image"
-                src="https://lh3.googleusercontent.com/lLGsyYaAldy7EMkG5xrzuIwpryl3pd7xVFspeXUn_ZKU7QNXVzTnmaWHuVXXUf3cond-gv6X2maTfxZCgph9-h-X6wmjXbx0"
+                src="https://lh3.googleusercontent.com/ezi5oistLUPzIpJCHqF6Ggyd6ofw2P2jZX31-xMnpIOB3iHiaBJfKciRivcxBfLD6E47U9H8aQeP8TG_MReJPZmYdHGVq7grLg"
                 alt="Hình ảnh"
               />
             </div>

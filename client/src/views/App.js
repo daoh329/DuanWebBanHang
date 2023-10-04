@@ -29,6 +29,7 @@ import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
+import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
 import Buy from "./Buy/Buy";
 import CreateOrder from "./VnPay/CreateOrder";
@@ -77,6 +78,7 @@ const App = () => {
               <Route path="/profile" element={<Profile user={user} />} />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
               <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
+              <Route path="/tat-ca-san-pham-phone-coppy" element={<AllProductPhonecopy />} />
               <Route path="/createorder" element={<CreateOrder />} />
             </Routes>
           </header>
