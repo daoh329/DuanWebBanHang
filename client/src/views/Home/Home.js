@@ -390,6 +390,9 @@ const Home = () => {
           </TabPane>
           <TabPane tab="Sản phẩm bán chạy" key="2">
           <div className="scroll-control-phone" ref={containerRef}>
+          <div >
+               <CountdownTimer initialTime={initialTime} />
+          </div>
           {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(startIndex, endIndex).map((item, index) => (
@@ -417,7 +420,35 @@ const Home = () => {
             </div>
           </TabPane>
           <TabPane tab="Flash Sales" key="3">
-            Content of Tab 3
+          <div className="scroll-control-phone" ref={containerRef}>
+          <div >
+               <CountdownTimer initialTime={initialTime} />
+          </div>
+          {topLaptop &&
+                topLaptop.length > 0 &&
+                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                  <div className="sanpham-card" key={index}>
+                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        APPLE
+                      </div>
+                    </div>
+                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
+                        {item.shortDescription}
+                      </h3>
+                    </div>
+
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {item.price}₫
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+            </div>
           </TabPane>
         </Tabs>
       </div>
