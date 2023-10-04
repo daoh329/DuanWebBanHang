@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const CreateOrder = () => {
@@ -6,13 +7,33 @@ const CreateOrder = () => {
   const [bankCode, setBankCode] = useState('');
   const [language, setLanguage] = useState('vn');
 
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const amountParam = params.get('amount');
+    if (amountParam) {
+      setAmount(amountParam);
+    }
+  }, [location]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
+  
+    const data = {
       amount,
       bankCode,
       language,
+    };
+  
+    console.log(data);
+  
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     });
 
     if (response.data && response.data.url) {
