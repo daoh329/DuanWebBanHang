@@ -28,7 +28,7 @@ function PhoneInputForm2({ data }) {
     setIsLoading(true);
 
     try {
-      if (fileList.length !== 0 && description !== product.description) {
+      if (fileList.length === 0 && description === product.description) {
         return notification.warning({
           message: "Không có dữ liệu nào được thay đổi!",
         });
