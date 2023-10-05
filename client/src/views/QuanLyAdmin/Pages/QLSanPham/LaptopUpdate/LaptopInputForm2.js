@@ -29,7 +29,7 @@ function LaptopInputForm2({ data }) {
     try {
       // Nếu không có trường nào thay đổi thì thông báo
       // và dừng logic submit
-      if (fileList.length !== 0 && description !== product.description) {
+      if (fileList.length === 0 && description === product.description) {
         return notification.warning({
           message: "Không có dữ liệu được thay đổi!",
         });
