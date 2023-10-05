@@ -209,7 +209,7 @@ class Product {
       // Lấy id từ client request lên
       const id = req.params.id;
       if (!id) {
-        return res.status();
+        return res.status(400).json({ message: "Not Id" });
       }
 
       // select imagePath galery
@@ -267,6 +267,7 @@ class Product {
       });
     }
 
+    // Tạo tên của các field (Xác định các field muốn cập nhật)
     const fieldsProduct = ["name", "price", "shortDescription"];
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
@@ -275,11 +276,15 @@ class Product {
       "configuration",
       "description",
     ];
+    // Tạo các đối tượng (object) chứa các field
+    // và giá trị tương ứng cho từng bảng
     var dataGroupTableProduct = {};
     var dataGroupTableProductDetails = {};
     var dataGroupTableProDetailColor = {};
 
     try {
+      // lặp qua các field trong req.body (trừ images)
+      // và gán giá trị cùng field tương ứng vào object
       for (const fieldName in dataUpdate) {
         // product
         if (fieldsProduct.includes(fieldName)) {
@@ -301,18 +306,13 @@ class Product {
         }
       }
 
-      // console.log("product: ", dataGroupTableProduct);
-      // console.log("details: ", dataGroupTableProductDetails);
-      // console.log("color: ", dataGroupTableProDetailColor);
-      // console.log("galery: ", arrPathImage);
-
-      // update product
+      // Cập nhật vào csdl nếu có dữ liệu thay đổi (dataGroupTableProduct không rỗng)
+      // 1. update product
       if (Object.values(dataGroupTableProduct).length != 0) {
         const queryUpdateProduct = `UPDATE product SET ? WHERE id = ?`;
         await query(queryUpdateProduct, [dataGroupTableProduct, id]);
       }
-
-      // update product details
+      // 2. update product details
       if (Object.values(dataGroupTableProductDetails).length != 0) {
         const queryUpdateProductDetails = `UPDATE productdetails SET ? WHERE product_id = ?`;
         await query(queryUpdateProductDetails, [
@@ -320,8 +320,7 @@ class Product {
           id,
         ]);
       }
-
-      // update color details
+      // 3. update color details
       if (Object.values(dataGroupTableProDetailColor).length != 0) {
         const dl_prodetailcolor = `
         DELETE FROM prodetailcolor
@@ -334,19 +333,52 @@ class Product {
         });
       }
 
-      // update galery
+      // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
+      // Nếu mảng images path không rỗng -> Thực hiện cập nhật
       if (arrPathImage.length != 0) {
+        // Xóa các image trước đó
+        const sl_galery = `
+        SELECT galery.thumbnail AS imagePath
+        FROM galery
+        WHERE product_id = ?;
+      `;
         const dl_galery = `
         DELETE FROM galery
         WHERE product_id = ?;
         `;
-        await query(dl_galery, [id]);
-        const queryUpdateGalery = `INSERT INTO galery (thumbnail, product_id) VALUES (?,?)`;
-        arrPathImage.forEach(async (image) => {
-          await query(queryUpdateGalery, [image, id]);
-        });
-      }
 
+        // select imagePath galery
+        const arrayImagePath = await query(sl_galery, [id]);
+
+        // check nếu có ảnh thì mới xóa trong server và sql
+        if (arrayImagePath.length != 0) {
+          await arrayImagePath.forEach(async (imagePath) => {
+            // Đường dẫn tới thư mục public chứa hình ảnh
+            const publicImagePath = path.join(
+              __dirname,
+              "../../src",
+              "public",
+              imagePath.imagePath
+            );
+            // Thực hiện xóa image trong server
+            fs.unlink(publicImagePath, (err) => {
+              if (err) {
+                console.error("Lỗi khi xóa hình ảnh:", err);
+                return res
+                  .status(500)
+                  .json({ message: "Delete image failed." });
+              }
+            });
+          });
+          // Nếu xóa image trên server thành công thì xóa trên sql
+          await query(dl_galery, [id]);
+          // Thêm ảnh mới của sản phẩm
+          const queryUpdateGalery = `INSERT INTO galery (thumbnail, product_id) VALUES (?,?)`;
+          arrPathImage.forEach(async (image) => {
+            await query(queryUpdateGalery, [image, id]);
+          });
+        }
+      }
       res.status(200).json({ message: "success" });
     } catch (error) {
       console.log(error);

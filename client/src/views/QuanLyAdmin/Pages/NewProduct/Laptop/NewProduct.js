@@ -6,15 +6,7 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import {
-  Button,
-  Modal,
-  notification,
-  Select,
-  Space,
-  Spin,
-} from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Modal, notification, Select, Space, Spin } from "antd";
 
 const { Option } = Select;
 
@@ -22,6 +14,9 @@ function NewProduct() {
   // Tạo modal show tiến trình thêm sản phẩm (Call API)
   // Tạo biến trạng thái của modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [colorSubmit, setColorSubmit] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -101,7 +96,6 @@ function NewProduct() {
       // description: Yup.string().required("Vui lòng nhập trường này."),
     }),
     onSubmit: async (values) => {
-      console.log(values);
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
@@ -123,7 +117,6 @@ function NewProduct() {
       // sử lí mảng color
       if (colorSubmit.length !== 0) {
         colorSubmit.forEach((color) => {
-          console.log(color);
           formData.append("color", color);
         });
       }
@@ -175,11 +168,6 @@ function NewProduct() {
         });
     },
   });
-
-  // Tạo mảng chứa brands lấy từ database
-  const [brands, setBrands] = useState([]);
-  const [colors, setColors] = useState([]);
-  const [colorSubmit, setColorSubmit] = useState([]);
 
   // function call api get brands
   const getBrands = async () => {
@@ -354,20 +342,6 @@ function NewProduct() {
                       </Option>
                     ))}
                 </Select>
-
-                <Button
-                  // onClick={addColor}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: "3px",
-                    marginLeft: "10px",
-                  }}
-                  icon={<PlusOutlined />}
-                >
-                  <a href="http://localhost:3000/admin/ListCate">Thêm</a>
-                </Button>
               </div>
             </div>
 

@@ -13,7 +13,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-function LaptopInputForm2({ data }) {
+function PhoneInputForm2({ data }) {
   const product = data;
   const [isLoading, setIsLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -24,20 +24,18 @@ function LaptopInputForm2({ data }) {
 
   // Hàm được gọi khi không bị lỗi form
   const onFinish = async (values) => {
-    // Bật loading button submit
+    // bật loading button submit
     setIsLoading(true);
+
     try {
-      // Nếu không có trường nào thay đổi thì thông báo
-      // và dừng logic submit
       if (fileList.length !== 0 && description !== product.description) {
         return notification.warning({
-          message: "Không có dữ liệu được thay đổi!",
+          message: "Không có dữ liệu nào được thay đổi!",
         });
       }
-
-      // Tạo FormData chứa dữ liệu
+      // Tạo FormData lưu dữ liệu
       const formData = new FormData();
-      // Nếu có ảnh được chọn
+      // Nếu có image được chọn
       if (fileList.length !== 0) {
         // đọc qua từ image và push vào formData
         fileList.forEach((file) => {
@@ -45,7 +43,7 @@ function LaptopInputForm2({ data }) {
         });
       }
 
-      // Nếu description thay đổi
+      // Nếu description có sự thay đổi dữ liệu
       if (description !== product.description) {
         // append vào formData
         formData.append("description", description);
@@ -89,14 +87,15 @@ function LaptopInputForm2({ data }) {
     });
   };
 
-  // Tắt modal preview image
+  //   Tắt modal preview image
   const handleCancel = () => setPreviewOpen(false);
 
-  // Bật modal preview image
+  //   Bật modal preview image
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
+
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
     setPreviewTitle(
@@ -104,7 +103,7 @@ function LaptopInputForm2({ data }) {
     );
   };
 
-  // nút upload image
+  //   nút upload image
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -174,4 +173,4 @@ function LaptopInputForm2({ data }) {
   );
 }
 
-export default LaptopInputForm2;
+export default PhoneInputForm2;
