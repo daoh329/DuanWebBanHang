@@ -100,7 +100,6 @@ function Detail() {
   const { id } = useParams();
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
-  console.log(Detail)
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
 

@@ -12,14 +12,16 @@ import axios from "axios";
 
 const { Option } = Select;
 
-function LaptopInputFrom({ data }) {
+function PhoneInputFrom({ data }) {
+  // tạo biến chứa thông tin sản phẩm được cập nhật
   const product = data;
-  // function select element
+  // Tạo state toàn cục
   const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [colors, setColors] = useState([]);
   const [colorSubmit, setColorSubmit] = useState(product.color);
 
+  // Hàm lấy dữ liệu thương hiệu (get csdl)
   const getBrands = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
@@ -32,7 +34,7 @@ function LaptopInputFrom({ data }) {
       });
   };
 
-  // function call api get colors
+  // Hàm lấy dữ liệu màu sắc (get csdl)
   const getColors = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/colors`)
@@ -44,56 +46,78 @@ function LaptopInputFrom({ data }) {
       });
   };
 
+  // Lấy brands và colors khi lần đầu chạy
   useEffect(() => {
     getBrands();
     getColors();
   }, []);
 
+  // Hàm được gọi khi form hoàn thành
   const onFinish = async (values) => {
+    // bật loading button
     setIsLoading(true);
     try {
       // kiểm tra nếu "" thì set là undefined
       // (undefined không được đưa lên server)
       var checkValuesChange = false;
 
+      // tạo tên field cho thuộc tính configuration
       const fieldsConfiguraton = [
-        "M2_slot_type_supported",
-        "accessory",
-        "connector",
-        "cpu",
-        "demand",
-        "guarantee",
-        "keyboard",
-        "mass",
-        "maximum_number_of_storage_ports",
-        "os",
-        "output_port",
-        "part_number",
-        "pin",
-        "ram",
-        "rom",
         "screen",
+        "resolution",
+        "rom",
+        "os",
+        "ram",
+        "chip",
+        "pin",
+        "charging_port",
+        "sim_type",
+        "mobile_network",
+        "rear_camera",
+        "front_camera",
+        "wifi",
+        "gps",
+        "bluetooth",
+        "headphone_jack",
+        "size",
+        "mass",
+        "accessory",
+        "guarantee",
         "series",
-        "vga",
-        "wireless_connectivity",
       ];
 
+      // Tạo thuộc tính configuration
       values.configuration = values.configuration || {};
+      // Lặp qua từng field của values
       for (const fieldName in values) {
+        //TH1: Nếu dữ dữ liệu của field hiện tại không được nhập hoăc bị xóa đy
         if (!values[fieldName]) {
+          // TH1.1: Dữ liệu của field không được nhập và thuộc configuration
           if (
             values[fieldName] === undefined &&
             fieldsConfiguraton.includes(fieldName)
           ) {
+            // Thực hiện gán giá trị mặc định cho field đó
             values.configuration[fieldName] = product.configuration[fieldName];
-          } else if (values[fieldName] === "") {
+          }
+          // TH1.2: Dữ liệu của field bị xóa
+          else if (values[fieldName] === "") {
+            // Thực hiện gán giá trị của field đó thành undefined
+            // (undefined sẽ không được submit lên server)
             values[fieldName] = undefined;
           }
-        } else if (values[fieldName]) {
+        }
+        // TH2: Nếu field có giá trị mới (giá trị mặc định bị thay đổi)
+        else if (values[fieldName]) {
+          // Nếu field đó thuộc configuaration
           if (fieldsConfiguraton.includes(fieldName)) {
+            // gán giá trị cho field đó vào thuộc tính configuration
             values.configuration[fieldName] = values[fieldName];
+            // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
             delete values[fieldName];
           }
+          // Nếu có giá trị thay đổi trong form thì đặt thành true
+          // ( = true sẽ tiếp tục call API)
           checkValuesChange = true;
         }
       }
@@ -102,6 +126,8 @@ function LaptopInputFrom({ data }) {
         values["color"] = colorSubmit;
       }
 
+      // Nếu không có dữ liệu trong form thay đổi (checkValuesChange === false)
+      // Bật thông báo, tắt loading button và dừng call API
       if (!checkValuesChange) {
         setIsLoading(false);
         return notification.warning({
@@ -115,7 +141,10 @@ function LaptopInputFrom({ data }) {
         values
       );
 
+      // Nếu trạng thái trả về bằng 200
+      // thì thông báo thành công và tắt loading button
       if (result.status === 200) {
+        // Set độ trễ 2s
         return setTimeout(() => {
           setIsLoading(false);
           notification.success({
@@ -123,6 +152,8 @@ function LaptopInputFrom({ data }) {
           });
         }, 2000);
       }
+      // Nếu trạng thái trả về khác 200
+      // Thông báo thất bại và tắt loading button
       setTimeout(() => {
         setIsLoading(false);
         notification.error({
@@ -130,7 +161,9 @@ function LaptopInputFrom({ data }) {
         });
       }, 2000);
     } catch (error) {
+      // Log ra lỗi, tắt loading button và thông báo thất bại
       console.log(error);
+      // set độ trễ 2s
       setTimeout(() => {
         setIsLoading(false);
         notification.error({
@@ -140,12 +173,14 @@ function LaptopInputFrom({ data }) {
     }
   };
 
+  // Hàm được gọi khi form bị lỗi
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  // select color
+  // Hàm được gọi khi input color thay đổi
   const handleChange = (value) => {
+    // Đặt giá trị cho state colorSubmit
     setColorSubmit(value);
   };
 
@@ -214,14 +249,6 @@ function LaptopInputFrom({ data }) {
         />
       </Form.Item>
 
-      {/* Part number */}
-      <Form.Item label="Part_number" name="part_number">
-        <Input
-          defaultValue={product ? product.configuration.part_number : null}
-          placeholder="Nhập part number sản phẩm"
-        />
-      </Form.Item>
-
       {/* colors */}
       <div className="form-group">
         <label className="form-label">Màu sắc</label>
@@ -251,14 +278,6 @@ function LaptopInputFrom({ data }) {
         </div>
       </div>
 
-      {/* demand */}
-      <Form.Item label="Nhu cầu" name="demand">
-        <Input
-          defaultValue={product ? product.configuration.demand : null}
-          placeholder="Nhập nhu cầu sử dụng sản phẩm"
-        />
-      </Form.Item>
-
       {/* số lượng */}
       <Form.Item label="Số lượng" name="quantity">
         <InputNumber
@@ -273,11 +292,11 @@ function LaptopInputFrom({ data }) {
         Thông tin chi tiết
       </h6>
 
-      {/* CPU */}
-      <Form.Item label="CPU" name="cpu">
+      {/* chip */}
+      <Form.Item label="Chip" name="chip">
         <Input
-          defaultValue={product ? product.configuration.cpu : null}
-          placeholder="Nhập thông số CPU sản phẩm"
+          defaultValue={product ? product.configuration.chip : null}
+          placeholder="Nhập thông số cpu sản phẩm"
         />
       </Form.Item>
 
@@ -297,11 +316,11 @@ function LaptopInputFrom({ data }) {
         />
       </Form.Item>
 
-      {/* vga */}
-      <Form.Item label="Đồ họa" name="vga">
+      {/* resolution */}
+      <Form.Item label="Độ phân giải" name="resolution">
         <Input
-          defaultValue={product ? product.configuration.vga : null}
-          placeholder="Nhập thông tin card đồ họa"
+          defaultValue={product ? product.configuration.resolution : null}
+          placeholder="Nhập thông tin độ phân giải màn hình"
         />
       </Form.Item>
 
@@ -313,62 +332,51 @@ function LaptopInputFrom({ data }) {
         />
       </Form.Item>
 
-      {/* số cổng lưu trữ tối đa */}
-      <Form.Item
-        label="Số cổng lưu trữ tối đa"
-        name="maximum_number_of_storage_ports"
-      >
+      {/* Cổng sạc */}
+      <Form.Item label="Cổng sạc" name="charging_port">
         <Input
-          defaultValue={
-            product
-              ? product.configuration.maximum_number_of_storage_ports
-              : null
-          }
-          placeholder="Nhập số lượng cổng lưu trữ tối đa"
+          defaultValue={product ? product.configuration.charging_port : null}
+          placeholder="Nhập thông tin cổng sạc"
         />
       </Form.Item>
 
-      {/* Kiểu khe M.2 hỗ trợ */}
-      <Form.Item label="Kiểu khe M.2 hỗ trợ" name="M2_slot_type_supported">
+      {/* Kiểu sim */}
+      <Form.Item label="Kiểu sim" name="sim_type">
         <Input
-          defaultValue={
-            product ? product.configuration.M2_slot_type_supported : null
-          }
-          placeholder="Nhập kiểu khe M.2 hỗ trợ"
+          defaultValue={product ? product.configuration.sim_type : null}
+          placeholder="Nhập kiểu sim hỗ trợ"
         />
       </Form.Item>
 
-      {/* Cổng xuất hình */}
-      <Form.Item label="Cổng xuất hình" name="output_port">
+      {/* mobile_network */}
+      <Form.Item label="Mạng di động" name="mobile_network">
         <Input
-          defaultValue={product ? product.configuration.output_port : null}
-          placeholder="Nhập thông tin cổng xuất hình"
+          defaultValue={product ? product.configuration.mobile_network : null}
+          placeholder="Nhập thông tin mạng di động"
         />
       </Form.Item>
 
-      {/* Cổng kết nối */}
-      <Form.Item label="Cổng kết nối" name="connector">
+      {/* rear_camera */}
+      <Form.Item label="Camera sau" name="rear_camera">
         <Input
-          defaultValue={product ? product.configuration.connector : null}
-          placeholder="Nhập thông tin cổng kết nối"
+          defaultValue={product ? product.configuration.rear_camera : null}
+          placeholder="Nhập thông tin camera sau"
         />
       </Form.Item>
 
-      {/* Kết nối không dây */}
-      <Form.Item label="Kết nối không dây" name="wireless_connectivity">
+      {/* front_camera */}
+      <Form.Item label="Camera trước" name="front_camera">
         <Input
-          defaultValue={
-            product ? product.configuration.wireless_connectivity : null
-          }
-          placeholder="Nhập thông tin công nghệ kết nối không dây"
+          defaultValue={product ? product.configuration.front_camera : null}
+          placeholder="Nhập thông tin camera trước"
         />
       </Form.Item>
 
-      {/* Bàn phím */}
-      <Form.Item label="Bàn phím" name="keyboard">
+      {/* wifi */}
+      <Form.Item label="Wifi" name="wifi">
         <Input
-          defaultValue={product ? product.configuration.keyboard : null}
-          placeholder="Nhập thông tin bàn phím"
+          defaultValue={product ? product.configuration.wifi : null}
+          placeholder="Nhập thông tin wifi"
         />
       </Form.Item>
 
@@ -377,6 +385,38 @@ function LaptopInputFrom({ data }) {
         <Input
           defaultValue={product ? product.configuration.os : null}
           placeholder="Nhập thông tin hệ điều hành"
+        />
+      </Form.Item>
+
+      {/* gps */}
+      <Form.Item label="Gps" name="gps">
+        <Input
+          defaultValue={product ? product.configuration.gps : null}
+          placeholder="Nhập thông tin gps"
+        />
+      </Form.Item>
+
+      {/* bluetooth */}
+      <Form.Item label="Bluetooth" name="bluetooth">
+        <Input
+          defaultValue={product ? product.configuration.bluetooth : null}
+          placeholder="Nhập thông tin bluetooth"
+        />
+      </Form.Item>
+
+      {/* headphone_jack */}
+      <Form.Item label="Tai nghe" name="headphone_jack">
+        <Input
+          defaultValue={product ? product.configuration.headphone_jack : null}
+          placeholder="Nhập thông tin tai nghe"
+        />
+      </Form.Item>
+
+      {/* size */}
+      <Form.Item label="Kích thước" name="size">
+        <Input
+          defaultValue={product ? product.configuration.size : null}
+          placeholder="Nhập thông tin kích thước"
         />
       </Form.Item>
 
@@ -413,4 +453,4 @@ function LaptopInputFrom({ data }) {
   );
 }
 
-export default LaptopInputFrom;
+export default PhoneInputFrom;
