@@ -6,13 +6,19 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import { Modal, Spin, notification } from "antd";
+import { Button, Modal, Select, Space, Spin, notification } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 function NewPhone() {
-  // Tạo modal show tiến trình thêm sản phẩm (Call API)
-  // Tạo biến trạng thái của modal
+  // Tạo các biến trạng thái cục bộ
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [colorSubmit, setColorSubmit] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
 
+  // Tạo các trường, giá trị mặc định, validate và submit form (use formik)
   const formik = useFormik({
     initialValues: {
       brand: "",
@@ -21,7 +27,6 @@ function NewPhone() {
       price: 0,
       shortDescription: "",
       series: "",
-      color: "",
       category: "Điện thoại",
       quantity: 1,
       images: [],
@@ -50,14 +55,10 @@ function NewPhone() {
     },
     validationSchema: Yup.object().shape({
       brand: Yup.string().required("Vui lòng chọn thương hiệu của sản phẩm."),
-      // guarantee: Yup.string().required("Vui lòng nhập trường này."),
       name: Yup.string().required("Vui lòng nhập trường này."),
       price: Yup.number().required("Vui lòng nhập giá sản phẩm"),
       shortDescription: Yup.string().required("Vui lòng nhập trường này."),
-      // series_laptop: Yup.string().required("Vui lòng nhập trường này."),
-      // color: Yup.string().required("Vui lòng nhập trường này."),
-      // demand: Yup.string().required("Vui lòng nhập trường này."),
-      // category: Yup.string().required("Vui lòng nhập trường này."),
+
       quantity: Yup.string().required("Vui lòng nhập trường này."),
       images: Yup.array().of(
         Yup.mixed()
@@ -74,25 +75,6 @@ function NewPhone() {
             (value) => value && value.size < 5 * 1024 * 1024
           )
       ),
-      // cpu: Yup.string().required("Vui lòng nhập trường này."),
-      // screen: Yup.string().required("Vui lòng nhập trường này."),
-      // ram: Yup.string().required("Vui lòng nhập trường này."),
-      // vga: Yup.string().required("Vui lòng nhập trường này."),
-      // rom: Yup.string().required("Vui lòng nhập trường này."),
-      // maximum_number_of_storage_ports: Yup.string().required(
-      //   "Vui lòng nhập trường này."
-      // ),
-      // M2_slot_type_supported: Yup.string().required(
-      //   "Vui lòng nhập trường này."
-      // ),
-      // output_port: Yup.string().required("Vui lòng nhập trường này."),
-      // connector: Yup.string().required("Vui lòng nhập trường này."),
-      // wireless_connectivity: Yup.string().required("Vui lòng nhập trường này."),
-      // keyboard: Yup.string().required("Vui lòng nhập trường này."),
-      // os: Yup.string().required("Vui lòng nhập trường này."),
-      // pin: Yup.string().required("Vui lòng nhập trường này."),
-      // mass: Yup.string().required("Vui lòng nhập trường này."),
-      // description: Yup.string().required("Vui lòng nhập trường này."),
     }),
     onSubmit: async (values) => {
       // Mở modal
@@ -111,17 +93,19 @@ function NewPhone() {
             fieldValue.forEach((image) => {
               formData.append(fieldName, image);
             });
-          } else if (fieldName === "color") {
-            const strColor = fieldValue.toString();
-            const arrColor = strColor.split(",");
-            arrColor.forEach((value) => {
-              formData.append(fieldName, value.trim());
-            });
           } else {
             formData.append(fieldName, fieldValue);
           }
         }
       }
+
+      // sử lí mảng color
+      if (colorSubmit.length !== 0) {
+        colorSubmit.forEach((color) => {
+          formData.append("color", color);
+        });
+      }
+
       // call API
       await axios
         .post(url, formData, {
@@ -170,23 +154,42 @@ function NewPhone() {
     },
   });
 
-  const [brands, setBrands] = useState([]);
-
-  // call api get brands
+  // function get brands (get from csdl)
   const getBrands = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
       .then((response) => {
-        setBrands(response.data.results);
+        setBrands(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
+  // function get colors (get from csdl)
+  const getColors = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/colors`)
+      .then((response) => {
+        setColors(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  // Lấy dữ liệu brands và colors khi chạy lần đầu
   useEffect(() => {
     getBrands();
+    getColors();
   }, []);
+
+  // Hàm được gọi khi giá trị màu sắc thay đổi
+  const handleChange = (value) => {
+    // set giá trị vào state colorSubmit
+    setColorSubmit(value);
+  };
+
   return (
     <div className="container-content">
       <form
@@ -299,21 +302,45 @@ function NewPhone() {
             </div>
             {/* Màu sắc */}
             <div className="form-group">
-              <label className="form-label">
-                Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)
-              </label>
-              <input
-                type="text"
-                name="color"
-                id="color"
-                className="form-control"
-                value={formik.values.color}
-                onChange={formik.handleChange}
-                placeholder="VD: Trắng,Đen,..."
-              ></input>
-              {formik.errors.color && (
-                <span className="form-message">{formik.errors.color}</span>
-              )}
+              <label className="form-label">Màu sắc</label>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="Chọn màu sắc"
+                  value={colorSubmit}
+                  onChange={handleChange}
+                  optionLabelProp="label"
+                  size="large"
+                >
+                  {colors &&
+                    colors.map((color, index) => (
+                      <Option key={index} value={color.name} label={color.name}>
+                        <Space>{color.name}</Space>
+                      </Option>
+                    ))}
+                </Select>
+
+                <Button
+                  // onClick={addColor}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "3px",
+                    marginLeft: "10px",
+                  }}
+                  icon={<PlusOutlined />}
+                >
+                  <a href="http://localhost:3000/admin/ListCate">Thêm</a>
+                </Button>
+              </div>
             </div>
             {/* category */}
             <div className="form-group">
@@ -694,13 +721,9 @@ function NewPhone() {
         <button type="submit" className="btn-submit-form">
           Xác nhận
         </button>
-        <Modal
-          open={isModalOpen}
-          footer={null}
-          closeIcon={null}
-        >
+        <Modal open={isModalOpen} footer={null} closeIcon={null}>
           <Spin tip="Đang tải lên..." spinning={true}>
-            <div style={{minHeight:"50px"}} className="content" />
+            <div style={{ minHeight: "50px" }} className="content" />
           </Spin>
         </Modal>
       </form>

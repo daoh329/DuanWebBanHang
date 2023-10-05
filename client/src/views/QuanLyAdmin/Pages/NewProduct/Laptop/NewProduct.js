@@ -6,12 +6,17 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import { Modal, notification, Spin } from "antd";
+import { Modal, notification, Select, Space, Spin } from "antd";
+
+const { Option } = Select;
 
 function NewProduct() {
   // Tạo modal show tiến trình thêm sản phẩm (Call API)
   // Tạo biến trạng thái của modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [colorSubmit, setColorSubmit] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -22,7 +27,6 @@ function NewProduct() {
       shortDescription: "",
       series: "",
       part_number: "",
-      color: "",
       demand: "",
       category: "Laptop",
       quantity: 1,
@@ -104,17 +108,19 @@ function NewProduct() {
             fieldValue.forEach((image) => {
               formData.append(fieldName, image);
             });
-          } else if (fieldName === "color") {
-            const strColor = fieldValue.toString();
-            const arrColor = strColor.split(",");
-            arrColor.forEach((value) => {
-              formData.append(fieldName, value.trim());
-            });
           } else {
             formData.append(fieldName, fieldValue);
           }
         }
       }
+
+      // sử lí mảng color
+      if (colorSubmit.length !== 0) {
+        colorSubmit.forEach((color) => {
+          formData.append("color", color);
+        });
+      }
+
       // call API
       await axios
         .post(url, formData, {
@@ -130,7 +136,6 @@ function NewProduct() {
               notification.success({
                 message: "Thành công",
                 description: "Dữ liệu đã được lưu thành công!",
-
               });
             }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
             // Xóa timer khi component bị hủy
@@ -142,7 +147,6 @@ function NewProduct() {
               notification.error({
                 message: "Lỗi",
                 description: "Có lỗi xảy ra khi lưu dữ liệu!",
-
               });
             }, 1000); // Đợi 1s mới tắt modal và hiển thị thông báo
             // Xóa timer khi component bị hủy
@@ -165,15 +169,24 @@ function NewProduct() {
     },
   });
 
-  // Tạo mảng chứa brands lấy từ database
-  const [brands, setBrands] = useState([]);
-
   // function call api get brands
   const getBrands = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
       .then((response) => {
-        setBrands(response.data.results);
+        setBrands(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  // function call api get colors
+  const getColors = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/colors`)
+      .then((response) => {
+        setColors(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -181,9 +194,15 @@ function NewProduct() {
   };
 
   useEffect(() => {
-    // get brands data
+    // get brands and color data
     getBrands();
+    getColors();
   }, []);
+
+  // select color
+  const handleChange = (value) => {
+    setColorSubmit(value);
+  };
 
   return (
     <div className="container-content">
@@ -277,9 +296,7 @@ function NewProduct() {
                 onChange={formik.handleChange}
               ></input>
               {formik.errors.series && (
-                <span className="form-message">
-                  {formik.errors.series}
-                </span>
+                <span className="form-message">{formik.errors.series}</span>
               )}
             </div>
             {/* Part-number */}
@@ -301,22 +318,33 @@ function NewProduct() {
             </div>
             {/* Màu sắc */}
             <div className="form-group">
-              <label className="form-label">
-                Màu sắc (Mỗi màu cách nhau bởi dấu phẩy)
-              </label>
-              <input
-                type="text"
-                name="color"
-                id="color"
-                className="form-control"
-                value={formik.values.color}
-                onChange={formik.handleChange}
-                placeholder="VD: Trắng,Đen,..."
-              ></input>
-              {formik.errors.color && (
-                <span className="form-message">{formik.errors.color}</span>
-              )}
+              <label className="form-label">Màu sắc</label>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="Chọn màu sắc"
+                  value={colorSubmit}
+                  onChange={handleChange}
+                  optionLabelProp="label"
+                  size="large"
+                >
+                  {colors &&
+                    colors.map((color, index) => (
+                      <Option key={index} value={color.name} label={color.name}>
+                        <Space>{color.name}</Space>
+                      </Option>
+                    ))}
+                </Select>
+              </div>
             </div>
+
             {/* Nhu cầu */}
             <div className="form-group">
               <label className="form-label">Nhu cầu</label>
@@ -332,7 +360,7 @@ function NewProduct() {
                 <span className="form-message">{formik.errors.demand}</span>
               )}
             </div>
-            {/* type */}
+            {/* category */}
             <div className="form-group">
               <label className="form-label">Loại</label>
               <input
@@ -649,13 +677,9 @@ function NewProduct() {
         <button type="submit" className="btn-submit-form">
           Xác nhận
         </button>
-        <Modal
-          open={isModalOpen}
-          footer={null}
-          closeIcon={null}
-        >
+        <Modal open={isModalOpen} footer={null} closeIcon={null}>
           <Spin tip="Đang tải lên..." spinning={true}>
-            <div style={{minHeight:"50px"}} className="content" />
+            <div style={{ minHeight: "50px" }} className="content" />
           </Spin>
         </Modal>
       </form>

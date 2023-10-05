@@ -3,6 +3,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import LaptopInputFrom from "../LaptopUpdate/LaptopInputFrom";
 import LaptopInputForm2 from "../LaptopUpdate/LaptopInputForm2";
+import PhoneInputFrom from "../PhoneUpdate/PhoneInputFrom";
+import PhoneInputFrom2 from "../PhoneUpdate/PhoneInputForm2";
 
 function ActionButton({ record, getProduct }) {
   const [openModal, setOpenModal] = useState(false);
@@ -125,6 +127,30 @@ function ActionButton({ record, getProduct }) {
           )}
 
           {/* edit phone */}
+        {record.category === "Điện thoại" &&
+          !isOpenEditImageAndDescription &&(
+            <div>
+              <Button
+                onClick={handleOpenEditImage}
+                style={{ marginBottom: "10px" }}
+              >
+                Cập nhật ảnh và mô tả sản phẩm
+              </Button>
+              <PhoneInputFrom data={record} />
+            </div>
+          )}
+        {record.category === "Điện thoại" &&
+          isOpenEditImageAndDescription &&(
+            <div>
+              <Button
+                onClick={handleCloseEditImage}
+                style={{ marginBottom: "10px" }}
+              >
+                Trở lại
+              </Button>
+              <PhoneInputFrom2 data={record} />
+            </div>
+          )}
       </Modal>
       {/* delete */}
       <Popconfirm
