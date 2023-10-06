@@ -6,32 +6,42 @@ class OrderController {
   async order(req, res) {
     const data = req.body;
     console.log(data);
-
+  
     if (!data) {
       return res.status(400).json("Invalid data");
     }
-
-    let sql = `INSERT INTO orders (UserID, deliveryMethod, paymentMenthod, created_at, updated_at, note, status) VALUES (?, ?, ?, NOW(), NOW(), ?, ?)`;
-    let values = [data.UserID, data.deliveryMethod, data.paymentMenthod, data.note, data.status];
+  
+    // Kiểm tra số lượng sản phẩm hiện có
+    let sql = `SELECT quantity FROM productdetails WHERE product_id = ?`;
+    let values = [data.productID];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(result);
-      const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-      sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-      values = [data.productID, data.quantity, orderID];
+  
+      // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
+      if (data.quantity > result[0].quantity) {
+        return res.status(400).json("Số lượng sản phẩm không đủ");
+      }
+  
+      // Nếu số lượng mua hàng không vượt quá số lượng sản phẩm hiện có
+      sql = `INSERT INTO orders (UserID, deliveryMethod, paymentMenthod, created_at, updated_at, note, status) VALUES (?, ?, ?, NOW(), NOW(), ?, ?)`;
+      values = [data.UserID, data.deliveryMethod, data.paymentMenthod, data.note, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
         console.log(result);
-        sql = `UPDATE productdetails SET quantity = quantity - ? WHERE product_id = ?`; // Cập nhật số lượng sản phẩm trong bảng productdetails
-        values = [data.quantity, data.productID];
+        const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
+        sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+        values = [data.productID, data.quantity, orderID];
         mysql.query(sql, values, (err, result) => {
           if (err) throw err;
           console.log(result);
-          res.send('Order details added and product quantity updated...');
+          res.send('Order details added...');
         });
       });
     });
   }
+  
+  
 
   async quanlyOrder(req, res, next) {
     const sql = `
@@ -60,25 +70,67 @@ class OrderController {
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
         } else {
-            res.send('Order confirmed');
+            // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
+            let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+            let values = [orderId];
+            mysql.query(sql, values, (err, orderDetails) => {
+              if (err) throw err;
+  
+              // Duyệt qua từng sản phẩm trong đơn hàng
+              for (let i = 0; i < orderDetails.length; i++) {
+                const productID = orderDetails[i].productID;
+                const quantity = orderDetails[i].quantity;
+  
+                // Cập nhật số lượng sản phẩm trong bảng productDetails
+                sql = `UPDATE productDetails SET quantity = quantity - ? WHERE product_id = ?`;
+                values = [quantity, productID];
+                mysql.query(sql, values, (err, result) => {
+                  if (err) throw err;
+                  console.log(result);
+                });
+              }
+  
+              res.send('Order confirmed and product quantity updated...');
+            });
         }
     });
   }
 
   async cancelOrder(req, res) {
-      const orderId = req.params.id;
-      const sql = 'UPDATE orders SET status = 2, updated_at = NOW() WHERE id = ?';
-
-      mysql.query(sql, [orderId], (err, result) => {
-          if (err) {
-              console.error(err);
-              res.status(500).send('Error canceling order');
-          } else if (result.affectedRows === 0) {
-              res.status(404).send('No order found with the provided ID');
-          } else {
-              res.send('Order canceled');
-          }
-      });
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 2, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error canceling order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+            // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
+            let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+            let values = [orderId];
+            mysql.query(sql, values, (err, orderDetails) => {
+              if (err) throw err;
+  
+              // Duyệt qua từng sản phẩm trong đơn hàng
+              for (let i = 0; i < orderDetails.length; i++) {
+                const productID = orderDetails[i].productID;
+                const quantity = orderDetails[i].quantity;
+  
+                // Cập nhật số lượng sản phẩm trong bảng productDetails
+                sql = `UPDATE productDetails SET quantity = quantity + ? WHERE product_id = ?`;
+                values = [quantity, productID];
+                mysql.query(sql, values, (err, result) => {
+                  if (err) throw err;
+                  console.log(result);
+                });
+              }
+  
+              res.send('Order canceled and product quantity updated...');
+            });
+        }
+    });
   }
 
   async orderHistory(req, res) {
