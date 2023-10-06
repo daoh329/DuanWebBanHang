@@ -292,7 +292,7 @@ export default function Buy(props) {
                               data-content-target={79}
                               className="css-1014eaz style-tofZn"
                               id="style-tofZn"
-                              onClick={handleContinueClick}
+                              onClick={showModal}
                             >
                               <div>
                                 <span id="style-owhaV" className="style-owhaV">
