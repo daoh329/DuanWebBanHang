@@ -1,7 +1,100 @@
-@media (max-width: 768px) {
-.div_main{
-    display: flex;
-    background-color: white;
+
+*, *::before, *::after {
+    box-sizing: border-box;
 }
+@media (max-width: 768px) {
+    .body-noi-dung {
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        background-color: rgb(255, 255, 255);
+    }
+
+    .div_main {
+        padding-right: 16px;
+        padding-left: 16px;
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        max-width: 1232px;
+        padding-top: 0.25rem;
+    }
+    .div_main2{
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        grid-auto-flow: row;    
+    }
+    .css-cbrxda {
+        -webkit-text-decoration: none;
+        text-decoration: none;
+        color: unset;
+        cursor: pointer;
+    }
+    .css-1g2qfl {
+        text-align: center;
+        padding: 4px;
+    }
+    .css-1knqu6t{
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        border-radius: 4px;
+        height: 48px;
+        width: 48px;
+
+    }
+    .css-1dr385k {
+        margin: 0.25rem 0px 0px;
+        padding: 0px;
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        color: inherit;
+        font-weight: 400;
+        text-decoration: unset;
+        font-size: 12px;
+        line-height: 16px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        max-width: unset;
+        min-width: unset;
+        white-space: pre-line;
+        transition: color 0.3s ease 0s;
+    }k {
+        margin: 0.25rem 0px 0px;
+        padding: 0px;
+        border-style: none;
+        border-width: 1px;
+        border-color: unset;
+        opacity: 1;
+        color: inherit;
+        font-weight: 400;
+        text-decoration: unset;
+        font-size: 12px;
+        line-height: 16px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        max-width: unset;
+        min-width: unset;
+        transition: color 0.3s ease 0s;
+    }
+    .css-1oc0336 {
+        width: 100%;
+        height: 1px;
+        background-color: rgb(224, 224, 224);
+        display: block;
+    }
+    
+    
   }
   
