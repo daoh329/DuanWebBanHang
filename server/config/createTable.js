@@ -5,7 +5,7 @@ const createTables = () => {
   CREATE TABLE IF NOT EXISTS product (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255) UNIQUE,
-    price NUMERIC,
+    price NUMERIC(10,2),
     shortDescription varchar(255),
     CategoryID int,
     status boolean,
@@ -94,7 +94,7 @@ const createTables = () => {
   const delivery_address =`CREATE TABLE IF NOT EXISTS delivery_address (
     id int PRIMARY KEY AUTO_INCREMENT,
     idUser int,
-    name int,
+    name varchar(255),
     city varchar(255),
     District varchar(255),
     Commune varchar(255),
