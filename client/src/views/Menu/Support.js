@@ -22,10 +22,6 @@ const Support = () => (
       <div className="snipcss-UfJbt">
         <div className="css-dniawc">
           <div className="css-qx2qqp">
-            <div className="show hidden-md css-158k0ov style-L4c12" id="style-L4c12">
-              <div className="css-8lyke9"></div>
-
-            </div>
             <div className="hide hidden-xs css-158k0ov style-ZXf5a" id="style-ZXf5a">
               <div className="css-8lyke9"></div>
 
