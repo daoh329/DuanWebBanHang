@@ -96,7 +96,7 @@ function Noidung() {
     <div className="css-1knqu6t" style={{height:"48",width:"48"}}>
       <img style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
     </div>
-    <div className="css-1dr385k">Liên hệ</div>
+    <div  style={{content:'Business consultancy'}} className="css-1dr385k">Liên hệ</div>
   </div>
   </a>
   </div>
