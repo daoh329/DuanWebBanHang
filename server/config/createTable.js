@@ -33,6 +33,10 @@ const createTables = () => {
   const deliveryMethod = `CREATE TABLE IF NOT EXISTS deliveryMethod (
     name varchar(255) PRIMARY KEY
   );`;
+  const IsvaluedeliveryMethod=`INSERT INTO deliveryMethod (name) VALUES
+  ('ngày trong tuần'),
+  ('cuối tuần')
+  ON DUPLICATE KEY UPDATE name = name;`
   const orderDetailsProduct = `CREATE TABLE IF NOT EXISTS orderDetailsProduct (
     id int PRIMARY KEY AUTO_INCREMENT,
     productID int,
@@ -101,6 +105,12 @@ const createTables = () => {
   );`
 
   mysql2.query(deliveryMethod, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  // Value trực tiếp vào database
+  mysql2.query(IsvaluedeliveryMethod, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
