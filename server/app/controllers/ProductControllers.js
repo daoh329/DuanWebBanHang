@@ -1,6 +1,5 @@
 const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
-const createTables = require("../../config/CrTables");
 const path = require("path");
 const fs = require("fs");
 const { da } = require("date-fns/locale");
@@ -386,7 +385,6 @@ class Product {
     }
   }
 
-  //Truy Vấn Laptop hiển thị Home
   async QueryProductsLaptop(req, res) {
     const query = `
       SELECT product.*, productDetails.brand, galery.thumbnail
@@ -401,17 +399,17 @@ class Product {
         ) tmp
         WHERE rn = 1
       ) galery ON product.id = galery.product_id
-      WHERE product.CategoryID = 1;
+      WHERE product.CategoryID = 1 AND product.status = 1;
     `;
-
+  
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-
+  
       res.json(results);
     });
-  }
+  }  
 
   //Truy vấn điện thoại hiển thị Home
   async QueryProductsDienThoai(req, res) {
@@ -428,7 +426,7 @@ class Product {
         ) tmp
         WHERE rn = 1
       ) galery ON product.id = galery.product_id
-      WHERE product.CategoryID = 2;
+      WHERE product.CategoryID = 2 AND product.status = 1;
     `;
 
     mysql.query(query, (error, results) => {

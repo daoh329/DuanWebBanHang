@@ -1,7 +1,6 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passport = require("passport");
 const { query } = require("./util/callbackToPromise");
-const createTable = require("./config/CrTables");
 
 passport.use(
   new GoogleStrategy(

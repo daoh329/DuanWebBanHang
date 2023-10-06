@@ -28,14 +28,14 @@ const CreateOrder = () => {
   
     console.log(data);
   
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-
+    
     if (response.data && response.data.url) {
       window.location.href = response.data.url;
     }

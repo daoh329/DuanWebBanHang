@@ -5,7 +5,7 @@ const createTables = () => {
   CREATE TABLE IF NOT EXISTS product (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255) UNIQUE,
-    price NUMERIC,
+    price NUMERIC(10,2),
     shortDescription varchar(255),
     CategoryID int,
     status boolean,
@@ -83,18 +83,17 @@ const createTables = () => {
     name varchar(255) PRIMARY KEY
   );
   `;
-  const user = `
+  const users = `
     CREATE TABLE IF NOT EXISTS users (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255),
     phone varchar(255),
-    address varchar(255),
     email varchar(255) UNIQUE
   );`
   const delivery_address =`CREATE TABLE IF NOT EXISTS delivery_address (
     id int PRIMARY KEY AUTO_INCREMENT,
     idUser int,
-    name int,
+    name varchar(255),
     city varchar(255),
     District varchar(255),
     Commune varchar(255),
@@ -103,7 +102,18 @@ const createTables = () => {
     phone varchar(255),
     FOREIGN KEY (idUser) REFERENCES users (id)
   );`
-
+  const promotional =`CREATE TABLE IF NOT EXISTS promotional (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    name varchar(255),
+    percent_discount FLOAT
+  );`
+  const promotional_product=`CREATE TABLE IF NOT EXISTS promotional_product (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    product_id int,
+    promotional_id int,
+    FOREIGN KEY (promotional_id) REFERENCES promotional(id),
+    FOREIGN KEY  (product_id) REFERENCES product(id)
+  );`
   mysql2.query(deliveryMethod, (error, results, fields) => {
     if (error) {
       console.error(error);
@@ -115,7 +125,7 @@ const createTables = () => {
       console.error(error);
     }
   });
-  mysql2.query(user, (error, results, fields) => {
+  mysql2.query(users, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
@@ -172,6 +182,16 @@ const createTables = () => {
     }
   });
   mysql2.query(delivery_address, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(promotional, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(promotional_product, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
