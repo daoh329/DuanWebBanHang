@@ -100,6 +100,7 @@ function Detail() {
   const { id } = useParams();
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
+  console.log(Detail)
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
 
@@ -749,7 +750,6 @@ function Detail() {
             </div>
 
             <MDBTable className="table-tiet" borderless>
-             
               <MDBTableBody>
                 <tr>
                   <td colSpan={1}>Thương hiệu</td>
@@ -771,7 +771,7 @@ function Detail() {
                   <td colSpan={3}>
                     {Detail.color ? (
                       Detail.color.map((color, index) => (
-                        <span key={index.id}>
+                        <span key={index}>
                           {color}
                           {index < Detail.color.length - 1 ? ', ' : ''}
                         </span>
@@ -856,7 +856,6 @@ function Detail() {
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.accessory}</td>
                 </tr>
               </MDBTableBody>
-
             </MDBTable>
           </div>
         </Modal>
