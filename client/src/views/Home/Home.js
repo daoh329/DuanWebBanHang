@@ -666,7 +666,7 @@ const Home = () => {
           }}
         >
           <div className="title-group">
-            <div className="products-title">Sản phẩm  </div>
+            <div className="products-title">Điện Thoại</div>
             <div className="views-all">
             <a href="/tat-ca-san-pham-phone" style={{color:'white'}}>Xem tất cả</a>
                <i className="fa fa-chevron-right"></i> 
@@ -727,7 +727,7 @@ const Home = () => {
           }}
         >
           <div className="title-group">
-            <div className="products-title">Sản phẩm  </div>
+            <div className="products-title">Laptop</div>
             <div className="views-all">
             <a href="/tat-ca-san-pham-laptop" style={{color:'white'}}>Xem tất cả</a>
                <i className="fa fa-chevron-right"></i> 
