@@ -280,13 +280,7 @@ const Support = () => (
             <div className="teko-row bg-lazy bg-visible-lazy css-eu37z5">
               <div data-uniq-id=".28ap312a" className="teko-col css-9my4e1">
                 <div className="bg-lazy bg-visible-lazy css-gdjjhc">
-                  <a
-                    href="https://phongvu.vn/c/ldp-khach-hang-doanh-nghiep-block-1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    id="style-7oF2h"
-                    className="style-7oF2h"
-                  >
+                 
                     <div className=" css-1q0vk5q" data-uniq-id="TXbBpPzQD6">
                       <picture className=" css-1v1ekmn">
                         <img
@@ -298,7 +292,7 @@ const Support = () => (
                         />
                       </picture>
                     </div>
-                  </a>
+             
                 </div>
               </div>
               <div data-uniq-id=".6xgbsx47" className="teko-col css-1h1qh4p">
@@ -313,8 +307,7 @@ const Support = () => (
                               type="product"
                             >
                               <div className="swiper-button-prev"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
+                             
                               <div
                                 className="swiper-wrapper style-pv7zx"
                                 id="style-pv7zx"
@@ -324,10 +317,6 @@ const Support = () => (
                                   data-swiper-slide-index={0}
                                   id="style-61tjX"
                                 >
-                                  <a
-                                    href="/hp-15s-fq2712tu--s221101761"
-                                    target="_blank"
-                                  >
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -376,17 +365,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-zSKfX"
                                   data-swiper-slide-index={1}
                                   id="style-zSKfX"
                                 >
-                                  <a
-                                    href="/hp-pavilion-14-dv2074tu--s221101771"
-                                    target="_blank"
-                                  >
+                               
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -435,17 +421,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                             
                                 </div>
                                 <div
                                   className="swiper-slide style-YaixR"
                                   data-swiper-slide-index={2}
                                   id="style-YaixR"
                                 >
-                                  <a
-                                    href="/acer-nitro-16-phoenix-an16-41-ryzen-5-rtx-4050--s230402670"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -495,17 +478,13 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
                                 </div>
                                 <div
                                   className="swiper-slide style-6xsHJ"
                                   data-swiper-slide-index={3}
                                   id="style-6xsHJ"
                                 >
-                                  <a
-                                    href="/may-tinh-xach-tay-laptop-asus-vivobook-14-x1402za-ek098w-i3-1220p-bac--s230302073"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -554,7 +533,7 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                               </div>
                             </div>
@@ -566,27 +545,16 @@ const Support = () => (
                               className="swiper-container swiper-container-virtual swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
                               type="product"
                             >
-                              <div className="swiper-button-prev swiper-button-disabled"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                                <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                              </div>
+                              
+                              
+                             
                               <div className="swiper-wrapper">
                                 <div
                                   className="swiper-slide swiper-slide-active style-ZZD46"
                                   data-swiper-slide-index={0}
                                   id="style-ZZD46"
                                 >
-                                  <a
-                                    href="/hp-15s-fq2712tu--s221101761"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -635,17 +603,13 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-5mIaP"
                                   data-swiper-slide-index={1}
                                   id="style-5mIaP"
                                 >
-                                  <a
-                                    href="/hp-pavilion-14-dv2074tu--s221101771"
-                                    target="_blank"
-                                  >
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -694,17 +658,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-s7qDp"
                                   data-swiper-slide-index={2}
                                   id="style-s7qDp"
                                 >
-                                  <a
-                                    href="/acer-nitro-16-phoenix-an16-41-ryzen-5-rtx-4050--s230402670"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -754,17 +715,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-CE1TU"
                                   data-swiper-slide-index={3}
                                   id="style-CE1TU"
                                 >
-                                  <a
-                                    href="/may-tinh-xach-tay-laptop-asus-vivobook-14-x1402za-ek098w-i3-1220p-bac--s230302073"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -813,18 +771,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                                 <div
                                   className="swiper-slide style-lxcIW"
                                   data-swiper-slide-index={4}
                                   id="style-lxcIW"
                                 >
-                                  <a
-                                    href="/asus-vivobook-15-x1502za-bq127w--s220500449"
-                                    target="_blank"
-                                  >
-                                    <div className="css-88ahb7">
+                                   <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
                                           <div
@@ -872,27 +826,21 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="css-qiail1">
-                          <a
-                            href="/c/ldp-khach-hang-doanh-nghiep-block-1"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            id="style-5dkBq"
-                            className="style-5dkBq"
-                          >
+                          
                             <button className="css-1sjt6s8">
                               <span id="style-NsAUQ" className="style-NsAUQ">
                                 <span>Xem thêm</span>
                               </span>
                               <div className="css-157jl91"></div>
                             </button>
-                          </a>
+                        
                         </div>
                       </div>
                     </div>
@@ -908,13 +856,7 @@ const Support = () => (
             <div className="teko-row bg-lazy bg-visible-lazy css-eu37z5">
               <div data-uniq-id=".356m2lis" className="teko-col css-9my4e1">
                 <div className="bg-lazy bg-visible-lazy css-gdjjhc">
-                  <a
-                    href="https://phongvu.vn/c/ldp-khach-hang-doanh-nghiep-block-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    id="style-oOyQN"
-                    className="style-oOyQN"
-                  >
+               
                     <div className=" css-1q0vk5q" data-uniq-id=".gz5r51eu">
                       <picture className=" css-1v1ekmn">
                         <img
@@ -926,7 +868,7 @@ const Support = () => (
                         />
                       </picture>
                     </div>
-                  </a>
+             
                 </div>
               </div>
               <div data-uniq-id=".6b38zvlb" className="teko-col css-1h1qh4p">
@@ -941,8 +883,8 @@ const Support = () => (
                               type="product"
                             >
                               <div className="swiper-button-prev"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
+                              
+                              
                               <div
                                 className="swiper-wrapper style-gNEkA"
                                 id="style-gNEkA"
@@ -952,10 +894,7 @@ const Support = () => (
                                   data-swiper-slide-index={0}
                                   id="style-Fx8ek"
                                 >
-                                  <a
-                                    href="/acer-nitro-5-eagle-an515-57-54mv-nh-qensv-003--s210901841"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1005,17 +944,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-YGMbl"
                                   data-swiper-slide-index={1}
                                   id="style-YGMbl"
                                 >
-                                  <a
-                                    href="/acer-nitro-16-phoenix-an16-41-ryzen-5-rtx-4050--s230402670"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1065,17 +1001,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                                 <div
                                   className="swiper-slide style-e7WDd"
                                   data-swiper-slide-index={2}
                                   id="style-e7WDd"
                                 >
-                                  <a
-                                    href="/asus-tuf-gaming-fx506lhb-hn188w--s220400306"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1124,17 +1057,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide style-ywqa6"
                                   data-swiper-slide-index={3}
                                   id="style-ywqa6"
                                 >
-                                  <a
-                                    href="/hp-victus-16-e1107ax-7c140pa--s221101325"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1184,7 +1114,7 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                               </div>
                             </div>
@@ -1196,27 +1126,16 @@ const Support = () => (
                               className="swiper-container swiper-container-virtual swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
                               type="product"
                             >
-                              <div className="swiper-button-prev swiper-button-disabled"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                                <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                              </div>
+                              
+                             
+                              
                               <div className="swiper-wrapper">
                                 <div
                                   className="swiper-slide swiper-slide-active style-gow4b"
                                   data-swiper-slide-index={0}
                                   id="style-gow4b"
                                 >
-                                  <a
-                                    href="/acer-nitro-5-eagle-an515-57-54mv-nh-qensv-003--s210901841"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1266,17 +1185,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-5PM4G"
                                   data-swiper-slide-index={1}
                                   id="style-5PM4G"
                                 >
-                                  <a
-                                    href="/acer-nitro-16-phoenix-an16-41-ryzen-5-rtx-4050--s230402670"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1326,17 +1242,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-3A6Zp"
                                   data-swiper-slide-index={2}
                                   id="style-3A6Zp"
                                 >
-                                  <a
-                                    href="/asus-tuf-gaming-fx506lhb-hn188w--s220400306"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1385,17 +1298,13 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                             
                                 </div>
                                 <div
                                   className="swiper-slide style-HZEox"
                                   data-swiper-slide-index={3}
                                   id="style-HZEox"
                                 >
-                                  <a
-                                    href="/hp-victus-16-e1107ax-7c140pa--s221101325"
-                                    target="_blank"
-                                  >
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1445,17 +1354,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-1t3Cm"
                                   data-swiper-slide-index={4}
                                   id="style-1t3Cm"
                                 >
-                                  <a
-                                    href="/acer-aspire-7-a715-42g-r05g-nh-qaysv-007--s211104709"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1505,27 +1411,21 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="css-qiail1">
-                          <a
-                            href="/c/ldp-khach-hang-doanh-nghiep-block-2"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            id="style-oIqLl"
-                            className="style-oIqLl"
-                          >
+                         
                             <button className="css-1sjt6s8">
                               <span id="style-moGwT" className="style-moGwT">
                                 <span>Xem thêm</span>
                               </span>
                               <div className="css-157jl91"></div>
                             </button>
-                          </a>
+                        
                         </div>
                       </div>
                     </div>
@@ -1565,13 +1465,7 @@ const Support = () => (
             <div className="teko-row bg-lazy bg-visible-lazy css-eu37z5">
               <div data-uniq-id=".7jzkkmvw" className="teko-col css-9my4e1">
                 <div className="bg-lazy bg-visible-lazy css-gdjjhc">
-                  <a
-                    href="https://phongvu.vn/c/ldp-khach-hang-doanh-nghiep-block-3"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    id="style-5IEGl"
-                    className="style-5IEGl"
-                  >
+                
                     <div className=" css-1q0vk5q" data-uniq-id=".5u0w5f3u">
                       <picture className=" css-1v1ekmn">
                         <img
@@ -1583,7 +1477,7 @@ const Support = () => (
                         />
                       </picture>
                     </div>
-                  </a>
+                 
                 </div>
               </div>
               <div data-uniq-id=".suwimmyo" className="teko-col css-1h1qh4p">
@@ -1598,8 +1492,8 @@ const Support = () => (
                               type="product"
                             >
                               <div className="swiper-button-prev"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
+                            
+                            
                               <div
                                 className="swiper-wrapper style-iJcKQ"
                                 id="style-iJcKQ"
@@ -1609,10 +1503,7 @@ const Support = () => (
                                   data-swiper-slide-index={0}
                                   id="style-5tecD"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-30066-intel-core-i3-10105-8gb-250gb-ssd-free-dos--s221003249"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1662,17 +1553,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-bMhhi"
                                   data-swiper-slide-index={1}
                                   id="style-bMhhi"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-30081-amd-ryzen-3-pro-4350g-8gb-240gb-ssd-free-dos--s230304309"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1722,17 +1610,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                              
                                 </div>
                                 <div
                                   className="swiper-slide style-6obNP"
                                   data-swiper-slide-index={2}
                                   id="style-6obNP"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-50082-amd-ryzen-5-pro-4650g-8gb-240gb-ssd-free-dos--s230304310"
-                                    target="_blank"
-                                  >
+                              
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1782,17 +1667,13 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                                 <div
                                   className="swiper-slide style-oqsGa"
                                   data-swiper-slide-index={3}
                                   id="style-oqsGa"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-hp-pro-tower-280-g9-core-i5-12500-8gb-ram-256gb-ssd-intel-graphics-wlan-ac-bt-usb-keyboard-mouse-win11-home-64-72j49pa--s220914480"
-                                    target="_blank"
-                                  >
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1843,7 +1724,7 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                               </div>
                             </div>
@@ -1855,27 +1736,16 @@ const Support = () => (
                               className="swiper-container swiper-container-virtual swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
                               type="product"
                             >
-                              <div className="swiper-button-prev swiper-button-disabled"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                                <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                              </div>
+                           
+                        
+                              
                               <div className="swiper-wrapper">
                                 <div
                                   className="swiper-slide swiper-slide-active style-ao6hz"
                                   data-swiper-slide-index={0}
                                   id="style-ao6hz"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-30066-intel-core-i3-10105-8gb-250gb-ssd-free-dos--s221003249"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1925,17 +1795,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-nwMCF"
                                   data-swiper-slide-index={1}
                                   id="style-nwMCF"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-30081-amd-ryzen-3-pro-4350g-8gb-240gb-ssd-free-dos--s230304309"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -1985,17 +1852,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-rXXUs"
                                   data-swiper-slide-index={2}
                                   id="style-rXXUs"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-50082-amd-ryzen-5-pro-4650g-8gb-240gb-ssd-free-dos--s230304310"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2045,17 +1909,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-RXoOZ"
                                   data-swiper-slide-index={3}
                                   id="style-RXoOZ"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-hp-pro-tower-280-g9-core-i5-12500-8gb-ram-256gb-ssd-intel-graphics-wlan-ac-bt-usb-keyboard-mouse-win11-home-64-72j49pa--s220914480"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2106,17 +1967,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-n2UVD"
                                   data-swiper-slide-index={4}
                                   id="style-n2UVD"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-g0065-intel-pentium-g6405-8gb-250gb-ssd-free-dos--s221003248"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2166,27 +2024,21 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="css-qiail1">
-                          <a
-                            href="/c/ldp-khach-hang-doanh-nghiep-block-3"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            id="style-MKKsX"
-                            className="style-MKKsX"
-                          >
+                        
                             <button className="css-1sjt6s8">
                               <span id="style-eYaLR" className="style-eYaLR">
                                 <span>Xem thêm</span>
                               </span>
                               <div className="css-157jl91"></div>
                             </button>
-                          </a>
+                    
                         </div>
                       </div>
                     </div>
@@ -2202,13 +2054,7 @@ const Support = () => (
             <div className="teko-row bg-lazy bg-visible-lazy css-eu37z5">
               <div data-uniq-id=".zg8mnqki" className="teko-col css-9my4e1">
                 <div className="bg-lazy bg-visible-lazy css-gdjjhc">
-                  <a
-                    href="https://phongvu.vn/c/ldp-khach-hang-doanh-nghiep-block-4"
-                    target="_top"
-                    rel="noopener noreferrer"
-                    id="style-tamZt"
-                    className="style-tamZt"
-                  >
+                
                     <div className=" css-1q0vk5q" data-uniq-id=".cacjjsqd">
                       <picture className=" css-1v1ekmn">
                         <img
@@ -2220,7 +2066,7 @@ const Support = () => (
                         />
                       </picture>
                     </div>
-                  </a>
+           
                 </div>
               </div>
               <div data-uniq-id=".kfzrwrng" className="teko-col css-1h1qh4p">
@@ -2235,8 +2081,8 @@ const Support = () => (
                               type="product"
                             >
                               <div className="swiper-button-prev"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
+                             
+                              
                               <div
                                 className="swiper-wrapper style-5B9Il"
                                 id="style-5B9Il"
@@ -2246,10 +2092,7 @@ const Support = () => (
                                   data-swiper-slide-index={0}
                                   id="style-x4Xl5"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-30066-intel-core-i3-10105-8gb-250gb-ssd-free-dos--s221003249"
-                                    target="_blank"
-                                  >
+                               
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2299,17 +2142,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-4HZ1N"
                                   data-swiper-slide-index={1}
                                   id="style-4HZ1N"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-g0065-intel-pentium-g6405-8gb-250gb-ssd-free-dos--s221003248"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2359,17 +2199,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide style-y149N"
                                   data-swiper-slide-index={2}
                                   id="style-y149N"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-gaming-50062-intel-core-i5-12400f-8gb-250gb-ssd-nvidia-geforce-gtx-1660s-free-dos--s221002926"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2419,17 +2256,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-vCXBa"
                                   data-swiper-slide-index={3}
                                   id="style-vCXBa"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-hp-pro-mini-260-g9-intel-core-i5-1235u-8gb-ddr4-ssd-256gb-usb-mouse-keyboard-w11h-1y-onsite-73d10pa--s230201986"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2480,7 +2314,7 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                               </div>
                             </div>
@@ -2492,27 +2326,16 @@ const Support = () => (
                               className="swiper-container swiper-container-virtual swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
                               type="product"
                             >
-                              <div className="swiper-button-prev swiper-button-disabled"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                                <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                              </div>
+                             
+                              
+                              
                               <div className="swiper-wrapper">
                                 <div
                                   className="swiper-slide swiper-slide-active style-8Z9js"
                                   data-swiper-slide-index={0}
                                   id="style-8Z9js"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-30066-intel-core-i3-10105-8gb-250gb-ssd-free-dos--s221003249"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2562,17 +2385,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                  
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-WBz88"
                                   data-swiper-slide-index={1}
                                   id="style-WBz88"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-home-office-g0065-intel-pentium-g6405-8gb-250gb-ssd-free-dos--s221003248"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2622,17 +2442,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                              
                                 </div>
                                 <div
                                   className="swiper-slide style-O3e2C"
                                   data-swiper-slide-index={2}
                                   id="style-O3e2C"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-pc-phong-vu-gaming-50062-intel-core-i5-12400f-8gb-250gb-ssd-nvidia-geforce-gtx-1660s-free-dos--s221002926"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2682,17 +2499,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-Pp74g"
                                   data-swiper-slide-index={3}
                                   id="style-Pp74g"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-hp-pro-mini-260-g9-intel-core-i5-1235u-8gb-ddr4-ssd-256gb-usb-mouse-keyboard-w11h-1y-onsite-73d10pa--s230201986"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2743,17 +2557,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-hrzoC"
                                   data-swiper-slide-index={4}
                                   id="style-hrzoC"
                                 >
-                                  <a
-                                    href="/may-tinh-de-ban-hp-pro-mini-400-g9-intel-core-i5-12500t-8gb-ddr4-3200-ssd-512gb-mouse-keyboard-w11h-1y-onsite-73d19pa--s230201990"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2804,27 +2615,21 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="css-qiail1">
-                          <a
-                            href="/c/ldp-khach-hang-doanh-nghiep-block-4"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            id="style-9Gi9v"
-                            className="style-9Gi9v"
-                          >
+                        
                             <button className="css-1sjt6s8">
                               <span id="style-Fvr7Z" className="style-Fvr7Z">
                                 <span>Xem thêm</span>
                               </span>
                               <div className="css-157jl91"></div>
                             </button>
-                          </a>
+                     
                         </div>
                       </div>
                     </div>
@@ -2840,13 +2645,7 @@ const Support = () => (
             <div className="teko-row bg-lazy bg-visible-lazy css-eu37z5">
               <div data-uniq-id=".wojkpw6a" className="teko-col css-9my4e1">
                 <div className="bg-lazy bg-visible-lazy css-gdjjhc">
-                  <a
-                    href="https://phongvu.vn/c/ldp-khach-hang-doanh-nghiep-block-5"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    id="style-kjVxU"
-                    className="style-kjVxU"
-                  >
+                 
                     <div className=" css-1q0vk5q" data-uniq-id=".udyb2rpy">
                       <picture className=" css-1v1ekmn">
                         <img
@@ -2858,7 +2657,7 @@ const Support = () => (
                         />
                       </picture>
                     </div>
-                  </a>
+               
                 </div>
               </div>
               <div data-uniq-id=".biwsloui" className="teko-col css-1h1qh4p">
@@ -2873,8 +2672,8 @@ const Support = () => (
                               type="product"
                             >
                               <div className="swiper-button-prev"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
+                              
+                             
                               <div
                                 className="swiper-wrapper style-hUitK"
                                 id="style-hUitK"
@@ -2884,10 +2683,7 @@ const Support = () => (
                                   data-swiper-slide-index={0}
                                   id="style-ahQFn"
                                 >
-                                  <a
-                                    href="/acer-23-8-inch-k243y-e-um-qx3sv-e01--s230302879"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2933,17 +2729,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-N6b9i"
                                   data-swiper-slide-index={1}
                                   id="style-N6b9i"
                                 >
-                                  <a
-                                    href="/man-hinh-lcd-asus-23-8-va24dqlb-1920x1080-ips-75hz-5ms--s200800668"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -2992,17 +2785,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                                 <div
                                   className="swiper-slide style-sxERi"
                                   data-swiper-slide-index={2}
                                   id="style-sxERi"
                                 >
-                                  <a
-                                    href="/man-hinh-acer-27-ka272--s211202450"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3047,17 +2837,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                
                                 </div>
                                 <div
                                   className="swiper-slide style-Dx6Oz"
                                   data-swiper-slide-index={3}
                                   id="style-Dx6Oz"
                                 >
-                                  <a
-                                    href="/man-hinh-lcd-msi-23-8-pro-mp243-3pb5-1920x1080-ips-75hz-5ms-gtg-23-8--s221202059"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3106,7 +2893,7 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                               </div>
                             </div>
@@ -3118,27 +2905,15 @@ const Support = () => (
                               className="swiper-container swiper-container-virtual swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events"
                               type="product"
                             >
-                              <div className="swiper-button-prev swiper-button-disabled"></div>
-                              <div className="swiper-button-next"></div>
-                              <div className="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                                <span className="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                                <span className="swiper-pagination-bullet"></span>
-                              </div>
+                            
+                              
                               <div className="swiper-wrapper">
                                 <div
                                   className="swiper-slide swiper-slide-active style-lh7Dj"
                                   data-swiper-slide-index={0}
                                   id="style-lh7Dj"
                                 >
-                                  <a
-                                    href="/acer-23-8-inch-k243y-e-um-qx3sv-e01--s230302879"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3184,17 +2959,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                                 
                                 </div>
                                 <div
                                   className="swiper-slide swiper-slide-next style-aDOso"
                                   data-swiper-slide-index={1}
                                   id="style-aDOso"
                                 >
-                                  <a
-                                    href="/man-hinh-lcd-asus-23-8-va24dqlb-1920x1080-ips-75hz-5ms--s200800668"
-                                    target="_blank"
-                                  >
+                                  
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3243,17 +3015,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-Bfc3f"
                                   data-swiper-slide-index={2}
                                   id="style-Bfc3f"
                                 >
-                                  <a
-                                    href="/man-hinh-acer-27-ka272--s211202450"
-                                    target="_blank"
-                                  >
+                                
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3298,17 +3067,14 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-xD2Mz"
                                   data-swiper-slide-index={3}
                                   id="style-xD2Mz"
                                 >
-                                  <a
-                                    href="/man-hinh-lcd-msi-23-8-pro-mp243-3pb5-1920x1080-ips-75hz-5ms-gtg-23-8--s221202059"
-                                    target="_blank"
-                                  >
+                                 
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3357,17 +3123,13 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                               
                                 </div>
                                 <div
                                   className="swiper-slide style-HVUje"
                                   data-swiper-slide-index={4}
                                   id="style-HVUje"
                                 >
-                                  <a
-                                    href="/man-hinh-lcd-asus-24-proart-pa248qv-1920x1080-fhd-ips-75hz-5ms--s200601200"
-                                    target="_blank"
-                                  >
                                     <div className="css-88ahb7">
                                       <div className="css-1msex0n">
                                         <div className="css-13gmder">
@@ -3416,27 +3178,21 @@ const Support = () => (
                                         </div>
                                       </div>
                                     </div>
-                                  </a>
+                              
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div className="css-qiail1">
-                          <a
-                            href="/c/ldp-khach-hang-doanh-nghiep-block-5"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            id="style-zZtho"
-                            className="style-zZtho"
-                          >
+                          
                             <button className="css-1sjt6s8">
                               <span id="style-M3fXk" className="style-M3fXk">
                                 <span>Xem thêm</span>
                               </span>
                               <div className="css-157jl91"></div>
                             </button>
-                          </a>
+                         
                         </div>
                       </div>
                     </div>
