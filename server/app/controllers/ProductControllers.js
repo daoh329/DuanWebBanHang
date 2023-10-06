@@ -17,56 +17,56 @@ class Product {
     const configuration =
       data.category === "Điện thoại"
         ? {
-            series: data.series,
-            screen: data.screen,
-            resolution: data.resolution,
-            chip: data.chip,
-            ram: data.ram,
-            rom: data.rom,
-            screen: data.screen,
-            os: data.os,
-            pin: data.pin,
-            guarantee: data.guarantee,
-            demand: data.demand,
-            charging_port: data.charging_port,
-            sim_type: data.sim_type,
-            mobile_network: data.mobile_network,
-            rear_camera: data.rear_camera,
-            front_camera: data.front_camera,
-            wifi: data.wifi,
-            gps: data.gps,
-            bluetooth: data.bluetooth,
-            headphone_jack: data.headphone_jack,
-            size: data.size,
-            mass: data.mass,
-            accessory: data.accessory,
-          }
+          series: data.series,
+          screen: data.screen,
+          resolution: data.resolution,
+          chip: data.chip,
+          ram: data.ram,
+          rom: data.rom,
+          screen: data.screen,
+          os: data.os,
+          pin: data.pin,
+          guarantee: data.guarantee,
+          demand: data.demand,
+          charging_port: data.charging_port,
+          sim_type: data.sim_type,
+          mobile_network: data.mobile_network,
+          rear_camera: data.rear_camera,
+          front_camera: data.front_camera,
+          wifi: data.wifi,
+          gps: data.gps,
+          bluetooth: data.bluetooth,
+          headphone_jack: data.headphone_jack,
+          size: data.size,
+          mass: data.mass,
+          accessory: data.accessory,
+        }
         : {
-            series: data.series,
-            part_number: data.part_number,
-            guarantee: data.guarantee,
-            demand: data.demand,
-            cpu: data.cpu,
-            ram: data.ram,
-            rom: data.rom,
-            screen: data.screen,
-            vga: data.vga,
-            os: data.os,
-            maximum_number_of_storage_ports:
-              data.maximum_number_of_storage_ports,
-            M2_slot_type_supported: data.M2_slot_type_supported,
-            output_port: data.output_port,
-            connector: data.connector,
-            wireless_connectivity: data.wireless_connectivity,
-            keyboard: data.keyboard,
-            pin: data.pin,
-            mass: data.mass,
-            accessory: data.accessory,
-          };
+          series: data.series,
+          part_number: data.part_number,
+          guarantee: data.guarantee,
+          demand: data.demand,
+          cpu: data.cpu,
+          ram: data.ram,
+          rom: data.rom,
+          screen: data.screen,
+          vga: data.vga,
+          os: data.os,
+          maximum_number_of_storage_ports:
+            data.maximum_number_of_storage_ports,
+          M2_slot_type_supported: data.M2_slot_type_supported,
+          output_port: data.output_port,
+          connector: data.connector,
+          wireless_connectivity: data.wireless_connectivity,
+          keyboard: data.keyboard,
+          pin: data.pin,
+          mass: data.mass,
+          accessory: data.accessory,
+        };
     const configurationString = JSON.stringify(configuration);
     let nameP;
     if (data.name == null || data.name == "") {
-      nameP = data.brand + " " + data.series;
+      nameP = data.brand + " " + data.series+" "+data.part_number;
     } else {
       nameP = data.name;
     }
@@ -452,40 +452,37 @@ class Product {
     JOIN brand b ON pd.brand = b.name
     WHERE p.id = ?;
     `;
-
-    // Thực hiện truy vấn
-    mysql.query(productQuery, [id], (error, productResults) => {
-      if (error) {
-        return res.json({ error });
-      }
-
-      // Truy vấn để lấy thông tin màu sắc
-      const colorQuery = `
+    // Truy vấn để lấy thông tin màu sắc
+    const colorQuery = `
       SELECT id, Colorname
       FROM ProdetailColor
       WHERE product_id = ?
       ORDER BY id ASC;
     `;
 
-      // Truy vấn để lấy hình ảnh
-      const imageQuery = `
+    // Truy vấn để lấy hình ảnh
+    const imageQuery = `
       SELECT id, thumbnail
       FROM galery
       WHERE product_id = ?
       ORDER BY id ASC;
     `;
+    // Thực hiện truy vấn
+    mysql.query(productQuery, [id], (error, productResults) => {
+      if (error) {
+        return res.json({ error });
+      }
+
 
       // Thực hiện truy vấn màu sắc và hình ảnh
       mysql.query(colorQuery, [id], (error, colorResults) => {
-        if (error) {
+        if (error) { 
           return res.json({ error });
         }
-
         mysql.query(imageQuery, [id], (error, imageResults) => {
           if (error) {
             return res.json({ error });
           }
-
           // Kết hợp kết quả và gửi lại cho client
           const results = {
             ...productResults[0],
@@ -498,7 +495,6 @@ class Product {
               thumbnail: result.thumbnail,
             })),
           };
-
           res.json(results);
         });
       });
@@ -523,7 +519,7 @@ class Product {
     mysql.query(query, (e, results, fields) => {
       if (e) {
         console.log(e);
-        res.status(500).json("Lỗi lấy dữ liệu brands!");
+        res.status(500).json("Lỗi lấy dữ liệu color!");
       }
       res.status(200).send(results);
     });
