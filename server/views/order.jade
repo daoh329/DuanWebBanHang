@@ -4,18 +4,17 @@ extends layout
 
 block content
     div(style="max-width: 708px;padding-right: 30px; padding-left: 30px;margin: 10px auto;display: flex;justify-content: center;font-size: 20px;")=title
-
-    //- //-     
-    //- display: flex;
-    //- margin: 0 auto;
-    //- padding-left: 30px;
+    //- max-width: 708px;
     //- padding-right: 30px;
-    //- flex-direction: column;
-
+    //- padding-left: 30px;
+    //- margin: 10px auto;
+    //- display: flex;
+    //- justify-content: center;
+    //- font-size: 20px;
     
-    div.table-responsive(style="max-width: 1200px;display: flex;margin: 0 auto;padding-left: 30px; padding-right: 30px;  flex-direction: column;")
-        form#createOrder(action='create_payment_url', method='POST',style="display:flex;")
-            div.form-group(style="margin-top: 10px;background-color: #f5f7f9;")
+    div.table-responsive(style="max-width: 708px;margin: 0 auto;padding-left: 30px; padding-right: 30px;display: flex ;justify-content: center;flex-direction: column;")
+        form#createOrder(action='create_payment_url', method='POST',style="box-sizing: border-box;")
+            div.form-group(style="margin-top: 10px;background-color: #f5f7f9;padding-top: 24px;")
 
 
                     label(style="padding-top:10px;margin-left: 30px;font-weight: 600;font-size: 20px;") Thông tin đơn hàng
@@ -23,34 +22,33 @@ block content
                     div.controlslabel(style="padding-top:30px") Số tiền thanh toán
                     
                     
-                        div(style="margin-top: 10px; border: 1px solid #ccc; padding: 5px;padding-left:24px;padding-right:24px")#[input.form-control#amount(name='amount',style='border:none;', type="input" value=amount, readonly)]
-                    div.controlslabel(style="padding-top:10px") Phí giao dịch
-                    div.controlslabel(style="padding-top:10px;padding-left: 25px;") 0VNĐ
+                        div(style="margin-top: 10px; border: 1px solid #ccc; padding: 5px;padding-left:24px;padding-right:24px")#[input.form-control#amount(name='amount',style='border:0;', type="input" value=amount, readonly)]
+                    
 
-            div.form-group(style="padding-left:24px;padding-right:24px;color:#21262c;-webkit-box-sizing: border-box;")
+            div.form-group(style="padding-left:24px;padding-right:24px;color:#21262c;-webkit-box-sizing: border-box;padding-top: 24px;")
                 label(style="font-size:18px")  Chọn Phương thức thanh toán:
                 label.control-label
                 div.controls
                 label.radio-inline
-                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="bankCode", id="defaultPaymentMethod", value="", checked="true")] Cổng thanh toán VNPAYQR
+                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;border: 0;border-radius: 3px;background-color:white;box-shadow: 0 0 2px rgba(33,38,44,.16);transition: .15s all linear;")#[input(type="radio", name="bankCode", id="defaultPaymentMethod", value="", checked="true")] Cổng thanh toán VNPAYQR
                 div.controls
                 label.radio-inline
-                 div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="bankCode", id="vnpayqrPaymentMethod", value="VNPAYQR")] Thanh toán qua ứng dụng hỗ trợ VNPAYQR
+                 div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;border: 0;border-radius: 3px;background-color:white;box-shadow: 0 0 2px rgba(33,38,44,.16);transition: .15s all linear;")#[input(type="radio", name="bankCode", id="vnpayqrPaymentMethod", value="VNPAYQR")] Thanh toán qua ứng dụng hỗ trợ VNPAYQR
                 div.controls
                 label.radio-inline
-                 div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="bankCode", id="vnbankPaymentMethod", value="VNBANK")] Thanh toán qua ATM-Tài khoản ngân hàng nội địa
+                 div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;border: 0;border-radius: 3px;background-color:white;box-shadow: 0 0 2px rgba(33,38,44,.16);transition: .15s all linear;")#[input(type="radio", name="bankCode", id="vnbankPaymentMethod", value="VNBANK")] Thanh toán qua ATM-Tài khoản ngân hàng nội địa
                 div.controls
                 label.radio-inline
-                 div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="bankCode", id="intcardPaymentMethod", value="INTCARD")] Thanh toán qua thẻ quốc tế
+                 div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;border: 0;border-radius: 3px;background-color:white;box-shadow: 0 0 2px rgba(33,38,44,.16);transition: .15s all linear;")#[input(type="radio", name="bankCode", id="intcardPaymentMethod", value="INTCARD")] Thanh toán qua thẻ quốc tế
             div.form-group(style="padding-left:24px;padding-right:24px;color:#21262c;-webkit-box-sizing: border-box;;margin-top:10px")  
                 label(style="font-size:16px") Ngôn ngữ
                 label.control-label
                 div.controls
                 label.radio-inline
-                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="language", id="vnLanguage", value="vn", checked="true")] Tiếng việt
+                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;width: 15%")#[input(type="radio", name="language", id="vnLanguage", value="vn", checked="true")] Tiếng việt
                 div.controls
                 label.radio-inline
-                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;")#[input(type="radio", name="language", id="enLanguage", value="en")] Tiếng anh
-            button.btn.btn-default#btnPopup(type='submit', style='background:cyan;border: 1px solid #ccc; padding: 10px; padding-left:25px;padding-right:25px;font-size: 15px;margin:25px') Thanh toán
+                div(style="margin-top: 10px; border: 1px solid #ccc; padding: 10px;width: 15%")#[input(type="radio", name="language", id="enLanguage", value="en")] Tiếng anh
+            button.btn.btn-default#btnPopup(type='submit', style='border-radius:15px;background:#004a9c;border: 1px solid #ccc; padding: 10px; padding-left:25px;padding-right:25px;font-size: 15px;margin:25px') Thanh toán
     p&nbsp;
     
