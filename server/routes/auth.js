@@ -96,4 +96,17 @@ router.post("/login-otp", async (req, res, next) => {
   }
 });
 
+router.get('/delivery-address/:id', async (req, res) => {
+  try {
+    const idUser = req.params.id;
+    const sl_query = `SELECT * FROM delivery_address WHERE idUser = ?`
+    const result = await query(sl_query, [idUser]);
+    
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Get delivery address failed");
+  }
+});
+
 module.exports = router;

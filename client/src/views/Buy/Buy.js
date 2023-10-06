@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   MDBTabs,
@@ -7,24 +7,12 @@ import {
   MDBTabsContent,
   MDBTabsPane,
   MDBTable,
-  MDBTableHead,
   MDBTableBody,
-  TreeSelect,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import "./Buy.css";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import {
-  Radio,
-  Input,
-  Checkbox,
-  Modal,
-  Button,
-  Form,
-  Select,
-  Space,
-} from "antd";
-import Icon from "@ant-design/icons/lib/components/Icon";
+import { Input, Checkbox, Modal, Button, Form, Select } from "antd";
 import { message } from "antd";
 const { TextArea } = Input;
 const { Option } = Select;
@@ -42,16 +30,27 @@ function formatCurrency(value) {
 
 export default function Buy(props) {
   const { user } = props;
+  const [deliveryAddress, setDeliveryAddress] = useState([]);
 
   const navigate = useNavigate();
 
-  const handleContinueClick = () => {
-    navigate("/profile");
+  // const handleContinueClick = () => {
+  //   navigate("/profile");
+  // };
+
+  // Hàm lấy thông tin địa chỉ nhận hàng của người dùng
+  const getDeliveryAddress = async () => {
+    console.log(props);
+    try {
+      const result = await axios.get(
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`
+      );
+      setDeliveryAddress(result.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
-  }, []);
   // modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -75,17 +74,21 @@ export default function Buy(props) {
   const [paymentMenthod, setPaymentMenthod] = useState([]);
   const [quantity, setQuantity] = useState(0);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+      );
+      setCity(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-        );
-        setCity(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+
+    getDeliveryAddress();
 
     fetchData();
   }, []);
@@ -126,12 +129,9 @@ export default function Buy(props) {
       icon: <ExclamationCircleFilled />,
       content: "Hãy đăng nhập để sửa dụng tính năng này!",
       onOk() {
-        console.log("Đăng nhập");
         navigate("/login");
       },
-      onCancel() {
-        console.log("Cancel");
-      },
+      onCancel() {},
     });
   };
 
@@ -139,12 +139,12 @@ export default function Buy(props) {
   // Lấy dữ liệu từ sessionStorage khi component được tải
   useEffect(() => {
     const buysDataFromSession = sessionStorage.getItem("buys");
-    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    // console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
     if (buysDataFromSession) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
-      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      // console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
       setBuysData(parsedBuysData);
-      console.log("dữ liệu buys:", parsedBuysData);
+      // console.log("dữ liệu buys:", parsedBuysData);
     }
   }, []);
 
@@ -193,7 +193,7 @@ export default function Buy(props) {
       return;
     }
     // In ra giá trị của biến data
-    console.log("Data:", data);
+    // console.log("Data:", data);
     // Gửi thông tin đăng ký lên server
     const response = await fetch(`${process.env.REACT_APP_API_URL}/order/pay`, {
       method: "POST",
@@ -211,9 +211,9 @@ export default function Buy(props) {
       message.error("Thanh toán đơn hàng thất bại");
     }
   };
-  const handleAddClick = () => {
-    navigate("/profile");
-  };
+  // const handleAddClick = () => {
+  //   navigate("/profile");
+  // };
 
   const handleBuyVNpay = () => {
     const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
@@ -225,13 +225,15 @@ export default function Buy(props) {
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
     setPaymentMenthod(1); // Cập nhật phương thức thanh toán
-  }
-  
+  };
+
   const handleBuyMoMoPay = () => {
     // Xử lý cho phương thức thanh toán ZaloPay
     setPaymentMenthod(2); // Cập nhật phương thức thanh toán
-  }
-  
+  };
+
+  console.log(deliveryAddress);
+
   return (
     <>
       {/* main */}
@@ -279,111 +281,80 @@ export default function Buy(props) {
                         className="teko-row teko-row-start css-1v9diph snipcss-f7MJM style-Aergz"
                         id="style-Aergz"
                       >
-                        <div
-                          className="teko-col teko-col-6 css-gr7r8o style-bjeqp"
-                          id="style-bjeqp"
-                        >
-                          {user ? (
-                            <Button
-                              data-content-region-name="shippingAddress"
-                              data-track-content="true"
-                              data-content-name="homeDelivery"
-                              data-content-index={0}
-                              data-content-target={79}
-                              className="css-1014eaz style-tofZn"
-                              id="style-tofZn"
-                              onClick={showModal}
+                        {/* btn show address */}
+                        {deliveryAddress.length !== 0 &&
+                          deliveryAddress.map((value) => (
+                            <div
+                              className="teko-col teko-col-6 css-gr7r8o style-bjeqp"
+                              id="style-bjeqp"
                             >
-                              <div>
-                                <span id="style-owhaV" className="style-owhaV">
-                                  {/* user name */}
-                                  {user && <div>{user.name}</div>}
-                                </span>
-                                {/* icon */}
-                                <div
-                                  data-content-region-name="shippingAddress"
-                                  data-track-content="true"
-                                  data-content-name="editAddress"
-                                  className="css-7kp13n"
-                                >
-                                  <svg
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    size={20}
-                                    className="css-1e44j4b"
-                                    color="#848788"
-                                    height={20}
-                                    width={20}
-                                    xmlns="http://www.w3.org/2000/svg"
+                              <Button
+                                data-content-region-name="shippingAddress"
+                                data-track-content="true"
+                                data-content-name="homeDelivery"
+                                data-content-index={0}
+                                data-content-target={79}
+                                className="css-1014eaz style-tofZn"
+                                id="style-tofZn"
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "start",
+                                }}
+                              >
+                                {/* name */}
+                                <div className="btn-select-address">
+                                  <span
+                                    id="style-owhaV"
+                                    className="style-owhaV"
                                   >
-                                    <path
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      d="M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z"
-                                      fill="#82869E"
-                                    ></path>
-                                  </svg>
-                                </div>
-                              </div>
-                              {/* sdt */}
-                              <div> {user && <div>{user.phone}</div>} </div>
-                              {/* addres */}
-                              <div id="style-GqGe8" className="style-GqGe8">
-                                {user && <div>{user.address}</div>}
-                              </div>
-                            </Button>
-                          ) : (
-                            <Button
-                              data-content-region-name="shippingAddress"
-                              data-track-content="true"
-                              data-content-name="homeDelivery"
-                              data-content-index={0}
-                              data-content-target={79}
-                              className="css-1014eaz style-tofZn"
-                              id="style-tofZn"
-                              onClick={showConfirm}
-                            >
-                              <div>
-                                <span id="style-owhaV" className="style-owhaV">
-                                  {/* user name */}
-                                  {user && <div>{user.name}</div>}
-                                </span>
-                                {/* icon */}
-                                <div
-                                  data-content-region-name="shippingAddress"
-                                  data-track-content="true"
-                                  data-content-name="editAddress"
-                                  className="css-7kp13n"
-                                >
-                                  <svg
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    size={20}
-                                    className="css-1e44j4b"
-                                    color="#848788"
-                                    height={20}
-                                    width={20}
-                                    xmlns="http://www.w3.org/2000/svg"
+                                    {/* user name */}
+                                    <div>{value.name}</div>
+                                  </span>
+                                  {/* icon */}
+                                  <div
+                                    data-content-region-name="shippingAddress"
+                                    data-track-content="true"
+                                    data-content-name="editAddress"
+                                    className="css-7kp13n"
+                                    onClick={showModal}
                                   >
-                                    <path
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      d="M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z"
-                                      fill="#82869E"
-                                    ></path>
-                                  </svg>
+                                    {/* icon */}
+                                    <svg
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      size={20}
+                                      className="css-1e44j4b"
+                                      color="#848788"
+                                      height={20}
+                                      width={20}
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z"
+                                        fill="#82869E"
+                                      ></path>
+                                    </svg>
+                                  </div>
                                 </div>
-                              </div>
-                              {/* sdt */}
-                              <div> {user && <div>{user.phone}</div>} </div>
-                              {/* addres */}
-                              <div id="style-GqGe8" className="style-GqGe8">
-                                {user && <div>{user.address}</div>}
-                              </div>
-                            </Button>
-                          )}
-                        </div>
+                                {/* sdt */}
+                                <div> {value && <div>{value.phone}</div>} </div>
+                                {/* addres */}
+                                <div id="style-GqGe8" className="style-GqGe8">
+                                  {value && (
+                                    <div>
+                                      {value.street},{value.commune},
+                                      {value.district},{value.city}
+                                    </div>
+                                  )}
+                                </div>
+                              </Button>
+                            </div>
+                          ))}
 
+                        {/* btn Add address */}
                         <div
                           data-content-region-name="addressShipping"
                           data-track-content="true"
@@ -391,67 +362,38 @@ export default function Buy(props) {
                           className="teko-col teko-col-6 css-gr7r8o style-Jlvl6"
                           id="style-Jlvl6"
                         >
-                          {user ? (
-                            <button
-                              height="100%"
-                              className="css-162xo41 style-kRCXj"
-                              type="button"
-                              id="style-kRCXj"
-                              onClick={handleAddClick}
+                          <button
+                            height="100%"
+                            className="css-162xo41 style-kRCXj"
+                            type="button"
+                            id="style-kRCXj"
+                            onClick={user ? showModal : showConfirm}
+                          >
+                            <svg
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              size={25}
+                              className="css-1e44j4b"
+                              color="#848788"
+                              height={25}
+                              width={25}
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              <svg
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                size={25}
-                                className="css-1e44j4b"
-                                color="#848788"
-                                height={25}
-                                width={25}
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                  fill="#82869E"
-                                ></path>
-                              </svg>
-                              Thêm địa chỉ
-                              <span id="style-EqcsP" className="style-EqcsP">
-                                <div className="css-157jl91"></div>
-                              </span>
-                            </button>
-                          ) : (
-                            <button
-                              height="100%"
-                              className="css-162xo41 style-kRCXj"
-                              type="button"
-                              id="style-kRCXj"
-                            >
-                              <svg
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                size={25}
-                                className="css-1e44j4b"
-                                color="#848788"
-                                height={25}
-                                width={25}
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                  fill="#82869E"
-                                ></path>
-                              </svg>
-                              Thêm địa chỉ
-                              <span id="style-EqcsP" className="style-EqcsP">
-                                <div className="css-157jl91"></div>
-                              </span>
-                            </button>
-                          )}
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                                fill="#82869E"
+                              ></path>
+                            </svg>
+                            Thêm địa chỉ
+                            <span id="style-EqcsP" className="style-EqcsP">
+                              <div className="css-157jl91"></div>
+                            </span>
+                          </button>
                         </div>
+
+                        {/* ------------ */}
                       </div>
                       <div className="radio">
                         <label>
@@ -1415,6 +1357,8 @@ export default function Buy(props) {
           </div>
         </div>
       </div>
+
+      {/* Thông tin người nhận */}
       <Modal
         title="Thông tin khách hàng"
         open={isModalOpen}
@@ -1542,7 +1486,7 @@ export default function Buy(props) {
                   </div>
                   {/*  */}
                   <Form.Item>
-                    <Select onChange={handleCityChange}>
+                    <Select placeholder="Chọn" onChange={handleCityChange}>
                       {city.map((city) => (
                         <Option key={city.Id} value={city.Id}>
                           {city.Name}
@@ -1570,7 +1514,7 @@ export default function Buy(props) {
                     </label>
                   </div>
                   <Form.Item>
-                    <Select onChange={handleDistrictChange}>
+                    <Select placeholder="Chọn" onChange={handleDistrictChange}>
                       {selectedCity &&
                         selectedCity.Districts.map((district) => (
                           <Option key={district.Id} value={district.Id}>
@@ -1602,7 +1546,7 @@ export default function Buy(props) {
                   </div>
 
                   <Form.Item>
-                    <Select onChange={handleWardChange}>
+                    <Select placeholder="Chọn" onChange={handleWardChange}>
                       {selectedDistrict &&
                         selectedDistrict.Wards.map((ward) => (
                           <Option key={ward.Id} value={ward.Id}>
