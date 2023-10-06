@@ -1,6 +1,5 @@
 const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
-const createTables = require("../../config/CrTables");
 const path = require("path");
 const fs = require("fs");
 const { da } = require("date-fns/locale");
