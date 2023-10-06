@@ -55,7 +55,7 @@ function Sale(){
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-89-90">
         <a
-          href="https://phongvu.vn/cong-nghe/cach-mua-hang-tra-gop-tai-phong-vu/?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=acs-t8-23"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           className="snipcss0-5-90-91 style-K1fb8"
@@ -92,27 +92,15 @@ function Sale(){
             </span>
           </p>
         </div>
+
         <div className="css-1hjg543 snipcss0-5-90-105">
-          <a
-            href="https://phongvu.vn/cong-nghe/cach-mua-hang-tra-gop-tai-phong-vu/?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=acs-t8-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="snipcss0-6-105-106 style-RhW78"
-            id="style-RhW78"
-          >
             <button
               data-uniq-id=".g2nlyehu"
-              className="css-kx6lpr snipcss0-7-106-107"
-            >
-              <span className="snipcss0-8-107-108 style-2SPOT" id="style-2SPOT">
-                <span className="snipcss0-9-108-109">
-                  <p className="snipcss0-10-109-110">Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91 snipcss0-8-107-111"></div>
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
+
       </div>
     </div>
     <div
@@ -121,7 +109,7 @@ function Sale(){
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-112-113">
         <a
-          href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=doi-diem-dh-23"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           className="snipcss0-5-113-114 style-ffqV7"
@@ -164,27 +152,15 @@ function Sale(){
             </span>
           </p>
         </div>
-        <div className="css-1hjg543 snipcss0-5-113-128">
-          <a
-            href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=doi-diem-dh-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="snipcss0-6-128-129 style-T55rJ"
-            id="style-T55rJ"
-          >
+
+            <div className="css-1hjg543 snipcss0-5-90-105">
             <button
-              data-uniq-id=".3vegqryh"
-              className="css-1rft5xj snipcss0-7-129-130"
-            >
-              <span className="snipcss0-8-130-131 style-y9Ztn" id="style-y9Ztn">
-                <span className="snipcss0-9-131-132">
-                  <p className="snipcss0-10-132-133">Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91 snipcss0-8-130-134"></div>
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
+
       </div>
     </div>
   </div>
@@ -197,7 +173,7 @@ function Sale(){
   >
     <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-512-513">
       <a
-        href="https://phongvu.vn/c/msi-laptop?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-t8-23"
+        href="#"
         target="_blank"
         rel="noopener noreferrer"
         className="snipcss0-5-513-514 style-DNvSb"
@@ -235,27 +211,13 @@ function Sale(){
           </span>
         </p>
       </div>
-      <div className="css-1hjg543 snipcss0-5-513-528">
-        <a
-          href="https://phongvu.vn/c/msi-laptop?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-t8-23"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="snipcss0-6-528-529 style-vwRrI"
-          id="style-vwRrI"
-        >
+<div className="css-1hjg543 snipcss0-5-90-105">
             <button
               data-uniq-id=".g2nlyehu"
-              className="css-kx6lpr snipcss0-7-106-107"
-            >
-              <span className="snipcss0-8-107-108 style-2SPOT" id="style-2SPOT">
-                <span className="snipcss0-9-108-109">
-                  <p className="snipcss0-10-109-110">Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91 snipcss0-8-107-111"></div>
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-        </a>
-      </div>
+        </div>
     </div>
   </div>
 </div>
@@ -271,7 +233,7 @@ function Sale(){
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-89-90">
         <a
-          href="https://phongvu.vn/cong-nghe/cach-mua-hang-tra-gop-tai-phong-vu/?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=acs-t8-23"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           className="snipcss0-5-90-91 style-K1fb8"
@@ -309,25 +271,11 @@ function Sale(){
           </p>
         </div>
         <div className="css-1hjg543 snipcss0-5-90-105">
-          <a
-            href="https://phongvu.vn/cong-nghe/cach-mua-hang-tra-gop-tai-phong-vu/?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=acs-t8-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="snipcss0-6-105-106 style-RhW78"
-            id="style-RhW78"
-          >
             <button
               data-uniq-id=".g2nlyehu"
-              className="css-kx6lpr snipcss0-7-106-107"
-            >
-              <span className="snipcss0-8-107-108 style-2SPOT" id="style-2SPOT">
-                <span className="snipcss0-9-108-109">
-                  <p className="snipcss0-10-109-110">Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91 snipcss0-8-107-111"></div>
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
       </div>
     </div>
@@ -337,7 +285,7 @@ function Sale(){
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-112-113">
         <a
-          href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=doi-diem-dh-23"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           className="snipcss0-5-113-114 style-ffqV7"
@@ -380,26 +328,12 @@ function Sale(){
             </span>
           </p>
         </div>
-        <div className="css-1hjg543 snipcss0-5-113-128">
-          <a
-            href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=doi-diem-dh-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="snipcss0-6-128-129 style-T55rJ"
-            id="style-T55rJ"
-          >
+        <div className="css-1hjg543 snipcss0-5-90-105">
             <button
-              data-uniq-id=".3vegqryh"
-              className="css-1rft5xj snipcss0-7-129-130"
-            >
-              <span className="snipcss0-8-130-131 style-y9Ztn" id="style-y9Ztn">
-                <span className="snipcss0-9-131-132">
-                  <p className="snipcss0-10-132-133">Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91 snipcss0-8-130-134"></div>
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
       </div>
     </div>
@@ -414,7 +348,7 @@ function Sale(){
     <div data-uniq-id=".cb7zm3mu" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 tether-target tether-enabled tether-target-attached-top tether-abutted tether-abutted-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
         <a
-          href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=uu-dai-sv-t8-23"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           id="style-xy3lr"
@@ -442,30 +376,19 @@ function Sale(){
         <div className=" css-1xbgrjh" data-uniq-id=".b74iemsg">
           <p>01/08 - 30/09/2023</p>
         </div>
-        <div className=" css-1hjg543">
-          <a
-            href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=uu-dai-sv-t8-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            id="style-3yFgU"
-            className="style-3yFgU"
-          >
-            <button data-uniq-id=".2wje39mo" className="css-1rft5xj">
-              <span id="style-oToTo" className="style-oToTo">
-                <span>
-                  <p>Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91"></div>
+        <div className="css-1hjg543 snipcss0-5-90-105">
+            <button
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
       </div>
     </div>
     <div data-uniq-id=".4kx8thns" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2">
         <a
-          href="https://phongvu.vn/c/nang-cap-ram?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=tang-ram-8gb-t8-23"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           id="style-5IE4R"
@@ -493,23 +416,12 @@ function Sale(){
         <div className=" css-1xbgrjh" data-uniq-id=".cj5r5625">
           <p>01/08 - 30/09/2023</p>
         </div>
-        <div className="css-1hjg543 tether-target tether-enabled tether-element-attached-top tether-element-attached-center tether-target-attached-top tether-target-attached-center">
-          <a
-            href="https://phongvu.vn/c/nang-cap-ram?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=tang-ram-8gb-t8-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            id="style-9H4fw"
-            className="style-9H4fw"
-          >
-            <button data-uniq-id=".wrbssndz" className="css-1rft5xj">
-              <span id="style-PME89" className="style-PME89">
-                <span>
-                  <p>Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91"></div>
+        <div className="css-1hjg543 snipcss0-5-90-105">
+            <button
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
       </div>
     </div>
@@ -520,7 +432,7 @@ function Sale(){
   <div data-uniq-id=".flt15z72" className="teko-col1 css-1ezrukj">
     <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-0-0-1">
       <a
-        href="https://phongvu.vn/c/msi?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-nhan-code-t8-23"
+        href="#"
         target="_blank"
         rel="noopener noreferrer"
         className="snipcss0-1-1-2 style-Ui96b"
@@ -554,27 +466,13 @@ function Sale(){
           </span>
         </p>
       </div>
-      <div className="css-1hjg543 snipcss0-1-1-16">
-        <a
-          href="https://phongvu.vn/c/msi?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-nhan-code-t8-23"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="snipcss0-2-16-17 style-heGEq"
-          id="style-heGEq"
-        >
-          <button
-            data-uniq-id=".q8ylg0tx"
-            className="css-1rft5xj snipcss0-3-17-18"
-          >
-            <span className="snipcss0-4-18-19 style-orqsS" id="style-orqsS">
-              <span className="snipcss0-5-19-20">
-                <p className="snipcss0-6-20-21">Xem chi tiết</p>
-              </span>
-            </span>
-            <div className="css-157jl91 snipcss0-4-18-22"></div>
-          </button>
-        </a>
-      </div>
+      <div className="css-1hjg543 snipcss0-5-90-105">
+            <button
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
+            </button>
+        </div>
     </div>
   </div>
 </div>
@@ -587,7 +485,7 @@ function Sale(){
     <div data-uniq-id=".tqwmy380" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2">
         <a
-          href="https://phongvu.vn/c/gigabyte-linh-kien?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=gigabyte-nhan-code-t8-23"
+          href="#3"
           target="_blank"
           rel="noopener noreferrer"
           id="style-hCIz7"
@@ -617,35 +515,18 @@ function Sale(){
             <span style={{ fontSize: 14 }}>11/08 - 10/09/2023</span>
           </p>
         </div>
-        <div className=" css-1hjg543">
-          <a
-            href="https://phongvu.vn/c/gigabyte-linh-kien?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=gigabyte-nhan-code-t8-23"
-            target="_blank"
-            rel="noopener noreferrer"
-            id="style-EoCos"
-            className="style-EoCos"
-          >
-            <button data-uniq-id=".gbt8kbxg" className="css-1rft5xj">
-              <span id="style-q3yKE" className="style-q3yKE">
-                <span>
-                  <p>Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91"></div>
+        <div className="css-1hjg543 snipcss0-5-90-105">
+            <button
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
       </div>
     </div>
     <div data-uniq-id=".cz5u8jwo" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2">
-        <a
-          href="https://phongvu.vn/p/lg?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=lg-gram-thang-8-9"
-          target="_blank"
-          rel="noopener noreferrer"
-          id="style-qYXbY"
-          className="style-qYXbY"
-        >
+
           <div className=" css-1q0vk5q" data-uniq-id=".ljv9nshe">
             <picture className=" css-4mc33u">
               <img
@@ -657,7 +538,7 @@ function Sale(){
               />
             </picture>
           </div>
-        </a>
+
         <div className=" css-17v6u7d" data-uniq-id=".ps4svlzw">
           <p style={{ fontSize: 16 }}>
             <span style={{ fontSize: 16 }}>
@@ -670,23 +551,12 @@ function Sale(){
             <span style={{ fontSize: 14 }}>17/08/2023 - 30/09/2023</span>
           </p>
         </div>
-        <div className=" css-1hjg543">
-          <a
-            href="https://phongvu.vn/p/lg?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=lg-gram-thang-8-9"
-            target="_blank"
-            rel="noopener noreferrer"
-            id="style-yq3k3"
-            className="style-yq3k3"
-          >
-            <button data-uniq-id=".09d8vtoo" className="css-1w48v8s">
-              <span id="style-ftJs1" className="style-ftJs1">
-                <span>
-                  <p>Xem chi tiết</p>
-                </span>
-              </span>
-              <div className="css-157jl91"></div>
+        <div className="css-1hjg543 snipcss0-5-90-105">
+            <button
+              data-uniq-id=".g2nlyehu"
+              className="css-kx6lpr snipcss0-7-106-107">
+              <p className="snipcss0-10-109-110">Xem chi tiết</p>
             </button>
-          </a>
         </div>
       </div>
     </div>

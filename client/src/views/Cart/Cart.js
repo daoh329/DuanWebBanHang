@@ -118,10 +118,6 @@ function Cart() {
     window.location.reload();
   };
 
-
-
-
-
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = (productId) => {
     const updatedCart = cart.map((item) => {
@@ -165,15 +161,6 @@ function Cart() {
   };
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
-
-  // useEffect(() => {
-  //   // Sắp xếp dữ liệu sản phẩm theo thời gian mới nhất đầu tiên
-  //   const sortedProducts = [...cart].sort((a, b) => {
-  //     return new Date(b.createdAt) - new Date(a.createdAt);
-  //   });
-  //   setSortedCart(sortedProducts);
-  // }, [cart]);
-
   const [totalPrice, setTotalPrice] = useState(0);
 
 
