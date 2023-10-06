@@ -27,7 +27,7 @@ function Sale(){
   <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss0-2-80-81">
     <div
       data-uniq-id="vEFHpq_K9P"
-      className="teko-col css-1u2x8w9 snipcss0-3-81-82"
+      className="teko-col1 css-1u2x8w9 snipcss0-3-81-82"
     >
       <div className="bg-lazy bg-visible-lazy css-em4mod snipcss0-4-82-83">
         <div className="css-168zspm snipcss0-5-83-84" data-uniq-id="NTNp27hgFb">
@@ -51,7 +51,7 @@ function Sale(){
   <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss0-2-87-88">
     <div
       data-uniq-id=".a9h0yldy"
-      className="teko-col css-1ezrukj snipcss0-3-88-89"
+      className="teko-col1 css-1ezrukj snipcss0-3-88-89"
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-89-90">
         <a
@@ -117,7 +117,7 @@ function Sale(){
     </div>
     <div
       data-uniq-id=".oh786q8h"
-      className="teko-col css-1ezrukj snipcss0-3-88-112"
+      className="teko-col1 css-1ezrukj snipcss0-3-88-112"
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-112-113">
         <a
@@ -193,7 +193,7 @@ function Sale(){
 <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss0-2-510-511 snipcss-49RPz">
   <div
     data-uniq-id=".0rromt62"
-    className="teko-col css-1ezrukj snipcss0-3-511-512"
+    className="teko-col1 css-1ezrukj snipcss0-3-511-512"
   >
     <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-512-513">
       <a
@@ -267,7 +267,7 @@ function Sale(){
   <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss0-2-87-88">
     <div
       data-uniq-id=".a9h0yldy"
-      className="teko-col css-1ezrukj snipcss0-3-88-89"
+      className="teko-col1 css-1ezrukj snipcss0-3-88-89"
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-89-90">
         <a
@@ -333,7 +333,7 @@ function Sale(){
     </div>
     <div
       data-uniq-id=".oh786q8h"
-      className="teko-col css-1ezrukj snipcss0-3-88-112"
+      className="teko-col1 css-1ezrukj snipcss0-3-88-112"
     >
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-112-113">
         <a
@@ -411,7 +411,7 @@ function Sale(){
   data-uniq-id=".yq5smqad"
 >
   <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi">
-    <div data-uniq-id=".cb7zm3mu" className="teko-col css-1ezrukj">
+    <div data-uniq-id=".cb7zm3mu" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2 tether-target tether-enabled tether-target-attached-top tether-abutted tether-abutted-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
         <a
           href="https://phongvu.vn/p/chuong-trinh-phong-vu?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=uu-dai-sv-t8-23"
@@ -462,7 +462,7 @@ function Sale(){
         </div>
       </div>
     </div>
-    <div data-uniq-id=".4kx8thns" className="teko-col css-1ezrukj">
+    <div data-uniq-id=".4kx8thns" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2">
         <a
           href="https://phongvu.vn/c/nang-cap-ram?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=tang-ram-8gb-t8-23"
@@ -517,7 +517,7 @@ function Sale(){
 </div>
 {/*  */}
 <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss-3qYfC">
-  <div data-uniq-id=".flt15z72" className="teko-col css-1ezrukj">
+  <div data-uniq-id=".flt15z72" className="teko-col1 css-1ezrukj">
     <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-0-0-1">
       <a
         href="https://phongvu.vn/c/msi?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=msi-nhan-code-t8-23"
@@ -584,7 +584,7 @@ function Sale(){
   data-uniq-id=".kdbrjgnv"
 >
   <div className="teko-row bg-lazy bg-visible-lazy css-1klnydi">
-    <div data-uniq-id=".tqwmy380" className="teko-col css-1ezrukj">
+    <div data-uniq-id=".tqwmy380" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2">
         <a
           href="https://phongvu.vn/c/gigabyte-linh-kien?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=gigabyte-nhan-code-t8-23"
@@ -637,7 +637,7 @@ function Sale(){
         </div>
       </div>
     </div>
-    <div data-uniq-id=".cz5u8jwo" className="teko-col css-1ezrukj">
+    <div data-uniq-id=".cz5u8jwo" className="teko-col1 css-1ezrukj">
       <div className="bg-lazy bg-visible-lazy css-2t7lu2">
         <a
           href="https://phongvu.vn/p/lg?utm_source=promotion-page&utm_medium=campaign-banner&utm_campaign=lg-gram-thang-8-9"
