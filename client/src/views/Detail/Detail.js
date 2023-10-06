@@ -749,6 +749,7 @@ function Detail() {
             </div>
 
             <MDBTable className="table-tiet" borderless>
+             
               <MDBTableBody>
                 <tr>
                   <td colSpan={1}>Thương hiệu</td>
@@ -770,7 +771,7 @@ function Detail() {
                   <td colSpan={3}>
                     {Detail.color ? (
                       Detail.color.map((color, index) => (
-                        <span key={index}>
+                        <span key={index.id}>
                           {color}
                           {index < Detail.color.length - 1 ? ', ' : ''}
                         </span>
@@ -855,6 +856,7 @@ function Detail() {
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.accessory}</td>
                 </tr>
               </MDBTableBody>
+
             </MDBTable>
           </div>
         </Modal>
