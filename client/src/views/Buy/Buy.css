@@ -982,19 +982,6 @@ button {
     margin-top: 1rem;
 } 
 
-button:not(:disabled) { 
-    cursor: pointer;
-} 
-
-p { 
-    margin-top: 0; 
-    margin-bottom: 1rem;
-} 
-
-button,[type="button"] { 
-    -webkit-appearance: button;
-} 
-
 .css-162xo41 { 
     opacity: 1; 
     height: 2.5rem; 
@@ -1015,10 +1002,7 @@ button,[type="button"] {
     transition-duration: 80ms; 
     transition-property: background-color;
 } 
-
-button:not(:disabled),[type="button"]:not(:disabled) { 
-    cursor: pointer;
-} 
+ 
 
 .css-162xo41:hover { 
     border-color: rgb(130, 134, 158);
@@ -1927,10 +1911,7 @@ input {
     background-color: rgb(255, 255, 255);
 } 
 
-p { 
-    margin-top: 0; 
-    margin-bottom: 1rem;
-} 
+
 
 .css-1eud8hl { 
     font-size: 0.8125rem; 
@@ -2261,10 +2242,6 @@ p {
     cursor: pointer; 
     transition-duration: 80ms; 
     transition-property: background-color;
-} 
-
-button:not(:disabled),[type="button"]:not(:disabled) { 
-    cursor: pointer;
 } 
 
 .css-uxjbk7:hover { 

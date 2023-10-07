@@ -184,7 +184,7 @@ export default function Buy(props) {
       note: note,
       status: 0,
     };
-
+  
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
@@ -202,13 +202,20 @@ export default function Buy(props) {
       },
       body: JSON.stringify(data),
     });
+    
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
       message.success("Thanh toán đơn hàng thành công");
     } else {
-      // Thông báo lỗi
-      message.error("Thanh toán đơn hàng thất bại");
+      // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
+      const responseData = await response.json();
+      if (responseData === 'Số lượng sản phẩm không đủ') {
+        message.error('Số lượng sản phẩm không đủ');
+      } else {
+        // Thông báo lỗi khác
+        message.error("Thanh toán đơn hàng thất bại");
+      }
     }
   };
   // const handleAddClick = () => {

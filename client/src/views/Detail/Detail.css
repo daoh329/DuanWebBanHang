@@ -620,11 +620,6 @@ button,
     height: 46px;
 }
 
-button:not(:disabled),
-[type="button"]:not(:disabled) {
-    cursor: pointer;
-}
-
 .css-9p27dv:hover {
     background-color: rgb(18, 48, 176);
 }
