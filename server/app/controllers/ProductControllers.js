@@ -385,6 +385,58 @@ class Product {
     }
   }
 
+  async Newphone(req, res) {
+    const query = `
+      SELECT product.*, productDetails.brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+        SELECT id, thumbnail, product_id
+        FROM (
+          SELECT id, thumbnail, product_id,
+                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+          FROM galery
+        ) tmp
+        WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      WHERE product.CategoryID = 2 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
+    `;
+  
+    mysql.query(query, (error, results) => {
+      if (error) {
+        return res.json({ error });
+      }
+  
+      res.json(results);
+    });
+  }
+
+  async Newlaptop(req, res) {
+    const query = `
+      SELECT product.*, productDetails.brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+        SELECT id, thumbnail, product_id
+        FROM (
+          SELECT id, thumbnail, product_id,
+                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+          FROM galery
+        ) tmp
+        WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      WHERE product.CategoryID = 1 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
+    `;
+  
+    mysql.query(query, (error, results) => {
+      if (error) {
+        return res.json({ error });
+      }
+  
+      res.json(results);
+    });
+  }
+
   async QueryProductsLaptop(req, res) {
     const query = `
       SELECT product.*, productDetails.brand, galery.thumbnail

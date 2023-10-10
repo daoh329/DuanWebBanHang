@@ -22,6 +22,9 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
+  const [topDienthoai, setTopDienthoai] = useState([]);
+  const [newPhone, setNewphone] = useState([]);
+  const [newLaptop, setNewLaptop] = useState([]);
   const navigate = useNavigate();
   const initialTime = 111300;
 
@@ -30,6 +33,16 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
         setTopLaptop(res.data);
+        // console.log("Laptopbanchay: " +res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  //top 10 dien thoai bán chạy
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/order/dienthoaibanchay`)
+      .then((res) => {
+        setTopDienthoai(res.data);
         // console.log("Laptopbanchay: " +res.data);
       })
       .catch((error) => console.log(error));
@@ -78,6 +91,26 @@ const Home = () => {
     const storedProducts = JSON.parse(sessionStorage.getItem("products")) || [];
     // Cập nhật state
     sethistorysp(storedProducts);
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/product/newphone`)
+      .then(response => {
+        setNewphone(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
+      .then(response => {
+        setNewLaptop(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   }, []);
 
   useEffect(() => {
@@ -388,7 +421,7 @@ const Home = () => {
 
             </div>
           </TabPane>
-          <TabPane tab="Sản phẩm bán chạy" key="2">
+          <TabPane tab="Laptop bán chạy" key="2">
           <div className="scroll-control-phone" ref={containerRef}>
           <div >
                <CountdownTimer initialTime={initialTime} />
@@ -419,14 +452,14 @@ const Home = () => {
                 ))}
             </div>
           </TabPane>
-          <TabPane tab="Flash Sales" key="3">
+          <TabPane tab="Điện thoại bán chạy" key="3">
           <div className="scroll-control-phone" ref={containerRef}>
           <div >
                <CountdownTimer initialTime={initialTime} />
           </div>
-          {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+          {topDienthoai &&
+                topDienthoai.length > 0 &&
+                topDienthoai.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
                     <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
@@ -535,12 +568,12 @@ const Home = () => {
       </div> */}
 
 
-      {/* ------------------box sản phẩm mới ra mắt ------------------ */}
-      {topLaptop && topLaptop.length > 0 ? (
+      {/* ------------------box Điện thoại mới ra mắt ------------------ */}
+      {newPhone && newPhone.length > 0 ? (
         <div className='phone-group' >
           <div className="title-group">
 
-            <div className="phone-title">Sản phẩm mới ra mắt</div>
+            <div className="phone-title">Điện thoại mới ra mắt</div>
             <div className="views-all">
               <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
               <i className="fa fa-chevron-right"></i>
@@ -549,9 +582,9 @@ const Home = () => {
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRef}>
-              {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+              {newPhone &&
+                newPhone.length > 0 &&
+                newPhone.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
                     <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
@@ -594,11 +627,11 @@ const Home = () => {
         </div>
       ) : null}
 
-      {/* ------------------box sản phẩm laptop bán chạy ------------------ */}
-      {topLaptop && topLaptop.length > 0 ? (
+      {/* ------------------box laptop mới ra mắt ------------------ */}
+      {newLaptop && newLaptop.length > 0 ? (
         <div className="phone-group">
           <div className="title-group">
-            <div className="phone-title">Danh mục nổi bật</div>
+            <div className="phone-title">Laptop mới ra mắtt</div>
             <div className="views-all">Xem tất cả <i className="fa fa-chevron-right"></i> </div>
           </div>
           <div className="scroll-group-phone">
@@ -606,9 +639,9 @@ const Home = () => {
             {/* content */}
             <div className="scroll-control-phone" ref={containerRef}>
 
-              {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+              {newLaptop &&
+                newLaptop.length > 0 &&
+                newLaptop.slice(startIndex, endIndex).map((item, index) => (
                   <div className="sanpham-card" key={index}>
                     <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>

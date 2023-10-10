@@ -2,10 +2,19 @@ const mysql = require("../../config/db/mySQL");
 let $ = require('jquery');
 const axios = require('axios');
 const moment = require('moment');
+let globalAmount;
 
 class PayController {
+    
+    async Set_amount(req, res){
+        globalAmount = req.body.amount; // Lưu amount vào biến toàn cục
+        console.log('amount: ', globalAmount);
+        res.end();
+    }
+
     async create_payment_url(req, res){
-        const amount = req.query.amount; // Lấy giá trị amount từ tham số truy vấn
+        const amount = globalAmount; // Lấy giá trị amount từ biến toàn cục
+        console.log('amount: '+amount);
         res.render('order', {title: 'Tạo mới đơn hàng', amount: amount}) // Sử dụng giá trị amount để render trang
     }
 
@@ -23,7 +32,7 @@ class PayController {
         res.render('refund', {title: 'Hoàn tiền giao dịch thanh toán'})
     }
 
-    async Post_create_payment_url(req, res, next){
+    async Post_create_payment(req, res, next){
         process.env.TZ = 'Asia/Ho_Chi_Minh';
     
         let date = new Date();
@@ -79,7 +88,7 @@ class PayController {
         vnp_Params['vnp_SecureHash'] = signed;
         vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
-        res.redirect(vnpUrl)
+        res.json({ url: vnpUrl }); // Trả về URL trong một đối tượng JSON
     }
 
     async Vnpay_return(req, res, next){
