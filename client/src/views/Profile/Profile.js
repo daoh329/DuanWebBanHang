@@ -67,7 +67,6 @@ const tailFormItemLayout = {
 
 export default function Profile(props) {
   const { user } = props;
-  console.log(props);
     // select mới
     const [city, setCity] = useState([]);
     const [districts, setDistricts] = useState([]);

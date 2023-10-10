@@ -95,9 +95,9 @@ const createTables = () => {
     idUser int,
     name varchar(255),
     city varchar(255),
-    District varchar(255),
-    Commune varchar(255),
-    Street varchar(255),
+    district varchar(255),
+    commune varchar(255),
+    street varchar(255),
     email varchar(255),
     phone varchar(255),
     FOREIGN KEY (idUser) REFERENCES users (id)
