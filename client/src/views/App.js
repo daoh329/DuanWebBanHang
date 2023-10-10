@@ -40,10 +40,10 @@ const App = () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
+      localStorage.setItem("idUser", data.user.id);
       setUser(data.user);
-     
     } catch (e) {
-      console.log(e);
+      localStorage.removeItem("idUser");
     }
   };
 
