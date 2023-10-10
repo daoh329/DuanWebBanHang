@@ -16,56 +16,56 @@ class Product {
     const configuration =
       data.category === "Điện thoại"
         ? {
-          series: data.series,
-          screen: data.screen,
-          resolution: data.resolution,
-          chip: data.chip,
-          ram: data.ram,
-          rom: data.rom,
-          screen: data.screen,
-          os: data.os,
-          pin: data.pin,
-          guarantee: data.guarantee,
-          demand: data.demand,
-          charging_port: data.charging_port,
-          sim_type: data.sim_type,
-          mobile_network: data.mobile_network,
-          rear_camera: data.rear_camera,
-          front_camera: data.front_camera,
-          wifi: data.wifi,
-          gps: data.gps,
-          bluetooth: data.bluetooth,
-          headphone_jack: data.headphone_jack,
-          size: data.size,
-          mass: data.mass,
-          accessory: data.accessory,
-        }
+            series: data.series,
+            screen: data.screen,
+            resolution: data.resolution,
+            chip: data.chip,
+            ram: data.ram,
+            rom: data.rom,
+            screen: data.screen,
+            os: data.os,
+            pin: data.pin,
+            guarantee: data.guarantee,
+            demand: data.demand,
+            charging_port: data.charging_port,
+            sim_type: data.sim_type,
+            mobile_network: data.mobile_network,
+            rear_camera: data.rear_camera,
+            front_camera: data.front_camera,
+            wifi: data.wifi,
+            gps: data.gps,
+            bluetooth: data.bluetooth,
+            headphone_jack: data.headphone_jack,
+            size: data.size,
+            mass: data.mass,
+            accessory: data.accessory,
+          }
         : {
-          series: data.series,
-          part_number: data.part_number,
-          guarantee: data.guarantee,
-          demand: data.demand,
-          cpu: data.cpu,
-          ram: data.ram,
-          rom: data.rom,
-          screen: data.screen,
-          vga: data.vga,
-          os: data.os,
-          maximum_number_of_storage_ports:
-            data.maximum_number_of_storage_ports,
-          M2_slot_type_supported: data.M2_slot_type_supported,
-          output_port: data.output_port,
-          connector: data.connector,
-          wireless_connectivity: data.wireless_connectivity,
-          keyboard: data.keyboard,
-          pin: data.pin,
-          mass: data.mass,
-          accessory: data.accessory,
-        };
+            series: data.series,
+            part_number: data.part_number,
+            guarantee: data.guarantee,
+            demand: data.demand,
+            cpu: data.cpu,
+            ram: data.ram,
+            rom: data.rom,
+            screen: data.screen,
+            vga: data.vga,
+            os: data.os,
+            maximum_number_of_storage_ports:
+              data.maximum_number_of_storage_ports,
+            M2_slot_type_supported: data.M2_slot_type_supported,
+            output_port: data.output_port,
+            connector: data.connector,
+            wireless_connectivity: data.wireless_connectivity,
+            keyboard: data.keyboard,
+            pin: data.pin,
+            mass: data.mass,
+            accessory: data.accessory,
+          };
     const configurationString = JSON.stringify(configuration);
     let nameP;
     if (data.name == null || data.name == "") {
-      nameP = data.brand + " " + data.series+" "+data.part_number;
+      nameP = data.brand + " " + data.series + " " + data.part_number;
     } else {
       nameP = data.name;
     }
@@ -350,6 +350,7 @@ class Product {
         const arrayImagePath = await query(sl_galery, [id]);
 
         // check nếu có ảnh thì mới xóa trong server và sql
+        // Thêm sau khi xóa
         if (arrayImagePath.length != 0) {
           await arrayImagePath.forEach(async (imagePath) => {
             // Đường dẫn tới thư mục public chứa hình ảnh
@@ -360,12 +361,18 @@ class Product {
               imagePath.imagePath
             );
             // Thực hiện xóa image trong server
-            fs.unlink(publicImagePath, (err) => {
-              if (err) {
-                console.error("Lỗi khi xóa hình ảnh:", err);
-                return res
-                  .status(500)
-                  .json({ message: "Delete image failed." });
+            // Kiểm tra file có trong thư mục không
+            fs.access(publicImagePath, fs.constants.F_OK, (err) => {
+              if (!err) {
+                // Nế có thì thực hiện xóa
+                fs.unlink(publicImagePath, (err) => {
+                  if (err) {
+                    console.error("Lỗi khi xóa hình ảnh:", err);
+                    return res
+                      .status(500)
+                      .json({ message: "Delete image failed." });
+                  }
+                });
               }
             });
           });
@@ -376,7 +383,14 @@ class Product {
           arrPathImage.forEach(async (image) => {
             await query(queryUpdateGalery, [image, id]);
           });
+          return res.status(200).json({ message: "success" });;
         }
+        // Nếu sản phẩm chưa có ảnh nào
+        // Thêm ảnh mới của sản phẩm
+        const queryUpdateGalery = `INSERT INTO galery (thumbnail, product_id) VALUES (?,?)`;
+        arrPathImage.forEach(async (image) => {
+          await query(queryUpdateGalery, [image, id]);
+        });
       }
       res.status(200).json({ message: "success" });
     } catch (error) {
@@ -453,15 +467,15 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 1 AND product.status = 1;
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
-  }  
+  }
 
   //Truy vấn điện thoại hiển thị Home
   async QueryProductsDienThoai(req, res) {
@@ -523,10 +537,9 @@ class Product {
         return res.json({ error });
       }
 
-
       // Thực hiện truy vấn màu sắc và hình ảnh
       mysql.query(colorQuery, [id], (error, colorResults) => {
-        if (error) { 
+        if (error) {
           return res.json({ error });
         }
         mysql.query(imageQuery, [id], (error, imageResults) => {

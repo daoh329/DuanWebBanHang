@@ -96,4 +96,55 @@ router.post("/login-otp", async (req, res, next) => {
   }
 });
 
+// API /auth/add-delivery-address
+router.post('/add-delivery-address', async (req, res) => {
+  try {
+    const {idUser, name,  phone, email, city, district, commune, street} = req.body;
+    const arrayValues = [idUser, name,  phone, email, city, district, commune, street];
+    const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street)
+    VALUES (?,?,?,?,?,?,?,?);
+    `;
+    await query(insert_query, arrayValues);
+    res.status(200).send("Thành công");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Insert delivery address failed");
+  }
+});
+
+// API /auth/update-delivery-address/:id
+router.put('/update-delivery-address/:id', async (req, res) => {
+  try {
+    // get values and id
+    const values = req.body;
+    const id = req.params.id
+    // create query SQL update
+    const insert_query = `UPDATE delivery_address SET ? WHERE id = ?;
+    `;
+    // update csdl
+    await query(insert_query, [values, id]);
+    // response success
+    res.status(200).send("Thành công");
+  } catch (error) {
+    // log error
+    console.log(error);
+    // response error
+    res.status(500).send("Insert delivery address failed");
+  }
+});
+
+// API /auth/delivery-address/:id
+router.get('/delivery-address/:id', async (req, res) => {
+  try {
+    const idUser = req.params.id;
+    const sl_query = `SELECT * FROM delivery_address WHERE idUser = ?`
+    const result = await query(sl_query, [idUser]);
+    
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Get delivery address failed");
+  }
+});
+
 module.exports = router;
