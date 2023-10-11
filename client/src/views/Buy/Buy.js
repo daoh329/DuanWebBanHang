@@ -10,17 +10,12 @@ import {
   MDBTableBody,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import {
-  CheckOutlined,
-  EditOutlined,
-  ExclamationCircleFilled,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { Input, Checkbox, Modal, Button } from "antd";
 import { message } from "antd";
 import "./Buy.css";
-import ModalContent from "./ModalContent/ModalContent";
 import ButtonAddress from "./ButtonCheckedAddress/ButtonAddress";
+import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -41,19 +36,24 @@ export default function Buy(props) {
   const [note, setNote] = useState("");
   const [paymentMenthod, setPaymentMenthod] = useState([]);
   const [quantity, setQuantity] = useState(0);
-  const [isModalOpenShow, setIsModalOpenShow] = useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
   const [fillActive, setFillActive] = useState("tab1");
   const [buysData, setBuysData] = useState(null);
-  const [receiverInformation, setReceiverInformation] = useState(null);
-  const [addressChecked, setAddressChecked] = useState(0);
+  // state checked address
+  const [addressChecked, setAddressChecked] = useState();
 
 
   const navigate = useNavigate();
 
-  // const setStateAddress = (value) => {
-  //   setAddressChecked((prev) => [...prev, value])
-  // }
+  function DedaultAddress(value) {
+    let index = 0;
+    for (let i = 0; i < value.length; i++) {
+      if (value[i].setdefault === 1) {
+        index = i;
+      }
+    }
+    setAddressChecked(index);
+  }
 
   // Hàm lấy thông tin địa chỉ nhận hàng của người dùng
   const getDeliveryAddress = async () => {
@@ -62,6 +62,7 @@ export default function Buy(props) {
         `${process.env.REACT_APP_API_URL}/auth/delivery-address/${idUser}`
       );
       setDeliveryAddress(result.data);
+      DedaultAddress(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +82,6 @@ export default function Buy(props) {
 
   const handleCancel = () => {
     setIsModalOpenAdd(false);
-    setIsModalOpenShow(false);
   };
 
   const handleFillClick = (value) => {
@@ -219,8 +219,11 @@ export default function Buy(props) {
   const handleChecked = (value) => {
     setAddressChecked(value);
   };
-  // console.log(addressChecked);
-  // console.log(paymentMenthod);
+
+  // Đếm chiều dài mảng address
+  function countAddress() {
+    return deliveryAddress.length;
+  }
 
   return (
     <>
@@ -271,28 +274,31 @@ export default function Buy(props) {
                         {idUser &&
                           deliveryAddress &&
                           deliveryAddress.map((value, index) => (
-                            <ButtonAddress key={index} index={index} onClick={handleChecked} value={value} checked={addressChecked === index ? true : false} />
+                            <ButtonAddress
+                              getValues={getDeliveryAddress}
+                              key={index}
+                              index={index}
+                              onClick={handleChecked}
+                              value={value}
+                              checked={addressChecked === index ? true : false}
+                            />
                           ))}
 
                         {/* add address */}
-                        {deliveryAddress.length < 4 && (
-                          <div
-                            onClick={idUser ? showModalAdd : showConfirm}
-                            className="address-add"
-                          >
-                            <PlusOutlined />
-                            <div>Thêm địa chỉ</div>
-                          </div>
-                        )}
-                        <Modal
-                          title="Thông tin khách hàng"
-                          open={isModalOpenAdd}
-                          onCancel={handleCancel}
-                          footer={false}
+                        <div
+                          onClick={idUser ? showModalAdd : showConfirm}
+                          className="address-add"
                         >
-                          {/* body */}
-                          <ModalContent action={"add"} />
-                        </Modal>
+                          <PlusOutlined />
+                          <div>Thêm địa chỉ</div>
+                        </div>
+                        <ReceiverInformationModal
+                          countAddress={countAddress()}
+                          getValues={getDeliveryAddress}
+                          action={"add"}
+                          open={isModalOpenAdd}
+                          cancel={handleCancel}
+                        />
                         {/*  */}
                       </div>
                       <div className="radio">
