@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+.address-style{
+    width: 100%;
+    text-align: left;
+    padding: 20px;
+    font-size: 13px;
+}
+
+/* add */
+.add-group{
+    width: 100%;
+    height: max-content;
+}
+
+.add-control{
+    width: 100%;
+    border: 1px dashed gray;
+    cursor: pointer;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-control:hover{
+    border: 1px dashed gray;
+}
+
+.add-control .text{
+    color: blue;
+}
+
+/* update and delete */
+.update-delete-group{
+    width: 100%;
+    padding: 0;
+}

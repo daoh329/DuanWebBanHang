@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+    localStorage.removeItem('idUser');
   }, []);
   let navigate = useNavigate();
 

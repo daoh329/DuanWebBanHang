@@ -76,9 +76,9 @@ router.post("/login-otp", async (req, res, next) => {
         email: "",
         picture: "",
       };
-      setTimeout(()=>{
-        return res.status(200).json({message: "success"});
-      },1000);
+      setTimeout(() => {
+        return res.status(200).json({ message: "success" });
+      }, 1000);
     }
 
     req.session.user = {
@@ -87,9 +87,9 @@ router.post("/login-otp", async (req, res, next) => {
       email: userData[0].email ? userData[0].email : "",
       picture: "",
     };
-    setTimeout(()=>{
-      return res.status(200).json({message: "success"});
-    },1000);
+    setTimeout(() => {
+      return res.status(200).json({ message: "success" });
+    }, 1000);
   } catch (error) {
     console.log(error);
     res.status(500).json({ status: "failed" });
@@ -97,13 +97,50 @@ router.post("/login-otp", async (req, res, next) => {
 });
 
 // API /auth/add-delivery-address
-router.post('/add-delivery-address', async (req, res) => {
+router.post("/add-delivery-address", async (req, res) => {
   try {
-    const {idUser, name,  phone, email, city, district, commune, street} = req.body;
-    const arrayValues = [idUser, name,  phone, email, city, district, commune, street];
-    const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street)
-    VALUES (?,?,?,?,?,?,?,?);
-    `;
+    const {
+      idUser,
+      name,
+      phone,
+      email,
+      city,
+      district,
+      commune,
+      street,
+      setdefault,
+    } = req.body;
+
+    const arrayValues = [
+      idUser,
+      name,
+      phone,
+      email,
+      city,
+      district,
+      commune,
+      street,
+      setdefault,
+    ];
+
+    // Nếu đặt địa chỉ mới làm mặc định
+    if (setdefault === 1) {
+      // tìm địa chỉ mặc định hiện tại
+      const sl_default_address = `select id from delivery_address where setdefault = 1`;
+      const result = await query(sl_default_address);
+      // Xóa mặc định của địa chỉ mặc định hiện tại (nếu có)
+      if (result[0]) {
+        const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
+        const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
+        VALUES (?,?,?,?,?,?,?,?,?);`;
+        await query(dl_default, [result[0].id]);
+        await query(insert_query, arrayValues);
+        return res.status(200).send("Thành công");
+      }
+    }
+
+    const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
+    VALUES (?,?,?,?,?,?,?,?,?);`;
     await query(insert_query, arrayValues);
     res.status(200).send("Thành công");
   } catch (error) {
@@ -112,12 +149,36 @@ router.post('/add-delivery-address', async (req, res) => {
   }
 });
 
+// API /auth/delete-delivery-address/:id
+router.delete("/delete-delivery-address/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const dl_address = `DELETE FROM delivery_address WHERE id = ?`;
+    await query(dl_address, [id]);
+    res.status(200).send("delete success");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Delete failed");
+  }
+});
+
 // API /auth/update-delivery-address/:id
-router.put('/update-delivery-address/:id', async (req, res) => {
+router.put("/update-delivery-address/:id", async (req, res) => {
   try {
     // get values and id
     const values = req.body;
-    const id = req.params.id
+    const id = req.params.id;
+    if (values.setdefault === 1) {
+      const sl_default_address = `select id from delivery_address where setdefault = 1`;
+      const result = await query(sl_default_address);
+      if (result[0]) {
+        const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
+        const insert_query = `UPDATE delivery_address SET ? WHERE id = ?`;
+        await query(dl_default, [result[0].id]);
+        await query(insert_query, [values, id]);
+        return res.status(200).send("Thành công");
+      }
+    }
     // create query SQL update
     const insert_query = `UPDATE delivery_address SET ? WHERE id = ?;
     `;
@@ -134,12 +195,12 @@ router.put('/update-delivery-address/:id', async (req, res) => {
 });
 
 // API /auth/delivery-address/:id
-router.get('/delivery-address/:id', async (req, res) => {
+router.get("/delivery-address/:id", async (req, res) => {
   try {
     const idUser = req.params.id;
-    const sl_query = `SELECT * FROM delivery_address WHERE idUser = ?`
+    const sl_query = `SELECT * FROM delivery_address WHERE idUser = ?`;
     const result = await query(sl_query, [idUser]);
-    
+
     res.status(200).send(result);
   } catch (error) {
     console.log(error);
