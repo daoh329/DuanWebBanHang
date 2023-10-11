@@ -52,7 +52,8 @@ function OrderList() {
 
     const columns = [
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
-        { title: 'SDT', dataIndex: 'user_phone', key: 'phone' },
+        { title: 'SDT người mua', dataIndex: 'user_phone', key: 'phone' },
+        { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { 

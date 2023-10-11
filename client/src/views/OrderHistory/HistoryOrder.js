@@ -20,30 +20,52 @@ function HistoryOrder(props) {
     }, []);
 
     const columns = [
-        { title: 'Người mua', dataIndex: 'nameOrder', key: 'Username' },
-        { title: 'SDT', dataIndex: 'phone', key: 'phone' },
+        { title: 'Người mua', dataIndex: 'user_name', key: 'Username' },
+        { title: 'SDT người mua', dataIndex: 'user_phone', key: 'phone' },
+        { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'Giá', dataIndex: 'price', key: 'price' },
-        {
-            title: 'Thời gian tạo',
-            dataIndex: 'created_at',
-            key: 'created_at',
+        { 
+            title: 'Tổng giá',
+            key: 'totalPrice',
+            render: (text, record) => (
+                <p>{record.price * record.quantity}</p>
+            ),
         },
         {
-          title: 'Trạng thái', 
-          dataIndex: 'status', 
-          key: 'status', 
-          render: status => (
-              <span style={{
-                  fontWeight: 'bold', 
-                  color: status === 1 ? 'green' : 'orange'
-              }}>
-                  {status === 1 ? 'Đã xác nhận' : 'Chưa xác nhận'}
-              </span>
-          )
-        },      
+            title: 'Thời gian tạo',
+            dataIndex: 'order_created_at',
+            key: 'created_at',
+        },
+
+        {
+            title: 'PTTT', 
+            dataIndex: 'paymentMenthod', 
+            key: 'paymentMenthod', 
+            render: status => (
+                <span style={{
+                    fontWeight: 'bold', 
+                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                }}>
+                    {status === 1 ? 'COD' : (status === 2 ? 'MOMO' : 'VNPAY')}
+                </span>
+            )
+        },
+        
+        {
+            title: 'Trạng thái', 
+            dataIndex: 'order_status', 
+            key: 'status', 
+            render: status => (
+                <span style={{
+                    fontWeight: 'bold', 
+                    color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
+                }}>
+                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
+                </span>
+            )
+        },
     ]
 
     return (

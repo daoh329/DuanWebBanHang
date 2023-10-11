@@ -1,5 +1,4 @@
 const mysql = require("../../config/db/mySQL");
-const createTables = require("../../config/CrTables");
 
 class List {
     // '/List/add/:table'

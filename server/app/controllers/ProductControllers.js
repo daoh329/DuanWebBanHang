@@ -1,6 +1,5 @@
 const mysql = require("../../config/db/mySQL");
 const { query } = require("../../util/callbackToPromise");
-const createTables = require("../../config/CrTables");
 const path = require("path");
 const fs = require("fs");
 const { da } = require("date-fns/locale");
@@ -66,7 +65,7 @@ class Product {
     const configurationString = JSON.stringify(configuration);
     let nameP;
     if (data.name == null || data.name == "") {
-      nameP = data.brand + " " + data.series;
+      nameP = data.brand + " " + data.series + " " + data.part_number;
     } else {
       nameP = data.name;
     }
@@ -351,6 +350,7 @@ class Product {
         const arrayImagePath = await query(sl_galery, [id]);
 
         // check nếu có ảnh thì mới xóa trong server và sql
+        // Thêm sau khi xóa
         if (arrayImagePath.length != 0) {
           await arrayImagePath.forEach(async (imagePath) => {
             // Đường dẫn tới thư mục public chứa hình ảnh
@@ -361,12 +361,18 @@ class Product {
               imagePath.imagePath
             );
             // Thực hiện xóa image trong server
-            fs.unlink(publicImagePath, (err) => {
-              if (err) {
-                console.error("Lỗi khi xóa hình ảnh:", err);
-                return res
-                  .status(500)
-                  .json({ message: "Delete image failed." });
+            // Kiểm tra file có trong thư mục không
+            fs.access(publicImagePath, fs.constants.F_OK, (err) => {
+              if (!err) {
+                // Nế có thì thực hiện xóa
+                fs.unlink(publicImagePath, (err) => {
+                  if (err) {
+                    console.error("Lỗi khi xóa hình ảnh:", err);
+                    return res
+                      .status(500)
+                      .json({ message: "Delete image failed." });
+                  }
+                });
               }
             });
           });
@@ -377,7 +383,14 @@ class Product {
           arrPathImage.forEach(async (image) => {
             await query(queryUpdateGalery, [image, id]);
           });
+          return res.status(200).json({ message: "success" });;
         }
+        // Nếu sản phẩm chưa có ảnh nào
+        // Thêm ảnh mới của sản phẩm
+        const queryUpdateGalery = `INSERT INTO galery (thumbnail, product_id) VALUES (?,?)`;
+        arrPathImage.forEach(async (image) => {
+          await query(queryUpdateGalery, [image, id]);
+        });
       }
       res.status(200).json({ message: "success" });
     } catch (error) {
@@ -386,7 +399,58 @@ class Product {
     }
   }
 
-  //Truy Vấn Laptop hiển thị Home
+  async Newphone(req, res) {
+    const query = `
+      SELECT product.*, productDetails.brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+        SELECT id, thumbnail, product_id
+        FROM (
+          SELECT id, thumbnail, product_id,
+                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+          FROM galery
+        ) tmp
+        WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      WHERE product.CategoryID = 2 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
+    `;
+  
+    mysql.query(query, (error, results) => {
+      if (error) {
+        return res.json({ error });
+      }
+  
+      res.json(results);
+    });
+  }
+
+  async Newlaptop(req, res) {
+    const query = `
+      SELECT product.*, productDetails.brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+        SELECT id, thumbnail, product_id
+        FROM (
+          SELECT id, thumbnail, product_id,
+                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+          FROM galery
+        ) tmp
+        WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      WHERE product.CategoryID = 1 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
+    `;
+  
+    mysql.query(query, (error, results) => {
+      if (error) {
+        return res.json({ error });
+      }
+  
+      res.json(results);
+    });
+  }
+
   async QueryProductsLaptop(req, res) {
     const query = `
       SELECT product.*, productDetails.brand, galery.thumbnail
@@ -401,7 +465,7 @@ class Product {
         ) tmp
         WHERE rn = 1
       ) galery ON product.id = galery.product_id
-      WHERE product.CategoryID = 1;
+      WHERE product.CategoryID = 1 AND product.status = 1;
     `;
 
     mysql.query(query, (error, results) => {
@@ -428,7 +492,7 @@ class Product {
         ) tmp
         WHERE rn = 1
       ) galery ON product.id = galery.product_id
-      WHERE product.CategoryID = 2;
+      WHERE product.CategoryID = 2 AND product.status = 1;
     `;
 
     mysql.query(query, (error, results) => {
@@ -452,40 +516,36 @@ class Product {
     JOIN brand b ON pd.brand = b.name
     WHERE p.id = ?;
     `;
-
-    // Thực hiện truy vấn
-    mysql.query(productQuery, [id], (error, productResults) => {
-      if (error) {
-        return res.json({ error });
-      }
-
-      // Truy vấn để lấy thông tin màu sắc
-      const colorQuery = `
+    // Truy vấn để lấy thông tin màu sắc
+    const colorQuery = `
       SELECT id, Colorname
       FROM ProdetailColor
       WHERE product_id = ?
       ORDER BY id ASC;
     `;
 
-      // Truy vấn để lấy hình ảnh
-      const imageQuery = `
+    // Truy vấn để lấy hình ảnh
+    const imageQuery = `
       SELECT id, thumbnail
       FROM galery
       WHERE product_id = ?
       ORDER BY id ASC;
     `;
+    // Thực hiện truy vấn
+    mysql.query(productQuery, [id], (error, productResults) => {
+      if (error) {
+        return res.json({ error });
+      }
 
       // Thực hiện truy vấn màu sắc và hình ảnh
       mysql.query(colorQuery, [id], (error, colorResults) => {
         if (error) {
           return res.json({ error });
         }
-
         mysql.query(imageQuery, [id], (error, imageResults) => {
           if (error) {
             return res.json({ error });
           }
-
           // Kết hợp kết quả và gửi lại cho client
           const results = {
             ...productResults[0],
@@ -498,7 +558,6 @@ class Product {
               thumbnail: result.thumbnail,
             })),
           };
-
           res.json(results);
         });
       });
@@ -523,7 +582,7 @@ class Product {
     mysql.query(query, (e, results, fields) => {
       if (e) {
         console.log(e);
-        res.status(500).json("Lỗi lấy dữ liệu brands!");
+        res.status(500).json("Lỗi lấy dữ liệu color!");
       }
       res.status(200).send(results);
     });

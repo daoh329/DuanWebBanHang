@@ -364,40 +364,6 @@ b {
     padding-bottom: 0.5em;
 } 
 
-button { 
-    border-radius: 0;
-} 
-
-button { 
-    margin: 0; 
-    font-family: inherit; 
-    font-size: inherit; 
-    line-height: inherit;
-} 
-
-button { 
-    overflow: visible;
-} 
-
-button { 
-    text-transform: none;
-} 
-
-button { 
-    -webkit-appearance: button;
-} 
-
-button { 
-    margin: 0px; 
-    color: inherit; 
-    font-size: inherit; 
-    font-family: inherit; 
-    line-height: inherit;
-} 
-
-button:not(:disabled) { 
-    cursor: pointer;
-} 
 
 .css-khknlw .store-details .bottom-elements .map-toggle  { 
     border: 1px solid #1435c3ff; 
@@ -409,13 +375,7 @@ button:not(:disabled) {
     padding: 0 15px; 
     border-radius: 4px; 
     outline-color: #1435c3ff;
-} 
-
-span { 
-    margin: 0; 
-    padding: 0; 
-    border: 0;
-} 
+}  
 
 
 /* These were inline style tags. Uses id+class to override almost everything */

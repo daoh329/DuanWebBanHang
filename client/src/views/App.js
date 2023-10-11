@@ -32,6 +32,7 @@ import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
 import Buy from "./Buy/Buy";
+import Noidung from "./Menu/Noidung";
 import CreateOrder from "./VnPay/CreateOrder";
 const App = () => {
   const [user, setUser] = useState(null);
@@ -40,10 +41,10 @@ const App = () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
+      localStorage.setItem("idUser", data.user.id);
       setUser(data.user);
-     
     } catch (e) {
-      console.log(e);
+      localStorage.removeItem("idUser");
     }
   };
 
@@ -68,6 +69,7 @@ const App = () => {
               <Route path="/search" element={<Search />} />
               <Route path="/showroom" element={<ShowRoom />} />
               <Route path="/tin-tuc" element={<Tintuc />} />
+              <Route path="/noi-dung" element={<Noidung />} />
               <Route path="/support" element={<Support />} />
               <Route path="/checkSP" element={<CheckSP />} />
               <Route path="/sale" element={<Sale />} />

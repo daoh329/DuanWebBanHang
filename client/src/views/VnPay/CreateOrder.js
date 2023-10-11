@@ -3,19 +3,31 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const CreateOrder = () => {
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(null);
   const [bankCode, setBankCode] = useState('');
   const [language, setLanguage] = useState('vn');
 
   const location = useLocation();
-
+  // Lấy dữ liệu từ sessionStorage khi component được tải
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const amountParam = params.get('amount');
-    if (amountParam) {
-      setAmount(amountParam);
+    const buysDataFromSession = sessionStorage.getItem("buys");
+    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    if (buysDataFromSession) {
+      const parsedBuysData = JSON.parse(buysDataFromSession);
+      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      setAmount(parsedBuysData.total); // Cập nhật giá trị total vào state amount
+      console.log("dữ liệu total:", parsedBuysData.total);
     }
-  }, [location]);
+  }, []);
+  
+  
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const amountParam = params.get('amount');
+  //   if (amountParam) {
+  //     setAmount(amountParam);
+  //   }
+  // }, [location]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,18 +38,18 @@ const CreateOrder = () => {
       language,
     };
   
-    console.log(data);
-  
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-
-    if (response.data && response.data.url) {
-      window.location.href = response.data.url;
+    
+    const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
+  
+    if (responseData && responseData.url) {
+      window.location.href = responseData.url;
     }
   };
 
@@ -45,22 +57,23 @@ const CreateOrder = () => {
     <div className="table-responsive">
       <form id="createOrder" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Số tiền</label>
+          <label style={{fontSize: 17, fontWeight: 'bold'}}>Số tiền</label>
           <input
+            style={{width: 500, display: 'block', marginLeft: 'auto', marginRight: 'auto'}}
             className="form-control"
             id="amount"
             name="amount"
             placeholder="Số tiền"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            readOnly
           />
         </div>
         <div className="form-group">
-          <label>Chọn Phương thức thanh toán:</label>
+          <label style={{fontSize: 17, fontWeight: 'bold'}}>Chọn Phương thức thanh toán:</label>
           <div>
             <label>
               <input
-                type="radio"
+                type="checkbox"
                 name="bankCode"
                 value=""
                 checked={bankCode === ''}
@@ -68,9 +81,9 @@ const CreateOrder = () => {
               />
               Cổng thanh toán VNPAYQR
             </label>
-            <label>
+            <label style={{marginLeft: 50}}>
               <input
-                type="radio"
+                type="checkbox"
                 name="bankCode"
                 value="VNPAYQR"
                 checked={bankCode === 'VNPAYQR'}
@@ -78,9 +91,9 @@ const CreateOrder = () => {
               />
               Thanh toán qua ứng dụng hỗ trợ VNPAYQR
             </label>
-            <label>
+            <label style={{marginLeft: 50}}>
               <input
-                type="radio"
+                type="checkbox"
                 name="bankCode"
                 value="VNBANK"
                 checked={bankCode === 'VNBANK'}
@@ -88,9 +101,9 @@ const CreateOrder = () => {
               />
               Thanh toán qua ATM-Tài khoản ngân hàng nội địa
             </label>
-            <label>
+            <label style={{marginLeft: 50}}>
               <input
-                type="radio"
+                type="checkbox"
                 name="bankCode"
                 value="INTCARD"
                 checked={bankCode === 'INTCARD'}
@@ -101,11 +114,11 @@ const CreateOrder = () => {
           </div>
         </div>
         <div className="form-group">
-          <label>Ngôn ngữ</label>
+          <label style={{fontSize: 17, fontWeight: 'bold'}}>Ngôn ngữ</label>
           <div>
             <label>
               <input
-                type="radio"
+                type="checkbox"
                 name="language"
                 value="vn"
                 checked={language === 'vn'}
@@ -113,9 +126,9 @@ const CreateOrder = () => {
               />
               Tiếng việt
             </label>
-            <label>
+            <label style={{marginLeft: 50}}>
               <input
-                type="radio"
+                type="checkbox"
                 name="language"
                 value="en"
                 checked={language === 'en'}

@@ -9,5 +9,6 @@
         "Quan",
         "Tintuc",
         "Xoài"
-    ]
+    ],
+    "compile-hero.disable-compile-files-on-did-save-code": true
 }

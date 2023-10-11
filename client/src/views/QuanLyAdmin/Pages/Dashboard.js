@@ -62,7 +62,7 @@ const Dashboard = () => {
           <Line type="monotone" dataKey="Revenue" stroke="#8884d8" activeDot={{ r: 10 }} dot={{ stroke: '#8884d8', strokeWidth: 2 }} />
         </LineChart>
       </div>
-    <h4>Biểu đồ doanh thu đơn đặt hàng</h4>
+    <h4>Biểu đồ đơn đặt hàng</h4>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <LineChart
           width={800}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   MDBTabs,
@@ -7,27 +7,20 @@ import {
   MDBTabsContent,
   MDBTabsPane,
   MDBTable,
-  MDBTableHead,
   MDBTableBody,
-  TreeSelect,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import "./Buy.css";
-import { ExclamationCircleFilled } from "@ant-design/icons";
 import {
-  Radio,
-  Input,
-  Checkbox,
-  Modal,
-  Button,
-  Form,
-  Select,
-  Space,
-} from "antd";
-import Icon from "@ant-design/icons/lib/components/Icon";
+  CheckOutlined,
+  EditOutlined,
+  ExclamationCircleFilled,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Input, Checkbox, Modal, Button } from "antd";
 import { message } from "antd";
-const { TextArea } = Input;
-const { Option } = Select;
+import "./Buy.css";
+import ModalContent from "./ModalContent/ModalContent";
+import ButtonAddress from "./ButtonCheckedAddress/ButtonAddress";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -42,75 +35,53 @@ function formatCurrency(value) {
 
 export default function Buy(props) {
   const { user } = props;
-
-  const navigate = useNavigate();
-
-  const handleContinueClick = () => {
-    navigate("/profile");
-  };
-
-  useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
-  }, []);
-  // modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  // select mới
-  const [city, setCity] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [selectedWard, setSelectedWard] = useState(null);
+  const idUser = localStorage.getItem("idUser");
+  const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [note, setNote] = useState("");
   const [paymentMenthod, setPaymentMenthod] = useState([]);
   const [quantity, setQuantity] = useState(0);
+  const [isModalOpenShow, setIsModalOpenShow] = useState(false);
+  const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
+  const [fillActive, setFillActive] = useState("tab1");
+  const [buysData, setBuysData] = useState(null);
+  const [receiverInformation, setReceiverInformation] = useState(null);
+  const [addressChecked, setAddressChecked] = useState(0);
+
+  const navigate = useNavigate();
+
+  // const setStateAddress = (value) => {
+  //   setAddressChecked((prev) => [...prev, value])
+  // }
+
+  // Hàm lấy thông tin địa chỉ nhận hàng của người dùng
+  const getDeliveryAddress = async () => {
+    try {
+      const result = await axios.get(
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${idUser}`
+      );
+      setDeliveryAddress(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-        );
-        setCity(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+    if (idUser) {
+      getDeliveryAddress();
+    }
   }, []);
-  // select city
-  const handleCityChange = (value) => {
-    const selectedCity = city.find((city) => city.Id === value);
-    setSelectedCity(selectedCity);
-    setSelectedDistrict(null);
-  };
-  //select district
-  const handleDistrictChange = (value) => {
-    const selectedDistrict = selectedCity.Districts.find(
-      (district) => district.Id === value
-    );
-    setSelectedDistrict(selectedDistrict);
-  };
-  //select ward
-  const handleWardChange = (value) => {
-    const selectedWard = selectedDistrict.Wards.find(
-      (ward) => ward.Id === value
-    );
-    setSelectedWard(selectedWard);
+
+  // modal
+  const showModalAdd = (value) => {
+    setIsModalOpenAdd(true);
   };
 
-  const [fillActive, setFillActive] = useState("tab1");
+  const handleCancel = () => {
+    setIsModalOpenAdd(false);
+    setIsModalOpenShow(false);
+  };
 
   const handleFillClick = (value) => {
     if (value === fillActive) {
@@ -126,25 +97,21 @@ export default function Buy(props) {
       icon: <ExclamationCircleFilled />,
       content: "Hãy đăng nhập để sửa dụng tính năng này!",
       onOk() {
-        console.log("Đăng nhập");
         navigate("/login");
       },
-      onCancel() {
-        console.log("Cancel");
-      },
+      onCancel() {},
     });
   };
 
-  const [buysData, setBuysData] = useState(null);
   // Lấy dữ liệu từ sessionStorage khi component được tải
   useEffect(() => {
     const buysDataFromSession = sessionStorage.getItem("buys");
-    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    // console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
     if (buysDataFromSession) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
-      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      // console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
       setBuysData(parsedBuysData);
-      console.log("dữ liệu buys:", parsedBuysData);
+      // console.log("dữ liệu buys:", parsedBuysData);
     }
   }, []);
 
@@ -193,7 +160,7 @@ export default function Buy(props) {
       return;
     }
     // In ra giá trị của biến data
-    console.log("Data:", data);
+    // console.log("Data:", data);
     // Gửi thông tin đăng ký lên server
     const response = await fetch(`${process.env.REACT_APP_API_URL}/order/pay`, {
       method: "POST",
@@ -202,36 +169,57 @@ export default function Buy(props) {
       },
       body: JSON.stringify(data),
     });
+
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
       message.success("Thanh toán đơn hàng thành công");
     } else {
-      // Thông báo lỗi
-      message.error("Thanh toán đơn hàng thất bại");
+      // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
+      const responseData = await response.json();
+      if (responseData === "Số lượng sản phẩm không đủ") {
+        message.error("Số lượng sản phẩm không đủ");
+      } else {
+        // Thông báo lỗi khác
+        message.error("Thanh toán đơn hàng thất bại");
+      }
     }
-  };
-  const handleAddClick = () => {
-    navigate("/profile");
   };
 
   const handleBuyVNpay = () => {
-    const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    // console.log('amount: '+totalAmount)
     setPaymentMenthod(0); // Cập nhật phương thức thanh toán
-    // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
-    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
+  
+    // fetch(`${process.env.REACT_APP_API_URL}/pay/set_amount`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ amount: totalAmount }),
+    // })
+    // .then(() => {
+    //   window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url`;
+    // });
+    navigate(`/createorder`); // Thêm totalAmount vào URL như một tham số truy vấn
   };
-
+  // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
     setPaymentMenthod(1); // Cập nhật phương thức thanh toán
-  }
-  
+  };
+
   const handleBuyMoMoPay = () => {
     // Xử lý cho phương thức thanh toán ZaloPay
     setPaymentMenthod(2); // Cập nhật phương thức thanh toán
-  }
-  
+  };
+
+  const handleChecked = (value) => {
+    setAddressChecked(value);
+  };
+
+  console.log(addressChecked);
+
   return (
     <>
       {/* main */}
@@ -274,184 +262,35 @@ export default function Buy(props) {
 
                   <MDBTabsContent>
                     <MDBTabsPane show={fillActive === "tab1"}>
-                      <h7>Thông tin nhận hàng</h7>
-                      <div
-                        className="teko-row teko-row-start css-1v9diph snipcss-f7MJM style-Aergz"
-                        id="style-Aergz"
-                      >
-                        <div
-                          className="teko-col teko-col-6 css-gr7r8o style-bjeqp"
-                          id="style-bjeqp"
-                        >
-                          {user ? (
-                            <Button
-                              data-content-region-name="shippingAddress"
-                              data-track-content="true"
-                              data-content-name="homeDelivery"
-                              data-content-index={0}
-                              data-content-target={79}
-                              className="css-1014eaz style-tofZn"
-                              id="style-tofZn"
-                              onClick={handleContinueClick}
-                            >
-                              <div>
-                                <span id="style-owhaV" className="style-owhaV">
-                                  {/* user name */}
-                                  {user && <div>{user.name}</div>}
-                                </span>
-                                {/* icon */}
-                                <div
-                                  data-content-region-name="shippingAddress"
-                                  data-track-content="true"
-                                  data-content-name="editAddress"
-                                  className="css-7kp13n"
-                                >
-                                  <svg
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    size={20}
-                                    className="css-1e44j4b"
-                                    color="#848788"
-                                    height={20}
-                                    width={20}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      d="M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z"
-                                      fill="#82869E"
-                                    ></path>
-                                  </svg>
-                                </div>
-                              </div>
-                              {/* sdt */}
-                              <div> {user && <div>{user.phone}</div>} </div>
-                              {/* addres */}
-                              <div id="style-GqGe8" className="style-GqGe8">
-                                {user && <div>{user.address}</div>}
-                              </div>
-                            </Button>
-                          ) : (
-                            <Button
-                              data-content-region-name="shippingAddress"
-                              data-track-content="true"
-                              data-content-name="homeDelivery"
-                              data-content-index={0}
-                              data-content-target={79}
-                              className="css-1014eaz style-tofZn"
-                              id="style-tofZn"
-                              onClick={showConfirm}
-                            >
-                              <div>
-                                <span id="style-owhaV" className="style-owhaV">
-                                  {/* user name */}
-                                  {user && <div>{user.name}</div>}
-                                </span>
-                                {/* icon */}
-                                <div
-                                  data-content-region-name="shippingAddress"
-                                  data-track-content="true"
-                                  data-content-name="editAddress"
-                                  className="css-7kp13n"
-                                >
-                                  <svg
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    size={20}
-                                    className="css-1e44j4b"
-                                    color="#848788"
-                                    height={20}
-                                    width={20}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      d="M14.4798 5.35373C14.968 4.86557 15.7594 4.86557 16.2476 5.35373L16.6919 5.79803C17.1801 6.28618 17.1801 7.07764 16.6919 7.56579L16.1819 8.07582L13.9698 5.86375L14.4798 5.35373ZM12.9092 6.92441L6.23644 13.5971L5.68342 16.3622L8.44851 15.8092L15.1212 9.13648L12.9092 6.92441ZM16.707 9.67199L9.3486 17.0304C9.24389 17.1351 9.11055 17.2065 8.96535 17.2355L4.87444 18.0537C4.62855 18.1029 4.37434 18.0259 4.19703 17.8486C4.01971 17.6713 3.94274 17.4171 3.99192 17.1712L4.8101 13.0803C4.83914 12.9351 4.91051 12.8017 5.01521 12.697L13.4192 4.29307C14.4931 3.21912 16.2343 3.21912 17.3083 4.29307L17.7526 4.73737C18.8265 5.81131 18.8265 7.55251 17.7526 8.62645L16.7174 9.66162C16.7157 9.66336 16.714 9.6651 16.7122 9.66683C16.7105 9.66856 16.7088 9.67028 16.707 9.67199ZM3.15918 20.5908C3.15918 20.1766 3.49497 19.8408 3.90918 19.8408H20.2728C20.687 19.8408 21.0228 20.1766 21.0228 20.5908C21.0228 21.005 20.687 21.3408 20.2728 21.3408H3.90918C3.49497 21.3408 3.15918 21.005 3.15918 20.5908Z"
-                                      fill="#82869E"
-                                    ></path>
-                                  </svg>
-                                </div>
-                              </div>
-                              {/* sdt */}
-                              <div> {user && <div>{user.phone}</div>} </div>
-                              {/* addres */}
-                              <div id="style-GqGe8" className="style-GqGe8">
-                                {user && <div>{user.address}</div>}
-                              </div>
-                            </Button>
-                          )}
-                        </div>
+                      <h6>Thông tin nhận hàng</h6>
+                      <div className="address-group">
+                        {/* show address */}
+                        {idUser &&
+                          deliveryAddress &&
+                          deliveryAddress.map((value, index) => (
+                            <ButtonAddress key={index} index={index} onClick={handleChecked} value={value} checked={addressChecked === index ? true : false} />
+                          ))}
 
-                        <div
-                          data-content-region-name="addressShipping"
-                          data-track-content="true"
-                          data-content-name="addNewAddress"
-                          className="teko-col teko-col-6 css-gr7r8o style-Jlvl6"
-                          id="style-Jlvl6"
+                        {/* add address */}
+                        {deliveryAddress.length < 4 && (
+                          <div
+                            onClick={idUser ? showModalAdd : showConfirm}
+                            className="address-add"
+                          >
+                            <PlusOutlined />
+                            <div>Thêm địa chỉ</div>
+                          </div>
+                        )}
+                        <Modal
+                          title="Thông tin khách hàng"
+                          open={isModalOpenAdd}
+                          onCancel={handleCancel}
+                          footer={false}
                         >
-                          {user ? (
-                            <button
-                              height="100%"
-                              className="css-162xo41 style-kRCXj"
-                              type="button"
-                              id="style-kRCXj"
-                              onClick={handleAddClick}
-                            >
-                              <svg
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                size={25}
-                                className="css-1e44j4b"
-                                color="#848788"
-                                height={25}
-                                width={25}
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                  fill="#82869E"
-                                ></path>
-                              </svg>
-                              Thêm địa chỉ
-                              <span id="style-EqcsP" className="style-EqcsP">
-                                <div className="css-157jl91"></div>
-                              </span>
-                            </button>
-                          ) : (
-                            <button
-                              height="100%"
-                              className="css-162xo41 style-kRCXj"
-                              type="button"
-                              id="style-kRCXj"
-                            >
-                              <svg
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                size={25}
-                                className="css-1e44j4b"
-                                color="#848788"
-                                height={25}
-                                width={25}
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                  fill="#82869E"
-                                ></path>
-                              </svg>
-                              Thêm địa chỉ
-                              <span id="style-EqcsP" className="style-EqcsP">
-                                <div className="css-157jl91"></div>
-                              </span>
-                            </button>
-                          )}
-                        </div>
+                          {/* body */}
+                          <ModalContent action={"add"} />
+                        </Modal>
+                        {/*  */}
                       </div>
                       <div className="radio">
                         <label>
@@ -1415,289 +1254,6 @@ export default function Buy(props) {
           </div>
         </div>
       </div>
-      <Modal
-        title="Thông tin khách hàng"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        {/* body */}
-        <div className="css-1g8ztiq snipcss-lpZLl">
-          <form className="teko-form-vertical css-kxydk6">
-            <div className="teko-row teko-form-item css-hsl6pk">
-              <div className="teko-col teko-form-item-label css-1mmulcy">
-                <label
-                  htmlFor="name"
-                  className="teko-form-item-no-colon teko-form-item-required css-15ognui style-HFi9o"
-                  id="style-HFi9o"
-                >
-                  <div type="body" color="textTitle" className="css-1ohipf9">
-                    Họ tên
-                  </div>
-                </label>
-              </div>
-              <div className="teko-col teko-form-item-control css-10ikb73">
-                <div className="teko-form-item-control-input">
-                  <div className="teko-form-item-control-input-content">
-                    <div className="css-5xvlco">
-                      <Input
-                        type="text"
-                        maxLength={255}
-                        placeholder="Vui lòng nhập tên người nhận"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="teko-row teko-row-space-between css-1o3gs9x">
-              <div className="teko-col css-gr7r8o style-kSbpZ" id="style-kSbpZ">
-                <div className="teko-row teko-form-item css-hsl6pk">
-                  <div className="teko-col teko-form-item-label css-1mmulcy">
-                    <label
-                      htmlFor="telephone"
-                      className="teko-form-item-no-colon teko-form-item-required css-15ognui style-gDaoi"
-                      id="style-gDaoi"
-                    >
-                      <div
-                        type="body"
-                        color="textTitle"
-                        className="css-1ohipf9"
-                      >
-                        Số điện thoại
-                      </div>
-                    </label>
-                  </div>
-                  <div className="teko-col teko-form-item-control css-10ikb73">
-                    <div className="teko-form-item-control-input">
-                      <div className="teko-form-item-control-input-content">
-                        <div className="css-5xvlco">
-                          <Input
-                            type="text"
-                            maxLength={255}
-                            placeholder="Nhập số điện thoại"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="teko-col css-gr7r8o style-ZI6gN" id="style-ZI6gN">
-                <div className="teko-row teko-form-item css-hsl6pk">
-                  <div className="teko-col teko-form-item-label css-1mmulcy">
-                    <label
-                      htmlFor="email"
-                      className="teko-form-item-no-colon teko-form-item-required css-15ognui style-MGwiV"
-                      id="style-MGwiV"
-                    >
-                      <div
-                        type="body"
-                        color="textTitle"
-                        className="css-1ohipf9"
-                      >
-                        Email
-                      </div>
-                    </label>
-                  </div>
-                  <div className="teko-col teko-form-item-control css-10ikb73">
-                    <div className="teko-form-item-control-input">
-                      <div className="teko-form-item-control-input-content">
-                        <div className="css-5xvlco">
-                          <Input
-                            type="text"
-                            maxLength={255}
-                            placeholder="Nhập Email"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="css-f1fyi0">
-              <div width="100%" color="divider" className="css-yae08c"></div>
-            </div>
-            <div type="title" className="css-3zo42j">
-              Địa chỉ nhận hàng
-            </div>
-            <div className="teko-row teko-row-space-between css-1o3gs9x">
-              <div className="teko-col css-gr7r8o style-Tgoyv" id="style-Tgoyv">
-                <div className="teko-row teko-form-item css-hsl6pk">
-                  <div className="teko-col teko-form-item-label css-1mmulcy">
-                    <label
-                      htmlFor="provinceCode"
-                      className="teko-form-item-no-colon teko-form-item-required css-15ognui style-MvFDT"
-                      id="style-MvFDT"
-                    >
-                      <div
-                        type="body"
-                        color="textTitle"
-                        className="css-1ohipf9"
-                      >
-                        Tỉnh/Thành phố
-                      </div>
-                    </label>
-                  </div>
-                  {/*  */}
-                  <Form.Item>
-                    <Select onChange={handleCityChange}>
-                      {city.map((city) => (
-                        <Option key={city.Id} value={city.Id}>
-                          {city.Name}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </div>
-              </div>
-              <div className="teko-col css-gr7r8o style-9gr1p" id="style-9gr1p">
-                <div className="teko-row teko-form-item css-hsl6pk">
-                  <div className="teko-col teko-form-item-label css-1mmulcy">
-                    <label
-                      htmlFor="districtCode"
-                      className="teko-form-item-no-colon teko-form-item-required css-15ognui style-EyAQH"
-                      id="style-EyAQH"
-                    >
-                      <div
-                        type="body"
-                        color="textTitle"
-                        className="css-1ohipf9"
-                      >
-                        Quận/Huyện
-                      </div>
-                    </label>
-                  </div>
-                  <Form.Item>
-                    <Select onChange={handleDistrictChange}>
-                      {selectedCity &&
-                        selectedCity.Districts.map((district) => (
-                          <Option key={district.Id} value={district.Id}>
-                            {district.Name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </Form.Item>
-                </div>
-              </div>
-            </div>
-            <div className="teko-row teko-row-space-between css-1c33opk">
-              <div className="teko-col css-gr7r8o style-AUdNr" id="style-AUdNr">
-                <div className="teko-row teko-form-item css-hsl6pk">
-                  <div className="teko-col teko-form-item-label css-1mmulcy">
-                    <label
-                      htmlFor="wardCode"
-                      className="teko-form-item-no-colon teko-form-item-required css-15ognui style-vhZwt"
-                      id="style-vhZwt"
-                    >
-                      <div
-                        type="body"
-                        color="textTitle"
-                        className="css-1ohipf9"
-                      >
-                        Phường/Xã
-                      </div>
-                    </label>
-                  </div>
-
-                  <Form.Item>
-                    <Select onChange={handleWardChange}>
-                      {selectedDistrict &&
-                        selectedDistrict.Wards.map((ward) => (
-                          <Option key={ward.Id} value={ward.Id}>
-                            {ward.Name}
-                          </Option>
-                        ))}
-                    </Select>
-                  </Form.Item>
-                </div>
-              </div>
-              <div className="teko-col css-gr7r8o style-yGp84" id="style-yGp84">
-                <div className="teko-row teko-form-item css-hsl6pk">
-                  <div className="teko-col teko-form-item-label css-1mmulcy">
-                    <label
-                      htmlFor="address"
-                      className="teko-form-item-no-colon teko-form-item-required css-15ognui style-qMHr5"
-                      id="style-qMHr5"
-                    >
-                      <div
-                        type="body"
-                        color="textTitle"
-                        className="css-1ohipf9"
-                      >
-                        Địa chỉ cụ thể
-                      </div>
-                    </label>
-                  </div>
-                  <div className="teko-col teko-form-item-control css-10ikb73">
-                    <div className="teko-form-item-control-input">
-                      <div className="teko-form-item-control-input-content">
-                        <div className="css-5xvlco">
-                          <Input
-                            type="text"
-                            maxLength={255}
-                            placeholder="Số nhà,ngõ,tên đường..."
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="teko-row teko-row-end css-1o3gs9x">
-              <div className="teko-row teko-form-item css-hsl6pk">
-                <div className="teko-col teko-form-item-control css-10ikb73">
-                  <div className="teko-form-item-control-input">
-                    <div className="teko-form-item-control-input-content">
-                      <label
-                        value="false"
-                        id="isDefault"
-                        className="check-box css-1arb6mh"
-                      >
-                        <div className="css-l24w9c">
-                          <input type="checkbox" className="css-lc01j1" />
-                          <div className="checkbox-inner css-gfk8lf">
-                            <svg
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              size={12}
-                              className="css-u5ggi9"
-                              color="transparent"
-                              height={12}
-                              width={12}
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M5 12.4545L9.375 17L19 7"
-                                stroke="#82869E"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              ></path>
-                            </svg>
-                          </div>
-                        </div>
-                        <div
-                          type="body"
-                          className="checkbox-label css-10md8qb style-8YjM4"
-                          id="style-8YjM4"
-                        >
-                          Đặt làm mặc định
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Form.Item>
-              <Button>Xác nhận</Button>
-            </Form.Item>
-          </form>
-        </div>
-      </Modal>
     </>
   );
 }
