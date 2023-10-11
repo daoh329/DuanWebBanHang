@@ -193,12 +193,23 @@ export default function Buy(props) {
   };
 
   const handleBuyVNpay = () => {
-    const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    // console.log('amount: '+totalAmount)
     setPaymentMenthod(0); // Cập nhật phương thức thanh toán
-    // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
-    window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url?amount=${totalAmount}`; // Thêm totalAmount vào URL như một tham số truy vấn
+  
+    // fetch(`${process.env.REACT_APP_API_URL}/pay/set_amount`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ amount: totalAmount }),
+    // })
+    // .then(() => {
+    //   window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url`;
+    // });
+    navigate(`/createorder`); // Thêm totalAmount vào URL như một tham số truy vấn
   };
-
+  // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
   const handleBuyCOD = () => {
     // Xử lý cho phương thức thanh toán COD
     setPaymentMenthod(1); // Cập nhật phương thức thanh toán

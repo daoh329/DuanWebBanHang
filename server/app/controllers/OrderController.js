@@ -46,9 +46,12 @@ class OrderController {
   async quanlyOrder(req, res, next) {
     const sql = `
       SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.updated_at AS order_updated_at, o.note AS order_note, o.status AS order_status, 
-      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, odp.*, p.*
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+      odp.*, p.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
+      JOIN delivery_address da ON u.id = da.idUser
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
       JOIN product p ON odp.productID = p.id
       ORDER BY o.created_at DESC
@@ -137,12 +140,17 @@ class OrderController {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
-        SELECT o.id, o.phone, o.UserID, o.nameOrder, o.address, o.created_at, o.status, odp.quantity, p.*
-        FROM orders o
-        JOIN orderDetailsProduct odp ON o.id = odp.orderID
-        JOIN product p ON odp.productID = p.id
-        WHERE o.phone = ?
-        ORDER BY o.created_at DESC
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, 
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+      odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN delivery_address da ON u.id = da.idUser
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN product p ON odp.productID = p.id
+      WHERE u.phone = ?
+      ORDER BY o.created_at DESC
     `;
     mysql.query(sql, [phone], (err, result) => {
         if (err) throw err;
@@ -167,9 +175,42 @@ class OrderController {
       JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
+      AND product.CategoryID = 1 AND product.status = 1
       GROUP BY product.id, galery.thumbnail
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
-      LIMIT 10;    
+      LIMIT 10;
+      `;
+
+      mysql.query(query, (error, results) => {
+        if (error) {
+          return res.json({ error });
+        }
+    
+        res.json(results);
+      });
+  }
+
+  async topDienthoai(req, res) {
+    const query = `
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN (
+          SELECT id, thumbnail, product_id
+          FROM (
+              SELECT id, thumbnail, product_id,
+              ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+              FROM galery
+          ) tmp
+          WHERE rn = 1
+      ) galery ON product.id = galery.product_id
+      JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
+      JOIN orders ON orderDetailsProduct.orderID = orders.id
+      WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
+      AND product.CategoryID = 2 AND product.status = 1
+      GROUP BY product.id, galery.thumbnail
+      ORDER BY SUM(orderDetailsProduct.quantity) DESC
+      LIMIT 10;
       `;
 
       mysql.query(query, (error, results) => {
@@ -259,66 +300,6 @@ class OrderController {
   
       res.send(convertedData);
     });
-  }
-
-  async payment(req, res, next){
-    var ipAddr = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
-
-    var config = require('config');
-    var dateFormat = require('dateformat');
-
-    
-    var tmnCode = config.get('COB8SBMM');
-    var secretKey = config.get('QAWFKRXBUVKWTSBCBQOOCGGFFYOCEPUD');
-    var vnpUrl = config.get('https://sandbox.vnpayment.vn/paymentv2/vpcpay.html');
-    var returnUrl = config.get('http://localhost:8080/thanks');
-
-    var date = new Date();
-
-    var createDate = dateFormat(date, 'yyyymmddHHmmss');
-    var orderId = dateFormat(date, 'HHmmss');
-    var amount = req.body.amount;
-    var bankCode = req.body.bankCode;
-    
-    var orderInfo = req.body.orderDescription;
-    var orderType = req.body.orderType;
-    var locale = req.body.language;
-    if(locale === null || locale === ''){
-        locale = 'vn';
-    }
-    var currCode = 'VND';
-    var vnp_Params = {};
-    vnp_Params['vnp_Version'] = '2.1.0';
-    vnp_Params['vnp_Command'] = 'pay';
-    vnp_Params['vnp_TmnCode'] = tmnCode;
-    // vnp_Params['vnp_Merchant'] = ''
-    vnp_Params['vnp_Locale'] = locale;
-    vnp_Params['vnp_CurrCode'] = currCode;
-    vnp_Params['vnp_TxnRef'] = orderId;
-    vnp_Params['vnp_OrderInfo'] = orderInfo;
-    vnp_Params['vnp_OrderType'] = orderType;
-    vnp_Params['vnp_Amount'] = amount * 100;
-    vnp_Params['vnp_ReturnUrl'] = returnUrl;
-    vnp_Params['vnp_IpAddr'] = ipAddr;
-    vnp_Params['vnp_CreateDate'] = createDate;
-    if(bankCode !== null && bankCode !== ''){
-        vnp_Params['vnp_BankCode'] = bankCode;
-    }
-
-    vnp_Params = sortObject(vnp_Params);
-
-    var querystring = require('qs');
-    var signData = querystring.stringify(vnp_Params, { encode: false });
-    var crypto = require("crypto");     
-    var hmac = crypto.createHmac("sha512", secretKey);
-    var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
-    vnp_Params['vnp_SecureHash'] = signed;
-    vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-
-    res.redirect(vnpUrl)
   }
 }
 

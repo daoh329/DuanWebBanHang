@@ -10,7 +10,7 @@ import {
   Dropdown,
 } from "antd";
 import {
-  SmileOutlined,
+  SolutionOutlined,
   BellOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -23,7 +23,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
-import Hinh from "../../../src/assets/DINHMINH.VN.gif";
+import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
@@ -216,6 +216,10 @@ const App = (userDetails) => {
       <div className="danhmuc">
         <img style={{width:'100%', height:"56px",objectFit:'cover'}} src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"></img>
       </div>
+
+      <div className="logoweb">
+      <img style={{objectFit:'cover'}} src={Hinh}></img>
+      </div>
       <div className="menu-container">
         <div className="menu1">
           <div className="css-1e7ahm9">
@@ -330,10 +334,9 @@ const App = (userDetails) => {
                     <img
                       src={Hinh}
                       style={{
-                        maxWidth: "100%", // Giới hạn chiều rộng tối đa của ảnh
-                        height: "50px", // Tự động tính tỷ lệ chiều cao dựa trên tỷ lệ chiều rộng
-                        objectFit: "cover", // Cắt và thay đổi tỷ lệ hình ảnh để vừa với phần tử cha
-                        width: "100%", // Đảm bảo ảnh chiếm toàn bộ chiều rộng của phần tử cha
+                        maxWidth: "100%",                  
+                        objectFit: "cover", 
+                        width: "100%",
                       }}
                       alt="Logo"
                     />
@@ -603,7 +606,7 @@ const App = (userDetails) => {
                     />
                   </Badge>
                 </Popover>
-                {/* <Badge
+                <Badge
                   className="tracuu"
                   style={{
                     marginTop: "10px",
@@ -621,7 +624,7 @@ const App = (userDetails) => {
                       }}
                     />
                   </NavLink>
-                </Badge> */}
+                </Badge>
               </div>
 
               {/* <Menu

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { message } from "antd";
 import "./Home.scss";
-import {parse, stringify} from 'flatted';
+import { parse, stringify } from 'flatted';
 import CountdownTimer from './CountdownTimer';
 
 import { useCart } from "../Cart/CartContext";
@@ -22,6 +22,9 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
+  const [topDienthoai, setTopDienthoai] = useState([]);
+  const [newPhone, setNewphone] = useState([]);
+  const [newLaptop, setNewLaptop] = useState([]);
   const navigate = useNavigate();
   const initialTime = 111300;
 
@@ -30,6 +33,16 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
         setTopLaptop(res.data);
+        // console.log("Laptopbanchay: " +res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  //top 10 dien thoai bán chạy
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/order/dienthoaibanchay`)
+      .then((res) => {
+        setTopDienthoai(res.data);
         // console.log("Laptopbanchay: " +res.data);
       })
       .catch((error) => console.log(error));
@@ -81,6 +94,26 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/product/newphone`)
+      .then(response => {
+        setNewphone(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
+      .then(response => {
+        setNewLaptop(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+  }, []);
+
+  useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then(response => {
         setProducts(response.data);
@@ -89,6 +122,7 @@ const Home = () => {
         console.error('There was an error!', error);
       });
   }, []);
+  const statusLaptop = products.filter((statusLaptop) => statusLaptop.status === 1);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
@@ -99,6 +133,7 @@ const Home = () => {
         console.error('There was an error!', error);
       });
   }, []);
+  const statusPhone = productsPhone.filter((productsPhone) => productsPhone.status === 1);
 
   // them giỏ hàng
   const { addToCart } = useCart();
@@ -144,17 +179,25 @@ const Home = () => {
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
   // State để lưu trang hiện tại
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage1, setCurrentPage1] = useState(1);
 
   // Hàm xử lý sự kiện khi người dùng chọn trang
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handlePageChange1 = (page) => {
+    setCurrentPage1(page);
   };
 
-  // Tính index bắt đầu và index kết thúc cho sản phẩm trên trang hiện tại
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const [currentPage2, setCurrentPage2] = useState(1);
 
+  // Hàm xử lý sự kiện khi người dùng chọn trang
+  const handlePageChange2 = (page) => {
+    setCurrentPage2(page);
+  };
+  // Tính index bắt đầu và index kết thúc cho sản phẩm trên trang hiện tại
+  const startIndex1 = (currentPage1 - 1) * itemsPerPage;
+  const endIndex1 = startIndex1 + itemsPerPage;
+
+  const startIndex2 = (currentPage2 - 1) * itemsPerPage;
+  const endIndex2 = startIndex2 + itemsPerPage;
   // logic scroll button phone
   const containerRef = useRef(null);
 
@@ -193,7 +236,7 @@ const Home = () => {
               <img
                 src={image}
                 alt={`Slide ${index}`}
-               
+
                 className="imgSliders"
               />
             </div>
@@ -201,9 +244,9 @@ const Home = () => {
         </Carousel>
         <div className="slider-overlay">
           <div className="slider-container">
-            <div style={{width:'1234px', transform: 'translateY(-65%)',margin:'0 auto'}}>
-               <div className="left-block">
-              {/* <div className="category-list">
+            <div style={{ width: '1234px', transform: 'translateY(-65%)', margin: '0 auto' }}>
+              <div className="left-block">
+                {/* <div className="category-list">
                 {categories.map((category, index) => (
                   <li key={index} className="category-item">
                     {category}
@@ -216,26 +259,26 @@ const Home = () => {
                 ))}
                 
               </div>  */}
-              <img
-                className="left-image"
-                src="https://lh3.googleusercontent.com/lLGsyYaAldy7EMkG5xrzuIwpryl3pd7xVFspeXUn_ZKU7QNXVzTnmaWHuVXXUf3cond-gv6X2maTfxZCgph9-h-X6wmjXbx0"
-                alt="Hình ảnh"
-              />
+                <img
+                  className="left-image"
+                  src="https://lh3.googleusercontent.com/lLGsyYaAldy7EMkG5xrzuIwpryl3pd7xVFspeXUn_ZKU7QNXVzTnmaWHuVXXUf3cond-gv6X2maTfxZCgph9-h-X6wmjXbx0"
+                  alt="Hình ảnh"
+                />
+              </div>
+              <div className="right-block">
+                <img
+                  className="right-image"
+                  src="https://lh3.googleusercontent.com/NMcRaUaWbe7V2eEwslmKNSvamonOIhbh5gDalyPC0GgizN2Mku2ITGyIcOksnDY0_O2_cZZb_AEZbcn4o3sUzclliTC_l_c=w300-rw"
+                  alt="Hình ảnh"
+                />
+                <img
+                  className="right-image"
+                  src="https://lh3.googleusercontent.com/_3-aKT2dKUecRCiOhoM7ztPmh0pasrYgz3ut3_jOKv4YvvW5TFdQWhfjTXEnYGyCLLoi_wHu9ppwxT58cAmgG8wnWV74b84myg=w300-rw"
+                  alt="Hình ảnh"
+                />
+              </div>
             </div>
-            <div className="right-block">
-              <img
-                className="right-image"
-                src="https://lh3.googleusercontent.com/NMcRaUaWbe7V2eEwslmKNSvamonOIhbh5gDalyPC0GgizN2Mku2ITGyIcOksnDY0_O2_cZZb_AEZbcn4o3sUzclliTC_l_c=w300-rw"
-                alt="Hình ảnh"
-              />
-              <img
-                className="right-image"
-                src="https://lh3.googleusercontent.com/_3-aKT2dKUecRCiOhoM7ztPmh0pasrYgz3ut3_jOKv4YvvW5TFdQWhfjTXEnYGyCLLoi_wHu9ppwxT58cAmgG8wnWV74b84myg=w300-rw"
-                alt="Hình ảnh"
-              />
-            </div>
-            </div>
-           
+
             {/* -------------------------- */}
             <div className="bottom-block">
               <img
@@ -267,68 +310,68 @@ const Home = () => {
       {/* ---------------menu-------------------- */}
       <nav className="menu-nav" >
         <div>
-        <ul className="menu-nav-ul">
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-mobile-phone" aria-hidden="true"></i>
-              <span className="name-menu">Điện thoại</span>
-            </a>
-            <div className="sub-container" style={{ position: 'absolute', left: '0', top: "55px", zIndex: "199", paddingTop: '15px', display: 'none', opacity: '0', visibility: 'hidden', transition: 'opacity 200ms,visibility 200ms' }}>
-              abc
-            </div>
-          </li>
+          <ul className="menu-nav-ul">
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-mobile-phone" aria-hidden="true"></i>
+                <span className="name-menu">Điện thoại</span>
+              </a>
+              <div className="sub-container" style={{ position: 'absolute', left: '0', top: "55px", zIndex: "199", paddingTop: '15px', display: 'none', opacity: '0', visibility: 'hidden', transition: 'opacity 200ms,visibility 200ms' }}>
+                abc
+              </div>
+            </li>
 
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-laptop" aria-hidden="true"></i>
-              <span className="name-menu">Lap Top</span>
-            </a>
-          </li>
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-icons" ></i>
-              <span className="name-menu">Phụ kiện</span>
-            </a>
-          </li>
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-keyboard" aria-hidden="true"></i>
-              <span className="name-menu">Keyboard</span>
-            </a>
-          </li>
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-rotate" aria-hidden="true"></i>
-              <span className="name-menu">Máy cũ</span>
-            </a>
-          </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-laptop" aria-hidden="true"></i>
+                <span className="name-menu">Lap Top</span>
+              </a>
+            </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-icons" ></i>
+                <span className="name-menu">Phụ kiện</span>
+              </a>
+            </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-keyboard" aria-hidden="true"></i>
+                <span className="name-menu">Keyboard</span>
+              </a>
+            </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-rotate" aria-hidden="true"></i>
+                <span className="name-menu">Máy cũ</span>
+              </a>
+            </li>
 
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-screwdriver-wrench" aria-hidden="true"></i>
-              <span className="name-menu">Sửa chữa</span>
-            </a>
-          </li>
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-bolt-lightning" aria-hidden="true"></i>
-              <span className="name-menu">Ưu đãi</span>
-            </a>
-          </li>
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-newspaper" aria-hidden="true"></i>
-              <span className="name-menu">Tin tức</span>
-            </a>
-          </li>
-          <li className="menu-nav-ul-li">
-            <a className="li-a">
-              <i className="fa fa-headset" aria-hidden="true"></i>
-              <span className="name-menu">Dịch vụ</span>
-            </a>
-          </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-screwdriver-wrench" aria-hidden="true"></i>
+                <span className="name-menu">Sửa chữa</span>
+              </a>
+            </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-bolt-lightning" aria-hidden="true"></i>
+                <span className="name-menu">Ưu đãi</span>
+              </a>
+            </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-newspaper" aria-hidden="true"></i>
+                <span className="name-menu">Tin tức</span>
+              </a>
+            </li>
+            <li className="menu-nav-ul-li">
+              <a className="li-a">
+                <i className="fa fa-headset" aria-hidden="true"></i>
+                <span className="name-menu">Dịch vụ</span>
+              </a>
+            </li>
 
-        </ul>
+          </ul>
         </div>
       </nav>
 
@@ -341,7 +384,6 @@ const Home = () => {
           backgroundImage:
             "url('https://lh3.googleusercontent.com/kNQJhjNgt5WnorADIKUr1lQIkwlxmWnUfOARFP5TfYXldzRRkfFw3hbzbXEBZo-20klJuDRkUZkDWbypz2UmFj0LesbRckx-=rw-w1920')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           // borderRadius: "20px",
           marginTop: "20px",
@@ -356,16 +398,16 @@ const Home = () => {
         >
           <TabPane tab="Tuần lễ giảm giá" key="1">
 
-       
+
             <div className="scroll-control-phone" ref={containerRef}>
-            <div >
-               <CountdownTimer initialTime={initialTime} />
-          </div>
+              <div >
+                <CountdownTimer initialTime={initialTime} />
+              </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                topLaptop.map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -388,16 +430,16 @@ const Home = () => {
 
             </div>
           </TabPane>
-          <TabPane tab="Sản phẩm bán chạy" key="2">
+          <TabPane tab="Laptop bán chạy" key="2">
           <div className="scroll-control-phone" ref={containerRef}>
           <div >
                <CountdownTimer initialTime={initialTime} />
           </div>
           {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+                topLaptop.map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -419,16 +461,16 @@ const Home = () => {
                 ))}
             </div>
           </TabPane>
-          <TabPane tab="Flash Sales" key="3">
+          <TabPane tab="Điện thoại bán chạy" key="3">
           <div className="scroll-control-phone" ref={containerRef}>
           <div >
                <CountdownTimer initialTime={initialTime} />
           </div>
-          {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+          {topDienthoai &&
+                topDienthoai.length > 0 &&
+                topDienthoai.map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -535,25 +577,26 @@ const Home = () => {
       </div> */}
 
 
-      {/* ------------------box sản phẩm mới ra mắt ------------------ */}
-      {topLaptop && topLaptop.length > 0 ? (
+      {/* ------------------box Điện thoại mới ra mắt ------------------ */}
+      {newPhone && newPhone.length > 0 ? (
         <div className='phone-group' >
           <div className="title-group">
 
-            <div className="phone-title">Sản phẩm mới ra mắt</div>
+            <div className="phone-title">Điện thoại mới ra mắt</div>
             <div className="views-all">
-              <a href="/tat-ca-san-pham" style={{color:'white'}}>Xem tất cả</a>
+              <a href="/tat-ca-san-pham" style={{ color: 'white' }}>Xem tất cả</a>
               <i className="fa fa-chevron-right"></i>
             </div>
 
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRef}>
-              {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+              {newPhone &&
+                newPhone.length > 0 &&
+                newPhone.map((item, index) => (
+
                   <div className="sanpham-card" key={index}>
-                    <img src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         APPLE
@@ -594,23 +637,22 @@ const Home = () => {
         </div>
       ) : null}
 
-      {/* ------------------box sản phẩm laptop bán chạy ------------------ */}
-      {topLaptop && topLaptop.length > 0 ? (
+      {/* ------------------box laptop mới ra mắt ------------------ */}
+      {newLaptop && newLaptop.length > 0 ? (
         <div className="phone-group">
           <div className="title-group">
-            <div className="phone-title">Danh mục nổi bật</div>
+            <div className="phone-title">Laptop mới ra mắtt</div>
             <div className="views-all">Xem tất cả <i className="fa fa-chevron-right"></i> </div>
           </div>
           <div className="scroll-group-phone">
 
             {/* content */}
             <div className="scroll-control-phone" ref={containerRef}>
-
-              {topLaptop &&
-                topLaptop.length > 0 &&
-                topLaptop.slice(startIndex, endIndex).map((item, index) => (
+              {newLaptop &&
+                newLaptop.length > 0 &&
+                newLaptop.map((item, index) => (
                   <div className="sanpham-card" key={index}>
-                    <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
@@ -668,23 +710,30 @@ const Home = () => {
           <div className="title-group">
             <div className="products-title">Điện Thoại</div>
             <div className="views-all">
-            <a href="/tat-ca-san-pham-phone" style={{color:'white'}}>Xem tất cả</a>
-               <i className="fa fa-chevron-right"></i> 
-               </div>
+              <a href="/tat-ca-san-pham-phone" style={{ color: 'black' }}>Xem tất cả</a>
+              <i className="fa fa-chevron-right" style={{ color: 'black' }}></i>
+            </div>
           </div>
           <div className="scroll-control-product">
 
-            {productsPhone &&
-              productsPhone.length > 0 &&
-              productsPhone.slice(startIndex, endIndex).map((item, index) => (
+            {statusPhone &&
+              statusPhone.length > 0 &&
+              statusPhone.slice(startIndex1, endIndex1).map((item, index) => (
                 <div className="sanpham-card" key={index}>
-                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL + item.thumbnail}
+                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div className="css-14q2k9dd">
+                    <div className="css-zb7zul">
+                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                    </div>
+                  </div>
                   <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                     <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                       {item.brand}
                     </div>
                   </div>
-                  <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                  <div className="css-nameproduct">
                     <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
                       {item.shortDescription}
                     </h3>
@@ -692,21 +741,21 @@ const Home = () => {
 
                   <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
                     <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {item.price}₫
+                      {formatCurrency(item.price)}
                     </div>
-          
+
                   </div>
                 </div>
               ))}
 
           </div>
-          {/* Phân trang */}
+
           <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
             <Pagination
-              current={currentPage}
+              current={currentPage1}
               total={productsPhone.length}
               pageSize={itemsPerPage}
-              onChange={handlePageChange}
+              onChange={handlePageChange1}
             />
           </div>
         </div>
@@ -729,23 +778,29 @@ const Home = () => {
           <div className="title-group">
             <div className="products-title">Laptop</div>
             <div className="views-all">
-            <a href="/tat-ca-san-pham-laptop" style={{color:'white'}}>Xem tất cả</a>
-               <i className="fa fa-chevron-right"></i> 
-               </div>
+              <a href="/tat-ca-san-pham-laptop" style={{ color: 'black' }}>Xem tất cả</a>
+              <i className="fa fa-chevron-right" style={{ color: 'black' }}></i>
+            </div>
           </div>
           <div className="scroll-control-product">
 
-            {products &&
-              products.length > 0 &&
-              products.slice(startIndex, endIndex).map((item, index) => (
+            {statusLaptop &&
+              statusLaptop.length > 0 &&
+              statusLaptop.slice(startIndex2, endIndex2).map((item, index) => (
                 <div className="sanpham-card" key={index}>
-                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div className="css-14q2k9dd">
+                    <div className="css-zb7zul">
+                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                    </div>
+                  </div>
                   <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                     <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                       {item.brand}
                     </div>
                   </div>
-                  <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+                  <div className="css-nameproduct">
                     <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
                       {item.shortDescription}
                     </h3>
@@ -755,6 +810,7 @@ const Home = () => {
                     <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
                       {formatCurrency(item.price)}
                     </div>
+
                   </div>
                 </div>
               ))}
@@ -763,10 +819,10 @@ const Home = () => {
           {/* Phân trang */}
           <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
             <Pagination
-              current={currentPage}
+              current={currentPage2}
               total={products.length}
               pageSize={itemsPerPage}
-              onChange={handlePageChange}
+              onChange={handlePageChange2}
             />
           </div>
         </div>
@@ -804,9 +860,9 @@ const Home = () => {
             <div className="scroll-control-phone" ref={ctnRef}>
               {historysp &&
                 historysp.length > 0 &&
-                historysp.slice(startIndex, endIndex).map((item, index) => (
+                historysp.map((item, index) => (
                   <div className="sanpham-card" key={index} style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
-                    <img onClick={() => handleViewDetailproducts(item)} src={process.env.REACT_APP_API_URL+item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                    <img onClick={() => handleViewDetailproducts(item)} src={process.env.REACT_APP_API_URL + item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
