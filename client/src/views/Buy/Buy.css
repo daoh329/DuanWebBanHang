@@ -961,7 +961,11 @@ button {
 button {
   -webkit-appearance: button;
 }
-
+.button-select{
+  background-color: #fff;
+  border-color: #00f;
+  color: #000;
+}
 .css-v463h2 {
   cursor: pointer;
   border-radius: 4px;

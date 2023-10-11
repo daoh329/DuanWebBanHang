@@ -42,6 +42,7 @@ export default function Buy(props) {
   // state checked address
   const [addressChecked, setAddressChecked] = useState();
 
+
   const navigate = useNavigate();
 
   function DedaultAddress(value) {
@@ -99,7 +100,7 @@ export default function Buy(props) {
       onOk() {
         navigate("/login");
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -144,6 +145,7 @@ export default function Buy(props) {
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
       UserID: user.id,
+      addressID: deliveryAddress[addressChecked].id,
       productID: productID,
       quantity: quantity,
       deliveryMethod: deliveryMethod,
@@ -155,7 +157,7 @@ export default function Buy(props) {
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
-    } else if (!paymentMenthod) {
+    } else if (!paymentMenthod || paymentMenthod == [] || paymentMenthod == null) {
       message.error("Vui lòng chọn phương thức thanh toán");
       return;
     }
@@ -239,6 +241,7 @@ export default function Buy(props) {
               className="teko-col teko-col-8 css-gr7r8o2 snipcss0-3-3-4 style-yXGc7"
               id="style-yXGc7"
             >
+
               {/*  */}
               <div className="teko-card css-svl62k snipcss0-4-4-5">
                 <div className="teko-card-body css-0 snipcss0-5-5-6">
@@ -805,7 +808,38 @@ export default function Buy(props) {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
                       >
-                        <Button
+                        {paymentMenthod==0?<Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="COD"
+                          data-content-target="COD"
+                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
+                          id="style-UMMoQ"
+                          onClick={handleBuyVNpay}
+                        >
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-76-77"
+                          >
+                            Thanh toán VNPAY-QR
+                            <span
+                              className="snipcss0-10-77-78 style-NANX3"
+                              id="style-NANX3"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            color="textSecondary"
+                            className="css-ngriz3 snipcss0-9-76-79"
+                          ></div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-76-80"
+                          >
+                            Thanh toán qua Internet Banking, Visa, Master, JCB,
+                            VNPAY-QR
+                          </div>
+                        </Button>:<Button
                           data-content-region-name="paymentMethod"
                           data-track-content="true"
                           data-content-name="COD"
@@ -836,7 +870,7 @@ export default function Buy(props) {
                             Thanh toán qua Internet Banking, Visa, Master, JCB,
                             VNPAY-QR
                           </div>
-                        </Button>
+                        </Button>}
                       </div>
                     ) : (
                       <div
@@ -848,7 +882,7 @@ export default function Buy(props) {
                           data-track-content="true"
                           data-content-name="COD"
                           data-content-target="COD"
-                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
                           id="style-UMMoQ"
                           onClick={showConfirm}
                         >
@@ -884,35 +918,62 @@ export default function Buy(props) {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
                       >
-                        <Button
-                          data-content-region-name="paymentMethod"
-                          data-track-content="true"
-                          data-content-name="COD"
-                          data-content-target="COD"
-                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
-                          id="style-UMMoQ"
-                          onClick={handleBuyCOD}
-                        >
-                          <div
+                        {paymentMenthod == 1 ?
+                          <Button
+                            data-content-region-name="paymentMethod"
+                            data-track-content="true"
+                            data-content-name="COD"
+                            data-content-target="COD"
+                            className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
+                            id="style-UMMoQ"
+                            onClick={handleBuyCOD}
+                          ><div
                             type="subtitle"
                             className="css-qat15y snipcss0-9-76-77"
                           >
-                            Thanh toán khi nhận hàng
-                            <span
-                              className="snipcss0-10-77-78 style-NANX3"
-                              id="style-NANX3"
-                            ></span>
-                          </div>
-                          <div
-                            type="body"
-                            color="textSecondary"
-                            className="css-ngriz3 snipcss0-9-76-79"
-                          ></div>
-                          <div
-                            type="body"
-                            className="css-9o8e5m snipcss0-9-76-80"
-                          ></div>
-                        </Button>
+                              Thanh toán khi nhận hàng
+                              <span
+                                className="snipcss0-10-77-78 style-NANX3"
+                                id="style-NANX3"
+                              ></span>
+                            </div>
+                            <div
+                              type="body"
+                              color="textSecondary"
+                              className="css-ngriz3 snipcss0-9-76-79"
+                            ></div>
+                            <div
+                              type="body"
+                              className="css-9o8e5m snipcss0-9-76-80"
+                            ></div>
+                          </Button> : <Button
+                            data-content-region-name="paymentMethod"
+                            data-track-content="true"
+                            data-content-name="COD"
+                            data-content-target="COD"
+                            className="css-64rk53 snipcss0-8-75-76 style-UMMoQ "
+                            id="style-UMMoQ"
+                            onClick={handleBuyCOD}
+                          ><div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-76-77"
+                          >
+                              Thanh toán khi nhận hàng
+                              <span
+                                className="snipcss0-10-77-78 style-NANX3"
+                                id="style-NANX3"
+                              ></span>
+                            </div>
+                            <div
+                              type="body"
+                              color="textSecondary"
+                              className="css-ngriz3 snipcss0-9-76-79"
+                            ></div>
+                            <div
+                              type="body"
+                              className="css-9o8e5m snipcss0-9-76-80"
+                            ></div>
+                          </Button>}
                       </div>
                     ) : (
                       <div
@@ -957,7 +1018,30 @@ export default function Buy(props) {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
                         id="style-poooX"
                       >
-                        <Button
+                        {paymentMenthod==2?<Button
+                          data-content-region-name="paymentMethod"
+                          data-track-content="true"
+                          data-content-name="ZALOPAY_GATEWAY"
+                          data-content-target="ZALOPAY_GATEWAY"
+                          className="css-64rk53 snipcss0-8-81-82 style-OQooy button-select"
+                          id="style-OQooy"
+                          onClick={handleBuyMoMoPay}
+                        >
+                          <div
+                            type="subtitle"
+                            className="css-qat15y snipcss0-9-82-83"
+                          >
+                            Thanh toán QR Code Momo
+                            <span
+                              className="snipcss0-10-83-84 style-DJQy2"
+                              id="style-DJQy2"
+                            ></span>
+                          </div>
+                          <div
+                            type="body"
+                            className="css-9o8e5m snipcss0-9-82-86"
+                          ></div>
+                        </Button>:<Button
                           data-content-region-name="paymentMethod"
                           data-track-content="true"
                           data-content-name="ZALOPAY_GATEWAY"
@@ -980,7 +1064,7 @@ export default function Buy(props) {
                             type="body"
                             className="css-9o8e5m snipcss0-9-82-86"
                           ></div>
-                        </Button>
+                        </Button>}
                       </div>
                     ) : (
                       <div
