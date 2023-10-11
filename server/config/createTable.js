@@ -100,6 +100,7 @@ const createTables = () => {
     street varchar(255),
     email varchar(255),
     phone varchar(255),
+    setdefault tinyint,
     FOREIGN KEY (idUser) REFERENCES users (id)
   );`
   const promotional =`CREATE TABLE IF NOT EXISTS promotional (

@@ -35,7 +35,7 @@ import Noidung from "./Menu/Noidung";
 import CreateOrder from "./VnPay/CreateOrder";
 const App = () => {
   const [user, setUser] = useState(null);
-  
+  const idUser = localStorage.getItem("idUser");
   const getUser = async () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
@@ -43,6 +43,7 @@ const App = () => {
       localStorage.setItem("idUser", data.user.id);
       setUser(data.user);
     } catch (e) {
+      console.log(e);
       localStorage.removeItem("idUser");
     }
   };
@@ -76,7 +77,7 @@ const App = () => {
               <Route path='/quanly/orders' element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
-              <Route path="/profile" element={<Profile user={user} />} />
+              <Route path="/profile" element={idUser ? <Profile user={user}/> : <Navigate to='/' />} />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
               <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
               <Route path="/createorder" element={<CreateOrder />} />

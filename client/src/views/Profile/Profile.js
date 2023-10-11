@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import {
   MDBTabs,
@@ -8,19 +8,8 @@ import {
   MDBTabsPane,
   MDBRow,
   MDBCol,
-  MDBIcons,
 } from "mdb-react-ui-kit";
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Avatar,
-  Space,
-} from "antd";
+import { Button, Col, Form, Input, Row, Select, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 
@@ -30,7 +19,9 @@ import {
   faUser,
   faClipboardList,
   faBell,
+  faMapLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
+import Layout from "./AddressManager/Layout";
 
 const { Option } = Select;
 
@@ -67,49 +58,49 @@ const tailFormItemLayout = {
 
 export default function Profile(props) {
   const { user } = props;
-    // select mới
-    const [city, setCity] = useState([]);
-    const [districts, setDistricts] = useState([]);
-    const [wards, setWards] = useState([]);
-    const [selectedCity, setSelectedCity] = useState(null);
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [selectedWard, setSelectedWard] = useState(null);
+  // select mới
+  const [city, setCity] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-          );
-          setCity(response.data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-  
-      fetchData();
-    }, []);
-    // select city
-    const handleCityChange = (value) => {
-      const selectedCity = city.find((city) => city.Id === value);
-      setSelectedCity(selectedCity);
-      setSelectedDistrict(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+        );
+        setCity(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    //select district
-    const handleDistrictChange = (value) => {
-      const selectedDistrict = selectedCity.Districts.find(
-        (district) => district.Id === value
-      );
-      setSelectedDistrict(selectedDistrict);
-    };
-    //select ward
-    const handleWardChange = (value) => {
-      const selectedWard = selectedDistrict.Wards.find(
-        (ward) => ward.Id === value
-      );
-      setSelectedWard(selectedWard);
-    };
-    //
+
+    fetchData();
+  }, []);
+  // select city
+  const handleCityChange = (value) => {
+    const selectedCity = city.find((city) => city.Id === value);
+    setSelectedCity(selectedCity);
+    setSelectedDistrict(null);
+  };
+  //select district
+  const handleDistrictChange = (value) => {
+    const selectedDistrict = selectedCity.Districts.find(
+      (district) => district.Id === value
+    );
+    setSelectedDistrict(selectedDistrict);
+  };
+  //select ward
+  const handleWardChange = (value) => {
+    const selectedWard = selectedDistrict.Wards.find(
+      (ward) => ward.Id === value
+    );
+    setSelectedWard(selectedWard);
+  };
+  //
 
   const [form] = Form.useForm();
   const onFinish = (values) => {
@@ -152,14 +143,10 @@ export default function Profile(props) {
           <MDBTabs className="flex-column text-center">
             <MDBTabsItem>
               <MDBTabsLink active={verticalActive === "tab1"}>
-                {user? (
+                {user ? (
                   <>
-                    <Avatar
-                      src={user.picture}
-                      size="large"
-                    />
+                    <Avatar src={user.picture} size="large" />
                     {user.name}
-                    
                   </>
                 ) : (
                   <Avatar
@@ -186,6 +173,8 @@ export default function Profile(props) {
                 <FontAwesomeIcon icon={faClipboardList} /> Quản lý đơn hàng
               </MDBTabsLink>
             </MDBTabsItem>
+
+            {/* Tab thong bao */}
             <MDBTabsItem>
               <MDBTabsLink
                 onClick={() => handleVerticalClick("tab3")}
@@ -194,8 +183,19 @@ export default function Profile(props) {
                 <FontAwesomeIcon icon={faBell} /> Thông báo
               </MDBTabsLink>
             </MDBTabsItem>
+            {/* Tab quan li thong tin nhan hang */}
+            <MDBTabsItem>
+              <MDBTabsLink
+                onClick={() => handleVerticalClick("tab4")}
+                active={verticalActive === "tab4"}
+              >
+                <FontAwesomeIcon icon={faMapLocationDot} /> Sổ địa chỉ
+              </MDBTabsLink>
+            </MDBTabsItem>
           </MDBTabs>
         </MDBCol>
+
+        {/* render */}
         <MDBCol size="9">
           <MDBTabsContent>
             <MDBTabsPane show={verticalActive === "tab1"}>
@@ -230,18 +230,12 @@ export default function Profile(props) {
                               initialValues={{ prefix: "84" }}
                               style={{ maxWidth: 600 }}
                             >
-                              <Form.Item
-                                name="email"
-                                label="E-mail"
-                                >
+                              <Form.Item name="email" label="E-mail">
                                 {user && (
-                                <div>
-                                <Input
-                                disabled
-                                value={user.email}
-                                />
-                                </div>
-                                )}                              
+                                  <div>
+                                    <Input disabled value={user.email} />
+                                  </div>
+                                )}
                               </Form.Item>
 
                               {/* name */}
@@ -250,21 +244,15 @@ export default function Profile(props) {
                                 label="Tên người dùng"
                                 tooltip="Bạn muốn chúng tôi gọi bạn như thế nào."
                               >
-                               {user && (
-                                <div>
-                                <Input
-                                value={user.given_name}
-            
-                                />
-                                </div>
-                                )}       
+                                {user && (
+                                  <div>
+                                    <Input value={user.given_name} />
+                                  </div>
+                                )}
                               </Form.Item>
 
                               {/* phone */}
-                              <Form.Item
-                                name="phone"
-                                label="Số điện thoại"
-                              >
+                              <Form.Item name="phone" label="Số điện thoại">
                                 <Input
                                   addonBefore={prefixSelector}
                                   style={{
@@ -273,7 +261,7 @@ export default function Profile(props) {
                                 />
                               </Form.Item>
                               {/* Thành phố */}
-                              <Form.Item label="Thành phố" name='TP'>
+                              <Form.Item label="Thành phố" name="TP">
                                 <Select onChange={handleCityChange}>
                                   {city.map((city) => (
                                     <Option key={city.Id} value={city.Id}>
@@ -284,26 +272,29 @@ export default function Profile(props) {
                               </Form.Item>
                               {/* Huyện */}
                               <Form.Item label="Huyện" name="HUYEN">
-                              <Select onChange={handleDistrictChange}>
-                                {selectedCity &&
-                                  selectedCity.Districts.map((district) => (
-                                    <Option key={district.Id} value={district.Id}>
-                                      {district.Name}
-                                    </Option>
-                                  ))}
-                              </Select>
-                            </Form.Item>
+                                <Select onChange={handleDistrictChange}>
+                                  {selectedCity &&
+                                    selectedCity.Districts.map((district) => (
+                                      <Option
+                                        key={district.Id}
+                                        value={district.Id}
+                                      >
+                                        {district.Name}
+                                      </Option>
+                                    ))}
+                                </Select>
+                              </Form.Item>
                               {/* Xã */}
                               <Form.Item label="Xã" name="XA">
-                              <Select onChange={handleWardChange}>
-                                {selectedDistrict &&
-                                  selectedDistrict.Wards.map((ward) => (
-                                    <Option key={ward.Id} value={ward.Id}>
-                                      {ward.Name}
-                                    </Option>
-                                  ))}
-                              </Select>
-                            </Form.Item>
+                                <Select onChange={handleWardChange}>
+                                  {selectedDistrict &&
+                                    selectedDistrict.Wards.map((ward) => (
+                                      <Option key={ward.Id} value={ward.Id}>
+                                        {ward.Name}
+                                      </Option>
+                                    ))}
+                                </Select>
+                              </Form.Item>
                               {/* capcha */}
                               <Form.Item
                                 label="Captcha"
@@ -393,6 +384,10 @@ export default function Profile(props) {
 
             <MDBTabsPane show={verticalActive === "tab3"}>
               <h6 style={{ display: "flex" }}>Thông báo dành cho bạn</h6>
+            </MDBTabsPane>
+
+            <MDBTabsPane show={verticalActive === "tab4"}>
+              <Layout/>
             </MDBTabsPane>
           </MDBTabsContent>
         </MDBCol>
