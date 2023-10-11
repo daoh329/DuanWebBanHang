@@ -300,7 +300,7 @@ export default function Buy(props) {
                               <input
                                 type="checkbox"
                                 value="Tất cả các ngày trong tuần"
-                                checked={
+                                CheckOutlined={
                                   deliveryMethod === "Tất cả ngày trong tuần"
                                 }
                                 onChange={(e) =>
