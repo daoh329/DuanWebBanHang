@@ -4,6 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
 }
 
 .css-27abj6 {
@@ -960,7 +961,11 @@ button {
 button {
   -webkit-appearance: button;
 }
-
+.button-select{
+  background-color: #fff;
+  border-color: #00f;
+  color: #000;
+}
 .css-v463h2 {
   cursor: pointer;
   border-radius: 4px;
@@ -2724,62 +2729,6 @@ svg {
 #style-Oc3me.style-Oc3me {
   margin-left: 0px;
 }
-/* Style cho các khối sản phẩm */
-.item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  cursor: pointer;
-}
-
-/* Style cho dấu tích */
-.checkbox {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #000;
-  background-color: #fff;
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 10px;
-  text-align: center;
-  line-height: 20px;
-  font-weight: bold;
-  font-size: 18px;
-  color: transparent;
-}
-
-/* Style cho dấu tích được chọn */
-.item.selected .checkbox {
-  background-color: #00f;
-  color: #fff;
-  border-color: #00f;
-}
-
-.btn-select-address {
-  display: flex;
-}
-
-.btn-select-address span {
-  font-weight: bold;
-  margin-right: 2px;
-}
-
-.btn-select-address svg {
-  cursor: pointer;
-}
-
-#style-tofZn {
-  cursor: auto;
-  border: 1px solid rgb(228, 228, 228);
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-}
-
-#style-tofZn:hover {
-  color: black;
-  border-color: gray;
-}
 
 /* ---------------------- */
 /* ADDRESS CUSTOM */
@@ -2793,6 +2742,7 @@ svg {
   grid-template-columns: repeat(2, 1fr); /* Tạo 2 cột bằng nhau */
   gap: 20px; /* Khoảng cách giữa các biểu tượng */
   overflow: hidden;
+  color: #333333;
 }
 
 /* add */
@@ -2865,6 +2815,10 @@ svg {
   font-weight: bold;
   margin-right: 2px;
 }
+
+/* .address-control-edit-icon{
+  
+} */
 
 .address-control .address-control-details {
   max-height: 2.6em;

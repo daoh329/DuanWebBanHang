@@ -1,6 +1,5 @@
 import { Modal } from "antd";
 import React, { useState } from "react";
-import ModalContent from "../ModalContent/ModalContent";
 import {
   CheckOutlined,
   EditOutlined,
@@ -8,7 +7,9 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-function ButtonAddress({ value, checked, onClick, index }) {
+import ReceiverInformationModal from "../../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
+
+function ButtonAddress({ value, checked, onClick, index, getValues }) {
   const idUser = localStorage.getItem("idUser");
 
   const [isModalOpenShow, setIsModalOpenShow] = useState(false);
@@ -70,15 +71,14 @@ function ButtonAddress({ value, checked, onClick, index }) {
           {value.city}
         </div>
       </div>
-      <Modal
-        title="Thông tin khách hàng"
+
+      <ReceiverInformationModal
         open={isModalOpenShow}
-        onCancel={handleCancel}
-        footer={false}
-      >
-        {/* body */}
-        <ModalContent action={"update"} data={value} />
-      </Modal>
+        cancel={handleCancel}
+        getValues={getValues}
+        action={"update"}
+        data={value}
+      />
     </div>
   );
 }

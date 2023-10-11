@@ -118,6 +118,7 @@ const App = (userDetails) => {
   // call API logout
   const logout = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
+    localStorage.removeItem("idUser");
   };
   // tới profile
   const profile = () => {

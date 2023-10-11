@@ -1,18 +1,36 @@
-import { Button, Input, Select, Form, Divider, notification, message } from "antd";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Select,
+  message,
+  notification,
+} from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const { Option } = Select;
 
-function ModalContent({ data, action }) {
+function ReceiverInformationModal({
+  data,
+  action,
+  open,
+  cancel,
+  getValues,
+  countAddress,
+}) {
+  const idUser = localStorage.getItem("idUser");
+
   const [city, setCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [receiverInformation, setReceiverInformation] = useState(data);
-
-  const idUser = localStorage.getItem("idUser");
+  const [form] = Form.useForm();
 
   useEffect(() => {
     setReceiverInformation(data);
@@ -64,6 +82,18 @@ function ModalContent({ data, action }) {
     values["idUser"] = values["idUser"] || "";
     values["idUser"] = idUser;
 
+    // Nếu địa chỉ hiện tại là địa chỉ đầu tiên thì gắn là mặc định
+    if (countAddress === 0) {
+      values["setdefault"] = values["setdefault"] || "";
+      values["setdefault"] = 1;
+    } else if (values.setdefault === true) {
+      values["setdefault"] = values["setdefault"] || "";
+      values["setdefault"] = 1;
+    } else if (values.setdefault === false || values.setdefault === undefined) {
+      values["setdefault"] = values["setdefault"] || "";
+      values["setdefault"] = 0;
+    }
+
     // try/catch check error
     try {
       // Tạo đường dẫn API
@@ -75,6 +105,12 @@ function ModalContent({ data, action }) {
       if (result.status === 200) {
         return setTimeout(() => {
           setIsLoading(false);
+          // reset các field của form và tắt modal
+          form.resetFields();
+          // gọi hàm get address
+          getValues();
+          // Tắt modal
+          cancel();
           notification.success({
             message: "Thành công!",
           });
@@ -109,29 +145,43 @@ function ModalContent({ data, action }) {
     try {
       // Nếu không đúng kiểu hành động thì dừng lại
       if (action !== "update") return;
-
       // Lặp qua các trường dữ liệu của form
       for (const fieldName in values) {
         // Nếu có dữ liệu là rỗng thì chuyển hết thành undefined
-        // console.log(values[fieldName] + " - " + receiverInformation[fieldName]);
         if (
           values[fieldName] === "" ||
           values[fieldName] === receiverInformation[fieldName]
         ) {
           values[fieldName] = undefined;
         }
+        // Nếu địa chỉ đã là mặc định thì không cần cập nhật (setdefault => undefined)
+        if (
+          fieldName === "setdefault" &&
+          values[fieldName] === true &&
+          receiverInformation[fieldName] === 1
+        ) {
+          values[fieldName] = undefined;
+        }
+        // nếu trường có dữ liệu
         if (values[fieldName]) {
+          // Đặt checkValue = true để call api cập nhật
           checkValue = true;
+          // Đổi setdefault từ true -> 1
+          if (fieldName === "setdefault") {
+            if (values[fieldName] === true) {
+              values[fieldName] = 1;
+            }
+          }
         }
       }
 
+      // Nếu không có dữ liệu nào thay đổi thì dừng cập nhật và thông báo
       if (!checkValue) {
         return setTimeout(() => {
           setIsLoading(false);
           message.warning("Không có dữ liệu được thay đổi");
         }, 1000);
       }
-
       // Call API Update
       const url = `${process.env.REACT_APP_API_URL}/auth/update-delivery-address/${receiverInformation.id}`;
       const result = await axios.put(url, values);
@@ -140,6 +190,10 @@ function ModalContent({ data, action }) {
       if (result.status === 200) {
         return setTimeout(() => {
           setIsLoading(false);
+          // gọi hàm get address
+          getValues();
+          // Tắt modal
+          cancel();
           notification.success({
             message: "Cập nhật thành công",
           });
@@ -167,12 +221,31 @@ function ModalContent({ data, action }) {
     console.log("Failed:", errorInfo);
   };
 
+  function handleCancel() {
+    cancel();
+    form.resetFields();
+  }
+
   return (
-    <>
-      {/* Nếu chưa đăng nhập mà modal vẫn được mở thì hiển thị bắt đăng nhập */}
-      {!idUser && <p>Vui lòng đăng nhập và thử lại!</p>}
-      {/* form add delivery address */}
+    <Modal
+      open={open}
+      onCancel={handleCancel}
+      style={{ top: 20 }}
+      footer={[
+        <Button
+          htmlType="submit"
+          key="submit"
+          type="primary"
+          loading={isLoading}
+          onClick={form.submit}
+        >
+          Xác nhận
+        </Button>,
+      ]}
+    >
+      <h5>Thông tin người nhận hàng</h5>
       <Form
+        form={form}
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 16 }}
         onFinish={action === "add" ? onFinishInsert : onFinishUpdate}
@@ -278,15 +351,29 @@ function ModalContent({ data, action }) {
         >
           <Input placeholder="Số nhà,ngõ,tên đường..." />
         </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            Xác nhận
-          </Button>
+        <Form.Item
+          name="setdefault"
+          valuePropName="checked"
+          wrapperCol={{ offset: 15, span: 8 }}
+        >
+          <Checkbox
+            defaultChecked={
+              receiverInformation && receiverInformation.setdefault === 1
+                ? true
+                : false
+            }
+            disabled={
+              receiverInformation && receiverInformation.setdefault === 1
+                ? true
+                : false
+            }
+          >
+            Đặt làm mặc định
+          </Checkbox>
         </Form.Item>
       </Form>
-    </>
+    </Modal>
   );
 }
 
-export default ModalContent;
+export default ReceiverInformationModal;

@@ -19,6 +19,7 @@ const createTables = () => {
   `;
   const orders = `CREATE TABLE IF NOT EXISTS orders (
     id int PRIMARY KEY AUTO_INCREMENT,
+    addressID int,
     UserID int,
     deliveryMethod varchar(255),
     paymentMenthod tinyint,
@@ -27,16 +28,17 @@ const createTables = () => {
     note TEXT,
     status tinyint,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
-    FOREIGN KEY (UserID) REFERENCES users (id)
-  );
-  `;
+    FOREIGN KEY (UserID) REFERENCES users (id),
+    FOREIGN KEY (addressID) REFERENCES delivery_address (id)
+  );`;
   const deliveryMethod = `CREATE TABLE IF NOT EXISTS deliveryMethod (
     name varchar(255) PRIMARY KEY
   );`;
   const IsvaluedeliveryMethod=`INSERT INTO deliveryMethod (name) VALUES
   ('ngày trong tuần'),
-  ('cuối tuần')
-  ON DUPLICATE KEY UPDATE name = name;`
+  ('cuối tuần'),
+  ('Chủ nhật')
+  ON DUPLICATE KEY UPDATE name = name;`;
   const orderDetailsProduct = `CREATE TABLE IF NOT EXISTS orderDetailsProduct (
     id int PRIMARY KEY AUTO_INCREMENT,
     productID int,
@@ -58,31 +60,26 @@ const createTables = () => {
     product_id int,
     FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (brand)  REFERENCES brand (name)
-  );
-  `;
+  );`;
   const galery = `CREATE TABLE IF NOT EXISTS galery (
     id int PRIMARY KEY AUTO_INCREMENT,
     thumbnail varchar(255),
     product_id int,
     FOREIGN KEY (product_id) REFERENCES product (id)
-  );
-  `;
+  );`;
   const ProdetailColor = `CREATE TABLE IF NOT EXISTS ProdetailColor (
     id int PRIMARY KEY AUTO_INCREMENT,
     product_id int,
     Colorname varchar(255),
     FOREIGN KEY (product_id) REFERENCES product (id),
     FOREIGN KEY (Colorname) REFERENCES color (name)
-  );
-  `;
+  );`;
   const color = `CREATE TABLE IF NOT EXISTS color (
     name varchar(255) PRIMARY KEY
-  );
-  `;
+  );`;
   const brand = `CREATE TABLE IF NOT EXISTS brand (
     name varchar(255) PRIMARY KEY
-  );
-  `;
+  );`;
   const users = `
     CREATE TABLE IF NOT EXISTS users (
     id int PRIMARY KEY AUTO_INCREMENT,
@@ -100,6 +97,7 @@ const createTables = () => {
     street varchar(255),
     email varchar(255),
     phone varchar(255),
+    setdefault tinyint,
     FOREIGN KEY (idUser) REFERENCES users (id)
   );`
   const promotional =`CREATE TABLE IF NOT EXISTS promotional (
@@ -140,11 +138,6 @@ const createTables = () => {
       console.error(error);
     }
   });
-  mysql2.query(deliveryMethod, (error, results, fields) => {
-    if (error) {
-      console.error(error);
-    }
-  });
   mysql2.query(category, (error, results, fields) => {
     if (error) {
       console.error(error);
@@ -171,17 +164,17 @@ const createTables = () => {
       console.error(error);
     }
   });
+  mysql2.query(delivery_address, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
   mysql2.query(orders, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
   });
   mysql2.query(orderDetailsProduct, (error, results, fields) => {
-    if (error) {
-      console.error(error);
-    }
-  });
-  mysql2.query(delivery_address, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
