@@ -117,7 +117,7 @@ const AllProductPhone = () => {
     setIsFiltering(false);
   };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 50;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-
 import Slider from "@mui/material/Slider";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -8,9 +7,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { Pagination } from "antd";
-
 import { Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Button } from '@mui/material';
-import './AllProduct.css'
+import './AllProduct.css';
 import { useNavigate } from "react-router-dom";
 
 function valuetext(value) {
@@ -349,7 +347,7 @@ const AllProductPhonecopy = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default AllProductPhonecopy;
