@@ -86,7 +86,10 @@ function ReceiverInformationModal({
     if (countAddress === 0) {
       values["setdefault"] = values["setdefault"] || "";
       values["setdefault"] = 1;
-    } else {
+    } else if (values.setdefault === true) {
+      values["setdefault"] = values["setdefault"] || "";
+      values["setdefault"] = 1;
+    } else if (values.setdefault === false || values.setdefault === undefined) {
       values["setdefault"] = values["setdefault"] || "";
       values["setdefault"] = 0;
     }
@@ -227,6 +230,7 @@ function ReceiverInformationModal({
     <Modal
       open={open}
       onCancel={handleCancel}
+      style={{ top: 20 }}
       footer={[
         <Button
           htmlType="submit"

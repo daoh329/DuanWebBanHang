@@ -10,17 +10,12 @@ import {
   MDBTableBody,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import {
-  CheckOutlined,
-  EditOutlined,
-  ExclamationCircleFilled,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { Input, Checkbox, Modal, Button } from "antd";
 import { message } from "antd";
 import "./Buy.css";
-import ModalContent from "./ModalContent/ModalContent";
 import ButtonAddress from "./ButtonCheckedAddress/ButtonAddress";
+import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -51,14 +46,13 @@ export default function Buy(props) {
 
   function DedaultAddress(value) {
     let index = 0;
-    console.log(value);
     for (let i = 0; i < value.length; i++) {
       if (value[i].setdefault === 1) {
         index = i;
       }
     }
     setAddressChecked(index);
-  };
+  }
 
   // Hàm lấy thông tin địa chỉ nhận hàng của người dùng
   const getDeliveryAddress = async () => {
@@ -196,7 +190,7 @@ export default function Buy(props) {
     // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
     // console.log('amount: '+totalAmount)
     setPaymentMenthod(0); // Cập nhật phương thức thanh toán
-  
+
     // fetch(`${process.env.REACT_APP_API_URL}/pay/set_amount`, {
     //   method: 'POST',
     //   headers: {
@@ -223,6 +217,11 @@ export default function Buy(props) {
   const handleChecked = (value) => {
     setAddressChecked(value);
   };
+
+  // Đếm chiều dài mảng address
+  function countAddress() {
+    return deliveryAddress.length;
+  }
 
   return (
     <>
@@ -273,6 +272,7 @@ export default function Buy(props) {
                           deliveryAddress &&
                           deliveryAddress.map((value, index) => (
                             <ButtonAddress
+                              getValues={getDeliveryAddress}
                               key={index}
                               index={index}
                               onClick={handleChecked}
@@ -282,24 +282,20 @@ export default function Buy(props) {
                           ))}
 
                         {/* add address */}
-                        {deliveryAddress.length < 4 && (
-                          <div
-                            onClick={idUser ? showModalAdd : showConfirm}
-                            className="address-add"
-                          >
-                            <PlusOutlined />
-                            <div>Thêm địa chỉ</div>
-                          </div>
-                        )}
-                        <Modal
-                          title="Thông tin khách hàng"
-                          open={isModalOpenAdd}
-                          onCancel={handleCancel}
-                          footer={false}
+                        <div
+                          onClick={idUser ? showModalAdd : showConfirm}
+                          className="address-add"
                         >
-                          {/* body */}
-                          <ModalContent action={"add"} />
-                        </Modal>
+                          <PlusOutlined />
+                          <div>Thêm địa chỉ</div>
+                        </div>
+                        <ReceiverInformationModal
+                          countAddress={countAddress()}
+                          getValues={getDeliveryAddress}
+                          action={"add"}
+                          open={isModalOpenAdd}
+                          cancel={handleCancel}
+                        />
                         {/*  */}
                       </div>
                       <div className="radio">

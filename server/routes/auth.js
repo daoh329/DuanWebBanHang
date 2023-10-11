@@ -110,6 +110,7 @@ router.post("/add-delivery-address", async (req, res) => {
       street,
       setdefault,
     } = req.body;
+
     const arrayValues = [
       idUser,
       name,
@@ -121,9 +122,25 @@ router.post("/add-delivery-address", async (req, res) => {
       street,
       setdefault,
     ];
+
+    // Nếu đặt địa chỉ mới làm mặc định
+    if (setdefault === 1) {
+      // tìm địa chỉ mặc định hiện tại
+      const sl_default_address = `select id from delivery_address where setdefault = 1`;
+      const result = await query(sl_default_address);
+      // Xóa mặc định của địa chỉ mặc định hiện tại (nếu có)
+      if (result[0]) {
+        const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
+        const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
+        VALUES (?,?,?,?,?,?,?,?,?);`;
+        await query(dl_default, [result[0].id]);
+        await query(insert_query, arrayValues);
+        return res.status(200).send("Thành công");
+      }
+    }
+
     const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
-    VALUES (?,?,?,?,?,?,?,?,?);
-    `;
+    VALUES (?,?,?,?,?,?,?,?,?);`;
     await query(insert_query, arrayValues);
     res.status(200).send("Thành công");
   } catch (error) {
@@ -151,7 +168,7 @@ router.put("/update-delivery-address/:id", async (req, res) => {
     // get values and id
     const values = req.body;
     const id = req.params.id;
-    if ( values.setdefault === 1) {
+    if (values.setdefault === 1) {
       const sl_default_address = `select id from delivery_address where setdefault = 1`;
       const result = await query(sl_default_address);
       if (result[0]) {
