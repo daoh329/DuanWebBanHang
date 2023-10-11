@@ -75,7 +75,7 @@ function OrderList() {
                     fontWeight: 'bold', 
                     color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
                 }}>
-                    {status === 1 ? 'COD' : (status === 2 ? 'MOMO' : 'VNPAY')}
+                    {status === 1 ? 'MOMO' : (status === 2 ? 'COD' : 'VNPAY')}
                 </span>
             )
         },

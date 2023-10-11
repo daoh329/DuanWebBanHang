@@ -102,8 +102,8 @@ function Admin() {
           key: "8",
           icon: <ShoppingCartOutlined />,
           label: (
-            // <Link to="orders">Đơn đặt hàng</Link>
-            "Đơn đặt hàng"
+            <Link to="/orders">Đơn đặt hàng</Link>
+           
           ),
 
         },
