@@ -113,7 +113,7 @@ function Detail() {
 
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
-        console.log("Detail: " + response.data.configuration)
+        console.log("Detail: ", Detail)
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
         const productThumbnails = response.data.thumbnails;
@@ -367,7 +367,7 @@ function Detail() {
                       <span className="css-n67qkj"> {Detail.brand}</span>
                     </a>
                     <span className="css-1qgvt7n"></span>
-                    SKU: 220300268
+                    SKU: {Detail.id}
                     <span className="css-1qgvt7n"></span>
                     Mã vạch: &nbsp;603122
                   </div>
@@ -515,7 +515,7 @@ function Detail() {
             <div className="mo-ta">
               <div className="title-mo">Mô tả sản phẩm</div>
 
-              <div style={{textAlign:'start'}} dangerouslySetInnerHTML={{ __html: htmlContent }} />
+              <div style={{ textAlign: 'start' }} dangerouslySetInnerHTML={{ __html: htmlContent }} />
 
 
             </div>
@@ -535,7 +535,7 @@ function Detail() {
                       <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration.guarantee}</td>
                     </tr>
                     <tr>
-                      <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+                      <td className="style-tin-chung" colSpan={2}>Thông tin chung</td>
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
@@ -544,16 +544,19 @@ function Detail() {
                     <tr>
                       <td colSpan={1}>Màu sắc</td>
                       <td colSpan={3}>
-                        {Detail.color ? (
-                          Detail.color.map((color, index) => (
-                            <span key={index}>
-                              {color}
-                              {index < Detail.color.length - 1 ? ', ' : ''}
-                            </span>
-                          ))
+                        {Detail.Colorname ? (
+                          <div>
+                            {Detail.Colorname.map((color, index) => (
+                              <span key={color.id}>
+                                {color.Colorname}
+                                {index < Detail.Colorname.length - 1 ? ', ' : ''}
+                              </span>
+                            ))}
+                          </div>
                         ) : (
                           <span></span>
                         )}
+
                       </td>
                     </tr>
                     <tr>
@@ -763,19 +766,21 @@ function Detail() {
                   <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series</td>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.name}</td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Màu sắc</td>
                   <td colSpan={3}>
-                    {Detail.color ? (
-                      Detail.color.map((color, index) => (
-                        <span key={index}>
-                          {color}
-                          {index < Detail.color.length - 1 ? ', ' : ''}
-                        </span>
-                      ))
+                    {Detail.Colorname ? (
+                      <div>
+                        {Detail.Colorname.map((color, index) => (
+                          <span key={color.id}>
+                            {color.Colorname}
+                            {index < Detail.Colorname.length - 1 ? ', ' : ''}
+                          </span>
+                        ))}
+                      </div>
                     ) : (
                       <span></span>
                     )}
@@ -789,16 +794,16 @@ function Detail() {
                   <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
                 </tr>
                 <tr>
-                  <td colSpan={1}>Thế hệ CPU</td>
-                  <td colSpan={3}>{configuration.cpu}</td>
+                  <td style={{display: configuration.cpu ? 'table-cell' : 'none'}} colSpan={1}>Thế hệ CPU</td>
+                  <td style={{display: configuration.cpu ? 'table-cell' : 'none'}} colSpan={3}>{configuration.cpu}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.cpu}</td>
+                  <td style={{ backgroundColor: '#f6f6f6',display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={1}>CPU</td>
+                  <td style={{ backgroundColor: '#f6f6f6',display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={3}>{configuration.cpu}</td>
                 </tr>
                 <tr>
-                  <td colSpan={1}>Chíp đồ họa</td>
-                  <td colSpan={3}>{configuration.vga}</td>
+                  <td style={{display: configuration.vga ? 'table-cell' : 'none'}} colSpan={1}>Chíp đồ họa</td>
+                  <td style={{display: configuration.vga ? 'table-cell' : 'none'}} colSpan={3}>{configuration.vga}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
@@ -841,18 +846,18 @@ function Detail() {
                   <td colSpan={3}>{configuration.os}</td>
                 </tr>
                 <tr>
-                  <td colSpan={1}>Pin</td>
-                  <td colSpan={3}>{configuration.pin}</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Pin</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.pin}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khối lượng</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.mass}</td>
+                  <td  colSpan={1}>Khối lượng</td>
+                  <td  colSpan={3}>{configuration.mass}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
                 </tr>
                 <tr>
-                  <td className="style-tin-chung" colSpan={1}>Phụ kiện đi kèm</td>
+                  <td style={{ backgroundColor: '#f6f6f6' }} className="style-tin-chung" colSpan={1}>Phụ kiện đi kèm</td>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.accessory}</td>
                 </tr>
               </MDBTableBody>

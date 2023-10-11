@@ -29,6 +29,7 @@ import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
+import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
@@ -73,12 +74,13 @@ const App = () => {
               <Route path="/checkSP" element={<CheckSP />} />
               <Route path="/sale" element={<Sale />} />
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
-              <Route path='/quanly/orders' element={<QLdonhang />} />
+              <Route path='/orders' element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/profile" element={<Profile user={user} />} />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
               <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
+              <Route path="/tat-ca-san-pham-phone-coppy" element={<AllProductPhonecopy />} />
               <Route path="/createorder" element={<CreateOrder />} />
             </Routes>
           </header>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-
 import Slider from "@mui/material/Slider";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -8,9 +7,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { Pagination } from "antd";
-
 import { Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Button } from '@mui/material';
-import './AllProduct.css'
+import './AllProduct.css';
 import { useNavigate } from "react-router-dom";
 
 function valuetext(value) {
@@ -21,7 +19,7 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
-const AllProductPhone = () => {
+const AllProductPhonecopy = () => {
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState(() => {
     // Lấy giá trị từ localStorage khi trang web được tải
@@ -117,7 +115,7 @@ const AllProductPhone = () => {
     setIsFiltering(false);
   };
 
-  const itemsPerPage = 50;
+  const itemsPerPage = 10;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
@@ -349,7 +347,7 @@ const AllProductPhone = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AllProductPhone;
+export default AllProductPhonecopy;
