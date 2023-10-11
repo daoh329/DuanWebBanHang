@@ -10,7 +10,7 @@ import {
   Dropdown,
 } from "antd";
 import {
-  SmileOutlined,
+  SolutionOutlined,
   BellOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -605,7 +605,7 @@ const App = (userDetails) => {
                     />
                   </Badge>
                 </Popover>
-                {/* <Badge
+                <Badge
                   className="tracuu"
                   style={{
                     marginTop: "10px",
@@ -623,7 +623,7 @@ const App = (userDetails) => {
                       }}
                     />
                   </NavLink>
-                </Badge> */}
+                </Badge>
               </div>
 
               {/* <Menu
