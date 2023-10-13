@@ -16,6 +16,7 @@ router.put(`/confirm/:id`, OrderController.confirmOrder);
 router.put(`/cancel/:id`, OrderController.cancelOrder);
 
 router.get('/orderhistory/:phone', OrderController.orderHistory);
+router.get('/orderhistoryProfile/:email', OrderController.orderHistoryProfile);
 router.get('/laptopbanchay', OrderController.topLaptop);
 router.get('/dienthoaibanchay', OrderController.topDienthoai);
 

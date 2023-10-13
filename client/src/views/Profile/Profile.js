@@ -9,7 +9,7 @@ import {
   MDBRow,
   MDBCol,
 } from "mdb-react-ui-kit";
-import { Button, Col, Form, Input, Row, Select, Avatar } from "antd";
+import { Button, Col, Form, Input, Row, Select, Avatar, Table } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 
@@ -65,6 +65,7 @@ export default function Profile(props) {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +81,34 @@ export default function Profile(props) {
 
     fetchData();
   }, []);
+
+  const [userEmail, setUserEmail] = useState(null);
+  const [data, setData] = useState([]);
+
+  async function printEmail() {
+    try {
+      const userData = await user;
+      setUserEmail(userData.email);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    printEmail();
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistoryProfile/${userEmail}`)
+        .then(res => {
+            setData(res.data);
+            const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setData(sortedOrders || []);
+        })
+        .catch(error => console.log(error));
+  }, [userEmail]);
+
+
   // select city
   const handleCityChange = (value) => {
     const selectedCity = city.find((city) => city.Id === value);
@@ -135,6 +164,39 @@ export default function Profile(props) {
     }
     setIconsActive(value);
   };
+
+  const columns = [
+    { title: 'Mã giao dịch', dataIndex: 'order_id', key: 'magd' },
+    { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
+    { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
+    { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+    { 
+        title: 'Tổng giá',
+        key: 'totalPrice',
+        render: (text, record) => (
+            <p>{record.price * record.quantity}</p>
+        ),
+    },
+    {
+        title: 'Thời gian tạo',
+        dataIndex: 'order_created_at',
+        key: 'created_at',
+    },
+    
+    {
+        title: 'Trạng thái', 
+        dataIndex: 'order_status', 
+        key: 'status', 
+        render: status => (
+            <span style={{
+                fontWeight: 'bold', 
+                color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
+            }}>
+                {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
+            </span>
+        )
+    },
+  ]
 
   return (
     <>
@@ -364,20 +426,26 @@ export default function Profile(props) {
                     onClick={() => handleIconsClick("tab3")}
                     active={iconsActive === "tab3"}
                   >
-                    Đã hoàn thành
+                    Đã hủy
                   </MDBTabsLink>
                 </MDBTabsItem>
               </MDBTabs>
 
               <MDBTabsContent>
                 <MDBTabsPane show={iconsActive === "tab1"}>
-                  Tab 1 content
+                  {data.filter(order => order.order_status === 0).length > 0 ? (
+                    <Table columns={columns} dataSource={data.filter(order => order.order_status === 0)} />
+                  ) : ('Không có đơn hàng nào đang chờ xử lý')}
                 </MDBTabsPane>
                 <MDBTabsPane show={iconsActive === "tab2"}>
-                  Tab 2 content
+                  {data.filter(order => order.order_status === 1).length > 0 ? (
+                    <Table columns={columns} dataSource={data.filter(order => order.order_status === 1)} />
+                  ) : ('Không có đơn hàng nào được xác nhận')}
                 </MDBTabsPane>
                 <MDBTabsPane show={iconsActive === "tab3"}>
-                  Tab 3 content
+                  {data.filter(order => order.order_status === 2).length > 0 ? (
+                    <Table columns={columns} dataSource={data.filter(order => order.order_status === 2)} />
+                  ) : ('Không có đơn hàng nào bị hủy')}
                 </MDBTabsPane>
               </MDBTabsContent>
             </MDBTabsPane>
