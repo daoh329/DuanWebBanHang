@@ -51,6 +51,7 @@ function OrderList() {
     };
 
     const columns = [
+        { title: 'Mã GD', dataIndex: 'order_id', key: 'magd' },
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT người mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
@@ -75,7 +76,7 @@ function OrderList() {
                     fontWeight: 'bold', 
                     color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
                 }}>
-                    {status === 1 ? 'MOMO' : (status === 2 ? 'COD' : 'VNPAY')}
+                    {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
                 </span>
             )
         },

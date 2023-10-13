@@ -9,10 +9,11 @@ const Dashboard = () => {
     const fetchData = async () => {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/revenue`);
       
-      // Chuyển đổi updated_month về chuỗi ngày tháng
+      // Chuyển đổi updated_month về chuỗi ngày tháng và Revenue thành chuỗi với dấu phân cách hàng nghìn
       const convertedData = result.data.map(item => ({
         ...item,
-        updated_month: new Date(item.updated_month).toISOString().slice(0, 7)
+        updated_month: new Date(item.updated_month).toISOString().slice(0, 7),
+        Revenue: Number(item.Revenue).toLocaleString('en-US')
       }));
   
       setRevenue(convertedData);
