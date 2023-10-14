@@ -40,26 +40,26 @@ const App = () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
-      const user = {
-        id: data.user.id,
-        name: data.user.name,
-        phone: data.user.phone,
-        email: data.user.email,
-        picture: data.user.picture,
-        permission: data.user.permission,
-      };
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(data.user);
+      if (!user) {
+        const user = {
+          id: data.user.id,
+          name: data.user.name,
+          phone: data.user.phone,
+          email: data.user.email,
+          picture: data.user.picture,
+          permission: data.user.permission,
+        };
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(data.user);
+      }
     } catch (e) {
       console.log(e);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.removeItem("user", JSON.stringify(user));
     }
   };
 
   useEffect(() => {
-    if (!user) {
-      getUser();
-    }
+    getUser();
   }, []);
 
   return (
