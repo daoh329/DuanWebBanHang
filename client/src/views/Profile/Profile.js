@@ -10,7 +10,6 @@ import {
   MDBCol,
 } from "mdb-react-ui-kit";
 import { Button, Form, Input, Avatar, Table, message } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 
 //hỗ trợ icon
@@ -67,22 +66,17 @@ export default function Profile() {
   // Hàm được gọi khi
   const onFinish = async (values) => {
     setIsLoading(true);
-
     try {
       const id = user.id;
       const url = `${process.env.REACT_APP_API_URL}/auth/update/${id}`;
-
       const result = await axios.put(url, values);
-
       if (result.status === 200) {
         // Set lại state user
-        console.log(values);
         const newData = {
           ...user,
           name: values.name,
           phone: values.phone,
         }
-        console.log(newData);
         // Cập nhật thông tin người dùng mới
         localStorage.setItem("user", JSON.stringify(newData));
         return setTimeout(() => {
@@ -90,7 +84,6 @@ export default function Profile() {
           message.success("Cập nhật thành công");
         }, 1000);
       }
-
       return setTimeout(() => {
         setIsLoading(false);
         message.warning("Cập nhật thất bại");
