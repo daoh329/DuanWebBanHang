@@ -41,7 +41,6 @@ export default function Buy() {
   // state checked address
   const [addressChecked, setAddressChecked] = useState();
 
-
   const navigate = useNavigate();
 
   function DedaultAddress(value) {
@@ -69,7 +68,7 @@ export default function Buy() {
 
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
-    if (user.id) {
+    if (user) {
       getDeliveryAddress();
     }
   }, []);
@@ -270,7 +269,7 @@ export default function Buy() {
                       <h6>Thông tin nhận hàng</h6>
                       <div className="address-group">
                         {/* show address */}
-                        {user.id &&
+                        {user &&
                           deliveryAddress &&
                           deliveryAddress.map((value, index) => (
                             <ButtonAddress
@@ -285,7 +284,7 @@ export default function Buy() {
 
                         {/* add address */}
                         <div
-                          onClick={user.id ? showModalAdd : showConfirm}
+                          onClick={user ? showModalAdd : showConfirm}
                           className="address-add"
                         >
                           <PlusOutlined />

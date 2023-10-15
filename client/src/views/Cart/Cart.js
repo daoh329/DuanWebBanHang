@@ -21,7 +21,6 @@ function Cart() {
   // Lấy dữ liệu từ session
   const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
   const [cart, setCart] = useState(initialCart);
-  console.log(cart)
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -208,16 +207,13 @@ function Cart() {
   const handleContinueClick = () => {
     // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
     const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
-
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-
     // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
     const buys = {
       selectedItems,
       total,
     };
-
     // Lưu thông tin vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(buys));
     console.log('buys', buys)
