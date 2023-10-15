@@ -34,6 +34,7 @@ import axios from "axios";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import CreateOrder from "./VnPay/CreateOrder";
+import ChatGpt from "./ChatGPT/ChatGpt";
 const App = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const getUser = async () => {
@@ -115,6 +116,7 @@ const App = () => {
                 element={<AllProductPhonecopy />}
               />
               <Route path="/createorder" element={<CreateOrder />} />
+              <Route path="/chatgpt" element={<ChatGpt/>} />
             </Routes>
           </header>
           <MobileNav user={user} />
