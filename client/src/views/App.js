@@ -54,13 +54,14 @@ const App = () => {
       }
     } catch (e) {
       console.log(e);
-      localStorage.removeItem("user", JSON.stringify(user));
+      localStorage.removeItem("user");
     }
   };
 
   useEffect(() => {
     getUser();
   }, []);
+  console.log(user);
 
   return (
     <div className="App">
