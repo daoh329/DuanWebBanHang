@@ -146,7 +146,7 @@ class OrderController {
       odp.*, p.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
-      JOIN delivery_address da ON u.id = da.idUser
+      JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
       JOIN product p ON odp.productID = p.id
       WHERE u.phone = ?
