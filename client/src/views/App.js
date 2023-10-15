@@ -117,7 +117,7 @@ const App = () => {
                 element={<AllProductPhonecopy />}
               />
               <Route path="/createorder" element={<CreateOrder />} />
-              <Route path="/chatgpt" element={<ChatGpt/>} />
+              <Route path="/chat" element={<ChatGpt/>} />
             </Routes>
           </header>
           <MobileNav user={user} />
