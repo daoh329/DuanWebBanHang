@@ -8,7 +8,7 @@ import ReceiverInformationModal from "./ItemAddress/Modal/receiverInformationMod
 
 function Layout() {
   // Lấy id user
-  const idUser = localStorage.getItem("idUser");
+  const user = JSON.parse(localStorage.getItem("user"))
 
   //   Các biết cục bộ
   const [receiverInformation, setReceiverInformation] = useState([]);
@@ -16,18 +16,18 @@ function Layout() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (idUser) {
+    if (user) {
       getDeliveryAddress();
     }
   }, []);
 
-  if (!idUser) return;
+  if (!user) return;
 
   // Hàm lấy thông tin địa chỉ nhận hàng của người dùng
   const getDeliveryAddress = async () => {
     try {
       const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${idUser}`
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`
       );
       // sử lí address mặc định luôn render phía trên
       var address = result.data;

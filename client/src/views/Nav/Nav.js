@@ -28,8 +28,8 @@ import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
 
 const { Header } = Layout;
 
-const App = (userDetails) => {
-  const user = userDetails.user;
+const App = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
 
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
@@ -119,40 +119,17 @@ const App = (userDetails) => {
   const logout = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
     localStorage.removeItem("idUser");
+    localStorage.removeItem("user");
   };
   // tới profile
   const profile = () => {
     navigate("/profile");
   };
-  //
-  // const items = [
-  //   {
-  //     key: "1",
-  //     label: (
-  //       <a
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //         href="https://www.antgroup.com"
-  //       >
-  //         Chăm sóc khách hàng: 18006569
-  //       </a>
-  //     ),
-  //   },
-  //   {
-  //     key: "2",
-  //     label: (
-  //       <a
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //         href="https://www.aliyun.com"
-  //       >
-  //         Tư vấn khách hàng: 18006569
-  //       </a>
-  //     ),
-  //     icon: <SmileOutlined />,
-  //     disabled: true,
-  //   },
-  // ];
+
+  // tới profile
+  const adminPage = () => {
+    navigate("/admin");
+  };
 
   const menuAccount = [
     {
@@ -173,6 +150,22 @@ const App = (userDetails) => {
     },
     {
       key: "2",
+      label: user && user.permission === "admin" && (
+        <Button
+          onClick={adminPage}
+          style={{
+            border: "none",
+            width: "100%",
+            height: "100%",
+            background: "none",
+          }}
+        >
+          Quản lí hệ thống
+        </Button>
+      ),
+    },
+    {
+      key: "3",
       label: user ? (
         <Button
           style={{
@@ -214,11 +207,14 @@ const App = (userDetails) => {
   return (
     <Layout>
       <div className="danhmuc">
-        <img style={{width:'100%', height:"56px",objectFit:'cover'}} src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"></img>
+        <img
+          style={{ width: "100%", height: "56px", objectFit: "cover" }}
+          src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
+        ></img>
       </div>
 
       <div className="logoweb">
-      <img style={{objectFit:'cover'}} src={Hinh}></img>
+        <img style={{ objectFit: "cover" }} src={Hinh}></img>
       </div>
       <div className="menu-container">
         <div className="menu1">
@@ -231,7 +227,8 @@ const App = (userDetails) => {
                 textDecoration: "none",
               }}
             >
-              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} /> Khuyến mãi
+              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              Khuyến mãi
             </a>
             <a
               href="/showroom"
@@ -241,7 +238,10 @@ const App = (userDetails) => {
                 textDecoration: "none",
               }}
             >
-              <EnvironmentOutlined style={{ marginRight: "8px", color: "#fff" }} /> Hệ thống showroom
+              <EnvironmentOutlined
+                style={{ marginRight: "8px", color: "#fff" }}
+              />{" "}
+              Hệ thống showroom
             </a>
             <a
               href="/support"
@@ -251,7 +251,8 @@ const App = (userDetails) => {
                 textDecoration: "none",
               }}
             >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} /> Tư vẫn doanh nghiệp
+              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              Tư vẫn doanh nghiệp
             </a>
             <Dropdown menu={{ items: menuContact }} placement="bottomRight">
               <a
@@ -262,7 +263,8 @@ const App = (userDetails) => {
                   textDecoration: "none",
                 }}
               >
-                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} /> Liên hệ
+                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+                Liên hệ
               </a>
             </Dropdown>
             <a
@@ -273,7 +275,8 @@ const App = (userDetails) => {
                 textDecoration: "none",
               }}
             >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} /> Tin tức
+              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              Tin tức
             </a>
           </div>
         </div>
@@ -334,8 +337,8 @@ const App = (userDetails) => {
                     <img
                       src={Hinh}
                       style={{
-                        maxWidth: "100%",                  
-                        objectFit: "cover", 
+                        maxWidth: "100%",
+                        objectFit: "cover",
                         width: "100%",
                       }}
                       alt="Logo"
@@ -488,8 +491,17 @@ const App = (userDetails) => {
                         cursor: "pointer",
                       }}
                     >
-                      <Avatar src={user.picture} style={{cursor:"pointer",}}/>
-                      <span style={{ fontWeight: "bold", marginLeft: "5px",cursor:"pointer", }}>
+                      <Avatar
+                        src={user.picture}
+                        style={{ cursor: "pointer" }}
+                      />
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          marginLeft: "5px",
+                          cursor: "pointer",
+                        }}
+                      >
                         {formatUserName(user.name)}
                       </span>
                     </div>
@@ -500,7 +512,7 @@ const App = (userDetails) => {
                         backgroundColor: "#ae69dd",
                         margin: "10px",
                         fontSize: "24px",
-                        cursor:"pointer",
+                        cursor: "pointer",
                       }}
                     />
                   )}
@@ -564,9 +576,9 @@ const App = (userDetails) => {
                               title={
                                 selectedItems.shortDescription.length > 20
                                   ? selectedItems.shortDescription.substring(
-                                    0,
-                                    20
-                                  ) + "..."
+                                      0,
+                                      20
+                                    ) + "..."
                                   : selectedItems.shortDescription
                               }
                               description={
