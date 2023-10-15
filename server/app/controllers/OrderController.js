@@ -158,27 +158,6 @@ class OrderController {
     });
   }
 
-  async orderHistoryProfile(req, res) {
-    const email = req.params.email;
-    const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, 
-      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
-      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-      odp.*, p.*
-      FROM orders o
-      JOIN users u ON o.UserID = u.id
-      JOIN delivery_address da ON u.id = da.idUser
-      JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
-      WHERE u.email = ?
-      ORDER BY o.created_at DESC
-    `;
-    mysql.query(sql, [email], (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-  }
-
   async topLaptop(req, res) {
     const query = `
       SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail

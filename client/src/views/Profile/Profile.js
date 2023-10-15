@@ -82,13 +82,13 @@ export default function Profile(props) {
     fetchData();
   }, []);
 
-  const [userEmail, setUserEmail] = useState(null);
+  const [userPhone, setUserPhone] = useState(null);
   const [data, setData] = useState([]);
 
   async function printEmail() {
     try {
       const userData = await user;
-      setUserEmail(userData.email);
+      setUserPhone(userData.phone);
     } catch (error) {
       console.log(error);
     }
@@ -99,14 +99,14 @@ export default function Profile(props) {
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistoryProfile/${userEmail}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${userPhone}`)
         .then(res => {
             setData(res.data);
             const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setData(sortedOrders || []);
         })
         .catch(error => console.log(error));
-  }, [userEmail]);
+  }, [userPhone]);
 
 
   // select city
