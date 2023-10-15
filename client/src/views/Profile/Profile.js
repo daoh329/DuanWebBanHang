@@ -25,8 +25,30 @@ import Layout from "./AddressManager/Layout";
 export default function Profile() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   // select mới
-  // const [email, setEmail] = useState("");
-  const [userEmail, setUserEmail] = useState(null);
+  const [city, setCity] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+        );
+        setCity(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [userPhone, setUserPhone] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,31 +58,27 @@ export default function Profile() {
 
   async function printEmail() {
     try {
-      const userData = user;
-      setUserEmail(userData.email);
+      const userData = await user;
+      setUserPhone(userData.phone);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    orderFunction();
-  }, [userEmail]);
+    printEmail();
+  }, []);
 
-  async function orderFunction() {
-    await axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/order/orderhistoryProfile/${userEmail}`
-      )
-      .then((res) => {
-        setData(res.data);
-        const sortedOrders = res.data.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-        setData(sortedOrders || []);
-      })
-      .catch((error) => console.log(error));
-  }
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${userPhone}`)
+        .then(res => {
+            setData(res.data);
+            const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setData(sortedOrders || []);
+        })
+        .catch(error => console.log(error));
+  }, [userPhone]);
+
 
   const [form] = Form.useForm();
   // Hàm được gọi khi
