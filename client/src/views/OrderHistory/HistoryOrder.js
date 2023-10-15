@@ -22,7 +22,7 @@ function HistoryOrder(props) {
     const columns = [
         { title: 'Mã giao dịch', dataIndex: 'order_id', key: 'magd' },
         { title: 'Người mua', dataIndex: 'user_name', key: 'Username' },
-        { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
+        { title: 'Địa chỉ', dataIndex: 'addressID', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
         { 
