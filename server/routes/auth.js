@@ -34,7 +34,7 @@ router.get("/google", passport.authenticate("google", ["profile", "email"]));
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_URL,
+    successRedirect: `${process.env.CLIENT_URL}/login`,
     failureRedirect: "/login/failed",
   })
 );
@@ -46,6 +46,20 @@ router.get("/logout", (req, res, next) => {
     }
     res.redirect(process.env.CLIENT_URL);
   });
+});
+
+// update profile
+router.put("/update/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const {name, phone} = req.body;
+    const ud_account = `UPDATE users SET name = ?, phone = ? WHERE id = ? `
+    await query(ud_account, [name, phone, id]);
+    res.status(200).send("Update account success");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Update account failed");
+  }
 });
 
 // LOGIN PHONE NUMBER (API: /auth/login-otp)

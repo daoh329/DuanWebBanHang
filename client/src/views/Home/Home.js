@@ -438,7 +438,7 @@ const Home = () => {
           {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.map((item, index) => (
-                  <div className="sanpham-card" key={index}>
+                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                     <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -469,7 +469,7 @@ const Home = () => {
           {topDienthoai &&
                 topDienthoai.length > 0 &&
                 topDienthoai.map((item, index) => (
-                  <div className="sanpham-card" key={index}>
+                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                     <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -595,7 +595,7 @@ const Home = () => {
                 newPhone.length > 0 &&
                 newPhone.map((item, index) => (
 
-                  <div className="sanpham-card" key={index}>
+                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                     <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
@@ -641,7 +641,7 @@ const Home = () => {
       {newLaptop && newLaptop.length > 0 ? (
         <div className="phone-group">
           <div className="title-group">
-            <div className="phone-title">Laptop mới ra mắtt</div>
+            <div className="phone-title">Laptop mới ra mắt</div>
             <div className="views-all">Xem tất cả <i className="fa fa-chevron-right"></i> </div>
           </div>
           <div className="scroll-group-phone">
@@ -651,8 +651,8 @@ const Home = () => {
               {newLaptop &&
                 newLaptop.length > 0 &&
                 newLaptop.map((item, index) => (
-                  <div className="sanpham-card" key={index}>
-                    <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
@@ -719,8 +719,8 @@ const Home = () => {
             {statusPhone &&
               statusPhone.length > 0 &&
               statusPhone.slice(startIndex1, endIndex1).map((item, index) => (
-                <div className="sanpham-card" key={index}>
-                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL + item.thumbnail}
+                <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
+                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                   <div className="css-14q2k9dd">
                     <div className="css-zb7zul">
@@ -787,8 +787,8 @@ const Home = () => {
             {statusLaptop &&
               statusLaptop.length > 0 &&
               statusLaptop.slice(startIndex2, endIndex2).map((item, index) => (
-                <div className="sanpham-card" key={index}>
-                  <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
+                  <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                   <div className="css-14q2k9dd">
                     <div className="css-zb7zul">
                       <div className="css-1bqeu8f">TIẾT KIỆM</div>
@@ -861,8 +861,8 @@ const Home = () => {
               {historysp &&
                 historysp.length > 0 &&
                 historysp.map((item, index) => (
-                  <div className="sanpham-card" key={index} style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
-                    <img onClick={() => handleViewDetailproducts(item)} src={process.env.REACT_APP_API_URL + item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
+                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)} style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
+                    <img src={process.env.REACT_APP_API_URL + item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}

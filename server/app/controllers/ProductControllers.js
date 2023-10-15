@@ -7,7 +7,6 @@ class Product {
   async Addproduct(req, res) {
     const data = req.body;
     const arrImage = req.files;
-    console.log(data);
     var arrPathImage = [];
     arrImage.forEach((image) => {
       const pathImage = `/images/${path.basename(image.path)}`;

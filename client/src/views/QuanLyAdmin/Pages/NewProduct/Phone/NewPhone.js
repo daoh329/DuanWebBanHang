@@ -326,20 +326,6 @@ function NewPhone() {
                       </Option>
                     ))}
                 </Select>
-
-                <Button
-                  // onClick={addColor}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: "3px",
-                    marginLeft: "10px",
-                  }}
-                  icon={<PlusOutlined />}
-                >
-                  <a href="http://localhost:3000/admin/ListCate">Thêm</a>
-                </Button>
               </div>
             </div>
             {/* category */}

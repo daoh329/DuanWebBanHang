@@ -224,17 +224,19 @@ class OrderController {
   
   async Revenue(req, res) {
     let sql = `
-        SELECT 
-            DATE_FORMAT(o.updated_at, '%Y-%m') as updated_month, 
-            SUM(p.price * od.quantity) as Revenue
-        FROM 
-            orders o
-        JOIN 
-            orderDetailsProduct od ON o.id = od.orderID
-        JOIN 
-            product p ON od.productID = p.id
-        GROUP BY 
-            DATE_FORMAT(o.updated_at, '%Y-%m')
+    SELECT 
+        DATE_FORMAT(o.updated_at, '%Y-%m') as updated_month, 
+        SUM(p.price * od.quantity) as Revenue
+    FROM 
+        orders o
+    JOIN 
+        orderDetailsProduct od ON o.id = od.orderID
+    JOIN 
+        product p ON od.productID = p.id
+    WHERE
+        o.status = 1
+    GROUP BY 
+        DATE_FORMAT(o.updated_at, '%Y-%m')
     `;
     mysql.query(sql, (err, result) => {
       if(err) throw err;
@@ -252,7 +254,12 @@ class OrderController {
         
         return acc;
       }, []);
-  
+
+      // Chuyển đổi số thành chuỗi với dấu phân cách hàng nghìn
+      convertedData.forEach(item => {
+        item.Revenue = item.Revenue.toLocaleString('en-US');
+      });
+
       res.send(convertedData);
     });
   }
