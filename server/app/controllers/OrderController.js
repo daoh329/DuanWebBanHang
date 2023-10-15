@@ -140,13 +140,13 @@ class OrderController {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, 
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.updated_at AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
-      JOIN delivery_address da ON u.id = da.idUser
+      JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
       JOIN product p ON odp.productID = p.id
       WHERE u.phone = ?
