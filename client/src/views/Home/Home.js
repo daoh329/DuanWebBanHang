@@ -13,6 +13,8 @@ import { parse, stringify } from 'flatted';
 import CountdownTimer from './CountdownTimer';
 
 import { useCart } from "../Cart/CartContext";
+
+import Chatbot from "../ChatBot/Chatbot";
 const { Header } = Layout;
 const { TabPane } = Tabs;
 function formatCurrency(value) {
@@ -902,6 +904,7 @@ const Home = () => {
           </div>
         </div>
       ) : null}
+      <Chatbot />
     </Layout>
   );
 };

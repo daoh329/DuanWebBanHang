@@ -33,8 +33,8 @@ import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
+import Chatbot from "./ChatBot/Chatbot";
 import CreateOrder from "./VnPay/CreateOrder";
-import ChatGpt from "./ChatGPT/ChatGpt";
 const App = () => {
   const [user, setUser] = useState(null);
   const getUser = async () => {
@@ -126,7 +126,7 @@ const App = () => {
                 element={<AllProductPhonecopy />}
               />
               <Route path="/createorder" element={<CreateOrder />} />
-              <Route path="/chat" element={<ChatGpt />} />
+              <Route path="/chat" element={<Chatbot/>} />
             </Routes>
           </header>
           <MobileNav user={user} />
