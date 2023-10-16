@@ -34,6 +34,24 @@ const { Header } = Layout;
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const arrayNotification = [
+    {
+      title: "Thông báo số 1",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+    },
+    {
+      title: "Thông báo số 2",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+    },
+    {
+      title: "Thông báo số 3",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+    },
+  ];
+
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
     // Kiểm tra xem tên có khoảng trắng hay không.
@@ -544,12 +562,30 @@ const App = () => {
                       <div
                         style={{
                           width: "100%",
-                          maxHeight: "200px",
+                          maxHeight: "300px",
                           overflowY: "auto",
                           scrollbarWidth: "none",
                         }}
                       >
-                        <List />
+                        <List
+                          itemLayout="horizontal"
+                          dataSource={arrayNotification}
+                          renderItem={(item, index) => (
+                            <List.Item>
+                              <List.Item.Meta
+                                avatar={
+                                  <Avatar
+                                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                                  />
+                                }
+                                title={
+                                  <a href="https://ant.design">{item.title}</a>
+                                }
+                                description={item.content}
+                              />
+                            </List.Item>
+                          )}
+                        />
                       </div>
 
                       {/* views all notification */}
@@ -570,7 +606,7 @@ const App = () => {
                 >
                   <Badge
                     className="thongbao"
-                    count={5}
+                    count={arrayNotification ? arrayNotification.length : 0}
                     style={{
                       marginTop: "10px",
                       marginRight: "10px",
@@ -648,12 +684,10 @@ const App = () => {
                         />
                       </div>
                       <Divider />
-                      <Button
-                        type="primary"
-                        style={{ width: "100%", borderRadius: "3px" }}
-                      >
-                        <NavLink to="/cart"></NavLink>
-                        Xem giỏ hàng
+                      <Button style={{ width: "100%", borderRadius: "3px" }}>
+                        <NavLink to="/cart">
+                          <p>Xem giỏ hàng</p>
+                        </NavLink>
                       </Button>
                     </div>
                   }
