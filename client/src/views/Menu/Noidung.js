@@ -72,7 +72,8 @@ function Noidung() {
    <a className="css-cbrxda" href="#">
   <div className="css-1g2qfl">
     <div className="css-1knqu6t" style={{height:"48",width:"48"}}>
-      <img style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
+      <img src="https://img.icons8.com/ios-glyphs/80/map-marker.png" alt="map-marker"
+       style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
     </div>
     <div typeof="caption" className="css-1dr385k">Showroom</div>
   </div>
@@ -83,7 +84,8 @@ function Noidung() {
    <a className="css-cbrxda" href="#">
   <div className="css-1g2qfl">
     <div className="css-1knqu6t" style={{height:"48",width:"48"}}>
-      <img style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
+      <img src="https://img.icons8.com/ios-glyphs/80/filled-chat.png" alt="messaging-"
+      style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
     </div>
     <div typeof="caption" className="css-1dr385k">Tư vấn<br/>doanh nghiệp</div>
   </div>
@@ -94,7 +96,8 @@ function Noidung() {
    <a className="css-cbrxda" href="#">
   <div className="css-1g2qfl">
     <div className="css-1knqu6t" style={{height:"48",width:"48"}}>
-      <img style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
+      <img src="https://img.icons8.com/ios-glyphs/80/man-on-phone--v1.png" alt="man-on-phone--v1"
+      style={{width:"100%",height:"48px",objectFit:"contain",position:"absolute",top:"0",left:"0"}}/>
     </div>
     <div  style={{content:'Business consultancy'}} className="css-1dr385k">Liên hệ</div>
   </div>
