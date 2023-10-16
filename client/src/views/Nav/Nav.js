@@ -713,10 +713,13 @@ const App = () => {
                         />
                       </div>
                       <Divider />
+               
+
                       <Button style={{ width: "100%", borderRadius: "3px" }}>
                         <NavLink to="/cart">
                           <p>Xem giỏ hàng</p>
                         </NavLink>
+
                       </Button>
                     </div>
                   }
