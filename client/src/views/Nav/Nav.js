@@ -33,24 +33,26 @@ const { Header } = Layout;
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-
-  const arrayNotification = [
+  const [arrayNotification, setArrayNotification] = useState([
     {
       title: "Thông báo số 1",
       content:
         "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: true,
     },
     {
       title: "Thông báo số 2",
       content:
         "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: false,
     },
     {
       title: "Thông báo số 3",
       content:
         "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: false,
     },
-  ];
+  ]);
 
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
@@ -225,6 +227,21 @@ const App = () => {
       label: <Button>Tư vấn khách hàng: 18006569</Button>,
     },
   ];
+
+  const handleReadAll = () => {
+    const updatedNotifications = arrayNotification.map((notification) => {
+      if (notification.status === true) {
+        // Thay đổi giá trị status từ true sang false
+        return { ...notification, status: false };
+      }
+      // Giữ nguyên thông báo nếu status không phải là true
+      return notification;
+    });
+    
+    // Sau đó, bạn có thể cập nhật state với mảng thông báo mới
+    setArrayNotification(updatedNotifications);
+    
+  };
 
   return (
     <Layout>
@@ -554,7 +571,10 @@ const App = () => {
                       >
                         <h4>Thông báo</h4>
                         <Tooltip title={"Đánh dấu tất cả đã đọc"}>
-                          <CheckOutlined style={{ cursor: "pointer" }} />
+                          <CheckOutlined
+                            onClick={handleReadAll}
+                            style={{ cursor: "pointer" }}
+                          />
                         </Tooltip>
                       </div>
                       <Divider style={{ margin: "0" }} />
@@ -571,7 +591,16 @@ const App = () => {
                           itemLayout="horizontal"
                           dataSource={arrayNotification}
                           renderItem={(item, index) => (
-                            <List.Item>
+                            <List.Item
+                              style={
+                                item.status === true
+                                  ? {
+                                      backgroundColor: "#EAEAEA",
+                                      borderRadius: "5px",
+                                    }
+                                  : {}
+                              }
+                            >
                               <List.Item.Meta
                                 avatar={
                                   <Avatar
