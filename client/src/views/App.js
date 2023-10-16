@@ -126,7 +126,9 @@ const App = () => {
                 element={<AllProductPhonecopy />}
               />
               <Route path="/createorder" element={<CreateOrder />} />
+
               <Route path="/chat" element={<Chatbot/>} />
+
             </Routes>
           </header>
           <MobileNav user={user} />
