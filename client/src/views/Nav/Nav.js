@@ -33,6 +33,26 @@ const { Header } = Layout;
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [arrayNotification, setArrayNotification] = useState([
+    {
+      title: "Thông báo số 1",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: true,
+    },
+    {
+      title: "Thông báo số 2",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: false,
+    },
+    {
+      title: "Thông báo số 3",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: false,
+    },
+  ]);
 
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
@@ -207,6 +227,21 @@ const App = () => {
       label: <Button>Tư vấn khách hàng: 18006569</Button>,
     },
   ];
+
+  const handleReadAll = () => {
+    const updatedNotifications = arrayNotification.map((notification) => {
+      if (notification.status === true) {
+        // Thay đổi giá trị status từ true sang false
+        return { ...notification, status: false };
+      }
+      // Giữ nguyên thông báo nếu status không phải là true
+      return notification;
+    });
+    
+    // Sau đó, bạn có thể cập nhật state với mảng thông báo mới
+    setArrayNotification(updatedNotifications);
+    
+  };
 
   return (
     <Layout>
@@ -536,7 +571,10 @@ const App = () => {
                       >
                         <h4>Thông báo</h4>
                         <Tooltip title={"Đánh dấu tất cả đã đọc"}>
-                          <CheckOutlined style={{ cursor: "pointer" }} />
+                          <CheckOutlined
+                            onClick={handleReadAll}
+                            style={{ cursor: "pointer" }}
+                          />
                         </Tooltip>
                       </div>
                       <Divider style={{ margin: "0" }} />
@@ -544,12 +582,39 @@ const App = () => {
                       <div
                         style={{
                           width: "100%",
-                          maxHeight: "200px",
+                          maxHeight: "300px",
                           overflowY: "auto",
                           scrollbarWidth: "none",
                         }}
                       >
-                        <List />
+                        <List
+                          itemLayout="horizontal"
+                          dataSource={arrayNotification}
+                          renderItem={(item, index) => (
+                            <List.Item
+                              style={
+                                item.status === true
+                                  ? {
+                                      backgroundColor: "#EAEAEA",
+                                      borderRadius: "5px",
+                                    }
+                                  : {}
+                              }
+                            >
+                              <List.Item.Meta
+                                avatar={
+                                  <Avatar
+                                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                                  />
+                                }
+                                title={
+                                  <a href="https://ant.design">{item.title}</a>
+                                }
+                                description={item.content}
+                              />
+                            </List.Item>
+                          )}
+                        />
                       </div>
 
                       {/* views all notification */}
@@ -570,7 +635,7 @@ const App = () => {
                 >
                   <Badge
                     className="thongbao"
-                    count={5}
+                    count={arrayNotification ? arrayNotification.length : 0}
                     style={{
                       marginTop: "10px",
                       marginRight: "10px",
@@ -648,12 +713,13 @@ const App = () => {
                         />
                       </div>
                       <Divider />
-                      <Button
-                        type="primary"
-                        style={{ width: "100%", borderRadius: "3px" }}
-                      >
-                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
-                        
+               
+
+                      <Button style={{ width: "100%", borderRadius: "3px" }}>
+                        <NavLink to="/cart">
+                          <p>Xem giỏ hàng</p>
+                        </NavLink>
+
                       </Button>
                     </div>
                   }
