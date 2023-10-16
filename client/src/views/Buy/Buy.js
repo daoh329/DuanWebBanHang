@@ -1185,7 +1185,7 @@ export default function Buy() {
                                   color="textPrimary"
                                   className="css-l4bwcr snipcss0-6-16-17 snipcss0-10-115-116"
                                 >
-                                  {item.name}
+                                  {item.shortDescription}
                                 </div>
                               </a>
                               {/* Số lượng */}
