@@ -78,7 +78,8 @@ const App = () => {
               <Route path='/orders' element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
-              <Route path="/profile" element={idUser ? <Profile user={user}/> : <Navigate to='/' />} />
+              <Route path="/profile" element={idUser ? <Profile  user={user}/> : <Navigate to='/' />} />
+                                                                  
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
               <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
               <Route path="/tat-ca-san-pham-phone-coppy" element={<AllProductPhonecopy />} />
