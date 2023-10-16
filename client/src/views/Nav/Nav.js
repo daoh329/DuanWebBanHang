@@ -652,8 +652,8 @@ const App = () => {
                         type="primary"
                         style={{ width: "100%", borderRadius: "3px" }}
                       >
-                        <NavLink to="/cart"></NavLink>
-                        Xem giỏ hàng
+                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                        
                       </Button>
                     </div>
                   }
