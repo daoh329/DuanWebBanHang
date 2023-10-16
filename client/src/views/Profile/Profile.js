@@ -22,40 +22,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Layout from "./AddressManager/Layout";
 
-
-const { Option } = Select;
-
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 8,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
-
 export default function Profile() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   // select mới
