@@ -10,7 +10,7 @@ function OrderList() {
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
             .then(res => {
-                const sortedOrders = res.data.sort((a, b) => new Date(b.order_updated_at) - new Date(a.order_updated_at));
+                const sortedOrders = res.data.sort((a, b) => new Date(b.order_created_at) - new Date(a.order_created_at));
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
@@ -51,6 +51,7 @@ function OrderList() {
     };
 
     const columns = [
+        { title: 'Mã GD', dataIndex: 'order_id', key: 'magd' },
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT người mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
@@ -75,7 +76,7 @@ function OrderList() {
                     fontWeight: 'bold', 
                     color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
                 }}>
-                    {status === 1 ? 'MOMO' : (status === 2 ? 'COD' : 'VNPAY')}
+                    {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
                 </span>
             )
         },
@@ -83,7 +84,7 @@ function OrderList() {
         { title: 'Ghi chú', dataIndex: 'order_note', key: 'note' },
         {
             title: 'Thời gian tạo',
-            dataIndex: 'order_updated_at',
+            dataIndex: 'order_created_at',
             key: 'updated_at',
         },
 

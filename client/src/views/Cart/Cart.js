@@ -21,23 +21,25 @@ function Cart() {
   // Lấy dữ liệu từ session
   const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
   const [cart, setCart] = useState(initialCart);
-  console.log(cart)
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  // Hàm này được gọi khi checkbox thay đổi trạng thái
   const handleCheckboxChange = (productId) => {
-    const updatedSelectedProducts = [...selectedProducts];
-    const index = updatedSelectedProducts.indexOf(productId);
+    // Kiểm tra xem sản phẩm đã được chọn chưa
+    const isSelected = selectedProducts.includes(productId);
+    let updatedSelectedProducts;
 
-    if (index === -1) {
-      updatedSelectedProducts.push(productId);
+    if (isSelected) {
+      // Nếu sản phẩm đã được chọn, hủy chọn nó
+      updatedSelectedProducts = selectedProducts.filter(id => id !== productId);
+      setSelectedProducts(updatedSelectedProducts);
     } else {
-      updatedSelectedProducts.splice(index, 1);
+      // Nếu sản phẩm chưa được chọn, chọn nó và hủy chọn tất cả các sản phẩm khác
+      updatedSelectedProducts = [productId];
+      setSelectedProducts(updatedSelectedProducts);
+      setSelectAll(false);
     }
-
-    setSelectedProducts(updatedSelectedProducts);
 
     // Lưu trạng thái checkbox vào sessionStorage
     const checkboxData = {
@@ -45,7 +47,8 @@ function Cart() {
       selectedProducts: updatedSelectedProducts,
     };
     sessionStorage.setItem('checkboxData', JSON.stringify(checkboxData));
-  };
+};
+
 
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
   const handleSelectAllChange = () => {
@@ -204,16 +207,13 @@ function Cart() {
   const handleContinueClick = () => {
     // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
     const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
-
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-
     // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
     const buys = {
       selectedItems,
       total,
     };
-
     // Lưu thông tin vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(buys));
     console.log('buys', buys)
@@ -232,10 +232,10 @@ function Cart() {
                 <MDBTableHead light>
                   <tr>
                     <th scope="col">
-                      <Checkbox
+                      {/* <Checkbox
                         onChange={handleSelectAllChange}
                         checked={selectAll}>
-                      </Checkbox>
+                      </Checkbox> */}
                     </th>
                     <th scope="col">Hình</th>
                     <th scope="col">Sản Phẩm</th>

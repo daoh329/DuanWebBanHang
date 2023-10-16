@@ -22,7 +22,7 @@ function ReceiverInformationModal({
   getValues,
   countAddress,
 }) {
-  const idUser = localStorage.getItem("idUser");
+  const user = JSON.parse(localStorage.getItem("user"))
 
   const [city, setCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -80,7 +80,7 @@ function ReceiverInformationModal({
 
     // Tạo trường id account cho values
     values["idUser"] = values["idUser"] || "";
-    values["idUser"] = idUser;
+    values["idUser"] = user.id;
 
     // Nếu địa chỉ hiện tại là địa chỉ đầu tiên thì gắn là mặc định
     if (countAddress === 0) {

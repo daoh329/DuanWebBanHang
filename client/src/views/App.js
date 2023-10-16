@@ -34,27 +34,38 @@ import axios from "axios";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import CreateOrder from "./VnPay/CreateOrder";
+import ChatGpt from "./ChatGPT/ChatGpt";
 const App = () => {
-  const [user, setUser] = useState(null);
-  const idUser = localStorage.getItem("idUser");
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const getUser = async () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
-      localStorage.setItem("idUser", data.user.id);
-      setUser(data.user);
+      if (!user) {
+        const user = {
+          id: data.user.id,
+          name: data.user.name,
+          phone: data.user.phone,
+          email: data.user.email,
+          picture: data.user.picture,
+          permission: data.user.permission,
+        };
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(data.user);
+      }
     } catch (e) {
       console.log(e);
-      localStorage.removeItem("idUser");
+      localStorage.removeItem("user");
     }
   };
 
   useEffect(() => {
     getUser();
   }, []);
+  console.log(user);
 
   return (
-    <div className='App'>
+    <div className="App">
       <BrowserRouter>
         <CartProvider>
           <Nav user={user} />
@@ -62,11 +73,25 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/detail/:id" element={<Detail />} />
-              <Route path="/login" element={user ? <Navigate to='/' /> : <Login />} />
+              <Route
+                path="/login"
+                element={user ? <Navigate to="/" /> : <Login />}
+              />
               {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
 
-              <Route path="/admin/*" element={<> <Admin /> <Outlet /> </>} />
+              <Route
+                path="/admin/*"
+                element={
+                  user && user.permission === "admin" ? (
+                    <>
+                      <Admin /> <Outlet />
+                    </>
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
               <Route path="/search" element={<Search />} />
               <Route path="/showroom" element={<ShowRoom />} />
               <Route path="/tin-tuc" element={<Tintuc />} />
@@ -75,15 +100,24 @@ const App = () => {
               <Route path="/checkSP" element={<CheckSP />} />
               <Route path="/sale" element={<Sale />} />
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
-              <Route path='/orders' element={<QLdonhang />} />
+              <Route path="/orders" element={<QLdonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
-              <Route path="/profile" element={idUser ? <Profile  user={user}/> : <Navigate to='/' />} />
-                                                                  
+              <Route
+                path="/profile"
+                element={user ? <Profile /> : <Navigate to="/" />}
+              />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
-              <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
-              <Route path="/tat-ca-san-pham-phone-coppy" element={<AllProductPhonecopy />} />
+              <Route
+                path="/tat-ca-san-pham-phone"
+                element={<AllProductPhone />}
+              />
+              <Route
+                path="/tat-ca-san-pham-phone-coppy"
+                element={<AllProductPhonecopy />}
+              />
               <Route path="/createorder" element={<CreateOrder />} />
+              <Route path="/chat" element={<ChatGpt/>} />
             </Routes>
           </header>
           <MobileNav user={user} />
@@ -91,7 +125,6 @@ const App = () => {
         </CartProvider>
       </BrowserRouter>
     </div>
-
   );
 };
 

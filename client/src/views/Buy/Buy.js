@@ -28,9 +28,8 @@ function formatCurrency(value) {
 }
 //
 
-export default function Buy(props) {
-  const { user } = props;
-  const idUser = localStorage.getItem("idUser");
+export default function Buy() {
+  const user = JSON.parse(localStorage.getItem("user"))
   const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [note, setNote] = useState("");
@@ -41,7 +40,6 @@ export default function Buy(props) {
   const [buysData, setBuysData] = useState(null);
   // state checked address
   const [addressChecked, setAddressChecked] = useState();
-
 
   const navigate = useNavigate();
 
@@ -59,7 +57,7 @@ export default function Buy(props) {
   const getDeliveryAddress = async () => {
     try {
       const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${idUser}`
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`
       );
       setDeliveryAddress(result.data);
       DedaultAddress(result.data);
@@ -70,7 +68,7 @@ export default function Buy(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
-    if (idUser) {
+    if (user) {
       getDeliveryAddress();
     }
   }, []);
@@ -271,7 +269,7 @@ export default function Buy(props) {
                       <h6>Thông tin nhận hàng</h6>
                       <div className="address-group">
                         {/* show address */}
-                        {idUser &&
+                        {user &&
                           deliveryAddress &&
                           deliveryAddress.map((value, index) => (
                             <ButtonAddress
@@ -286,7 +284,7 @@ export default function Buy(props) {
 
                         {/* add address */}
                         <div
-                          onClick={idUser ? showModalAdd : showConfirm}
+                          onClick={user ? showModalAdd : showConfirm}
                           className="address-add"
                         >
                           <PlusOutlined />
