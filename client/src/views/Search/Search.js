@@ -188,7 +188,7 @@ const Search = () => {
     }}
   >
     <div className="title-group">
-      <div className="products-title">Bạn đangtìm kiếm "{query}": ({filteredProducts.length} sản phẩm)</div>     
+      <div className="products-title">Bạn đang tìm kiếm "{query}": ({filteredProducts.length} sản phẩm)</div>     
     </div>
     <div className="scroll-control-product">
 
