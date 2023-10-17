@@ -8,6 +8,8 @@ import {
   Popover,
   List,
   Dropdown,
+  Divider,
+  Tooltip,
 } from "antd";
 import {
   SolutionOutlined,
@@ -19,6 +21,7 @@ import {
   CommentOutlined,
   PhoneOutlined,
   DeleteOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +33,26 @@ const { Header } = Layout;
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [arrayNotification, setArrayNotification] = useState([
+    {
+      title: "Thông báo số 1",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: true,
+    },
+    {
+      title: "Thông báo số 2",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: false,
+    },
+    {
+      title: "Thông báo số 3",
+      content:
+        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
+      status: false,
+    },
+  ]);
 
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
@@ -187,6 +210,7 @@ const App = () => {
             background: "none",
           }}
         >
+          {localStorage.removeItem("user")}
           <NavLink to="/login">Đăng nhập</NavLink>
         </Button>
       ),
@@ -203,6 +227,21 @@ const App = () => {
       label: <Button>Tư vấn khách hàng: 18006569</Button>,
     },
   ];
+
+  const handleReadAll = () => {
+    const updatedNotifications = arrayNotification.map((notification) => {
+      if (notification.status === true) {
+        // Thay đổi giá trị status từ true sang false
+        return { ...notification, status: false };
+      }
+      // Giữ nguyên thông báo nếu status không phải là true
+      return notification;
+    });
+    
+    // Sau đó, bạn có thể cập nhật state với mảng thông báo mới
+    setArrayNotification(updatedNotifications);
+    
+  };
 
   return (
     <Layout>
@@ -517,92 +556,173 @@ const App = () => {
                     />
                   )}
                 </Dropdown>
-                <Badge
-                  className="thongbao"
-                  count={5}
-                  style={{
-                    marginTop: "10px",
-                    marginRight: "10px",
-                    backgroundColor: "#f50",
-                    color: "#fff",
-                  }}
-                >
-                  <BellOutlined
-                    style={{
-                      fontSize: "30px",
-                      color: "#ae69dd",
-                      margin: "10px",
-                    }}
-                  />
-                </Badge>
+
+                {/* notification */}
                 <Popover
                   content={
-                    <div
+                    <div style={{ width: "350px" }}>
+                      {/* title */}
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <h4>Thông báo</h4>
+                        <Tooltip title={"Đánh dấu tất cả đã đọc"}>
+                          <CheckOutlined
+                            onClick={handleReadAll}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </Tooltip>
+                      </div>
+                      <Divider style={{ margin: "0" }} />
+                      {/* list */}
+                      <div
+                        style={{
+                          width: "100%",
+                          maxHeight: "300px",
+                          overflowY: "auto",
+                          scrollbarWidth: "none",
+                        }}
+                      >
+                        <List
+                          itemLayout="horizontal"
+                          dataSource={arrayNotification}
+                          renderItem={(item, index) => (
+                            <List.Item
+                              style={
+                                item.status === true
+                                  ? {
+                                      backgroundColor: "#EAEAEA",
+                                      borderRadius: "5px",
+                                    }
+                                  : {}
+                              }
+                            >
+                              <List.Item.Meta
+                                avatar={
+                                  <Avatar
+                                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                                  />
+                                }
+                                title={
+                                  <a href="https://ant.design">{item.title}</a>
+                                }
+                                description={item.content}
+                              />
+                            </List.Item>
+                          )}
+                        />
+                      </div>
+
+                      {/* views all notification */}
+                      <Divider style={{ margin: "0" }} />
+                      <div
+                        style={{
+                          padding: "10px 0 0 0",
+                          width: "100%",
+                          textAlign: "center",
+                        }}
+                      >
+                        <p style={{ cursor: "pointer" }}>
+                          Xem tất cả thông báo
+                        </p>
+                      </div>
+                    </div>
+                  }
+                >
+                  <Badge
+                    className="thongbao"
+                    count={arrayNotification ? arrayNotification.length : 0}
+                    style={{
+                      marginTop: "10px",
+                      marginRight: "10px",
+                      backgroundColor: "#f50",
+                      color: "#fff",
+                    }}
+                  >
+                    <BellOutlined
                       style={{
-                        width: "300px",
-                        maxHeight: "200px",
-                        overflowY: "auto",
-                        scrollbarWidth: "none",
+                        fontSize: "30px",
+                        color: "#ae69dd",
+                        margin: "10px",
+                        cursor: "pointer",
                       }}
-                    >
-                      <Button
-                        type="primary"
-                        style={{ width: "100%", marginTop: "10px" }}
+                    />
+                  </Badge>
+                </Popover>
+
+                {/* cart */}
+                <Popover
+                  content={
+                    <div style={{ width: "350px" }}>
+                      <div
+                        style={{
+                          width: "100%",
+                          maxHeight: "200px",
+                          overflowY: "auto",
+                          scrollbarWidth: "none",
+                        }}
                       >
-                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
-                      </Button>
-                      <List
-                        itemLayout="horizontal"
-                        dataSource={cart}
-                        renderItem={(selectedItems) => (
-                          <List.Item
-                            actions={[
-                              <Button
-                                type="danger"
-                                icon={<DeleteOutlined />}
-                                onClick={() => removeFromCart(selectedItems.id)}
-                              ></Button>,
-                            ]}
-                          >
-                            <List.Item.Meta
-                              avatar={
-                                <Avatar
-                                  src={
-                                    process.env.REACT_APP_API_URL +
-                                    selectedItems.thumbnail
+                        <List
+                          itemLayout="horizontal"
+                          dataSource={cart}
+                          renderItem={(selectedItems) => (
+                            <List.Item
+                              actions={[
+                                <Button
+                                  type="danger"
+                                  icon={<DeleteOutlined />}
+                                  onClick={() =>
+                                    removeFromCart(selectedItems.id)
                                   }
-                                />
-                              }
-                              title={
-                                selectedItems.shortDescription.length > 20
-                                  ? selectedItems.shortDescription.substring(
-                                      0,
-                                      20
-                                    ) + "..."
-                                  : selectedItems.shortDescription
-                              }
-                              description={
-                                <>
-                                  <div>Giá: {selectedItems.price} ₫</div>
-                                  <div>
-                                    Số lượng: {selectedItems.quantity}
-                                  </div>{" "}
-                                  {/* Hiển thị số lượng */}
-                                </>
-                              }
-                            />
-                          </List.Item>
-                        )}
-                      />
-                      <Button
-                        type="primary"
-                        style={{ width: "100%", marginTop: "10px" }}
-                      >
-                        <NavLink to="/cart">Xem giỏ hàng</NavLink>
+                                ></Button>,
+                              ]}
+                            >
+                              <List.Item.Meta
+                                avatar={
+                                  <Avatar
+                                    src={
+                                      process.env.REACT_APP_API_URL +
+                                      selectedItems.thumbnail
+                                    }
+                                  />
+                                }
+                                title={
+                                  selectedItems.shortDescription.length > 20
+                                    ? selectedItems.shortDescription.substring(
+                                        0,
+                                        20
+                                      ) + "..."
+                                    : selectedItems.shortDescription
+                                }
+                                description={
+                                  <>
+                                    <div>Giá: {selectedItems.price} ₫</div>
+                                    <div>
+                                      Số lượng: {selectedItems.quantity}
+                                    </div>{" "}
+                                    {/* Hiển thị số lượng */}
+                                  </>
+                                }
+                              />
+                            </List.Item>
+                          )}
+                        />
+                      </div>
+                      <Divider />
+               
+
+                      <Button style={{ width: "100%", borderRadius: "3px" }}>
+                        <NavLink to="/cart">
+                          <p>Xem giỏ hàng</p>
+                        </NavLink>
+
                       </Button>
                     </div>
                   }
-                  title="Giỏ hàng"
                   trigger="hover"
                 >
                   <Badge
@@ -614,10 +734,13 @@ const App = () => {
                         fontSize: "30px",
                         color: "#ae69dd",
                         margin: "10px",
+                        cursor: "pointer",
                       }}
                     />
                   </Badge>
                 </Popover>
+
+                {/* tra cuu */}
                 <Badge
                   className="tracuu"
                   style={{

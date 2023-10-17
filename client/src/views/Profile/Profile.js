@@ -182,20 +182,22 @@ export default function Profile() {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
+                onClick={() => handleVerticalClick("tab1")}
                 active={verticalActive === "tab1"}
               >
                 <Avatar src={user.picture} size="large" />
                 {user.name}
               </MDBTabsLink>
             </MDBTabsItem>
-            <MDBTabsItem>
+
+            {/* <MDBTabsItem>
               <MDBTabsLink
                 onClick={() => handleVerticalClick("tab1")}
                 active={verticalActive === "tab1"}
               >
                 <FontAwesomeIcon icon={faUser} /> Cá nhân
               </MDBTabsLink>
-            </MDBTabsItem>
+            </MDBTabsItem> */}
             <MDBTabsItem>
               <MDBTabsLink
                 onClick={() => handleVerticalClick("tab2")}

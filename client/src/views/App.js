@@ -33,36 +33,45 @@ import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
+import Chatbot from "./ChatBot/Chatbot";
 import CreateOrder from "./VnPay/CreateOrder";
-import ChatGpt from "./ChatGPT/ChatGpt";
 const App = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState(null);
   const getUser = async () => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
-      const { data } = await axios.get(url, { withCredentials: true });
-      if (!user) {
-        const user = {
-          id: data.user.id,
-          name: data.user.name,
-          phone: data.user.phone,
-          email: data.user.email,
-          picture: data.user.picture,
-          permission: data.user.permission,
-        };
-        localStorage.setItem("user", JSON.stringify(user));
-        setUser(data.user);
+      const result = await axios.get(url, { withCredentials: true });
+      let data = result.data;
+      const u = {
+        id: data.user.id,
+        name: data.user.name,
+        phone: data.user.phone,
+        email: data.user.email,
+        picture: data.user.picture,
+        permission: data.user.permission,
+      };
+
+      if (!storedUser && result.status === 200) {
+        localStorage.setItem("user", JSON.stringify(u));
+        setUser(u);
+        return;
       }
-    } catch (e) {
-      console.log(e);
+      else if (storedUser && result.status === 200) {
+        setUser(storedUser);
+      }
       localStorage.removeItem("user");
+      setUser(null);
+    } catch (e) {
+      setUser(null);
+      localStorage.removeItem("user");
+      console.log(e);
     }
   };
 
   useEffect(() => {
-    getUser();
+      getUser();
   }, []);
-  console.log(user);
 
   return (
     <div className="App">
@@ -117,7 +126,9 @@ const App = () => {
                 element={<AllProductPhonecopy />}
               />
               <Route path="/createorder" element={<CreateOrder />} />
-              <Route path="/chat" element={<ChatGpt/>} />
+
+              <Route path="/chat" element={<Chatbot/>} />
+
             </Routes>
           </header>
           <MobileNav user={user} />

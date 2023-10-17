@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from '../Cart/CartContext';
 
 const { Content } = Layout;
-
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 const Search = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -107,71 +109,133 @@ const Search = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   return (
+    
+    // <div
+    //   style={{
+    //     borderRadius: "20px",
+    //     width: "1234px",
+    //     margin: "0 auto",
+    //     marginTop: "20px",
+    //     backgroundSize: "cover",
+    //     backgroundColor: "white",
+    //   }}
+    // >
+    //   <div>
+    //     <div
+    //       style={{
+    //         fontWeight: "bold",
+    //         fontSize: "25px",
+    //         display: "-webkit-box",
+    //         padding: "20px",
+    //         color: "black",
+    //       }}
+    //     >
+    //       Kết quả tìm kiếm
+    //     </div>
+    //   </div>
+    //   <div
+    //     style={{
+    //       display: "grid",
+    //       gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+    //       gap: "20px",
+    //     }}
+    //   >
+    //     {filteredProducts &&
+    //       filteredProducts.length > 0 &&
+    //       filteredProducts.slice(startIndex, endIndex).map((item, index) => (
+    //         <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
+    //           <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' , margin:'0 auto'}}></img>
+    //           <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+    //             <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+    //               {item.brand}
+    //             </div>
+    //           </div>
+    //           <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
+    //             <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+    //               {item.shortDescription}
+    //             </h3>
+    //           </div>
+
+    //           <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+    //             <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+    //               {item.price}₫
+    //             </div>
+
+    //           </div>
+    //         </div>
+    //       ))}
+    //   </div>
+    //   {/* Phân trang */}
+    //   {/* <div style={{ textAlign: 'center', marginTop: '10px' }}>
+    //                 <Pagination
+    //                     current={currentPage}
+    //                     total={ListUsers.length}
+    //                     pageSize={itemsPerPage}
+    //                     onChange={handlePageChange}
+    //                 />
+    //             </div> */}
+    // </div>
+
+
     <div
-      style={{
-        borderRadius: "20px",
-        width: "1234px",
-        margin: "0 auto",
-        marginTop: "20px",
-        backgroundSize: "cover",
-        backgroundColor: "white",
-      }}
-    >
-      <div>
-        <div
-          style={{
-            fontWeight: "bold",
-            fontSize: "25px",
-            display: "-webkit-box",
-            padding: "20px",
-            color: "black",
-          }}
-        >
-          Kết quả tìm kiếm
-        </div>
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        {filteredProducts &&
-          filteredProducts.length > 0 &&
-          filteredProducts.slice(startIndex, endIndex).map((item, index) => (
-            <div className="sanpham-card" style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
-              <img onClick={() => handleViewDetailProduct(item)} src={process.env.REACT_APP_API_URL+item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' , margin:'0 auto'}}></img>
-              <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                  {item.brand}
-                </div>
-              </div>
-              <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
-                <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                  {item.shortDescription}
-                </h3>
-              </div>
+    className="product-container"
+    style={{
+      width: "1234px",
+      margin: "0 auto",
+      marginTop: "20px",
+      backgroundSize: "cover",
+      backgroundColor: "#ededed",
+    }}
+  >
+    <div className="title-group">
+      <div className="products-title">Bạn đangtìm kiếm "{query}": ({filteredProducts.length} sản phẩm)</div>     
+    </div>
+    <div className="scroll-control-product">
 
-              <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                  {item.price}₫
-                </div>
-
+      {filteredProducts &&
+        filteredProducts.length > 0 &&
+        filteredProducts.map((item, index) => (
+          <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
+            <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+            <div className="css-14q2k9dd">
+              <div className="css-zb7zul">
+                <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                <div className="css-1rdv2qd">191.000&nbsp;₫</div>
               </div>
             </div>
-          ))}
-      </div>
-      {/* Phân trang */}
-      {/* <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                    <Pagination
-                        current={currentPage}
-                        total={ListUsers.length}
-                        pageSize={itemsPerPage}
-                        onChange={handlePageChange}
-                    />
-                </div> */}
+            <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+              <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                {item.brand}
+              </div>
+            </div>
+            <div className="css-nameproduct">
+              <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                {item.shortDescription}
+              </h3>
+            </div>
+
+            <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+              <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                {formatCurrency(item.price)}
+              </div>
+
+            </div>
+          </div>
+        ))}
+
     </div>
+    {/* Phân trang */}
+    {/* <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
+      <Pagination
+        current={currentPage2}
+        total={products.length}
+        pageSize={itemsPerPage}
+        onChange={handlePageChange2}
+      />
+    </div> */}
+  </div>
+
+
   );
 };
 
