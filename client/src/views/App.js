@@ -18,6 +18,7 @@ import Admin from "./QuanLyAdmin/Admin";
 import Search from "./Search/Search";
 import Sale from "./Menu/Sale";
 import QLdonhang from "./QuanLyAdmin/QLdonhang";
+import QLAlldonhang from "./QuanLyAdmin/QLAlldonhang";
 import ShowRoom from "./Menu/ShowRoom";
 import Tintuc from "./Menu/Tintuc";
 import Support from "./Menu/Support";
@@ -110,6 +111,7 @@ const App = () => {
               <Route path="/sale" element={<Sale />} />
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
               <Route path="/orders" element={<QLdonhang />} />
+              <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
               <Route

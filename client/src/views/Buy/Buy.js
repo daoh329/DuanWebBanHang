@@ -335,7 +335,7 @@ export default function Buy() {
                         </label>
                       </div>
 
-                      <div className="css-18c0ysw snipcss0-4-4-52">
+                      {/* <div className="css-18c0ysw snipcss0-4-4-52">
                         <div
                           type="subtitle"
                           className="css-1realo9 snipcss0-5-52-53"
@@ -349,7 +349,7 @@ export default function Buy() {
                             placeholder="Email"
                           />
                         </div>
-                      </div>
+                      </div> */}
                     </MDBTabsPane>
 
                     <MDBTabsPane show={fillActive === "tab2"}>

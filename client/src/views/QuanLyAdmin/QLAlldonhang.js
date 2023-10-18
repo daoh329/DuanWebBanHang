@@ -3,11 +3,11 @@ import { Table, Button } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
 
-function OrderList() {
+function QLAlldonhang() {
 
     const [data, setData] = useState([]);
     const loadData = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
             .then(res => {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data.sort((a, b) => {
@@ -109,33 +109,15 @@ function OrderList() {
                 </span>
             )
         },
-        {
-            title: 'Hành động',
-            dataIndex: 'action',
-            key: 'action',
-            render: (_, record) => (
-                <span>
-                    {record.order_status === 1 ? (
-                        <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
-                            Hủy
-                        </Button>
-                    ) : (
-                        <Button className="confirm-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
-                            Xác nhận
-                        </Button>
-                    )}
-                </span>
-            ),
-        }
     ];
 
     return (
         <div>
-            <h1>Quản lý đơn hàng trong một tháng</h1>
-            <a href="/allorders" style={{ color: 'black' }}>Xem tất cả đơn hàng</a>
+            <h1>Tất cả đơn hàng</h1>
+            <a href="/orders" style={{ color: 'black' }}>Xem đơn hàng trong một tháng</a>
             <Table columns={columns} dataSource={data} />
         </div>
     );
 }
 
-export default OrderList;
+export default QLAlldonhang;
