@@ -34,6 +34,7 @@ const AllProductPhonecopy = () => {
   const [maxSliderValue, setMaxSliderValue] = useState(40000000);
   const [selectedBrand, setSelectedBrand] = useState('ALL');
   const [displayedProducts, setDisplayedProducts] = useState(products);
+  const brands = [...new Set(products.map(product => product.brand))];
 
   useEffect(() => {
     axios
@@ -186,9 +187,9 @@ const AllProductPhonecopy = () => {
                   onChange={handleBrandChange}
                 >
                   <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                  <FormControlLabel value="SAMSUNG" control={<Radio />} label="SAMSUNG" />
-                  <FormControlLabel value="APPLE" control={<Radio />} label="APPLE" />
-                  <FormControlLabel value="Dell" control={<Radio />} label="Dell" />
+                  {brands.map((brand) => (
+                    <FormControlLabel value={brand} control={<Radio />} label={brand} />
+                  ))}
                 </RadioGroup>
               </FormControl>
               <div className="css-f1fyi0">

@@ -36,6 +36,7 @@ const AllProduct = () => {
   const [maxSliderValue, setMaxSliderValue] = useState(40000000);
   const [selectedBrand, setSelectedBrand] = useState('ALL');
   const [displayedProducts, setDisplayedProducts] = useState(products);
+  const brands = [...new Set(products.map(product => product.brand))];
 
   useEffect(() => {
     axios
@@ -77,19 +78,14 @@ const AllProduct = () => {
   };
 
   const handleBrandChange = (event) => {
-    setSelectedBrand(event.target.value);
-
-    const filteredByBrand = event.target.value !== 'ALL'
-      ? products.filter((product) => product.brand === event.target.value)
-      : products;
-
-    const [minValue, maxValue] = value;
-    const filteredByPrice = filteredByBrand.filter((product) => {
-      const price = product.price;
-      return price >= minValue && price <= maxValue;
-    });
-
-    setFilteredProducts(filteredByPrice);
+    const brand = event.target.value;
+    setSelectedBrand(brand);
+    if (brand === "ALL") {
+      setDisplayedProducts(products);
+    } else {
+      const filteredProducts = products.filter(product => product.brand === brand);
+      setDisplayedProducts(filteredProducts);
+    }
   };
 
   const handleSortChange = (type) => {
@@ -188,9 +184,9 @@ const AllProduct = () => {
                   onChange={handleBrandChange}
                 >
                   <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                  <FormControlLabel value="ACER" control={<Radio />} label="ACER" />
-                  <FormControlLabel value="MSI" control={<Radio />} label="MSI" />
-                  <FormControlLabel value="Dell" control={<Radio />} label="Dell" />
+                  {brands.map((brand) => (
+                    <FormControlLabel value={brand} control={<Radio />} label={brand} />
+                  ))}
                 </RadioGroup>
               </FormControl>
               <div className="css-f1fyi0">
@@ -219,7 +215,7 @@ const AllProduct = () => {
           </div>
           <div className='all-products'>
             <div className='y2krk0'>
-              {(isFiltering ? filteredProducts : products).slice(startIndex, endIndex).map((item, index) => (
+              {displayedProducts.slice(startIndex, endIndex).map((item, index) => (
                 <div type="grid" className="css-13w7uog" key={item.id}>
                   <div
                     className="product-cards css-35xksx"
