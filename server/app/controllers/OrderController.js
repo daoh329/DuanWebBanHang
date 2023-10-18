@@ -45,16 +45,36 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-    SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, o.addressID,
-    u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
-    CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-    odp.*, p.*
-    FROM orders o
-    JOIN users u ON o.UserID = u.id
-    JOIN delivery_address da ON o.addressID = da.id
-    JOIN orderDetailsProduct odp ON o.id = odp.orderID
-    JOIN product p ON odp.productID = p.id
-    ORDER BY o.created_at DESC
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+      odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN delivery_address da ON o.addressID = da.id
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN product p ON odp.productID = p.id
+      WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+      ORDER BY o.created_at DESC
+    `;
+    mysql.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+  }
+
+  async quanlyAllOrder(req, res, next) {
+    const sql = `
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+      odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN delivery_address da ON o.addressID = da.id
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN product p ON odp.productID = p.id
+      ORDER BY o.created_at DESC
     `;
     mysql.query(sql, (err, result) => {
         if (err) throw err;
@@ -99,7 +119,7 @@ class OrderController {
     });
   }
 
-  async cancelOrder(req, res) {
+  async cancel(req, res) {
     const orderId = req.params.id;
     const sql = 'UPDATE orders SET status = 2, updated_at = NOW() WHERE id = ?';
     
@@ -132,6 +152,38 @@ class OrderController {
   
               res.send('Order canceled and product quantity updated...');
             });
+        }
+    });
+  }
+
+  async buyback(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 0, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order buyback...');
+        }
+    });
+  }
+
+  async cancelOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 2, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error canceling order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order cancelorder...');
         }
     });
   }

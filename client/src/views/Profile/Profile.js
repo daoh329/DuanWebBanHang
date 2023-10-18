@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Profile.css";
 import {
   MDBTabs,
@@ -69,7 +69,8 @@ export default function Profile() {
     printEmail();
   }, []);
 
-  useEffect(() => {
+  // Hàm tải dữ liệu
+  const loadData = useCallback(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${userPhone}`)
         .then(res => {
             setData(res.data);
@@ -78,6 +79,10 @@ export default function Profile() {
         })
         .catch(error => console.log(error));
   }, [userPhone]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
 
   const [form] = Form.useForm();
@@ -133,42 +138,87 @@ export default function Profile() {
     setIconsActive(value);
   };
 
+
+  // Hàm xác nhận đơn hàng
+  const handleConfirmOrder = async (record) => {
+      if (record.order_id) {
+          console.log('Confirm order button clicked for order:', record.order_id);
+          try {
+              await axios.put(`${process.env.REACT_APP_API_URL}/order/buyback/${record.order_id}`);
+              loadData();  // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
+          } catch (error) {
+              console.error("Error confirming order:", error);
+          }
+      } else {
+          console.error("Order ID is undefined:", record);
+      }
+  };
+
+// Hàm hủy đơn hàng
+const handleCancelOrder = async (record) => {
+    if (record.order_id) {
+        try {
+            await axios.put(`${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`);
+            loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+        } catch (error) {
+            console.error("Error canceling order:", error);
+        }
+    } else {
+        console.error("Order ID is undefined:", record);
+    }
+};
+
   const columns = [
-    { title: "Mã giao dịch", dataIndex: "order_id", key: "magd" },
-    { title: "Địa chỉ", dataIndex: "address", key: "address" },
-    { title: "Tên sản phẩm", dataIndex: "shortDescription", key: "name" },
-    { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
-    {
-      title: "Tổng giá",
-      key: "totalPrice",
-      render: (text, record) => <p>{record.price * record.quantity}</p>,
-    },
-    {
-      title: "Thời gian tạo",
-      dataIndex: "order_created_at",
-      key: "created_at",
+    { title: 'Mã GD', dataIndex: 'order_id', key: 'magd' },
+    { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
+    { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
+    { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+    { 
+      title: 'Tổng giá',
+      key: 'totalPrice',
+      render: (text, record) => (
+          <p>{record.price * record.quantity}</p>
+      ),
     },
 
     {
-      title: "Trạng thái",
-      dataIndex: "order_status",
-      key: "status",
-      render: (status) => (
-        <span
-          style={{
-            fontWeight: "bold",
-            color: status === 1 ? "green" : status === 2 ? "red" : "orange",
-          }}
-        >
-          {status === 1
-            ? "Đã xác nhận"
-            : status === 2
-            ? "Đã bị hủy"
-            : "Chưa xác nhận"}
-        </span>
-      ),
+        title: 'Thời gian tạo',
+        dataIndex: 'order_created_at',
+        key: 'updated_at',
     },
-  ];
+
+    {
+        title: 'Trạng thái', 
+        dataIndex: 'order_status', 
+        key: 'status', 
+        render: status => (
+            <span style={{
+                fontWeight: 'bold', 
+                color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
+            }}>
+                {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
+            </span>
+        )
+    },
+    {
+      title: 'Hành động',
+      dataIndex: 'action',
+      key: 'action',
+      render: (_, record) => (
+          <span>
+              {record.order_status === 0 ? (
+                  <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
+                      Hủy
+                  </Button>
+              ) : record.order_status === 2 ? (
+                  <Button className="buy-again-button" style={{ backgroundColor: '#33CCFF', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
+                      Mua lại
+                  </Button>
+              ) : null}
+          </span>
+      ),
+    }
+  ]
 
   return (
     <>
