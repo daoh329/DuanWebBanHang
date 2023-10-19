@@ -36,6 +36,7 @@ import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import Chatbot from "./ChatBot/Chatbot";
 import CreateOrder from "./VnPay/CreateOrder";
+import BuySuccess from "./Buy/BuySuccess";
 const App = () => {
   const [user, setUser] = useState(null);
   const getUser = async () => {
@@ -114,6 +115,7 @@ const App = () => {
               <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
+              <Route path="/success" element={<BuySuccess />} />
               <Route
                 path="/profile"
                 element={user ? <Profile /> : <Navigate to="/" />}
