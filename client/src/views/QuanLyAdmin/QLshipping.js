@@ -3,7 +3,7 @@ import { Table, Button } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
 
-function QLdelivered() {
+function QLshipping() {
 
     const [data, setData] = useState([]);
     const loadData = () => {
@@ -16,7 +16,7 @@ function QLdelivered() {
                 });
 
                 // Lọc các đơn hàng có trạng thái bằng 1
-                const filteredOrders = sortedOrders.filter(order => order.order_status === 3);
+                const filteredOrders = sortedOrders.filter(order => order.order_status === 1);
                 setData(filteredOrders || []);
             })
             .catch(error => console.log(error));
@@ -27,26 +27,12 @@ function QLdelivered() {
         loadData();
     }, []);
 
-    // Hàm đã giao đơn hàng
-    const handleDelivered = async (record) => {
+    // Hàm vận chuyển đơn hàng
+    const handleShipping = async (record) => {
         if (record.order_id) {
             try {
-                await axios.put(`${process.env.REACT_APP_API_URL}/order/delivered/${record.order_id}`);
-                loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-            } catch (error) {
-                console.error("Error delivered order:", error);
-            }
-        } else {
-            console.error("Order ID is undefined:", record);
-        }
-    };
-
-    // Hàm giao hàng không thành công
-    const handleFailed = async (record) => {
-        if (record.order_id) {
-            try {
-                await axios.put(`${process.env.REACT_APP_API_URL}/order/deliveryfailed/${record.order_id}`);
-                loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+                await axios.put(`${process.env.REACT_APP_API_URL}/order/shipping/${record.order_id}`);
+                loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
             }
@@ -82,9 +68,9 @@ function QLdelivered() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : (status === 3 ? '#FF33FF' : 'orange')
+                    color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
                 }}>
-                    {status === 1 ? 'Đã xác nhận' : (status === 3 ? 'Vận chuyển' : 'Chưa xác nhận')}
+                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
                 </span>
             )
         },
@@ -93,18 +79,8 @@ function QLdelivered() {
             dataIndex: 'action',
             key: 'newAction',
             render: (_, record) => (
-                <Button style={{ backgroundColor: '#FF0099', color: 'white' }} onClick={() => handleDelivered(record)}>
-                    Đã giao
-                </Button>
-            ),
-        },
-        {
-            title: 'Hành động',
-            dataIndex: 'action',
-            key: 'cancel',
-            render: (_, record) => (
-                <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleFailed(record)}>
-                    Giao không thành công
+                <Button style={{ backgroundColor: '#FF33FF', color: 'white' }} onClick={() => handleShipping(record)}>
+                   Vận chuyển
                 </Button>
             ),
         },
@@ -112,9 +88,9 @@ function QLdelivered() {
 
     return (
         <div>
-            <h1>Xác nhận giao hàng</h1>
+            <h1>Xác nhận đơn hàng vận chuyển</h1>
             <div>
-                <a href="/allorders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
+                <a href="/delivered" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận đơn hàng đã gửi</a>
             </div>
 
             <div>
@@ -126,4 +102,4 @@ function QLdelivered() {
     );
 }
 
-export default QLdelivered;
+export default QLshipping;

@@ -135,11 +135,11 @@ function OrderList() {
         <div>
             <h1>Quản lý đơn hàng trong một tháng</h1>
             <div>
-                <a href="/delivered" style={{ color: 'black' }}>Xác nhận đơn hàng đã giao</a>
+                <a href="/shipping" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận vận chuyển đơn hàng</a>
             </div>
 
             <div>
-                <a href="/allorders" style={{ color: 'black' }}>Xem tất cả đơn hàng</a>
+                <a href="/allorders" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
             </div>
             
             <Table columns={columns} dataSource={data} />

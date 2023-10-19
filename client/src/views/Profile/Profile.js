@@ -194,9 +194,9 @@ const handleCancelOrder = async (record) => {
       render: status => (
           <span style={{
               fontWeight: 'bold', 
-              color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF00FF' : 'orange'))
+              color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#FF00FF' : (status === 5 ? 'red' : 'orange'))))
           }}>
-              {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đã giao' : 'Chưa xác nhận'))}
+              {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Giao hàng không thành công' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
           </span>
       )
     },
@@ -207,11 +207,11 @@ const handleCancelOrder = async (record) => {
       key: 'action',
       render: (_, record) => (
           <span>
-              {record.order_status === 0 ? (
+              {record.order_status === 0 || record.order_status === 1 ? (
                   <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
                       Hủy
                   </Button>
-              ) : record.order_status === 2 ? (
+              ) : record.order_status === 5 ? (
                   <Button className="buy-again-button" style={{ backgroundColor: '#33CCFF', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
                       Mua lại
                   </Button>
@@ -394,7 +394,7 @@ const handleCancelOrder = async (record) => {
                     onClick={() => handleIconsClick("tab3")}
                     active={iconsActive === "tab3"}
                   >
-                    Đã hủy
+                    Đang vận chuyển
                   </MDBTabsLink>
                 </MDBTabsItem>
                 <MDBTabsItem>
@@ -403,6 +403,22 @@ const handleCancelOrder = async (record) => {
                     active={iconsActive === "tab4"}
                   >
                     Đã giao
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    onClick={() => handleIconsClick("tab5")}
+                    active={iconsActive === "tab5"}
+                  >
+                    Giao hàng không thành công
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    onClick={() => handleIconsClick("tab6")}
+                    active={iconsActive === "tab6"}
+                  >
+                    Đã hủy
                   </MDBTabsLink>
                 </MDBTabsItem>
               </MDBTabs>
@@ -435,6 +451,45 @@ const handleCancelOrder = async (record) => {
                   )}
                 </MDBTabsPane>
                 <MDBTabsPane show={iconsActive === "tab3"}>
+                  {data.filter((order) => order.order_status === 3).length >
+                  0 ? (
+                    <Table
+                      columns={columns}
+                      dataSource={data.filter(
+                        (order) => order.order_status === 3
+                      )}
+                    />
+                  ) : (
+                    "Không có đơn hàng nào đang vận chuyển"
+                  )}
+                </MDBTabsPane>
+                <MDBTabsPane show={iconsActive === "tab4"}>
+                  {data.filter((order) => order.order_status === 4).length >
+                  0 ? (
+                    <Table
+                      columns={columns}
+                      dataSource={data.filter(
+                        (order) => order.order_status === 4
+                      )}
+                    />
+                  ) : (
+                    "Không có đơn hàng nào đã được giao"
+                  )}
+                </MDBTabsPane>
+                <MDBTabsPane show={iconsActive === "tab5"}>
+                  {data.filter((order) => order.order_status === 5).length >
+                  0 ? (
+                    <Table
+                      columns={columns}
+                      dataSource={data.filter(
+                        (order) => order.order_status === 5
+                      )}
+                    />
+                  ) : (
+                    "Không có đơn hàng nào giao hàng không thành công"
+                  )}
+                </MDBTabsPane>
+                <MDBTabsPane show={iconsActive === "tab6"}>
                   {data.filter((order) => order.order_status === 2).length >
                   0 ? (
                     <Table
@@ -445,19 +500,6 @@ const handleCancelOrder = async (record) => {
                     />
                   ) : (
                     "Không có đơn hàng nào bị hủy"
-                  )}
-                </MDBTabsPane>
-                <MDBTabsPane show={iconsActive === "tab4"}>
-                  {data.filter((order) => order.order_status === 3).length >
-                  0 ? (
-                    <Table
-                      columns={columns}
-                      dataSource={data.filter(
-                        (order) => order.order_status === 3
-                      )}
-                    />
-                  ) : (
-                    "Không có đơn hàng nào đã được giao"
                   )}
                 </MDBTabsPane>
               </MDBTabsContent>
