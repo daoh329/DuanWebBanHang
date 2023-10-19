@@ -29,7 +29,9 @@ import CheckSP from "./Menu/CheckSP";
 import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
 import AllProduct from "./ProductPages/AllProduct/AllProduct";
+import AllNewProductLaptop from "./ProductPages/AllProduct/AllNewProductLaptop";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
+import AllNewProductPhone from "./ProductPages/AllProduct/AllNewProductPhone";
 import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
 import Buy from "./Buy/Buy";
@@ -121,9 +123,14 @@ const App = () => {
                 element={user ? <Profile /> : <Navigate to="/" />}
               />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
+              <Route path="/tat-ca-san-pham-laptop-moi" element={<AllNewProductLaptop />} />
               <Route
                 path="/tat-ca-san-pham-phone"
                 element={<AllProductPhone />}
+              />
+              <Route
+                path="/tat-ca-san-pham-phone-moi"
+                element={<AllNewProductPhone />}
               />
               <Route
                 path="/tat-ca-san-pham-phone-coppy"

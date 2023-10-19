@@ -32,7 +32,7 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
-const AllProduct = () => {
+const AllNewProductLaptop = () => {
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState(() => {
     // Lấy giá trị từ localStorage khi trang web được tải
@@ -73,7 +73,7 @@ const AllProduct = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+      .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then((response) => {
         setProducts(response.data);
         // Ban đầu hiển thị tất cả sản phẩm
@@ -667,4 +667,4 @@ const AllProduct = () => {
   )
 }
 
-export default AllProduct;
+export default AllNewProductLaptop;

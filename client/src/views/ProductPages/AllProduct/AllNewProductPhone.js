@@ -32,7 +32,7 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
-const AllProduct = () => {
+const AllNewProductPhone = () => {
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState(() => {
     // Lấy giá trị từ localStorage khi trang web được tải
@@ -47,33 +47,29 @@ const AllProduct = () => {
   const [maxSliderValue, setMaxSliderValue] = useState(40000000);
   const [selectedBrand, setSelectedBrand] = useState('ALL');
   const [selectedRom, setSelectedRom] = useState('ALL');
-  const [selectedCpu, setSelectedCpu] = useState('ALL');
+  const [selectedChip, setSelectedChip] = useState('ALL');
   const [selectedSeries, setSelectedSeries] = useState('ALL');
   const [selectedRam, setSelectedRam] = useState('ALL');
   const [selectedPin, setSelectedPin] = useState('ALL');
-  const [selectedVga, setSelectedVga] = useState('ALL');
+  const [selectedRear_camera, setSelectedRear_camera] = useState('ALL');
   const [selectedFront_camera, setSelectedFront_camera] = useState('ALL');
   const [selectedScreen, setSelectedScreen] = useState('ALL');
 
   const [displayedProducts, setDisplayedProducts] = useState(products);
-
-  //Loại bỏ các thương hiệu trùng lặp từ mảng product
   const brands = [...new Set(products.map(product => product.brand))];
   const configurations = products.map(product => JSON.parse(product.configuration));
   const uniqueRom = [...new Set(configurations.map(config => config.rom))];
-  const uniqueCpu = [...new Set(configurations.map(config => config.cpu))];
+  const uniqueChip = [...new Set(configurations.map(config => config.chip))];
   const uniqueSeries = [...new Set(configurations.map(config => config.series))];
   const uniqueRam = [...new Set(configurations.map(config => config.ram))];
   const uniquePin = [...new Set(configurations.map(config => config.pin))];
-  const uniqueVga = [...new Set(configurations.map(config => config.vga))];
+  const uniqueRear_camera = [...new Set(configurations.map(config => config.rear_camera))];
   const uniqueFront_camera = [...new Set(configurations.map(config => config.front_camera))];
   const uniqueScreen = [...new Set(configurations.map(config => config.screen))];
 
-
-
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+      .get(`${process.env.REACT_APP_API_URL}/product/newphone`)
       .then((response) => {
         setProducts(response.data);
         // Ban đầu hiển thị tất cả sản phẩm
@@ -91,8 +87,8 @@ const AllProduct = () => {
 
   useEffect(() => {
     filterProducts();
-  }, [selectedBrand, selectedRom, minSliderValue, maxSliderValue, selectedCpu, selectedSeries, selectedRam, selectedPin, selectedVga,
-    selectedFront_camera, selectedScreen,
+  }, [selectedBrand, selectedRom, minSliderValue, maxSliderValue, selectedChip, selectedSeries, selectedRam, selectedPin, selectedRear_camera,
+    selectedFront_camera, selectedScreen
   ]);
 
   const handleChange = (event, newValue) => {
@@ -116,8 +112,8 @@ const AllProduct = () => {
 
 
 
-  const handleCpuChange = (value) => {
-    setSelectedCpu(value);
+  const handleChipChange = (value) => {
+    setSelectedChip(value);
     filterProducts(value);
   };
 
@@ -134,8 +130,8 @@ const AllProduct = () => {
     setSelectedPin(value);
     filterProducts(value);
   };
-  const handleVgaChange = (value) => {
-    setSelectedVga(value);
+  const handleRear_cameraChange = (value) => {
+    setSelectedRear_camera(value);
     filterProducts(value);
   };
   const handleFront_cameraChange = (value) => {
@@ -171,11 +167,11 @@ const AllProduct = () => {
     }
 
 
-    // Lọc theo Cpu
-    if (selectedCpu !== 'ALL') {
+    // Lọc theo chip
+    if (selectedChip !== 'ALL') {
       filteredProducts = filteredProducts.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.cpu === selectedCpu;
+        return config.chip === selectedChip;
       });
 
     }
@@ -203,11 +199,11 @@ const AllProduct = () => {
       });
     }
 
-    // Lọc theo  Vga
-    if (selectedVga !== 'ALL') {
+    // Lọc theo  rear_camera
+    if (selectedRear_camera !== 'ALL') {
       filteredProducts = filteredProducts.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.vga === selectedVga;
+        return config.rear_camera === selectedRear_camera;
       });
     }
 
@@ -262,7 +258,6 @@ const AllProduct = () => {
     // Cập nhật trạng thái displayedProducts với các sản phẩm đã sắp xếp
     setDisplayedProducts(sortedProducts);
   };
-
 
   const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (page) => {
@@ -354,73 +349,6 @@ const AllProduct = () => {
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Cpu" name="cpu">
-                <Select
-                  value={selectedCpu}
-                  onChange={handleCpuChange}
-                >
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: '13px' }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueCpu &&
-                    uniqueCpu.map((cpu) => (
-                      <Select.Option key={cpu} value={cpu}>
-                        <span style={{ fontSize: '13px' }}>{cpu}</span>
-                      </Select.Option>
-                    ))
-                  }
-                </Select>
-              </Form.Item>
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form.Item label="Card đồ họa" name="Vga">
-                <Select
-                  value={selectedVga}
-                  onChange={handleVgaChange}
-                >
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: '13px' }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueVga &&
-                    uniqueVga.map((vga) => (
-                      <Select.Option key={vga} value={vga}>
-                        <span style={{ fontSize: '13px' }}>{vga}</span>
-                      </Select.Option>
-                    ))
-                  }
-                </Select>
-              </Form.Item>
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form.Item label="Màn hình" name="screen">
-                <Select
-                  value={selectedScreen}
-                  onChange={handleScreenChange}
-                >
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: '13px' }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueScreen &&
-                    uniqueScreen.map((screen) => (
-                      <Select.Option key={screen} value={screen}>
-                        <span style={{ fontSize: '13px' }}>{screen}</span>
-                      </Select.Option>
-                    ))
-                  }
-                </Select>
-              </Form.Item>
-
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
               <Form.Item label="Series" name="series">
                 <Select
                   value={selectedSeries}
@@ -439,11 +367,11 @@ const AllProduct = () => {
                   }
                 </Select>
               </Form.Item>
-
+              
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Lưu trữ" name="rom" >
+              <Form.Item label="Rom" name="rom" >
                 <Select
                   value={selectedRom}
                   onChange={handleRomChange}
@@ -487,9 +415,29 @@ const AllProduct = () => {
               </Form.Item>
 
 
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Chip" name="chip">
+                <Select
+                  value={selectedChip}
+                  onChange={handleChipChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
 
+                  {uniqueChip &&
+                    uniqueChip.map((chip) => (
+                      <Select.Option key={chip} value={chip}>
+                        <span style={{ fontSize: '13px' }}>{chip}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
 
-
+             
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
@@ -513,9 +461,71 @@ const AllProduct = () => {
                 </Select>
               </Form.Item>
 
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Camera trước" name="front_camera">
+                <Select
+                  value={selectedFront_camera}
+                  onChange={handleFront_cameraChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
 
+                  {uniqueFront_camera &&
+                    uniqueFront_camera.map((front_camera) => (
+                      <Select.Option key={front_camera} value={front_camera}>
+                        <span style={{ fontSize: '13px' }}>{front_camera}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
 
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Camera sau" name="rear_camera">
+                <Select
+                  value={selectedRear_camera}
+                  onChange={handleRear_cameraChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
 
+                  {uniqueRear_camera &&
+                    uniqueRear_camera.map((rear_camera) => (
+                      <Select.Option key={rear_camera} value={rear_camera}>
+                        <span style={{ fontSize: '13px' }}>{rear_camera}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Màn hình" name="screen">
+                <Select
+                  value={selectedScreen}
+                  onChange={handleScreenChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueScreen &&
+                    uniqueScreen.map((screen) => (
+                      <Select.Option key={screen} value={screen}>
+                        <span style={{ fontSize: '13px' }}>{screen}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
 
             </div>
           </div>
@@ -667,4 +677,4 @@ const AllProduct = () => {
   )
 }
 
-export default AllProduct;
+export default AllNewProductPhone;

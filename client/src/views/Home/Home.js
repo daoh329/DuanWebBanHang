@@ -623,7 +623,7 @@ const Home = () => {
 
             <div className="phone-title">Điện thoại mới ra mắt</div>
             <div className="views-all">
-              <a href="/tat-ca-san-pham" style={{ color: 'white' }}>Xem tất cả</a>
+              <a href="/tat-ca-san-pham-phone-moi" style={{ color: 'white' }}>Xem tất cả</a>
               <i className="fa fa-chevron-right"></i>
             </div>
 
@@ -682,7 +682,10 @@ const Home = () => {
         <div className="phone-group">
           <div className="title-group">
             <div className="phone-title">Laptop mới ra mắt</div>
-            <div className="views-all">Xem tất cả <i className="fa fa-chevron-right"></i> </div>
+            <div className="views-all">
+              <a href="/tat-ca-san-pham-laptop-moi" style={{ color: 'white' }}>Xem tất cả</a>
+              <i className="fa fa-chevron-right"></i>
+            </div>
           </div>
           <div className="scroll-group-phone">
 
