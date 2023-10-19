@@ -9,16 +9,18 @@ function QLAlldonhang() {
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
             .then(res => {
-                // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
-                const sortedOrders = res.data.sort((a, b) => {
-                    // Sắp xếp theo trạng thái
-                    if (a.order_status < b.order_status) return -1;
-                    if (a.order_status > b.order_status) return 1;
-    
-                    // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
-                    return new Date(b.order_created_at) - new Date(a.order_created_at);
-                });
-    
+                // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
+                const sortedOrders = res.data
+                    .filter(order => order.order_status === 2 || order.order_status === 3)
+                    .sort((a, b) => {
+                        // Sắp xếp theo trạng thái
+                        if (a.order_status < b.order_status) return 1;
+                        if (a.order_status > b.order_status) return -1;
+        
+                        // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
+                        return new Date(b.order_created_at) - new Date(a.order_created_at);
+                    });
+        
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
@@ -103,18 +105,25 @@ function QLAlldonhang() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
+                    color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF00FF' : 'orange'))
                 }}>
-                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
+                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đã giao' : 'Chưa xác nhận'))}
                 </span>
             )
-        },
+        }
     ];
 
     return (
         <div>
             <h1>Tất cả đơn hàng</h1>
-            <a href="/orders" style={{ color: 'black' }}>Xem đơn hàng trong một tháng</a>
+            <div>
+                <a href="/orders" style={{ color: 'black' }}>Xem đơn hàng trong một tháng</a>
+            </div>
+
+            <div>
+                <a href="/delivered" style={{ color: 'black' }}>Xác nhận đơn hàng đã giao</a>
+            </div>
+            
             <Table columns={columns} dataSource={data} />
         </div>
     );

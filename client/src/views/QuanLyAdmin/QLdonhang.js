@@ -9,16 +9,18 @@ function OrderList() {
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
             .then(res => {
-                // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
-                const sortedOrders = res.data.sort((a, b) => {
-                    // Sắp xếp theo trạng thái
-                    if (a.order_status < b.order_status) return -1;
-                    if (a.order_status > b.order_status) return 1;
-    
-                    // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
-                    return new Date(b.order_created_at) - new Date(a.order_created_at);
-                });
-    
+                // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
+                const sortedOrders = res.data
+                    .filter(order => order.order_status === 1 || order.order_status === 2)
+                    .sort((a, b) => {
+                        // Sắp xếp theo trạng thái
+                        if (a.order_status < b.order_status) return -1;
+                        if (a.order_status > b.order_status) return 1;
+        
+                        // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
+                        return new Date(b.order_created_at) - new Date(a.order_created_at);
+                    });
+        
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
@@ -61,8 +63,8 @@ function OrderList() {
     const columns = [
         { title: 'Mã GD', dataIndex: 'order_id', key: 'magd' },
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
-        { title: 'SDT người mua', dataIndex: 'user_phone', key: 'phone' },
-        { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
+        { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
+        { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { 
@@ -126,13 +128,20 @@ function OrderList() {
                     )}
                 </span>
             ),
-        }
+        },
     ];
 
     return (
         <div>
             <h1>Quản lý đơn hàng trong một tháng</h1>
-            <a href="/allorders" style={{ color: 'black' }}>Xem tất cả đơn hàng</a>
+            <div>
+                <a href="/delivered" style={{ color: 'black' }}>Xác nhận đơn hàng đã giao</a>
+            </div>
+
+            <div>
+                <a href="/allorders" style={{ color: 'black' }}>Xem tất cả đơn hàng</a>
+            </div>
+            
             <Table columns={columns} dataSource={data} />
         </div>
     );

@@ -14,6 +14,7 @@ router.get('/revenue', OrderController.Revenue);
 router.get('/dashboard', OrderController.dashboard);
 
 router.put(`/confirm/:id`, OrderController.confirmOrder);
+router.put(`/delivered/:id`, OrderController.deliveredOrder);
 router.put(`/cancel/:id`, OrderController.cancel);
 
 router.put(`/buyback/:id`, OrderController.buyback);
