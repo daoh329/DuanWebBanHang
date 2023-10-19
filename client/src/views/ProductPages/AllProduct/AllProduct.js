@@ -36,6 +36,8 @@ const AllProduct = () => {
   const [maxSliderValue, setMaxSliderValue] = useState(40000000);
   const [selectedBrand, setSelectedBrand] = useState('ALL');
   const [displayedProducts, setDisplayedProducts] = useState(products);
+
+  //Loại bỏ các thương hiệu trùng lặp từ mảng product
   const brands = [...new Set(products.map(product => product.brand))];
 
   useEffect(() => {
