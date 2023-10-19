@@ -151,7 +151,7 @@ export default function Buy() {
       note: note,
       status: 0,
     };
-
+  
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
@@ -169,11 +169,18 @@ export default function Buy() {
       },
       body: JSON.stringify(data),
     });
-
+  
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
       message.success("Thanh toán đơn hàng thành công");
+  
+      // Chuyển hướng người dùng đến trang thông báo thành công
+      window.location.replace("/success");
+
+  
+      // Xóa sản phẩm khỏi giỏ hàng
+      removeFromCart(productID);
     } else {
       // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
       const responseData = await response.json();
@@ -185,7 +192,21 @@ export default function Buy() {
       }
     }
   };
-
+  
+  const removeFromCart = (productID) => {
+    // Xóa sản phẩm khỏi selectedItems
+    const updatedSelectedItems = buysData.selectedItems.filter(item => item.id !== productID);
+  
+    // Cập nhật buysData
+    const updatedBuysData = { ...buysData, selectedItems: updatedSelectedItems };
+  
+    // Cập nhật trạng thái buysData
+    setBuysData(updatedBuysData);
+  
+    // Lưu buysData vào sessionStorage
+    sessionStorage.setItem("buys", JSON.stringify(updatedBuysData));
+  };
+  
   const handleBuyVNpay = () => {
     // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
     // console.log('amount: '+totalAmount)
