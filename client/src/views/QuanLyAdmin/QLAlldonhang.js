@@ -11,7 +11,7 @@ function QLAlldonhang() {
             .then(res => {
                 // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data
-                    .filter(order => order.order_status === 2 || order.order_status === 3)
+                    .filter(order => order.order_status === 2 || order.order_status === 4 || order.order_status === 5)
                     .sort((a, b) => {
                         // Sắp xếp theo trạng thái
                         if (a.order_status < b.order_status) return 1;
@@ -105,9 +105,9 @@ function QLAlldonhang() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF00FF' : 'orange'))
+                    color: status === 5 ? 'red' : (status === 2 ? 'red' : (status === 4 ? '#FF00FF' : 'orange'))
                 }}>
-                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đã giao' : 'Chưa xác nhận'))}
+                    {status === 5 ? 'Giao không thành công' : (status === 2 ? 'Đã bị hủy' : (status === 4 ? 'Đã giao' : 'Chưa xác nhận'))}
                 </span>
             )
         }
@@ -117,11 +117,15 @@ function QLAlldonhang() {
         <div>
             <h1>Tất cả đơn hàng</h1>
             <div>
-                <a href="/orders" style={{ color: 'black' }}>Xem đơn hàng trong một tháng</a>
+                <a href="/orders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                    Xem đơn hàng trong một tháng
+                </a>
             </div>
 
             <div>
-                <a href="/delivered" style={{ color: 'black' }}>Xác nhận đơn hàng đã giao</a>
+                <a href="/delivered" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                    Xác nhận đơn hàng đã giao
+                </a>
             </div>
             
             <Table columns={columns} dataSource={data} />

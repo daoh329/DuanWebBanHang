@@ -156,9 +156,41 @@ class OrderController {
     });
   }
 
-  async deliveredOrder(req, res) {
+  async shippingOrder(req, res) {
     const orderId = req.params.id;
     const sql = 'UPDATE orders SET status = 3, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order delivered...');
+        }
+    });
+  }
+
+  async deliveredOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 4, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order delivered...');
+        }
+    });
+  }
+
+  async deliveryfailedOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 5, updated_at = NOW() WHERE id = ?';
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {

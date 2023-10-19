@@ -480,37 +480,42 @@ const App = () => {
                 <div className="css-cssveg">
                   <div className="css-17xgviv">
                     <div
-                      data-content-region-name="headerBar"
-                      data-track-content="true"
-                      data-content-name="searchBox"
-                      className="css-7wh3a0"
+                        data-content-region-name="headerBar"
+                        data-track-content="true"
+                        data-content-name="searchBox"
+                        className="css-7wh3a0"
                     >
-                      <input
-                        className="search-input css-7jjcju"
-                        placeholder="Nhập từ khoá cần tìm"
-                        role="searchbox"
-                        aria-label="Search"
-                        value={searchQuery}
-                        onChange={handleInputChange}
-                      />
+                        <input
+                            className="search-input css-7jjcju"
+                            placeholder="Nhập từ khoá cần tìm"
+                            role="searchbox"
+                            aria-label="Search"
+                            value={searchQuery}
+                            onChange={handleInputChange}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    handleSearch();
+                                }
+                            }}
+                        />
                     </div>
                     <div
-                      data-content-region-name="headerBar"
-                      data-track-content="true"
-                      data-content-name="searchButton"
-                      className="css-7kp13n"
+                        data-content-region-name="headerBar"
+                        data-track-content="true"
+                        data-content-name="searchButton"
+                        className="css-7kp13n"
                     >
-                      <button
-                        className="search-icon css-193nd6m"
-                        aria-label="Search"
-                        onClick={handleSearch}
-                      >
-                        <span
-                          size="26"
-                          color="#616161"
-                          className="css-1dn5jdn"
-                        ></span>
-                      </button>
+                        <button
+                            className="search-icon css-193nd6m"
+                            aria-label="Search"
+                            onClick={handleSearch}
+                        >
+                            <span
+                                size="26"
+                                color="#616161"
+                                className="css-1dn5jdn"
+                            ></span>
+                        </button>
                     </div>
                   </div>
                   <div className="css-1nb0ewh"></div>
