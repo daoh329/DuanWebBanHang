@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Space,
+  notification,
+} from "antd";
 import Slider from "@mui/material/Slider";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { Pagination } from "antd";
+import FormLabel from '@mui/material/FormLabel'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 
-import { Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Button } from '@mui/material';
+import { Pagination } from "antd";
+import { Box, } from '@mui/material';
 import './AllProduct.css'
 import { useNavigate } from "react-router-dom";
 
+const { Option } = Select;
 function valuetext(value) {
   return `${value}°C`;
 }
@@ -35,8 +46,28 @@ const AllProductPhone = () => {
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(40000000);
   const [selectedBrand, setSelectedBrand] = useState('ALL');
+  const [selectedRom, setSelectedRom] = useState('ALL');
+  const [selectedChip, setSelectedChip] = useState('ALL');
+  const [selectedSeries, setSelectedSeries] = useState('ALL');
+  const [selectedRam, setSelectedRam] = useState('ALL');
+  const [selectedPin, setSelectedPin] = useState('ALL');
+  const [selectedRear_camera, setSelectedRear_camera] = useState('ALL');
+  const [selectedFront_camera, setSelectedFront_camera] = useState('ALL');
+  const [selectedScreen, setSelectedScreen] = useState('ALL');
+
   const [displayedProducts, setDisplayedProducts] = useState(products);
   const brands = [...new Set(products.map(product => product.brand))];
+  const configurations = products.map(product => JSON.parse(product.configuration));
+  const uniqueRom = [...new Set(configurations.map(config => config.rom))];
+  const uniqueChip = [...new Set(configurations.map(config => config.chip))];
+  const uniqueSeries = [...new Set(configurations.map(config => config.series))];
+  const uniqueRam = [...new Set(configurations.map(config => config.ram))];
+  const uniquePin = [...new Set(configurations.map(config => config.pin))];
+  const uniqueRear_camera = [...new Set(configurations.map(config => config.rear_camera))];
+  const uniqueFront_camera = [...new Set(configurations.map(config => config.front_camera))];
+  const uniqueScreen = [...new Set(configurations.map(config => config.screen))];
+
+
 
   useEffect(() => {
     axios
@@ -56,42 +87,159 @@ const AllProductPhone = () => {
     localStorage.setItem('sliderValue', JSON.stringify(value));
   }, [value]);
 
+  useEffect(() => {
+    filterProducts();
+  }, [selectedBrand, selectedRom, minSliderValue, maxSliderValue, selectedChip, selectedSeries, selectedRam, selectedPin, selectedRear_camera,
+    selectedFront_camera, selectedScreen
+  ]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setIsFiltering(true);
     setMinSliderValue(newValue[0]);
     setMaxSliderValue(newValue[1]);
+    filterProducts();
+  };
 
-    const filteredByPrice = products.filter((product) => {
+  const handleBrandChange = (value) => {
+    setSelectedBrand(value);
+    filterProducts(value);
+  };
+
+
+  const handleRomChange = (value) => {
+    setSelectedRom(value);
+    filterProducts(value);
+  };
+
+
+
+  const handleChipChange = (value) => {
+    setSelectedChip(value);
+    filterProducts(value);
+  };
+
+  const handleSeriesChange = (value) => {
+    setSelectedSeries(value);
+    filterProducts(value);
+  };
+
+  const handleRamChange = (value) => {
+    setSelectedRam(value);
+    filterProducts(value);
+  };
+  const handlePinChange = (value) => {
+    setSelectedPin(value);
+    filterProducts(value);
+  };
+  const handleRear_cameraChange = (value) => {
+    setSelectedRear_camera(value);
+    filterProducts(value);
+  };
+  const handleFront_cameraChange = (value) => {
+    setSelectedFront_camera(value);
+    filterProducts(value);
+  };
+  const handleScreenChange = (value) => {
+    setSelectedScreen(value);
+    filterProducts(value);
+  };
+
+
+  const filterProducts = () => {
+    let filteredProducts = products;
+
+    // Lọc theo giá
+    filteredProducts = filteredProducts.filter((product) => {
       const price = product.price;
-      return price >= newValue[0] && price <= newValue[1];
+      return price >= minSliderValue && price <= maxSliderValue;
     });
 
-    const filteredByBrand = selectedBrand !== 'ALL'
-      ? filteredByPrice.filter((product) => product.brand === selectedBrand)
-      : filteredByPrice;
-
-    setFilteredProducts(filteredByBrand);
-
-    // Cập nhật displayedProducts dựa trên filteredProducts hoặc products tùy thuộc vào việc áp dụng bộ lọc
-    setDisplayedProducts(isFiltering ? filteredByBrand : products);
-  };
-
-  const handleBrandChange = (event) => {
-    const brand = event.target.value;
-    setSelectedBrand(brand);
-    if (brand === "ALL") {
-      setDisplayedProducts(products);
-    } else {
-      const filteredProducts = products.filter(product => product.brand === brand);
-      setDisplayedProducts(filteredProducts);
+    // Lọc theo thương hiệu
+    if (selectedBrand !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => product.brand === selectedBrand);
     }
+
+    // Lọc theo ROM
+    if (selectedRom !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.rom === selectedRom;
+      });
+    }
+
+
+    // Lọc theo chip
+    if (selectedChip !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.chip === selectedChip;
+      });
+
+    }
+    // Lọc theo series
+    if (selectedSeries !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.series === selectedSeries;
+      });
+    }
+
+    // Lọc theo ram
+    if (selectedRam !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.ram === selectedRam;
+      });
+    }
+
+    // Lọc theo pin
+    if (selectedPin !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.pin === selectedPin;
+      });
+    }
+
+    // Lọc theo  rear_camera
+    if (selectedRear_camera !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.rear_camera === selectedRear_camera;
+      });
+    }
+
+    // Lọc theo  front_camera
+    if (selectedFront_camera !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.front_camera === selectedFront_camera;
+      });
+    }
+
+    // Lọc theo  screen
+    if (selectedScreen !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.screen === selectedScreen;
+      });
+    }
+
+
+
+
+    setFilteredProducts(filteredProducts);
+    setDisplayedProducts(filteredProducts);
   };
+
+
+
 
   const handleSortChange = (type) => {
     setSortType(type);
 
-    const sortedProducts = [...filteredProducts];
+    // Tạo một bản sao của trạng thái displayedProducts để tránh biến đổi trạng thái gốc
+    const sortedProducts = [...displayedProducts];
 
     switch (type) {
       case 'priceLowToHigh':
@@ -100,11 +248,17 @@ const AllProductPhone = () => {
       case 'priceHighToLow':
         sortedProducts.sort((a, b) => b.price - a.price);
         break;
-      default:
+      case 'newestProducts':
+        sortedProducts.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
         break;
+      default:
+        // Nếu loại là 'none' hoặc không hợp lệ, đặt lại sắp xếp về thứ tự ban đầu
+        setDisplayedProducts(filteredProducts);
+        return;
     }
 
-    setFilteredProducts(sortedProducts);
+    // Cập nhật trạng thái displayedProducts với các sản phẩm đã sắp xếp
+    setDisplayedProducts(sortedProducts);
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -174,30 +328,207 @@ const AllProductPhone = () => {
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label" >Thương hiệu</FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="radio-buttons-group"
-                  size="small"
+              <Form.Item label="Thương hiệu" name="brand" >
+                <Select
                   value={selectedBrand}
                   onChange={handleBrandChange}
+                  style={{ marginTop: '10px' }} // Áp dụng kiểu dáng trực tiếp
                 >
-                  <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                  {brands.map((brand) => (
-                    <FormControlLabel value={brand} control={<Radio />} label={brand} />
-                  ))}
-                </RadioGroup>
-              </FormControl>
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {brands &&
+                    brands.map((brand) => (
+                      <Select.Option key={brand} value={brand}>
+                        <span style={{ fontSize: '13px' }}>{brand}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
+              <Form.Item label="Series" name="series">
+                <Select
+                  value={selectedSeries}
+                  onChange={handleSeriesChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueSeries &&
+                    uniqueSeries.map((series) => (
+                      <Select.Option key={series} value={series}>
+                        <span style={{ fontSize: '13px' }}>{series}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+              
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
+              <Form.Item label="Rom" name="rom" >
+                <Select
+                  value={selectedRom}
+                  onChange={handleRomChange}
+                  style={{ marginTop: '10px' }}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueRom &&
+                    uniqueRom.map((rom) => (
+                      <Select.Option key={rom} value={rom}>
+                        <span style={{ fontSize: '13px' }}>{rom}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
+              <Form.Item label="Ram" name="ram" >
+                <Select
+                  value={selectedRam}
+                  onChange={handleRamChange}
+                  style={{ marginTop: '10px' }}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueRam &&
+                    uniqueRam.map((ram) => (
+                      <Select.Option key={ram} value={ram}>
+                        <span style={{ fontSize: '13px' }}>{ram}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Chip" name="chip">
+                <Select
+                  value={selectedChip}
+                  onChange={handleChipChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueChip &&
+                    uniqueChip.map((chip) => (
+                      <Select.Option key={chip} value={chip}>
+                        <span style={{ fontSize: '13px' }}>{chip}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+             
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Pin" name="pin">
+                <Select
+                  value={selectedPin}
+                  onChange={handlePinChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniquePin &&
+                    uniquePin.map((pin) => (
+                      <Select.Option key={pin} value={pin}>
+                        <span style={{ fontSize: '13px' }}>{pin}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Camera trước" name="front_camera">
+                <Select
+                  value={selectedFront_camera}
+                  onChange={handleFront_cameraChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueFront_camera &&
+                    uniqueFront_camera.map((front_camera) => (
+                      <Select.Option key={front_camera} value={front_camera}>
+                        <span style={{ fontSize: '13px' }}>{front_camera}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Camera sau" name="rear_camera">
+                <Select
+                  value={selectedRear_camera}
+                  onChange={handleRear_cameraChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueRear_camera &&
+                    uniqueRear_camera.map((rear_camera) => (
+                      <Select.Option key={rear_camera} value={rear_camera}>
+                        <span style={{ fontSize: '13px' }}>{rear_camera}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Màn hình" name="screen">
+                <Select
+                  value={selectedScreen}
+                  onChange={handleScreenChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueScreen &&
+                    uniqueScreen.map((screen) => (
+                      <Select.Option key={screen} value={screen}>
+                        <span style={{ fontSize: '13px' }}>{screen}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
             </div>
           </div>
         </div>
@@ -210,12 +541,12 @@ const AllProductPhone = () => {
               Xắp xếp theo
               <button className="sort-button" onClick={() => handleSortChange('priceLowToHigh')}>Giá thấp đến cao</button>
               <button className="sort-button" onClick={() => handleSortChange('priceHighToLow')}>Giá cao đến thấp</button>
-              <button className="sort-button" onClick={() => handleSortChange('none')}>Sản phẩm mới nhất</button>
+              <button className="sort-button" onClick={() => handleSortChange('newestProducts')}>Sản phẩm mới nhất</button>
             </div>
           </div>
           <div className='all-products'>
             <div className='y2krk0'>
-              {displayedProducts.slice(startIndex, endIndex).map((item, index) => (
+              {displayedProducts.map((item, index) => (
                 <div type="grid" className="css-13w7uog" key={item.id}>
                   <div
                     className="product-cards css-35xksx"
@@ -263,7 +594,7 @@ const AllProductPhone = () => {
                             type="body"
                             color="textSecondary"
                             className="product-brand-name css-90n0z6"
-                            style={{display: "inline" }}
+                            style={{ display: "inline" }}
                           >
                             {item.brand}
                           </div>

@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Space,
+  notification,
+} from "antd";
 import Slider from "@mui/material/Slider";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import FormLabel from '@mui/material/FormLabel'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+
 import { Pagination } from "antd";
-import { Box, List, ListItem, ListItemButton, ListItemText, Typography, Divider, Button } from '@mui/material';
-import './AllProduct.css';
+import { Box, } from '@mui/material';
+import './AllProduct.css'
 import { useNavigate } from "react-router-dom";
 
+const { Option } = Select;
 function valuetext(value) {
   return `${value}°C`;
 }
@@ -19,7 +32,7 @@ function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
-const AllProductPhonecopy = () => {
+const AllProductPhone = () => {
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState(() => {
     // Lấy giá trị từ localStorage khi trang web được tải
@@ -33,12 +46,32 @@ const AllProductPhonecopy = () => {
   const [minSliderValue, setMinSliderValue] = useState(0);
   const [maxSliderValue, setMaxSliderValue] = useState(40000000);
   const [selectedBrand, setSelectedBrand] = useState('ALL');
+  const [selectedRom, setSelectedRom] = useState('ALL');
+  const [selectedCpu, setSelectedCpu] = useState('ALL');
+  const [selectedSeries, setSelectedSeries] = useState('ALL');
+  const [selectedRam, setSelectedRam] = useState('ALL');
+  const [selectedPin, setSelectedPin] = useState('ALL');
+  const [selectedVga, setSelectedVga] = useState('ALL');
+  const [selectedFront_camera, setSelectedFront_camera] = useState('ALL');
+  const [selectedScreen, setSelectedScreen] = useState('ALL');
+
   const [displayedProducts, setDisplayedProducts] = useState(products);
   const brands = [...new Set(products.map(product => product.brand))];
+  const configurations = products.map(product => JSON.parse(product.configuration));
+  const uniqueRom = [...new Set(configurations.map(config => config.rom))];
+  const uniqueCpu = [...new Set(configurations.map(config => config.cpu))];
+  const uniqueSeries = [...new Set(configurations.map(config => config.series))];
+  const uniqueRam = [...new Set(configurations.map(config => config.ram))];
+  const uniquePin = [...new Set(configurations.map(config => config.pin))];
+  const uniqueVga = [...new Set(configurations.map(config => config.vga))];
+  const uniqueFront_camera = [...new Set(configurations.map(config => config.front_camera))];
+  const uniqueScreen = [...new Set(configurations.map(config => config.screen))];
+
+
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
+      .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => {
         setProducts(response.data);
         // Ban đầu hiển thị tất cả sản phẩm
@@ -54,47 +87,159 @@ const AllProductPhonecopy = () => {
     localStorage.setItem('sliderValue', JSON.stringify(value));
   }, [value]);
 
+  useEffect(() => {
+    filterProducts();
+  }, [selectedBrand, selectedRom, minSliderValue, maxSliderValue, selectedCpu, selectedSeries, selectedRam, selectedPin, selectedVga,
+    selectedFront_camera, selectedScreen,
+  ]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setIsFiltering(true);
     setMinSliderValue(newValue[0]);
     setMaxSliderValue(newValue[1]);
-
-    const filteredByPrice = products.filter((product) => {
-      const price = product.price;
-      return price >= newValue[0] && price <= newValue[1];
-    });
-
-    const filteredByBrand = selectedBrand !== 'ALL'
-      ? filteredByPrice.filter((product) => product.brand === selectedBrand)
-      : filteredByPrice;
-
-    setFilteredProducts(filteredByBrand);
-
-    // Cập nhật displayedProducts dựa trên filteredProducts hoặc products tùy thuộc vào việc áp dụng bộ lọc
-    setDisplayedProducts(isFiltering ? filteredByBrand : products);
+    filterProducts();
   };
 
-  const handleBrandChange = (event) => {
-    setSelectedBrand(event.target.value);
+  const handleBrandChange = (value) => {
+    setSelectedBrand(value);
+    filterProducts(value);
+  };
 
-    const filteredByBrand = event.target.value !== 'ALL'
-      ? products.filter((product) => product.brand === event.target.value)
-      : products;
 
-    const [minValue, maxValue] = value;
-    const filteredByPrice = filteredByBrand.filter((product) => {
+  const handleRomChange = (value) => {
+    setSelectedRom(value);
+    filterProducts(value);
+  };
+
+
+
+  const handleCpuChange = (value) => {
+    setSelectedCpu(value);
+    filterProducts(value);
+  };
+
+  const handleSeriesChange = (value) => {
+    setSelectedSeries(value);
+    filterProducts(value);
+  };
+
+  const handleRamChange = (value) => {
+    setSelectedRam(value);
+    filterProducts(value);
+  };
+  const handlePinChange = (value) => {
+    setSelectedPin(value);
+    filterProducts(value);
+  };
+  const handleVgaChange = (value) => {
+    setSelectedVga(value);
+    filterProducts(value);
+  };
+  const handleFront_cameraChange = (value) => {
+    setSelectedFront_camera(value);
+    filterProducts(value);
+  };
+  const handleScreenChange = (value) => {
+    setSelectedScreen(value);
+    filterProducts(value);
+  };
+
+
+  const filterProducts = () => {
+    let filteredProducts = products;
+
+    // Lọc theo giá
+    filteredProducts = filteredProducts.filter((product) => {
       const price = product.price;
-      return price >= minValue && price <= maxValue;
+      return price >= minSliderValue && price <= maxSliderValue;
     });
 
-    setFilteredProducts(filteredByPrice);
+    // Lọc theo thương hiệu
+    if (selectedBrand !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => product.brand === selectedBrand);
+    }
+
+    // Lọc theo ROM
+    if (selectedRom !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.rom === selectedRom;
+      });
+    }
+
+
+    // Lọc theo Cpu
+    if (selectedCpu !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.cpu === selectedCpu;
+      });
+
+    }
+    // Lọc theo series
+    if (selectedSeries !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.series === selectedSeries;
+      });
+    }
+
+    // Lọc theo ram
+    if (selectedRam !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.ram === selectedRam;
+      });
+    }
+
+    // Lọc theo pin
+    if (selectedPin !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.pin === selectedPin;
+      });
+    }
+
+    // Lọc theo  Vga
+    if (selectedVga !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.vga === selectedVga;
+      });
+    }
+
+    // Lọc theo  front_camera
+    if (selectedFront_camera !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.front_camera === selectedFront_camera;
+      });
+    }
+
+    // Lọc theo  screen
+    if (selectedScreen !== 'ALL') {
+      filteredProducts = filteredProducts.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.screen === selectedScreen;
+      });
+    }
+
+
+
+
+    setFilteredProducts(filteredProducts);
+    setDisplayedProducts(filteredProducts);
   };
+
+
+
 
   const handleSortChange = (type) => {
     setSortType(type);
 
-    const sortedProducts = [...filteredProducts];
+    // Tạo một bản sao của trạng thái displayedProducts để tránh biến đổi trạng thái gốc
+    const sortedProducts = [...displayedProducts];
 
     switch (type) {
       case 'priceLowToHigh':
@@ -103,12 +248,19 @@ const AllProductPhonecopy = () => {
       case 'priceHighToLow':
         sortedProducts.sort((a, b) => b.price - a.price);
         break;
-      default:
+      case 'newestProducts':
+        sortedProducts.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
         break;
+      default:
+        // Nếu loại là 'none' hoặc không hợp lệ, đặt lại sắp xếp về thứ tự ban đầu
+        setDisplayedProducts(filteredProducts);
+        return;
     }
 
-    setFilteredProducts(sortedProducts);
+    // Cập nhật trạng thái displayedProducts với các sản phẩm đã sắp xếp
+    setDisplayedProducts(sortedProducts);
   };
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (page) => {
@@ -116,7 +268,7 @@ const AllProductPhonecopy = () => {
     setIsFiltering(false);
   };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 50;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
@@ -177,30 +329,192 @@ const AllProductPhonecopy = () => {
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label" >Thương hiệu</FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="radio-buttons-group"
-                  size="small"
+              <Form.Item label="Thương hiệu" name="brand" >
+                <Select
                   value={selectedBrand}
                   onChange={handleBrandChange}
+                  style={{ marginTop: '10px' }} // Áp dụng kiểu dáng trực tiếp
                 >
-                  <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                  {brands.map((brand) => (
-                    <FormControlLabel value={brand} control={<Radio />} label={brand} />
-                  ))}
-                </RadioGroup>
-              </FormControl>
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {brands &&
+                    brands.map((brand) => (
+                      <Select.Option key={brand} value={brand}>
+                        <span style={{ fontSize: '13px' }}>{brand}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
+              <Form.Item label="Cpu" name="cpu">
+                <Select
+                  value={selectedCpu}
+                  onChange={handleCpuChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueCpu &&
+                    uniqueCpu.map((cpu) => (
+                      <Select.Option key={cpu} value={cpu}>
+                        <span style={{ fontSize: '13px' }}>{cpu}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
+              <Form.Item label="Card đồ họa" name="Vga">
+                <Select
+                  value={selectedVga}
+                  onChange={handleVgaChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueVga &&
+                    uniqueVga.map((vga) => (
+                      <Select.Option key={vga} value={vga}>
+                        <span style={{ fontSize: '13px' }}>{vga}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
+              <Form.Item label="Màn hình" name="screen">
+                <Select
+                  value={selectedScreen}
+                  onChange={handleScreenChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueScreen &&
+                    uniqueScreen.map((screen) => (
+                      <Select.Option key={screen} value={screen}>
+                        <span style={{ fontSize: '13px' }}>{screen}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Series" name="series">
+                <Select
+                  value={selectedSeries}
+                  onChange={handleSeriesChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueSeries &&
+                    uniqueSeries.map((series) => (
+                      <Select.Option key={series} value={series}>
+                        <span style={{ fontSize: '13px' }}>{series}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Lưu trữ" name="rom" >
+                <Select
+                  value={selectedRom}
+                  onChange={handleRomChange}
+                  style={{ marginTop: '10px' }}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueRom &&
+                    uniqueRom.map((rom) => (
+                      <Select.Option key={rom} value={rom}>
+                        <span style={{ fontSize: '13px' }}>{rom}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Ram" name="ram" >
+                <Select
+                  value={selectedRam}
+                  onChange={handleRamChange}
+                  style={{ marginTop: '10px' }}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniqueRam &&
+                    uniqueRam.map((ram) => (
+                      <Select.Option key={ram} value={ram}>
+                        <span style={{ fontSize: '13px' }}>{ram}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+
+
+
+
+
+              <div className="css-f1fyi0">
+                <div width="100%" color="border" className="css-yae08c"></div>
+              </div>
+              <Form.Item label="Pin" name="pin">
+                <Select
+                  value={selectedPin}
+                  onChange={handlePinChange}
+                >
+                  <Select.Option value="ALL">
+                    <span style={{ fontSize: '13px' }}>ALL</span>
+                  </Select.Option>
+
+                  {uniquePin &&
+                    uniquePin.map((pin) => (
+                      <Select.Option key={pin} value={pin}>
+                        <span style={{ fontSize: '13px' }}>{pin}</span>
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Form.Item>
+
+
+
+
+
             </div>
           </div>
         </div>
@@ -213,12 +527,12 @@ const AllProductPhonecopy = () => {
               Xắp xếp theo
               <button className="sort-button" onClick={() => handleSortChange('priceLowToHigh')}>Giá thấp đến cao</button>
               <button className="sort-button" onClick={() => handleSortChange('priceHighToLow')}>Giá cao đến thấp</button>
-              <button className="sort-button" onClick={() => handleSortChange('none')}>Sản phẩm mới nhất</button>
+              <button className="sort-button" onClick={() => handleSortChange('newestProducts')}>Sản phẩm mới nhất</button>
             </div>
           </div>
           <div className='all-products'>
             <div className='y2krk0'>
-              {(isFiltering ? filteredProducts : products).slice(startIndex, endIndex).map((item, index) => (
+              {displayedProducts.map((item, index) => (
                 <div type="grid" className="css-13w7uog" key={item.id}>
                   <div
                     className="product-cards css-35xksx"
@@ -266,7 +580,7 @@ const AllProductPhonecopy = () => {
                             type="body"
                             color="textSecondary"
                             className="product-brand-name css-90n0z6"
-                            style={{ textTransform: "uppercase", display: "inline" }}
+                            style={{ display: "inline" }}
                           >
                             {item.brand}
                           </div>
@@ -348,7 +662,7 @@ const AllProductPhonecopy = () => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default AllProductPhonecopy;
+export default AllProductPhone;
