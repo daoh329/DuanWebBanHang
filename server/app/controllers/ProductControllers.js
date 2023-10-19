@@ -400,7 +400,7 @@ class Product {
 
   async Newphone(req, res) {
     const query = `
-      SELECT product.*, productDetails.brand, galery.thumbnail
+      SELECT product.*, productDetails.brand, productDetails.configuration, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -426,7 +426,7 @@ class Product {
 
   async Newlaptop(req, res) {
     const query = `
-      SELECT product.*, productDetails.brand, galery.thumbnail
+      SELECT product.*, productDetails.brand, productDetails.configuration, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
