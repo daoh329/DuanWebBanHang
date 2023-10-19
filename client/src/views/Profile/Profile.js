@@ -188,18 +188,19 @@ const handleCancelOrder = async (record) => {
     },
 
     {
-        title: 'Trạng thái', 
-        dataIndex: 'order_status', 
-        key: 'status', 
-        render: status => (
-            <span style={{
-                fontWeight: 'bold', 
-                color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
-            }}>
-                {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
-            </span>
-        )
+      title: 'Trạng thái', 
+      dataIndex: 'order_status', 
+      key: 'status', 
+      render: status => (
+          <span style={{
+              fontWeight: 'bold', 
+              color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF00FF' : 'orange'))
+          }}>
+              {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đã giao' : 'Chưa xác nhận'))}
+          </span>
+      )
     },
+
     {
       title: 'Hành động',
       dataIndex: 'action',
@@ -396,6 +397,14 @@ const handleCancelOrder = async (record) => {
                     Đã hủy
                   </MDBTabsLink>
                 </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    onClick={() => handleIconsClick("tab4")}
+                    active={iconsActive === "tab4"}
+                  >
+                    Đã giao
+                  </MDBTabsLink>
+                </MDBTabsItem>
               </MDBTabs>
 
               <MDBTabsContent>
@@ -436,6 +445,19 @@ const handleCancelOrder = async (record) => {
                     />
                   ) : (
                     "Không có đơn hàng nào bị hủy"
+                  )}
+                </MDBTabsPane>
+                <MDBTabsPane show={iconsActive === "tab4"}>
+                  {data.filter((order) => order.order_status === 3).length >
+                  0 ? (
+                    <Table
+                      columns={columns}
+                      dataSource={data.filter(
+                        (order) => order.order_status === 3
+                      )}
+                    />
+                  ) : (
+                    "Không có đơn hàng nào đã được giao"
                   )}
                 </MDBTabsPane>
               </MDBTabsContent>
