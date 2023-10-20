@@ -93,28 +93,7 @@ class OrderController {
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
         } else {
-            // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
-            let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
-            let values = [orderId];
-            mysql.query(sql, values, (err, orderDetails) => {
-              if (err) throw err;
-  
-              // Duyệt qua từng sản phẩm trong đơn hàng
-              for (let i = 0; i < orderDetails.length; i++) {
-                const productID = orderDetails[i].productID;
-                const quantity = orderDetails[i].quantity;
-  
-                // Cập nhật số lượng sản phẩm trong bảng productDetails
-                sql = `UPDATE productDetails SET quantity = quantity - ? WHERE product_id = ?`;
-                values = [quantity, productID];
-                mysql.query(sql, values, (err, result) => {
-                  if (err) throw err;
-                  console.log(result);
-                });
-              }
-  
-              res.send('Order confirmed and product quantity updated...');
-            });
+            res.send('Order confirmed...');
         }
     });
   }
@@ -130,28 +109,7 @@ class OrderController {
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
         } else {
-            // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
-            let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
-            let values = [orderId];
-            mysql.query(sql, values, (err, orderDetails) => {
-              if (err) throw err;
-  
-              // Duyệt qua từng sản phẩm trong đơn hàng
-              for (let i = 0; i < orderDetails.length; i++) {
-                const productID = orderDetails[i].productID;
-                const quantity = orderDetails[i].quantity;
-  
-                // Cập nhật số lượng sản phẩm trong bảng productDetails
-                sql = `UPDATE productDetails SET quantity = quantity + ? WHERE product_id = ?`;
-                values = [quantity, productID];
-                mysql.query(sql, values, (err, result) => {
-                  if (err) throw err;
-                  console.log(result);
-                });
-              }
-  
-              res.send('Order canceled and product quantity updated...');
-            });
+            res.send('Order canceled...');
         }
     });
   }
@@ -183,7 +141,28 @@ class OrderController {
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
         } else {
-          res.send('Order delivered...');
+          // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
+          let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+          let values = [orderId];
+          mysql.query(sql, values, (err, orderDetails) => {
+            if (err) throw err;
+
+            // Duyệt qua từng sản phẩm trong đơn hàng
+            for (let i = 0; i < orderDetails.length; i++) {
+              const productID = orderDetails[i].productID;
+              const quantity = orderDetails[i].quantity;
+
+              // Cập nhật số lượng sản phẩm trong bảng productDetails
+              sql = `UPDATE productDetails SET quantity = quantity - ? WHERE product_id = ?`;
+              values = [quantity, productID];
+              mysql.query(sql, values, (err, result) => {
+                if (err) throw err;
+                console.log(result);
+              });
+            }
+
+            res.send('Order delivered and product quantity updated...');
+          });
         }
     });
   }
@@ -199,7 +178,27 @@ class OrderController {
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
         } else {
-          res.send('Order delivered...');
+          // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
+          let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+          let values = [orderId];
+          mysql.query(sql, values, (err, orderDetails) => {
+            if (err) throw err;
+
+            // Duyệt qua từng sản phẩm trong đơn hàng
+            for (let i = 0; i < orderDetails.length; i++) {
+              const productID = orderDetails[i].productID;
+              const quantity = orderDetails[i].quantity;
+
+              // Cập nhật số lượng sản phẩm trong bảng productDetails
+              sql = `UPDATE productDetails SET quantity = quantity + ? WHERE product_id = ?`;
+              values = [quantity, productID];
+              mysql.query(sql, values, (err, result) => {
+                if (err) throw err;
+                console.log(result);
+              });
+            }
+            res.send('Order canceled and product quantity updated...');
+          });
         }
     });
   }
@@ -334,7 +333,7 @@ class OrderController {
     JOIN 
         product p ON od.productID = p.id
     WHERE
-        o.status = 1
+        o.status = 4
     GROUP BY 
         DATE_FORMAT(o.updated_at, '%Y-%m')
     `;
@@ -366,7 +365,7 @@ class OrderController {
 
 
   async dashboard(req, res) {
-    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -376,27 +375,21 @@ class OrderController {
         
         if(dateExists){
           switch(item.status) {
-            case 0:
-              dateExists.Unconfirm = item.count;
+            case 4:
+              dateExists.Delivered = item.count;
               break;
-            case 1:
-              dateExists.Confirm = item.count;
-              break;
-            case 2:
-              dateExists.Cancel = item.count;
+            case 5:
+              dateExists.Deliveryfailed = item.count;
               break;
           }
         } else {
           let newItem = {updated_date: item.updated_date};
           switch(item.status) {
-            case 0:
-              newItem.Unconfirm = item.count;
+            case 4:
+              newItem.Delivered = item.count;
               break;
-            case 1:
-              newItem.Confirm = item.count;
-              break;
-            case 2:
-              newItem.Cancel = item.count;
+            case 5:
+              newItem.Deliveryfailed = item.count;
               break;
           }
           acc.push(newItem);
