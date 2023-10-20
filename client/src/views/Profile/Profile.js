@@ -196,7 +196,7 @@ const handleCancelOrder = async (record) => {
               fontWeight: 'bold', 
               color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#FF00FF' : (status === 5 ? 'red' : 'orange'))))
           }}>
-              {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Giao hàng không thành công' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
+              {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đang vận chuyển' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
           </span>
       )
     },
@@ -211,7 +211,7 @@ const handleCancelOrder = async (record) => {
                   <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
                       Hủy
                   </Button>
-              ) : record.order_status === 5 ? (
+              ) : record.order_status === 2 || record.order_status === 5 ? (
                   <Button className="buy-again-button" style={{ backgroundColor: '#33CCFF', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
                       Mua lại
                   </Button>
@@ -394,7 +394,7 @@ const handleCancelOrder = async (record) => {
                     onClick={() => handleIconsClick("tab3")}
                     active={iconsActive === "tab3"}
                   >
-                    Đang vận chuyển
+                    Vận chuyển
                   </MDBTabsLink>
                 </MDBTabsItem>
                 <MDBTabsItem>
@@ -409,14 +409,6 @@ const handleCancelOrder = async (record) => {
                   <MDBTabsLink
                     onClick={() => handleIconsClick("tab5")}
                     active={iconsActive === "tab5"}
-                  >
-                    Giao hàng không thành công
-                  </MDBTabsLink>
-                </MDBTabsItem>
-                <MDBTabsItem>
-                  <MDBTabsLink
-                    onClick={() => handleIconsClick("tab6")}
-                    active={iconsActive === "tab6"}
                   >
                     Đã hủy
                   </MDBTabsLink>
@@ -477,26 +469,10 @@ const handleCancelOrder = async (record) => {
                   )}
                 </MDBTabsPane>
                 <MDBTabsPane show={iconsActive === "tab5"}>
-                  {data.filter((order) => order.order_status === 5).length >
-                  0 ? (
+                  {data.filter((order) => order.order_status === 5 || order.order_status === 2).length > 0 ? (
                     <Table
                       columns={columns}
-                      dataSource={data.filter(
-                        (order) => order.order_status === 5
-                      )}
-                    />
-                  ) : (
-                    "Không có đơn hàng nào giao hàng không thành công"
-                  )}
-                </MDBTabsPane>
-                <MDBTabsPane show={iconsActive === "tab6"}>
-                  {data.filter((order) => order.order_status === 2).length >
-                  0 ? (
-                    <Table
-                      columns={columns}
-                      dataSource={data.filter(
-                        (order) => order.order_status === 2
-                      )}
+                      dataSource={data.filter((order) => order.order_status === 5 || order.order_status === 2)}
                     />
                   ) : (
                     "Không có đơn hàng nào bị hủy"
