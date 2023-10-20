@@ -34,8 +34,8 @@ function HistoryOrder(props) {
         },
         {
             title: 'Thời gian tạo',
-            dataIndex: 'order_created_at',
-            key: 'created_at',
+            dataIndex: 'order_updated_at',
+            key: 'updated_at',
         },
 
         {
@@ -47,7 +47,7 @@ function HistoryOrder(props) {
                     fontWeight: 'bold', 
                     color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
                 }}>
-                    {status === 1 ? 'COD' : (status === 2 ? 'MOMO' : 'VNPAY')}
+                    {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
                 </span>
             )
         },
@@ -59,12 +59,12 @@ function HistoryOrder(props) {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
+                    color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#00DD00' : (status === 5 ? 'red' : 'orange'))))
                 }}>
-                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
+                    {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đang vận chuyển' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
                 </span>
             )
-        },
+          },
     ]
 
     return (

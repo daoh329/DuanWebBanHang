@@ -45,7 +45,7 @@ class OrderController {
 
   async quanlyOrder(req, res, next) {
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*
@@ -65,7 +65,7 @@ class OrderController {
 
   async quanlyAllOrder(req, res, next) {
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*
@@ -206,7 +206,7 @@ class OrderController {
 
   async buyback(req, res) {
     const orderId = req.params.id;
-    const sql = 'UPDATE orders SET status = 0, updated_at = NOW() WHERE id = ?';
+    const sql = 'UPDATE orders SET status = 0, updated_at = NOW(), created_at = NOW() WHERE id = ?';
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
@@ -240,7 +240,7 @@ class OrderController {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*
