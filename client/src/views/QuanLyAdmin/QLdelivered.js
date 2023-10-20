@@ -71,7 +71,7 @@ function QLdelivered() {
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
         {
             title: 'Thời gian tạo',
-            dataIndex: 'order_created_at',
+            dataIndex: 'order_updated_at',
             key: 'updated_at',
         },
 

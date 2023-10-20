@@ -95,7 +95,7 @@ function QLAlldonhang() {
         {
             title: 'Thời gian tạo',
             dataIndex: 'order_created_at',
-            key: 'updated_at',
+            key: 'created_at',
         },
 
         {
