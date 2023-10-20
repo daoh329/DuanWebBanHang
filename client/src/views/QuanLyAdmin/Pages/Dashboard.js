@@ -81,9 +81,8 @@ const Dashboard = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="Unconfirm" stroke="#FFD700" activeDot={{ r: 10 }} dot={{ stroke: '#FFD700', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="Confirm" stroke="#008000" activeDot={{ r: 10 }} dot={{ stroke: '#008000', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="Cancel" stroke="#FF0000" activeDot={{ r: 10 }} dot={{ stroke: '#FF0000', strokeWidth: 2 }} />
+        <Line type="monotone" dataKey="Delivered" stroke="#008000" activeDot={{ r: 10 }} dot={{ stroke: '#008000', strokeWidth: 2 }} />
+        <Line type="monotone" dataKey="Deliveryfailed" stroke="#FF0000" activeDot={{ r: 10 }} dot={{ stroke: '#FF0000', strokeWidth: 2 }} />
       </LineChart>
       </div>
     </>
