@@ -11,7 +11,7 @@ function OrderList() {
             .then(res => {
                 // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data
-                    .filter(order => order.order_status === 1 || order.order_status === 2)
+                    .filter(order => order.order_status === 0 || order.order_status === 1 || order.order_status === 2)
                     .sort((a, b) => {
                         // Sắp xếp theo trạng thái
                         if (a.order_status < b.order_status) return -1;
