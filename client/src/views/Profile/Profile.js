@@ -194,7 +194,7 @@ const handleCancelOrder = async (record) => {
       render: status => (
           <span style={{
               fontWeight: 'bold', 
-              color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#FF00FF' : (status === 5 ? 'red' : 'orange'))))
+              color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#00DD00' : (status === 5 ? 'red' : 'orange'))))
           }}>
               {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đang vận chuyển' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
           </span>

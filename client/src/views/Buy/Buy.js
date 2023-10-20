@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLocation } from "react";
 import axios from "axios";
 import {
   MDBTabs,
@@ -40,6 +40,10 @@ export default function Buy() {
   const [buysData, setBuysData] = useState(null);
   // state checked address
   const [addressChecked, setAddressChecked] = useState();
+
+  const [amount, setAmount] = useState(null);
+  const [bankCode, setBankCode] = useState('');
+  const [language, setLanguage] = useState('vn');
 
   const navigate = useNavigate();
 
@@ -206,23 +210,46 @@ export default function Buy() {
     // Lưu buysData vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(updatedBuysData));
   };
+
+  //Thanh toán VNPay
+
+  // Lấy dữ liệu từ sessionStorage khi component được tải
+  useEffect(() => {
+    const buysDataFromSession = sessionStorage.getItem("buys");
+    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    if (buysDataFromSession) {
+      const parsedBuysData = JSON.parse(buysDataFromSession);
+      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      setAmount(parsedBuysData.total); // Cập nhật giá trị total vào state amount
+      console.log("dữ liệu total:", parsedBuysData.total);
+    }
+  }, []);
   
-  const handleBuyVNpay = () => {
+  const handleBuyVNpay = async () => {
     // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
     // console.log('amount: '+totalAmount)
     setPaymentMenthod(0); // Cập nhật phương thức thanh toán
 
-    // fetch(`${process.env.REACT_APP_API_URL}/pay/set_amount`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ amount: totalAmount }),
-    // })
-    // .then(() => {
-    //   window.location.href = `${process.env.REACT_APP_API_URL}/pay/create_payment_url`;
-    // });
-    navigate(`/createorder`); // Thêm totalAmount vào URL như một tham số truy vấn
+    const data = {
+      amount,
+      bankCode,
+      language,
+    };
+  
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    
+    const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
+  
+    if (responseData && responseData.url) {
+      window.location.href = responseData.url;
+    }
+    // navigate(`/createorder`); // Thêm totalAmount vào URL như một tham số truy vấn
   };
   // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
   const handleBuyCOD = () => {

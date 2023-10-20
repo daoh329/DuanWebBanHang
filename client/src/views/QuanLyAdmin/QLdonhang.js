@@ -141,6 +141,10 @@ function OrderList() {
             <div>
                 <a href="/allorders" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
             </div>
+
+            <div>
+                <a href="https://sandbox.vnpayment.vn/merchantv2/Transaction/SearchRefund.htm" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem lịch sử thanh toán</a>
+            </div>
             
             <Table columns={columns} dataSource={data} />
         </div>
