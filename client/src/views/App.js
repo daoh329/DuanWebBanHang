@@ -58,13 +58,18 @@ const App = () => {
         permission: data.user.permission,
       };
 
-      if (!storedUser && result.status === 200) {
-        localStorage.setItem("user", JSON.stringify(u));
-        setUser(u);
-        return;
-      }
-      else if (storedUser && result.status === 200) {
-        setUser(storedUser);
+      // Nếu đang login trên server
+      // Thực hiện lưu phiên và thông tin user đăng nhập (localStorage)
+      if (result.status === 200) {
+        // Nếu trong localStorage đã có data
+        if (storedUser) {
+          return setUser(storedUser);
+        }
+        // Nếu chưa thì lưu user vào localStorage
+        else{
+          localStorage.setItem("user", JSON.stringify(u));
+          return setUser(u);
+        }
       }
       localStorage.removeItem("user");
       setUser(null);
