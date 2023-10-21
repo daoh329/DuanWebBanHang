@@ -12,6 +12,21 @@ const authRoute = require("./routes/auth");
 const session = require("express-session");
 const passportStrategy = require("./passport");
 const app = express();
+const fs = require('fs');
+
+// Đường dẫn đến thư mục bạn muốn tạo
+const directoryPath = path.join(__dirname, 'src/public/images');
+// Kiểm tra xem thư mục đã tồn tại hay chưa
+if (!fs.existsSync(directoryPath)) {
+  // Nếu thư mục không tồn tại, tạo nó
+  fs.mkdirSync(directoryPath, { recursive: true }, (err) => {
+    if (err) {
+      console.error(`Không thể tạo thư mục ${directoryPath}:`, err);
+    } else {
+      console.log(`Thư mục ${directoryPath} đã được tạo thành công.`);
+    }
+  });
+}
 
 app.use(
 	session({
@@ -38,7 +53,6 @@ app.use(cookieParser());
 app.use(bodyParser.json({ limit: "5mb" }));
 app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
 app.use(express.static(path.join(__dirname, "./src/public")));
-
 
 // Định nghĩa các tuyến (routes)
 app.use("/auth", authRoute);

@@ -21,9 +21,10 @@ import {
   faMapLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import Layout from "./AddressManager/Layout";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const user = useSelector((state) => state.user);
   // select mới
   const [city, setCity] = useState([]);
   const [districts, setDistricts] = useState([]);

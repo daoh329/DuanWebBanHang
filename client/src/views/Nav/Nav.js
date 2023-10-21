@@ -27,12 +27,13 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
 import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
+import { useSelector } from "react-redux";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
 
 const App = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = useSelector((state) => state.user);
   const [arrayNotification, setArrayNotification] = useState([
     {
       title: "Thông báo số 1",
@@ -157,7 +158,7 @@ const App = () => {
   const menuAccount = [
     {
       key: "1",
-      label: user && (
+      label: user.id && (
         <Button
           onClick={profile}
           style={{
@@ -173,7 +174,7 @@ const App = () => {
     },
     {
       key: "2",
-      label: user && user.permission === "admin" && (
+      label: user.id && user.permission === "admin" && (
         <Button
           onClick={adminPage}
           style={{
@@ -189,7 +190,7 @@ const App = () => {
     },
     {
       key: "3",
-      label: user ? (
+      label: user.id ? (
         <Button
           style={{
             border: "none",
@@ -334,7 +335,7 @@ const App = () => {
             </div>
             <div className="user-mobile">
               <Dropdown menu={menu}>
-                {user ? (
+                {user.id ? (
                   <Avatar src={user.picture} />
                 ) : (
                   <Avatar
@@ -527,7 +528,7 @@ const App = () => {
                 style={{ display: "flex", alignItems: "center", gap: "1px" }}
               >
                 <Dropdown menu={{ items: menuAccount }} className="avt-user">
-                  {user ? (
+                  {user.id ? (
                     <div
                       style={{
                         justifyContent: "center",

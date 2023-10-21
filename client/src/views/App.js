@@ -36,15 +36,20 @@ import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import AllNewProductPhone from "./ProductPages/AllProduct/AllNewProductPhone";
 import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import Chatbot from "./ChatBot/Chatbot";
 import CreateOrder from "./VnPay/CreateOrder";
 import BuySuccess from "./Buy/BuySuccess";
+import { update } from "../redux/userSlice";
+
 const App = () => {
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
+  const userDispatch = useDispatch();
+
   const getUser = async () => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
       const result = await axios.get(url, { withCredentials: true });
@@ -57,31 +62,16 @@ const App = () => {
         picture: data.user.picture,
         permission: data.user.permission,
       };
-
-      // Nếu đang login trên server
-      // Thực hiện lưu phiên và thông tin user đăng nhập (localStorage)
       if (result.status === 200) {
-        // Nếu trong localStorage đã có data
-        if (storedUser) {
-          return setUser(storedUser);
-        }
-        // Nếu chưa thì lưu user vào localStorage
-        else{
-          localStorage.setItem("user", JSON.stringify(u));
-          return setUser(u);
-        }
+        userDispatch(update(u));
       }
-      localStorage.removeItem("user");
-      setUser(null);
     } catch (e) {
-      setUser(null);
-      localStorage.removeItem("user");
       console.log(e);
     }
   };
 
   useEffect(() => {
-      getUser();
+    getUser();
   }, []);
 
   return (
@@ -95,7 +85,7 @@ const App = () => {
               <Route path="/detail/:id" element={<Detail />} />
               <Route
                 path="/login"
-                element={user ? <Navigate to="/" /> : <Login />}
+                element={user.id ? <Navigate to="/" /> : <Login />}
               />
               {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
@@ -103,7 +93,7 @@ const App = () => {
               <Route
                 path="/admin/*"
                 element={
-                  user && user.permission === "admin" ? (
+                  user.id && user.permission === "admin" ? (
                     <>
                       <Admin /> <Outlet />
                     </>
@@ -129,10 +119,13 @@ const App = () => {
               <Route path="/success" element={<BuySuccess />} />
               <Route
                 path="/profile"
-                element={user ? <Profile /> : <Navigate to="/" />}
+                element={user.id ? <Profile /> : <Navigate to="/" />}
               />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
-              <Route path="/tat-ca-san-pham-laptop-moi" element={<AllNewProductLaptop />} />
+              <Route
+                path="/tat-ca-san-pham-laptop-moi"
+                element={<AllNewProductLaptop />}
+              />
               <Route
                 path="/tat-ca-san-pham-phone"
                 element={<AllProductPhone />}
@@ -147,8 +140,7 @@ const App = () => {
               />
               <Route path="/createorder" element={<CreateOrder />} />
 
-              <Route path="/chat" element={<Chatbot/>} />
-
+              <Route path="/chat" element={<Chatbot />} />
             </Routes>
           </header>
           <MobileNav user={user} />

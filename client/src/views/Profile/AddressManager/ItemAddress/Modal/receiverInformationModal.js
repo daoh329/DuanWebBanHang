@@ -11,6 +11,7 @@ import {
 } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -22,7 +23,7 @@ function ReceiverInformationModal({
   getValues,
   countAddress,
 }) {
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = useSelector((state) => state.user);
 
   const [city, setCity] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);

@@ -8,9 +8,10 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import ReceiverInformationModal from "../../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
+import { useSelector } from "react-redux";
 
 function ButtonAddress({ value, checked, onClick, index, getValues }) {
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = useSelector((state) => state.user);
 
   const [isModalOpenShow, setIsModalOpenShow] = useState(false);
 
@@ -57,7 +58,7 @@ function ButtonAddress({ value, checked, onClick, index, getValues }) {
         <div className="address-control-name">
           <span>{value.name}</span>
           <EditOutlined
-            onClick={user ? () => showModalUpdate(value) : showConfirm}
+            onClick={user.id ? () => showModalUpdate(value) : showConfirm}
             className="address-control-edit-icon"
           />
         </div>
