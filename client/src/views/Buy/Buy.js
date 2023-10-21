@@ -16,6 +16,7 @@ import { message } from "antd";
 import "./Buy.css";
 import ButtonAddress from "./ButtonCheckedAddress/ButtonAddress";
 import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
+import { useSelector } from "react-redux";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -29,7 +30,7 @@ function formatCurrency(value) {
 //
 
 export default function Buy() {
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = useSelector((state) => state.user);
   const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [note, setNote] = useState("");
@@ -317,7 +318,7 @@ export default function Buy() {
                       <h6>Thông tin nhận hàng</h6>
                       <div className="address-group">
                         {/* show address */}
-                        {user &&
+                        {user.id &&
                           deliveryAddress &&
                           deliveryAddress.map((value, index) => (
                             <ButtonAddress
@@ -332,7 +333,7 @@ export default function Buy() {
 
                         {/* add address */}
                         <div
-                          onClick={user ? showModalAdd : showConfirm}
+                          onClick={user.id ? showModalAdd : showConfirm}
                           className="address-add"
                         >
                           <PlusOutlined />
@@ -849,7 +850,7 @@ export default function Buy() {
                     id="style-RRpB6"
                   >
                     {/* pt1 */}
-                    {user ? (
+                    {user.id ? (
                       <div
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
@@ -959,7 +960,7 @@ export default function Buy() {
                     )}
 
                     {/* pt2 */}
-                    {user ? (
+                    {user.id ? (
                       <div
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
@@ -1059,7 +1060,7 @@ export default function Buy() {
                     )}
 
                     {/* pt3 */}
-                    {user ? (
+                    {user.id ? (
                       <div
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
                         id="style-poooX"
@@ -1347,7 +1348,7 @@ export default function Buy() {
                         className="css-0 snipcss0-8-202-203"
                       >
                         <div>
-                          {user ? (
+                          {user.id ? (
                             <button
                               onClick={handleBuyClick}
                               className="att-checkout-button css-v463h2 snipcss0-9-203-204"

@@ -5,10 +5,11 @@ import "./Stylye.css";
 import ItemLayout from "./ItemAddress/Layout.js";
 import axios from "axios";
 import ReceiverInformationModal from "./ItemAddress/Modal/receiverInformationModal";
+import { useSelector } from "react-redux";
 
 function Layout() {
   // Lấy id user
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = useSelector((state) => state.user);
 
   //   Các biết cục bộ
   const [receiverInformation, setReceiverInformation] = useState([]);
