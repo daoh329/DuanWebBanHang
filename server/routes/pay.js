@@ -14,4 +14,6 @@ router.get('/vnpay_ipn', PayController.Vnpay_ipn);
 router.post('/querydr', PayController.Post_querydr);
 router.post('/refund', PayController.Post_refund);
 
+router.post('/paymomo', PayController.Paymomo);
+
 module.exports = router;

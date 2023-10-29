@@ -258,10 +258,31 @@ export default function Buy() {
     setPaymentMenthod(1); // Cập nhật phương thức thanh toán
   };
 
-  const handleBuyMoMoPay = () => {
+  const handleBuyMoMoPay = async () => {
     // Xử lý cho phương thức thanh toán ZaloPay
     setPaymentMenthod(2); // Cập nhật phương thức thanh toán
-  };
+
+    const data = {
+      amount,
+    };
+  
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/paymomo`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    
+    const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
+    
+    if (responseData && responseData.url) {
+      window.location.href = responseData.url;
+    } else if (responseData && responseData.error) {
+        // Hiển thị thông báo lỗi
+        message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
+    }
+  }
 
   const handleChecked = (value) => {
     setAddressChecked(value);
