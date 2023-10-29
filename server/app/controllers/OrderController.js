@@ -5,7 +5,7 @@ class OrderController {
   // API /order/order
   async order(req, res) {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
   
     if (!data) {
       return res.status(400).json("Invalid data");
@@ -16,7 +16,7 @@ class OrderController {
     let values = [data.productID];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
-      console.log(result);
+      // console.log(result);
   
       // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
       if (data.quantity > result[0].quantity) {
@@ -28,13 +28,13 @@ class OrderController {
       values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
-        console.log(result);
+        // console.log(result);
         const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
         sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
         values = [data.productID, data.quantity, orderID];
         mysql.query(sql, values, (err, result) => {
           if (err) throw err;
-          console.log(result);
+          // console.log(result);
           res.send('Order details added...');
         });
       });
@@ -88,7 +88,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -104,7 +104,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error canceling order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -120,7 +120,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -136,7 +136,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -157,7 +157,7 @@ class OrderController {
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
-                console.log(result);
+                // console.log(result);
               });
             }
 
@@ -173,7 +173,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -194,7 +194,7 @@ class OrderController {
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
-                console.log(result);
+                // console.log(result);
               });
             }
             res.send('Order canceled and product quantity updated...');
@@ -209,7 +209,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -225,7 +225,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error canceling order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
