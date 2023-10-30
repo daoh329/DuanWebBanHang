@@ -105,7 +105,7 @@ function QLAlldonhang() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 5 ? 'red' : (status === 2 ? 'red' : (status === 4 ? '#FF00FF' : 'orange'))
+                    color: status === 5 ? 'violet' : (status === 2 ? '#FF3399' : (status === 4 ? '#33CCFF' : 'orange'))
                 }}>
                     {status === 5 ? 'Giao không thành công' : (status === 2 ? 'Đã bị hủy' : (status === 4 ? 'Đã giao' : 'Chưa xác nhận'))}
                 </span>

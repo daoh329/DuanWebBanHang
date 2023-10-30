@@ -79,7 +79,7 @@ function QLshipping() {
             dataIndex: 'action',
             key: 'newAction',
             render: (_, record) => (
-                <Button style={{ backgroundColor: '#FF33FF', color: 'white' }} onClick={() => handleShipping(record)}>
+                <Button style={{ backgroundColor: '#BDB76B', color: 'white' }} onClick={() => handleShipping(record)}>
                    Vận chuyển
                 </Button>
             ),

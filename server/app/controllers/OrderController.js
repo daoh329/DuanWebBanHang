@@ -363,6 +363,68 @@ class OrderController {
     });
   }
 
+  async orderDate(req, res) {
+    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_Date, COUNT(*) as count FROM orders WHERE DATE(updated_at) = CURDATE() AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const dateExists = acc.find(data => data.updated_Date === item.updated_Date);
+        
+        if(dateExists){
+          switch(item.status) {
+            case 0:
+              dateExists.ChuaXacNhan = item.count;
+              break;
+            case 1:
+              dateExists.DaXacNhan = item.count;
+              break;
+            case 2:
+              dateExists.DaHuy = item.count;
+              break;
+            case 3:
+              dateExists.DangVanChuyen = item.count;
+              break;
+            case 4:
+              dateExists.DaGiao = item.count;
+              break;
+            case 5:
+              dateExists.GiaoKhongThanhCong = item.count;
+              break;
+          }
+        } else {
+          let newItem = {updated_Date: item.updated_Date};
+          switch(item.status) {
+            case 0:
+              newItem.ChuaXacNhan = item.count;
+              break;
+            case 1:
+              newItem.DaXacNhan = item.count;
+              break;
+            case 2:
+              newItem.DaHuy = item.count;
+              break;
+            case 3:
+              newItem.DangVanChuyen = item.count;
+              break;
+            case 4:
+              newItem.DaGiao = item.count;
+              break;
+            case 5:
+              newItem.GiaoKhongThanhCong = item.count;
+              break;
+          }
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);      
+      res.send(convertedData);
+    });
+  }
+  
+
 
   async dashboard(req, res) {
     let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
