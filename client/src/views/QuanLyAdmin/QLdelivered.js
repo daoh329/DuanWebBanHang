@@ -82,7 +82,7 @@ function QLdelivered() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : (status === 3 ? '#FF33FF' : 'orange')
+                    color: status === 1 ? 'green' : (status === 3 ? '#BDB76B' : 'orange')
                 }}>
                     {status === 1 ? 'Đã xác nhận' : (status === 3 ? 'Vận chuyển' : 'Chưa xác nhận')}
                 </span>
@@ -93,7 +93,7 @@ function QLdelivered() {
             dataIndex: 'action',
             key: 'newAction',
             render: (_, record) => (
-                <Button style={{ backgroundColor: '#FF0099', color: 'white' }} onClick={() => handleDelivered(record)}>
+                <Button style={{ backgroundColor: '#33CCFF', color: 'white' }} onClick={() => handleDelivered(record)}>
                     Đã giao
                 </Button>
             ),
@@ -103,7 +103,7 @@ function QLdelivered() {
             dataIndex: 'action',
             key: 'cancel',
             render: (_, record) => (
-                <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleFailed(record)}>
+                <Button style={{ backgroundColor: 'violet', color: 'white' }} onClick={() => handleFailed(record)}>
                     Giao không thành công
                 </Button>
             ),
