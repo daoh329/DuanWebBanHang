@@ -21,7 +21,7 @@ function Footer() {
           </div>
 
           <div>
-            <a href="" className="me-4 text-reset">
+            <a href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="facebook-f" />
             </a>
             <a href="" className="me-4 text-reset">
