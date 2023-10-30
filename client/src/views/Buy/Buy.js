@@ -221,8 +221,9 @@ export default function Buy() {
     if (buysDataFromSession) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
       console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
-      setAmount(parsedBuysData.total); // Cập nhật giá trị total vào state amount
-      console.log("dữ liệu total:", parsedBuysData.total);
+      // Chuyển đổi total thành số trước khi cập nhật vào state amount
+      setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
+      console.log("dữ liệu total:", Number(parsedBuysData.total));
     }
   }, []);
   
