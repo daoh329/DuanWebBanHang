@@ -24,19 +24,19 @@ function Footer() {
             <a href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="facebook-f" />
             </a>
-            <a href="" className="me-4 text-reset">
+            <a href="https://twitter.com/fpl_tn_minh" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="twitter" />
             </a>
-            <a href="" className="me-4 text-reset">
+            {/* <a href="" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="google" />
-            </a>
-            <a href="" className="me-4 text-reset">
+            </a> */}
+            <a href="https://www.instagram.com/minhnguyen.2032/" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="instagram" />
             </a>
-            <a href="" className="me-4 text-reset">
+            {/* <a href="" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="linkedin" />
-            </a>
-            <a href="" className="me-4 text-reset">
+            </a> */}
+            <a href="https://github.com/MinhPK02434" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="github" />
             </a>
           </div>
