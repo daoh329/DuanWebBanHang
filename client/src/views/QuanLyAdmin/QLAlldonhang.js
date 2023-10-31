@@ -74,7 +74,7 @@ function QLAlldonhang() {
                 <p>{record.price * record.quantity}</p>
             ),
         },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
         { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
 
         {
@@ -96,6 +96,12 @@ function QLAlldonhang() {
             title: 'Thời gian tạo',
             dataIndex: 'order_created_at',
             key: 'created_at',
+        },
+
+        {
+            title: 'Thời gian CN',
+            dataIndex: 'order_updated_at',
+            key: 'order_updated_at',
         },
 
         {
