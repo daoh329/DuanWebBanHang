@@ -50,11 +50,11 @@ function Layout({ data, getValues }) {
           </div>
           <div className="item-address">
             Địa chỉ:{" "}
-            {value.street +
+            {value.Street +
               ", " +
-              value.commune +
+              value.Commune +
               ", " +
-              value.district +
+              value.District +
               ", " +
               value.city}
           </div>

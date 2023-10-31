@@ -216,6 +216,7 @@ function Detail() {
       alert("Có lỗi xảy ra khi thêm thông tin cá nhân");
     }
   };
+  
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
@@ -371,7 +372,7 @@ function formatCurrency(value) {
                     <span className="css-1qgvt7n"></span>
                     SKU: {Detail.id}
                     <span className="css-1qgvt7n"></span>
-                    Mã vạch: &nbsp;603122
+                    Mã vạch: &nbsp;{configuration.part_number}
                   </div>
                 </div>
               </div>
@@ -472,6 +473,10 @@ function formatCurrency(value) {
                     type="button"
                     // onClick={showModal}
                   // sự kiện cho modal
+                  onClick={(e) => {
+                    handleAddToCart();
+                    window.location.replace("/cart");
+                }}
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY

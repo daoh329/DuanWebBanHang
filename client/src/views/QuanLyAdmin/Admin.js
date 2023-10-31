@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row, Menu } from "antd";
 import {
   TagsOutlined,
@@ -185,7 +185,10 @@ function Admin() {
   //   return null;
   // });
 
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
+  
   return (
     <>
       <Row>

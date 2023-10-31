@@ -108,6 +108,9 @@ const Search = () => {
   // Tính index bắt đầu và index kết thúc cho sản phẩm trên trang hiện tại
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
   return (
     
     // <div
