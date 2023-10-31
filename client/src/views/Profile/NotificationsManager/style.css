@@ -1,0 +1,42 @@
+
+.notifications-container{
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* title */
+.notifications-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notifications-title p{
+    margin: 0;
+    padding: 0;
+}
+
+.notifications-title .notifications-title-content {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.notifications-title .notificatons-title-read-all{
+    font-size: 13px;
+    color: blue;
+    cursor: pointer;
+}
+
+/* item */
+.notifications-list{
+    margin-top: 10px;
+}
+
+#notifications-list-item{
+    cursor: pointer;
+    text-align: start;
+    background-color: white;
+    padding: 16px;
+}

@@ -44,10 +44,11 @@ import Chatbot from "./ChatBot/Chatbot";
 import CreateOrder from "./VnPay/CreateOrder";
 import BuySuccess from "./Buy/BuySuccess";
 import { update } from "../redux/userSlice";
+import { addNotification } from "../redux/notificationsSlice";
 
 const App = () => {
   const user = useSelector((state) => state.user);
-  const userDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const getUser = async () => {
     try {
@@ -63,12 +64,28 @@ const App = () => {
         permission: data.user.permission,
       };
       if (result.status === 200) {
-        userDispatch(update(u));
+        dispatch(update(u));
+        getNotifications(u.id);
       }
     } catch (e) {
       console.log(e);
     }
   };
+
+  const getNotifications = async (id) => {
+    try {
+      const api = `${process.env.REACT_APP_API_URL}/auth/get-notifications/${id}`
+      const results = await axios.get(api);
+      if (results.status === 200) {
+        const notifications = results.data;
+        Array.isArray(notifications) && notifications.forEach((notification) => {
+          dispatch(addNotification(notification));
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     getUser();

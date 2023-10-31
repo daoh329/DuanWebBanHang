@@ -1,0 +1,88 @@
+
+.order-informations{
+    width: 100%;
+    height: 100vh;
+    text-align: start;
+    padding: 20px;
+}
+
+.order-informations-title{
+    width: 100%;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#order-informations-title-btn{
+    border: none;
+    margin-right: 10px;
+}
+
+.order-informations-title h5{
+    margin: 0;
+}
+
+/* content */
+.order-informations-content{
+    margin-top: 10px;
+    font-size: 13px;
+}
+/* block 1 */
+.order-informations-block-1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 200px;
+}
+
+.order-informations-block-1 .block-1-1{
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 32%;
+    height: 100%;
+    font-weight: 600;
+}
+
+.order-informations-block-1 .block-1-1 span{
+    font-weight: normal;
+}
+
+.order-informations-block-1 .block-1-2{
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 32%;
+    height: 100%;
+    font-weight: 600;
+}
+
+.order-informations-block-1 .block-1-2 span{
+    font-weight: normal;
+}
+
+.order-informations-block-1 .block-1-3{
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 32%;
+    height: 100%;
+    font-weight: 600;
+}
+
+.order-informations-block-1 .block-1-3 span{
+    font-weight: normal;
+}
+
+/* block 2 */
+.order-informations-block-2{
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.order-informations-block-2 .block-2-title{
+    padding: 10px 10px 0 10px;
+}
+

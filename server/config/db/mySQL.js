@@ -1,11 +1,13 @@
 const mysql = require('mysql2');
+require('dotenv').config();
 
 // create the connection to database
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: process.env.PASS_MYSQL,
-    database: 'banhangdientu'
+    host: process.env.DB_HOST,
+    port:process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
 });
 
 // Kết nối tới cơ sở dữ liệu

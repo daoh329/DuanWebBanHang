@@ -12,6 +12,7 @@ router.post('/Add', upload.array('images', 10), ProductControllers.Addproduct);
 router.delete('/delete/:id', ProductControllers.Delete);
 router.put('/update/:id', upload.array('images', 10), ProductControllers.Update);
 router.get('/json', ProductControllers.json);
+router.get('/:id', ProductControllers.getProduct);
 router.get('/brands', ProductControllers.getBrands);
 router.get('/colors', ProductControllers.getColors);
 router.post('/disable-and-enable', ProductControllers.disable);

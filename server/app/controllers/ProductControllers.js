@@ -170,6 +170,53 @@ class Product {
     }
   }
 
+  // /product/:id
+  async getProduct(req, res) {
+    try {
+      const product_id = req.params.id;
+      const sl_product = `SELECT 
+      product.id,
+      product.name,
+      product.price,
+      product.status,
+      product.shortDescription,
+      productDetails.brand,
+      productDetails.quantity,
+      productDetails.created_at,
+      productDetails.configuration,
+      productDetails.description,
+      category.name as category,
+      CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color,
+      CONCAT('[', GROUP_CONCAT('{"galery": "', galery.thumbnail, '"}' SEPARATOR ','), ']') as galery
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN category ON product.CategoryID = category.id
+      LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
+      LEFT JOIN galery ON product.id = galery.product_id
+      WHERE product.id = ?
+      GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
+      productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, 
+      productDetails.description, category.name;`;
+      const results = await query(sl_product, [product_id]);
+      // chuyển string thành mảng (color, image)
+      // color
+      const colorRaw = JSON.parse(results[0].color);
+      let arrColor = [];
+      colorRaw.forEach((color) => {arrColor.push(color.color)});
+      results[0].color = arrColor;
+      // image
+      const imageRaw = JSON.parse(results[0].galery);
+      let arrimage = [];
+      imageRaw.forEach((image) => {arrimage.push(image.galery)});
+      results[0].galery = arrimage;
+      
+      res.status(200).json(results);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Get product failed" });
+    }
+  }
+
   // API: /product/delete/:id
   async Delete(req, res) {
     // query get path image
@@ -382,7 +429,7 @@ class Product {
           arrPathImage.forEach(async (image) => {
             await query(queryUpdateGalery, [image, id]);
           });
-          return res.status(200).json({ message: "success" });;
+          return res.status(200).json({ message: "success" });
         }
         // Nếu sản phẩm chưa có ảnh nào
         // Thêm ảnh mới của sản phẩm
@@ -414,12 +461,12 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 2 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
   }
@@ -440,12 +487,12 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 1 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
   }
