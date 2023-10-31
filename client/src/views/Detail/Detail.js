@@ -386,7 +386,7 @@ function formatCurrency(value) {
                 >
                   {formatCurrency(Detail.price)}
                 </div>
-                <div className="css-3mjppt">
+                <div className="css-3mjppt" style={{display:'none'}}>
                   <div
                     type="caption"
                     className="att-product-detail-retail-price css-1gnksc0"
@@ -406,11 +406,11 @@ function formatCurrency(value) {
               <div className="css-f1fyi0">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="css-1gs5ebu">
+              <div className="css-1gs5ebu" style={{display:'none'}}>
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
               </div>
-              <div className="css-30n8gl">
+              <div className="css-30n8gl"  style={{display:'none'}}>
                 <div className="css-ixp6xz">
                   Chọn 1 trong những khuyến mãi sau
                 </div>
@@ -454,6 +454,7 @@ function formatCurrency(value) {
                   </div>
                 </div>
               </div>
+              
               <div className="css-f7zc9t">
                 {/* button mua ngay */}
                 <div
