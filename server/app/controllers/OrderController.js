@@ -5,7 +5,7 @@ class OrderController {
   // API /order/order
   async order(req, res) {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
   
     if (!data) {
       return res.status(400).json("Invalid data");
@@ -16,7 +16,7 @@ class OrderController {
     let values = [data.productID];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
-      console.log(result);
+      // console.log(result);
   
       // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
       if (data.quantity > result[0].quantity) {
@@ -28,13 +28,13 @@ class OrderController {
       values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
-        console.log(result);
+        // console.log(result);
         const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
         sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
         values = [data.productID, data.quantity, orderID];
         mysql.query(sql, values, (err, result) => {
           if (err) throw err;
-          console.log(result);
+          // console.log(result);
           res.send('Order details added...');
         });
       });
@@ -88,7 +88,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -104,7 +104,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error canceling order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -120,23 +120,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
-            res.status(500).send('Error confirming order');
-        } else if (result.affectedRows === 0) {
-            res.status(404).send('No order found with the provided ID');
-        } else {
-          res.send('Order delivered...');
-        }
-    });
-  }
-
-  async deliveredOrder(req, res) {
-    const orderId = req.params.id;
-    const sql = 'UPDATE orders SET status = 4, updated_at = NOW() WHERE id = ?';
-    
-    mysql.query(sql, [orderId], (err, result) => {
-        if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -157,12 +141,28 @@ class OrderController {
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
-                console.log(result);
+                // console.log(result);
               });
             }
 
-            res.send('Order delivered and product quantity updated...');
+            res.send('Order shipping and product quantity updated...');
           });
+        }
+    });
+  }
+
+  async deliveredOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 4, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            // console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order delivered...');
         }
     });
   }
@@ -173,7 +173,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -194,7 +194,7 @@ class OrderController {
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
-                console.log(result);
+                // console.log(result);
               });
             }
             res.send('Order canceled and product quantity updated...');
@@ -209,7 +209,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error confirming order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -225,7 +225,7 @@ class OrderController {
     
     mysql.query(sql, [orderId], (err, result) => {
         if (err) {
-            console.error(err);
+            // console.error(err);
             res.status(500).send('Error canceling order');
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
@@ -320,6 +320,49 @@ class OrderController {
         res.json(results);
       });
   }
+
+  async RevenueDate(req, res) {
+    let sql = `
+    SELECT 
+        DATE_FORMAT(o.updated_at, '%Y-%m-%d') as updated_day, 
+        SUM(p.price * od.quantity) as Revenue
+    FROM 
+        orders o
+    JOIN 
+        orderDetailsProduct od ON o.id = od.orderID
+    JOIN 
+        product p ON od.productID = p.id
+    WHERE
+        o.status = 4 AND
+        DATE_FORMAT(o.updated_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+    GROUP BY 
+        DATE_FORMAT(o.updated_at, '%Y-%m-%d')
+    `;
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const dayExists = acc.find(data => data.updated_day === item.updated_day);
+        
+        if(dayExists){
+          dayExists.Revenue += item.Revenue;
+        } else {
+          let newItem = {updated_day: item.updated_day, Revenue: item.Revenue};
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);
+
+      // Chuyển đổi số thành chuỗi với dấu phân cách hàng nghìn
+      convertedData.forEach(item => {
+        item.Revenue = item.Revenue.toLocaleString('en-US');
+      });
+
+      res.send(convertedData);
+    });
+  }
   
   async Revenue(req, res) {
     let sql = `
@@ -363,9 +406,80 @@ class OrderController {
     });
   }
 
+  async orderDate(req, res) {
+    let sql = "SELECT id as MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY id, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const dateExists = acc.find(data => data.updated_Date === item.updated_Date);
+        
+        if(dateExists){
+          switch(item.status) {
+            case 0:
+              dateExists.ChuaXacNhan = item.count;
+              break;
+            case 1:
+              dateExists.DaXacNhan = item.count;
+              break;
+            case 2:
+              dateExists.DaHuy = item.count;
+              break;
+            case 3:
+              dateExists.DangVanChuyen = item.count;
+              break;
+            case 4:
+              dateExists.DaGiao = item.count;
+              break;
+            case 5:
+              dateExists.GiaoKhongThanhCong = item.count;
+              break;
+          }
+        } else {
+          let newItem = {MaGiaoDich: item.MaGiaoDich, updated_Date: item.updated_Date};
+          switch(item.paymentMenthod) {
+            case 0:
+              newItem.paymentMenthod = 0;
+              break;
+            case 1:
+              newItem.paymentMenthod = 1;
+              break;
+            case 2:
+              newItem.paymentMenthod = 2;
+              break;
+          }
+          switch(item.status) {
+            case 0:
+              newItem.ChuaXacNhan = item.count;
+              break;
+            case 1:
+              newItem.DaXacNhan = item.count;
+              break;
+            case 2:
+              newItem.DaHuy = item.count;
+              break;
+            case 3:
+              newItem.DangVanChuyen = item.count;
+              break;
+            case 4:
+              newItem.DaGiao = item.count;
+              break;
+            case 5:
+              newItem.GiaoKhongThanhCong = item.count;
+              break;
+          }
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);      
+      res.send(convertedData);
+    });
+  }
 
   async dashboard(req, res) {
-    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    let sql = "SELECT id as MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -376,20 +490,31 @@ class OrderController {
         if(dateExists){
           switch(item.status) {
             case 4:
-              dateExists.Delivered = item.count;
+              dateExists.DaGiao = item.count;
               break;
             case 5:
-              dateExists.Deliveryfailed = item.count;
+              dateExists.GiaoKhongThanhCong = item.count;
               break;
           }
         } else {
-          let newItem = {updated_date: item.updated_date};
+          let newItem = {MaGiaoDich: item.MaGiaoDich, updated_date: item.updated_date};
+          switch(item.paymentMenthod) {
+            case 0:
+              newItem.paymentMenthod = 0;
+              break;
+            case 1:
+              newItem.paymentMenthod = 1;
+              break;
+            case 2:
+              newItem.paymentMenthod = 2;
+              break;
+          }
           switch(item.status) {
             case 4:
-              newItem.Delivered = item.count;
+              newItem.DaGiao = item.count;
               break;
             case 5:
-              newItem.Deliveryfailed = item.count;
+              newItem.GiaoKhongThanhCong = item.count;
               break;
           }
           acc.push(newItem);
@@ -397,10 +522,10 @@ class OrderController {
         
         return acc;
       }, []);
-  
+    
       res.send(convertedData);
     });
-  }
+  }  
 }
 
 module.exports = new OrderController();

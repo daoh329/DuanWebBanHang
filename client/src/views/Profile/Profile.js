@@ -195,7 +195,7 @@ const handleCancelOrder = async (record) => {
       render: status => (
           <span style={{
               fontWeight: 'bold', 
-              color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#00DD00' : (status === 5 ? 'red' : 'orange'))))
+              color: status === 1 ? 'green' : (status === 2 ? '#FF3399' : (status === 3 ? '#BDB76B' : (status === 4 ? '#33CCFF' : (status === 5 ? 'violet' : 'orange'))))
           }}>
               {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đang vận chuyển' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
           </span>
@@ -213,7 +213,7 @@ const handleCancelOrder = async (record) => {
                       Hủy
                   </Button>
               ) : record.order_status === 2 || record.order_status === 5 ? (
-                  <Button className="buy-again-button" style={{ backgroundColor: '#33CCFF', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
+                  <Button className="buy-again-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
                       Mua lại
                   </Button>
               ) : null}

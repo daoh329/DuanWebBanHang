@@ -10,8 +10,10 @@ router.get('/quanlyOrder', OrderController.quanlyOrder);
 router.get('/quanlyAllOrder', OrderController.quanlyAllOrder);
 
 router.get('/revenue', OrderController.Revenue);
+router.get('/revenueDate', OrderController.RevenueDate);
 
 router.get('/dashboard', OrderController.dashboard);
+router.get('/orderDate', OrderController.orderDate);
 
 router.put(`/confirm/:id`, OrderController.confirmOrder);
 router.put(`/shipping/:id`, OrderController.shippingOrder);
