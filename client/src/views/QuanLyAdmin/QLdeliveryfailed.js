@@ -3,7 +3,7 @@ import { Table, Button } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
 
-function QLAlldonhang() {
+function QLdeliveryfailed() {
 
     const [data, setData] = useState([]);
     const loadData = () => {
@@ -11,16 +11,16 @@ function QLAlldonhang() {
             .then(res => {
                 // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data
-                    .filter(order => order.order_status === 4)
+                    .filter(order => order.order_status === 2 || order.order_status === 5)
                     .sort((a, b) => {
                         // Sắp xếp theo trạng thái
                         if (a.order_status < b.order_status) return 1;
                         if (a.order_status > b.order_status) return -1;
-
+        
                         // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
                         return new Date(b.order_created_at) - new Date(a.order_created_at);
                     });
-
+        
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
@@ -67,7 +67,7 @@ function QLAlldonhang() {
         { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
-        {
+        { 
             title: 'Tổng giá',
             key: 'totalPrice',
             render: (text, record) => (
@@ -78,12 +78,12 @@ function QLAlldonhang() {
         { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
 
         {
-            title: 'PTTT',
-            dataIndex: 'paymentMenthod',
-            key: 'paymentMenthod',
+            title: 'PTTT', 
+            dataIndex: 'paymentMenthod', 
+            key: 'paymentMenthod', 
             render: status => (
                 <span style={{
-                    fontWeight: 'bold',
+                    fontWeight: 'bold', 
                     color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
                 }}>
                     {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
@@ -99,7 +99,6 @@ function QLAlldonhang() {
         },
 
         {
-
             title: 'Thời gian CN',
             dataIndex: 'order_updated_at',
             key: 'order_updated_at',
@@ -122,24 +121,20 @@ function QLAlldonhang() {
 
     return (
         <div>
-            <h1>Tất cả đơn hàng</h1>
-
+            <h1>Đơn hàng đã hủy hoặc giao không thành công</h1>
             <div>
-                <a href="/deliveryfailed" style={{width: 250, height: 60, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                    Đơn hàng đã hủy hoặc giao không thành công
-                </a>
-            </div>
-
-            <div>
-                <a href="/orders" style={{width: 250, height: 40, marginTop: '10px', display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                <a href="/orders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
                     Xem đơn hàng trong một tháng
                 </a>
             </div>
 
-
+            <div>
+                <a href="/allorders" style={{width: 250, height: 40, marginTop: '10px', display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
+            </div>
+            
             <Table columns={columns} dataSource={data} />
         </div>
     );
 }
 
-export default QLAlldonhang;
+export default QLdeliveryfailed;

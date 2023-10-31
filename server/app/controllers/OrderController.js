@@ -407,7 +407,7 @@ class OrderController {
   }
 
   async orderDate(req, res) {
-    let sql = "SELECT id as MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY id, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    let sql = "SELECT status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00'))) as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00')))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -418,37 +418,26 @@ class OrderController {
         if(dateExists){
           switch(item.status) {
             case 0:
-              dateExists.ChuaXacNhan = item.count;
+              dateExists.ChuaXacNhan = (dateExists.ChuaXacNhan || 0) + item.count;
               break;
             case 1:
-              dateExists.DaXacNhan = item.count;
+              dateExists.DaXacNhan = (dateExists.DaXacNhan || 0) + item.count;
               break;
             case 2:
-              dateExists.DaHuy = item.count;
+              dateExists.DaHuy = (dateExists.DaHuy || 0) + item.count;
               break;
             case 3:
-              dateExists.DangVanChuyen = item.count;
+              dateExists.DangVanChuyen = (dateExists.DangVanChuyen || 0) + item.count;
               break;
             case 4:
-              dateExists.DaGiao = item.count;
+              dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
               break;
             case 5:
-              dateExists.GiaoKhongThanhCong = item.count;
+              dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
               break;
           }
         } else {
-          let newItem = {MaGiaoDich: item.MaGiaoDich, updated_Date: item.updated_Date};
-          switch(item.paymentMenthod) {
-            case 0:
-              newItem.paymentMenthod = 0;
-              break;
-            case 1:
-              newItem.paymentMenthod = 1;
-              break;
-            case 2:
-              newItem.paymentMenthod = 2;
-              break;
-          }
+          let newItem = {updated_Date: item.updated_Date};
           switch(item.status) {
             case 0:
               newItem.ChuaXacNhan = item.count;
@@ -475,11 +464,12 @@ class OrderController {
         return acc;
       }, []);      
       res.send(convertedData);
+
     });
   }
 
   async dashboard(req, res) {
-    let sql = "SELECT id as MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    let sql = "SELECT status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00'))) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00')))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -490,25 +480,14 @@ class OrderController {
         if(dateExists){
           switch(item.status) {
             case 4:
-              dateExists.DaGiao = item.count;
+              dateExists.DaGiao = (dateExists.GiaoKhongThanhCong || 0) + item.count;
               break;
             case 5:
-              dateExists.GiaoKhongThanhCong = item.count;
+              dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
               break;
           }
         } else {
-          let newItem = {MaGiaoDich: item.MaGiaoDich, updated_date: item.updated_date};
-          switch(item.paymentMenthod) {
-            case 0:
-              newItem.paymentMenthod = 0;
-              break;
-            case 1:
-              newItem.paymentMenthod = 1;
-              break;
-            case 2:
-              newItem.paymentMenthod = 2;
-              break;
-          }
+          let newItem = {updated_date: item.updated_date};
           switch(item.status) {
             case 4:
               newItem.DaGiao = item.count;
@@ -524,6 +503,7 @@ class OrderController {
       }, []);
     
       res.send(convertedData);
+
     });
   }  
 }

@@ -15,9 +15,7 @@ const Dashboard = () => {
       const convertedData = result.data
         .map(item => ({
           ...item,
-          MaGiaoDich: item.MaGiaoDich,
           updated_Date: new Date(item.updated_Date * 1000).toISOString().slice(0, 10),
-          paymentMenthod: item.paymentMenthod === 0 ? 'VNPay' : item.paymentMenthod === 1 ? 'COD' : item.paymentMenthod === 2 ? 'MOMOPay' : 'Unknown',
         }))
         .sort((a, b) => new Date(a.updated_Date) - new Date(b.updated_Date));
   
@@ -36,9 +34,7 @@ const Dashboard = () => {
         .sort((a, b) => a.updated_date - b.updated_date)
         .map(item => ({
           ...item,
-          MaGiaoDich: item.MaGiaoDich,
           updated_date: new Date(item.updated_date * 1000).toISOString().slice(0, 10),
-          paymentMenthod: item.paymentMenthod === 0 ? 'VNPay' : item.paymentMenthod === 1 ? 'COD' : item.paymentMenthod === 2 ? 'MOMOPay' : 'Unknown',
         }));
     
       setData(convertedData);
@@ -78,8 +74,8 @@ const Dashboard = () => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="updated_Date" />
-        <YAxis domain={[0, 10]} />
-        <Tooltip content={<CustomTooltip />} />
+        <YAxis domain={[0, 100]} />
+        <Tooltip/>
         <Legend />
         <Line type="monotone" dataKey="ChuaXacNhan" stroke="orange" activeDot={{ r: 10 }} dot={{ stroke: 'orange', strokeWidth: 2 }} />
         <Line type="monotone" dataKey="DaXacNhan" stroke="green" activeDot={{ r: 10 }} dot={{ stroke: 'green', strokeWidth: 2 }} />
@@ -105,11 +101,11 @@ const Dashboard = () => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="updated_date" />
-        <YAxis domain={[0, 10]} />
-        <Tooltip content={<CustomTooltip />} />
+        <YAxis domain={[0, 100]} />
+        <Tooltip/>
         <Legend />
         <Line type="monotone" dataKey="DaGiao" stroke="#33CCFF" activeDot={{ r: 10 }} dot={{ stroke: '#33CCFF', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="GiaoKhongThanhCong" stroke="violet" activeDot={{ r: 10 }} dot={{ stroke: 'violet', strokeWidth: 2 }} />
+        {/* <Line type="monotone" dataKey="GiaoKhongThanhCong" stroke="violet" activeDot={{ r: 10 }} dot={{ stroke: 'violet', strokeWidth: 2 }} /> */}
       </LineChart>
       </div>
     </>

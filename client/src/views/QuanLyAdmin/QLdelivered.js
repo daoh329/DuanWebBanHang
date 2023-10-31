@@ -15,7 +15,7 @@ function QLdelivered() {
                     return new Date(b.order_created_at) - new Date(a.order_created_at);
                 });
 
-                // Lọc các đơn hàng có trạng thái bằng 1
+                // Lọc các đơn hàng có trạng thái bằng 3
                 const filteredOrders = sortedOrders.filter(order => order.order_status === 3);
                 setData(filteredOrders || []);
             })
