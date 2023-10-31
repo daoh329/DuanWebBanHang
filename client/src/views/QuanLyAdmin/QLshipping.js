@@ -46,7 +46,21 @@ function QLshipping() {
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
+        { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
+        {
+            title: 'PTTT', 
+            dataIndex: 'paymentMenthod', 
+            key: 'paymentMenthod', 
+            render: status => (
+                <span style={{
+                    fontWeight: 'bold', 
+                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                }}>
+                    {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
+                </span>
+            )
+        },
         { 
             title: 'Tổng giá',
             key: 'totalPrice',
