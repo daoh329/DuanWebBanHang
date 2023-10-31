@@ -274,7 +274,9 @@ function Detail() {
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
 
-
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 
 
   return (
@@ -382,7 +384,7 @@ function Detail() {
                   className="att-product-detail-latest-price css-oj899w"
                   color="primary500"
                 >
-                  {Detail.price}₫
+                  {formatCurrency(Detail.price)}
                 </div>
                 <div className="css-3mjppt">
                   <div
@@ -390,7 +392,7 @@ function Detail() {
                     className="att-product-detail-retail-price css-1gnksc0"
                     color="textSecondary"
                   >
-                    26.990.000₫
+                     {formatCurrency(Detail.price)}
                   </div>
                   <div
                     type="caption"
@@ -467,7 +469,7 @@ function Detail() {
                     color="white"
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
-                    onClick={showModal}
+                    // onClick={showModal}
                   // sự kiện cho modal
                   >
                     <div type="subtitle" className="css-ueraml">

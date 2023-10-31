@@ -10,7 +10,7 @@ function QLdelivered() {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
             .then(res => {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
-                const sortedOrders = res.data.sort((a, b) => {    
+                const sortedOrders = res.data.sort((a, b) => {
                     // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
                     return new Date(b.order_created_at) - new Date(a.order_created_at);
                 });
@@ -61,7 +61,7 @@ function QLdelivered() {
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
-        { 
+        {
             title: 'Tổng giá',
             key: 'totalPrice',
             render: (text, record) => (
@@ -76,12 +76,12 @@ function QLdelivered() {
         },
 
         {
-            title: 'Trạng thái', 
-            dataIndex: 'order_status', 
-            key: 'status', 
+            title: 'Trạng thái',
+            dataIndex: 'order_status',
+            key: 'status',
             render: status => (
                 <span style={{
-                    fontWeight: 'bold', 
+                    fontWeight: 'bold',
                     color: status === 1 ? 'green' : (status === 3 ? '#FF33FF' : 'orange')
                 }}>
                     {status === 1 ? 'Đã xác nhận' : (status === 3 ? 'Vận chuyển' : 'Chưa xác nhận')}
@@ -113,14 +113,16 @@ function QLdelivered() {
     return (
         <div>
             <h1>Xác nhận giao hàng</h1>
-            <div>
-                <a href="/allorders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
+            <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
+                <div style={{ margin: '10px' }}>
+                    <a href="/allorders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
+                </div>
+
+                <div style={{ margin: '10px' }}>
+                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
+                </div>
             </div>
 
-            <div>
-                <a href="/orders" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-            </div>
-            
             <Table columns={columns} dataSource={data} />
         </div>
     );

@@ -247,7 +247,7 @@ const AllNewProductPhone = () => {
         sortedProducts.sort((a, b) => b.price - a.price);
         break;
       case 'newestProducts':
-        sortedProducts.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         break;
       default:
         // Nếu loại là 'none' hoặc không hợp lệ, đặt lại sắp xếp về thứ tự ban đầu
@@ -626,7 +626,7 @@ const AllNewProductPhone = () => {
                                 className="att-product-detail-retail-price css-18z00w6"
                                 color="textSecondary"
                               >
-                                1.590.000&nbsp;₫
+                                  {formatCurrency(item.price)}
                               </div>
                               <div type="caption" color="primary500" className="css-2rwx6s">
                                 -12.01%

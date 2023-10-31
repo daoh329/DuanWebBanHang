@@ -10,7 +10,7 @@ function QLshipping() {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
             .then(res => {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
-                const sortedOrders = res.data.sort((a, b) => {    
+                const sortedOrders = res.data.sort((a, b) => {
                     // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
                     return new Date(b.order_created_at) - new Date(a.order_created_at);
                 });
@@ -47,7 +47,7 @@ function QLshipping() {
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
-        { 
+        {
             title: 'Tổng giá',
             key: 'totalPrice',
             render: (text, record) => (
@@ -62,12 +62,12 @@ function QLshipping() {
         },
 
         {
-            title: 'Trạng thái', 
-            dataIndex: 'order_status', 
-            key: 'status', 
+            title: 'Trạng thái',
+            dataIndex: 'order_status',
+            key: 'status',
             render: status => (
                 <span style={{
-                    fontWeight: 'bold', 
+                    fontWeight: 'bold',
                     color: status === 1 ? 'green' : (status === 2 ? 'red' : 'orange')
                 }}>
                     {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : 'Chưa xác nhận')}
@@ -80,7 +80,7 @@ function QLshipping() {
             key: 'newAction',
             render: (_, record) => (
                 <Button style={{ backgroundColor: '#FF33FF', color: 'white' }} onClick={() => handleShipping(record)}>
-                   Vận chuyển
+                    Vận chuyển
                 </Button>
             ),
         },
@@ -89,14 +89,17 @@ function QLshipping() {
     return (
         <div>
             <h1>Xác nhận đơn hàng vận chuyển</h1>
-            <div>
-                <a href="/delivered" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận đơn hàng đã gửi</a>
+            <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
+                <div style={{ margin: '10px' }}>
+                    <a href="/delivered" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận đơn hàng đã gửi</a>
+                </div>
+
+                <div style={{ margin: '10px' }}>
+                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
+                </div>
             </div>
 
-            <div>
-                <a href="/orders" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-            </div>
-            
+
             <Table columns={columns} dataSource={data} />
         </div>
     );
