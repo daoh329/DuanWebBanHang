@@ -135,11 +135,7 @@ const App = () => {
               <Route
                 path="/tat-ca-san-pham-phone-moi"
                 element={<AllNewProductPhone />}
-              />
-              <Route
-                path="/tat-ca-san-pham-phone-coppy"
-                element={<AllProductPhonecopy />}
-              />
+              />          
               <Route path="/createorder" element={<CreateOrder />} />
 
               <Route path="/chat" element={<Chatbot />} />
