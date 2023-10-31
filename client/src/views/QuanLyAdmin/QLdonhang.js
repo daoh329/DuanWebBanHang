@@ -11,7 +11,7 @@ function OrderList() {
             .then(res => {
                 // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data
-                    .filter(order => order.order_status === 0 || order.order_status === 1 || order.order_status === 2)
+                    .filter(order => order.order_status === 0)
                     .sort((a, b) => {
                         // Sắp xếp theo trạng thái
                         if (a.order_status < b.order_status) return -1;
@@ -64,7 +64,7 @@ function OrderList() {
         { title: 'Mã GD', dataIndex: 'order_id', key: 'magd' },
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
-        { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
+        // { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { 
@@ -116,17 +116,20 @@ function OrderList() {
             dataIndex: 'action',
             key: 'action',
             render: (_, record) => (
-                <span>
-                    {record.order_status === 1 ? (
-                        <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
-                            Hủy
-                        </Button>
-                    ) : (
-                        <Button className="confirm-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
-                            Xác nhận
-                        </Button>
-                    )}
-                </span>
+                <Button className="confirm-button" style={{ backgroundColor: 'green', color: 'white' }} onClick={() => handleConfirmOrder(record)}>
+                    Xác nhận
+                </Button>
+            ),
+        },
+
+        {
+            title: 'Hành động',
+            dataIndex: 'action',
+            key: 'cancel',
+            render: (_, record) => (
+                <Button className="cancel-button" style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleCancelOrder(record)}>
+                    Hủy
+                </Button>
             ),
         },
     ];
