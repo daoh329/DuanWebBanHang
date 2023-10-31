@@ -15,7 +15,6 @@ import axios from "axios";
 //hỗ trợ icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faClipboardList,
   faBell,
   faMapLocationDot,
@@ -34,55 +33,16 @@ export default function Profile() {
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  // select mới
-  const [city, setCity] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [selectedWard, setSelectedWard] = useState(null);
-  const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-        );
-        setCity(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const [userPhone, setUserPhone] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
+  const [iconsActive, setIconsActive] = useState("tab1");
 
-  useEffect(() => {
-    printEmail();
-  }, []);
-
-  async function printEmail() {
-    try {
-      const userData = await user;
-      setUserPhone(userData.phone);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    printEmail();
-  }, []);
 
   // Hàm tải dữ liệu
   const loadData = useCallback(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${userPhone}`)
+      .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${user.phone}`)
       .then((res) => {
         setData(res.data);
         const sortedOrders = res.data.sort(
@@ -91,14 +51,14 @@ export default function Profile() {
         setData(sortedOrders || []);
       })
       .catch((error) => console.log(error));
-  }, [userPhone]);
-
+  }, [user]);
+  
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   const [form] = Form.useForm();
-  // Hàm được gọi khi
+  // Hàm được gọi khi submit update profile
   const onFinish = async (values) => {
     setIsLoading(true);
     try {
@@ -132,16 +92,12 @@ export default function Profile() {
     }
   };
 
-  const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
-
   const handleVerticalClick = (value) => {
     if (value === verticalActive) {
       return;
     }
-
     setVerticalActive(value);
   };
-  const [iconsActive, setIconsActive] = useState("tab1");
 
   const handleIconsClick = (value) => {
     if (value === iconsActive) {
@@ -193,6 +149,12 @@ export default function Profile() {
     }
   };
 
+  const handleToInformationsNotification = (parentPage, order_id ) => {
+    handleOpenOrderInformations(order_id);
+    setVerticalActive(parentPage);
+
+  }
+
   const columns = [
     {
       title: "Mã đơn hàng",
@@ -204,9 +166,7 @@ export default function Profile() {
         </Link>
       ),
     },
-    { title: "Địa chỉ", dataIndex: "address", key: "address" },
-    { title: "Tên sản phẩm", dataIndex: "shortDescription", key: "name" },
-    { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
+    { title: "Sản phẩm", dataIndex: "shortDescription", key: "name" },
     {
       title: "Tổng giá",
       key: "totalPrice",
@@ -214,11 +174,10 @@ export default function Profile() {
     },
 
     {
-      title: "Thời gian tạo",
+      title: "Ngày mua",
       dataIndex: "order_updated_at",
       key: "updated_at",
     },
-
     {
       title: "Trạng thái",
       dataIndex: "order_status",
@@ -255,7 +214,6 @@ export default function Profile() {
         </span>
       ),
     },
-
     {
       title: "Hành động",
       dataIndex: "action",
@@ -432,7 +390,11 @@ export default function Profile() {
                 <Order setOrder={setOrder} order={order} />
               </MDBTabsPane>
             ) : (
-              <MDBTabsPane style={{paddingTop:"20px"}} className="tab-2" show={verticalActive === "tab2"}>
+              <MDBTabsPane
+                style={{ paddingTop: "20px" }}
+                className="tab-2"
+                show={verticalActive === "tab2"}
+              >
                 <h5 style={{ display: "flex" }}>Quản lý đơn hàng</h5>
                 {/* Tab */}
                 <MDBTabs className="mb-3">
@@ -553,7 +515,7 @@ export default function Profile() {
 
             {/*  */}
             <MDBTabsPane show={verticalActive === "tab3"}>
-              <NotificationsLayout />
+              <NotificationsLayout statusPage={handleToInformationsNotification} />
             </MDBTabsPane>
             {/*  */}
             <MDBTabsPane show={verticalActive === "tab4"}>

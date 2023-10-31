@@ -129,6 +129,7 @@ const App = () => {
 
   // call API logout
   const logout = () => {
+    localStorage.removeItem("isLogin");
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
   };
   // tới profile

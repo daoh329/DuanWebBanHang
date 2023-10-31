@@ -49,6 +49,7 @@ import { addNotification } from "../redux/notificationsSlice";
 
 const App = () => {
   const user = useSelector((state) => state.user);
+  const isLogin = localStorage.getItem("isLogin");
   const dispatch = useDispatch();
 
   const getUser = async () => {
@@ -65,10 +66,18 @@ const App = () => {
         permission: data.user.permission,
       };
       if (result.status === 200) {
+        if (!isLogin) {
+          localStorage.setItem("isLogin", data.user.id);
+        }
         dispatch(update(u));
         getNotifications(u.id);
+
+      }
+      else{
+        localStorage.removeItem("isLogin");
       }
     } catch (e) {
+      localStorage.removeItem("isLogin");
       console.log(e);
     }
   };
@@ -96,14 +105,14 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <CartProvider>
-          <Nav user={user} />
+          <Nav/>
           <header>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/detail/:id" element={<Detail />} />
               <Route
                 path="/login"
-                element={user.id ? <Navigate to="/" /> : <Login />}
+                element={isLogin ? <Navigate to="/" /> : <Login />}
               />
               {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
@@ -111,7 +120,7 @@ const App = () => {
               <Route
                 path="/admin/*"
                 element={
-                  user.id && user.permission === "admin" ? (
+                  isLogin && user.permission === "admin" ? (
                     <>
                       <Admin /> <Outlet />
                     </>
@@ -138,7 +147,7 @@ const App = () => {
               <Route path="/success" element={<BuySuccess />} />
               <Route
                 path="/profile"
-                element={user.id ? <Profile /> : <Navigate to="/" />}
+                element={isLogin ? <Profile /> : <Navigate to="/" />}
               />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
               <Route

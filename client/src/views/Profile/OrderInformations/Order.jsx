@@ -5,18 +5,21 @@ import axios from "axios";
 
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
+import { formatPrice } from "../../../util/FormatVnd";
 
 function Order(props) {
   const { order, setOrder } = props;
   const [productAPI, setProduct] = useState(null);
-
   useEffect(() => {
-    getProduct();
+    const o = order;
+    if (o) {
+      getProductOfOrder();
+    }
   }, []);
 
-  const getProduct = async () => {
+  const getProductOfOrder = async () => {
     try {
-      const q = `${process.env.REACT_APP_API_URL}/product/${order[0].productID}`;
+      const q = `${process.env.REACT_APP_API_URL}/order/${order[0].productID}`;
       const results = await axios.get(q);
       if (results.status === 200) {
         setProduct(results.data[0]);
@@ -34,11 +37,10 @@ function Order(props) {
     shortDescription: order[0]?.shortDescription,
     product_id: order[0]?.productID,
     price_total:
-      parseInt(order[0]?.price ? order[0]?.price : 0) *
-      parseInt(order[0]?.quantity ? order[0]?.quantity : 0),
+      parseFloat(order[0]?.price ? order[0]?.price : 0) *
+      parseFloat(order[0]?.quantity ? order[0]?.quantity : 0),
     quantity: order[0]?.quantity,
     imageUrl: productAPI?.galery[0],
-
   };
 
   return (
@@ -58,17 +60,17 @@ function Order(props) {
         {/* block 1 */}
         <div className="order-informations-block-1">
           <div className="block-1-1">
-            <p>Thông tin người nhận</p>
-            <p style={{ margin: "0" }}>
+            <p style={{ margin: "0 0 16px" }}>Thông tin người nhận</p>
+            <p >
               Nguời nhận: <span>{order[0].user_name}</span>
             </p>
-            <p style={{ margin: "0" }}>
+            <p>
               Hình thức nhận hàng: <span>{"Giao hàng tiêu chuẩn"}</span>
             </p>
-            <p style={{ margin: "0" }}>
-              Địa chỉ: <span>{order[0].address}</span>
+            <p className="address">
+              Địa chỉ: <span >{order[0].address}</span>
             </p>
-            <p style={{ margin: "0" }}>
+            <p>
               Điện thoại: <span>{order[0].user_phone}</span>
             </p>
           </div>
@@ -101,7 +103,27 @@ function Order(props) {
         </div>
 
         {/* block 3 */}
-        <div></div>
+        <div className="order-informations-block-3">
+          <div className="block-1">
+            <div className="sub">
+              <div>Tổng tạm tính</div>
+              <div className="price">{formatPrice(product.price_total) }</div>
+            </div>
+            <div className="sub">
+              <div>Phí vận chuyển</div>
+              <div className="price">{formatPrice(25000)}</div>
+            </div>
+            <div className="sub">
+              <div>Giảm giá</div>
+              <div className="price">{formatPrice()}</div>
+            </div>
+            <div className="sub">
+              <div>Thành tiền</div>
+              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatPrice(product?.price_total + 25000)}</div>
+            </div>
+          </div>
+          <div className="block-2">(Đã bao gồm VAT)</div>
+        </div>
       </div>
     </div>
   );
