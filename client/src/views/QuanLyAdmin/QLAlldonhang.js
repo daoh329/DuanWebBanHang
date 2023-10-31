@@ -74,7 +74,7 @@ function QLAlldonhang() {
                 <p>{record.price * record.quantity}</p>
             ),
         },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
         { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
 
         {
@@ -99,13 +99,20 @@ function QLAlldonhang() {
         },
 
         {
-            title: 'Trạng thái',
-            dataIndex: 'order_status',
-            key: 'status',
+
+            title: 'Thời gian CN',
+            dataIndex: 'order_updated_at',
+            key: 'order_updated_at',
+        },
+
+        {
+            title: 'Trạng thái', 
+            dataIndex: 'order_status', 
+            key: 'status', 
             render: status => (
                 <span style={{
-                    fontWeight: 'bold',
-                    color: status === 5 ? 'red' : (status === 2 ? 'red' : (status === 4 ? '#FF00FF' : 'orange'))
+                    fontWeight: 'bold', 
+                    color: status === 5 ? 'violet' : (status === 2 ? '#FF3399' : (status === 4 ? '#33CCFF' : 'orange'))
                 }}>
                     {status === 5 ? 'Giao không thành công' : (status === 2 ? 'Đã bị hủy' : (status === 4 ? 'Đã giao' : 'Chưa xác nhận'))}
                 </span>

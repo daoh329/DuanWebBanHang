@@ -60,6 +60,7 @@ function QLdelivered() {
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
+        { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         {
             title: 'Tổng giá',
@@ -69,6 +70,21 @@ function QLdelivered() {
             ),
         },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+
+        {
+            title: 'PTTT', 
+            dataIndex: 'paymentMenthod', 
+            key: 'paymentMenthod', 
+            render: status => (
+                <span style={{
+                    fontWeight: 'bold', 
+                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                }}>
+                    {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
+                </span>
+            )
+        },
+        
         {
             title: 'Thời gian tạo',
             dataIndex: 'order_updated_at',
@@ -81,8 +97,8 @@ function QLdelivered() {
             key: 'status',
             render: status => (
                 <span style={{
-                    fontWeight: 'bold',
-                    color: status === 1 ? 'green' : (status === 3 ? '#FF33FF' : 'orange')
+                    fontWeight: 'bold', 
+                    color: status === 1 ? 'green' : (status === 3 ? '#BDB76B' : 'orange')
                 }}>
                     {status === 1 ? 'Đã xác nhận' : (status === 3 ? 'Vận chuyển' : 'Chưa xác nhận')}
                 </span>
@@ -93,7 +109,7 @@ function QLdelivered() {
             dataIndex: 'action',
             key: 'newAction',
             render: (_, record) => (
-                <Button style={{ backgroundColor: '#FF0099', color: 'white' }} onClick={() => handleDelivered(record)}>
+                <Button style={{ backgroundColor: '#33CCFF', color: 'white' }} onClick={() => handleDelivered(record)}>
                     Đã giao
                 </Button>
             ),
@@ -103,7 +119,7 @@ function QLdelivered() {
             dataIndex: 'action',
             key: 'cancel',
             render: (_, record) => (
-                <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleFailed(record)}>
+                <Button style={{ backgroundColor: 'violet', color: 'white' }} onClick={() => handleFailed(record)}>
                     Giao không thành công
                 </Button>
             ),
