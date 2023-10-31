@@ -125,22 +125,6 @@ class OrderController {
         } else if (result.affectedRows === 0) {
             res.status(404).send('No order found with the provided ID');
         } else {
-          res.send('Order delivered...');
-        }
-    });
-  }
-
-  async deliveredOrder(req, res) {
-    const orderId = req.params.id;
-    const sql = 'UPDATE orders SET status = 4, updated_at = NOW() WHERE id = ?';
-    
-    mysql.query(sql, [orderId], (err, result) => {
-        if (err) {
-            // console.error(err);
-            res.status(500).send('Error confirming order');
-        } else if (result.affectedRows === 0) {
-            res.status(404).send('No order found with the provided ID');
-        } else {
           // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
           let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
           let values = [orderId];
@@ -161,8 +145,24 @@ class OrderController {
               });
             }
 
-            res.send('Order delivered and product quantity updated...');
+            res.send('Order shipping and product quantity updated...');
           });
+        }
+    });
+  }
+
+  async deliveredOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 4, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            // console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order delivered...');
         }
     });
   }
