@@ -320,6 +320,49 @@ class OrderController {
         res.json(results);
       });
   }
+
+  async RevenueDate(req, res) {
+    let sql = `
+    SELECT 
+        DATE_FORMAT(o.updated_at, '%Y-%m-%d') as updated_day, 
+        SUM(p.price * od.quantity) as Revenue
+    FROM 
+        orders o
+    JOIN 
+        orderDetailsProduct od ON o.id = od.orderID
+    JOIN 
+        product p ON od.productID = p.id
+    WHERE
+        o.status = 4 AND
+        DATE_FORMAT(o.updated_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+    GROUP BY 
+        DATE_FORMAT(o.updated_at, '%Y-%m-%d')
+    `;
+    mysql.query(sql, (err, result) => {
+      if(err) throw err;
+      
+      // Chuyển đổi dữ liệu
+      const convertedData = result.reduce((acc, item) => {
+        const dayExists = acc.find(data => data.updated_day === item.updated_day);
+        
+        if(dayExists){
+          dayExists.Revenue += item.Revenue;
+        } else {
+          let newItem = {updated_day: item.updated_day, Revenue: item.Revenue};
+          acc.push(newItem);
+        }
+        
+        return acc;
+      }, []);
+
+      // Chuyển đổi số thành chuỗi với dấu phân cách hàng nghìn
+      convertedData.forEach(item => {
+        item.Revenue = item.Revenue.toLocaleString('en-US');
+      });
+
+      res.send(convertedData);
+    });
+  }
   
   async Revenue(req, res) {
     let sql = `
@@ -364,7 +407,7 @@ class OrderController {
   }
 
   async orderDate(req, res) {
-    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_Date, COUNT(*) as count FROM orders WHERE DATE(updated_at) = CURDATE() AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    let sql = "SELECT id as MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY id, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -394,7 +437,18 @@ class OrderController {
               break;
           }
         } else {
-          let newItem = {updated_Date: item.updated_Date};
+          let newItem = {MaGiaoDich: item.MaGiaoDich, updated_Date: item.updated_Date};
+          switch(item.paymentMenthod) {
+            case 0:
+              newItem.paymentMenthod = 0;
+              break;
+            case 1:
+              newItem.paymentMenthod = 1;
+              break;
+            case 2:
+              newItem.paymentMenthod = 2;
+              break;
+          }
           switch(item.status) {
             case 0:
               newItem.ChuaXacNhan = item.count;
@@ -423,11 +477,9 @@ class OrderController {
       res.send(convertedData);
     });
   }
-  
-
 
   async dashboard(req, res) {
-    let sql = "SELECT status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
+    let sql = "SELECT id as MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00')) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY MaGiaoDich, paymentMenthod, status, UNIX_TIMESTAMP(CONVERT_TZ(updated_at, '+00:00', '+07:00'))";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -438,20 +490,31 @@ class OrderController {
         if(dateExists){
           switch(item.status) {
             case 4:
-              dateExists.Delivered = item.count;
+              dateExists.DaGiao = item.count;
               break;
             case 5:
-              dateExists.Deliveryfailed = item.count;
+              dateExists.GiaoKhongThanhCong = item.count;
               break;
           }
         } else {
-          let newItem = {updated_date: item.updated_date};
+          let newItem = {MaGiaoDich: item.MaGiaoDich, updated_date: item.updated_date};
+          switch(item.paymentMenthod) {
+            case 0:
+              newItem.paymentMenthod = 0;
+              break;
+            case 1:
+              newItem.paymentMenthod = 1;
+              break;
+            case 2:
+              newItem.paymentMenthod = 2;
+              break;
+          }
           switch(item.status) {
             case 4:
-              newItem.Delivered = item.count;
+              newItem.DaGiao = item.count;
               break;
             case 5:
-              newItem.Deliveryfailed = item.count;
+              newItem.GiaoKhongThanhCong = item.count;
               break;
           }
           acc.push(newItem);
@@ -459,10 +522,10 @@ class OrderController {
         
         return acc;
       }, []);
-  
+    
       res.send(convertedData);
     });
-  }
+  }  
 }
 
 module.exports = new OrderController();
