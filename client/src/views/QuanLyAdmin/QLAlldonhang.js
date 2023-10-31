@@ -11,7 +11,7 @@ function QLAlldonhang() {
             .then(res => {
                 // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data
-                    .filter(order => order.order_status === 2 || order.order_status === 4 || order.order_status === 5)
+                    .filter(order => order.order_status === 4)
                     .sort((a, b) => {
                         // Sắp xếp theo trạng thái
                         if (a.order_status < b.order_status) return 1;
@@ -122,8 +122,15 @@ function QLAlldonhang() {
     return (
         <div>
             <h1>Tất cả đơn hàng</h1>
+
             <div>
-                <a href="/orders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                <a href="/deliveryfailed" style={{width: 250, height: 60, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                    Đơn hàng đã hủy hoặc giao không thành công
+                </a>
+            </div>
+
+            <div>
+                <a href="/orders" style={{width: 250, height: 40, marginTop: '10px', display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
                     Xem đơn hàng trong một tháng
                 </a>
             </div>

@@ -20,6 +20,7 @@ import Sale from "./Menu/Sale";
 import QLdonhang from "./QuanLyAdmin/QLdonhang";
 import QLshipping from "./QuanLyAdmin/QLshipping";
 import QLdelivered from "./QuanLyAdmin/QLdelivered";
+import QLdeliveryfailed from "./QuanLyAdmin/QLdeliveryfailed";
 import QLAlldonhang from "./QuanLyAdmin/QLAlldonhang";
 import ShowRoom from "./Menu/ShowRoom";
 import Tintuc from "./Menu/Tintuc";
@@ -130,6 +131,7 @@ const App = () => {
               <Route path="/orders" element={<QLdonhang />} />
               <Route path="/shipping" element={<QLshipping />} />
               <Route path="/delivered" element={<QLdelivered />} />
+              <Route path="/deliveryfailed" element={<QLdeliveryfailed />} />
               <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
