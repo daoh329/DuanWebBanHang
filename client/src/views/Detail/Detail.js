@@ -26,6 +26,7 @@ import { Form, Select } from "antd";
 import { message } from "antd";
 import { CartProvider } from "../Cart/CartContext";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { formatCurrency } from "../../util/FormatVnd";
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
@@ -100,20 +101,22 @@ function Detail() {
   const { id } = useParams();
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
-  console.log(Detail)
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
-    axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
+    getProduct();
+  }, [id]);
+
+  const getProduct = async () => {
+    await axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
       .then(response => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
 
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
-        console.log("Detail: ", Detail)
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
         const productThumbnails = response.data.thumbnails;
@@ -122,7 +125,7 @@ function Detail() {
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, [id]);
+  }
 
   // so luong sp
   const [quantity, setQuantity] = useState(1);
@@ -216,6 +219,7 @@ function Detail() {
       alert("Có lỗi xảy ra khi thêm thông tin cá nhân");
     }
   };
+  
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
@@ -273,8 +277,6 @@ function Detail() {
   //   AddToCart();
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
-
-
 
 
   return (
@@ -369,7 +371,7 @@ function Detail() {
                     <span className="css-1qgvt7n"></span>
                     SKU: {Detail.id}
                     <span className="css-1qgvt7n"></span>
-                    Mã vạch: &nbsp;603122
+                    Mã vạch: &nbsp;{configuration.part_number}
                   </div>
                 </div>
               </div>
@@ -382,15 +384,15 @@ function Detail() {
                   className="att-product-detail-latest-price css-oj899w"
                   color="primary500"
                 >
-                  {Detail.price}₫
+                  {formatCurrency(Detail.price)}
                 </div>
-                <div className="css-3mjppt">
+                <div className="css-3mjppt" style={{display:'none'}}>
                   <div
                     type="caption"
                     className="att-product-detail-retail-price css-1gnksc0"
                     color="textSecondary"
                   >
-                    26.990.000₫
+                     {formatCurrency(Detail.price)}
                   </div>
                   <div
                     type="caption"
@@ -404,11 +406,11 @@ function Detail() {
               <div className="css-f1fyi0">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="css-1gs5ebu">
+              <div className="css-1gs5ebu" style={{display:'none'}}>
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
               </div>
-              <div className="css-30n8gl">
+              <div className="css-30n8gl"  style={{display:'none'}}>
                 <div className="css-ixp6xz">
                   Chọn 1 trong những khuyến mãi sau
                 </div>
@@ -452,6 +454,7 @@ function Detail() {
                   </div>
                 </div>
               </div>
+              
               <div className="css-f7zc9t">
                 {/* button mua ngay */}
                 <div
@@ -467,8 +470,12 @@ function Detail() {
                     color="white"
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
-                    onClick={showModal}
+                    // onClick={showModal}
                   // sự kiện cho modal
+                  onClick={(e) => {
+                    handleAddToCart();
+                    window.location.replace("/cart");
+                }}
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY

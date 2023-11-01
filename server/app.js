@@ -1,18 +1,19 @@
 require("dotenv").config();
-require("./config/createTable");
 const express = require("express");
-const route = require("./routes");
 const cookieParser = require('cookie-parser');
-const bodyParser = require("body-parser");
-require("./config/db/mySQL");
 const path = require("path");
 const cors = require("cors");
 const passport = require("passport");
-const authRoute = require("./routes/auth");
 const session = require("express-session");
-const passportStrategy = require("./passport");
 const app = express();
 const fs = require('fs');
+
+const route = require("./routes");
+require("./config/createTable");
+require("./config/db/mySQL");
+const authRoute = require("./routes/auth");
+const configSession = require("./config/session");
+const configPassport = require("./config/passport");
 
 // Đường dẫn đến thư mục bạn muốn tạo
 const directoryPath = path.join(__dirname, 'src/public/images');
@@ -27,19 +28,6 @@ if (!fs.existsSync(directoryPath)) {
     }
   });
 }
-
-app.use(
-	session({
-    secret: "1234",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.set('view engine', 'jade');
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -47,16 +35,21 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(cookieParser());
-// Sử dụng bodyParser để phân tích cú pháp các yêu cầu đến
-app.use(bodyParser.json({ limit: "5mb" }));
-app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
+// config session
+configSession(app);
+app.set('view engine', 'jade');
+app.use(passport.authenticate('session'));
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.static(path.join(__dirname, "./src/public")));
 
 // Định nghĩa các tuyến (routes)
 app.use("/auth", authRoute);
 route(app);
+
+configPassport();
 
 // Khởi chạy máy chủ
 const port = process.env.PORT || 3000;

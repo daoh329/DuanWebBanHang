@@ -13,10 +13,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
-    localStorage.removeItem('user');
-  }, []);
+
   let navigate = useNavigate();
 
   const [check, setCheck] = useState(false);
@@ -47,7 +44,7 @@ const Login = () => {
     if (check) {
       // Call API
       window.open(
-        `${process.env.REACT_APP_API_URL}/auth/google/callback`,
+        `${process.env.REACT_APP_API_URL}/auth/login/google`,
         "_self"
       );
     } else {

@@ -29,5 +29,6 @@ router.get('/orderhistory/id/:id', OrderController.orderHistoryById);
 
 router.get('/laptopbanchay', OrderController.topLaptop);
 router.get('/dienthoaibanchay', OrderController.topDienthoai);
+router.get('/:id', OrderController.getProduct);
 
 module.exports = router;
