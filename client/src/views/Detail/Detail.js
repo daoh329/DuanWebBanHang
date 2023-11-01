@@ -103,6 +103,7 @@ function Detail() {
   const [Detail, setDetail] = useState({});
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
+  const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
@@ -219,7 +220,7 @@ function Detail() {
       alert("Có lỗi xảy ra khi thêm thông tin cá nhân");
     }
   };
-  
+
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
@@ -278,6 +279,11 @@ function Detail() {
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
 
+  // Hàm xử lý sự kiện khi nhấp vào hình thu nhỏ
+  const handleThumbnailHover = (index) => {
+    setCurrentImage(index);
+    carouselRef.current.goTo(index);
+  };
 
   return (
     <>
@@ -312,7 +318,9 @@ function Detail() {
                         <button className="scroll-btn" id="scroll-right-btn" onClick={handleNextClick}>
                           <i className="fa-solid fa-chevron-right"></i>
                         </button>
-                        <Carousel autoplay ref={carouselRef}>
+                        <Carousel autoplay
+                          ref={carouselRef}
+                          afterChange={(current) => setCurrentImage(current)}>
                           {Detail &&
                             Detail.thumbnails &&
                             Detail.thumbnails.length > 0 &&
@@ -342,7 +350,12 @@ function Detail() {
                           console.log(`current index: ${current}, prev index: ${prev}`),
                       }}
                     >
-                      <Image width={80} src={process.env.REACT_APP_API_URL + thumbnail.thumbnail} />
+                      <Image
+                        width={80}
+                        src={process.env.REACT_APP_API_URL + thumbnail.thumbnail}
+                        onMouseEnter={() => handleThumbnailHover(index)} // Thay đổi từ onClick sang onMouseEnter
+                        style={{ border: currentImage === index ? '2px solid blue' : 'none' }}
+                      />
                     </Image.PreviewGroup>
                   ))}
                 </div>
@@ -386,13 +399,13 @@ function Detail() {
                 >
                   {formatCurrency(Detail.price)}
                 </div>
-                <div className="css-3mjppt" style={{display:'none'}}>
+                <div className="css-3mjppt" style={{ display: 'none' }}>
                   <div
                     type="caption"
                     className="att-product-detail-retail-price css-1gnksc0"
                     color="textSecondary"
                   >
-                     {formatCurrency(Detail.price)}
+                    {formatCurrency(Detail.price)}
                   </div>
                   <div
                     type="caption"
@@ -406,11 +419,11 @@ function Detail() {
               <div className="css-f1fyi0">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="css-1gs5ebu" style={{display:'none'}}>
+              <div className="css-1gs5ebu" style={{ display: 'none' }}>
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
               </div>
-              <div className="css-30n8gl"  style={{display:'none'}}>
+              <div className="css-30n8gl" style={{ display: 'none' }}>
                 <div className="css-ixp6xz">
                   Chọn 1 trong những khuyến mãi sau
                 </div>
@@ -454,7 +467,7 @@ function Detail() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="css-f7zc9t">
                 {/* button mua ngay */}
                 <div
@@ -471,11 +484,11 @@ function Detail() {
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
                     // onClick={showModal}
-                  // sự kiện cho modal
-                  onClick={(e) => {
-                    handleAddToCart();
-                    window.location.replace("/cart");
-                }}
+                    // sự kiện cho modal
+                    onClick={(e) => {
+                      handleAddToCart();
+                      window.location.replace("/cart");
+                    }}
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
@@ -801,16 +814,16 @@ function Detail() {
                   <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
                 </tr>
                 <tr>
-                  <td style={{display: configuration.cpu ? 'table-cell' : 'none'}} colSpan={1}>Thế hệ CPU</td>
-                  <td style={{display: configuration.cpu ? 'table-cell' : 'none'}} colSpan={3}>{configuration.cpu}</td>
+                  <td style={{ display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={1}>Thế hệ CPU</td>
+                  <td style={{ display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={3}>{configuration.cpu}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6',display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={1}>CPU</td>
-                  <td style={{ backgroundColor: '#f6f6f6',display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={3}>{configuration.cpu}</td>
+                  <td style={{ backgroundColor: '#f6f6f6', display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={1}>CPU</td>
+                  <td style={{ backgroundColor: '#f6f6f6', display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={3}>{configuration.cpu}</td>
                 </tr>
                 <tr>
-                  <td style={{display: configuration.vga ? 'table-cell' : 'none'}} colSpan={1}>Chíp đồ họa</td>
-                  <td style={{display: configuration.vga ? 'table-cell' : 'none'}} colSpan={3}>{configuration.vga}</td>
+                  <td style={{ display: configuration.vga ? 'table-cell' : 'none' }} colSpan={1}>Chíp đồ họa</td>
+                  <td style={{ display: configuration.vga ? 'table-cell' : 'none' }} colSpan={3}>{configuration.vga}</td>
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
@@ -857,8 +870,8 @@ function Detail() {
                   <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.pin}</td>
                 </tr>
                 <tr>
-                  <td  colSpan={1}>Khối lượng</td>
-                  <td  colSpan={3}>{configuration.mass}</td>
+                  <td colSpan={1}>Khối lượng</td>
+                  <td colSpan={3}>{configuration.mass}</td>
                 </tr>
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
