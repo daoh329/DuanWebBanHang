@@ -52,10 +52,7 @@ function LaptopInputFrom({ data }) {
   const onFinish = async (values) => {
     setIsLoading(true);
     try {
-      // kiểm tra nếu "" thì set là undefined
-      // (undefined không được đưa lên server)
       var checkValuesChange = false;
-
       const fieldsConfiguraton = [
         "M2_slot_type_supported",
         "accessory",
@@ -77,7 +74,8 @@ function LaptopInputFrom({ data }) {
         "vga",
         "wireless_connectivity",
       ];
-
+      // kiểm tra nếu "" thì set là undefined
+      // (undefined không được đưa lên server)
       values.configuration = values.configuration || {};
       for (const fieldName in values) {
         if (!values[fieldName]) {
@@ -264,6 +262,14 @@ function LaptopInputFrom({ data }) {
         <InputNumber
           defaultValue={product ? product.quantity : null}
           placeholder="Nhập số lượng sản phẩm đang bán"
+        />
+      </Form.Item>
+
+      {/* số lượng còn lại */}
+      <Form.Item label="Số lượng còn lại" name="remaining_quantity">
+        <InputNumber
+          defaultValue={product ? product.remaining_quantity : null}
+          placeholder="Nhập số lượng sản phẩm còn lại"
         />
       </Form.Item>
 

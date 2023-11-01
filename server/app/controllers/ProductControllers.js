@@ -73,7 +73,7 @@ class Product {
     const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
     const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
     const is_productdetail =
-      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);";
+      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
     const is_ProDetailColor =
       "INSERT INTO prodetailcolor (`product_id`,`Colorname`) VALUES (?,?);";
 
@@ -104,6 +104,7 @@ class Product {
         configurationString,
         data.description,
         id_Product,
+        data.quantity,
       ];
       await query(is_productdetail, PdValues);
 
@@ -131,6 +132,7 @@ class Product {
     product.shortDescription,
     productDetails.brand,
     productDetails.quantity,
+    productDetails.remaining_quantity,
     productDetails.created_at,
     productDetails.configuration,
     productDetails.description,
@@ -140,7 +142,9 @@ class Product {
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
     LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
-    GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
+    GROUP BY product.id, product.name, product.price, product.status, 
+    productDetails.brand, productDetails.quantity, productDetails.remaining_quantity, 
+    product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
     `;
 
     // Hàm sử lí lỗi tập chung
@@ -270,6 +274,7 @@ class Product {
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
       "quantity",
+      "remaining_quantity",
       "brand",
       "configuration",
       "description",
