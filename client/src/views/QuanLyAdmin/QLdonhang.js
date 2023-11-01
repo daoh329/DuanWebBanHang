@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table, Button } from 'antd';
 import { format } from 'date-fns';
 import axios from "axios";
+import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 
 function OrderList() {
 
@@ -37,6 +38,7 @@ function OrderList() {
             console.log('Confirm order button clicked for order:', record.order_id);
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/confirm/${record.order_id}`);
+                CreateNotification(record.productID, record.order_id, "Xác nhận đơn hàng", "Đơn hàng đã được xác nhận", `Đơn hàng ${record.order_id} đã được xác nhận và đang trong quá trình đóng gói`);
                 loadData();  // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
             } catch (error) {
                 console.error("Error confirming order:", error);
