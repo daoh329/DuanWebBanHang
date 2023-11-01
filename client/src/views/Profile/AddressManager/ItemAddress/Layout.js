@@ -8,7 +8,7 @@ import ReceiverInformationModal from "./Modal/receiverInformationModal";
 function Layout({ data, getValues }) {
   const [value, setValue] = useState(data);
   const [open, setOpen] = useState(false);
-
+  
   useEffect(() => {
     setValue(data);
   }, [data]);
@@ -50,11 +50,11 @@ function Layout({ data, getValues }) {
           </div>
           <div className="item-address">
             Địa chỉ:{" "}
-            {value.Street +
+            {value.street +
               ", " +
-              value.Commune +
+              value.commune +
               ", " +
-              value.District +
+              value.district +
               ", " +
               value.city}
           </div>

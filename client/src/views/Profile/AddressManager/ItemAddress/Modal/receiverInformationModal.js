@@ -37,6 +37,10 @@ function ReceiverInformationModal({
     setReceiverInformation(data);
   }, [data]);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -48,17 +52,12 @@ function ReceiverInformationModal({
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   // select city
   const handleCityChange = (value) => {
     const selectedCity = city.find((city) => city.Name === value);
     setSelectedCity(selectedCity);
     setSelectedDistrict(null);
   };
-
   //select district
   const handleDistrictChange = (value) => {
     const selectedDistrict = selectedCity.Districts.find(
