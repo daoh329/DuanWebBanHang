@@ -34,6 +34,7 @@ import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
+import { formatCurrency } from "../../util/FormatVnd";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
@@ -248,9 +249,54 @@ const App = () => {
     }
   };
 
-  const nextToNotifications = () => {
-    
-  }
+  // hàm chuyển tới page profile
+  // và truyền state xác định tab QL đơn hàng
+  const nextToNotifications = async (notification) => {
+    const { id, is_read } = notification;
+    try {
+      // tạo mảng chứa id thông báo (API nhận kiểu mảng)
+      const arrId = [];
+      arrId.push(id);
+      // kiểm tra tình trạng thông báo và sử lí logic
+      if (is_read === 0) {
+        // tạo api
+        const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
+        // gọi api cập nhật trạng thái thông báo tại db
+        const results = await axios.put(api, arrId);
+
+        if (results.status === 200) {
+          arrId.forEach((id) => {
+            const data = {
+              id,
+              newStates: 1,
+            };
+            // Cập nhật trạng thái thông báo tại redux
+            dispatch(updateNotification(data));
+          });
+        }
+        // chuyển qua page chi tiết thông báo
+        navigate("/profile", {
+          state: {
+            tab: "tab2",
+            actions: "call_order",
+            order_id: notification.order_id,
+          },
+        });
+      } else {
+        // chuyển qua page chi tiết thông báo
+        navigate("/profile", {
+          state: {
+            tab: "tab2",
+            actions: "call_order",
+            order_id: notification.order_id,
+          },
+        });
+      }
+    } catch (error) {
+      // Log ra lỗi nếu có
+      console.log(error);
+    }
+  };
 
   return (
     <Layout className="nav-container">
@@ -608,7 +654,10 @@ const App = () => {
                             itemLayout="horizontal"
                             dataSource={arrayNotification}
                             renderItem={(item, index) => (
-                              <List.Item onClick={() => nextToNotifications(item)} style={{ cursor: "pointer" }}>
+                              <List.Item
+                                onClick={() => nextToNotifications(item)}
+                                style={{ cursor: "pointer" }}
+                              >
                                 <List.Item.Meta
                                   avatar={
                                     <Avatar
@@ -675,7 +724,9 @@ const App = () => {
                           }}
                         >
                           <p style={{ cursor: "pointer", margin: "0" }}>
-                            <Link to="profile" state={{tab: "tab3"}}>Xem tất cả thông báo</Link>
+                            <Link to="profile" state={{ tab: "tab3" }}>
+                              Xem tất cả thông báo
+                            </Link>
                           </p>
                         </div>
                       </div>
@@ -787,9 +838,12 @@ const App = () => {
                                 }
                                 description={
                                   <>
-                                    <div>Giá: {selectedItems.price} ₫</div>
                                     <div>
-                                      Số lượng: {selectedItems.quantity}
+                                      Giá:{" "}
+                                      {formatCurrency(selectedItems?.price)}
+                                    </div>
+                                    <div>
+                                      Số lượng: {selectedItems?.quantity}
                                     </div>{" "}
                                     {/* Hiển thị số lượng */}
                                   </>

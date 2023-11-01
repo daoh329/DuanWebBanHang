@@ -26,6 +26,7 @@ import { update } from "../../redux/userSlice";
 import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
+import { format } from "date-fns";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
@@ -40,15 +41,30 @@ export default function Profile() {
   const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
   const [iconsActive, setIconsActive] = useState("tab1");
 
+  // hook nhận hành động chuyển page
+  useEffect(() => {
+    const action = location.state?.actions;
+    // nếu hành động đó gọi tới thông tin đơn hàng
+    // và đã có dữ liệu đơn hàng (data.length > 0)
+    if (action === "call_order" && data.length > 0) {
+      // lấy order_id, xác định đơn hàng và chuyển page
+      const order_id = location.state?.order_id;
+      handleOpenOrderInformations(order_id);
+    }
+  }, [data]);
+
   // Hàm tải dữ liệu
   const loadData = useCallback(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
-        .then(res => {
-            setData(res.data);
-            const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            setData(sortedOrders || []);
-        })
-        .catch(error => console.log(error));
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
+      .then((res) => {
+        setData(res.data);
+        const sortedOrders = res.data.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+        setData(sortedOrders || []);
+      })
+      .catch((error) => console.log(error));
   }, [user]);
 
   useEffect(() => {
@@ -104,7 +120,7 @@ export default function Profile() {
     setIconsActive(value);
   };
 
-  // Hàm xác nhận đơn hàng
+  // Hàm đặt lại đơn hàng
   const handleConfirmOrder = async (record) => {
     if (record.order_id) {
       console.log("Confirm order button clicked for order:", record.order_id);
@@ -133,7 +149,7 @@ export default function Profile() {
           record.order_id,
           "2",
           "Hủy đơn hàng thành công",
-          `Đơn hàng ${record.order_id} đã được hủy thành công`
+          `Đơn hàng ${record.order_id} của hạn đã được hủy thành công`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
       } catch (error) {
@@ -144,9 +160,12 @@ export default function Profile() {
     }
   };
 
+  // Tạo state order để chuyển sang page order mỗi khi có dữ liệu
   const [order, setOrder] = useState(null);
   const handleOpenOrderInformations = (order_id) => {
     try {
+      // tìm đơn hàng trong mảng đơn hàng
+      // và set dữ liệu đơn hàng đó cho order
       const orderData = data.filter((order) => order.order_id === order_id);
       setOrder(orderData);
     } catch (error) {
@@ -154,11 +173,10 @@ export default function Profile() {
     }
   };
 
-  const handleToInformationsNotification = (parentPage, order_id ) => {
+  const handleToInformationsNotification = (parentPage, order_id) => {
     handleOpenOrderInformations(order_id);
     setVerticalActive(parentPage);
-
-  }
+  };
 
   const columns = [
     {
@@ -183,6 +201,17 @@ export default function Profile() {
       title: "Ngày mua",
       dataIndex: "order_updated_at",
       key: "updated_at",
+      render: (order_updated_at) =>
+        order_updated_at && (
+          <div>
+            <p style={{ margin: "0" }}>
+              {format(new Date(order_updated_at), "HH:mm:ss")}
+            </p>
+            <p style={{ margin: "0" }}>
+              {format(new Date(order_updated_at), "dd/MM/yyyy")}
+            </p>
+          </div>
+        ),
     },
     {
       title: "Trạng thái",
@@ -251,7 +280,7 @@ export default function Profile() {
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
-  
+
   return (
     <>
       <MDBRow>
@@ -525,7 +554,9 @@ export default function Profile() {
 
             {/*  */}
             <MDBTabsPane show={verticalActive === "tab3"}>
-              <NotificationsLayout statusPage={handleToInformationsNotification} />
+              <NotificationsLayout
+                statusPage={handleToInformationsNotification}
+              />
             </MDBTabsPane>
             {/*  */}
             <MDBTabsPane show={verticalActive === "tab4"}>
