@@ -68,7 +68,7 @@ function OrderList() {
           record.order_id,
           "2",
           "Hủy đơn hàng thành công",
-          `Đơn hàng ${record.order_id} đã bị hủy vì không được xác nhận`
+          `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
       } catch (error) {

@@ -6,6 +6,7 @@ import axios from "axios";
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
 import { formatCurrency } from "../../../util/FormatVnd";
+import { format } from "date-fns";
 
 function Order(props) {
   const { order, setOrder } = props;
@@ -91,7 +92,7 @@ function Order(props) {
               </span>
             </p>
             <p>
-              Thời gian tạo: <span>{order[0].order_created_at}</span>
+              Thời gian tạo: <span>{format(new Date(order[0].order_created_at), "HH:mm:ss dd/MM/yyyy") }</span>
             </p>
           </div>
           <div className="block-1-3">

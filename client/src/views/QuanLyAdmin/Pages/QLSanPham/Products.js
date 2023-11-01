@@ -7,7 +7,6 @@ import ActionButton from "./ActionComponent/ActionButton";
 function Product() {
   const [Product, setProduct] = useState([]);
 
-
   const getProduct = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/json`)
@@ -43,7 +42,11 @@ function Product() {
   const columns = [
     { title: "Tên sản phẩm", dataIndex: "name", key: "name" },
     { title: "Giá", dataIndex: "price", key: "price" },
-    { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
+    {
+      title: "SL còn lại",
+      dataIndex: "remaining_quantity",
+      key: "remaining_quantity",
+    },
     { title: "Loại sản phẩm", dataIndex: "category", key: "category" },
     {
       title: "Trạng thái",
@@ -68,37 +71,32 @@ function Product() {
     {
       title: "Hành động",
       key: "action",
-      render: (_, record) => (<ActionButton getProduct={getProduct} record={record}/>),
+      render: (_, record) => (
+        <ActionButton getProduct={getProduct} record={record} />
+      ),
     },
     {
       title: "Ngày tạo",
       dataIndex: "created_at",
       key: "created_at",
-      render: (created_at) => {
-        const created_at_date = format(new Date(created_at), "dd/MM/yyyy"); // Định dạng lại thời gian
-        const created_at_time = format(new Date(created_at), "HH:mm:ss"); // Định dạng lại thời gian
-        return (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <p style={{ margin: "0" }}>{created_at_date}</p>
-            <p style={{ margin: "0" }}>{created_at_time}</p>
+      render: (created_at) =>
+        created_at && (
+          <div>
+            <p style={{ margin: "0" }}>
+              {format(new Date(created_at), "HH:mm:ss")}
+            </p>
+            <p style={{ margin: "0" }}>
+              {format(new Date(created_at), "dd/MM/yyyy")}
+            </p>
           </div>
-        );
-      },
+        ),
     },
   ];
 
   return (
     <div>
       <h1>Quản lý Sản Phẩm</h1>
-      <Table columns={columns} dataSource={Product}/>
+      <Table columns={columns} dataSource={Product} />
     </div>
   );
 }

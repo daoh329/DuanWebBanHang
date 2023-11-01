@@ -52,6 +52,10 @@ const App = () => {
   const isLogin = localStorage.getItem("isLogin");
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    getUser();
+  }, []);
+
   const getUser = async () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
@@ -67,13 +71,11 @@ const App = () => {
       };
       if (result.status === 200) {
         if (!isLogin) {
-          localStorage.setItem("isLogin", data.user.id);
+          localStorage.setItem("isLogin", u.permission.toLowerCase());
         }
         dispatch(update(u));
         getNotifications(u.id);
-
-      }
-      else {
+      } else {
         localStorage.removeItem("isLogin");
       }
     } catch (e) {
@@ -84,22 +86,19 @@ const App = () => {
 
   const getNotifications = async (id) => {
     try {
-      const api = `${process.env.REACT_APP_API_URL}/auth/get-notifications/${id}`
+      const api = `${process.env.REACT_APP_API_URL}/auth/get-notifications/${id}`;
       const results = await axios.get(api);
       if (results.status === 200) {
         const notifications = results.data;
-        Array.isArray(notifications) && notifications.forEach((notification) => {
-          dispatch(addNotification(notification));
-        })
+        Array.isArray(notifications) &&
+          notifications.forEach((notification) => {
+            dispatch(addNotification(notification));
+          });
       }
     } catch (error) {
       console.log(error);
     }
-  }
-
-  useEffect(() => {
-    getUser();
-  }, []);
+  };
 
   return (
     <div className="App">
@@ -120,7 +119,7 @@ const App = () => {
               <Route
                 path="/admin/*"
                 element={
-                  isLogin && user.permission === "admin" ? (
+                  isLogin === "admin" ? (
                     <>
                       <Admin /> <Outlet />
                     </>
@@ -140,7 +139,10 @@ const App = () => {
               <Route path="/orders" element={<QLdonhang />} />
               <Route path="/shippingOrder" element={<QLshipping />} />
               <Route path="/deliveredOrder" element={<QLdelivered />} />
-              <Route path="/deliveryfailedOrder" element={<QLdeliveryfailed />} />
+              <Route
+                path="/deliveryfailedOrder"
+                element={<QLdeliveryfailed />}
+              />
               <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
@@ -150,12 +152,21 @@ const App = () => {
                 element={isLogin ? <Profile /> : <Navigate to="/" />}
               />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
-              <Route path="/tat-ca-san-pham-laptop-moi" element={<AllNewProductLaptop/>} />
-              <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
-              <Route path="/tat-ca-san-pham-phone-moi"  element={<AllNewProductPhone />}/>
+              <Route
+                path="/tat-ca-san-pham-laptop-moi"
+                element={<AllNewProductLaptop />}
+              />
+              <Route
+                path="/tat-ca-san-pham-phone"
+                element={<AllProductPhone />}
+              />
+              <Route
+                path="/tat-ca-san-pham-phone-moi"
+                element={<AllNewProductPhone />}
+              />
 
-              <Route path="/danhmuc-dienthoai" element={<AllProductPhone />}/>
-              <Route path="/danhmuc-laptop"element={<AllProduct />}/>
+              <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
+              <Route path="/danhmuc-laptop" element={<AllProduct />} />
 
               <Route path="/createorder" element={<CreateOrder />} />
 
