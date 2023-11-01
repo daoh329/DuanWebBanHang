@@ -132,6 +132,7 @@ class Product {
     product.shortDescription,
     productDetails.brand,
     productDetails.quantity,
+    productDetails.remaining_quantity,
     productDetails.created_at,
     productDetails.configuration,
     productDetails.description,
@@ -141,7 +142,9 @@ class Product {
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
     LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
-    GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
+    GROUP BY product.id, product.name, product.price, product.status, 
+    productDetails.brand, productDetails.quantity, productDetails.remaining_quantity, 
+    product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
     `;
 
     // Hàm sử lí lỗi tập chung
