@@ -378,13 +378,13 @@ export default function Buy() {
                           <label style={{ display: "flex", alignItems: "center" }}>
                             <input
                               type="checkbox"
-                              value="Tất cả các ngày trong tuần"
-                              checked={deliveryMethod === "Tất cả các ngày trong tuần"}
+                              value="ngày trong tuần"
+                              checked={deliveryMethod === "ngày trong tuần"}
                               onChange={(e) =>
                                 setDeliveryMethod(e.target.checked ? e.target.value : "")
                               }
                             />
-                            Tất cả ngày trong tuần
+                            Ngày trong tuần
                           </label>
                           <label style={{ display: "flex", alignItems: "center" }}>
                             <input
