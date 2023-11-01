@@ -6,7 +6,6 @@ import axios from "axios";
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
 import { formatCurrency } from "../../../util/FormatVnd";
-import { confiStatusOrder } from "../../../util/configStatusOrder";
 
 function Order(props) {
   const { order, setOrder } = props;
