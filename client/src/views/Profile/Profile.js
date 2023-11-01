@@ -184,6 +184,7 @@ export default function Profile() {
       render: (order_id) => (
         <Link onClick={() => handleOpenOrderInformations(order_id)}>
           {order_id}
+          <p>Xem chi tiết</p>
         </Link>
       ),
     },
