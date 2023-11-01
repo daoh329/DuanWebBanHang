@@ -246,7 +246,7 @@ function Cart() {
 
                 </MDBTableHead>
                 <MDBTableBody>
-                  {cart.map((item, index) => (
+                  {[...cart].reverse().map((item, index) => (
                     <tr key={index}>
                       <td>
                         <input

@@ -95,7 +95,9 @@ const CheckSP = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
 
   return (
     <div style={{margin:'0 auto', width:'80%',marginTop:'10px'}}>

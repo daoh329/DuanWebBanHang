@@ -219,6 +219,7 @@ function Detail() {
       alert("Có lỗi xảy ra khi thêm thông tin cá nhân");
     }
   };
+  
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
@@ -277,7 +278,9 @@ function Detail() {
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
 
-
+function formatCurrency(value) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 
 
   return (
@@ -372,7 +375,7 @@ function Detail() {
                     <span className="css-1qgvt7n"></span>
                     SKU: {Detail.id}
                     <span className="css-1qgvt7n"></span>
-                    Mã vạch: &nbsp;603122
+                    Mã vạch: &nbsp;{configuration.part_number}
                   </div>
                 </div>
               </div>
@@ -385,15 +388,15 @@ function Detail() {
                   className="att-product-detail-latest-price css-oj899w"
                   color="primary500"
                 >
-                  {formatPrice(parseFloat(Detail?.price))}
+                  {formatCurrency(Detail.price)}
                 </div>
-                <div className="css-3mjppt">
+                <div className="css-3mjppt" style={{display:'none'}}>
                   <div
                     type="caption"
                     className="att-product-detail-retail-price css-1gnksc0"
                     color="textSecondary"
                   >
-                    26.990.000₫
+                     {formatCurrency(Detail.price)}
                   </div>
                   <div
                     type="caption"
@@ -407,11 +410,11 @@ function Detail() {
               <div className="css-f1fyi0">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="css-1gs5ebu">
+              <div className="css-1gs5ebu" style={{display:'none'}}>
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
               </div>
-              <div className="css-30n8gl">
+              <div className="css-30n8gl"  style={{display:'none'}}>
                 <div className="css-ixp6xz">
                   Chọn 1 trong những khuyến mãi sau
                 </div>
@@ -455,6 +458,7 @@ function Detail() {
                   </div>
                 </div>
               </div>
+              
               <div className="css-f7zc9t">
                 {/* button mua ngay */}
                 <div
@@ -470,8 +474,12 @@ function Detail() {
                     color="white"
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
-                    onClick={showModal}
+                    // onClick={showModal}
                   // sự kiện cho modal
+                  onClick={(e) => {
+                    handleAddToCart();
+                    window.location.replace("/cart");
+                }}
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY

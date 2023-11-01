@@ -242,6 +242,10 @@ export default function Profile() {
     },
   ];
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
+  
   return (
     <>
       <MDBRow>

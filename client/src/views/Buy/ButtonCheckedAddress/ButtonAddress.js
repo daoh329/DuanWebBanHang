@@ -66,9 +66,9 @@ function ButtonAddress({ value, checked, onClick, index, getValues }) {
         <div className="address-control-phone">{value.phone}</div>
         {/* show address details*/}
         <div className="address-control-details">
-          {value.street + ", "}
-          {value.commune + ", "}
-          {value.district + ", "}
+          {value.Street + ", "}
+          {value.Commune + ", "}
+          {value.District + ", "}
           {value.city}
         </div>
       </div>

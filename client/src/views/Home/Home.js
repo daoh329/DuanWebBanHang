@@ -98,17 +98,23 @@ const Home = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/newphone`)
       .then(response => {
-        setNewphone(response.data);
+        let data = response.data;
+        // Sắp xếp dữ liệu tại đây
+        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setNewphone(data);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
   }, []);
+  
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then(response => {
-        setNewLaptop(response.data);
+        let data = response.data;
+        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setNewLaptop(data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -118,7 +124,9 @@ const Home = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then(response => {
-        setProducts(response.data);
+        let data = response.data;
+        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setProducts(data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -129,7 +137,9 @@ const Home = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then(response => {
-        setProductsPhone(response.data);
+        let data = response.data;
+        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setProductsPhone(data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -630,6 +640,7 @@ const Home = () => {
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRefphone}>
+              
               {newPhone &&
                 newPhone.length > 0 &&
                 newPhone.map((item, index) => (
