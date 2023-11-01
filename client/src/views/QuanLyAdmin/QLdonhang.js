@@ -41,7 +41,7 @@ function OrderList() {
           `${process.env.REACT_APP_API_URL}/order/confirm/${record.order_id}`
         );
         CreateNotification(
-          record.productID,
+          record.user_id,
           record.order_id,
           "Xác nhận đơn hàng",
           "Đơn hàng đã được xác nhận",
