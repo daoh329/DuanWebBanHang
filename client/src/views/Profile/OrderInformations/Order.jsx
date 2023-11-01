@@ -10,11 +10,9 @@ import { formatCurrency } from "../../../util/FormatVnd";
 function Order(props) {
   const { order, setOrder } = props;
   const [productAPI, setProduct] = useState(null);
+
   useEffect(() => {
-    const o = order;
-    if (o) {
-      getProductOfOrder();
-    }
+    getProductOfOrder();
   }, []);
 
   const getProductOfOrder = async () => {
@@ -79,7 +77,7 @@ function Order(props) {
             <p>
               Trạng thái đơn hàng:{" "}
               <span>
-                {order[0]?.order_status === 0 ? "Đợi xác nhận" : "Đã hủy"}
+                {order[0]?.order_status === 1 ? "Đã xác nhận" : "Đã hủy"}
               </span>
             </p>
             <p>
