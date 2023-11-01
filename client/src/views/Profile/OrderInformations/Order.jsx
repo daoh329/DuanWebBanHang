@@ -76,9 +76,19 @@ function Order(props) {
           <div className="block-1-2">
             <p>Thông tin đơn hàng</p>
             <p>
-              Trạng thái đơn hàng:{" "}
+            Trạng thái đơn hàng:{" "}
               <span>
-                {confiStatusOrder(order[0]?.order_status)}
+                {(() => {
+                  switch (order[0]?.order_status) {
+                    case 0: return "Chờ xác nhận";
+                    case 1: return "Đã xác nhận";
+                    case 2: return "Đã hủy";
+                    case 3: return "Đang vận chuyển";
+                    case 4: return "Đã giao hàng";
+                    case 5: return "Giao hàng không thành công";
+                    default: return "Không xác định";
+                  }
+                })()}
               </span>
             </p>
             <p>

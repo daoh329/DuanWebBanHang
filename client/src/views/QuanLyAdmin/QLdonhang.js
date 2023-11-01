@@ -110,25 +110,25 @@ function OrderList() {
       key: "created_at",
     },
 
-    {
-      title: "Trạng thái",
-      dataIndex: "order_status",
-      key: "status",
-      render: (status) => (
-        <span
-          style={{
-            fontWeight: "bold",
-            color: status === 1 ? "green" : status === 2 ? "red" : "orange",
-          }}
-        >
-          {status === 1
-            ? "Đã xác nhận"
-            : status === 2
-            ? "Đã bị hủy"
-            : "Chưa xác nhận"}
-        </span>
-      ),
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: "order_status",
+    //   key: "status",
+    //   render: (status) => (
+    //     <span
+    //       style={{
+    //         fontWeight: "bold",
+    //         color: status === 1 ? "green" : status === 2 ? "red" : "orange",
+    //       }}
+    //     >
+    //       {status === 1
+    //         ? "Đã xác nhận"
+    //         : status === 2
+    //         ? "Đã bị hủy"
+    //         : "Chưa xác nhận"}
+    //     </span>
+    //   ),
+    // },
     {
       title: "Hành động",
       dataIndex: "action",

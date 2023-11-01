@@ -340,7 +340,7 @@ const Home = () => {
         <div>
           <ul className="menu-nav-ul">
             <li className="menu-nav-ul-li">
-              <a className="li-a">
+              <a className="li-a" href="/danhmuc-dienthoai">
                 <i className="fa fa-mobile-phone" aria-hidden="true"></i>
                 <span className="name-menu">Điện thoại</span>
               </a>
@@ -350,7 +350,7 @@ const Home = () => {
             </li>
 
             <li className="menu-nav-ul-li">
-              <a className="li-a">
+              <a className="li-a" href="/danhmuc-laptop">
                 <i className="fa fa-laptop" aria-hidden="true"></i>
                 <span className="name-menu">Lap Top</span>
               </a>
@@ -433,7 +433,7 @@ const Home = () => {
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.map((item, index) => (
+                topLaptop.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
@@ -472,7 +472,7 @@ const Home = () => {
           </div>
           {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.map((item, index) => (
+                topLaptop.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
@@ -510,7 +510,7 @@ const Home = () => {
           </div>
           {topDienthoai &&
                 topDienthoai.length > 0 &&
-                topDienthoai.map((item, index) => (
+                topDienthoai.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>

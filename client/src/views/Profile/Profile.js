@@ -184,6 +184,7 @@ export default function Profile() {
       render: (order_id) => (
         <Link onClick={() => handleOpenOrderInformations(order_id)}>
           {order_id}
+          <p>Xem chi tiết</p>
         </Link>
       ),
     },
@@ -241,7 +242,7 @@ export default function Profile() {
       key: "action",
       render: (_, record) => (
         <span>
-          {record.order_status === 0 || record.order_status === 1 ? (
+          {record.order_status === 0 ? (
             <Button
               className="cancel-button"
               style={{ backgroundColor: "red", color: "white" }}
