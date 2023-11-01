@@ -27,5 +27,6 @@ router.put(`/cancelorder/:id`, OrderController.cancelOrder);
 router.get('/orderhistory/:phone', OrderController.orderHistory);
 router.get('/laptopbanchay', OrderController.topLaptop);
 router.get('/dienthoaibanchay', OrderController.topDienthoai);
+router.get('/:id', OrderController.getProduct);
 
 module.exports = router;

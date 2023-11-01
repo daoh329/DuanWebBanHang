@@ -26,6 +26,7 @@ import { Form, Select } from "antd";
 import { message } from "antd";
 import { CartProvider } from "../Cart/CartContext";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { formatCurrency } from "../../util/FormatVnd";
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
@@ -100,20 +101,22 @@ function Detail() {
   const { id } = useParams();
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
-  console.log(Detail)
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
-    axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
+    getProduct();
+  }, [id]);
+
+  const getProduct = async () => {
+    await axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
       .then(response => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
 
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
-        console.log("Detail: ", Detail)
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
         const productThumbnails = response.data.thumbnails;
@@ -122,7 +125,7 @@ function Detail() {
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, [id]);
+  }
 
   // so luong sp
   const [quantity, setQuantity] = useState(1);
@@ -274,10 +277,6 @@ function Detail() {
   //   AddToCart();
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-}
 
 
   return (

@@ -382,7 +382,7 @@ class Product {
           arrPathImage.forEach(async (image) => {
             await query(queryUpdateGalery, [image, id]);
           });
-          return res.status(200).json({ message: "success" });;
+          return res.status(200).json({ message: "success" });
         }
         // Nếu sản phẩm chưa có ảnh nào
         // Thêm ảnh mới của sản phẩm
@@ -414,12 +414,12 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 2 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
   }
@@ -440,12 +440,12 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 1 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
   }

@@ -11,24 +11,20 @@ function Layout() {
   // Lấy id user
   const user = useSelector((state) => state.user);
 
-  //   Các biết cục bộ
+  // Các biết cục bộ
   const [receiverInformation, setReceiverInformation] = useState([]);
   // open modal
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      getDeliveryAddress();
-    }
-  }, []);
-
-  if (!user) return;
+    getDeliveryAddress();
+  }, [user]);
 
   // Hàm lấy thông tin địa chỉ nhận hàng của người dùng
   const getDeliveryAddress = async () => {
     try {
       const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user?.id}`
       );
       // sử lí address mặc định luôn render phía trên
       var address = result.data;
