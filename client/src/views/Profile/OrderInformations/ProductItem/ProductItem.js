@@ -2,7 +2,7 @@ import React from "react";
 import {useNavigate} from 'react-router-dom'
 
 import "./ProductItemt.css";
-import { formatPrice } from "../../../../util/FormatVnd";
+import { formatCurrency } from "../../../../util/FormatVnd";
 
 function ProductItem(props) {
   const { shortDescription, product_id, price_total, quantity, imageUrl } =
@@ -25,7 +25,7 @@ function ProductItem(props) {
         </p>
       </div>
       <div className="product-total">
-        <p style={{ fontWeight: "500" }}>{formatPrice(price_total)}</p>
+        <p style={{ fontWeight: "500" }}>{formatCurrency(price_total)}</p>
         <p style={{color:"#a6a4a4"}}>x{quantity}</p>
       </div>
     </div>

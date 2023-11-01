@@ -5,7 +5,7 @@ import axios from "axios";
 
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
-import { formatPrice } from "../../../util/FormatVnd";
+import { formatCurrency } from "../../../util/FormatVnd";
 
 function Order(props) {
   const { order, setOrder } = props;
@@ -107,19 +107,19 @@ function Order(props) {
           <div className="block-1">
             <div className="sub">
               <div>Tổng tạm tính</div>
-              <div className="price">{formatPrice(product.price_total) }</div>
+              <div className="price">{formatCurrency(product.price_total) }</div>
             </div>
             <div className="sub">
               <div>Phí vận chuyển</div>
-              <div className="price">{formatPrice(25000)}</div>
+              <div className="price">{formatCurrency(25000)}</div>
             </div>
             <div className="sub">
               <div>Giảm giá</div>
-              <div className="price">{formatPrice()}</div>
+              <div className="price">{formatCurrency()}</div>
             </div>
             <div className="sub">
               <div>Thành tiền</div>
-              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatPrice(product?.price_total + 25000)}</div>
+              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatCurrency(product?.price_total + 25000)}</div>
             </div>
           </div>
           <div className="block-2">(Đã bao gồm VAT)</div>

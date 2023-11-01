@@ -26,7 +26,7 @@ import { Form, Select } from "antd";
 import { message } from "antd";
 import { CartProvider } from "../Cart/CartContext";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { formatPrice } from "../../util/FormatVnd";
+import { formatCurrency } from "../../util/FormatVnd";
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
@@ -277,10 +277,6 @@ function Detail() {
   //   AddToCart();
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-}
 
 
   return (

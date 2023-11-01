@@ -1,10 +1,5 @@
-export function formatPrice(price) {
+export function formatCurrency(price) {
   // Sử dụng hàm toLocaleString để định dạng số về dạng tiền tệ
   if (!price) price = 0;
-  const formattedPrice = price.toLocaleString("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  });
-
-  return formattedPrice;
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 }
