@@ -340,7 +340,7 @@ const Home = () => {
         <div>
           <ul className="menu-nav-ul">
             <li className="menu-nav-ul-li">
-              <a className="li-a">
+              <a className="li-a" href="/danhmuc-dienthoai">
                 <i className="fa fa-mobile-phone" aria-hidden="true"></i>
                 <span className="name-menu">Điện thoại</span>
               </a>
@@ -350,7 +350,7 @@ const Home = () => {
             </li>
 
             <li className="menu-nav-ul-li">
-              <a className="li-a">
+              <a className="li-a" href="/danhmuc-laptop">
                 <i className="fa fa-laptop" aria-hidden="true"></i>
                 <span className="name-menu">Lap Top</span>
               </a>
