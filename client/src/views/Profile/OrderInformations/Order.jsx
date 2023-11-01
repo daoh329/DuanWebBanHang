@@ -6,6 +6,7 @@ import axios from "axios";
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
 import { formatCurrency } from "../../../util/FormatVnd";
+import { confiStatusOrder } from "../../../util/configStatusOrder";
 
 function Order(props) {
   const { order, setOrder } = props;
@@ -77,7 +78,7 @@ function Order(props) {
             <p>
               Trạng thái đơn hàng:{" "}
               <span>
-                {order[0]?.order_status === 1 ? "Đã xác nhận" : "Đã hủy"}
+                {confiStatusOrder(order[0]?.order_status)}
               </span>
             </p>
             <p>
