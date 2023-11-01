@@ -49,22 +49,20 @@ export default function Profile() {
     fetchData();
   }, []);
 
-  const [userPhone, setUserPhone] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    printEmail();
-  }, []);
 
   async function printEmail() {
     try {
       const userData = await user;
-      setUserPhone(userData.phone);
+      setUserId(userData.id);
     } catch (error) {
       console.log(error);
     }
   }
+  console.log("id: "+userId)
 
   useEffect(() => {
     printEmail();
@@ -72,14 +70,14 @@ export default function Profile() {
 
   // Hàm tải dữ liệu
   const loadData = useCallback(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${userPhone}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${userId}`)
         .then(res => {
             setData(res.data);
             const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setData(sortedOrders || []);
         })
         .catch(error => console.log(error));
-  }, [userPhone]);
+  }, [userId]);
 
   useEffect(() => {
     loadData();

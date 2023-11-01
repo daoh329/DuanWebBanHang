@@ -10,7 +10,7 @@ function HistoryOrder(props) {
     const phone = window.sessionStorage.getItem('phone');
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${phone}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/phone/${phone}`)
             .then(res => {
                 setData(res.data);
                 const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

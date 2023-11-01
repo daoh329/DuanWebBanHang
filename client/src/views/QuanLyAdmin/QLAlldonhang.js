@@ -123,7 +123,7 @@ function QLAlldonhang() {
         <div>
             <h1>Tất cả đơn hàng</h1>
 
-            <div>
+            {/* <div>
                 <a href="/deliveryfailed" style={{width: 250, height: 60, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
                     Đơn hàng đã hủy hoặc giao không thành công
                 </a>
@@ -139,7 +139,7 @@ function QLAlldonhang() {
                 <a href="/delivered" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
                     Xác nhận đơn hàng đã giao
                 </a>
-            </div>
+            </div> */}
             
             <Table columns={columns} dataSource={data} />
         </div>

@@ -7,7 +7,7 @@ function QLdelivered() {
 
     const [data, setData] = useState([]);
     const loadData = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
             .then(res => {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data.sort((a, b) => {    
@@ -86,7 +86,7 @@ function QLdelivered() {
         },
         
         {
-            title: 'Thời gian tạo',
+            title: 'Thời gian',
             dataIndex: 'order_updated_at',
             key: 'updated_at',
         },
@@ -129,13 +129,13 @@ function QLdelivered() {
     return (
         <div>
             <h1>Xác nhận giao hàng</h1>
-            <div>
+            {/* <div>
                 <a href="/allorders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
             </div>
 
             <div>
                 <a href="/orders" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-            </div>
+            </div> */}
             
             <Table columns={columns} dataSource={data} />
         </div>

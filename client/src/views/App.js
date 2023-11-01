@@ -112,9 +112,9 @@ const App = () => {
               <Route path="/sale" element={<Sale />} />
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
               <Route path="/orders" element={<QLdonhang />} />
-              <Route path="/shipping" element={<QLshipping />} />
-              <Route path="/delivered" element={<QLdelivered />} />
-              <Route path="/deliveryfailed" element={<QLdeliveryfailed />} />
+              <Route path="/shippingOrder" element={<QLshipping />} />
+              <Route path="/deliveredOrder" element={<QLdelivered />} />
+              <Route path="/deliveryfailedOrder" element={<QLdeliveryfailed />} />
               <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />

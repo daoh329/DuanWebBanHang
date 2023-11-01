@@ -122,7 +122,7 @@ function QLdeliveryfailed() {
     return (
         <div>
             <h1>Đơn hàng đã hủy hoặc giao không thành công</h1>
-            <div>
+            {/* <div>
                 <a href="/orders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
                     Xem đơn hàng trong một tháng
                 </a>
@@ -130,7 +130,7 @@ function QLdeliveryfailed() {
 
             <div>
                 <a href="/allorders" style={{width: 250, height: 40, marginTop: '10px', display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
-            </div>
+            </div> */}
             
             <Table columns={columns} dataSource={data} />
         </div>
