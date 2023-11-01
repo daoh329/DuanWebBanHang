@@ -13,10 +13,6 @@ const Dashboard = () => {
   
       // Chuyển đổi updated_date từ timestamp về chuỗi ngày tháng
       const convertedData = result.data
-        .map(item => ({
-          ...item,
-          updated_Date: new Date(item.updated_Date * 1000).toISOString().slice(0, 10),
-        }))
         .sort((a, b) => new Date(a.updated_Date) - new Date(b.updated_Date));
   
       setOrderDate(convertedData);
@@ -27,15 +23,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/dashboard`);
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/orderDate`);
     
       // Chuyển đổi updated_date từ timestamp về chuỗi ngày tháng
       const convertedData = result.data
-        .sort((a, b) => a.updated_date - b.updated_date)
-        .map(item => ({
-          ...item,
-          updated_date: new Date(item.updated_date * 1000).toISOString().slice(0, 10),
-        }));
+        .sort((a, b) => a.updated_Date - b.updated_Date)
     
       setData(convertedData);
     };
@@ -74,7 +66,7 @@ const Dashboard = () => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="updated_Date" />
-        <YAxis domain={[0, 100]} />
+        <YAxis domain={[0, 50]} />
         <Tooltip/>
         <Legend />
         <Line type="monotone" dataKey="ChuaXacNhan" stroke="orange" activeDot={{ r: 10 }} dot={{ stroke: 'orange', strokeWidth: 2 }} />
@@ -86,7 +78,7 @@ const Dashboard = () => {
       </LineChart>
       </div>
 
-    <h4>Biểu đồ đơn đặt hàng đã giao thành công và không thành công</h4>
+    <h4>Biểu đồ đơn đã giao trong tháng</h4>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
       <LineChart
         width={800}
@@ -100,8 +92,8 @@ const Dashboard = () => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="updated_date" />
-        <YAxis domain={[0, 100]} />
+        <XAxis dataKey="updated_Date" />
+        <YAxis domain={[0, 50]} />
         <Tooltip/>
         <Legend />
         <Line type="monotone" dataKey="DaGiao" stroke="#33CCFF" activeDot={{ r: 10 }} dot={{ stroke: '#33CCFF', strokeWidth: 2 }} />
