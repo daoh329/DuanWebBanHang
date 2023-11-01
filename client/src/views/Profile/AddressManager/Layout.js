@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 import "./Stylye.css";
 import ItemLayout from "./ItemAddress/Layout.js";
-import axios from "axios";
 import ReceiverInformationModal from "./ItemAddress/Modal/receiverInformationModal";
-import { useSelector } from "react-redux";
 
 function Layout() {
   // Lấy id user
   const user = useSelector((state) => state.user);
-
   // Các biết cục bộ
   const [receiverInformation, setReceiverInformation] = useState([]);
   // open modal
