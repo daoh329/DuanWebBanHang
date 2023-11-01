@@ -56,37 +56,23 @@ export default function Profile() {
     fetchData();
   }, []);
 
-  const [userId, setUserId] = useState(null);
+
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
   const [iconsActive, setIconsActive] = useState("tab1");
 
-
-  async function printEmail() {
-    try {
-      const userData = await user;
-      setUserId(userData.id);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    printEmail();
-  }, []);
-
   // Hàm tải dữ liệu
   const loadData = useCallback(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${userId}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
         .then(res => {
             setData(res.data);
             const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setData(sortedOrders || []);
         })
         .catch(error => console.log(error));
-  }, [userId]);
+  }, [user]);
 
   useEffect(() => {
     loadData();
