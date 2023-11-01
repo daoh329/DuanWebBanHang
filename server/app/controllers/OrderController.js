@@ -431,7 +431,7 @@ class OrderController {
   }
 
   async orderDate(req, res) {
-    let sql = "SELECT status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00'))) as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00')))";
+    let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -493,7 +493,7 @@ class OrderController {
   }
 
   async dashboard(req, res) {
-    let sql = "SELECT status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00'))) as updated_date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, UNIX_TIMESTAMP(DATE(CONVERT_TZ(updated_at, '+00:00', '+07:00')))";
+    let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
     mysql.query(sql, (err, result) => {
       if(err) throw err;
       
@@ -504,7 +504,7 @@ class OrderController {
         if(dateExists){
           switch(item.status) {
             case 4:
-              dateExists.DaGiao = (dateExists.GiaoKhongThanhCong || 0) + item.count;
+              dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
               break;
             case 5:
               dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
