@@ -433,7 +433,7 @@ const Home = () => {
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.map((item, index) => (
+                topLaptop.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
@@ -472,7 +472,7 @@ const Home = () => {
           </div>
           {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.map((item, index) => (
+                topLaptop.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
@@ -510,7 +510,7 @@ const Home = () => {
           </div>
           {topDienthoai &&
                 topDienthoai.length > 0 &&
-                topDienthoai.map((item, index) => (
+                topDienthoai.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
