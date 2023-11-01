@@ -45,25 +45,25 @@ class OrderController {
   
   
 
-  async quanlyOrder(req, res, next) {
-    const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
-      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
-      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-      odp.*, p.*
-      FROM orders o
-      JOIN users u ON o.UserID = u.id
-      JOIN delivery_address da ON o.addressID = da.id
-      JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
-      WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
-      ORDER BY o.created_at DESC
-    `;
-    mysql.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-  }
+  // async quanlyOrder(req, res, next) {
+  //   const sql = `
+  //     SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
+  //     u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+  //     CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+  //     odp.*, p.*
+  //     FROM orders o
+  //     JOIN users u ON o.UserID = u.id
+  //     JOIN delivery_address da ON o.addressID = da.id
+  //     JOIN orderDetailsProduct odp ON o.id = odp.orderID
+  //     JOIN product p ON odp.productID = p.id
+  //     WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+  //     ORDER BY o.created_at DESC
+  //   `;
+  //   mysql.query(sql, (err, result) => {
+  //       if (err) throw err;
+  //       res.send(result);
+  //   });
+  // }
 
   async quanlyAllOrder(req, res, next) {
     const sql = `
@@ -237,7 +237,7 @@ class OrderController {
     });
   }
 
-  async orderHistory(req, res) {
+  async orderHistoryByPhone(req, res) {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
@@ -254,6 +254,28 @@ class OrderController {
       ORDER BY o.created_at DESC
     `;
     mysql.query(sql, [phone], (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+  }
+
+  async orderHistoryById(req, res) {
+    const id = req.params.id;
+    // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có id là id
+    const sql = `
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+      odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN delivery_address da ON o.addressID = da.id
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN product p ON odp.productID = p.id
+      WHERE u.id = ?
+      ORDER BY o.created_at DESC
+    `;
+    mysql.query(sql, [id], (err, result) => {
         if (err) throw err;
         res.send(result);
     });

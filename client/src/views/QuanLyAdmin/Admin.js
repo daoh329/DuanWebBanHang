@@ -27,6 +27,10 @@ import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/QLSanPham/Products";
 // import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
+import QLshipping from "./QLshipping";
+import QLdelivered from "./QLdelivered";
+import QLAlldonhang from "./QLAlldonhang";
+import QLdeliveryfailed from "./QLdeliveryfailed";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
@@ -115,6 +119,42 @@ function Admin() {
           ),
 
         },
+        {
+          key: "10",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/shippingOrder">Xác nhận vận chuyển</Link>
+           
+          ),
+
+        },
+        {
+          key: "11",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/deliveredOrder">Xác nhận đơn hàng</Link>
+           
+          ),
+
+        },
+        {
+          key: "12",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/allOrders">Tất cả đơn hàng đã giao</Link>
+           
+          ),
+
+        },
+        {
+          key: "13",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/deliveryfailedOrder">Đơn hàng hủy hoặc không giao thành công</Link>
+           
+          ),
+
+        },
       ],
     },
     {
@@ -123,7 +163,7 @@ function Admin() {
       label: "Khuyến mãi",
       children: [
         {
-          key: "10",
+          key: "14",
           label: "Phiếu giảm giá",
           icon: <TagsOutlined />,
         },
@@ -135,7 +175,7 @@ function Admin() {
       label: "CMS",
       children: [
         {
-          key: "11",
+          key: "15",
           label: "Trang",
           icon: <FileProtectOutlined />,
         },
@@ -147,11 +187,11 @@ function Admin() {
       label: "Setting",
       children: [
         {
-          key: "12",
+          key: "16",
           label: "Option 1",
         },
         {
-          key: "13",
+          key: "17",
           label: "Option 2",
         },
       ],
@@ -215,6 +255,10 @@ function Admin() {
               element={<Products style={{ marginRight: "20px" }} />}
             />
             <Route path="orders" element={<OrderList />} />
+            <Route path="shippingOrder" element={<QLshipping />} />
+            <Route path="deliveredOrder" element={<QLdelivered />} />
+            <Route path="allOrders" element={<QLAlldonhang />} />
+            <Route path="deliveryfailedOrder" element={<QLdeliveryfailed />} />
             <Route path="ListCate" element={<TypeList />} />
           </Routes>
         </Col>

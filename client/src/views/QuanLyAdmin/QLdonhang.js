@@ -7,7 +7,7 @@ function OrderList() {
 
     const [data, setData] = useState([]);
     const loadData = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyOrder`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
             .then(res => {
                 // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data
@@ -64,7 +64,7 @@ function OrderList() {
         { title: 'Mã GD', dataIndex: 'order_id', key: 'magd' },
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
-        // { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
+        { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         {
@@ -137,6 +137,8 @@ function OrderList() {
     return (
         <div>
             <h1>Quản lý đơn hàng trong một tháng</h1>
+            {/* <div>
+                <a href="/shipping" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận vận chuyển đơn hàng</a>
             <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
                 <div style={{ margin: '10px' }}>
                     <a href="/shipping" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận vận chuyển đơn hàng</a>
@@ -150,8 +152,9 @@ function OrderList() {
                     <a href="https://sandbox.vnpayment.vn/merchantv2/Transaction/SearchRefund.htm" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#ffc107', color: 'black', borderRadius: '5px', textDecoration: 'none' }}>Xem lịch sử thanh toán</a>
                 </div>
             </div>
-
-
+            <div>
+                <a href="https://sandbox.vnpayment.vn/merchantv2/Transaction/SearchRefund.htm" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem lịch sử thanh toán</a>
+            </div> */}
 
             <Table columns={columns} dataSource={data} />
         </div>

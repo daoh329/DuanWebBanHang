@@ -32,6 +32,31 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
+  // select mới
+  const [city, setCity] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+        );
+        setCity(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [userId, setUserId] = useState(null);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,20 +64,30 @@ export default function Profile() {
   const [iconsActive, setIconsActive] = useState("tab1");
 
 
+  async function printEmail() {
+    try {
+      const userData = await user;
+      setUserId(userData.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    printEmail();
+  }, []);
+
   // Hàm tải dữ liệu
   const loadData = useCallback(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${user.phone}`)
-      .then((res) => {
-        setData(res.data);
-        const sortedOrders = res.data.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-        setData(sortedOrders || []);
-      })
-      .catch((error) => console.log(error));
-  }, [user]);
-  
+    axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${userId}`)
+        .then(res => {
+            setData(res.data);
+            const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setData(sortedOrders || []);
+        })
+        .catch(error => console.log(error));
+  }, [userId]);
+
   useEffect(() => {
     loadData();
   }, [loadData]);

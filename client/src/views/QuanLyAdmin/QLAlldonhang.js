@@ -123,6 +123,9 @@ function QLAlldonhang() {
     return (
         <div>
             <h1>Tất cả đơn hàng</h1>
+
+            {/* <div>
+                <a href="/deliveryfailed" style={{width: 250, height: 60, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
             <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
                 <div style={{ margin: '10px' }}>
                     <a href="/deliveryfailed" style={{ width: '100%', height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
@@ -135,9 +138,12 @@ function QLAlldonhang() {
                         Xem đơn hàng trong một tháng</a>
                 </div>
             </div>
-
-    
-
+            <div>
+                <a href="/delivered" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                    Xác nhận đơn hàng đã giao
+                </a>
+            </div> */}
+            
             <Table columns={columns} dataSource={data} />
         </div>
     );
