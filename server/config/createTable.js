@@ -52,6 +52,7 @@ const createTables = () => {
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
     id int PRIMARY KEY AUTO_INCREMENT,
     quantity int,
+    remaining_quantity int,
     brand varchar(255),
     configuration longtext,
     description longtext,

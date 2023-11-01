@@ -73,7 +73,7 @@ class Product {
     const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
     const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
     const is_productdetail =
-      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);";
+      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
     const is_ProDetailColor =
       "INSERT INTO prodetailcolor (`product_id`,`Colorname`) VALUES (?,?);";
 
@@ -104,6 +104,7 @@ class Product {
         configurationString,
         data.description,
         id_Product,
+        data.quantity,
       ];
       await query(is_productdetail, PdValues);
 
@@ -270,6 +271,7 @@ class Product {
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
       "quantity",
+      "remaining_quantity",
       "brand",
       "configuration",
       "description",

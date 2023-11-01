@@ -25,6 +25,7 @@ import { Link, useLocation } from "react-router-dom";
 import { update } from "../../redux/userSlice";
 import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
+import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
@@ -32,30 +33,6 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
-  // select mới
-  const [city, setCity] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [selectedWard, setSelectedWard] = useState(null);
-  const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-        );
-        setCity(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
 
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
@@ -150,6 +127,13 @@ export default function Profile() {
       try {
         await axios.put(
           `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`
+        );
+        CreateNotification(
+          record.user_id,
+          record.order_id,
+          "2",
+          "Hủy đơn hàng thành công",
+          `Đơn hàng ${record.order_id} đã được hủy thành công`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
       } catch (error) {

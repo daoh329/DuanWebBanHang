@@ -10,9 +10,9 @@ async function CreateNotification(user_id, order_id, type, title, content) {
     const data = {
       user_id,
       order_id,
+      type,
       title,
       content,
-      type,
     };
     const api = `${process.env.REACT_APP_API_URL}/auth/create-notification`;
     const results = await axios.post(api, data);
