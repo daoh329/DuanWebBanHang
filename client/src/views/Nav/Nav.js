@@ -248,6 +248,10 @@ const App = () => {
     }
   };
 
+  const nextToNotifications = () => {
+    
+  }
+
   return (
     <Layout className="nav-container">
       <div className="danhmuc">
@@ -604,7 +608,7 @@ const App = () => {
                             itemLayout="horizontal"
                             dataSource={arrayNotification}
                             renderItem={(item, index) => (
-                              <List.Item style={{ cursor: "pointer" }}>
+                              <List.Item onClick={() => nextToNotifications(item)} style={{ cursor: "pointer" }}>
                                 <List.Item.Meta
                                   avatar={
                                     <Avatar
