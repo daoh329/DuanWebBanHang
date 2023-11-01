@@ -73,7 +73,7 @@ const App = () => {
         getNotifications(u.id);
 
       }
-      else{
+      else {
         localStorage.removeItem("isLogin");
       }
     } catch (e) {
@@ -105,7 +105,7 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <CartProvider>
-          <Nav/>
+          <Nav />
           <header>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -150,18 +150,13 @@ const App = () => {
                 element={isLogin ? <Profile /> : <Navigate to="/" />}
               />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
-              <Route
-                path="/tat-ca-san-pham-laptop-moi"
-                element={<AllNewProductLaptop />}
-              />
-              <Route
-                path="/tat-ca-san-pham-phone"
-                element={<AllProductPhone />}
-              />
-              <Route
-                path="/tat-ca-san-pham-phone-moi"
-                element={<AllNewProductPhone />}
-              />          
+              <Route path="/tat-ca-san-pham-laptop-moi" element={<AllNewProductLaptop/>} />
+              <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
+              <Route path="/tat-ca-san-pham-phone-moi"  element={<AllNewProductPhone />}/>
+
+              <Route path="/danhmuc-dienthoai" element={<AllProductPhone />}/>
+              <Route path="/danhmuc-laptop"element={<AllProduct />}/>
+
               <Route path="/createorder" element={<CreateOrder />} />
 
               <Route path="/chat" element={<Chatbot />} />
