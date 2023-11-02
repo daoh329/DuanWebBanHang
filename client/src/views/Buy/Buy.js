@@ -76,7 +76,7 @@ export default function Buy() {
     if (user) {
       getDeliveryAddress();
     }
-  }, []);
+  }, [user]);
 
   // modal
   const showModalAdd = (value) => {

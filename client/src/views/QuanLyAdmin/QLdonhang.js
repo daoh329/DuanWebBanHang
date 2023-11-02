@@ -63,6 +63,13 @@ function OrderList() {
         await axios.put(
           `${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`
         );
+        CreateNotification(
+          record.user_id,
+          record.order_id,
+          "2",
+          "Hủy đơn hàng thành công",
+          `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
+        );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
       } catch (error) {
         console.error("Error canceling order:", error);

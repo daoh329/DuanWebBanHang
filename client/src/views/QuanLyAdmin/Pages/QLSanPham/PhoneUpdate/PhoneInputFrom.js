@@ -286,6 +286,14 @@ function PhoneInputFrom({ data }) {
         />
       </Form.Item>
 
+      {/* số lượng còn lại */}
+      <Form.Item label="Số lượng còn lại" name="remaining_quantity">
+        <InputNumber
+          defaultValue={product ? product.remaining_quantity : null}
+          placeholder="Nhập số lượng sản phẩm còn lại"
+        />
+      </Form.Item>
+
       {/* ====================================== */}
       <hr />
       <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
