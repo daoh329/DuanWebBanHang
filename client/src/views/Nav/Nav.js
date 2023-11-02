@@ -35,13 +35,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
 import { formatCurrency } from "../../util/FormatVnd";
+import { deleteProductInCart } from "../../redux/cartSlice";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
 
 const App = () => {
   const user = useSelector((state) => state.user);
-  const arrayNotification = useSelector((state) => state.notifications);
+  const arrayNotification = useSelector((state) => state.notifications.notifications);
   const dispatch = useDispatch();
 
   // Hàm sử lí hiển thị name
@@ -66,10 +67,7 @@ const App = () => {
   }
 
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
-  const [cart, setCart] = useState(
-    JSON.parse(sessionStorage.getItem("cart")) || []
-  );
-
+  const cart = useSelector((state) => state.cart.products);
   const handleMenuOpenChange = (openKeys) => {
     setMenuOpenKeys(openKeys);
   };
@@ -80,10 +78,15 @@ const App = () => {
 
   // const [cartList, setCartList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  
   const removeFromCart = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart); // Cập nhật state giỏ hàng
+    try {
+      const updatedCart = cart.filter((item) => item.id !== productId);
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+      dispatch(deleteProductInCart(productId));
+    } catch (error) {
+      console.log(error);
+    }
   };
   // phone
   const [phone, setPhone] = useState("");
@@ -297,6 +300,14 @@ const App = () => {
       console.log(error);
     }
   };
+
+  const totalCartPrice = (cart) => {
+    let total = 0;
+    cart.forEach((product) => {
+      total += parseFloat(product.totalPrice);
+    })
+    return total;
+  }
 
   return (
     <Layout className="nav-container">
@@ -664,7 +675,7 @@ const App = () => {
                                       style={{ backgroundColor: "white" }}
                                       size={64}
                                       icon={
-                                        item.type === "Xác nhận đơn hàng" ? (
+                                        item.type === "1" ? (
                                           <FileDoneOutlined
                                             style={{ color: "green" }}
                                           />
@@ -799,7 +810,7 @@ const App = () => {
                       <div
                         style={{
                           width: "100%",
-                          maxHeight: "200px",
+                          maxHeight: "300px",
                           overflowY: "auto",
                           scrollbarWidth: "none",
                         }}
@@ -853,8 +864,11 @@ const App = () => {
                           )}
                         />
                       </div>
-                      <Divider />
-
+                      <Divider style={{margin:"0 0 5px"}}/>
+                      {/* <div style={{display:"flex", justifyContent:"space-between", margin:"0 0 5px"}}>
+                      <div>Tổng tiền ({cart.length}) sản phẩm: </div>
+                      <div style={{fontSize:"16px", fontWeight:"500", color:"red"}}>{formatCurrency(totalCartPrice(cart))}</div>
+                      </div> */}
                       <Button style={{ width: "100%", borderRadius: "3px" }}>
                         <NavLink to="/cart">
                           <p>Xem giỏ hàng</p>

@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = {
+  notifications: [],
+};
 
 export const notificationsSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
     addNotification:(state, action) => {
-      state.push(action.payload);
+      state.notifications = action.payload;
     },
     updateNotification: (state, action) => {
       const { id, newStatus } = action.payload;
-      const notificationToUpdate = state.find((notification) => notification.id === id);
+      const notificationToUpdate = state.notifications.find((notification) => notification.id === id);
 
       if (notificationToUpdate) {
         notificationToUpdate.is_read = newStatus;

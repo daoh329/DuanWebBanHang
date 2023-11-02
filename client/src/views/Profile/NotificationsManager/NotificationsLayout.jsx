@@ -10,7 +10,7 @@ import { updateNotification } from "../../../redux/notificationsSlice";
 function NotificationsLayout(props) {
   const statusPage = props.statusPage;
 
-  const data = useSelector((state) => state.notifications);
+  const data = useSelector((state) => state.notifications.notifications);
   const dispatch = useDispatch();
 
   const handleReadAll = async () => {

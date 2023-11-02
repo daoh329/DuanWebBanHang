@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Spin } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
+import {useSelector, useDispatch } from "react-redux";
+
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
+import { reloadPage } from "../../redux/reloadSlice";
 
 function OrderList() {
   const [data, setData] = useState([]);
+  const reloadGetDataFunction = useSelector(state => state.reload.status);
+  const dispatch = useDispatch();
   const loadData = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -43,11 +48,17 @@ function OrderList() {
         CreateNotification(
           record.user_id,
           record.order_id,
-          "Xác nhận đơn hàng",
+          "1",
           "Đơn hàng đã được xác nhận",
           `Đơn hàng ${record.order_id} đã được xác nhận và đang trong quá trình đóng gói`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
+        // window.location.reload();
+        if (reloadGetDataFunction) {
+          dispatch(reloadPage(false));
+        }else{
+          dispatch(reloadPage(true));
+        }
       } catch (error) {
         console.error("Error confirming order:", error);
       }
@@ -71,6 +82,11 @@ function OrderList() {
           `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+        if (reloadGetDataFunction) {
+          dispatch(reloadPage(false));
+        } else {
+          dispatch(reloadPage(true));
+        }
       } catch (error) {
         console.error("Error canceling order:", error);
       }
@@ -169,8 +185,9 @@ function OrderList() {
 
   return (
     <div>
+
       <h1>Quản lý đơn hàng trong một tháng</h1>
-       {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
+      {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
         <div style={{ margin: '10px' }}>
           <a href="/shipping" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận vận chuyển đơn hàng</a>
         </div>
