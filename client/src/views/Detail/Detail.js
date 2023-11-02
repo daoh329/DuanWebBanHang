@@ -242,6 +242,10 @@ function Detail() {
   const cart = useSelector((state) => state.cart.products);
 
   const handleAddToCart = () => {
+    if (Detail.remaining_quantity === 0) {
+      message.warning("Sản phẩm đã hết hàng");
+      return false;
+    }
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.p_ID,
@@ -504,6 +508,7 @@ function Detail() {
                   data-content-target="cart"
                   data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
                   className="css-yp9swi"
+                  
                 >
                   <button
                     height="2.5rem"
@@ -513,9 +518,10 @@ function Detail() {
                     // onClick={showModal}
                     // sự kiện cho modal
                     onClick={(e) => {
-                      handleAddToCart();
-                      window.location.replace("/cart");
+                      const result = handleAddToCart();
+                      result && window.location.replace("/cart");
                     }}
+                    disabled={Detail.remaining_quantity === 0 ? false : true}
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
