@@ -29,7 +29,7 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item.discount > 0 && (
+      {(item.discount > 0 || item.price - item.discount > 0) && (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
@@ -90,7 +90,7 @@ function CardProduct(props) {
           height: "40px",
         }}
       >
-        {item.discount == 0 ? (
+        {item.discount == 0 || item.price - item.discount <= 0 ? (
           <div
             style={{
               color: "#1435c3",
