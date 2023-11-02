@@ -9,10 +9,11 @@ import {
   notification,
 } from "antd";
 import axios from "axios";
+import { formatCurrency } from "../../../../../util/FormatVnd";
 
 const { Option } = Select;
 
-function LaptopInputFrom({ data }) {
+function LaptopInputFrom({ data, onClick, setModal }) {
   const product = data;
   // function select element
   const [brands, setBrands] = useState([]);
@@ -47,7 +48,7 @@ function LaptopInputFrom({ data }) {
   useEffect(() => {
     getBrands();
     getColors();
-  }, []);
+  }, [product]);
 
   const onFinish = async (values) => {
     setIsLoading(true);
@@ -88,25 +89,46 @@ function LaptopInputFrom({ data }) {
             values[fieldName] = undefined;
           }
         } else if (values[fieldName]) {
+          // Nếu field đó thuộc configuaration
           if (fieldsConfiguraton.includes(fieldName)) {
-            values.configuration[fieldName] = values[fieldName];
-            delete values[fieldName];
+            // kiểm tra xem giá trị field đó có khác mặc định không?
+            if (values[fieldName] == product.configuration[fieldName]) {
+              // Nếu không khác
+              // gán giá trị cho field đó vào thuộc tính configuration
+              values.configuration[fieldName] = values[fieldName];
+              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
+              delete values[fieldName];
+            } else {
+              // Nếu dữ liệu khác mặc định
+              // Đặt là có dữ liệu thay đổi
+              checkValuesChange = true;
+              // gán giá trị cho field đó vào thuộc tính configuration
+              values.configuration[fieldName] = values[fieldName];
+              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
+              delete values[fieldName];
+            }
+          } else {
+            // Nếu có giá trị thay đổi trong form thì đặt thành true
+            // ( = true sẽ tiếp tục call API)
+            if (fieldName !== "configuration") {
+              checkValuesChange = true;
+            }
           }
-          checkValuesChange = true;
         }
       }
       values["color"] = values["color"] || [];
       if (colorSubmit != product.color) {
         values["color"] = colorSubmit;
+      }else{
+        values["color"] = product.color;
       }
 
       if (!checkValuesChange) {
         setIsLoading(false);
         return notification.warning({
-          message: "Không có dữ liệu được thay đổi",
+          message: "Không có dữ liệu thay đổi",
         });
       }
-      console.log(values);
       // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
@@ -119,6 +141,8 @@ function LaptopInputFrom({ data }) {
           notification.success({
             message: "Cập nhật thành công!",
           });
+          setModal(false);
+          onClick();
         }, 2000);
       }
       setTimeout(() => {
@@ -197,8 +221,9 @@ function LaptopInputFrom({ data }) {
       </Form.Item>
 
       {/* Giá đã giảm */}
-      <Form.Item label="Giá đã giảm" name="discount">
+      <Form.Item label={`Giá đã giảm (Max: ${formatCurrency(product.price)})`} name="discount">
         <InputNumber
+          max={product ? product.price : 0}
           defaultValue={product ? product.discount : null}
           style={{ width: "100%" }}
           placeholder="Nhập giá đã giảm"
@@ -231,7 +256,7 @@ function LaptopInputFrom({ data }) {
 
       {/* colors */}
       <div className="form-group">
-        <label className="form-label">Màu sắc</label>
+        <label>Màu sắc</label>
         <div
           style={{
             display: "flex",

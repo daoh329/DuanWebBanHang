@@ -803,7 +803,6 @@ const Home = () => {
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={ctnRef}>
-              {console.log(historysp)}
               {historysp &&
                 historysp.length > 0 &&
                 historysp.map((item, index) => (
