@@ -29,16 +29,23 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      <div className="css-14q2k9dd">
-        <div className="css-zb7zul" style={{textAlign:"start"}}>
-          <div className="css-1bqeu8f" style={{fontSize:"10px"}}>TIẾT KIỆM</div>
-          <div className="css-1rdv2qd">{formatCurrency((item.price - item.discount))}&nbsp;</div>
+      {item.discount > 0 && (
+        <div className="css-14q2k9dd">
+          <div className="css-zb7zul" style={{ textAlign: "start" }}>
+            <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
+              TIẾT KIỆM
+            </div>
+            <div className="css-1rdv2qd">
+              {formatCurrency(item.price - item.discount)}&nbsp;
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
       {/* brand */}
       <div
         style={{
-          color: "#333333"
+          color: "#333333",
         }}
       >
         <div
@@ -91,7 +98,7 @@ function CardProduct(props) {
               fontSize: "15px",
               fontWeight: "700",
               width: "90px",
-              lineHeight:"24px"
+              lineHeight: "24px",
             }}
           >
             {formatCurrency(item.price)}
@@ -118,7 +125,7 @@ function CardProduct(props) {
                 display: "-webkit-box",
                 fontSize: "12px",
                 lineHeight: "12px",
-                fontWeight:"normal"
+                fontWeight: "normal",
               }}
             >
               <span style={{ textDecoration: "line-through" }}>
