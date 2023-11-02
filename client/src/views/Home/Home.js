@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Layout, Carousel, Tabs, Card, Button, Pagination } from "antd";
 import { LeftOutlined, RightOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { Divider, Space, Tag } from 'antd';
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,7 +108,7 @@ const Home = () => {
         console.error('There was an error!', error);
       });
   }, []);
-  
+
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
@@ -211,20 +212,20 @@ const Home = () => {
   const startIndex2 = (currentPage2 - 1) * itemsPerPage;
   const endIndex2 = startIndex2 + itemsPerPage;
 
-   // logic scroll button phone
-   const containerRefphone = useRef(null);
+  // logic scroll button phone
+  const containerRefphone = useRef(null);
 
-   const scrollLeftPhone = () => {
-     if (containerRefphone.current) {
-       containerRefphone.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
- 
-   const scrollRightPhone = () => {
-     if (containerRefphone.current) {
-       containerRefphone.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
+  const scrollLeftPhone = () => {
+    if (containerRefphone.current) {
+      containerRefphone.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
+
+  const scrollRightPhone = () => {
+    if (containerRefphone.current) {
+      containerRefphone.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
 
   // logic scroll button lap
   const containerRef = useRef(null);
@@ -435,109 +436,109 @@ const Home = () => {
                 topLaptop.length > 0 &&
                 topLaptop.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail}
+                      style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <div className="css-14q2k9dd">
+                      <div className="css-zb7zul">
+                        <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                        <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        {item.brand}
+                      </div>
                     </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
+                    <div className="css-nameproduct">
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                        {item.shortDescription}
+                      </h3>
                     </div>
 
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {formatCurrency(item.price)}
+                      </div>
+
+                    </div>
                   </div>
-                </div>
                 ))}
 
             </div>
           </TabPane>
           <TabPane tab="Laptop bán chạy" key="2">
-          <div className="scroll-control-phone" ref={containerRef}>
-          <div >
-               <CountdownTimer initialTime={initialTime} />
-          </div>
-          {topLaptop &&
+            <div className="scroll-control-phone" ref={containerRef}>
+              <div >
+                <CountdownTimer initialTime={initialTime} />
+              </div>
+              {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail}
+                      style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <div className="css-14q2k9dd">
+                      <div className="css-zb7zul">
+                        <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                        <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        {item.brand}
+                      </div>
                     </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
+                    <div className="css-nameproduct">
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                        {item.shortDescription}
+                      </h3>
                     </div>
 
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {formatCurrency(item.price)}
+                      </div>
+
+                    </div>
                   </div>
-                </div>
                 ))}
             </div>
           </TabPane>
           <TabPane tab="Điện thoại bán chạy" key="3">
-          <div className="scroll-control-phone" ref={containerRef}>
-          <div >
-               <CountdownTimer initialTime={initialTime} />
-          </div>
-          {topDienthoai &&
+            <div className="scroll-control-phone" ref={containerRef}>
+              <div >
+                <CountdownTimer initialTime={initialTime} />
+              </div>
+              {topDienthoai &&
                 topDienthoai.length > 0 &&
                 topDienthoai.slice(0, 5).map((item, index) => (
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail}
+                      style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <div className="css-14q2k9dd">
+                      <div className="css-zb7zul">
+                        <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                        <div className="css-1rdv2qd">191.000&nbsp;₫</div>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
+                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
+                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
+                        {item.brand}
+                      </div>
                     </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
+                    <div className="css-nameproduct">
+                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
+                        {item.shortDescription}
+                      </h3>
                     </div>
 
+                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {formatCurrency(item.price)}
+                      </div>
+
+                    </div>
                   </div>
-                </div>
                 ))}
             </div>
           </TabPane>
@@ -640,14 +641,13 @@ const Home = () => {
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRefphone}>
-              
+
               {newPhone &&
                 newPhone.length > 0 &&
                 newPhone.map((item, index) => (
-
                   <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} 
-                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    <img src={process.env.REACT_APP_API_URL + item.thumbnail}
+                      style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                     <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
                       <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
                         {item.brand}
@@ -660,10 +660,12 @@ const Home = () => {
                     </div>
 
                     <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                      </div>
-
+                      {item.quantity === 0 ?
+                        <Tag color="red">Sản phẩm tạm hết</Tag> :
+                        <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                          {formatCurrency(item.price)}
+                        </div>
+                      }
                     </div>
                   </div>
                 ))}
@@ -719,10 +721,12 @@ const Home = () => {
                     </div>
 
                     <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                      </div>
-
+                      {item.quantity === 0 ?
+                        <Tag color="red">Sản phẩm tạm hết</Tag> :
+                        <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                          {formatCurrency(item.price)}
+                        </div>
+                      }
                     </div>
                   </div>
                 ))}
@@ -775,7 +779,7 @@ const Home = () => {
               statusPhone.slice(startIndex1, endIndex1).map((item, index) => (
                 <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
                   <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
+                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
                   <div className="css-14q2k9dd">
                     <div className="css-zb7zul">
                       <div className="css-1bqeu8f">TIẾT KIỆM</div>
@@ -794,10 +798,12 @@ const Home = () => {
                   </div>
 
                   <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
+                    {item.quantity === 0 ?
+                      <Tag color="red">Sản phẩm tạm hết</Tag> :
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {formatCurrency(item.price)}
+                      </div>
+                    }
                   </div>
                 </div>
               ))}
@@ -861,10 +867,12 @@ const Home = () => {
                   </div>
 
                   <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
+                    {item.quantity === 0 ?
+                      <Tag color="red">Sản phẩm tạm hết</Tag> :
+                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
+                        {formatCurrency(item.price)}
+                      </div>
+                    }
                   </div>
                 </div>
               ))}

@@ -41,6 +41,7 @@ function Product() {
   // };
 
   const columns = [
+    { title: "ID", dataIndex: "id", key: "id" },
     { title: "Tên sản phẩm", dataIndex: "name", key: "name" },
     { title: "Giá", dataIndex: "price", key: "price" },
     { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
