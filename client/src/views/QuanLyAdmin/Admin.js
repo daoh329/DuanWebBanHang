@@ -31,6 +31,8 @@ import QLshipping from "./QLshipping";
 import QLdelivered from "./QLdelivered";
 import QLAlldonhang from "./QLAlldonhang";
 import QLdeliveryfailed from "./QLdeliveryfailed";
+import TabsQLdonhang from "./Pages/TabsQLdonhang";
+
 import QLAlldelivered from "./QLAlldelivered";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
@@ -115,64 +117,11 @@ function Admin() {
           key: "9",
           icon: <ShoppingCartOutlined />,
           label: (
-            <Link to="/orders">Đơn đặt hàng</Link>
+            <Link to="/quanlydonhang">Quản lý đơn hàng</Link>
            
           ),
+        },  
 
-        },
-        {
-          key: "10",
-          icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/shippingOrder">Xác nhận vận chuyển</Link>
-           
-          ),
-
-        },
-        {
-          key: "11",
-          icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/deliveredOrder">Xác nhận đơn hàng</Link>
-           
-          ),
-
-        },
-      ],
-    },
-
-    {
-      key: "sub10",
-      icon: <GiftOutlined />,
-      label: "Quản lý đơn hàng",
-      children: [
-        {
-          key: "20",
-          icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/allOrders">Tất cả đơn hàng</Link>
-           
-          ),
-
-        },
-        {
-          key: "12",
-          icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/alldelivered">Đơn hàng đã giao</Link>
-           
-          ),
-
-        },
-        {
-          key: "13",
-          icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/deliveryfailedOrder">Đơn hàng hủy hoặc không giao thành công</Link>
-           
-          ),
-
-        },
       ],
     },
 
@@ -280,6 +229,7 @@ function Admin() {
             <Route path="alldelivered" element={<QLAlldelivered />} />
             <Route path="deliveryfailedOrder" element={<QLdeliveryfailed />} />
             <Route path="ListCate" element={<TypeList />} />
+          
           </Routes>
         </Col>
         <Col span={6} pull={18}>
