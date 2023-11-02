@@ -117,7 +117,58 @@ function Admin() {
           key: "9",
           icon: <ShoppingCartOutlined />,
           label: (
-            <Link to="/quanlydonhang">Quản lý đơn hàng</Link>
+            <Link to="/dondathang">Đơn đặt hàng</Link>
+           
+          ),
+        },
+        {
+          key: "10",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/vanchuyen">Xác nhận vận chuyển</Link>
+           
+          ),
+        },
+        {
+          key: "11",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/xacnhangiaohang">Xác nhận đơn hàng</Link>
+           
+          ),
+        },
+
+      ],
+    },
+
+    {
+      key: "sub9",
+      icon: <DollarCircleOutlined />,
+      label: "Quản lý đơn hàng",
+      children: [
+        {
+          key: "12",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/quanlydonhang">Tất cả đơn hàng</Link>
+           
+          ),
+        },  
+
+        {
+          key: "18",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/quanlydagiao">Đơn hàng đã giao</Link>
+           
+          ),
+        },  
+
+        {
+          key: "13",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/quanlygiaohuy">Đã hủy hoặc giao không thành công</Link>
            
           ),
         },  

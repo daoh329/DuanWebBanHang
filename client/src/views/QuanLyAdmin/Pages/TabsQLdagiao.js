@@ -13,7 +13,7 @@ import '../Admin.css';
 import QLAlldelivered from '../QLAlldelivered';
 
 
-const TabsQLdonhang = () => {
+const TabsQLdagiao = () => {
   const [size, setSize] = useState('small');
   const onChange = (e) => {
     setSize(e.target.value);
@@ -55,7 +55,7 @@ const TabsQLdonhang = () => {
             
           },
           {
-            key: "6",
+            key: "4",
             label: "Đơn đặt hàng",
             tab: "Đơn đặt hàng",
             children: <OrderList />
@@ -73,7 +73,7 @@ const TabsQLdonhang = () => {
             children: <QLdelivered />
           },
           {
-            key: "4",
+            key: "1",
             label: "Tất cả đơn hàng đã giao",
             tab: "Tất cả đơn hàng đã giao",
             children: <QLAlldelivered />
@@ -85,7 +85,7 @@ const TabsQLdonhang = () => {
             children: <QLdeliveryfailed />
           },
           {
-            key: "1",
+            key: "6",
             label: "Tất cả đơn hàng",
             tab: "Tất cả đơn hàng",
             children: <QLAlldonhang />
@@ -96,4 +96,4 @@ const TabsQLdonhang = () => {
   );
 };
 
-export default TabsQLdonhang;
+export default TabsQLdagiao;
