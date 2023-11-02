@@ -51,7 +51,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   useEffect(() => {
     getBrands();
     getColors();
-  }, []);
+  }, [product]);
 
   // Hàm được gọi khi form hoàn thành
   const onFinish = async (values) => {
@@ -61,7 +61,6 @@ function PhoneInputFrom({ data, onClick, setModal }) {
       // kiểm tra nếu "" thì set là undefined
       // (undefined không được đưa lên server)
       var checkValuesChange = false;
-
       // tạo tên field cho thuộc tính configuration
       const fieldsConfiguraton = [
         "screen",
@@ -103,9 +102,22 @@ function PhoneInputFrom({ data, onClick, setModal }) {
           }
           // TH1.2: Dữ liệu của field bị xóa
           else if (values[fieldName] === "") {
-            // Thực hiện gán giá trị của field đó thành undefined
-            // (undefined sẽ không được submit lên server)
-            values[fieldName] = undefined;
+            if (fieldsConfiguraton.includes(fieldName)) {
+              if (
+                product.configuration[fieldName] === undefined ||
+                values[fieldName] === product.configuration[fieldName]
+              ) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            } else {
+              if (values[fieldName] === product[fieldName]) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            }
           }
         }
         // TH2: Nếu field có giá trị mới (giá trị field bị thay đổi)
@@ -138,9 +150,11 @@ function PhoneInputFrom({ data, onClick, setModal }) {
         }
       }
 
+      // color
       values["color"] = values["color"] || [];
-      if (colorSubmit != product.color) {
+      if (colorSubmit.toString() !== product.color.toString()) {
         values["color"] = colorSubmit;
+        checkValuesChange = true;
       } else {
         values["color"] = product.color;
       }
