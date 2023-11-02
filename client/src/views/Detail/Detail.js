@@ -412,7 +412,7 @@ function Detail() {
               <div className="css-qmrpdk" />
               {/* giá tiền */}
               <div className="css-1q5zfcu">
-                {Detail?.discount === 0 ? (
+                {Detail?.discount == 0 ? (
                   <div className="css-oj899w">
                     {formatCurrency(Detail.price)}
                   </div>
