@@ -10,6 +10,7 @@ import OrderList from '../QLdonhang';
 import QLdeliveryfailed from '../QLdeliveryfailed';
 import QLshipping from '../QLshipping';
 import '../Admin.css';
+import QLAlldelivered from '../QLAlldelivered';
 
 
 const TabsQLdonhang = () => {
@@ -67,7 +68,7 @@ const TabsQLdonhang = () => {
           },
           {
             key: "3",
-            label: "Xác nhận đơn hàng",
+            label: "Xác nhận giao hàng",
             tab: "Xác nhận đơn hàng",
             children: <QLdelivered />
           },
@@ -75,13 +76,19 @@ const TabsQLdonhang = () => {
             key: "4",
             label: "Tất cả đơn hàng đã giao",
             tab: "Tất cả đơn hàng đã giao",
-            children: <QLAlldonhang />
+            children: <QLAlldelivered />
           },
           {
             key: "5",
             label: "Đơn hàng đã hủy hoặc giao không thành công",
             tab: "Đơn hàng đã hủy hoặc giao không thành công",
             children: <QLdeliveryfailed />
+          },
+          {
+            key: "6",
+            label: "Tất cả đơn hàng",
+            tab: "Tất cả đơn hàng",
+            children: <QLAlldonhang />
           }
         ]}
       />
