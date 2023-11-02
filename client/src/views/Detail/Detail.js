@@ -412,7 +412,8 @@ function Detail() {
               <div className="css-qmrpdk" />
               {/* giá tiền */}
               <div className="css-1q5zfcu">
-                {Detail?.discount == 0 ? (
+                {Detail?.discount == 0 ||
+                Detail.price - Detail.discount <= 0 ? (
                   <div className="css-oj899w">
                     {formatCurrency(Detail.price)}
                   </div>
@@ -421,10 +422,15 @@ function Detail() {
                     <div className="css-oj899w">
                       {formatCurrency(Detail.discount)}
                     </div>
-                    <div style={{fontSize:"12px"}}>
-                      <span style={{textDecoration:"line-through"}}>{formatCurrency(Detail.price)}</span>
+                    <div style={{ fontSize: "12px" }}>
+                      <span style={{ textDecoration: "line-through" }}>
+                        {formatCurrency(Detail.price)}
+                      </span>
                       &nbsp;
-                      <span style={{color:"#1435c3"}}> -{format_sale(Detail.price, Detail.discount)}</span>
+                      <span style={{ color: "#1435c3" }}>
+                        {" "}
+                        -{format_sale(Detail.price, Detail.discount)}
+                      </span>
                     </div>
                   </>
                 )}
