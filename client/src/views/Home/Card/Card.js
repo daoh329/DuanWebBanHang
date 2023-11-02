@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { formatCurrency } from "../../../util/FormatVnd";
 import { format_sale } from "../../../util/formatSale";
 
+import { Divider, Space, Tag } from 'antd';
+
 function CardProduct(props) {
   const { item, onClick } = props;
 
@@ -29,18 +31,19 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item.discount > 0 && item.price - item.discount > 0 && (
+      {item.remaining_quantity !== 0 && item.discount > 0 && item.price - item.discount > 0 ? (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
               TIẾT KIỆM
             </div>
             <div className="css-1rdv2qd">
-              {formatCurrency(item.price - item.discount)}&nbsp;
+              {formatCurrency(item.price - item.discount)}
             </div>
           </div>
         </div>
-      )}
+      ) : null}
+
 
       {/* brand */}
       <div
@@ -90,7 +93,11 @@ function CardProduct(props) {
           height: "40px",
         }}
       >
-        {item.discount > 0 && item.price - item.discount > 0 ? (
+
+        {/* Tag hết sản phẩm */}
+        {item.remaining_quantity === 0 ? (
+          <Tag color="red">Sản phẩm tạm hết</Tag>
+        ) : item.discount > 0 && item.price - item.discount > 0 ? (
           <div>
             {/* discount */}
             <div

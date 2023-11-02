@@ -446,7 +446,7 @@ const Home = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           // borderRadius: "20px",
-          marginTop: "20px",
+          marginTop: "30px",
         }}
       >
         <Tabs
@@ -633,7 +633,7 @@ const Home = () => {
 
       {/* ------------------box laptop mới ra mắt ------------------ */}
       {newLaptop && newLaptop.length > 0 ? (
-        <div className="phone-group">
+        <div className="laptop-group">
           <div className="title-group">
             <div className="phone-title">Laptop mới ra mắt</div>
             <div className="views-all">
@@ -682,7 +682,7 @@ const Home = () => {
           style={{
             width: "1234px",
             margin: "0 auto",
-            marginTop: "20px",
+            marginTop: "30px",
             backgroundSize: "cover",
             backgroundColor: "#ededed",
           }}
@@ -731,7 +731,7 @@ const Home = () => {
           style={{
             width: "1234px",
             margin: "0 auto",
-            marginTop: "20px",
+            marginTop: "30px",
             backgroundSize: "cover",
             backgroundColor: "#ededed",
           }}
@@ -782,7 +782,7 @@ const Home = () => {
             position: "relative",
             width: "1234px",
             margin: "0 auto",
-            marginTop: "20px",
+            marginTop: "30px",
             backgroundColor: "white",
           }}
         >
