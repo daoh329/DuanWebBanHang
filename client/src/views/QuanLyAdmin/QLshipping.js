@@ -102,7 +102,7 @@ function QLshipping() {
 
     return (
         <div>
-            <h1>Xác nhận đơn hàng vận chuyển</h1>
+            <h1>Xác nhận vận chuyển đơn hàng</h1>
             
             {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
                 <div style={{ margin: '10px' }}>

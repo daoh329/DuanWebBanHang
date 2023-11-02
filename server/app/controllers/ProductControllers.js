@@ -406,7 +406,7 @@ class Product {
 
   async Newphone(req, res) {
     const query = `
-      SELECT product.*,productDetails.quantity, productDetails.brand, productDetails.configuration,productDetails.created_at , galery.thumbnail
+      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration,productDetails.created_at , galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -432,7 +432,7 @@ class Product {
 
   async Newlaptop(req, res) {
     const query = `
-      SELECT product.*,productDetails.quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -458,7 +458,7 @@ class Product {
 
   async QueryProductsLaptop(req, res) {
     const query = `
-      SELECT product.*, productDetails.quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -485,7 +485,7 @@ class Product {
   //Truy vấn điện thoại hiển thị Home
   async QueryProductsDienThoai(req, res) {
     const query = `
-      SELECT product.*,productDetails.quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*,productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
