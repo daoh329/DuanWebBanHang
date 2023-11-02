@@ -170,7 +170,7 @@ function OrderList() {
   return (
     <div>
       <h1>Quản lý đơn hàng trong một tháng</h1>
-      <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
+      {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
         <div style={{ margin: '10px' }}>
           <a href="/shipping" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận vận chuyển đơn hàng</a>
         </div>
@@ -182,7 +182,7 @@ function OrderList() {
         <div style={{ margin: '10px' }}>
           <a href="https://sandbox.vnpayment.vn/merchantv2/Transaction/SearchRefund.htm" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#ffc107', color: 'black', borderRadius: '5px', textDecoration: 'none' }}>Xem lịch sử thanh toán</a>
         </div>
-      </div>
+      </div> */}
       <Table columns={columns} dataSource={data} />
     </div>
   );
