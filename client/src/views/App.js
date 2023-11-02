@@ -47,6 +47,7 @@ import CreateOrder from "./VnPay/CreateOrder";
 import BuySuccess from "./Buy/BuySuccess";
 import { update } from "../redux/userSlice";
 import { addNotification } from "../redux/notificationsSlice";
+import TabsQLdonhang from "./QuanLyAdmin/Pages/TabsQLdonhang";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -140,6 +141,9 @@ const App = () => {
               <Route path="/orders" element={<QLdonhang />} />
               <Route path="/shippingOrder" element={<QLshipping />} />
               <Route path="/deliveredOrder" element={<QLdelivered />} />
+
+              <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
+
               <Route
                 path="/deliveryfailedOrder"
                 element={<QLdeliveryfailed />}
