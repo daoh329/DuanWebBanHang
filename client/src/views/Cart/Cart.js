@@ -14,7 +14,10 @@ import {
 } from "mdb-react-ui-kit";
 const { Header, Footer, Sider, Content } = Layout;
 function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(value);
 }
 function Cart() {
   const navigate = useNavigate();
@@ -32,7 +35,9 @@ function Cart() {
 
     if (isSelected) {
       // Nếu sản phẩm đã được chọn, hủy chọn nó
-      updatedSelectedProducts = selectedProducts.filter(id => id !== productId);
+      updatedSelectedProducts = selectedProducts.filter(
+        (id) => id !== productId
+      );
       setSelectedProducts(updatedSelectedProducts);
     } else {
       // Nếu sản phẩm chưa được chọn, chọn nó và hủy chọn tất cả các sản phẩm khác
@@ -46,9 +51,8 @@ function Cart() {
       selectAll,
       selectedProducts: updatedSelectedProducts,
     };
-    sessionStorage.setItem('checkboxData', JSON.stringify(checkboxData));
-};
-
+    sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
+  };
 
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
   const handleSelectAllChange = () => {
@@ -67,25 +71,28 @@ function Cart() {
       selectAll: newSelectAll,
       selectedProducts: newSelectAll ? cart.map((item) => item.id) : [],
     };
-    sessionStorage.setItem('checkboxData', JSON.stringify(checkboxData));
+    sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
 
   useEffect(() => {
     // Kiểm tra nếu có dữ liệu trong sessionStorage
-    const savedCheckboxData = sessionStorage.getItem('checkboxData');
+    const savedCheckboxData = sessionStorage.getItem("checkboxData");
 
     if (savedCheckboxData) {
-      const { selectAll: savedSelectAll, selectedProducts: savedSelectedProducts } = JSON.parse(savedCheckboxData);
+      const {
+        selectAll: savedSelectAll,
+        selectedProducts: savedSelectedProducts,
+      } = JSON.parse(savedCheckboxData);
       setSelectAll(savedSelectAll);
       setSelectedProducts(savedSelectedProducts);
     }
   }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
 
-
-
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
-    const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
+    const selectedItems = cart.filter((item) =>
+      selectedProducts.includes(item.id)
+    );
 
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
@@ -166,11 +173,10 @@ function Cart() {
   const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
 
-
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
-      console.error('Product ID is undefined!');
+      console.error("Product ID is undefined!");
       return;
     }
     // Lấy danh sách các sản phẩm đã xem từ session storage
@@ -179,7 +185,9 @@ function Cart() {
     const historyproduct = {
       shortDescription: products.shortDescription,
       price: products.price,
-      avatar: products.thumbnail,
+      discount: products.discount,
+      thumbnail: products.thumbnail,
+      brand: products.brand,
       id: products.id,
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
@@ -194,7 +202,7 @@ function Cart() {
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
 
-    console.log('click')
+    console.log("click");
     navigate(`/detail/${products.id}`);
   };
 
@@ -206,7 +214,9 @@ function Cart() {
   // Hàm xử lý khi nút "Tiếp tục" được ấn
   const handleContinueClick = () => {
     // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
-    const selectedItems = cart.filter((item) => selectedProducts.includes(item.id));
+    const selectedItems = cart.filter((item) =>
+      selectedProducts.includes(item.id)
+    );
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
     // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
@@ -216,7 +226,7 @@ function Cart() {
     };
     // Lưu thông tin vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(buys));
-    console.log('buys', buys)
+    console.log("buys", buys);
     // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
     navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
   };
@@ -243,7 +253,6 @@ function Cart() {
                     <th scope="col">Đơn giá</th>
                     <th scope="col">Thành tiền</th>
                   </tr>
-
                 </MDBTableHead>
                 <MDBTableBody>
                   {[...cart].reverse().map((item, index) => (
@@ -255,15 +264,17 @@ function Cart() {
                           onChange={() => handleCheckboxChange(item.id)}
                         />
                       </td>
-                      <td style={{ width: '20%' }}>
+                      <td style={{ width: "20%" }}>
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
-                          src={process.env.REACT_APP_API_URL+item.thumbnail}
+                          src={process.env.REACT_APP_API_URL + item.thumbnail}
                           alt="thumbnail"
                         />
                       </td>
-                      <td style={{ lineHeight: '15px', fontSize: '12px' }}>{item.shortDescription}</td>
+                      <td style={{ lineHeight: "15px", fontSize: "12px" }}>
+                        {item.shortDescription}
+                      </td>
 
                       <td>
                         <div className="quantity-control">
@@ -322,7 +333,6 @@ function Cart() {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -330,4 +340,3 @@ function Cart() {
 }
 
 export default Cart;
-

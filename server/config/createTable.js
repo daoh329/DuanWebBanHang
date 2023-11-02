@@ -6,6 +6,7 @@ const createTables = () => {
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255) UNIQUE,
     price NUMERIC(10,2),
+    discount NUMERIC(10,2) default 0,
     shortDescription varchar(255),
     CategoryID int,
     status boolean,
