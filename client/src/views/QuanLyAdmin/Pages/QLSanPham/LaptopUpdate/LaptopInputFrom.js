@@ -86,7 +86,22 @@ function LaptopInputFrom({ data, onClick, setModal }) {
           ) {
             values.configuration[fieldName] = product.configuration[fieldName];
           } else if (values[fieldName] === "") {
-            values[fieldName] = undefined;
+            if (fieldsConfiguraton.includes(fieldName)) {
+              if (
+                product.configuration[fieldName] === undefined ||
+                values[fieldName] === product.configuration[fieldName]
+              ) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            } else {
+              if (values[fieldName] === product[fieldName]) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            }
           }
         } else if (values[fieldName]) {
           // Nếu field đó thuộc configuaration
@@ -116,10 +131,12 @@ function LaptopInputFrom({ data, onClick, setModal }) {
           }
         }
       }
+
       values["color"] = values["color"] || [];
-      if (colorSubmit != product.color) {
+      if (colorSubmit.toString() !== product.color.toString()) {
         values["color"] = colorSubmit;
-      }else{
+        checkValuesChange = true;
+      } else {
         values["color"] = product.color;
       }
 
@@ -221,7 +238,10 @@ function LaptopInputFrom({ data, onClick, setModal }) {
       </Form.Item>
 
       {/* Giá đã giảm */}
-      <Form.Item label={`Giá đã giảm (Max: ${formatCurrency(product.price)})`} name="discount">
+      <Form.Item
+        label={`Giá đã giảm (Max: ${formatCurrency(product.price)})`}
+        name="discount"
+      >
         <InputNumber
           max={product ? product.price : 0}
           defaultValue={product ? product.discount : null}
