@@ -123,6 +123,7 @@ const createTables = () => {
     title text NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     type text NOT NULL,  
     is_read BOOLEAN DEFAULT 0
 );`;

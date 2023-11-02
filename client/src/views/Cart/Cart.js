@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from "antd";
-import { format } from "date-fns";
-import axios from "axios";
-import { useCart } from "../Cart/CartContext";
+
 import "./Cart.css";
 import {
-  MDBBtn,
   MDBTable,
   MDBTableHead,
   MDBTableBody,
-  MDBCheckbox,
 } from "mdb-react-ui-kit";
-const { Header, Footer, Sider, Content } = Layout;
+import { useDispatch, useSelector } from "react-redux";
+import { decreaseProduct, deleteProductInCart, increaseProduct } from "../../redux/cartSlice";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -22,9 +18,8 @@ function formatCurrency(value) {
 function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
-  const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  const [cart, setCart] = useState(initialCart);
-
+  const cart = useSelector(state => state.cart.products);
+  const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -115,62 +110,39 @@ function Cart() {
     // Tìm sản phẩm cần xóa trong giỏ hàng
     const updatedCart = cart.filter((item) => item.id !== productId);
 
-    // Cập nhật danh sách giỏ hàng
-    setCart(updatedCart);
-
     // Cập nhật danh sách sản phẩm được chọn (nếu sản phẩm bị xóa đang được chọn)
     setSelectedProducts((prevSelected) =>
       prevSelected.filter((productId) => productId !== productId)
     );
-
+    dispatch(deleteProductInCart(productId));
     // Lưu danh sách giỏ hàng đã cập nhật vào session
     sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-    window.location.reload();
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = (productId) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        // Tăng số lượng sản phẩm lên 1
-        item.quantity += 1;
-        // Cập nhật tổng tiền của sản phẩm
-        item.totalPrice = item.quantity * item.price;
-      }
-      return item;
-    });
-    // Cập nhật giỏ hàng
-    setCart(updatedCart);
+    const data = {
+      product_id: productId,
+    }
+    dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
-
-    // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
-
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
   const decreaseQuantity = (productId) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        // Giảm số lượng sản phẩm đi 1, nhưng không thấp hơn 1
-        item.quantity = Math.max(item.quantity - 1, 1);
-        // Cập nhật tổng tiền của sản phẩm
-        item.totalPrice = item.quantity * item.price;
-      }
-      return item;
-    });
+    const data = {
+      product_id: productId,
+    }
     // Cập nhật giỏ hàng
-    setCart(updatedCart);
+    dispatch(decreaseProduct(data))
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
-
-    // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
+
+  // const [selectedItems, setSelectedItems] = useState([]);
+  // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
 
   const handleViewDetailProduct = (products) => {
@@ -226,7 +198,6 @@ function Cart() {
     };
     // Lưu thông tin vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(buys));
-    console.log("buys", buys);
     // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
     navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
   };
@@ -264,7 +235,7 @@ function Cart() {
                           onChange={() => handleCheckboxChange(item.id)}
                         />
                       </td>
-                      <td style={{ width: "20%" }}>
+                      <td style={{ width: "15%" }}>
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
@@ -272,7 +243,7 @@ function Cart() {
                           alt="thumbnail"
                         />
                       </td>
-                      <td style={{ lineHeight: "15px", fontSize: "12px" }}>
+                      <td style={{ lineHeight: "18px", fontSize: "14px" }}>
                         {item.shortDescription}
                       </td>
 

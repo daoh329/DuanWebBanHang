@@ -7,6 +7,9 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
 import "../views/App.scss";
 import Home from "./Home/Home";
 import Nav from "./Nav/Nav";
@@ -28,7 +31,6 @@ import Tintuc from "./Menu/Tintuc";
 import Support from "./Menu/Support";
 import OrderHistory from "./OrderHistory/HistoryOrder";
 import Cart from "./Cart/Cart";
-import { CartProvider } from "./Cart/CartContext";
 import CheckSP from "./Menu/CheckSP";
 import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
@@ -37,9 +39,6 @@ import AllNewProductLaptop from "./ProductPages/AllProduct/AllNewProductLaptop";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import AllNewProductPhone from "./ProductPages/AllProduct/AllNewProductPhone";
 import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import Chatbot from "./ChatBot/Chatbot";
@@ -47,6 +46,7 @@ import CreateOrder from "./VnPay/CreateOrder";
 import BuySuccess from "./Buy/BuySuccess";
 import { update } from "../redux/userSlice";
 import { addNotification } from "../redux/notificationsSlice";
+import { addProductToCart } from "../redux/cartSlice.jsx";
 import TabsQLdonhang from "./QuanLyAdmin/Pages/TabsQLdonhang";
 import TabsQLdagiao from "./QuanLyAdmin/Pages/TabsQLdagiao.js";
 import TabsQLgiaohuy from "./QuanLyAdmin/Pages/TabsQLgiaohuy.js";
@@ -57,9 +57,19 @@ import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
 const App = () => {
   const user = useSelector((state) => state.user);
   const isLogin = localStorage.getItem("isLogin");
+  const reloadState = useSelector((state) => state.reload.status);
   const dispatch = useDispatch();
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
+    getUser();
+  }, [reloadState]);
+
+  useEffect(() => {
+    const cart = JSON.parse(sessionStorage.getItem("cart"));
+    if (cart && cart.length !== 0) {
+      dispatch(addProductToCart(cart));
+    }
     getUser();
   }, []);
 
@@ -97,10 +107,7 @@ const App = () => {
       const results = await axios.get(api);
       if (results.status === 200) {
         const notifications = results.data;
-        Array.isArray(notifications) &&
-          notifications.forEach((notification) => {
-            dispatch(addNotification(notification));
-          });
+        dispatch(addNotification(notifications));
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +117,7 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <CartProvider>
+    
           <Nav />
           <header>
             <Routes>
@@ -191,7 +198,7 @@ const App = () => {
           </header>
           <MobileNav user={user} />
           <Footer />
-        </CartProvider>
+
       </BrowserRouter>
     </div>
   );

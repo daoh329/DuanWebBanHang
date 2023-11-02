@@ -1,34 +1,28 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Layout, Carousel, Tabs, Card, Button, Pagination } from "antd";
-import { Divider, Space, Tag } from 'antd';
+import { Layout, Carousel, Tabs, Pagination } from "antd";
 import {
   LeftOutlined,
   RightOutlined,
-  ShoppingCartOutlined,
 } from "@ant-design/icons";
-
-import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { message } from "antd";
+
 import "./Home.scss";
-import { parse, stringify } from "flatted";
 import CountdownTimer from "./CountdownTimer";
-
-import { useCart } from "../Cart/CartContext";
-
 import Chatbot from "../ChatBot/Chatbot";
 import CardProduct from "./Card/Card";
 const { Header } = Layout;
 const { TabPane } = Tabs;
+
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(value);
 }
+
+
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);

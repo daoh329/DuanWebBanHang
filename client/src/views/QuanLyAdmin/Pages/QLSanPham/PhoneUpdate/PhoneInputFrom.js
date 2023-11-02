@@ -275,6 +275,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
       >
         <InputNumber
           max={product.price}
+          min={0}
           defaultValue={product ? product.discount : null}
           style={{ width: "100%" }}
           placeholder="Nhập giá sản phẩm đã giảm"

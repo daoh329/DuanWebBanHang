@@ -244,6 +244,7 @@ function LaptopInputFrom({ data, onClick, setModal }) {
       >
         <InputNumber
           max={product ? product.price : 0}
+          min={0}
           defaultValue={product ? product.discount : null}
           style={{ width: "100%" }}
           placeholder="Nhập giá đã giảm"

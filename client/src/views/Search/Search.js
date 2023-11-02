@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Layout, Affix, Carousel, Tabs, Card, Button, Pagination, message } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { useCart } from '../Cart/CartContext';
+import { useNavigate, useLocation } from "react-router-dom";
 
-const { Content } = Layout;
 function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
@@ -19,12 +14,6 @@ const Search = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   
   const navigate = useNavigate();
-  const { addToCart } = useCart();
-
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    message.success('Sản phẩm đã được thêm vào giỏ hàng');
-  };
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
