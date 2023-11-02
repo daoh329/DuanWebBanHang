@@ -21,6 +21,7 @@ import QLdonhang from "./QuanLyAdmin/QLdonhang";
 import QLshipping from "./QuanLyAdmin/QLshipping";
 import QLdelivered from "./QuanLyAdmin/QLdelivered";
 import QLdeliveryfailed from "./QuanLyAdmin/QLdeliveryfailed";
+import QLAlldelivered from "./QuanLyAdmin/QLAlldelivered";
 import QLAlldonhang from "./QuanLyAdmin/QLAlldonhang";
 import ShowRoom from "./Menu/ShowRoom";
 import Tintuc from "./Menu/Tintuc";
@@ -147,6 +148,7 @@ const App = () => {
                 path="/deliveryfailedOrder"
                 element={<QLdeliveryfailed />}
               />
+              <Route path="/alldelivered" element={<QLAlldelivered />} />
               <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />

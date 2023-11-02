@@ -32,6 +32,8 @@ import QLdelivered from "./QLdelivered";
 import QLAlldonhang from "./QLAlldonhang";
 import QLdeliveryfailed from "./QLdeliveryfailed";
 import TabsQLdonhang from "./Pages/TabsQLdonhang";
+
+import QLAlldelivered from "./QLAlldelivered";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
@@ -45,13 +47,13 @@ function Admin() {
       icon: <UserOutlined />,
       label: "Admin",
       children: [
-        {
-          key: "1",
-          icon: <HomeOutlined />,
-          label: (
-            <Link to="dashboard">Biểu đồ thống kê đơn hàng</Link>
-          ),
-        },
+        // {
+        //   key: "1",
+        //   icon: <HomeOutlined />,
+        //   label: (
+        //     <Link to="dashboard">Biểu đồ thống kê đơn hàng</Link>
+        //   ),
+        // },
         {
           key: "2",
           icon: <HomeOutlined />,
@@ -109,7 +111,7 @@ function Admin() {
     {
       key: "sub4",
       icon: <DollarCircleOutlined />,
-      label: "Đơn hàng",
+      label: "Trạng thái đơn hàng",
       children: [
         {
           key: "9",
@@ -118,10 +120,11 @@ function Admin() {
             <Link to="/quanlydonhang">Quản lý đơn hàng</Link>
            
           ),
-
         },  
+
       ],
     },
+
     {
       key: "sub5",
       icon: <GiftOutlined />,
@@ -223,6 +226,7 @@ function Admin() {
             <Route path="shippingOrder" element={<QLshipping />} />
             <Route path="deliveredOrder" element={<QLdelivered />} />
             <Route path="allOrders" element={<QLAlldonhang />} />
+            <Route path="alldelivered" element={<QLAlldelivered />} />
             <Route path="deliveryfailedOrder" element={<QLdeliveryfailed />} />
             <Route path="ListCate" element={<TypeList />} />
           
