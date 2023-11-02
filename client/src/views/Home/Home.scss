@@ -447,7 +447,6 @@
   }
 
   .sanpham-card {
-
     background-color: #ffffff;
     color: #333333;
     display: flex;
@@ -456,7 +455,7 @@
     justify-content: space-between;
     line-height: 20px;
     padding: 10px;
-    height: 362px;
+    height: 350px;
     margin-top: 0px;
     width: 188px;
   }
@@ -605,29 +604,20 @@
   .productname{
     margin: 0px;
     padding: 0px;
-    border-style: none;
-    border-width: 1px;
-    border-color: unset;
-    opacity: 1;
     color: rgb(67, 70, 87);
     font-weight: 400;
-    text-decoration: unset;
     font-size: 12px;
     line-height: 16px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    max-width: unset;
-    min-width: unset;
+    -webkit-line-clamp: 3;
     transition: color 0.3s ease 0s;
     width: 165px;
     height: auto;
     color: #434657;
-    display: -webkit-box;
-    font-size: 12px;
-    line-height: 16px;
     text-align: -webkit-left;
+    text-overflow: ellipsis;
   }
 }
 
@@ -812,7 +802,6 @@
   }
 
   .sanpham-card {
-
     background-color: #ffffff;
     color: #333333;
     display: flex;
@@ -821,7 +810,7 @@
     justify-content: space-between;
     line-height: 20px;
     padding: 16px;
-    height: 362px;
+    height: 350px;
     // margin-top: 5px;
     width: 200px;
   }
@@ -905,7 +894,7 @@
 
   .css-14q2k9dd {
     position: absolute;
-    transform: translateY(370%);
+    transform: translateY(360%);
   }
 
   .css-nameproduct {
@@ -942,28 +931,19 @@
   .productname{
     margin: 0px;
     padding: 0px;
-    border-style: none;
-    border-width: 1px;
-    border-color: unset;
-    opacity: 1;
     color: rgb(67, 70, 87);
     font-weight: 400;
-    text-decoration: unset;
     font-size: 12px;
     line-height: 16px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
-    max-width: unset;
-    min-width: unset;
     transition: color 0.3s ease 0s;
     width: 165px;
     height: auto;
     color: #434657;
-    display: -webkit-box;
-    font-size: 12px;
-    line-height: 16px;
     text-align: -webkit-left;
+    text-overflow: ellipsis;
   }
 }

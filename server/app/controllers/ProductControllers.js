@@ -128,6 +128,7 @@ class Product {
     product.id,
     product.name,
     product.price,
+    product.discount,
     product.status,
     product.shortDescription,
     productDetails.brand,
@@ -142,7 +143,7 @@ class Product {
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
     LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
-    GROUP BY product.id, product.name, product.price, product.status, 
+    GROUP BY product.id, product.name, product.price, product.status, product.discount, 
     productDetails.brand, productDetails.quantity, productDetails.remaining_quantity, 
     product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
     `;
@@ -270,7 +271,7 @@ class Product {
     }
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)
-    const fieldsProduct = ["name", "price", "shortDescription"];
+    const fieldsProduct = ["name", "price", "discount", "shortDescription"];
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
       "quantity",
@@ -513,7 +514,7 @@ class Product {
 
     // Truy vấn để lấy thông tin chi tiết sản phẩm
     const productQuery = `
-    SELECT p.id AS p_ID, p.name, p.price, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
+    SELECT p.id AS p_ID, p.name, p.price, p.discount, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
     FROM product p 
     JOIN category c ON p.CategoryID = c.id
     JOIN productDetails pd ON p.id = pd.product_id

@@ -280,10 +280,12 @@ const AllProductPhone = () => {
 
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     const historyproduct = {
-      shortDescription: product.shortDescription,
-      price: product.price,
-      avatar: product.thumbnail,
-      id: product.id,
+      shortDescription: products.shortDescription,
+      price: products.price,
+      discount: products.discount,
+      thumbnail: products.thumbnail,
+      brand: products.brand,
+      id: products.id,
     };
 
     const isViewed = historysp.some(

@@ -233,6 +233,15 @@ function PhoneInputFrom({ data }) {
         />
       </Form.Item>
 
+      {/* Giá đã giảm */}
+      <Form.Item label="Giá đã giảm" name="discount">
+        <InputNumber
+          defaultValue={product ? product.discount : null}
+          style={{ width: "100%" }}
+          placeholder="Nhập giá sản phẩm đã giảm"
+        />
+      </Form.Item>
+
       {/* Mô tả ngắn */}
       <Form.Item label="Mô tả ngắn" name="shortDescription">
         <Input.TextArea

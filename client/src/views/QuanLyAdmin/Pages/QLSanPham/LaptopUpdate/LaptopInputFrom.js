@@ -106,7 +106,7 @@ function LaptopInputFrom({ data }) {
           message: "Không có dữ liệu được thay đổi",
         });
       }
-
+      console.log(values);
       // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
@@ -193,6 +193,15 @@ function LaptopInputFrom({ data }) {
           defaultValue={product ? product.price : null}
           style={{ width: "100%" }}
           placeholder="Nhập giá sản phẩm"
+        />
+      </Form.Item>
+
+      {/* Giá đã giảm */}
+      <Form.Item label="Giá đã giảm" name="discount">
+        <InputNumber
+          defaultValue={product ? product.discount : null}
+          style={{ width: "100%" }}
+          placeholder="Nhập giá đã giảm"
         />
       </Form.Item>
 
