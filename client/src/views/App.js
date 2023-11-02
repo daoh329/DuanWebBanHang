@@ -48,6 +48,11 @@ import { update } from "../redux/userSlice";
 import { addNotification } from "../redux/notificationsSlice";
 import { addProductToCart } from "../redux/cartSlice.jsx";
 import TabsQLdonhang from "./QuanLyAdmin/Pages/TabsQLdonhang";
+import TabsQLdagiao from "./QuanLyAdmin/Pages/TabsQLdagiao.js";
+import TabsQLgiaohuy from "./QuanLyAdmin/Pages/TabsQLgiaohuy.js";
+import TabsDonDatHang from "./QuanLyAdmin/Pages/Tabsdondathang.js";
+import TabsVanChuyen from "./QuanLyAdmin/Pages/Tabsvanchuyen.js";
+import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -149,7 +154,12 @@ const App = () => {
               <Route path="/shippingOrder" element={<QLshipping />} />
               <Route path="/deliveredOrder" element={<QLdelivered />} />
 
+              <Route path="/dondathang" element={<TabsDonDatHang />} />
+              <Route path="/vanchuyen" element={<TabsVanChuyen />} />
+              <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
               <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
+              <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
+              <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
 
               <Route
                 path="/deliveryfailedOrder"

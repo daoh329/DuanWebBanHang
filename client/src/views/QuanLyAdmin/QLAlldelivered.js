@@ -122,7 +122,7 @@ function QLAlldelivered() {
 
     return (
         <div>
-            <h1>Đơn hàng đã giao</h1>
+            <h1>Tất cả đơn hàng đã giao</h1>
             {/* <div>
                 <a href="/allorders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
             </div>
