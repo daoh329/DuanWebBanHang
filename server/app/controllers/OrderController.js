@@ -8,20 +8,20 @@ class OrderController {
   async order(req, res) {
     const data = req.body;
     // console.log(data);
-  
+
     if (!data) {
       return res.status(400).json("Invalid data");
     }
-  
+
     // Kiểm tra số lượng sản phẩm hiện có
-    let sql = `SELECT quantity FROM productdetails WHERE product_id = ?`;
+    let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
     let values = [data.productID];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       // console.log(result);
-  
+
       // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-      if (data.quantity > result[0].quantity) {
+      if (data.quantity > result[0].remaining_quantity) {
         return res.status(400).json("Số lượng sản phẩm không đủ");
       }
   
@@ -139,7 +139,7 @@ class OrderController {
               const quantity = orderDetails[i].quantity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE productDetails SET quantity = quantity - ? WHERE product_id = ?`;
+              sql = `UPDATE productDetails SET remaining_quantity = remaining_quantity - ? WHERE product_id = ?`;
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
@@ -192,7 +192,7 @@ class OrderController {
               const quantity = orderDetails[i].quantity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE productDetails SET quantity = quantity + ? WHERE product_id = ?`;
+              sql = `UPDATE productDetails SET remaining_quantity = remaining_quantity + ? WHERE product_id = ?`;
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
@@ -283,7 +283,7 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -299,7 +299,7 @@ class OrderController {
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       AND product.CategoryID = 1 AND product.status = 1
-      GROUP BY product.id, galery.thumbnail
+      GROUP BY product.id, galery.thumbnail, productDetails.remaining_quantity
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
@@ -315,7 +315,7 @@ class OrderController {
 
   async topDienthoai(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -331,7 +331,7 @@ class OrderController {
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       AND product.CategoryID = 2 AND product.status = 1
-      GROUP BY product.id, galery.thumbnail
+      GROUP BY product.id, galery.thumbnail, productDetails.remaining_quantity
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
