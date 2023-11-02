@@ -1,24 +1,31 @@
-
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Layout, Carousel, Tabs, Card, Button, Pagination } from "antd";
-import { LeftOutlined, RightOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  RightOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { message } from "antd";
 import "./Home.scss";
-import { parse, stringify } from 'flatted';
-import CountdownTimer from './CountdownTimer';
+import { parse, stringify } from "flatted";
+import CountdownTimer from "./CountdownTimer";
 
 import { useCart } from "../Cart/CartContext";
 
 import Chatbot from "../ChatBot/Chatbot";
+import CardProduct from "./Card/Card";
 const { Header } = Layout;
 const { TabPane } = Tabs;
 function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(value);
 }
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -32,7 +39,8 @@ const Home = () => {
 
   //top 10 laptop bán chạy
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
         setTopLaptop(res.data);
         // console.log("Laptopbanchay: " +res.data);
@@ -42,7 +50,8 @@ const Home = () => {
 
   //top 10 dien thoai bán chạy
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/order/dienthoaibanchay`)
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/order/dienthoaibanchay`)
       .then((res) => {
         setTopDienthoai(res.data);
         // console.log("Laptopbanchay: " +res.data);
@@ -53,7 +62,7 @@ const Home = () => {
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
-      console.error('Product ID is undefined!');
+      console.error("Product ID is undefined!");
       return;
     }
     // Lấy danh sách các sản phẩm đã xem từ session storage
@@ -62,7 +71,9 @@ const Home = () => {
     const historyproduct = {
       shortDescription: products.shortDescription,
       price: products.price,
-      avatar: products.thumbnail,
+      discount: products.discount,
+      thumbnail: products.thumbnail,
+      brand: products.brand,
       id: products.id,
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
@@ -77,14 +88,14 @@ const Home = () => {
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
 
-    console.log('click')
+    console.log("click");
     navigate(`/detail/${products.id}`);
   };
 
-  const handleViewDetailproducts = (products) => {
-    console.log("click oke");
-    navigate(`/detail/${products.id}`);
-  };
+  // const handleViewDetailproducts = (products) => {
+  //   console.log("click oke");
+  //   navigate(`/detail/${products.id}`);
+  // };
 
   const [historysp, sethistorysp] = useState([]);
 
@@ -96,73 +107,80 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/product/newphone`)
-      .then(response => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/product/newphone`)
+      .then((response) => {
         let data = response.data;
         // Sắp xếp dữ liệu tại đây
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setNewphone(data);
       })
-      .catch(error => {
-        console.error('There was an error!', error);
+      .catch((error) => {
+        console.error("There was an error!", error);
       });
   }, []);
-  
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
-      .then(response => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
+      .then((response) => {
         let data = response.data;
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setNewLaptop(data);
       })
-      .catch(error => {
-        console.error('There was an error!', error);
+      .catch((error) => {
+        console.error("There was an error!", error);
       });
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
-      .then(response => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+      .then((response) => {
         let data = response.data;
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setProducts(data);
       })
-      .catch(error => {
-        console.error('There was an error!', error);
+      .catch((error) => {
+        console.error("There was an error!", error);
       });
   }, []);
-  const statusLaptop = products.filter((statusLaptop) => statusLaptop.status === 1);
+  const statusLaptop = products.filter(
+    (statusLaptop) => statusLaptop.status === 1
+  );
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
-      .then(response => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
+      .then((response) => {
         let data = response.data;
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setProductsPhone(data);
       })
-      .catch(error => {
-        console.error('There was an error!', error);
+      .catch((error) => {
+        console.error("There was an error!", error);
       });
   }, []);
-  const statusPhone = productsPhone.filter((productsPhone) => productsPhone.status === 1);
+  const statusPhone = productsPhone.filter(
+    (productsPhone) => productsPhone.status === 1
+  );
 
   // them giỏ hàng
-  const { addToCart } = useCart();
-  const handleAddToCart = (item) => {
-    // addToCart(item);
-    message.success("Sản phẩm đã được thêm vào giỏ hàng");
+  // const { addToCart } = useCart();
+  // const handleAddToCart = (item) => {
+  //   // addToCart(item);
+  //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
 
-    // Lấy giỏ hàng hiện tại từ session
-    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  //   // Lấy giỏ hàng hiện tại từ session
+  //   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-    // Thêm sản phẩm vào giỏ hàng
-    cart.push(item);
+  //   // Thêm sản phẩm vào giỏ hàng
+  //   cart.push(item);
 
-    // Lưu giỏ hàng đã cập nhật vào session
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-    console.log(">>>", cart);
-  };
+  //   // Lưu giỏ hàng đã cập nhật vào session
+  //   sessionStorage.setItem("cart", JSON.stringify(cart));
+  //   console.log(">>>", cart);
+  // };
 
   //---------------------------
   const sliderImages = [
@@ -177,7 +195,7 @@ const Home = () => {
     "https://lh3.googleusercontent.com/YSEh7mEEW8a_KbVD42Mut-z-NVGg_x9d8YBLcI8ZHZxX0PPVLz30TqanefsaJITaHRRimZ8W75k2SD6WXoqEogPcpqj4EePL=w1920-rw",
     "https://lh3.googleusercontent.com/l-97kfw2WWEm-jtK28TpqtA4T0jBKWm8eGn-FSJ4gI-pz83AXBScpf2VTtcZ4F2vn-hBSt45eDJmOziqesf08ru3FOHGJr0s=w1920-rw",
     "https://lh3.googleusercontent.com/7fLNK64SX-6-xlW1aHfS0kbJOs8XxPpVPvDJIhL_3PS34Vo9VXTZTzaFRRtdoY38r2_XYbjonorwEmSUQgYkZXnSuVqSTvmB=w1920-rw",
-    "https://lh3.googleusercontent.com/NEyGqAS4HkBmVGWbdLxRCJ7v4n7Xz-Xcfs6ffoxCNZMHBg0txwJk7L0FVyBvjZ9mwdFsV915-uAWlcX_JPHD1yJSq2EYfeV6=w1920-rw"
+    "https://lh3.googleusercontent.com/NEyGqAS4HkBmVGWbdLxRCJ7v4n7Xz-Xcfs6ffoxCNZMHBg0txwJk7L0FVyBvjZ9mwdFsV915-uAWlcX_JPHD1yJSq2EYfeV6=w1920-rw",
   ];
   const [activeTab, setActiveTab] = useState("1"); // State to keep track of active tab
 
@@ -211,20 +229,20 @@ const Home = () => {
   const startIndex2 = (currentPage2 - 1) * itemsPerPage;
   const endIndex2 = startIndex2 + itemsPerPage;
 
-   // logic scroll button phone
-   const containerRefphone = useRef(null);
+  // logic scroll button phone
+  const containerRefphone = useRef(null);
 
-   const scrollLeftPhone = () => {
-     if (containerRefphone.current) {
-       containerRefphone.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
- 
-   const scrollRightPhone = () => {
-     if (containerRefphone.current) {
-       containerRefphone.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
-     }
-   };
+  const scrollLeftPhone = () => {
+    if (containerRefphone.current) {
+      containerRefphone.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
+
+  const scrollRightPhone = () => {
+    if (containerRefphone.current) {
+      containerRefphone.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
 
   // logic scroll button lap
   const containerRef = useRef(null);
@@ -260,19 +278,20 @@ const Home = () => {
       <div className="content">
         <Carousel autoplay>
           {sliderImages.map((image, index) => (
-            <div className='banner' key={index}>
-              <img
-                src={image}
-                alt={`Slide ${index}`}
-
-                className="imgSliders"
-              />
+            <div className="banner" key={index}>
+              <img src={image} alt={`Slide ${index}`} className="imgSliders" />
             </div>
           ))}
         </Carousel>
         <div className="slider-overlay">
           <div className="slider-container">
-            <div style={{ width: '1234px', transform: 'translateY(-65%)', margin: '0 auto' }}>
+            <div
+              style={{
+                width: "1234px",
+                transform: "translateY(-65%)",
+                margin: "0 auto",
+              }}
+            >
               <div className="left-block">
                 {/* <div className="category-list">
                 {categories.map((category, index) => (
@@ -334,9 +353,8 @@ const Home = () => {
         </div>
       </div>
 
-
       {/* ---------------menu-------------------- */}
-      <nav className="menu-nav" >
+      <nav className="menu-nav">
         <div>
           <ul className="menu-nav-ul">
             <li className="menu-nav-ul-li">
@@ -344,7 +362,20 @@ const Home = () => {
                 <i className="fa fa-mobile-phone" aria-hidden="true"></i>
                 <span className="name-menu">Điện thoại</span>
               </a>
-              <div className="sub-container" style={{ position: 'absolute', left: '0', top: "55px", zIndex: "199", paddingTop: '15px', display: 'none', opacity: '0', visibility: 'hidden', transition: 'opacity 200ms,visibility 200ms' }}>
+              <div
+                className="sub-container"
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: "55px",
+                  zIndex: "199",
+                  paddingTop: "15px",
+                  display: "none",
+                  opacity: "0",
+                  visibility: "hidden",
+                  transition: "opacity 200ms,visibility 200ms",
+                }}
+              >
                 abc
               </div>
             </li>
@@ -357,7 +388,7 @@ const Home = () => {
             </li>
             <li className="menu-nav-ul-li">
               <a className="li-a">
-                <i className="fa fa-icons" ></i>
+                <i className="fa fa-icons"></i>
                 <span className="name-menu">Phụ kiện</span>
               </a>
             </li>
@@ -398,7 +429,6 @@ const Home = () => {
                 <span className="name-menu">Dịch vụ</span>
               </a>
             </li>
-
           </ul>
         </div>
       </nav>
@@ -424,128 +454,59 @@ const Home = () => {
           activeKey={activeTab}
           onChange={handleTabChange}
         >
+          {/* Tuần lễ giảm giá */}
           <TabPane tab="Tuần lễ giảm giá" key="1">
-
-
             <div className="scroll-control-phone" ref={containerRef}>
-              <div >
+              <div>
                 <CountdownTimer initialTime={initialTime} />
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(0, 5).map((item, index) => (
-                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-                    </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
-                    </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
-                  </div>
-                </div>
+                  <CardProduct
+                  key={index}
+                  item={item}
+                  onClick={handleViewDetailProduct}
+                />
                 ))}
-
             </div>
           </TabPane>
+          {/* Laptop bán chạy */}
           <TabPane tab="Laptop bán chạy" key="2">
-          <div className="scroll-control-phone" ref={containerRef}>
-          <div >
-               <CountdownTimer initialTime={initialTime} />
-          </div>
-          {topLaptop &&
+            <div className="scroll-control-phone" ref={containerRef}>
+              <div>
+                <CountdownTimer initialTime={initialTime} />
+              </div>
+              {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop.slice(0, 5).map((item, index) => (
-                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-                    </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
-                    </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
-                  </div>
-                </div>
+                  <CardProduct
+                  key={index}
+                  item={item}
+                  onClick={handleViewDetailProduct}
+                />
                 ))}
             </div>
           </TabPane>
+          {/* Điện thoại bán chạy */}
           <TabPane tab="Điện thoại bán chạy" key="3">
-          <div className="scroll-control-phone" ref={containerRef}>
-          <div >
-               <CountdownTimer initialTime={initialTime} />
-          </div>
-          {topDienthoai &&
+            <div className="scroll-control-phone" ref={containerRef}>
+              <div>
+                <CountdownTimer initialTime={initialTime} />
+              </div>
+              {topDienthoai &&
                 topDienthoai.length > 0 &&
                 topDienthoai.slice(0, 5).map((item, index) => (
-                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-                    </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
-                    </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
-                  </div>
-                </div>
+                  <CardProduct
+                  key={index}
+                  item={item}
+                  onClick={handleViewDetailProduct}
+                />
                 ))}
             </div>
           </TabPane>
         </Tabs>
       </div>
-
-
-
 
       {/*-------- Danh mục nổi bật -----------*/}
       {/* <div className='danhmucmobile' style={{
@@ -625,49 +586,29 @@ const Home = () => {
         </div>
       </div> */}
 
-
       {/* ------------------box Điện thoại mới ra mắt ------------------ */}
       {newPhone && newPhone.length > 0 ? (
-        <div className='phone-group' >
+        <div className="phone-group">
           <div className="title-group">
-
             <div className="phone-title">Điện thoại mới ra mắt</div>
             <div className="views-all">
-              <a href="/tat-ca-san-pham-phone-moi" style={{ color: 'white' }}>Xem tất cả</a>
+              <a href="/tat-ca-san-pham-phone-moi" style={{ color: "white" }}>
+                Xem tất cả
+              </a>
               <i className="fa fa-chevron-right"></i>
             </div>
-
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={containerRefphone}>
-              
               {newPhone &&
                 newPhone.length > 0 &&
                 newPhone.map((item, index) => (
-
-                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} 
-                    style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                        {item.brand}
-                      </div>
-                    </div>
-                    <div className="productname">
-                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
-                        {item.name}
-                      </h3>
-                    </div>
-
-                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                      </div>
-
-                    </div>
-                  </div>
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct}
+                  />
                 ))}
-
             </div>
             {/* button */}
             <button
@@ -694,39 +635,24 @@ const Home = () => {
           <div className="title-group">
             <div className="phone-title">Laptop mới ra mắt</div>
             <div className="views-all">
-              <a href="/tat-ca-san-pham-laptop-moi" style={{ color: 'white' }}>Xem tất cả</a>
+              <a href="/tat-ca-san-pham-laptop-moi" style={{ color: "white" }}>
+                Xem tất cả
+              </a>
               <i className="fa fa-chevron-right"></i>
             </div>
           </div>
           <div className="scroll-group-phone">
-
             {/* content */}
             <div className="scroll-control-phone" ref={containerRef}>
               {newLaptop &&
                 newLaptop.length > 0 &&
                 newLaptop.map((item, index) => (
-                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                    <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                        {item.brand}
-                      </div>
-                    </div>
-                    <div className="productname">
-                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                        {item.shortDescription}
-                      </h3>
-                    </div>
-
-                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                      </div>
-
-                    </div>
-                  </div>
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct}
+                  />
                 ))}
-
             </div>
 
             <button
@@ -747,8 +673,6 @@ const Home = () => {
         </div>
       ) : null}
 
-      {/* --------------------------------------- */}
-
       {/* ------------------box sản phẩm Dien thoai------------------ */}
       {productsPhone && productsPhone.length > 0 ? (
         <div
@@ -764,47 +688,30 @@ const Home = () => {
           <div className="title-group">
             <div className="products-title">Điện Thoại</div>
             <div className="views-all">
-              <a href="/tat-ca-san-pham-phone" style={{ color: 'black' }}>Xem tất cả</a>
-              <i className="fa fa-chevron-right" style={{ color: 'black' }}></i>
+              <a href="/tat-ca-san-pham-phone" style={{ color: "black" }}>
+                Xem tất cả
+              </a>
+              <i className="fa fa-chevron-right" style={{ color: "black" }}></i>
             </div>
           </div>
           <div className="scroll-control-product">
-
             {statusPhone &&
               statusPhone.length > 0 &&
-              statusPhone.slice(startIndex1, endIndex1).map((item, index) => (
-                <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail}
-                   style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-                    </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
-                    </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
-                  </div>
-                </div>
-              ))}
-
+              statusPhone
+                .slice(startIndex1, endIndex1)
+                .map((item, index) => (
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct}
+                  />
+                ))}
           </div>
 
-          <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
+          <div
+            className="pagination-container"
+            style={{ textAlign: "center", marginTop: "10px" }}
+          >
             <Pagination
               current={currentPage1}
               total={productsPhone.length}
@@ -814,8 +721,6 @@ const Home = () => {
           </div>
         </div>
       ) : null}
-
-
 
       {/* ------------------box sản phẩm laptop------------------ */}
       {products && products.length > 0 ? (
@@ -832,46 +737,30 @@ const Home = () => {
           <div className="title-group">
             <div className="products-title">Laptop</div>
             <div className="views-all">
-              <a href="/tat-ca-san-pham-laptop" style={{ color: 'black' }}>Xem tất cả</a>
-              <i className="fa fa-chevron-right" style={{ color: 'black' }}></i>
+              <a href="/tat-ca-san-pham-laptop" style={{ color: "black" }}>
+                Xem tất cả
+              </a>
+              <i className="fa fa-chevron-right" style={{ color: "black" }}></i>
             </div>
           </div>
           <div className="scroll-control-product">
-
             {statusLaptop &&
               statusLaptop.length > 0 &&
-              statusLaptop.slice(startIndex2, endIndex2).map((item, index) => (
-                <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-                  <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-                  <div className="css-14q2k9dd">
-                    <div className="css-zb7zul">
-                      <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                      <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-                    </div>
-                  </div>
-                  <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                    <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                      {item.brand}
-                    </div>
-                  </div>
-                  <div className="css-nameproduct">
-                    <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                      {item.shortDescription}
-                    </h3>
-                  </div>
-
-                  <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                    <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                      {formatCurrency(item.price)}
-                    </div>
-
-                  </div>
-                </div>
-              ))}
-
+              statusLaptop
+                .slice(startIndex2, endIndex2)
+                .map((item, index) => (
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct}
+                  />
+                ))}
           </div>
           {/* Phân trang */}
-          <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
+          <div
+            className="pagination-container"
+            style={{ textAlign: "center", marginTop: "10px" }}
+          >
             <Pagination
               current={currentPage2}
               total={products.length}
@@ -888,7 +777,7 @@ const Home = () => {
           className="product-container"
           style={{
             borderRadius: "5px",
-            position: 'relative',
+            position: "relative",
             width: "1234px",
             margin: "0 auto",
             marginTop: "20px",
@@ -904,7 +793,7 @@ const Home = () => {
                 display: "-webkit-box",
                 padding: "20px",
                 color: "black",
-                borderBottom: '1px solid rgb(228, 229, 240)'
+                borderBottom: "1px solid rgb(228, 229, 240)",
               }}
             >
               Sản phẩm vừa xem
@@ -912,31 +801,16 @@ const Home = () => {
           </div>
           <div className="scroll-group-phone">
             <div className="scroll-control-phone" ref={ctnRef}>
+              {console.log(historysp)}
               {historysp &&
                 historysp.length > 0 &&
                 historysp.map((item, index) => (
-                  <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)} style={{ border: '1px solid rgb(228, 229, 240)', borderRadius: '5px', }}>
-                    <img src={process.env.REACT_APP_API_URL + item.avatar} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '200px', width: '205px', backgroundColor: 'pink' }}></img>
-                    <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-                      <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                        {item.brand}
-                      </div>
-                    </div>
-                    <div style={{ width: '165px', height: 'auto', color: '#434657', display: '-webkit-box', fontSize: '12px', lineHeight: '16px', textAlign: '-webkit-left' }}>
-                      <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto', }}>
-                        {item.shortDescription}
-                      </h3>
-                    </div>
-
-                    <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-                      <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                        {item.price}₫
-                      </div>
-
-                    </div>
-                  </div>
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct}
+                  />
                 ))}
-
             </div>
             {/* button */}
             <button

@@ -3,6 +3,7 @@ import { Table, Button, Tag, Popconfirm, Modal, message } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
 import ActionButton from "./ActionComponent/ActionButton";
+import { formatCurrency } from "../../../../util/FormatVnd";
 
 function Product() {
   const [Product, setProduct] = useState([]);
@@ -41,7 +42,12 @@ function Product() {
 
   const columns = [
     { title: "Tên sản phẩm", dataIndex: "name", key: "name" },
-    { title: "Giá", dataIndex: "price", key: "price" },
+    {
+      title: "Giá gốc",
+      dataIndex: "price",
+      key: "price",
+      render: (price) => <div>{formatCurrency(price)}</div>,
+    },
     {
       title: "SL còn lại",
       dataIndex: "remaining_quantity",
