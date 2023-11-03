@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import CardProduct from "../Home/Card/Card";
 
 function formatCurrency(value) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -187,32 +188,11 @@ const Search = () => {
       {filteredProducts &&
         filteredProducts.length > 0 &&
         filteredProducts.map((item, index) => (
-          <div className="sanpham-card" key={index} onClick={() => handleViewDetailProduct(item)}>
-            <img src={process.env.REACT_APP_API_URL + item.thumbnail} style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', height: '165px', width: '165px', backgroundColor: 'pink' }}></img>
-            <div className="css-14q2k9dd">
-              <div className="css-zb7zul">
-                <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-              </div>
-            </div>
-            <div style={{ color: '#333333', fontSize: '14px', lineHeight: '20px', margin: '0px 0px 4px', width: '165px', height: '21px' }}>
-              <div style={{ width: '40px', height: '15px', color: '#82869e', fontSize: '13px', fontWeight: '500', lineHeight: '20px' }}>
-                {item.brand}
-              </div>
-            </div>
-            <div className="css-nameproduct">
-              <h3 style={{ color: '#434657', display: 'inline', fontFamily: 'Roboto', fontSize: '12px', lineHeight: '16px', margin: '0px 0px 8px', width: '154px', height: 'auto' }}>
-                {item.shortDescription}
-              </h3>
-            </div>
-
-            <div style={{ alignItems: 'start', color: '#333333', display: 'flex', flexDirection: 'column', fontSize: '14px', lineHeight: '20px', width: '165px', height: '40px', }}>
-              <div style={{ color: '#1435c3', display: '-webkit-box', fontSize: '15px', fontWeight: '700', lineHeight: '24px', width: '90px', height: '24px' }}>
-                {formatCurrency(item.price)}
-              </div>
-
-            </div>
-          </div>
+          <CardProduct
+          key={index}
+          item={item}
+          onClick={handleViewDetailProduct}
+        />
         ))}
 
     </div>
