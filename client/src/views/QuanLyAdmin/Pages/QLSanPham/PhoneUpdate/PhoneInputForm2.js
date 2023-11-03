@@ -13,7 +13,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-function PhoneInputForm2({ data }) {
+function PhoneInputForm2({ data, onClick, setModal }) {
   const product = data;
   const [isLoading, setIsLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -29,6 +29,7 @@ function PhoneInputForm2({ data }) {
 
     try {
       if (fileList.length === 0 && description === product.description) {
+        setIsLoading(false)
         return notification.warning({
           message: "Không có dữ liệu nào được thay đổi!",
         });
@@ -61,6 +62,8 @@ function PhoneInputForm2({ data }) {
           notification.success({
             message: "Cập nhật thành công!",
           });
+          setModal(false);
+          onClick();
         }, 2000);
       }
       setTimeout(() => {

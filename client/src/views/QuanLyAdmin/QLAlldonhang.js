@@ -9,22 +9,18 @@ function QLAlldonhang() {
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
             .then(res => {
-                // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
+                // Sắp xếp các đơn hàng theo thời gian tạo
                 const sortedOrders = res.data
-                    .filter(order => order.order_status === 2 || order.order_status === 4 || order.order_status === 5)
                     .sort((a, b) => {
-                        // Sắp xếp theo trạng thái
-                        if (a.order_status < b.order_status) return 1;
-                        if (a.order_status > b.order_status) return -1;
-        
-                        // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
+                        // Sắp xếp theo thời gian tạo
                         return new Date(b.order_created_at) - new Date(a.order_created_at);
                     });
-        
+
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
     };
+
 
     // Gọi hàm tải dữ liệu khi component được render
     useEffect(() => {
@@ -67,23 +63,23 @@ function QLAlldonhang() {
         { title: 'SDT người nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
-        { 
+        {
             title: 'Tổng giá',
             key: 'totalPrice',
             render: (text, record) => (
                 <p>{record.price * record.quantity}</p>
             ),
         },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
         { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
 
         {
-            title: 'PTTT', 
-            dataIndex: 'paymentMenthod', 
-            key: 'paymentMenthod', 
+            title: 'PTTT',
+            dataIndex: 'paymentMenthod',
+            key: 'paymentMenthod',
             render: status => (
                 <span style={{
-                    fontWeight: 'bold', 
+                    fontWeight: 'bold',
                     color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
                 }}>
                     {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
@@ -99,13 +95,20 @@ function QLAlldonhang() {
         },
 
         {
+
+            title: 'Thời gian CN',
+            dataIndex: 'order_updated_at',
+            key: 'order_updated_at',
+        },
+
+        {
             title: 'Trạng thái', 
             dataIndex: 'order_status', 
             key: 'status', 
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 5 ? 'red' : (status === 2 ? 'red' : (status === 4 ? '#FF00FF' : 'orange'))
+                    color: status === 5 ? 'violet' : (status === 2 ? '#FF3399' : (status === 4 ? '#33CCFF' : 'orange'))
                 }}>
                     {status === 5 ? 'Giao không thành công' : (status === 2 ? 'Đã bị hủy' : (status === 4 ? 'Đã giao' : 'Chưa xác nhận'))}
                 </span>
@@ -116,17 +119,26 @@ function QLAlldonhang() {
     return (
         <div>
             <h1>Tất cả đơn hàng</h1>
-            <div>
-                <a href="/orders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                    Xem đơn hàng trong một tháng
-                </a>
-            </div>
 
+            {/* <div>
+                <a href="/deliveryfailed" style={{width: 250, height: 60, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+            <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
+                <div style={{ margin: '10px' }}>
+                    <a href="/deliveryfailed" style={{ width: '100%', height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                    Đơn hàng đã hủy hoặc giao không thành công
+                        </a>
+                </div>
+
+                <div style={{ margin: '10px' }}>
+                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
+                        Xem đơn hàng trong một tháng</a>
+                </div>
+            </div>
             <div>
                 <a href="/delivered" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
                     Xác nhận đơn hàng đã giao
                 </a>
-            </div>
+            </div> */}
             
             <Table columns={columns} dataSource={data} />
         </div>

@@ -10,7 +10,7 @@ function HistoryOrder(props) {
     const phone = window.sessionStorage.getItem('phone');
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/${phone}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/phone/${phone}`)
             .then(res => {
                 setData(res.data);
                 const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -59,7 +59,7 @@ function HistoryOrder(props) {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'green' : (status === 2 ? 'red' : (status === 3 ? '#FF33FF' : (status === 4 ? '#00DD00' : (status === 5 ? 'red' : 'orange'))))
+                    color: status === 1 ? 'green' : (status === 2 ? '#FF3399' : (status === 3 ? '#BDB76B' : (status === 4 ? '#33CCFF' : (status === 5 ? 'violet' : 'orange'))))
                 }}>
                     {status === 1 ? 'Đã xác nhận' : (status === 2 ? 'Đã bị hủy' : (status === 3 ? 'Đang vận chuyển' : (status === 4 ? 'Đã giao hàng' : (status === 5 ? 'Giao hàng không thành công' : 'Chưa xác nhận'))))}
                 </span>

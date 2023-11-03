@@ -110,7 +110,7 @@ function ActionButton({ record, getProduct }) {
               >
                 Cập nhật ảnh và mô tả sản phẩm
               </Button>
-              <LaptopInputFrom data={record} />
+              <LaptopInputFrom setModal={setOpenModal} onClick={getProduct} data={record} />
             </div>
           )}
         {record.category === "Laptop" &&
@@ -122,7 +122,7 @@ function ActionButton({ record, getProduct }) {
               >
                 Trở lại
               </Button>
-              <LaptopInputForm2 data={record} />
+              <LaptopInputForm2 setModal={setOpenModal} onClick={getProduct} data={record} />
             </div>
           )}
 
@@ -136,7 +136,7 @@ function ActionButton({ record, getProduct }) {
               >
                 Cập nhật ảnh và mô tả sản phẩm
               </Button>
-              <PhoneInputFrom data={record} />
+              <PhoneInputFrom setModal={setOpenModal} onClick={getProduct} data={record} />
             </div>
           )}
         {record.category === "Điện thoại" &&
@@ -148,7 +148,7 @@ function ActionButton({ record, getProduct }) {
               >
                 Trở lại
               </Button>
-              <PhoneInputFrom2 data={record} />
+              <PhoneInputFrom2 setModal={setOpenModal} onClick={getProduct} data={record} />
             </div>
           )}
       </Modal>

@@ -73,7 +73,7 @@ class Product {
     const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
     const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
     const is_productdetail =
-      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?,?);";
+      "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
     const is_ProDetailColor =
       "INSERT INTO prodetailcolor (`product_id`,`Colorname`) VALUES (?,?);";
 
@@ -104,6 +104,7 @@ class Product {
         configurationString,
         data.description,
         id_Product,
+        data.quantity,
       ];
       await query(is_productdetail, PdValues);
 
@@ -127,10 +128,12 @@ class Product {
     product.id,
     product.name,
     product.price,
+    product.discount,
     product.status,
     product.shortDescription,
     productDetails.brand,
     productDetails.quantity,
+    productDetails.remaining_quantity,
     productDetails.created_at,
     productDetails.configuration,
     productDetails.description,
@@ -140,7 +143,9 @@ class Product {
     JOIN productDetails ON product.id = productDetails.product_id
     JOIN category ON product.CategoryID = category.id
     LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
-    GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
+    GROUP BY product.id, product.name, product.price, product.status, product.discount, 
+    productDetails.brand, productDetails.quantity, productDetails.remaining_quantity, 
+    product.shortDescription, productDetails.created_at, productDetails.configuration, productDetails.description, category.name;
     `;
 
     // Hàm sử lí lỗi tập chung
@@ -266,10 +271,11 @@ class Product {
     }
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)
-    const fieldsProduct = ["name", "price", "shortDescription"];
+    const fieldsProduct = ["name", "price", "discount", "shortDescription"];
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
       "quantity",
+      "remaining_quantity",
       "brand",
       "configuration",
       "description",
@@ -382,7 +388,7 @@ class Product {
           arrPathImage.forEach(async (image) => {
             await query(queryUpdateGalery, [image, id]);
           });
-          return res.status(200).json({ message: "success" });;
+          return res.status(200).json({ message: "success" });
         }
         // Nếu sản phẩm chưa có ảnh nào
         // Thêm ảnh mới của sản phẩm
@@ -400,7 +406,7 @@ class Product {
 
   async Newphone(req, res) {
     const query = `
-      SELECT product.*, productDetails.brand, productDetails.configuration,productDetails.created_at , galery.thumbnail
+      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration,productDetails.created_at , galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -414,19 +420,19 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 2 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
   }
 
   async Newlaptop(req, res) {
     const query = `
-      SELECT product.*, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -440,19 +446,19 @@ class Product {
       ) galery ON product.id = galery.product_id
       WHERE product.CategoryID = 1 AND product.status = 1 AND productDetails.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH);
     `;
-  
+
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-  
+
       res.json(results);
     });
   }
 
   async QueryProductsLaptop(req, res) {
     const query = `
-      SELECT product.*, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -479,7 +485,7 @@ class Product {
   //Truy vấn điện thoại hiển thị Home
   async QueryProductsDienThoai(req, res) {
     const query = `
-      SELECT product.*, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*,productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -508,7 +514,7 @@ class Product {
 
     // Truy vấn để lấy thông tin chi tiết sản phẩm
     const productQuery = `
-    SELECT p.id AS p_ID, p.name, p.price, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
+    SELECT p.id AS p_ID, p.name, p.price, p.discount, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
     FROM product p 
     JOIN category c ON p.CategoryID = c.id
     JOIN productDetails pd ON p.id = pd.product_id

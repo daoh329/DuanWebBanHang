@@ -22,6 +22,7 @@ import { Pagination } from "antd";
 import { Box, } from '@mui/material';
 import './AllProduct.css'
 import { useNavigate } from "react-router-dom";
+import CardProduct2 from './CardProducts/CardProducts';
 
 const { Option } = Select;
 function valuetext(value) {
@@ -251,7 +252,7 @@ const AllProduct = () => {
         sortedProducts.sort((a, b) => b.price - a.price);
         break;
       case 'newestProducts':
-        sortedProducts.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         break;
       default:
         // Nếu loại là 'none' hoặc không hợp lệ, đặt lại sắp xếp về thứ tự ban đầu
@@ -274,30 +275,37 @@ const AllProduct = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const handleViewDetailProduct = (product) => {
-    if (!product.id) {
-      console.error('Product ID is undefined!');
+  const handleViewDetailProduct = (products) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+    if (!products.id) {
+      console.error("Product ID is undefined!");
       return;
     }
-
+    // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
+    // Tạo đối tượng sản phẩm mới
     const historyproduct = {
-      shortDescription: product.shortDescription,
-      price: product.price,
-      avatar: product.thumbnail,
-      id: product.id,
+      shortDescription: products.shortDescription,
+      price: products.price,
+      discount: products.discount,
+      thumbnail: products.thumbnail,
+      brand: products.brand,
+      id: products.id,
     };
-
+    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.shortDescription === historyproduct.shortDescription
+      (product) => product.id === historyproduct.id
     );
-
+    // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
+      // Thêm đối tượng sản phẩm mới vào cuối danh sách
       historysp.push(historyproduct);
+      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
 
-    navigate(`/detail/${product.id}`);
+    console.log("click");
+    navigate(`/detail/${products.id}`);
   };
 
   return (
@@ -535,121 +543,10 @@ const AllProduct = () => {
           <div className='all-products'>
             <div className='y2krk0'>
               {displayedProducts.map((item, index) => (
-                <div type="grid" className="css-13w7uog" key={item.id}>
-                  <div
-                    className="product-cards css-35xksx"
-                    data-content-region-name="itemProductResult"
-                    data-track-content="true"
-                    data-content-name={item.id}
-                    data-content-index={index}
-                    data-content-target="productDetail"
-                  >
-                    <a
-                      target="_self"
-                      className="css-pxdb0j"
-                      onClick={() => handleViewDetailProduct(item)}
-                    >
-                      <div className="css-4rhdrh">
-                        <div className="css-1v97aik">
-                          <div className="css-798fc">
-                            <div height="100%" width="100%" className="css-1uzm8bv">
-                              <img
-                                loading="lazy"
-                                hover="zoom"
-                                decoding="async"
-                                src={process.env.REACT_APP_API_URL + item.thumbnail}
-                                style={{
-                                  width: "100%",
-                                  height: "100%",
-                                  objectFit: "contain",
-                                  position: "absolute",
-                                  top: 0,
-                                  left: 0
-                                }}
-                                alt={item.shortDescription}
-                              />
-                            </div>
-                          </div>
-                          <div className="css-14q2k9d">
-                            <div className="css-zb7zul">
-                              <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                              <div className="css-1rdv2qd">191.000&nbsp;₫</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="css-68cx5s">
-                          <div
-                            type="body"
-                            color="textSecondary"
-                            className="product-brand-name css-90n0z6"
-                            style={{ display: "inline" }}
-                          >
-                            {item.brand}
-                          </div>
-                        </div>
-                        <div className="css-1ybkowq">
-                          <div
-                            type="caption"
-                            className="att-product-card-title css-1uunp2d"
-                            color="textPrimary"
-                          >
-                            <h3
-                              title={item.shortDescription}
-                              className="css-1xdyrhj"
-                            >
-                              {item.shortDescription}
-                            </h3>
-                          </div>
-                        </div>
-                        <div className="css-kgkvir">
-                          <div className="css-1co26wt">
-                            <div
-                              type="subtitle"
-                              className="att-product-detail-latest-price css-do31rh"
-                              color="primary500"
-                            >
-                              {formatCurrency(item.price)}
-                            </div>
-                            <div className="css-3mjppt">
-                              <div
-                                type="caption"
-                                className="att-product-detail-retail-price css-18z00w6"
-                                color="textSecondary"
-                              >
-                                1.590.000&nbsp;₫
-                              </div>
-                              <div type="caption" color="primary500" className="css-2rwx6s">
-                                -12.01%
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div direction="row" className="css-w8t278">
-                          <div width={24} height={24} className="css-mtfgc8">
-                            <div height="100%" width="100%" className="css-8tlony">
-                              <img
-                                src="https://lh3.googleusercontent.com/Py0IZbRdaIo7LaHZK3eblQBu-iPyWjPepxwWmwcDPgUw6z2oKksOybAsl0Twi0t4BusEcmAsFFMTBlSD7aLV=rw"
-                                loading="lazy"
-                                hover=""
-                                decoding="async"
-                                alt="Túi chống sốc Western (Quà tặng)"
-                                fetchpriority="low"
-                                style={{
-                                  width: "100%",
-                                  height: "100%",
-                                  objectFit: "contain",
-                                  position: "absolute",
-                                  top: 0,
-                                  left: 0
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
+              <CardProduct2
+              key={index}
+              item={item}
+              onClick={handleViewDetailProduct} />
               ))}
             </div>
           </div>

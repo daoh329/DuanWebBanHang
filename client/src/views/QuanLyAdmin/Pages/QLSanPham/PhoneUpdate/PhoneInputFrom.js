@@ -9,10 +9,11 @@ import {
   notification,
 } from "antd";
 import axios from "axios";
+import { formatCurrency } from "../../../../../util/FormatVnd";
 
 const { Option } = Select;
 
-function PhoneInputFrom({ data }) {
+function PhoneInputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
   const product = data;
   // Tạo state toàn cục
@@ -50,7 +51,7 @@ function PhoneInputFrom({ data }) {
   useEffect(() => {
     getBrands();
     getColors();
-  }, []);
+  }, [product]);
 
   // Hàm được gọi khi form hoàn thành
   const onFinish = async (values) => {
@@ -60,7 +61,6 @@ function PhoneInputFrom({ data }) {
       // kiểm tra nếu "" thì set là undefined
       // (undefined không được đưa lên server)
       var checkValuesChange = false;
-
       // tạo tên field cho thuộc tính configuration
       const fieldsConfiguraton = [
         "screen",
@@ -102,28 +102,61 @@ function PhoneInputFrom({ data }) {
           }
           // TH1.2: Dữ liệu của field bị xóa
           else if (values[fieldName] === "") {
-            // Thực hiện gán giá trị của field đó thành undefined
-            // (undefined sẽ không được submit lên server)
-            values[fieldName] = undefined;
+            if (fieldsConfiguraton.includes(fieldName)) {
+              if (
+                product.configuration[fieldName] === undefined ||
+                values[fieldName] === product.configuration[fieldName]
+              ) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            } else {
+              if (values[fieldName] === product[fieldName]) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            }
           }
         }
-        // TH2: Nếu field có giá trị mới (giá trị mặc định bị thay đổi)
+        // TH2: Nếu field có giá trị mới (giá trị field bị thay đổi)
         else if (values[fieldName]) {
           // Nếu field đó thuộc configuaration
           if (fieldsConfiguraton.includes(fieldName)) {
-            // gán giá trị cho field đó vào thuộc tính configuration
-            values.configuration[fieldName] = values[fieldName];
-            // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
-            delete values[fieldName];
+            // kiểm tra xem giá trị field đó có khác mặc định không?
+            if (values[fieldName] == product.configuration[fieldName]) {
+              // Nếu không khác
+              // gán giá trị cho field đó vào thuộc tính configuration
+              values.configuration[fieldName] = values[fieldName];
+              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
+              delete values[fieldName];
+            } else {
+              // Nếu dữ liệu khác mặc định
+              // Đặt là có dữ liệu thay đổi
+              checkValuesChange = true;
+              // gán giá trị cho field đó vào thuộc tính configuration
+              values.configuration[fieldName] = values[fieldName];
+              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
+              delete values[fieldName];
+            }
+          } else {
+            // Nếu có giá trị thay đổi trong form thì đặt thành true
+            // ( = true sẽ tiếp tục call API)
+            if (fieldName !== "configuration") {
+              checkValuesChange = true;
+            }
           }
-          // Nếu có giá trị thay đổi trong form thì đặt thành true
-          // ( = true sẽ tiếp tục call API)
-          checkValuesChange = true;
         }
       }
+
+      // color
       values["color"] = values["color"] || [];
-      if (colorSubmit != product.color) {
+      if (colorSubmit.toString() !== product.color.toString()) {
         values["color"] = colorSubmit;
+        checkValuesChange = true;
+      } else {
+        values["color"] = product.color;
       }
 
       // Nếu không có dữ liệu trong form thay đổi (checkValuesChange === false)
@@ -131,7 +164,7 @@ function PhoneInputFrom({ data }) {
       if (!checkValuesChange) {
         setIsLoading(false);
         return notification.warning({
-          message: "Không có dữ liệu được thay đổi",
+          message: "Không có dữ liệu thay đổi",
         });
       }
 
@@ -150,6 +183,8 @@ function PhoneInputFrom({ data }) {
           notification.success({
             message: "Cập nhật thành công!",
           });
+          setModal(false);
+          onClick();
         }, 2000);
       }
       // Nếu trạng thái trả về khác 200
@@ -233,6 +268,20 @@ function PhoneInputFrom({ data }) {
         />
       </Form.Item>
 
+      {/* Giá đã giảm */}
+      <Form.Item
+        label={`Giá đã giảm (Max: ${formatCurrency(product.price)})`}
+        name="discount"
+      >
+        <InputNumber
+          max={product.price}
+          min={0}
+          defaultValue={product ? product.discount : null}
+          style={{ width: "100%" }}
+          placeholder="Nhập giá sản phẩm đã giảm"
+        />
+      </Form.Item>
+
       {/* Mô tả ngắn */}
       <Form.Item label="Mô tả ngắn" name="shortDescription">
         <Input.TextArea
@@ -251,7 +300,7 @@ function PhoneInputFrom({ data }) {
 
       {/* colors */}
       <div className="form-group">
-        <label className="form-label">Màu sắc</label>
+        <label>Màu sắc</label>
         <div
           style={{
             display: "flex",
@@ -283,6 +332,14 @@ function PhoneInputFrom({ data }) {
         <InputNumber
           defaultValue={product ? product.quantity : null}
           placeholder="Nhập số lượng sản phẩm đang bán"
+        />
+      </Form.Item>
+
+      {/* số lượng còn lại */}
+      <Form.Item label="Số lượng còn lại" name="remaining_quantity">
+        <InputNumber
+          defaultValue={product ? product.remaining_quantity : null}
+          placeholder="Nhập số lượng sản phẩm còn lại"
         />
       </Form.Item>
 

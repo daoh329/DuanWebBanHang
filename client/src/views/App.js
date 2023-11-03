@@ -7,6 +7,9 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
 import "../views/App.scss";
 import Home from "./Home/Home";
 import Nav from "./Nav/Nav";
@@ -20,13 +23,14 @@ import Sale from "./Menu/Sale";
 import QLdonhang from "./QuanLyAdmin/QLdonhang";
 import QLshipping from "./QuanLyAdmin/QLshipping";
 import QLdelivered from "./QuanLyAdmin/QLdelivered";
+import QLdeliveryfailed from "./QuanLyAdmin/QLdeliveryfailed";
+import QLAlldelivered from "./QuanLyAdmin/QLAlldelivered";
 import QLAlldonhang from "./QuanLyAdmin/QLAlldonhang";
 import ShowRoom from "./Menu/ShowRoom";
 import Tintuc from "./Menu/Tintuc";
 import Support from "./Menu/Support";
 import OrderHistory from "./OrderHistory/HistoryOrder";
 import Cart from "./Cart/Cart";
-import { CartProvider } from "./Cart/CartContext";
 import CheckSP from "./Menu/CheckSP";
 import Profile from "./Profile/Profile";
 import MobileNav from "./Nav/MobileNav";
@@ -35,19 +39,39 @@ import AllNewProductLaptop from "./ProductPages/AllProduct/AllNewProductLaptop";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import AllNewProductPhone from "./ProductPages/AllProduct/AllNewProductPhone";
 import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import Chatbot from "./ChatBot/Chatbot";
 import CreateOrder from "./VnPay/CreateOrder";
 import BuySuccess from "./Buy/BuySuccess";
 import { update } from "../redux/userSlice";
+import { addNotification } from "../redux/notificationsSlice";
+import { addProductToCart } from "../redux/cartSlice.jsx";
+import TabsQLdonhang from "./QuanLyAdmin/Pages/TabsQLdonhang";
+import TabsQLdagiao from "./QuanLyAdmin/Pages/TabsQLdagiao.js";
+import TabsQLgiaohuy from "./QuanLyAdmin/Pages/TabsQLgiaohuy.js";
+import TabsDonDatHang from "./QuanLyAdmin/Pages/Tabsdondathang.js";
+import TabsVanChuyen from "./QuanLyAdmin/Pages/Tabsvanchuyen.js";
+import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
-  const userDispatch = useDispatch();
+  const isLogin = localStorage.getItem("isLogin");
+  const reloadState = useSelector((state) => state.reload.status);
+  const dispatch = useDispatch();
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    getUser();
+  }, [reloadState]);
+
+  useEffect(() => {
+    const cart = JSON.parse(sessionStorage.getItem("cart"));
+    if (cart && cart.length !== 0) {
+      dispatch(addProductToCart(cart));
+    }
+    getUser();
+  }, []);
 
   const getUser = async () => {
     try {
@@ -63,29 +87,45 @@ const App = () => {
         permission: data.user.permission,
       };
       if (result.status === 200) {
-        userDispatch(update(u));
+        if (!isLogin) {
+          localStorage.setItem("isLogin", u.permission.toLowerCase());
+        }
+        dispatch(update(u));
+        getNotifications(u.id);
+      } else {
+        localStorage.removeItem("isLogin");
       }
     } catch (e) {
+      localStorage.removeItem("isLogin");
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  const getNotifications = async (id) => {
+    try {
+      const api = `${process.env.REACT_APP_API_URL}/auth/get-notifications/${id}`;
+      const results = await axios.get(api);
+      if (results.status === 200) {
+        const notifications = results.data;
+        dispatch(addNotification(notifications));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="App">
       <BrowserRouter>
-        <CartProvider>
-          <Nav user={user} />
+    
+          <Nav />
           <header>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/detail/:id" element={<Detail />} />
               <Route
                 path="/login"
-                element={user.id ? <Navigate to="/" /> : <Login />}
+                element={isLogin ? <Navigate to="/" /> : <Login />}
               />
               {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
@@ -93,7 +133,7 @@ const App = () => {
               <Route
                 path="/admin/*"
                 element={
-                  user.id && user.permission === "admin" ? (
+                  isLogin === "admin" ? (
                     <>
                       <Admin /> <Outlet />
                     </>
@@ -111,15 +151,28 @@ const App = () => {
               <Route path="/sale" element={<Sale />} />
               <Route path="/orderhistory/:phone" element={<OrderHistory />} />
               <Route path="/orders" element={<QLdonhang />} />
-              <Route path="/shipping" element={<QLshipping />} />
-              <Route path="/delivered" element={<QLdelivered />} />
+              <Route path="/shippingOrder" element={<QLshipping />} />
+              <Route path="/deliveredOrder" element={<QLdelivered />} />
+
+              <Route path="/dondathang" element={<TabsDonDatHang />} />
+              <Route path="/vanchuyen" element={<TabsVanChuyen />} />
+              <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
+              <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
+              <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
+              <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
+
+              <Route
+                path="/deliveryfailedOrder"
+                element={<QLdeliveryfailed />}
+              />
+              <Route path="/alldelivered" element={<QLAlldelivered />} />
               <Route path="/allorders" element={<QLAlldonhang />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/success" element={<BuySuccess />} />
               <Route
                 path="/profile"
-                element={user.id ? <Profile /> : <Navigate to="/" />}
+                element={isLogin ? <Profile /> : <Navigate to="/" />}
               />
               <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
               <Route
@@ -134,10 +187,10 @@ const App = () => {
                 path="/tat-ca-san-pham-phone-moi"
                 element={<AllNewProductPhone />}
               />
-              <Route
-                path="/tat-ca-san-pham-phone-coppy"
-                element={<AllProductPhonecopy />}
-              />
+
+              <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
+              <Route path="/danhmuc-laptop" element={<AllProduct />} />
+
               <Route path="/createorder" element={<CreateOrder />} />
 
               <Route path="/chat" element={<Chatbot />} />
@@ -145,7 +198,7 @@ const App = () => {
           </header>
           <MobileNav user={user} />
           <Footer />
-        </CartProvider>
+
       </BrowserRouter>
     </div>
   );

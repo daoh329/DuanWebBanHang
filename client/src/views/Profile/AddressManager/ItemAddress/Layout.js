@@ -8,7 +8,7 @@ import ReceiverInformationModal from "./Modal/receiverInformationModal";
 function Layout({ data, getValues }) {
   const [value, setValue] = useState(data);
   const [open, setOpen] = useState(false);
-
+  
   useEffect(() => {
     setValue(data);
   }, [data]);

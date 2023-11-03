@@ -1,31 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import { auth } from "../../firebaseConfig";
 // import firebase from 'firebase'
-import {
-  Image,
-  Button,
-  Checkbox,
-  Input,
-  Radio,
-  Modal,
-  TreeSelect,
-  Carousel
-} from "antd";
+import { Image, Button, Input, Radio, Modal, TreeSelect, Carousel } from "antd";
 // Thư viện mdb
-import { MDBCarousel, MDBCarouselItem, MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
+import { MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
 // link
 import "./Detail.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Form, Select } from "antd";
 import { message } from "antd";
-import { CartProvider } from "../Cart/CartContext";
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+// import { CartProvider } from "../Cart/CartContext";
+import { formatCurrency } from "../../util/FormatVnd";
+import { format_sale } from "../../util/formatSale";
+import { useDispatch, useSelector } from "react-redux";
+import { addProductToCart } from "../../redux/cartSlice";
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
@@ -36,10 +27,12 @@ function Detail() {
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const reduxCart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   // sự kiện mở modal
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  // const showModal = () => {
+  //   setIsModalOpen(true);
+  // };
   const showModal2 = () => {
     setIsModalOpen2(true);
   };
@@ -55,12 +48,11 @@ function Detail() {
   };
   // select mới
   const [city, setCity] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
+  // const [districts, setDistricts] = useState([]);
+  // const [wards, setWards] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,6 +68,7 @@ function Detail() {
 
     fetchData();
   }, []);
+
   // select city
   const handleCityChange = (value) => {
     const selectedCity = city.find((city) => city.Id === value);
@@ -96,45 +89,50 @@ function Detail() {
     );
     setSelectedWard(selectedWard);
   };
+
   //lấy thông tin vào modal
   const { id } = useParams();
   const [thumbnails, setThumbnails] = useState([]);
   const [Detail, setDetail] = useState({});
-  console.log(Detail)
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail.description;
+  const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
     // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
-    axios.get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
-      .then(response => {
+    getProduct();
+  }, [id]);
+
+  const getProduct = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
+      .then((response) => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
 
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
-        console.log("Detail: ", Detail)
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
         const productThumbnails = response.data.thumbnails;
         setThumbnails(productThumbnails);
       })
-      .catch(error => {
-        console.error('There was an error!', error);
+      .catch((error) => {
+        console.error("There was an error!", error);
       });
-  }, [id]);
+  };
 
   // so luong sp
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
 
   // Khai báo state cho các trường thông tin cá nhân
-  const [address, setAddress] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState('');
-  const [userName, setUserName] = useState('');
-  const [note, setNote] = useState('');
-  const [phone, setPhone] = useState('');
-  const [status, setStatus] = useState('');
+  const [address, setAddress] = useState("");
+  const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [userName, setUserName] = useState("");
+  const [note, setNote] = useState("");
+  const [phone, setPhone] = useState("");
+  // const [status, setStatus] = useState('');
   // otp
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
@@ -160,7 +158,9 @@ function Detail() {
       })
       .catch((error) => {
         if (error.code === "auth/too-many-requests") {
-          alert("Bạn đã nhập số điện thoại quá nhiều lần. Vui lòng thử lại sau ít phút.");
+          alert(
+            "Bạn đã nhập số điện thoại quá nhiều lần. Vui lòng thử lại sau ít phút."
+          );
         } else {
           // Handle other errors
         }
@@ -183,7 +183,7 @@ function Detail() {
   const handleConfirm = async () => {
     if (!isOTPVerified) {
       // Nếu người dùng chưa xác minh mã OTP
-      alert('Vui lòng xác minh mã OTP trước khi gửi đơn hàng');
+      alert("Vui lòng xác minh mã OTP trước khi gửi đơn hàng");
       return;
     }
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
@@ -194,19 +194,22 @@ function Detail() {
       deliveryMethod: deliveryMethod,
       phone: phone,
       note: note,
-      status: 'Chưa xác nhận',
+      status: "Chưa xác nhận",
     };
 
     // In ra giá trị của biến data
     console.log("Data:", data);
     // Gửi thông tin đăng ký lên server
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/order/order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/order/order`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
@@ -216,10 +219,10 @@ function Detail() {
       alert("Có lỗi xảy ra khi thêm thông tin cá nhân");
     }
   };
+
   useEffect(() => {
     window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
-
 
   const carouselRef = useRef(null);
 
@@ -236,22 +239,34 @@ function Detail() {
   };
 
   // them giỏ hàng
-  const [cart, setCart] = useState(JSON.parse(sessionStorage.getItem("cart")) || []);
+  const cart = useSelector((state) => state.cart.products);
 
   const handleAddToCart = () => {
+    if (Detail.remaining_quantity === 0) {
+      message.warning("Sản phẩm đã hết hàng");
+      return false;
+    }
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.p_ID,
       thumbnail: Detail.thumbnails[0].thumbnail,
       shortDescription: Detail.shortDescription,
-      price: Detail.price,
+      price:
+        Detail.discount > 0 && Detail.price > Detail.discount
+          ? Detail.discount
+          : Detail.price,
       brand: Detail.brand,
       quantity: 1,
-      totalPrice: Detail.price // Tính giá trị tổng tiền cho sản phẩm
+      totalPrice:
+        Detail.discount > 0 && Detail.price > Detail.discount
+          ? Detail.discount
+          : Detail.price, // Tính giá trị tổng tiền cho sản phẩm
     };
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    const existingItemIndex = cart.findIndex((cartItem) => cartItem.id === newItem.id);
+    const existingItemIndex = cart.findIndex(
+      (cartItem) => cartItem.id === newItem.id
+    );
 
     if (existingItemIndex !== -1) {
       // Sản phẩm đã tồn tại trong giỏ hàng, chỉ hiển thị thông báo
@@ -259,11 +274,11 @@ function Detail() {
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
-      setCart(updatedCart);
-      message.success("Sản phẩm đã được thêm vào giỏ hàng");
-      window.location.reload();
       // Lưu giỏ hàng đã cập nhật vào sessionStorage
       sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+      // update redux state
+      dispatch(addProductToCart(updatedCart));
+      message.success("Sản phẩm đã được thêm vào giỏ hàng");
     }
   };
 
@@ -274,8 +289,11 @@ function Detail() {
   //   message.success("Sản phẩm đã được thêm vào giỏ hàng");
   // };
 
-
-
+  // Hàm xử lý sự kiện khi nhấp vào hình thu nhỏ
+  const handleThumbnailHover = (index) => {
+    setCurrentImage(index);
+    carouselRef.current.goTo(index);
+  };
 
   return (
     <>
@@ -303,46 +321,75 @@ function Detail() {
                           </MDBCarouselItem>
                         ))}
                       </MDBCarousel> */}
-                      <div style={{ width: '100%', position: 'relative' }}>
-                        <button className="scroll-btn" id="scroll-left-btn" onClick={handlePreviousClick}>
+                      <div style={{ width: "100%", position: "relative" }}>
+                        <button
+                          className="scroll-btn"
+                          id="scroll-left-btn"
+                          onClick={handlePreviousClick}
+                        >
                           <i className="fa-solid fa-chevron-left"></i>
                         </button>
-                        <button className="scroll-btn" id="scroll-right-btn" onClick={handleNextClick}>
+                        <button
+                          className="scroll-btn"
+                          id="scroll-right-btn"
+                          onClick={handleNextClick}
+                        >
                           <i className="fa-solid fa-chevron-right"></i>
                         </button>
-                        <Carousel autoplay ref={carouselRef}>
+                        <Carousel
+                          autoplay
+                          ref={carouselRef}
+                          afterChange={(current) => setCurrentImage(current)}
+                        >
                           {Detail &&
                             Detail.thumbnails &&
                             Detail.thumbnails.length > 0 &&
                             Detail.thumbnails.map((thumbnail, index) => (
                               <div key={index}>
-                                <img src={process.env.REACT_APP_API_URL + thumbnail.thumbnail} alt={`Image ${index + 1}`} />
+                                <img
+                                  src={
+                                    process.env.REACT_APP_API_URL +
+                                    thumbnail.thumbnail
+                                  }
+                                  alt={""}
+                                />
                               </div>
                             ))}
-
                         </Carousel>
-
                       </div>
-
                     </MDBContainer>
-
                   </div>
                 </div>
-
-
                 {/* Slider hình nhỏ */}
                 <div className="thumbnail-slider">
-                  {Detail && Detail.thumbnails && Detail.thumbnails.length > 0 && Detail.thumbnails.map((thumbnail, index) => (
-                    <Image.PreviewGroup
-                      key={index}
-                      preview={{
-                        onChange: (current, prev) =>
-                          console.log(`current index: ${current}, prev index: ${prev}`),
-                      }}
-                    >
-                      <Image width={80} src={process.env.REACT_APP_API_URL + thumbnail.thumbnail} />
-                    </Image.PreviewGroup>
-                  ))}
+                  {Detail &&
+                    Detail.thumbnails &&
+                    Detail.thumbnails.length > 0 &&
+                    Detail.thumbnails.map((thumbnail, index) => (
+                      <Image.PreviewGroup
+                        key={index}
+                        preview={{
+                          onChange: (current, prev) =>
+                            console.log(
+                              `current index: ${current}, prev index: ${prev}`
+                            ),
+                        }}
+                      >
+                        <Image
+                          width={80}
+                          src={
+                            process.env.REACT_APP_API_URL + thumbnail.thumbnail
+                          }
+                          onMouseEnter={() => handleThumbnailHover(index)} // Thay đổi từ onClick sang onMouseEnter
+                          style={{
+                            border:
+                              currentImage === index
+                                ? "2px solid blue"
+                                : "none",
+                          }}
+                        />
+                      </Image.PreviewGroup>
+                    ))}
                 </div>
               </div>
               {/* hiển thị chi tiết  */}
@@ -355,7 +402,7 @@ function Detail() {
                   <div
                     type="caption"
                     color="textSecondary"
-                    className="css-1qm2d75 style-La8m4"
+                    className="css-1qm2d75"
                     id="style-La8m4"
                   >
                     Thương hiệu
@@ -369,46 +416,45 @@ function Detail() {
                     <span className="css-1qgvt7n"></span>
                     SKU: {Detail.id}
                     <span className="css-1qgvt7n"></span>
-                    Mã vạch: &nbsp;603122
+                    Mã vạch: &nbsp;{configuration.part_number}
                   </div>
                 </div>
               </div>
-
-              <div className="css-qmrpdk"></div>
+              <div className="css-qmrpdk" />
               {/* giá tiền */}
               <div className="css-1q5zfcu">
-                <div
-                  type="title"
-                  className="att-product-detail-latest-price css-oj899w"
-                  color="primary500"
-                >
-                  {Detail.price}₫
-                </div>
-                <div className="css-3mjppt">
-                  <div
-                    type="caption"
-                    className="att-product-detail-retail-price css-1gnksc0"
-                    color="textSecondary"
-                  >
-                    26.990.000₫
+                {Detail?.discount == 0 ||
+                Detail.price - Detail.discount <= 0 ? (
+                  <div className="css-oj899w">
+                    {formatCurrency(Detail.price)}
                   </div>
-                  <div
-                    type="caption"
-                    color="primary500"
-                    className="css-1qruly8"
-                  >
-                    -14.82%
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="css-oj899w">
+                      {formatCurrency(Detail.discount)}
+                    </div>
+                    <div style={{ fontSize: "12px" }}>
+                      <span style={{ textDecoration: "line-through" }}>
+                        {formatCurrency(Detail.price)}
+                      </span>
+                      &nbsp;
+                      <span style={{ color: "#1435c3" }}>
+                        {" "}
+                        -{format_sale(Detail.price, Detail.discount)}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
+
               <div className="css-f1fyi0">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
               </div>
-              <div className="css-1gs5ebu">
+              <div className="css-1gs5ebu" style={{ display: "none" }}>
                 <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                 {/* phần khuyến mãi */}
               </div>
-              <div className="css-30n8gl">
+              <div className="css-30n8gl" style={{ display: "none" }}>
                 <div className="css-ixp6xz">
                   Chọn 1 trong những khuyến mãi sau
                 </div>
@@ -452,6 +498,7 @@ function Detail() {
                   </div>
                 </div>
               </div>
+
               <div className="css-f7zc9t">
                 {/* button mua ngay */}
                 <div
@@ -461,14 +508,20 @@ function Detail() {
                   data-content-target="cart"
                   data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
                   className="css-yp9swi"
+                  
                 >
                   <button
                     height="2.5rem"
                     color="white"
                     className="att-detail-page-buy-now-button css-9p27dv"
                     type="button"
-                    onClick={showModal}
-                  // sự kiện cho modal
+                    // onClick={showModal}
+                    // sự kiện cho modal
+                    onClick={(e) => {
+                      const result = handleAddToCart();
+                      result && window.location.replace("/cart");
+                    }}
+                    disabled={Detail.remaining_quantity === 0 ? false : true}
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
@@ -511,19 +564,18 @@ function Detail() {
         </div>
         <div className="style-2">
           <div className="fle-x">
-
             <div className="mo-ta">
               <div className="title-mo">Mô tả sản phẩm</div>
 
-              <div style={{ textAlign: 'start' }} dangerouslySetInnerHTML={{ __html: htmlContent }} />
-
-
+              <div
+                style={{ textAlign: "start" }}
+                dangerouslySetInnerHTML={{ __html: htmlContent }}
+              />
             </div>
 
             <div className="chi-tiet">
               <div className="title-tiet">Thông tin chi tiết</div>
               <div className="khoi-tiet-cha">
-
                 <MDBTable className="table-tiet" borderless>
                   <MDBTableBody>
                     <tr>
@@ -531,15 +583,29 @@ function Detail() {
                       <td colSpan={3}>{Detail.brand}</td>
                     </tr>
                     <tr>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration.guarantee}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Bảo hành
+                      </td>
+                      <td
+                        style={{ backgroundColor: "#f6f6f6" }}
+                        className="back-gr-tiet"
+                        colSpan={3}
+                      >
+                        {configuration.guarantee}
+                      </td>
                     </tr>
                     <tr>
-                      <td className="style-tin-chung" colSpan={2}>Thông tin chung</td>
+                      <td className="style-tin-chung" colSpan={2}>
+                        Thông tin chung
+                      </td>
                     </tr>
                     <tr>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series laptop</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.name}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Series laptop
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {Detail.name}
+                      </td>
                     </tr>
                     <tr>
                       <td colSpan={1}>Màu sắc</td>
@@ -549,46 +615,61 @@ function Detail() {
                             {Detail.Colorname.map((color, index) => (
                               <span key={color.id}>
                                 {color.Colorname}
-                                {index < Detail.Colorname.length - 1 ? ', ' : ''}
+                                {index < Detail.Colorname.length - 1
+                                  ? ", "
+                                  : ""}
                               </span>
                             ))}
                           </div>
                         ) : (
                           <span></span>
                         )}
-
                       </td>
                     </tr>
                     <tr>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Nhu cầu</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.shortDescription}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Nhu cầu
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {Detail.shortDescription}
+                      </td>
                     </tr>
                     <tr>
-                      <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+                      <td className="style-tin-chung" colSpan={1}>
+                        Cấu hình chi tiết
+                      </td>
                     </tr>
                     <tr>
                       <td colSpan={1}>Thế hệ CPU</td>
                       <td colSpan={3}>{configuration.cpu}</td>
                     </tr>
                     <tr>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>CPU</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.cpu}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        CPU
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {configuration.cpu}
+                      </td>
                     </tr>
                     <tr>
                       <td colSpan={1}>Chíp đồ họa</td>
                       <td colSpan={3}>{configuration.vga}</td>
                     </tr>
                     <tr>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
-                      <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.ram}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Ram
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {configuration.ram}
+                      </td>
                     </tr>
                   </MDBTableBody>
                 </MDBTable>
               </div>
-              <div onClick={showModal2} className="xem-tiet">Xem chi tiết cấu hình</div>
-
+              <div onClick={showModal2} className="xem-tiet">
+                Xem chi tiết cấu hình
+              </div>
             </div>
-
           </div>
         </div>
         {/* <div className="style-2"></div> */}
@@ -606,7 +687,11 @@ function Detail() {
               <h2>Thông tin sản phẩm</h2>
               <Form layout="vertical">
                 <Form.Item label="Tên sản phẩm">
-                  <Input className="product-name" value={Detail.name} disabled />
+                  <Input
+                    className="product-name"
+                    value={Detail.name}
+                    disabled
+                  />
                 </Form.Item>
                 <Form.Item label="Hình">
                   <Image width={380} src={Detail.avatar}></Image>
@@ -745,7 +830,8 @@ function Detail() {
           open={isModalOpen2}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={700} >
+          width={700}
+        >
           {/* body */}
           <div className="khoi-tiet-cha">
             <div className="title-modal-cha">
@@ -759,15 +845,29 @@ function Detail() {
                   <td colSpan={3}>{Detail.brand}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bảo hành</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} className="back-gr-tiet" colSpan={3}>{configuration.guarantee}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Bảo hành
+                  </td>
+                  <td
+                    style={{ backgroundColor: "#f6f6f6" }}
+                    className="back-gr-tiet"
+                    colSpan={3}
+                  >
+                    {configuration.guarantee}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="style-tin-chung" colSpan={1}>Thông tin chung</td>
+                  <td className="style-tin-chung" colSpan={1}>
+                    Thông tin chung
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Series</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{Detail.name}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Series
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {Detail.name}
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Màu sắc</td>
@@ -777,7 +877,7 @@ function Detail() {
                         {Detail.Colorname.map((color, index) => (
                           <span key={color.id}>
                             {color.Colorname}
-                            {index < Detail.Colorname.length - 1 ? ', ' : ''}
+                            {index < Detail.Colorname.length - 1 ? ", " : ""}
                           </span>
                         ))}
                       </div>
@@ -787,78 +887,164 @@ function Detail() {
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Nhu cầu</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.demand}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Nhu cầu
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.demand}
+                  </td>
                 </tr>
                 <tr>
-                  <td className="style-tin-chung" colSpan={1}>Cấu hình chi tiết</td>
+                  <td className="style-tin-chung" colSpan={1}>
+                    Cấu hình chi tiết
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{display: configuration.cpu ? 'table-cell' : 'none'}} colSpan={1}>Thế hệ CPU</td>
-                  <td style={{display: configuration.cpu ? 'table-cell' : 'none'}} colSpan={3}>{configuration.cpu}</td>
+                  <td
+                    style={{
+                      display: configuration.cpu ? "table-cell" : "none",
+                    }}
+                    colSpan={1}
+                  >
+                    Thế hệ CPU
+                  </td>
+                  <td
+                    style={{
+                      display: configuration.cpu ? "table-cell" : "none",
+                    }}
+                    colSpan={3}
+                  >
+                    {configuration.cpu}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6',display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={1}>CPU</td>
-                  <td style={{ backgroundColor: '#f6f6f6',display: configuration.cpu ? 'table-cell' : 'none' }} colSpan={3}>{configuration.cpu}</td>
+                  <td
+                    style={{
+                      backgroundColor: "#f6f6f6",
+                      display: configuration.cpu ? "table-cell" : "none",
+                    }}
+                    colSpan={1}
+                  >
+                    CPU
+                  </td>
+                  <td
+                    style={{
+                      backgroundColor: "#f6f6f6",
+                      display: configuration.cpu ? "table-cell" : "none",
+                    }}
+                    colSpan={3}
+                  >
+                    {configuration.cpu}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{display: configuration.vga ? 'table-cell' : 'none'}} colSpan={1}>Chíp đồ họa</td>
-                  <td style={{display: configuration.vga ? 'table-cell' : 'none'}} colSpan={3}>{configuration.vga}</td>
+                  <td
+                    style={{
+                      display: configuration.vga ? "table-cell" : "none",
+                    }}
+                    colSpan={1}
+                  >
+                    Chíp đồ họa
+                  </td>
+                  <td
+                    style={{
+                      display: configuration.vga ? "table-cell" : "none",
+                    }}
+                    colSpan={3}
+                  >
+                    {configuration.vga}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Ram</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.ram}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Ram
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.ram}
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Màn hình</td>
                   <td colSpan={3}>{configuration.screen}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Lưu trữ</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.rom}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Lưu trữ
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.rom}
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Số cổng lưu chữ tối đa</td>
-                  <td colSpan={3}>{configuration.maximum_number_of_storage_ports}</td>
+                  <td colSpan={3}>
+                    {configuration.maximum_number_of_storage_ports}
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Khe hở M.2 hỗ trợ</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.M2_slot_type_supported}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Khe hở M.2 hỗ trợ
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.M2_slot_type_supported}
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Cổng xuất hình</td>
                   <td colSpan={3}>{configuration.output_port}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Cổng kết nối</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.connector}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Cổng kết nối
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.connector}
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Kết nối không dây</td>
                   <td colSpan={3}>{configuration.wireless_connectivity}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Bàn phím</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.keyboard}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Bàn phím
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.keyboard}
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan={1}>Hệ điều hành</td>
                   <td colSpan={3}>{configuration.os}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={1}>Pin</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.pin}</td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                    Pin
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.pin}
+                  </td>
                 </tr>
                 <tr>
-                  <td  colSpan={1}>Khối lượng</td>
-                  <td  colSpan={3}>{configuration.mass}</td>
+                  <td colSpan={1}>Khối lượng</td>
+                  <td colSpan={3}>{configuration.mass}</td>
                 </tr>
                 <tr>
-                  <td className="style-tin-chung" colSpan={1}>Thông tin khác</td>
+                  <td className="style-tin-chung" colSpan={1}>
+                    Thông tin khác
+                  </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: '#f6f6f6' }} className="style-tin-chung" colSpan={1}>Phụ kiện đi kèm</td>
-                  <td style={{ backgroundColor: '#f6f6f6' }} colSpan={3}>{configuration.accessory}</td>
+                  <td
+                    style={{ backgroundColor: "#f6f6f6" }}
+                    className="style-tin-chung"
+                    colSpan={1}
+                  >
+                    Phụ kiện đi kèm
+                  </td>
+                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                    {configuration.accessory}
+                  </td>
                 </tr>
               </MDBTableBody>
             </MDBTable>

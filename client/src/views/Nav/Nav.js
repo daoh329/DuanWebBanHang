@@ -10,6 +10,8 @@ import {
   Dropdown,
   Divider,
   Tooltip,
+  Tag,
+  Empty,
 } from "antd";
 import {
   SolutionOutlined,
@@ -22,38 +24,26 @@ import {
   PhoneOutlined,
   DeleteOutlined,
   CheckOutlined,
+  FileDoneOutlined,
+  FileExcelOutlined,
 } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
 import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateNotification } from "../../redux/notificationsSlice";
+import axios from "axios";
+import { formatCurrency } from "../../util/FormatVnd";
+import { deleteProductInCart } from "../../redux/cartSlice";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
 
 const App = () => {
   const user = useSelector((state) => state.user);
-  const [arrayNotification, setArrayNotification] = useState([
-    {
-      title: "Thông báo số 1",
-      content:
-        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
-      status: true,
-    },
-    {
-      title: "Thông báo số 2",
-      content:
-        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
-      status: false,
-    },
-    {
-      title: "Thông báo số 3",
-      content:
-        "Không có gì để xem đâu, chỉ là đang kiểm tra giao diện thông báo thôi...hihi",
-      status: false,
-    },
-  ]);
+  const arrayNotification = useSelector((state) => state.notifications.notifications);
+  const dispatch = useDispatch();
 
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
@@ -77,10 +67,7 @@ const App = () => {
   }
 
   const [menuOpenKeys, setMenuOpenKeys] = useState([]);
-  const [cart, setCart] = useState(
-    JSON.parse(sessionStorage.getItem("cart")) || []
-  );
-
+  const cart = useSelector((state) => state.cart.products);
   const handleMenuOpenChange = (openKeys) => {
     setMenuOpenKeys(openKeys);
   };
@@ -91,10 +78,15 @@ const App = () => {
 
   // const [cartList, setCartList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  
   const removeFromCart = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-    setCart(updatedCart); // Cập nhật state giỏ hàng
+    try {
+      const updatedCart = cart.filter((item) => item.id !== productId);
+      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+      dispatch(deleteProductInCart(productId));
+    } catch (error) {
+      console.log(error);
+    }
   };
   // phone
   const [phone, setPhone] = useState("");
@@ -141,9 +133,8 @@ const App = () => {
 
   // call API logout
   const logout = () => {
+    localStorage.removeItem("isLogin");
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
-    localStorage.removeItem("idUser");
-    localStorage.removeItem("user");
   };
   // tới profile
   const profile = () => {
@@ -211,7 +202,6 @@ const App = () => {
             background: "none",
           }}
         >
-          {localStorage.removeItem("user")}
           <NavLink to="/login">Đăng nhập</NavLink>
         </Button>
       ),
@@ -229,23 +219,98 @@ const App = () => {
     },
   ];
 
-  const handleReadAll = () => {
-    const updatedNotifications = arrayNotification.map((notification) => {
-      if (notification.status === true) {
-        // Thay đổi giá trị status từ true sang false
-        return { ...notification, status: false };
+  const handleReadAll = async () => {
+    if (arrayNotification.length === 0) return;
+
+    try {
+      const arrId = [];
+      arrayNotification.forEach((notification) => {
+        if (notification.is_read === 0) {
+          //Thêm id thông báo vào array
+          arrId.push(notification.id);
+        }
+      });
+      // return nếu không có thông báo nào chưa được đọc
+      if (arrId.length === 0) return;
+
+      const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
+      // gọi api cập nhật trạng thái thông báo tại db
+      const results = await axios.put(api, arrId);
+
+      if (results.status === 200) {
+        arrId.forEach((id) => {
+          const data = {
+            id,
+            newStates: 1,
+          };
+          // Cập nhật trạng thái thông báo tại redux
+          dispatch(updateNotification(data));
+        });
       }
-      // Giữ nguyên thông báo nếu status không phải là true
-      return notification;
-    });
-    
-    // Sau đó, bạn có thể cập nhật state với mảng thông báo mới
-    setArrayNotification(updatedNotifications);
-    
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  // hàm chuyển tới page profile
+  // và truyền state xác định tab QL đơn hàng
+  const nextToNotifications = async (notification) => {
+    const { id, is_read } = notification;
+    try {
+      // tạo mảng chứa id thông báo (API nhận kiểu mảng)
+      const arrId = [];
+      arrId.push(id);
+      // kiểm tra tình trạng thông báo và sử lí logic
+      if (is_read === 0) {
+        // tạo api
+        const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
+        // gọi api cập nhật trạng thái thông báo tại db
+        const results = await axios.put(api, arrId);
+
+        if (results.status === 200) {
+          arrId.forEach((id) => {
+            const data = {
+              id,
+              newStates: 1,
+            };
+            // Cập nhật trạng thái thông báo tại redux
+            dispatch(updateNotification(data));
+          });
+        }
+        // chuyển qua page chi tiết thông báo
+        navigate("/profile", {
+          state: {
+            tab: "tab2",
+            actions: "call_order",
+            order_id: notification.order_id,
+          },
+        });
+      } else {
+        // chuyển qua page chi tiết thông báo
+        navigate("/profile", {
+          state: {
+            tab: "tab2",
+            actions: "call_order",
+            order_id: notification.order_id,
+          },
+        });
+      }
+    } catch (error) {
+      // Log ra lỗi nếu có
+      console.log(error);
+    }
+  };
+
+  const totalCartPrice = (cart) => {
+    let total = 0;
+    cart.forEach((product) => {
+      total += parseFloat(product.totalPrice);
+    })
+    return total;
+  }
+
   return (
-    <Layout>
+    <Layout className="nav-container">
       <div className="danhmuc">
         <img
           style={{ width: "100%", height: "56px", objectFit: "cover" }}
@@ -481,42 +546,42 @@ const App = () => {
                 <div className="css-cssveg">
                   <div className="css-17xgviv">
                     <div
-                        data-content-region-name="headerBar"
-                        data-track-content="true"
-                        data-content-name="searchBox"
-                        className="css-7wh3a0"
+                      data-content-region-name="headerBar"
+                      data-track-content="true"
+                      data-content-name="searchBox"
+                      className="css-7wh3a0"
                     >
-                        <input
-                            className="search-input css-7jjcju"
-                            placeholder="Nhập từ khoá cần tìm"
-                            role="searchbox"
-                            aria-label="Search"
-                            value={searchQuery}
-                            onChange={handleInputChange}
-                            onKeyPress={event => {
-                                if (event.key === 'Enter') {
-                                    handleSearch();
-                                }
-                            }}
-                        />
+                      <input
+                        className="search-input css-7jjcju"
+                        placeholder="Nhập từ khoá cần tìm"
+                        role="searchbox"
+                        aria-label="Search"
+                        value={searchQuery}
+                        onChange={handleInputChange}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            handleSearch();
+                          }
+                        }}
+                      />
                     </div>
                     <div
-                        data-content-region-name="headerBar"
-                        data-track-content="true"
-                        data-content-name="searchButton"
-                        className="css-7kp13n"
+                      data-content-region-name="headerBar"
+                      data-track-content="true"
+                      data-content-name="searchButton"
+                      className="css-7kp13n"
                     >
-                        <button
-                            className="search-icon css-193nd6m"
-                            aria-label="Search"
-                            onClick={handleSearch}
-                        >
-                            <span
-                                size="26"
-                                color="#616161"
-                                className="css-1dn5jdn"
-                            ></span>
-                        </button>
+                      <button
+                        className="search-icon css-193nd6m"
+                        aria-label="Search"
+                        onClick={handleSearch}
+                      >
+                        <span
+                          size="26"
+                          color="#616161"
+                          className="css-1dn5jdn"
+                        ></span>
+                      </button>
                     </div>
                   </div>
                   <div className="css-1nb0ewh"></div>
@@ -566,82 +631,160 @@ const App = () => {
                 {/* notification */}
                 <Popover
                   content={
-                    <div style={{ width: "350px" }}>
-                      {/* title */}
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <h4>Thông báo</h4>
-                        <Tooltip title={"Đánh dấu tất cả đã đọc"}>
-                          <CheckOutlined
-                            onClick={handleReadAll}
-                            style={{ cursor: "pointer" }}
+                    arrayNotification.length !== 0 ? (
+                      <div style={{ width: "400px" }}>
+                        {/* title */}
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <h6 style={{ textTransform: "uppercase" }}>
+                            Thông báo
+                          </h6>
+                          <Tooltip title={"Đánh dấu tất cả đã đọc"}>
+                            <CheckOutlined
+                              onClick={handleReadAll}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        </div>
+                        <Divider style={{ margin: "0" }} />
+                        {/* list */}
+                        <div
+                          style={{
+                            width: "100%",
+                            maxHeight: "300px",
+                            overflowY: "auto",
+                            scrollbarWidth: "none",
+                          }}
+                        >
+                          <List
+                            itemLayout="horizontal"
+                            dataSource={arrayNotification}
+                            renderItem={(item, index) => (
+                              <List.Item
+                                onClick={() => nextToNotifications(item)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <List.Item.Meta
+                                  avatar={
+                                    <Avatar
+                                      style={{ backgroundColor: "white" }}
+                                      size={64}
+                                      icon={
+                                        item.type === "1" ? (
+                                          <FileDoneOutlined
+                                            style={{ color: "green" }}
+                                          />
+                                        ) : (
+                                          <FileExcelOutlined
+                                            style={{ color: "red" }}
+                                          />
+                                        )
+                                      }
+                                    />
+                                  }
+                                  title={
+                                    item.is_read === 0 ? (
+                                      <p className="notification-title">
+                                        {item.title}{" "}
+                                        <Tag color="red">Chưa đọc</Tag>
+                                      </p>
+                                    ) : (
+                                      <p
+                                        className="notification-title"
+                                        style={{ color: "#A9A9A9" }}
+                                      >
+                                        {item.title}
+                                      </p>
+                                    )
+                                  }
+                                  description={
+                                    item.is_read === 0 ? (
+                                      <p
+                                        className="notification-description"
+                                        style={{ color: "black" }}
+                                      >
+                                        {item.content}
+                                      </p>
+                                    ) : (
+                                      <p
+                                        className="notification-description"
+                                        style={{ color: "#A9A9A9" }}
+                                      >
+                                        {item.content}
+                                      </p>
+                                    )
+                                  }
+                                />
+                              </List.Item>
+                            )}
                           />
-                        </Tooltip>
-                      </div>
-                      <Divider style={{ margin: "0" }} />
-                      {/* list */}
-                      <div
-                        style={{
-                          width: "100%",
-                          maxHeight: "300px",
-                          overflowY: "auto",
-                          scrollbarWidth: "none",
-                        }}
-                      >
-                        <List
-                          itemLayout="horizontal"
-                          dataSource={arrayNotification}
-                          renderItem={(item, index) => (
-                            <List.Item
-                              style={
-                                item.status === true
-                                  ? {
-                                      backgroundColor: "#EAEAEA",
-                                      borderRadius: "5px",
-                                    }
-                                  : {}
-                              }
-                            >
-                              <List.Item.Meta
-                                avatar={
-                                  <Avatar
-                                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
-                                  />
-                                }
-                                title={
-                                  <a href="https://ant.design">{item.title}</a>
-                                }
-                                description={item.content}
-                              />
-                            </List.Item>
-                          )}
-                        />
-                      </div>
+                        </div>
 
-                      {/* views all notification */}
-                      <Divider style={{ margin: "0" }} />
-                      <div
-                        style={{
-                          padding: "10px 0 0 0",
-                          width: "100%",
-                          textAlign: "center",
-                        }}
-                      >
-                        <p style={{ cursor: "pointer" }}>
-                          Xem tất cả thông báo
-                        </p>
+                        {/* views all notification */}
+                        <Divider style={{ margin: "0" }} />
+                        <div
+                          style={{
+                            padding: "10px 0 0 0",
+                            width: "100%",
+                            textAlign: "center",
+                          }}
+                        >
+                          <p style={{ cursor: "pointer", margin: "0" }}>
+                            <Link to="profile" state={{ tab: "tab3" }}>
+                              Xem tất cả thông báo
+                            </Link>
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div style={{ width: "400px", minHeight: "150px" }}>
+                        {/* title */}
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <h6 style={{ textTransform: "uppercase" }}>
+                            Thông báo
+                          </h6>
+                          <Tooltip title={"Đánh dấu tất cả đã đọc"}>
+                            <CheckOutlined
+                              onClick={handleReadAll}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        </div>
+                        <Divider style={{ margin: "0" }} />
+                        {/* content */}
+                        <Empty
+                          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                          imageStyle={{ height: 60 }}
+                          description={
+                            <span style={{ color: "#A9A9A9" }}>
+                              Hiện không có thông báo nào
+                            </span>
+                          }
+                        ></Empty>
+                      </div>
+                    )
                   }
                 >
                   <Badge
                     className="thongbao"
-                    count={arrayNotification ? arrayNotification.length : 0}
+                    count={
+                      arrayNotification
+                        ? arrayNotification.filter(
+                            (notification) => notification.is_read === 0
+                          ).length
+                        : []
+                    }
                     style={{
                       marginTop: "10px",
                       marginRight: "10px",
@@ -667,7 +810,7 @@ const App = () => {
                       <div
                         style={{
                           width: "100%",
-                          maxHeight: "200px",
+                          maxHeight: "300px",
                           overflowY: "auto",
                           scrollbarWidth: "none",
                         }}
@@ -706,9 +849,12 @@ const App = () => {
                                 }
                                 description={
                                   <>
-                                    <div>Giá: {selectedItems.price} ₫</div>
                                     <div>
-                                      Số lượng: {selectedItems.quantity}
+                                      Giá:{" "}
+                                      {formatCurrency(selectedItems?.price)}
+                                    </div>
+                                    <div>
+                                      Số lượng: {selectedItems?.quantity}
                                     </div>{" "}
                                     {/* Hiển thị số lượng */}
                                   </>
@@ -718,14 +864,15 @@ const App = () => {
                           )}
                         />
                       </div>
-                      <Divider />
-               
-
+                      <Divider style={{margin:"0 0 5px"}}/>
+                      {/* <div style={{display:"flex", justifyContent:"space-between", margin:"0 0 5px"}}>
+                      <div>Tổng tiền ({cart.length}) sản phẩm: </div>
+                      <div style={{fontSize:"16px", fontWeight:"500", color:"red"}}>{formatCurrency(totalCartPrice(cart))}</div>
+                      </div> */}
                       <Button style={{ width: "100%", borderRadius: "3px" }}>
                         <NavLink to="/cart">
                           <p>Xem giỏ hàng</p>
                         </NavLink>
-
                       </Button>
                     </div>
                   }

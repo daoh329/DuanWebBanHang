@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row, Menu } from "antd";
 import {
   TagsOutlined,
@@ -20,12 +20,20 @@ import {
 import { Routes, Route, Link } from "react-router-dom";
 import "./Admin.css";
 import Dashboard from "./Pages/Dashboard";
+import DashboardRevenue from "./Pages/DashboardRevenue";
 import TypeProduct from "./Pages/NewProduct/Type/TypeProduct";
 import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/QLSanPham/Products";
 // import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
+import QLshipping from "./QLshipping";
+import QLdelivered from "./QLdelivered";
+import QLAlldonhang from "./QLAlldonhang";
+import QLdeliveryfailed from "./QLdeliveryfailed";
+import TabsQLdonhang from "./Pages/TabsQLdonhang";
+
+import QLAlldelivered from "./QLAlldelivered";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
@@ -39,22 +47,29 @@ function Admin() {
       icon: <UserOutlined />,
       label: "Admin",
       children: [
+        // {
+        //   key: "1",
+        //   icon: <HomeOutlined />,
+        //   label: (
+        //     <Link to="dashboard">Biểu đồ thống kê đơn hàng</Link>
+        //   ),
+        // },
         {
-          key: "1",
+          key: "2",
           icon: <HomeOutlined />,
           label: (
-            <Link to="dashboard">Bảng điều khiển</Link>
+            <Link to="dashboardrevenue">Biểu đồ thống kê doanh thu</Link>
           ),
         },
         {
-          key: "2",
+          key: "3",
           icon: <AppstoreAddOutlined />,
           label: (
             <Link to="newproduct">Tạo sản phẩm mới</Link>
           ),
         },
         {
-          key: "3",
+          key: "4",
           icon: <GiftOutlined />,
           label: (
             <Link to="newcoupon">Tạo mã giảm giá</Link>
@@ -68,26 +83,26 @@ function Admin() {
       label: "Mục lục",
       children: [
         {
-          key: "4",
+          key: "5",
           icon: <ShoppingOutlined />,
           label: (
             <Link to="products">Tất cả sản phẩm</Link>
           ),
         },
         {
-          key: "5",
+          key: "6",
           icon: <OrderedListOutlined />,
           label: (
             <Link to="ListCate">Danh mục</Link>
           ),
         },
         {
-          key: "6",
+          key: "7",
           icon: <BookOutlined />,
           label: "Bộ sưu tập",
         },
         {
-          key: "7",
+          key: "8",
           icon: <DatabaseOutlined />,
           label: "Thuộc tính",
         },
@@ -96,26 +111,78 @@ function Admin() {
     {
       key: "sub4",
       icon: <DollarCircleOutlined />,
-      label: "Doanh thu",
+      label: "Trạng thái đơn hàng",
       children: [
         {
-          key: "8",
+          key: "9",
           icon: <ShoppingCartOutlined />,
           label: (
-            <Link to="/orders">Đơn đặt hàng</Link>
+            <Link to="/dondathang">Đơn đặt hàng</Link>
            
           ),
-
         },
+        {
+          key: "10",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/vanchuyen">Xác nhận vận chuyển</Link>
+           
+          ),
+        },
+        {
+          key: "11",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/xacnhangiaohang">Xác nhận đơn hàng</Link>
+           
+          ),
+        },
+
       ],
     },
+
+    {
+      key: "sub9",
+      icon: <DollarCircleOutlined />,
+      label: "Quản lý đơn hàng",
+      children: [
+        {
+          key: "12",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/quanlydonhang">Tất cả đơn hàng</Link>
+           
+          ),
+        },  
+
+        {
+          key: "18",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/quanlydagiao">Đơn hàng đã giao</Link>
+           
+          ),
+        },  
+
+        {
+          key: "13",
+          icon: <ShoppingCartOutlined />,
+          label: (
+            <Link to="/quanlygiaohuy">Đã hủy hoặc giao không thành công</Link>
+           
+          ),
+        },  
+
+      ],
+    },
+
     {
       key: "sub5",
       icon: <GiftOutlined />,
       label: "Khuyến mãi",
       children: [
         {
-          key: "9",
+          key: "14",
           label: "Phiếu giảm giá",
           icon: <TagsOutlined />,
         },
@@ -127,7 +194,7 @@ function Admin() {
       label: "CMS",
       children: [
         {
-          key: "10",
+          key: "15",
           label: "Trang",
           icon: <FileProtectOutlined />,
         },
@@ -139,11 +206,11 @@ function Admin() {
       label: "Setting",
       children: [
         {
-          key: "11",
+          key: "16",
           label: "Option 1",
         },
         {
-          key: "12",
+          key: "17",
           label: "Option 2",
         },
       ],
@@ -177,7 +244,10 @@ function Admin() {
   //   return null;
   // });
 
-
+  useEffect(() => {
+    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
+  }, []);
+  
   return (
     <>
       <Row>
@@ -196,6 +266,7 @@ function Admin() {
           
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="dashboardrevenue" element={<DashboardRevenue />} />
             <Route path="newproduct" element={<TypeProduct />} />
             <Route path="newcoupon" element={<NewCoupon />} />
             <Route
@@ -203,7 +274,13 @@ function Admin() {
               element={<Products style={{ marginRight: "20px" }} />}
             />
             <Route path="orders" element={<OrderList />} />
+            <Route path="shippingOrder" element={<QLshipping />} />
+            <Route path="deliveredOrder" element={<QLdelivered />} />
+            <Route path="allOrders" element={<QLAlldonhang />} />
+            <Route path="alldelivered" element={<QLAlldelivered />} />
+            <Route path="deliveryfailedOrder" element={<QLdeliveryfailed />} />
             <Route path="ListCate" element={<TypeList />} />
+          
           </Routes>
         </Col>
         <Col span={6} pull={18}>

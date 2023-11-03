@@ -76,7 +76,7 @@ export default function Buy() {
     if (user) {
       getDeliveryAddress();
     }
-  }, []);
+  }, [user]);
 
   // modal
   const showModalAdd = (value) => {
@@ -156,7 +156,7 @@ export default function Buy() {
       note: note,
       status: 0,
     };
-  
+
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
@@ -174,16 +174,16 @@ export default function Buy() {
       },
       body: JSON.stringify(data),
     });
-  
+
     // Xử lý kết quả trả về từ server NodeJS
     if (response.ok) {
       // Thông báo thành công
       message.success("Thanh toán đơn hàng thành công");
-  
+
       // Chuyển hướng người dùng đến trang thông báo thành công
       window.location.replace("/success");
 
-  
+
       // Xóa sản phẩm khỏi giỏ hàng
       removeFromCart(productID);
     } else {
@@ -197,17 +197,17 @@ export default function Buy() {
       }
     }
   };
-  
+
   const removeFromCart = (productID) => {
     // Xóa sản phẩm khỏi selectedItems
     const updatedSelectedItems = buysData.selectedItems.filter(item => item.id !== productID);
-  
+
     // Cập nhật buysData
     const updatedBuysData = { ...buysData, selectedItems: updatedSelectedItems };
-  
+
     // Cập nhật trạng thái buysData
     setBuysData(updatedBuysData);
-  
+
     // Lưu buysData vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(updatedBuysData));
   };
@@ -226,7 +226,7 @@ export default function Buy() {
       console.log("dữ liệu total:", Number(parsedBuysData.total));
     }
   }, []);
-  
+
   const handleBuyVNpay = async () => {
     // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
     // console.log('amount: '+totalAmount)
@@ -237,7 +237,7 @@ export default function Buy() {
       bankCode,
       language,
     };
-  
+
     const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
       method: "POST",
       headers: {
@@ -245,9 +245,9 @@ export default function Buy() {
       },
       body: JSON.stringify(data),
     });
-    
+
     const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
-  
+
     if (responseData && responseData.url) {
       window.location.href = responseData.url;
     }
@@ -266,22 +266,22 @@ export default function Buy() {
     const data = {
       amount,
     };
-  
+
     const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/paymomo`, {
       method: "POST",
       headers: {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-    
+
     const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
-    
+
     if (responseData && responseData.url) {
       window.location.href = responseData.url;
     } else if (responseData && responseData.error) {
-        // Hiển thị thông báo lỗi
-        message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
+      // Hiển thị thông báo lỗi
+      message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
     }
   }
 
@@ -337,7 +337,7 @@ export default function Buy() {
 
                   <MDBTabsContent>
                     <MDBTabsPane show={fillActive === "tab1"}>
-                      <h6>Thông tin nhận hàng</h6>
+                      <h6 style={{marginTop:'10px'}}>Thông tin nhận hàng</h6>
                       <div className="address-group">
                         {/* show address */}
                         {user.id &&
@@ -371,39 +371,33 @@ export default function Buy() {
                         {/*  */}
                       </div>
                       <div className="radio">
-                        <label>
+                        <label style={{ display: "block", fontSize: "15px", marginBottom: "10px" , fontWeight:'bold'}}>
                           Phương thức giao hàng
-                          <div>
-                            <label>
-                              <input
-                                type="checkbox"
-                                value="Tất cả các ngày trong tuần"
-                                CheckOutlined={
-                                  deliveryMethod === "Tất cả ngày trong tuần"
-                                }
-                                onChange={(e) =>
-                                  setDeliveryMethod(
-                                    e.target.checked ? e.target.value : ""
-                                  )
-                                }
-                              />
-                              Tất cả ngày trong tuần
-                            </label>
-                            <label>
-                              <input
-                                type="checkbox"
-                                value="Chủ nhật"
-                                checked={deliveryMethod === "Chủ nhật"}
-                                onChange={(e) =>
-                                  setDeliveryMethod(
-                                    e.target.checked ? e.target.value : ""
-                                  )
-                                }
-                              />
-                              Chủ nhật
-                            </label>
-                          </div>
                         </label>
+                        <div style={{justifyContent: "space-between", }}>
+                          <label style={{ display: "flex", alignItems: "center" }}>
+                            <input
+                              type="checkbox"
+                              value="ngày trong tuần"
+                              checked={deliveryMethod === "ngày trong tuần"}
+                              onChange={(e) =>
+                                setDeliveryMethod(e.target.checked ? e.target.value : "")
+                              }
+                            />
+                            Ngày trong tuần
+                          </label>
+                          <label style={{ display: "flex", alignItems: "center" }}>
+                            <input
+                              type="checkbox"
+                              value="Chủ nhật"
+                              checked={deliveryMethod === "Chủ nhật"}
+                              onChange={(e) =>
+                                setDeliveryMethod(e.target.checked ? e.target.value : "")
+                              }
+                            />
+                            Chủ nhật
+                          </label>
+                        </div>
                       </div>
 
                       {/* <div className="css-18c0ysw snipcss0-4-4-52">
@@ -877,7 +871,7 @@ export default function Buy() {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
                       >
-                        {paymentMenthod==0?<Button
+                        {paymentMenthod == 0 ? <Button
                           data-content-region-name="paymentMethod"
                           data-track-content="true"
                           data-content-name="COD"
@@ -908,7 +902,7 @@ export default function Buy() {
                             Thanh toán qua Internet Banking, Visa, Master, JCB,
                             VNPAY-QR
                           </div>
-                        </Button>:<Button
+                        </Button> : <Button
                           data-content-region-name="paymentMethod"
                           data-track-content="true"
                           data-content-name="COD"
@@ -1087,7 +1081,7 @@ export default function Buy() {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
                         id="style-poooX"
                       >
-                        {paymentMenthod==2?<Button
+                        {paymentMenthod == 2 ? <Button
                           data-content-region-name="paymentMethod"
                           data-track-content="true"
                           data-content-name="ZALOPAY_GATEWAY"
@@ -1110,7 +1104,7 @@ export default function Buy() {
                             type="body"
                             className="css-9o8e5m snipcss0-9-82-86"
                           ></div>
-                        </Button>:<Button
+                        </Button> : <Button
                           data-content-region-name="paymentMethod"
                           data-track-content="true"
                           data-content-name="ZALOPAY_GATEWAY"
@@ -1276,9 +1270,9 @@ export default function Buy() {
                               </span>
                               <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
                                 {/* Giá khuyến mãi */}
-                                <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
+                                {/* <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
                                   {formatCurrency(item.promoPrice)}
-                                </span>
+                                </span> */}
                               </div>
                             </div>
                           </div>

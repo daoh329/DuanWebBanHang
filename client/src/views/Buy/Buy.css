@@ -1646,9 +1646,10 @@ svg {
 .radio {
   display: inline-grid;
   margin-right: 70%;
+  padding: 0 40px;
 }
 .email {
-  display: inli;
+  display: inline;
   display: inline-grid;
   margin-right: 60%;
   margin-top: 20px;

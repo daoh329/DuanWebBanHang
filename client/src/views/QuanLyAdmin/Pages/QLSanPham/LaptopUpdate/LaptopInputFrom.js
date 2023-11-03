@@ -9,10 +9,11 @@ import {
   notification,
 } from "antd";
 import axios from "axios";
+import { formatCurrency } from "../../../../../util/FormatVnd";
 
 const { Option } = Select;
 
-function LaptopInputFrom({ data }) {
+function LaptopInputFrom({ data, onClick, setModal }) {
   const product = data;
   // function select element
   const [brands, setBrands] = useState([]);
@@ -47,15 +48,12 @@ function LaptopInputFrom({ data }) {
   useEffect(() => {
     getBrands();
     getColors();
-  }, []);
+  }, [product]);
 
   const onFinish = async (values) => {
     setIsLoading(true);
     try {
-      // kiểm tra nếu "" thì set là undefined
-      // (undefined không được đưa lên server)
       var checkValuesChange = false;
-
       const fieldsConfiguraton = [
         "M2_slot_type_supported",
         "accessory",
@@ -77,7 +75,8 @@ function LaptopInputFrom({ data }) {
         "vga",
         "wireless_connectivity",
       ];
-
+      // kiểm tra nếu "" thì set là undefined
+      // (undefined không được đưa lên server)
       values.configuration = values.configuration || {};
       for (const fieldName in values) {
         if (!values[fieldName]) {
@@ -87,28 +86,66 @@ function LaptopInputFrom({ data }) {
           ) {
             values.configuration[fieldName] = product.configuration[fieldName];
           } else if (values[fieldName] === "") {
-            values[fieldName] = undefined;
+            if (fieldsConfiguraton.includes(fieldName)) {
+              if (
+                product.configuration[fieldName] === undefined ||
+                values[fieldName] === product.configuration[fieldName]
+              ) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            } else {
+              if (values[fieldName] === product[fieldName]) {
+                values[fieldName] = undefined;
+              } else {
+                checkValuesChange = true;
+              }
+            }
           }
         } else if (values[fieldName]) {
+          // Nếu field đó thuộc configuaration
           if (fieldsConfiguraton.includes(fieldName)) {
-            values.configuration[fieldName] = values[fieldName];
-            delete values[fieldName];
+            // kiểm tra xem giá trị field đó có khác mặc định không?
+            if (values[fieldName] == product.configuration[fieldName]) {
+              // Nếu không khác
+              // gán giá trị cho field đó vào thuộc tính configuration
+              values.configuration[fieldName] = values[fieldName];
+              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
+              delete values[fieldName];
+            } else {
+              // Nếu dữ liệu khác mặc định
+              // Đặt là có dữ liệu thay đổi
+              checkValuesChange = true;
+              // gán giá trị cho field đó vào thuộc tính configuration
+              values.configuration[fieldName] = values[fieldName];
+              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
+              delete values[fieldName];
+            }
+          } else {
+            // Nếu có giá trị thay đổi trong form thì đặt thành true
+            // ( = true sẽ tiếp tục call API)
+            if (fieldName !== "configuration") {
+              checkValuesChange = true;
+            }
           }
-          checkValuesChange = true;
         }
       }
+
       values["color"] = values["color"] || [];
-      if (colorSubmit != product.color) {
+      if (colorSubmit.toString() !== product.color.toString()) {
         values["color"] = colorSubmit;
+        checkValuesChange = true;
+      } else {
+        values["color"] = product.color;
       }
 
       if (!checkValuesChange) {
         setIsLoading(false);
         return notification.warning({
-          message: "Không có dữ liệu được thay đổi",
+          message: "Không có dữ liệu thay đổi",
         });
       }
-
       // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
@@ -121,6 +158,8 @@ function LaptopInputFrom({ data }) {
           notification.success({
             message: "Cập nhật thành công!",
           });
+          setModal(false);
+          onClick();
         }, 2000);
       }
       setTimeout(() => {
@@ -198,6 +237,20 @@ function LaptopInputFrom({ data }) {
         />
       </Form.Item>
 
+      {/* Giá đã giảm */}
+      <Form.Item
+        label={`Giá đã giảm (Max: ${formatCurrency(product.price)})`}
+        name="discount"
+      >
+        <InputNumber
+          max={product ? product.price : 0}
+          min={0}
+          defaultValue={product ? product.discount : null}
+          style={{ width: "100%" }}
+          placeholder="Nhập giá đã giảm"
+        />
+      </Form.Item>
+
       {/* Mô tả ngắn */}
       <Form.Item label="Mô tả ngắn" name="shortDescription">
         <Input.TextArea
@@ -224,7 +277,7 @@ function LaptopInputFrom({ data }) {
 
       {/* colors */}
       <div className="form-group">
-        <label className="form-label">Màu sắc</label>
+        <label>Màu sắc</label>
         <div
           style={{
             display: "flex",
@@ -264,6 +317,14 @@ function LaptopInputFrom({ data }) {
         <InputNumber
           defaultValue={product ? product.quantity : null}
           placeholder="Nhập số lượng sản phẩm đang bán"
+        />
+      </Form.Item>
+
+      {/* số lượng còn lại */}
+      <Form.Item label="Số lượng còn lại" name="remaining_quantity">
+        <InputNumber
+          defaultValue={product ? product.remaining_quantity : null}
+          placeholder="Nhập số lượng sản phẩm còn lại"
         />
       </Form.Item>
 

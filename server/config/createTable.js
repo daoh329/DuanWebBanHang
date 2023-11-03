@@ -6,6 +6,7 @@ const createTables = () => {
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255) UNIQUE,
     price NUMERIC(10,2),
+    discount NUMERIC(10,2) default 0,
     shortDescription varchar(255),
     CategoryID int,
     status boolean,
@@ -34,7 +35,7 @@ const createTables = () => {
   const deliveryMethod = `CREATE TABLE IF NOT EXISTS deliveryMethod (
     name varchar(255) PRIMARY KEY
   );`;
-  const IsvaluedeliveryMethod=`INSERT INTO deliveryMethod (name) VALUES
+  const IsvaluedeliveryMethod = `INSERT INTO deliveryMethod (name) VALUES
   ('ngày trong tuần'),
   ('cuối tuần'),
   ('Chủ nhật')
@@ -52,6 +53,7 @@ const createTables = () => {
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
     id int PRIMARY KEY AUTO_INCREMENT,
     quantity int,
+    remaining_quantity int,
     brand varchar(255),
     configuration longtext,
     description longtext,
@@ -87,8 +89,8 @@ const createTables = () => {
     phone varchar(255),
     email varchar(255) UNIQUE,
     permission varchar(50)
-  );`
-  const delivery_address =`CREATE TABLE IF NOT EXISTS delivery_address (
+  );`;
+  const delivery_address = `CREATE TABLE IF NOT EXISTS delivery_address (
     id int PRIMARY KEY AUTO_INCREMENT,
     idUser int,
     name varchar(255),
@@ -100,19 +102,32 @@ const createTables = () => {
     phone varchar(255),
     setdefault tinyint,
     FOREIGN KEY (idUser) REFERENCES users (id)
-  );`
-  const promotional =`CREATE TABLE IF NOT EXISTS promotional (
+  );`;
+  const promotional = `CREATE TABLE IF NOT EXISTS promotional (
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(255),
     percent_discount FLOAT
-  );`
-  const promotional_product=`CREATE TABLE IF NOT EXISTS promotional_product (
+  );`;
+  const promotional_product = `CREATE TABLE IF NOT EXISTS promotional_product (
     id int PRIMARY KEY AUTO_INCREMENT,
     product_id int,
     promotional_id int,
     FOREIGN KEY (promotional_id) REFERENCES promotional(id),
     FOREIGN KEY  (product_id) REFERENCES product(id)
-  );`
+  );`;
+
+  const notitications = `CREATE TABLE IF NOT EXISTS Notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT null,
+    user_id INT NOT NULL, 
+    title text NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    type text NOT NULL,  
+    is_read BOOLEAN DEFAULT 0
+);`;
+
   mysql2.query(deliveryMethod, (error, results, fields) => {
     if (error) {
       console.error(error);
@@ -144,7 +159,7 @@ const createTables = () => {
       console.error(error);
     }
   });
-  
+
   mysql2.query(product, (error, results, fields) => {
     if (error) {
       console.error(error);
@@ -186,6 +201,11 @@ const createTables = () => {
     }
   });
   mysql2.query(promotional_product, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(notitications, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
