@@ -10,13 +10,36 @@ export const cartSlice = createSlice({
   reducers: {
     addProductToCart: (state, action) => {
       state.products = action.payload;
+      localStorage.setItem("cart", JSON.stringify(state.products));
     },
     deleteProductInCart: (state, action) => {
       const product_id = action.payload;
       const updatedProducts = state.products.filter(
         (product) => product.id !== product_id
       );
+      localStorage.setItem(
+        "cart",
+        JSON.stringify({ ...state, products: updatedProducts }.products)
+      );
       return { ...state, products: updatedProducts };
+    },
+    updateProductCart: (state, action) => {
+      const { id, price, brand, main_image, shortDescription } =
+        action.payload;
+      const productUpdate = [...state.products].find(
+        (product) => product.id === id
+      );
+      if (productUpdate) {
+        productUpdate.price = price;
+        productUpdate.brand = brand;
+        productUpdate.main_image = main_image;
+        productUpdate.shortDescription = shortDescription;
+        productUpdate.totalPrice = price * productUpdate.quantity;
+      }
+      localStorage.setItem(
+        "cart",
+        JSON.stringify(state.products)
+      );
     },
     increaseProduct: (state, action) => {
       const { product_id } = action.payload;
@@ -28,7 +51,7 @@ export const cartSlice = createSlice({
         cartToUpdate.totalPrice = cartToUpdate.price * cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
-      sessionStorage.setItem("cart", JSON.stringify(state.products));
+      localStorage.setItem("cart", JSON.stringify(state.products));
     },
     decreaseProduct: (state, action) => {
       const { product_id } = action.payload;
@@ -40,13 +63,18 @@ export const cartSlice = createSlice({
         cartToUpdate.totalPrice = cartToUpdate.price * cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
-      sessionStorage.setItem("cart", JSON.stringify(state.products));
+      localStorage.setItem("cart", JSON.stringify(state.products));
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addProductToCart, deleteProductInCart, increaseProduct, decreaseProduct } =
-  cartSlice.actions;
+export const {
+  addProductToCart,
+  deleteProductInCart,
+  increaseProduct,
+  decreaseProduct,
+  updateProductCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

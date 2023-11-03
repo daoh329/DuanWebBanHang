@@ -19,7 +19,7 @@ function CardProduct(props) {
   return (
     <div className="sanpham-card" onClick={handleViewDetail}>
       <img
-        src={process.env.REACT_APP_API_URL + item.thumbnail}
+        src={process.env.REACT_APP_API_URL + item.main_image}
         style={{
           color: "#333333",
           fontSize: "14px",
@@ -76,6 +76,7 @@ function CardProduct(props) {
             margin: "0px 0px 8px",
             width: "154px",
             height: "auto",
+
           }}
         >
           {item.shortDescription}
