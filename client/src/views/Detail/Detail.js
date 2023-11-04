@@ -295,7 +295,7 @@ function Detail() {
   return (
     <>
       <div>
-        <div className="css-rfz8yf snipcss-lgA99 style-BooKL">
+        <div className="style-1">
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
@@ -669,7 +669,57 @@ function Detail() {
             </div>
           </div>
         </div>
-        {/* <div className="style-2"></div> */}
+        <div className="style-3">
+        <div className="fle-x-sp-lien-quan">
+            <div>
+              <div className="title-sp-lien-quan">Sản phẩm liên quan</div>
+            </div>
+
+             <div className="glide css-npa7ru glide--ltr glide--slider glide--swipeable">
+              <div className="glide__track" data-glide-el="track">
+                <div className="glide__slides">
+                  <div className="glide__slide glide__slide--active" style={{height:"unset",marginRight:"5px",width:"232px"}}>
+                    <div className="css-1ei4kcr">
+                      <div className="product-card css-1msrncq" data-content-region-name="relatedProducts"data-track-content="true"data-content-name="210400696"data-content-target="productDetail">
+                        <a target="_self"class="css-pxdb0j"href="/acer-nitro-5-an515-45-r9sc-nh-qbrsv-001--s210400696">
+                          <div className="css-4rhdrh">
+                            <div className="css-1v97aik">
+                              <div className="css-798fc">
+                            <div className="css-1uzm8bv" >
+                            </div>
+                              </div>
+                              <div className="css-14q2k9d">
+                                <div className="css-zb7zul">
+                                  <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                                  <div className="css-1rdv2qd">1.800.000 ₫</div>
+                                </div>
+
+                              </div>
+                            </div>
+                            <div className="css-68cx5s"></div>
+                            <div className="css-1ybkowq"></div>
+                            <div className="css-kgkvir"></div>
+                            <div></div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                 
+
+                </div>
+              </div>
+
+             </div>
+   
+
+
+
+          </div>
+          </div>
+
+
         {/* main */}
         {/* modal */}
         <Modal
