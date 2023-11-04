@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./Cart.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-} from "mdb-react-ui-kit";
+import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
-import { decreaseProduct, deleteProductInCart, increaseProduct } from "../../redux/cartSlice";
+import {
+  decreaseProduct,
+  deleteProductInCart,
+  increaseProduct,
+} from "../../redux/cartSlice";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -18,7 +18,7 @@ function formatCurrency(value) {
 function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
-  const cart = useSelector(state => state.cart.products);
+  const cart = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -115,7 +115,7 @@ function Cart() {
   const increaseQuantity = (productId) => {
     const data = {
       product_id: productId,
-    }
+    };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
@@ -125,9 +125,9 @@ function Cart() {
   const decreaseQuantity = (productId) => {
     const data = {
       product_id: productId,
-    }
+    };
     // Cập nhật giỏ hàng
-    dispatch(decreaseProduct(data))
+    dispatch(decreaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
@@ -136,8 +136,9 @@ function Cart() {
   // const [selectedItems, setSelectedItems] = useState([]);
   // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
-
   const handleViewDetailProduct = (products) => {
+    console.log(products);
+
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
       console.error("Product ID is undefined!");
@@ -151,6 +152,7 @@ function Cart() {
       price: products.price,
       discount: products.discount,
       main_image: products.main_image,
+      thumbnail: products.thumbnail,
       brand: products.brand,
       id: products.id,
     };
@@ -229,7 +231,11 @@ function Cart() {
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
-                          src={process.env.REACT_APP_API_URL + item.main_image}
+                          src={
+                            item.main_image
+                              ? process.env.REACT_APP_API_URL + item.main_image
+                              : process.env.REACT_APP_API_URL + item.thumbnail
+                          }
                           alt="main_image"
                         />
                       </td>

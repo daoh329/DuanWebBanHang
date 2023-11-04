@@ -108,12 +108,11 @@ function Detail() {
       .then((response) => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
-
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
-        const productThumbnails = response.data.thumbnails;
+        const productThumbnails = [ ...response.data.thumbnails];
         setThumbnails(productThumbnails);
       })
       .catch((error) => {
@@ -249,6 +248,7 @@ function Detail() {
     const newItem = {
       id: Detail.p_ID,
       main_image: Detail.main_image,
+      thumbnail: Detail.thumbnails[0].thumbnail,
       shortDescription: Detail.shortDescription,
       price:
         Detail.discount > 0 && Detail.price > Detail.discount
@@ -341,7 +341,7 @@ function Detail() {
                           {Detail &&
                             Detail.thumbnails &&
                             Detail.thumbnails.length > 0 &&
-                            Detail.thumbnails.map((thumbnail, index) => (
+                            [...Detail.thumbnails].map((thumbnail, index) => (
                               <div key={index}>
                                 <img
                                   src={
@@ -362,7 +362,7 @@ function Detail() {
                   {Detail &&
                     Detail.thumbnails &&
                     Detail.thumbnails.length > 0 &&
-                    Detail.thumbnails.map((thumbnail, index) => (
+                    [...Detail.thumbnails].map((thumbnail, index) => (
                       <Image.PreviewGroup
                         key={index}
                         preview={{
