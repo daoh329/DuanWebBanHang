@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./Cart.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-} from "mdb-react-ui-kit";
+import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
-import { decreaseProduct, deleteProductInCart, increaseProduct } from "../../redux/cartSlice";
+import {
+  decreaseProduct,
+  deleteProductInCart,
+  increaseProduct,
+} from "../../redux/cartSlice";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -18,7 +18,7 @@ function formatCurrency(value) {
 function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
-  const cart = useSelector(state => state.cart.products);
+  const cart = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -107,23 +107,15 @@ function Cart() {
 
   //xóa sp
   const removeFromCart = (productId) => {
-    // Tìm sản phẩm cần xóa trong giỏ hàng
-    const updatedCart = cart.filter((item) => item.id !== productId);
-
-    // Cập nhật danh sách sản phẩm được chọn (nếu sản phẩm bị xóa đang được chọn)
-    setSelectedProducts((prevSelected) =>
-      prevSelected.filter((productId) => productId !== productId)
-    );
+    // xóa trong cart
     dispatch(deleteProductInCart(productId));
-    // Lưu danh sách giỏ hàng đã cập nhật vào session
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = (productId) => {
     const data = {
       product_id: productId,
-    }
+    };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
@@ -133,9 +125,9 @@ function Cart() {
   const decreaseQuantity = (productId) => {
     const data = {
       product_id: productId,
-    }
+    };
     // Cập nhật giỏ hàng
-    dispatch(decreaseProduct(data))
+    dispatch(decreaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
@@ -144,8 +136,9 @@ function Cart() {
   // const [selectedItems, setSelectedItems] = useState([]);
   // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
-
   const handleViewDetailProduct = (products) => {
+    console.log(products);
+
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
       console.error("Product ID is undefined!");
@@ -158,6 +151,7 @@ function Cart() {
       shortDescription: products.shortDescription,
       price: products.price,
       discount: products.discount,
+      main_image: products.main_image,
       thumbnail: products.thumbnail,
       brand: products.brand,
       id: products.id,
@@ -173,8 +167,6 @@ function Cart() {
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
-
-    console.log("click");
     navigate(`/detail/${products.id}`);
   };
 
@@ -239,8 +231,12 @@ function Cart() {
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
-                          src={process.env.REACT_APP_API_URL + item.thumbnail}
-                          alt="thumbnail"
+                          src={
+                            item.main_image
+                              ? process.env.REACT_APP_API_URL + item.main_image
+                              : process.env.REACT_APP_API_URL + item.thumbnail
+                          }
+                          alt="main_image"
                         />
                       </td>
                       <td style={{ lineHeight: "18px", fontSize: "14px" }}>

@@ -65,7 +65,10 @@ const Search = () => {
     const historyproduct = {
       shortDescription: products.shortDescription,
       price: products.price,
-      avatar: products.thumbnail,
+      discount: products.discount,
+      main_image: products.main_image,
+      thumbnail: products.thumbnail,
+      brand: products.brand,
       id: products.id,
     };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không

@@ -536,16 +536,11 @@ class OrderController {
     try {
       const product_id = req.params.id;
       const sl_product = `SELECT 
-      product.id,
-      product.name,
-      product.price,
-      product.status,
-      product.shortDescription,
+      product.*,
       productDetails.brand,
       productDetails.quantity,
       productDetails.created_at,
       productDetails.configuration,
-      productDetails.description,
       category.name as category,
       CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color,
       CONCAT('[', GROUP_CONCAT('{"galery": "', galery.thumbnail, '"}' SEPARATOR ','), ']') as galery
@@ -557,7 +552,7 @@ class OrderController {
       WHERE product.id = ?
       GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
       productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, 
-      productDetails.description, category.name;`;
+      category.name;`;
       const results = await query(sl_product, [product_id]);
       // chuyển string thành mảng (color, image)
       // color

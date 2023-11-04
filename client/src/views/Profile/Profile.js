@@ -27,7 +27,6 @@ import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { format } from "date-fns";
-import { reloadPage } from "../../redux/reloadSlice";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
@@ -35,7 +34,6 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
-  const reloadGetDataFunction = useSelector((state) => state.reload.status);
 
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
@@ -154,11 +152,6 @@ export default function Profile() {
           `Đơn hàng ${record.order_id} của hạn đã được hủy thành công`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-        if (reloadGetDataFunction) {
-          dispatch(reloadPage(false));
-        } else {
-          dispatch(reloadPage(true));
-        }
       } catch (error) {
         console.error("Error canceling order:", error);
       }
@@ -305,6 +298,7 @@ export default function Profile() {
                 active={verticalActive === "tab1"}
               >
                 <Avatar src={user.picture} size="large" />
+                &nbsp;
                 {user.name}
               </MDBTabsLink>
             </MDBTabsItem>

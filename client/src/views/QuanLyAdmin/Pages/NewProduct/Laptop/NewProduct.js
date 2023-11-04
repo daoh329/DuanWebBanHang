@@ -17,6 +17,7 @@ function NewProduct() {
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
   const [colorSubmit, setColorSubmit] = useState([]);
+  const [mainImage, setMainImage] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -24,6 +25,7 @@ function NewProduct() {
       guarantee: "",
       name: "",
       price: 0,
+      main_image: {},
       shortDescription: "",
       series: "",
       part_number: "",
@@ -96,6 +98,8 @@ function NewProduct() {
       // description: Yup.string().required("Vui lòng nhập trường này."),
     }),
     onSubmit: async (values) => {
+      // Lấy dữ liệu ảnh chính
+      values.main_image = mainImage[0]?.originFileObj;
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
@@ -169,6 +173,12 @@ function NewProduct() {
     },
   });
 
+  useEffect(() => {
+    // get brands and color data
+    getBrands();
+    getColors();
+  }, []);
+
   // function call api get brands
   const getBrands = async () => {
     await axios
@@ -192,12 +202,6 @@ function NewProduct() {
         console.log(e);
       });
   };
-
-  useEffect(() => {
-    // get brands and color data
-    getBrands();
-    getColors();
-  }, []);
 
   // select color
   const handleChange = (value) => {
@@ -344,7 +348,6 @@ function NewProduct() {
                 </Select>
               </div>
             </div>
-
             {/* Nhu cầu */}
             <div className="form-group">
               <label className="form-label">Nhu cầu</label>
@@ -392,7 +395,7 @@ function NewProduct() {
               )}
             </div>
             {/* image */}
-            <ImageInput formik={formik} />
+            <ImageInput setMainImage={setMainImage} formik={formik} />
             {/* status */}
             <div
               style={{ flexDirection: "row", alignItems: "center" }}

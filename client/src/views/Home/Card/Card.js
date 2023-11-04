@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { formatCurrency } from "../../../util/FormatVnd";
 import { format_sale } from "../../../util/formatSale";
 
-import { Divider, Space, Tag } from 'antd';
+import { Tag } from "antd";
 
 function CardProduct(props) {
   const { item, onClick } = props;
@@ -19,7 +19,11 @@ function CardProduct(props) {
   return (
     <div className="sanpham-card" onClick={handleViewDetail}>
       <img
-        src={process.env.REACT_APP_API_URL + item.thumbnail}
+        src={
+          item.main_image
+            ? process.env.REACT_APP_API_URL + item.main_image
+            : process.env.REACT_APP_API_URL + item.thumbnail
+        }
         style={{
           color: "#333333",
           fontSize: "14px",
@@ -31,7 +35,9 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item.remaining_quantity !== 0 && item.discount > 0 && item.price - item.discount > 0 ? (
+      {item.remaining_quantity !== 0 &&
+      item.discount > 0 &&
+      item.price - item.discount > 0 ? (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
@@ -43,7 +49,6 @@ function CardProduct(props) {
           </div>
         </div>
       ) : null}
-
 
       {/* brand */}
       <div
@@ -93,7 +98,6 @@ function CardProduct(props) {
           height: "40px",
         }}
       >
-
         {/* Tag hết sản phẩm */}
         {item.remaining_quantity === 0 ? (
           <Tag color="red">Sản phẩm tạm hết</Tag>

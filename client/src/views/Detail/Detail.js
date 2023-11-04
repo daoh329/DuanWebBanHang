@@ -27,7 +27,6 @@ function Detail() {
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
-  const reduxCart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   // sự kiện mở modal
   // const showModal = () => {
@@ -109,12 +108,11 @@ function Detail() {
       .then((response) => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
-
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
-        const productThumbnails = response.data.thumbnails;
+        const productThumbnails = [ ...response.data.thumbnails];
         setThumbnails(productThumbnails);
       })
       .catch((error) => {
@@ -249,6 +247,7 @@ function Detail() {
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.p_ID,
+      main_image: Detail.main_image,
       thumbnail: Detail.thumbnails[0].thumbnail,
       shortDescription: Detail.shortDescription,
       price:
@@ -274,8 +273,6 @@ function Detail() {
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
-      // Lưu giỏ hàng đã cập nhật vào sessionStorage
-      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
       // update redux state
       dispatch(addProductToCart(updatedCart));
       message.success("Sản phẩm đã được thêm vào giỏ hàng");
@@ -344,7 +341,7 @@ function Detail() {
                           {Detail &&
                             Detail.thumbnails &&
                             Detail.thumbnails.length > 0 &&
-                            Detail.thumbnails.map((thumbnail, index) => (
+                            [...Detail.thumbnails].map((thumbnail, index) => (
                               <div key={index}>
                                 <img
                                   src={
@@ -365,7 +362,7 @@ function Detail() {
                   {Detail &&
                     Detail.thumbnails &&
                     Detail.thumbnails.length > 0 &&
-                    Detail.thumbnails.map((thumbnail, index) => (
+                    [...Detail.thumbnails].map((thumbnail, index) => (
                       <Image.PreviewGroup
                         key={index}
                         preview={{
@@ -521,7 +518,7 @@ function Detail() {
                       const result = handleAddToCart();
                       result && window.location.replace("/cart");
                     }}
-                    disabled={Detail.remaining_quantity === 0 ? false : true}
+                    
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY

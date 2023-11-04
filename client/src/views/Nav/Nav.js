@@ -35,15 +35,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
 import { formatCurrency } from "../../util/FormatVnd";
-import { deleteProductInCart } from "../../redux/cartSlice";
+import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
 
 const App = () => {
   const user = useSelector((state) => state.user);
-  const arrayNotification = useSelector((state) => state.notifications.notifications);
+  const arrayNotification = useSelector(
+    (state) => state.notifications.notifications
+  );
   const dispatch = useDispatch();
+  const isLogin = localStorage.getItem("isLogin");
 
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
@@ -78,15 +81,9 @@ const App = () => {
 
   // const [cartList, setCartList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  
+
   const removeFromCart = (productId) => {
-    try {
-      const updatedCart = cart.filter((item) => item.id !== productId);
-      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-      dispatch(deleteProductInCart(productId));
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(deleteProductInCart(productId));
   };
   // phone
   const [phone, setPhone] = useState("");
@@ -165,7 +162,7 @@ const App = () => {
     },
     {
       key: "2",
-      label: user.id && user.permission === "admin" && (
+      label: isLogin && isLogin === "admin" && (
         <Button
           onClick={adminPage}
           style={{
@@ -221,7 +218,6 @@ const App = () => {
 
   const handleReadAll = async () => {
     if (arrayNotification.length === 0) return;
-
     try {
       const arrId = [];
       arrayNotification.forEach((notification) => {
@@ -301,25 +297,57 @@ const App = () => {
     }
   };
 
-  const totalCartPrice = (cart) => {
-    let total = 0;
-    cart.forEach((product) => {
-      total += parseFloat(product.totalPrice);
-    })
-    return total;
-  }
+  // cập nhật giỏ hàng khi onMouseEnter
+  const updateCart = async (arrProductId) => {
+    try {
+      if (arrProductId.length === 0) {
+        return;
+      }
+      if (cart.length > 0) {
+        const arrId = [];
+        for (let i = 0; i < cart.length; i++) {
+          arrId.push(cart[i].id);
+        }
+        updateCart(arrId);
+      }
+      const api = `${process.env.REACT_APP_API_URL}/product/cart`;
+      const results = await axios.post(api, arrProductId);
+      if (results.status === 200) {
+        const products = results.data;
+        for (let i = 0; i < products.length; i++) {
+          const newItem = {
+            id: products[i].id,
+            main_image: products[i].main_image,
+            shortDescription: products[i].shortDescription,
+            price:
+              products[i].discount > 0 &&
+              products[i].price > products[i].discount
+                ? products[i].discount
+                : products[i].price,
+            brand: products[i].brand,
+          };
+          dispatch(updateProductCart(newItem));
+        }
+        return;
+      }
+      throw new Error("get product cart faild");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Layout className="nav-container">
       <div className="danhmuc">
         <img
+          alt=""
           style={{ width: "100%", height: "56px", objectFit: "cover" }}
           src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
         ></img>
       </div>
 
       <div className="logoweb">
-        <img style={{ objectFit: "cover" }} src={Hinh}></img>
+        <img alt="" style={{ objectFit: "cover" }} src={Hinh}></img>
       </div>
       <div className="menu-container">
         <div className="menu1">
@@ -834,8 +862,11 @@ const App = () => {
                                 avatar={
                                   <Avatar
                                     src={
-                                      process.env.REACT_APP_API_URL +
-                                      selectedItems.thumbnail
+                                      selectedItems?.main_image
+                                        ? process.env.REACT_APP_API_URL +
+                                          selectedItems.main_image
+                                        : process.env.REACT_APP_API_URL +
+                                          selectedItems.thumbnail
                                     }
                                   />
                                 }
@@ -864,12 +895,15 @@ const App = () => {
                           )}
                         />
                       </div>
-                      <Divider style={{margin:"0 0 5px"}}/>
+                      <Divider style={{ margin: "0 0 5px" }} />
                       {/* <div style={{display:"flex", justifyContent:"space-between", margin:"0 0 5px"}}>
                       <div>Tổng tiền ({cart.length}) sản phẩm: </div>
                       <div style={{fontSize:"16px", fontWeight:"500", color:"red"}}>{formatCurrency(totalCartPrice(cart))}</div>
                       </div> */}
-                      <Button style={{ width: "100%", borderRadius: "3px" }}>
+                      <Button
+                        onClick={updateCart}
+                        style={{ width: "100%", borderRadius: "3px" }}
+                      >
                         <NavLink to="/cart">
                           <p>Xem giỏ hàng</p>
                         </NavLink>
@@ -879,10 +913,11 @@ const App = () => {
                   trigger="hover"
                 >
                   <Badge
-                    count={cart.length}
+                    count={cart?.length}
                     style={{ marginRight: "10px", marginTop: "10px" }}
                   >
                     <ShoppingCartOutlined
+                      // onMouseEnter={updateCart}
                       style={{
                         fontSize: "30px",
                         color: "#ae69dd",
