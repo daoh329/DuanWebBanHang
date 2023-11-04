@@ -12,16 +12,7 @@ import "./Home.scss";
 import CountdownTimer from "./CountdownTimer";
 import Chatbot from "../ChatBot/Chatbot";
 import CardProduct from "./Card/Card";
-const { Header } = Layout;
 const { TabPane } = Tabs;
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
-}
-
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -69,6 +60,7 @@ const Home = () => {
       price: products.price,
       discount: products.discount,
       main_image: products.main_image,
+      thumbnail: products.thumbnail,
       brand: products.brand,
       id: products.id,
     };

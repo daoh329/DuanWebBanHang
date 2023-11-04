@@ -324,9 +324,17 @@ class Product {
     // API: /product/update/:id
     const id = req.params.id;
     const dataUpdate = req.body;
-    const arrImage = req.files;
+    const arrImage = req.files?.images;
+    const main_image = req.files?.main_image;
+    
+    var mainImagePath = "";
     var arrPathImage = [];
-
+    
+    // create main image path
+    if (main_image) {
+      mainImagePath = `/images/${path.basename(main_image[0].path)}`
+    }
+    // create images path
     if (arrImage) {
       arrImage.forEach((image) => {
         const pathImage = `/images/${path.basename(image.path)}`;
@@ -335,7 +343,13 @@ class Product {
     }
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)
-    const fieldsProduct = ["name", "price", "discount", "shortDescription"];
+    const fieldsProduct = [
+      "name",
+      "price",
+      "main_image",
+      "discount",
+      "shortDescription",
+    ];
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
       "quantity",
@@ -349,7 +363,10 @@ class Product {
     var dataGroupTableProduct = {};
     var dataGroupTableProductDetails = {};
     var dataGroupTableProDetailColor = {};
-
+    // Thêm ảnh chính vào object product
+    if (mainImagePath) {
+      dataGroupTableProduct["main_image"] = mainImagePath;
+    }
     try {
       // lặp qua các field trong req.body (trừ images)
       // và gán giá trị cùng field tương ứng vào object
@@ -403,6 +420,7 @@ class Product {
 
       // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
       // Nếu mảng images path không rỗng -> Thực hiện cập nhật
+
       if (arrPathImage.length != 0) {
         // Xóa các image trước đó
         const sl_galery = `

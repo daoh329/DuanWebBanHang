@@ -6,8 +6,7 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import { Button, Modal, Select, Space, Spin, notification } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Modal, Select, Space, Spin, notification } from "antd";
 
 const { Option } = Select;
 
@@ -15,6 +14,7 @@ function NewPhone() {
   // Tạo các biến trạng thái cục bộ
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [colorSubmit, setColorSubmit] = useState([]);
+  const [mainImage, setMainImage] = useState([]);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
 
@@ -25,6 +25,7 @@ function NewPhone() {
       guarantee: "",
       name: "",
       price: 0,
+      main_image: {},
       shortDescription: "",
       series: "",
       category: "Điện thoại",
@@ -77,9 +78,10 @@ function NewPhone() {
       ),
     }),
     onSubmit: async (values) => {
+      // Lấy dữ liệu ảnh chính
+      values.main_image = mainImage[0].originFileObj;
       // Mở modal
       setIsModalOpen(true);
-
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
 
@@ -360,7 +362,7 @@ function NewPhone() {
               )}
             </div>
             {/* image */}
-            <ImageInput formik={formik} />
+            <ImageInput setMainImage={setMainImage} formik={formik} />
             {/* status */}
             <div
               style={{ flexDirection: "row", alignItems: "center" }}

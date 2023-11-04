@@ -55,7 +55,8 @@ function ImageInput(props) {
       <label className="form-label">Hình ảnh</label>
       {/* image */}
       <div className="image_group">
-        {/* images */}
+        {/* main image */}
+        <p style={{fontSize:"12px", margin:"0"}}>Ảnh chính (Ảnh được hiển thị chính)</p> 
         <Upload
           listType="picture-card"
           accept=".png,.jpeg,.jpg"
@@ -79,6 +80,8 @@ function ImageInput(props) {
         >
           <img alt="example" style={{ width: "100%" }} src={previewImage} />
         </Modal> */}
+        <p style={{fontSize:"12px", margin:"0"}} >Các ảnh khác (Ảnh được hiển thị trong chi tiết)</p>
+        {/* imagse */}
         {indexs.map((i) => (
           <div
             key={i}

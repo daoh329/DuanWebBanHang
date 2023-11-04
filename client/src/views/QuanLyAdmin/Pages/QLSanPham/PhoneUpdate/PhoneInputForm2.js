@@ -20,6 +20,7 @@ function PhoneInputForm2({ data, onClick, setModal }) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState([]);
+  const [mainImage, setMainImage] = useState([]);
   const [description, setDescription] = useState(product.description);
 
   // Hàm được gọi khi không bị lỗi form
@@ -28,8 +29,12 @@ function PhoneInputForm2({ data, onClick, setModal }) {
     setIsLoading(true);
 
     try {
-      if (fileList.length === 0 && description === product.description) {
-        setIsLoading(false)
+      if (
+        fileList.length === 0 &&
+        description === product.description &&
+        mainImage.length === 0
+      ) {
+        setIsLoading(false);
         return notification.warning({
           message: "Không có dữ liệu nào được thay đổi!",
         });
@@ -37,6 +42,11 @@ function PhoneInputForm2({ data, onClick, setModal }) {
       // Tạo FormData lưu dữ liệu
       const formData = new FormData();
       // Nếu có image được chọn
+      // Ảnh chính
+      if (mainImage.length !== 0) {
+        formData.append("main_image", mainImage[0].originFileObj);
+      }
+      // Các ảnh khác
       if (fileList.length !== 0) {
         // đọc qua từ image và push vào formData
         fileList.forEach((file) => {
@@ -129,7 +139,26 @@ function PhoneInputForm2({ data, onClick, setModal }) {
       autoComplete="off"
       {...props}
     >
+      {/* main image */}
+      <p>Ảnh chính:</p>
+      <Upload
+        listType="picture-card"
+        accept=".png,.jpeg,.jpg"
+        onPreview={handlePreview}
+        onChange={({ fileList: newFileList }) => {
+          setMainImage(newFileList);
+        }}
+        beforeUpload={() => {
+          return false;
+        }}
+        multiple
+        name="main_image"
+      >
+        {mainImage.length === 1 ? null : uploadButton}
+      </Upload>
+
       {/* images */}
+      <p>Các ảnh khác:</p>
       <Upload
         listType="picture-card"
         accept=".png,.jpeg,.jpg"
@@ -145,6 +174,7 @@ function PhoneInputForm2({ data, onClick, setModal }) {
       >
         {fileList.length >= 10 ? null : uploadButton}
       </Upload>
+
       <Modal
         open={previewOpen}
         title={previewTitle}
