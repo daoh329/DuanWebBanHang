@@ -79,7 +79,7 @@ function NewPhone() {
     }),
     onSubmit: async (values) => {
       // Lấy dữ liệu ảnh chính
-      values.main_image = mainImage[0].originFileObj;
+      values.main_image = mainImage[0]?.originFileObj;
       // Mở modal
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;

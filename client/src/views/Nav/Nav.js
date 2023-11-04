@@ -340,7 +340,7 @@ const App = () => {
     <Layout className="nav-container">
       <div className="danhmuc">
         <img
-        alt=""
+          alt=""
           style={{ width: "100%", height: "56px", objectFit: "cover" }}
           src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
         ></img>
@@ -862,8 +862,11 @@ const App = () => {
                                 avatar={
                                   <Avatar
                                     src={
-                                      process.env.REACT_APP_API_URL +
-                                      selectedItems.main_image
+                                      selectedItems?.main_image
+                                        ? process.env.REACT_APP_API_URL +
+                                          selectedItems.main_image
+                                        : process.env.REACT_APP_API_URL +
+                                          selectedItems.thumbnail
                                     }
                                   />
                                 }
@@ -897,7 +900,10 @@ const App = () => {
                       <div>Tổng tiền ({cart.length}) sản phẩm: </div>
                       <div style={{fontSize:"16px", fontWeight:"500", color:"red"}}>{formatCurrency(totalCartPrice(cart))}</div>
                       </div> */}
-                      <Button onClick={updateCart} style={{ width: "100%", borderRadius: "3px" }}>
+                      <Button
+                        onClick={updateCart}
+                        style={{ width: "100%", borderRadius: "3px" }}
+                      >
                         <NavLink to="/cart">
                           <p>Xem giỏ hàng</p>
                         </NavLink>
@@ -907,7 +913,7 @@ const App = () => {
                   trigger="hover"
                 >
                   <Badge
-                    count={cart.length}
+                    count={cart?.length}
                     style={{ marginRight: "10px", marginTop: "10px" }}
                   >
                     <ShoppingCartOutlined

@@ -10,11 +10,18 @@ class Product {
     const main_image = req.files.main_image;
 
     var arrPathImage = [];
-    var mainImagePath = `/images/${path.basename(main_image[0].path)}`;
-    arrImage.forEach((image) => {
-      const pathImage = `/images/${path.basename(image.path)}`;
-      arrPathImage.push(pathImage);
-    });
+    var mainImagePath = "";
+    // multer không nhận được ảnh sẽ trả về undefind
+    if (main_image) {
+      mainImagePath = `/images/${path.basename(main_image[0].path)}`;
+    }
+    if (arrImage) {
+      arrImage.forEach((image) => {
+        const pathImage = `/images/${path.basename(image.path)}`;
+        arrPathImage.push(pathImage);
+      });
+    }
+    
     const configuration =
       data.category === "Điện thoại"
         ? {

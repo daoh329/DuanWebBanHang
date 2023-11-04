@@ -288,6 +288,7 @@ const AllNewProductLaptop = () => {
       shortDescription: products.shortDescription,
       price: products.price,
       discount: products.discount,
+      main_image: products.main_image,
       thumbnail: products.thumbnail,
       brand: products.brand,
       id: products.id,

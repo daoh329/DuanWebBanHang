@@ -298,6 +298,7 @@ export default function Profile() {
                 active={verticalActive === "tab1"}
               >
                 <Avatar src={user.picture} size="large" />
+                &nbsp;
                 {user.name}
               </MDBTabsLink>
             </MDBTabsItem>
