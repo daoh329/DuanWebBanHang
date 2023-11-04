@@ -107,16 +107,8 @@ function Cart() {
 
   //xóa sp
   const removeFromCart = (productId) => {
-    // Tìm sản phẩm cần xóa trong giỏ hàng
-    const updatedCart = cart.filter((item) => item.id !== productId);
-
-    // Cập nhật danh sách sản phẩm được chọn (nếu sản phẩm bị xóa đang được chọn)
-    setSelectedProducts((prevSelected) =>
-      prevSelected.filter((productId) => productId !== productId)
-    );
+    // xóa trong cart
     dispatch(deleteProductInCart(productId));
-    // Lưu danh sách giỏ hàng đã cập nhật vào session
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
@@ -158,7 +150,7 @@ function Cart() {
       shortDescription: products.shortDescription,
       price: products.price,
       discount: products.discount,
-      thumbnail: products.thumbnail,
+      main_image: products.main_image,
       brand: products.brand,
       id: products.id,
     };
@@ -173,8 +165,6 @@ function Cart() {
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
-
-    console.log("click");
     navigate(`/detail/${products.id}`);
   };
 
@@ -239,8 +229,8 @@ function Cart() {
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
-                          src={process.env.REACT_APP_API_URL + item.thumbnail}
-                          alt="thumbnail"
+                          src={process.env.REACT_APP_API_URL + item.main_image}
+                          alt="main_image"
                         />
                       </td>
                       <td style={{ lineHeight: "18px", fontSize: "14px" }}>

@@ -539,6 +539,7 @@ class OrderController {
       product.id,
       product.name,
       product.price,
+      product.discount,
       product.status,
       product.shortDescription,
       productDetails.brand,

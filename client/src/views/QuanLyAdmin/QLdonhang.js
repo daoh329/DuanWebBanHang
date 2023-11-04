@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Spin } from "antd";
-import { format } from "date-fns";
+import { Table, Button } from "antd";
 import axios from "axios";
-import {useSelector, useDispatch } from "react-redux";
 
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
-import { reloadPage } from "../../redux/reloadSlice";
 
 function OrderList() {
   const [data, setData] = useState([]);
-  const reloadGetDataFunction = useSelector(state => state.reload.status);
-  const dispatch = useDispatch();
   const loadData = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -54,11 +49,6 @@ function OrderList() {
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
         // window.location.reload();
-        if (reloadGetDataFunction) {
-          dispatch(reloadPage(false));
-        }else{
-          dispatch(reloadPage(true));
-        }
       } catch (error) {
         console.error("Error confirming order:", error);
       }
@@ -82,11 +72,6 @@ function OrderList() {
           `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-        if (reloadGetDataFunction) {
-          dispatch(reloadPage(false));
-        } else {
-          dispatch(reloadPage(true));
-        }
       } catch (error) {
         console.error("Error canceling order:", error);
       }

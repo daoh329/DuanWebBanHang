@@ -16,21 +16,18 @@ import { message } from "antd";
 import "./Buy.css";
 import ButtonAddress from "./ButtonCheckedAddress/ButtonAddress";
 import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProductInCart } from "../../redux/cartSlice";
+import { formatCurrency } from "../../util/FormatVnd";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
-function formatCurrency(value) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
-}
 //
 
 export default function Buy() {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [note, setNote] = useState("");
@@ -182,8 +179,6 @@ export default function Buy() {
 
       // Chuyển hướng người dùng đến trang thông báo thành công
       window.location.replace("/success");
-
-
       // Xóa sản phẩm khỏi giỏ hàng
       removeFromCart(productID);
     } else {
@@ -199,17 +194,7 @@ export default function Buy() {
   };
 
   const removeFromCart = (productID) => {
-    // Xóa sản phẩm khỏi selectedItems
-    const updatedSelectedItems = buysData.selectedItems.filter(item => item.id !== productID);
-
-    // Cập nhật buysData
-    const updatedBuysData = { ...buysData, selectedItems: updatedSelectedItems };
-
-    // Cập nhật trạng thái buysData
-    setBuysData(updatedBuysData);
-
-    // Lưu buysData vào sessionStorage
-    sessionStorage.setItem("buys", JSON.stringify(updatedBuysData));
+    dispatch(deleteProductInCart(productID));
   };
 
   //Thanh toán VNPay
@@ -217,13 +202,13 @@ export default function Buy() {
   // Lấy dữ liệu từ sessionStorage khi component được tải
   useEffect(() => {
     const buysDataFromSession = sessionStorage.getItem("buys");
-    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    // console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
     if (buysDataFromSession) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
-      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      // console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
       // Chuyển đổi total thành số trước khi cập nhật vào state amount
       setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
-      console.log("dữ liệu total:", Number(parsedBuysData.total));
+      // console.log("dữ liệu total:", Number(parsedBuysData.total));
     }
   }, []);
 
@@ -1230,7 +1215,7 @@ export default function Buy() {
                                     alt="product"
                                     src={
                                       process.env.REACT_APP_API_URL +
-                                      item.thumbnail
+                                      item.main_image
                                     } // Lấy URL ảnh từ dữ liệu
                                     loading="lazy"
                                     decoding="async"
@@ -1336,7 +1321,7 @@ export default function Buy() {
                           {buysData && buysData.total && (
                             <MDBTableBody>
                               <tr>
-                                <td colSpan={1}>Tổng tiền tam tính</td>
+                                <td colSpan={1}>Tổng tiền tạm tính</td>
                                 <td colSpan={3}>
                                   {formatCurrency(buysData.total)}
                                 </td>

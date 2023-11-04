@@ -6,8 +6,11 @@ const { da } = require("date-fns/locale");
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
-    const arrImage = req.files;
+    const arrImage = req.files.images;
+    const main_image = req.files.main_image;
+
     var arrPathImage = [];
+    var mainImagePath = `/images/${path.basename(main_image[0].path)}`;
     arrImage.forEach((image) => {
       const pathImage = `/images/${path.basename(image.path)}`;
       arrPathImage.push(pathImage);
@@ -64,13 +67,13 @@ class Product {
     const configurationString = JSON.stringify(configuration);
     let nameP;
     if (data.name == null || data.name == "") {
-      nameP = data.brand + " " + data.series + " " + data.part_number;
+      nameP = data.brand + " " + data.series;
     } else {
       nameP = data.name;
     }
 
     const sl_categoryid = `SELECT id AS Value FROM category where name = ?`;
-    const is_product = `INSERT INTO product (name, price, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
+    const is_product = `INSERT INTO product (name, price, main_image, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?, ?)`;
     const is_galery = `INSERT INTO galery (thumbnail, product_id) VALUES (?, ?)`;
     const is_productdetail =
       "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
@@ -88,6 +91,7 @@ class Product {
       const productValues = [
         nameP,
         data.price,
+        mainImagePath,
         data.shortDescription,
         arrayCategoryid[0].Value,
         data.status ? 1 : 0,
@@ -172,6 +176,66 @@ class Product {
       res.status(200).send(getProduct);
     } catch (error) {
       handleError(error, res, { message: "Get product details failed!!!" });
+    }
+  }
+
+  async GetProductCart(req, res) {
+    // /product/cart
+    try {
+      const product_ids = req.body;
+      const sl_product = `SELECT 
+      product.id,
+      product.name,
+      product.price,
+      product.discount,
+      product.status,
+      product.main_image,
+      product.shortDescription,
+      productDetails.brand,
+      productDetails.quantity,
+      productDetails.created_at,
+      category.name as category,
+      CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color
+      FROM product
+      JOIN productDetails ON product.id = productDetails.product_id
+      JOIN category ON product.CategoryID = category.id
+      LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
+      WHERE product.id IN (?)
+      GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
+      productDetails.quantity, product.shortDescription, productDetails.created_at,  
+      category.name;`;
+
+      const results = await query(sl_product, [product_ids]);
+      // chuyển string thành mảng (color, image)
+      // color
+      for (let i = 0; i < results.length; i++) {
+        if (results[i]?.color) {
+          const colorRaw = JSON.parse(results[i].color);
+          let arrColor = [];
+          colorRaw.forEach((color) => {
+            if (!arrColor.includes(color.color)) {
+              arrColor.push(color.color);
+            }
+          });
+          results[i].color = arrColor;
+        }
+        // image
+        if (results[i]?.galery) {
+          const imageRaw = JSON.parse(results[i].galery);
+          let arrimage = [];
+          imageRaw.forEach((image) => {
+            if (!arrimage.includes(image.galery)) {
+              arrimage.push(image.galery);
+            }
+          });
+          results[i].galery = arrimage;
+        }
+      }
+
+      res.status(200).json(results);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Get product failed" });
     }
   }
 
@@ -260,9 +324,17 @@ class Product {
     // API: /product/update/:id
     const id = req.params.id;
     const dataUpdate = req.body;
-    const arrImage = req.files;
+    const arrImage = req.files?.images;
+    const main_image = req.files?.main_image;
+    
+    var mainImagePath = "";
     var arrPathImage = [];
-
+    
+    // create main image path
+    if (main_image) {
+      mainImagePath = `/images/${path.basename(main_image[0].path)}`
+    }
+    // create images path
     if (arrImage) {
       arrImage.forEach((image) => {
         const pathImage = `/images/${path.basename(image.path)}`;
@@ -271,7 +343,13 @@ class Product {
     }
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)
-    const fieldsProduct = ["name", "price", "discount", "shortDescription"];
+    const fieldsProduct = [
+      "name",
+      "price",
+      "main_image",
+      "discount",
+      "shortDescription",
+    ];
     const fieldsColor = ["color"];
     const fieldsProductDetails = [
       "quantity",
@@ -285,7 +363,10 @@ class Product {
     var dataGroupTableProduct = {};
     var dataGroupTableProductDetails = {};
     var dataGroupTableProDetailColor = {};
-
+    // Thêm ảnh chính vào object product
+    if (mainImagePath) {
+      dataGroupTableProduct["main_image"] = mainImagePath;
+    }
     try {
       // lặp qua các field trong req.body (trừ images)
       // và gán giá trị cùng field tương ứng vào object
@@ -339,6 +420,7 @@ class Product {
 
       // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
       // Nếu mảng images path không rỗng -> Thực hiện cập nhật
+
       if (arrPathImage.length != 0) {
         // Xóa các image trước đó
         const sl_galery = `
@@ -514,7 +596,7 @@ class Product {
 
     // Truy vấn để lấy thông tin chi tiết sản phẩm
     const productQuery = `
-    SELECT p.id AS p_ID, p.name, p.price, p.discount, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
+    SELECT p.id AS p_ID, p.name, p.price, p.main_image, p.discount, p.shortDescription, p.CategoryID, p.status, c.name as category_name, pd.*, b.name as brand_name
     FROM product p 
     JOIN category c ON p.CategoryID = c.id
     JOIN productDetails pd ON p.id = pd.product_id

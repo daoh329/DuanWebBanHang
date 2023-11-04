@@ -27,7 +27,6 @@ function Detail() {
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
-  const reduxCart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   // sự kiện mở modal
   // const showModal = () => {
@@ -249,7 +248,7 @@ function Detail() {
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.p_ID,
-      thumbnail: Detail.thumbnails[0].thumbnail,
+      main_image: Detail.main_image,
       shortDescription: Detail.shortDescription,
       price:
         Detail.discount > 0 && Detail.price > Detail.discount
@@ -274,8 +273,6 @@ function Detail() {
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
-      // Lưu giỏ hàng đã cập nhật vào sessionStorage
-      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
       // update redux state
       dispatch(addProductToCart(updatedCart));
       message.success("Sản phẩm đã được thêm vào giỏ hàng");
@@ -521,7 +518,7 @@ function Detail() {
                       const result = handleAddToCart();
                       result && window.location.replace("/cart");
                     }}
-                    disabled={Detail.remaining_quantity === 0 ? false : true}
+                    
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
