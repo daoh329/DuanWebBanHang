@@ -142,17 +142,8 @@ export default function Buy() {
   }, [quantity]);
 
   const removeFromCart = (productID) => {
-    // Xóa sản phẩm khỏi selectedItems
-    const updatedSelectedItems = buysData.selectedItems.filter(item => item.id !== productID);
-
-    // Cập nhật buysData
-    const updatedBuysData = { ...buysData, selectedItems: updatedSelectedItems };
-
-    // Cập nhật trạng thái buysData
-    setBuysData(updatedBuysData);
-
-    // Lưu buysData vào sessionStorage
-    sessionStorage.setItem("buys", JSON.stringify(updatedBuysData));
+    // xóa trong cart
+    dispatch(deleteProductInCart(productID));
   };
 
   //Thanh toán VNPay

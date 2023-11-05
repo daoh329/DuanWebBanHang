@@ -8,14 +8,14 @@ function ProductItem(props) {
   const { shortDescription, product_id, price_total, quantity, imageUrl } =
     props.product;
   const navigate = useNavigate();
-
+  
   const handleDetails = () => {
     navigate(`/detail/${product_id}`);
   }
   return (
     <div className="product-item">
       <div className="product-image">
-        <img src={process.env.REACT_APP_API_URL + imageUrl} alt="" />
+        <img onClick={handleDetails} src={process.env.REACT_APP_API_URL + imageUrl} alt="" />
       </div>
       <div className="product-infomations">
         <p onClick={handleDetails} className="name">{shortDescription}</p>
