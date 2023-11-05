@@ -433,7 +433,7 @@ const App = () => {
                 ) : (
                   <Avatar
                     icon={<UserOutlined />}
-                    style={{ backgroundColor: "#ae69dd" }}
+                    style={{ backgroundColor: " #1435c3" }}
                   />
                 )}
               </Dropdown>
@@ -647,7 +647,7 @@ const App = () => {
                     <Avatar
                       icon={<UserOutlined />}
                       style={{
-                        backgroundColor: "#ae69dd",
+                        backgroundColor: " #1435c3",
                         margin: "10px",
                         fontSize: "24px",
                         cursor: "pointer",
@@ -823,7 +823,7 @@ const App = () => {
                     <BellOutlined
                       style={{
                         fontSize: "30px",
-                        color: "#ae69dd",
+                        color: " #1435c3",
                         margin: "10px",
                         cursor: "pointer",
                       }}
@@ -920,7 +920,7 @@ const App = () => {
                       // onMouseEnter={updateCart}
                       style={{
                         fontSize: "30px",
-                        color: "#ae69dd",
+                        color: " #1435c3",
                         margin: "10px",
                         cursor: "pointer",
                       }}
@@ -942,7 +942,7 @@ const App = () => {
                     <SolutionOutlined
                       style={{
                         fontSize: "24px",
-                        color: "#ae69dd",
+                        color: " #1435c3",
                         margin: "10px",
                       }}
                     />
