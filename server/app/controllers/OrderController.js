@@ -26,8 +26,8 @@ class OrderController {
       }
   
       // Nếu số lượng mua hàng không vượt quá số lượng sản phẩm hiện có
-      sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, status) VALUES (?,?, ?, ?, NOW(), NOW(), ?, ?)`;
-      values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.status];
+      sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?,?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
+      values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.totalAmount, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
         // console.log(result);
@@ -39,6 +39,29 @@ class OrderController {
           // console.log(result);
           res.send('Order details added...');
         });
+      });
+    });
+  }
+
+  async Paymentmomo(req, res) {
+    const data = req.body;
+    console.log(data);
+
+    if (!data) {
+      return res.status(400).json("Invalid data");
+    }
+    let sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, paymentData, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?, ?)`;
+    let values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.paymentData, data.totalAmount, data.status];
+    mysql.query(sql, values, (err, result) => {
+    if (err) throw err;
+      // console.log(result);
+      const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
+      sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+      values = [data.productID, data.quantity, orderID];
+      mysql.query(sql, values, (err, result) => {
+        if (err) throw err;
+        // console.log(result);
+        res.send('Order details added...');
       });
     });
   }
@@ -67,7 +90,7 @@ class OrderController {
 
   async quanlyAllOrder(req, res, next) {
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*
@@ -241,7 +264,7 @@ class OrderController {
     const phone = req.params.phone;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có số điện thoại là phone
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*
@@ -263,7 +286,7 @@ class OrderController {
     const id = req.params.id;
     // Truy vấn cơ sở dữ liệu để lấy lịch sử mua hàng của người dùng có id là id
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*

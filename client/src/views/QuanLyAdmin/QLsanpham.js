@@ -51,12 +51,7 @@ function Product() {
         { title: 'Giá', dataIndex: 'price', key: 'price' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
         { title: 'Loại sản phẩm', dataIndex: 'Type', key: 'Type' },
-        {
-            title: 'Ngày nhập kho',
-            dataIndex: 'Entry_Date',
-            key: 'Entry_Date',
-            render: Entry_Date => format(new Date(Entry_Date), 'dd/MM/yyyy HH:mm:ss'), // Định dạng lại thời gian
-        },
+        { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
         {
             title: 'Trạng thái', dataIndex: 'status', key: 'status', onClick: '', render: status => <span style={{
 

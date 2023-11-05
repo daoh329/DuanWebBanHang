@@ -53,6 +53,8 @@ import TabsQLgiaohuy from "./QuanLyAdmin/Pages/TabsQLgiaohuy.js";
 import TabsDonDatHang from "./QuanLyAdmin/Pages/Tabsdondathang.js";
 import TabsVanChuyen from "./QuanLyAdmin/Pages/Tabsvanchuyen.js";
 import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
+import BillSuccess from "./Buy/BillSuccess.js";
+import QLOrder from "./Profile/OrderInformations/QLOrder.jsx";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -163,6 +165,8 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               <Route path="/buy" element={<Buy user={user} />} />
               <Route path="/success" element={<BuySuccess />} />
+              <Route path="/thanks" element={<BillSuccess />} />
+              <Route path="/qlbillorder/:id" element={<QLOrder />} />
               <Route
                 path="/profile"
                 element={isLogin ? <Profile /> : <Navigate to="/" />}
