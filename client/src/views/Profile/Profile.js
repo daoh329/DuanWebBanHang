@@ -27,6 +27,7 @@ import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { format } from "date-fns";
+import { formatCurrency } from "../../util/FormatVnd";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
@@ -201,7 +202,7 @@ const loadData = useCallback(() => {
       render: (order_id) => (
         <Link onClick={() => handleOpenOrderInformations(order_id)}>
           {order_id}
-          <p>Xem chi tiết</p>
+          <p>Chi tiết</p>
         </Link>
       ),
     },
@@ -216,14 +217,14 @@ const loadData = useCallback(() => {
         order_updated_at && (
           <div>
             <p style={{ margin: "0" }}>
-              {format(new Date(order_updated_at), "HH:mm:ss")}
+              {new Date(order_updated_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour: '2-digit', minute: '2-digit', second: '2-digit' })}
             </p>
             <p style={{ margin: "0" }}>
-              {format(new Date(order_updated_at), "dd/MM/yyyy")}
+              {new Date(order_updated_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", day: '2-digit', month: '2-digit', year: 'numeric' })}
             </p>
           </div>
         ),
-    },
+    },    
 
     {
       title: 'PTTT', 
@@ -331,7 +332,7 @@ const loadData = useCallback(() => {
 
             {/* Orders Manager */}
             <MDBTabsItem>
-              <MDBTabsLink
+              <MDBTabsLink  
                 onClick={() => handleVerticalClick("tab2")}
                 active={verticalActive === "tab2"}
               >
