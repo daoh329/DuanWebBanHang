@@ -21,7 +21,9 @@ function Order(props) {
       const q = `${process.env.REACT_APP_API_URL}/order/${order[0].productID}`;
       const results = await axios.get(q);
       if (results.status === 200) {
-        setProduct(results.data[0]);
+        // Chuyển đổi paymentData từ chuỗi sang đối tượng JSON
+        const parsedPaymentData = JSON.parse(results.data[0].paymentData);
+        setProduct({...results.data[0], paymentData: parsedPaymentData});
       }
     } catch (error) {
       console.log(error);
@@ -95,9 +97,26 @@ function Order(props) {
               Thời gian tạo: <span>{format(new Date(order[0].order_created_at), "HH:mm:ss dd/MM/yyyy") }</span>
             </p>
           </div>
+          
           <div className="block-1-3">
-            <p>Thông tin xuất hóa đơn</p>
+            {order[0] && order[0]?.paymentData && (order[0]?.paymentData?.vnp_OrderInfo || order[0]?.paymentData?.orderId) ? (
+              <>
+                <p>Thông tin xuất hóa đơn</p>
+                <p>Mã thanh toán giao dịch: <span>{order[0]?.paymentData?.vnp_OrderInfo || order[0]?.paymentData?.orderId}</span></p>
+                <p>Mã tham chiếu giao dịch: <span>{order[0]?.paymentData?.vnp_TxnRef || order[0]?.paymentData?.transId}</span></p>
+                <p>Thời gian thực hiện: <span>{order[0]?.paymentData?.vnp_PayDate || order[0]?.paymentData?.responseTime}</span></p>
+                <p>Loại thanh toán: <span>{order[0]?.paymentData?.vnp_CardType || order[0]?.paymentData?.payType}</span></p>
+                <p>Ngân hàng: <span>{order[0]?.paymentData?.vnp_BankCode || order[0]?.paymentData?.orderType}</span></p>
+                <p>Số giao dịch: <span>{order[0]?.paymentData?.vnp_BankTranNo || order[0]?.paymentData?.transId}</span></p>
+                <p>Tổng tiền: <span>{(parseInt(order[0]?.paymentData?.vnp_Amount ? order[0]?.paymentData?.vnp_Amount / 100 : order[0]?.paymentData?.amount)).toLocaleString()}</span></p>
+                {/* Thêm các trường khác của paymentData tại đây */}
+              </>
+            ) : null}
           </div>
+
+
+
+
         </div>
 
         {/* block 2 */}

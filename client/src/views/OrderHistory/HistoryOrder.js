@@ -25,13 +25,7 @@ function HistoryOrder(props) {
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        { 
-            title: 'Tổng giá',
-            key: 'totalPrice',
-            render: (text, record) => (
-                <p>{record.price * record.quantity}</p>
-            ),
-        },
+        { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
         {
             title: 'Thời gian tạo',
             dataIndex: 'order_updated_at',

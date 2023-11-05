@@ -3,6 +3,16 @@ let $ = require('jquery');
 const axios = require('axios');
 const moment = require('moment');
 let globalAmount;
+let User;
+let address;
+let product;
+let quantitys;
+let deliveryMethodd;
+let paymentMenthodd;
+let notee;
+let amount;
+let statuss;
+
 
 class PayController {
     
@@ -32,67 +42,123 @@ class PayController {
         res.render('refund', {title: 'Hoàn tiền giao dịch thanh toán'})
     }
 
+    async checkQuantity(productID, quantity) {
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+            let values = [productID];
+            mysql.query(sql, values, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else if (quantity > result[0].remaining_quantity) {
+                    reject("Số lượng sản phẩm không đủ");
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
     async Post_create_payment(req, res, next){
-        process.env.TZ = 'Asia/Ho_Chi_Minh';
-    
-        let date = new Date();
-        let createDate = moment(date).format('YYYYMMDDHHmmss');
+        const data = req.body;
+        // console.log(data);
         
-        let ipAddr = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress ||
-            req.connection.socket.remoteAddress;
+        User = req.body.UserID;
+        address = req.body.addressID;
+        product = req.body.productID;
+        quantitys = req.body.quantity;
+        deliveryMethodd = req.body.deliveryMethod;
+        paymentMenthodd = req.body.paymentMenthod;
+        notee = req.body.note;
+        amount = req.body.amount;
+        statuss = req.body.status;
 
-        let config = require('../../config/default.json');
+        // Kiểm tra số lượng sản phẩm hiện có
+        let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+        let values = [product];
+        mysql.query(sql, values, (err, result) => {
+            if (err) throw err;
+            // console.log(result);
+
+            // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
+            if (quantitys > result[0].remaining_quantity) {
+                return res.status(400).json("Số lượng sản phẩm không đủ");
+            }
+
+            // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
+            if (quantitys <= result[0].remaining_quantity) {
+                process.env.TZ = 'Asia/Ho_Chi_Minh';
         
-        let tmnCode = config.vnp_TmnCode;
-        let secretKey = config.vnp_HashSecret;
-        let vnpUrl = config.vnp_Url;
-        let returnUrl = config.vnp_ReturnUrl;
-        let orderId = moment(date).format('DDHHmmss');
-        let amount = req.body.amount;
-        let bankCode = req.body.bankCode;
+                let date = new Date();
+                let createDate = moment(date).format('YYYYMMDDHHmmss');
+                
+                let ipAddr = req.headers['x-forwarded-for'] ||
+                    req.connection.remoteAddress ||
+                    req.socket.remoteAddress ||
+                    req.connection.socket.remoteAddress;
 
-        console.log('bank: '+bankCode)
-        
-        let locale = req.body.language;
-        if(locale === null || locale === ''){
-            locale = 'vn';
-        }
-        console.log(locale)
-        let currCode = 'VND';
-        let vnp_Params = {};
-        vnp_Params['vnp_Version'] = '2.1.0';
-        vnp_Params['vnp_Command'] = 'pay';
-        vnp_Params['vnp_TmnCode'] = tmnCode;
-        vnp_Params['vnp_Locale'] = locale;
-        vnp_Params['vnp_CurrCode'] = currCode;
-        vnp_Params['vnp_TxnRef'] = orderId;
-        vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
-        vnp_Params['vnp_OrderType'] = 'other';
-        vnp_Params['vnp_Amount'] = amount * 100;
-        vnp_Params['vnp_ReturnUrl'] = returnUrl;
-        vnp_Params['vnp_IpAddr'] = ipAddr;
-        vnp_Params['vnp_CreateDate'] = createDate;
-        if(bankCode !== null && bankCode !== ''){
-            vnp_Params['vnp_BankCode'] = bankCode;
-        }
+                let config = require('../../config/default.json');
+                
+                let tmnCode = config.vnp_TmnCode;
+                let secretKey = config.vnp_HashSecret;
+                let vnpUrl = config.vnp_Url;
+                let returnUrl = config.vnp_ReturnUrl;
+                let orderId = moment(date).format('DDHHmmss');
+                let amount = req.body.amount;
+                let bankCode = req.body.bankCode;
 
-        vnp_Params = sortObject(vnp_Params);
+                // console.log('bank: '+bankCode)
+                
+                let locale = req.body.language;
+                if(locale === null || locale === ''){
+                    locale = 'vn';
+                }
+                // console.log(locale)
+                let currCode = 'VND';
+                let vnp_Params = {};
+                vnp_Params['vnp_Version'] = '2.1.0';
+                vnp_Params['vnp_Command'] = 'pay';
+                vnp_Params['vnp_TmnCode'] = tmnCode;
+                vnp_Params['vnp_Locale'] = locale;
+                vnp_Params['vnp_CurrCode'] = currCode;
+                vnp_Params['vnp_TxnRef'] = orderId;
+                vnp_Params['vnp_OrderInfo'] = orderId;
+                vnp_Params['vnp_OrderType'] = 'other';
+                vnp_Params['vnp_Amount'] = amount * 100;
+                vnp_Params['vnp_ReturnUrl'] = returnUrl;
+                vnp_Params['vnp_IpAddr'] = ipAddr;
+                vnp_Params['vnp_CreateDate'] = createDate;
+                
+                if(bankCode !== null && bankCode !== ''){
+                    vnp_Params['vnp_BankCode'] = bankCode;
+                }
 
-        let querystring = require('qs');
-        let signData = querystring.stringify(vnp_Params, { encode: false });
-        let crypto = require("crypto");     
-        let hmac = crypto.createHmac("sha512", secretKey);
-        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
-        vnp_Params['vnp_SecureHash'] = signed;
-        vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+                vnp_Params = sortObject(vnp_Params);
 
-        res.json({ url: vnpUrl }); // Trả về URL trong một đối tượng JSON
+                let querystring = require('qs');
+                let signData = querystring.stringify(vnp_Params, { encode: false });
+                let crypto = require("crypto");     
+                let hmac = crypto.createHmac("sha512", secretKey);
+                let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
+                vnp_Params['vnp_SecureHash'] = signed;
+                vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+                res.json({ url: vnpUrl }); // Trả về URL trong một đối tượng JSON
+            }  
+        });
     }
 
     async Vnpay_return(req, res, next){
         let vnp_Params = req.query;
+
+        let UserID = User;
+        let addressID = address;
+        let productID = product;
+        let quantity = quantitys;
+        let deliveryMethod = deliveryMethodd;
+        let paymentMenthod = paymentMenthodd;
+        let note = notee;
+        let totalAmount = amount;
+        let status = statuss;
 
         let secureHash = vnp_Params['vnp_SecureHash'];
 
@@ -109,19 +175,33 @@ class PayController {
         let signData = querystring.stringify(vnp_Params, { encode: false });
         let crypto = require("crypto");     
         let hmac = crypto.createHmac("sha512", secretKey);
-        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");     
+        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+        // console.log("return: " + JSON.stringify(vnp_Params));
+        let paymentData = JSON.stringify(vnp_Params);
 
-        if(secureHash === signed){
-            //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
-            res.render('success', {code: vnp_Params['vnp_ResponseCode']})
-        } else{
-            res.render('success', {code: '97'})
-        }
+        //Lưu đơn hàng vào csdl
+        let sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, paymentData, totalAmount, status) VALUES (?,?, ?, ?, NOW(), NOW(), ?, ?, ?, ?)`;
+        let values = [UserID, addressID, deliveryMethod, paymentMenthod, note, paymentData, totalAmount, status];
+        mysql.query(sql, values, (err, result) => {
+            if (err) throw err;
+            const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
+            sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+            values = [productID, quantity, orderID];
+            mysql.query(sql, values, (err, result) => {
+                if (err) throw err;
+                // console.log(result);
+                if(secureHash === signed){
+                    res.redirect(`${process.env.CLIENT_URL}/success`);
+                } else{
+                    res.send('Order details added...');
+                }
+            });
+        });
     }
 
     async Vnpay_ipn(req, res){
         let vnp_Params = req.query;
+        console.log("ipn: " + vnp_Params);
         let secureHash = vnp_Params['vnp_SecureHash'];
         
         let orderId = vnp_Params['vnp_TxnRef'];
@@ -309,11 +389,13 @@ class PayController {
 
     //Thanh toán momo
     async Paymomo(request, response, next){
+        var quantity = request.body.quantity;
+        var productID = request.body.productID;
         var accessKey = 'F8BBA842ECF85';
         var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
         var orderInfo = 'pay with MoMo';
         var partnerCode = 'MOMO';
-        var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+        var redirectUrl = `${process.env.CLIENT_URL}/thanks`;
         var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
         var requestType = "payWithMethod";
         var amount = request.body.amount;
@@ -326,81 +408,91 @@ class PayController {
         var autoCapture =true;
         var lang = 'vi';
 
-        //before sign HMAC SHA256 with format
-        //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-        var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
-        //signature
-        const crypto = require('crypto');
-        var signature = crypto.createHmac('sha256', secretKey)
-            .update(rawSignature)
-            .digest('hex');
+        // Kiểm tra số lượng sản phẩm hiện có
+        let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+        let values = [productID];
+        mysql.query(sql, values, (err, result) => {
+            if (err) throw err;
+            // console.log(result);
 
-        //json object send to MoMo endpoint
-        const requestBody = JSON.stringify({
-            partnerCode : partnerCode,
-            partnerName : "Test",
-            storeId : "MomoTestStore",
-            requestId : requestId,
-            amount : amount,
-            orderId : orderId,
-            orderInfo : orderInfo,
-            redirectUrl : redirectUrl,
-            ipnUrl : ipnUrl,
-            lang : lang,
-            requestType: requestType,
-            autoCapture: autoCapture,
-            extraData : extraData,
-            orderGroupId: orderGroupId,
-            signature : signature
-        });
-        //Create the HTTPS objects
-        const https = require('https');
-        const options = {
-            hostname: 'test-payment.momo.vn',
-            port: 443,
-            path: '/v2/gateway/api/create',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(requestBody)
+            // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
+            if (quantity > result[0].remaining_quantity) {
+                return res.status(400).json("Số lượng sản phẩm không đủ");
             }
-        }
-        //Send the request and get the response
-        const paymentReq = https.request(options, res => {
-            let data = '';
-            
-            console.log(`Status: ${res.statusCode}`);
-            console.log(`Headers: ${JSON.stringify(res.headers)}`);
-            res.setEncoding('utf8');
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-            res.on('end', () => {
-                console.log('No more data in response.');
-                const body = JSON.parse(data);
-                console.log('Body: ');
-                console.log(body);
-                console.log('payUrl: ');
-                console.log(body.payUrl);
-            
-                // Check if payUrl is undefined, which means there was an error
-                if (body.payUrl === undefined) {
-                    // Send the error message back as a JSON response
-                    response.json({ error: body.message });
-                } else {
-                    // Send the payUrl back as a JSON response
-                    response.json({ url: body.payUrl });
+
+            // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
+            if (quantity <= result[0].remaining_quantity) {
+                //before sign HMAC SHA256 with format
+                //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
+                var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
+                //signature
+                const crypto = require('crypto');
+                var signature = crypto.createHmac('sha256', secretKey)
+                    .update(rawSignature)
+                    .digest('hex');
+
+                //json object send to MoMo endpoint
+                const requestBody = JSON.stringify({
+                    partnerCode : partnerCode,
+                    partnerName : "Test",
+                    storeId : "MomoTestStore",
+                    requestId : requestId,
+                    amount : amount,
+                    orderId : orderId,
+                    orderInfo : orderInfo,
+                    redirectUrl : redirectUrl,
+                    ipnUrl : ipnUrl,
+                    lang : lang,
+                    requestType: requestType,
+                    autoCapture: autoCapture,
+                    extraData : extraData,
+                    orderGroupId: orderGroupId,
+                    signature : signature
+                });
+                //Create the HTTPS objects
+                const https = require('https');
+                const options = {
+                    hostname: 'test-payment.momo.vn',
+                    port: 443,
+                    path: '/v2/gateway/api/create',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': Buffer.byteLength(requestBody)
+                    }
                 }
-            });
+                //Send the request and get the response
+                const paymentReq = https.request(options, res => {
+                    let data = '';
+                    
+                    console.log(`Status: ${res.statusCode}`);
+                    console.log(`Headers: ${JSON.stringify(res.headers)}`);
+                    res.setEncoding('utf8');
+                    res.on('data', (chunk) => {
+                        data += chunk;
+                    });
+                    res.on('end', () => {
+                        console.log('No more data in response.');
+                        const body = JSON.parse(data);
+                        console.log('Body: ');
+                        console.log(body);
+                        console.log('payUrl: ');
+                        console.log(body.payUrl);
+                        if (body.payUrl === undefined) {
+                            response.json({ error: body.message });
+                        } else {
+                            response.json({ url: body.payUrl });
+                        }
+                    });
+                })
+                paymentReq.on('error', (e) => {
+                    console.log(`problem with request: ${e.message}`);
+                });
+                paymentReq.write(requestBody);
+                paymentReq.end();
+                // console.log("return: "+redirectUrl);              
+            }
         })
-        
-        paymentReq.on('error', (e) => {
-            console.log(`problem with request: ${e.message}`);
-        });
-        // write data to request body
-        console.log("Sending....")
-        paymentReq.write(requestBody);
-        paymentReq.end();
     }
 }
     function sortObject(obj) {

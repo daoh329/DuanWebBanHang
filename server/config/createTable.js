@@ -28,6 +28,8 @@ const createTables = () => {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
+    paymentData longtext,
+    totalAmount NUMERIC(10,2),
     status tinyint,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
     FOREIGN KEY (UserID) REFERENCES users (id),
