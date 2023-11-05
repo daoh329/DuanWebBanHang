@@ -27,6 +27,7 @@ import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { format } from "date-fns";
+import { formatCurrency } from "../../util/FormatVnd";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
@@ -201,7 +202,7 @@ const loadData = useCallback(() => {
       render: (order_id) => (
         <Link onClick={() => handleOpenOrderInformations(order_id)}>
           {order_id}
-          <p>Xem chi tiết</p>
+          <p>Chi tiết</p>
         </Link>
       ),
     },
@@ -331,7 +332,7 @@ const loadData = useCallback(() => {
 
             {/* Orders Manager */}
             <MDBTabsItem>
-              <MDBTabsLink
+              <MDBTabsLink  
                 onClick={() => handleVerticalClick("tab2")}
                 active={verticalActive === "tab2"}
               >

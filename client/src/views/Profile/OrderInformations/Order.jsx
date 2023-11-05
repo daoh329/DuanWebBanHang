@@ -11,6 +11,8 @@ import { format } from "date-fns";
 function Order(props) {
   const { order, setOrder } = props;
   const [productAPI, setProduct] = useState(null);
+  const [reducedPrice, setReducedPrice] = useState(0);
+  const [shippingFee , setShippingFee] = useState(0);
 
   useEffect(() => {
     getProductOfOrder();
@@ -21,9 +23,11 @@ function Order(props) {
       const q = `${process.env.REACT_APP_API_URL}/order/${order[0].productID}`;
       const results = await axios.get(q);
       if (results.status === 200) {
-        // Chuyển đổi paymentData từ chuỗi sang đối tượng JSON
-        const parsedPaymentData = JSON.parse(results.data[0].paymentData);
-        setProduct({...results.data[0], paymentData: parsedPaymentData});
+        if (results.data[0].discount > 0 && results.data[0].price > results.data[0].discount) {
+          const rp = results.data[0].price - results.data[0].discount;
+          setReducedPrice(rp)
+        }
+        setProduct(results.data[0]);
       }
     } catch (error) {
       console.log(error);
@@ -38,8 +42,7 @@ function Order(props) {
     shortDescription: order[0]?.shortDescription,
     product_id: order[0]?.productID,
     price_total:
-      parseFloat(order[0]?.price ? order[0]?.price : 0) *
-      parseFloat(order[0]?.quantity ? order[0]?.quantity : 0),
+      parseFloat(order[0]?.totalAmount ? order[0]?.totalAmount : 0),
     quantity: order[0]?.quantity,
     imageUrl: productAPI?.main_image ? productAPI.main_image : productAPI?.galery[0],
   };
@@ -58,6 +61,7 @@ function Order(props) {
 
       {/* content */}
       <div className="order-informations-content">
+
         {/* block 1 */}
         <div className="order-informations-block-1">
           <div className="block-1-1">
@@ -139,15 +143,15 @@ function Order(props) {
             </div>
             <div className="sub">
               <div>Phí vận chuyển</div>
-              <div className="price">{formatCurrency(25000)}</div>
+              <div className="price">{formatCurrency(shippingFee)}</div>
             </div>
             <div className="sub">
               <div>Giảm giá</div>
-              <div className="price">{formatCurrency()}</div>
+              <div className="price">{formatCurrency(reducedPrice)}</div>
             </div>
             <div className="sub">
               <div>Thành tiền</div>
-              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatCurrency(product?.price_total + 25000)}</div>
+              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatCurrency(product?.price_total - shippingFee)}</div>
             </div>
           </div>
           <div className="block-2">(Đã bao gồm VAT)</div>
