@@ -245,6 +245,7 @@ export default function Buy() {
       body: JSON.stringify(data),
     });
 
+    
     if (response.ok) {
       const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
 

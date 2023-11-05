@@ -16,6 +16,10 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
 import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart } from "../../redux/cartSlice";
+import CardProduct from "../Home/Card/Card";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+
 
 const { Option } = Select;
 //text area
@@ -24,6 +28,8 @@ const { TextArea } = Input;
 
 function Detail() {
   
+const navigate = useNavigate();
+
   const [selectedColors, setSelectedColors] = useState([]);
 
   // Hàm xử lý khi checkbox thay đổi
@@ -324,6 +330,110 @@ function Detail() {
     setCurrentImage(index);
     carouselRef.current.goTo(index);
   };
+
+
+
+
+
+// Khai báo state cho relatedProducts
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  // Hàm để lấy sản phẩm liên quan
+useEffect(() => {
+  // Hàm để lấy sản phẩm liên quan
+  const getRelatedProducts = async (brand, categoryID) => {
+    let relatedProducts = [];
+
+    // Lấy danh sách sản phẩm laptop và điện thoại
+    const laptopProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error("Error fetching laptop data:", error);
+      });
+
+    const phoneProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error("Error fetching phone data:", error);
+      });
+
+    // Lựa chọn danh sách sản phẩm tương ứng với CategoryID
+    const products = categoryID === 1 ? laptopProducts : phoneProducts;
+
+    // Lọc các sản phẩm có cùng brand
+    relatedProducts = products.filter(product => product.CategoryID === categoryID);
+
+    // Sắp xếp mảng sao cho các sản phẩm có cùng brand đứng đầu
+    relatedProducts.sort((a, b) => {
+      if (a.brand === brand) {
+        return -1;
+      } else if (b.brand === brand) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    setRelatedProducts(relatedProducts);
+  };
+
+  // Gọi hàm để lấy sản phẩm liên quan sau khi lấy chi tiết sản phẩm
+  if (Detail) {
+    getRelatedProducts(Detail.brand, Detail.CategoryID);
+    console.log(relatedProducts)
+  }
+}, [Detail]); // Mảng phụ thuộc bao gồm 'detail'
+
+
+
+// ------------------------
+const handleViewDetailProduct = (products) => {
+  // Kiểm tra xem 'id' có tồn tại hay không
+  if (!products.id) {
+    console.error("Product ID is undefined!");
+    return;
+  }
+  // Lấy danh sách các sản phẩm đã xem từ session storage
+  const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
+  // Tạo đối tượng sản phẩm mới
+  const historyproduct = {
+    shortDescription: products.shortDescription,
+    price: products.price,
+    discount: products.discount,
+    main_image: products.main_image,
+    thumbnail: products.thumbnail,
+    brand: products.brand,
+    id: products.id,
+  };
+  // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+  const isViewed = historysp.some(
+    (product) => product.id === historyproduct.id
+  );
+  // Nếu sản phẩm mới chưa được xem
+  if (!isViewed) {
+    // Thêm đối tượng sản phẩm mới vào cuối danh sách
+    historysp.push(historyproduct);
+    // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+    sessionStorage.setItem("products", JSON.stringify(historysp));
+  }
+  navigate(`/detail/${products.id}`);
+  window.scrollTo(0, 0)
+};
+
+  // logic scroll button product
+  const ctnRef = useRef(null);
+
+  const scrollTrai = () => {
+    if (ctnRef.current) {
+      ctnRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
+
+  const scrollPhai = () => {
+    if (ctnRef.current) {
+      ctnRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
+
 
   return (
     <>
@@ -753,63 +863,7 @@ function Detail() {
             </div>
           </div>
         </div>
-        <div className="style-3">
-          <div className="fle-x-sp-lien-quan">
-            <div>
-              <div className="title-sp-lien-quan">Sản phẩm liên quan</div>
-            </div>
-
-            <div className="glide css-npa7ru glide--ltr glide--slider glide--swipeable">
-              <div className="glide__track" data-glide-el="track">
-                <div className="glide__slides">
-                  <div
-                    className="glide__slide glide__slide--active"
-                    style={{
-                      height: "unset",
-                      marginRight: "5px",
-                      width: "232px",
-                    }}
-                  >
-                    <div className="css-1ei4kcr">
-                      <div
-                        className="product-card css-1msrncq"
-                        data-content-region-name="relatedProducts"
-                        data-track-content="true"
-                        data-content-name="210400696"
-                        data-content-target="productDetail"
-                      >
-                        <a
-                          target="_self"
-                          class="css-pxdb0j"
-                          href="/acer-nitro-5-an515-45-r9sc-nh-qbrsv-001--s210400696"
-                        >
-                          <div className="css-4rhdrh">
-                            <div className="css-1v97aik">
-                              <div className="css-798fc">
-                                <div className="css-1uzm8bv"></div>
-                              </div>
-                              <div className="css-14q2k9d">
-                                <div className="css-zb7zul">
-                                  <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                                  <div className="css-1rdv2qd">1.800.000 ₫</div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="css-68cx5s"></div>
-                            <div className="css-1ybkowq"></div>
-                            <div className="css-kgkvir"></div>
-                            <div></div>
-                          </div>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+ 
         {/* main */}
         {/* modal */}
         <Modal
@@ -1190,6 +1244,61 @@ function Detail() {
           </div>
         </Modal>
         {/*  */}
+        <div
+          className="product-container"
+          style={{
+            borderRadius: "5px",
+            position: "relative",
+            width: "1234px",
+            margin: "0 auto",
+            marginTop: "30px",
+            backgroundColor: "white",
+          }}
+        >
+          <div>
+            <div
+              className="product-title"
+              style={{
+                fontWeight: "bold",
+                fontSize: "20px",
+                display: "-webkit-box",
+                padding: "20px",
+                color: "black",
+                borderBottom: "1px solid rgb(228, 229, 240)",
+              }}
+            >
+              Sản phẩm tương tự
+            </div>
+          </div>
+          <div className="scroll-group-phone">
+            <div className="scroll-control-phone" ref={ctnRef}>
+              {relatedProducts &&
+                relatedProducts.length > 0 &&
+                relatedProducts.map((item, index) => (
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct}
+                  />
+                ))}
+            </div>
+            {/* button */}
+            <button
+              className="scroll-button"
+              id="scroll-left-button"
+              onClick={scrollTrai}
+            >
+              <LeftOutlined />
+            </button>
+            <button
+              className="scroll-button"
+              id="scroll-right-button"
+              onClick={scrollPhai}
+            >
+              <RightOutlined />
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
