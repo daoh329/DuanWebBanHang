@@ -8,25 +8,25 @@ class OrderController {
   async order(req, res) {
     const data = req.body;
     // console.log(data);
-  
+
     if (!data) {
       return res.status(400).json("Invalid data");
     }
-  
+
     // Kiểm tra số lượng sản phẩm hiện có
     let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
     let values = [data.productID];
     mysql.query(sql, values, (err, result) => {
       if (err) throw err;
       // console.log(result);
-  
+
       // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
       if (data.quantity > result[0].remaining_quantity) {
         return res.status(400).json("Số lượng sản phẩm không đủ");
       }
   
       // Nếu số lượng mua hàng không vượt quá số lượng sản phẩm hiện có
-      sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?,?, ?, ?, CONVERT_TZ(NOW(), '+00:00', '+07:00'), CONVERT_TZ(NOW(), '+00:00', '+07:00'), ?, ?, ?)`;
+      sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?,?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
       values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.totalAmount, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
@@ -41,7 +41,7 @@ class OrderController {
         });
       });
     });
-  }  
+  }
 
   async Paymentmomo(req, res) {
     const data = req.body;
