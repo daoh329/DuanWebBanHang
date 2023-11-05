@@ -25,6 +25,7 @@ const createTables = () => {
     UserID int,
     deliveryMethod varchar(255),
     paymentMenthod tinyint,
+    totalAmount NUMERIC(10,2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
