@@ -17,6 +17,12 @@
 
 .product-item .product-image img{
     width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+.product-item .product-image img:hover{
+    transform: scale(120%);
 }
 
 .product-item .product-infomations{
@@ -25,7 +31,7 @@
 }
 
 .product-item .product-infomations p span{
-    color: blue;
+    color: #3b71ca;
 }
 
 .product-item .product-infomations .name{
@@ -38,7 +44,10 @@
     line-height: 16px;
     margin-bottom: 10px;
     cursor: pointer;
+}
 
+.product-item .product-infomations .name:hover{
+    color: blue;
 }
 
 .product-item .product-total{

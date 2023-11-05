@@ -303,12 +303,14 @@ function Detail() {
     if (existingItemIndex !== -1) {
       // Sản phẩm đã tồn tại trong giỏ hàng, chỉ hiển thị thông báo
       message.success("Sản phẩm đã có trong giỏ hàng");
+      return true;
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
       // update redux state
       dispatch(addProductToCart(updatedCart));
       message.success("Sản phẩm đã được thêm vào giỏ hàng");
+      return true;
     }
   };
 
