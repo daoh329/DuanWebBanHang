@@ -149,7 +149,7 @@ function ReceiverInformationModal({
       for (const fieldName in values) {
         // Nếu có dữ liệu là rỗng thì chuyển hết thành undefined
         if (
-          values[fieldName] === "" ||
+          // values[fieldName] === "" ||
           values[fieldName] === receiverInformation[fieldName]
         ) {
           values[fieldName] = undefined;
@@ -254,7 +254,7 @@ function ReceiverInformationModal({
           receiverInformation && {
             name: receiverInformation.name,
             phone: receiverInformation.phone,
-            email: receiverInformation.email,
+            email: receiverInformation.email ? receiverInformation.email : "",
             city: receiverInformation.city,
             district: receiverInformation.district,
             commune: receiverInformation.commune,
@@ -283,11 +283,7 @@ function ReceiverInformationModal({
         </Form.Item>
 
         {/* Email */}
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: "Email không được bỏ trống" }]}
-        >
+        <Form.Item label="Email" name="email">
           <Input placeholder="Nhập email người nhận" />
         </Form.Item>
 

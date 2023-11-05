@@ -16,21 +16,18 @@ import { message } from "antd";
 import "./Buy.css";
 import ButtonAddress from "./ButtonCheckedAddress/ButtonAddress";
 import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Modal/receiverInformationModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteProductInCart } from "../../redux/cartSlice";
+import { formatCurrency } from "../../util/FormatVnd";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
 };
-function formatCurrency(value) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
-}
 //
 
 export default function Buy() {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [note, setNote] = useState("");
@@ -43,8 +40,8 @@ export default function Buy() {
   const [addressChecked, setAddressChecked] = useState();
 
   const [amount, setAmount] = useState(null);
-  const [bankCode, setBankCode] = useState('');
-  const [language, setLanguage] = useState('vn');
+  const [bankCode, setBankCode] = useState("");
+  const [language, setLanguage] = useState("vn");
 
   const navigate = useNavigate();
 
@@ -103,7 +100,7 @@ export default function Buy() {
       onOk() {
         navigate("/login");
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -282,7 +279,11 @@ export default function Buy() {
     if (!deliveryMethod) {
       message.error("Vui lòng chọn phương thức giao hàng");
       return;
-    } else if (!paymentMenthod || paymentMenthod == [] || paymentMenthod == null) {
+    } else if (
+      !paymentMenthod ||
+      paymentMenthod == [] ||
+      paymentMenthod == null
+    ) {
       message.error("Vui lòng chọn phương thức thanh toán");
       return;
     }
@@ -304,8 +305,6 @@ export default function Buy() {
 
       // Chuyển hướng người dùng đến trang thông báo thành công
       window.location.replace("/success");
-
-
       // Xóa sản phẩm khỏi giỏ hàng
       removeFromCart(productID);
     } else {
@@ -319,7 +318,7 @@ export default function Buy() {
       }
     }
   };
-
+  
   const handleChecked = (value) => {
     setAddressChecked(value);
   };
@@ -345,7 +344,6 @@ export default function Buy() {
               className="teko-col teko-col-8 css-gr7r8o2 snipcss0-3-3-4 style-yXGc7"
               id="style-yXGc7"
             >
-
               {/*  */}
               <div className="teko-card css-svl62k snipcss0-4-4-5">
                 <div className="teko-card-body css-0 snipcss0-5-5-6">
@@ -372,7 +370,7 @@ export default function Buy() {
 
                   <MDBTabsContent>
                     <MDBTabsPane show={fillActive === "tab1"}>
-                      <h6 style={{marginTop:'10px'}}>Thông tin nhận hàng</h6>
+                      <h6 style={{ marginTop: "10px" }}>Thông tin nhận hàng</h6>
                       <div className="address-group">
                         {/* show address */}
                         {user.id &&
@@ -406,28 +404,43 @@ export default function Buy() {
                         {/*  */}
                       </div>
                       <div className="radio">
-                        <label style={{ display: "block", fontSize: "15px", marginBottom: "10px" , fontWeight:'bold'}}>
+                        <label
+                          style={{
+                            display: "block",
+                            fontSize: "15px",
+                            marginBottom: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
                           Phương thức giao hàng
                         </label>
-                        <div style={{justifyContent: "space-between", }}>
-                          <label style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ justifyContent: "space-between" }}>
+                          <label
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
                             <input
                               type="checkbox"
                               value="ngày trong tuần"
                               checked={deliveryMethod === "ngày trong tuần"}
                               onChange={(e) =>
-                                setDeliveryMethod(e.target.checked ? e.target.value : "")
+                                setDeliveryMethod(
+                                  e.target.checked ? e.target.value : ""
+                                )
                               }
                             />
                             Ngày trong tuần
                           </label>
-                          <label style={{ display: "flex", alignItems: "center" }}>
+                          <label
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
                             <input
                               type="checkbox"
                               value="Chủ nhật"
                               checked={deliveryMethod === "Chủ nhật"}
                               onChange={(e) =>
-                                setDeliveryMethod(e.target.checked ? e.target.value : "")
+                                setDeliveryMethod(
+                                  e.target.checked ? e.target.value : ""
+                                )
                               }
                             />
                             Chủ nhật
@@ -906,69 +919,73 @@ export default function Buy() {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
                       >
-                        {paymentMenthod == 0 ? <Button
-                          data-content-region-name="paymentMethod"
-                          data-track-content="true"
-                          data-content-name="COD"
-                          data-content-target="COD"
-                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
-                          id="style-UMMoQ"
-                          onClick={handleBuyVNpay}
-                        >
-                          <div
-                            type="subtitle"
-                            className="css-qat15y snipcss0-9-76-77"
+                        {paymentMenthod == 0 ? (
+                          <Button
+                            data-content-region-name="paymentMethod"
+                            data-track-content="true"
+                            data-content-name="COD"
+                            data-content-target="COD"
+                            className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
+                            id="style-UMMoQ"
+                            onClick={handleBuyVNpay}
                           >
-                            Thanh toán VNPAY-QR
-                            <span
-                              className="snipcss0-10-77-78 style-NANX3"
-                              id="style-NANX3"
-                            ></span>
-                          </div>
-                          <div
-                            type="body"
-                            color="textSecondary"
-                            className="css-ngriz3 snipcss0-9-76-79"
-                          ></div>
-                          <div
-                            type="body"
-                            className="css-9o8e5m snipcss0-9-76-80"
+                            <div
+                              type="subtitle"
+                              className="css-qat15y snipcss0-9-76-77"
+                            >
+                              Thanh toán VNPAY-QR
+                              <span
+                                className="snipcss0-10-77-78 style-NANX3"
+                                id="style-NANX3"
+                              ></span>
+                            </div>
+                            <div
+                              type="body"
+                              color="textSecondary"
+                              className="css-ngriz3 snipcss0-9-76-79"
+                            ></div>
+                            <div
+                              type="body"
+                              className="css-9o8e5m snipcss0-9-76-80"
+                            >
+                              Thanh toán qua Internet Banking, Visa, Master,
+                              JCB, VNPAY-QR
+                            </div>
+                          </Button>
+                        ) : (
+                          <Button
+                            data-content-region-name="paymentMethod"
+                            data-track-content="true"
+                            data-content-name="COD"
+                            data-content-target="COD"
+                            className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
+                            id="style-UMMoQ"
+                            onClick={handleBuyVNpay}
                           >
-                            Thanh toán qua Internet Banking, Visa, Master, JCB,
-                            VNPAY-QR
-                          </div>
-                        </Button> : <Button
-                          data-content-region-name="paymentMethod"
-                          data-track-content="true"
-                          data-content-name="COD"
-                          data-content-target="COD"
-                          className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
-                          id="style-UMMoQ"
-                          onClick={handleBuyVNpay}
-                        >
-                          <div
-                            type="subtitle"
-                            className="css-qat15y snipcss0-9-76-77"
-                          >
-                            Thanh toán VNPAY-QR
-                            <span
-                              className="snipcss0-10-77-78 style-NANX3"
-                              id="style-NANX3"
-                            ></span>
-                          </div>
-                          <div
-                            type="body"
-                            color="textSecondary"
-                            className="css-ngriz3 snipcss0-9-76-79"
-                          ></div>
-                          <div
-                            type="body"
-                            className="css-9o8e5m snipcss0-9-76-80"
-                          >
-                            Thanh toán qua Internet Banking, Visa, Master, JCB,
-                            VNPAY-QR
-                          </div>
-                        </Button>}
+                            <div
+                              type="subtitle"
+                              className="css-qat15y snipcss0-9-76-77"
+                            >
+                              Thanh toán VNPAY-QR
+                              <span
+                                className="snipcss0-10-77-78 style-NANX3"
+                                id="style-NANX3"
+                              ></span>
+                            </div>
+                            <div
+                              type="body"
+                              color="textSecondary"
+                              className="css-ngriz3 snipcss0-9-76-79"
+                            ></div>
+                            <div
+                              type="body"
+                              className="css-9o8e5m snipcss0-9-76-80"
+                            >
+                              Thanh toán qua Internet Banking, Visa, Master,
+                              JCB, VNPAY-QR
+                            </div>
+                          </Button>
+                        )}
                       </div>
                     ) : (
                       <div
@@ -1016,7 +1033,7 @@ export default function Buy() {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-75 style-keAdr"
                         id="style-keAdr"
                       >
-                        {paymentMenthod == 1 ?
+                        {paymentMenthod == 1 ? (
                           <Button
                             data-content-region-name="paymentMethod"
                             data-track-content="true"
@@ -1025,10 +1042,11 @@ export default function Buy() {
                             className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
                             id="style-UMMoQ"
                             onClick={handleBuyCOD}
-                          ><div
-                            type="subtitle"
-                            className="css-qat15y snipcss0-9-76-77"
                           >
+                            <div
+                              type="subtitle"
+                              className="css-qat15y snipcss0-9-76-77"
+                            >
                               Thanh toán khi nhận hàng
                               <span
                                 className="snipcss0-10-77-78 style-NANX3"
@@ -1044,7 +1062,9 @@ export default function Buy() {
                               type="body"
                               className="css-9o8e5m snipcss0-9-76-80"
                             ></div>
-                          </Button> : <Button
+                          </Button>
+                        ) : (
+                          <Button
                             data-content-region-name="paymentMethod"
                             data-track-content="true"
                             data-content-name="COD"
@@ -1052,10 +1072,11 @@ export default function Buy() {
                             className="css-64rk53 snipcss0-8-75-76 style-UMMoQ "
                             id="style-UMMoQ"
                             onClick={handleBuyCOD}
-                          ><div
-                            type="subtitle"
-                            className="css-qat15y snipcss0-9-76-77"
                           >
+                            <div
+                              type="subtitle"
+                              className="css-qat15y snipcss0-9-76-77"
+                            >
                               Thanh toán khi nhận hàng
                               <span
                                 className="snipcss0-10-77-78 style-NANX3"
@@ -1071,7 +1092,8 @@ export default function Buy() {
                               type="body"
                               className="css-9o8e5m snipcss0-9-76-80"
                             ></div>
-                          </Button>}
+                          </Button>
+                        )}
                       </div>
                     ) : (
                       <div
@@ -1116,53 +1138,57 @@ export default function Buy() {
                         className="teko-col teko-col-6 css-gr7r8o2 snipcss0-7-63-81 style-poooX"
                         id="style-poooX"
                       >
-                        {paymentMenthod == 2 ? <Button
-                          data-content-region-name="paymentMethod"
-                          data-track-content="true"
-                          data-content-name="ZALOPAY_GATEWAY"
-                          data-content-target="ZALOPAY_GATEWAY"
-                          className="css-64rk53 snipcss0-8-81-82 style-OQooy button-select"
-                          id="style-OQooy"
-                          onClick={handleBuyMoMoPay}
-                        >
-                          <div
-                            type="subtitle"
-                            className="css-qat15y snipcss0-9-82-83"
+                        {paymentMenthod == 2 ? (
+                          <Button
+                            data-content-region-name="paymentMethod"
+                            data-track-content="true"
+                            data-content-name="ZALOPAY_GATEWAY"
+                            data-content-target="ZALOPAY_GATEWAY"
+                            className="css-64rk53 snipcss0-8-81-82 style-OQooy button-select"
+                            id="style-OQooy"
+                            onClick={handleBuyMoMoPay}
                           >
-                            Thanh toán QR Code Momo
-                            <span
-                              className="snipcss0-10-83-84 style-DJQy2"
-                              id="style-DJQy2"
-                            ></span>
-                          </div>
-                          <div
-                            type="body"
-                            className="css-9o8e5m snipcss0-9-82-86"
-                          ></div>
-                        </Button> : <Button
-                          data-content-region-name="paymentMethod"
-                          data-track-content="true"
-                          data-content-name="ZALOPAY_GATEWAY"
-                          data-content-target="ZALOPAY_GATEWAY"
-                          className="css-64rk53 snipcss0-8-81-82 style-OQooy"
-                          id="style-OQooy"
-                          onClick={handleBuyMoMoPay}
-                        >
-                          <div
-                            type="subtitle"
-                            className="css-qat15y snipcss0-9-82-83"
+                            <div
+                              type="subtitle"
+                              className="css-qat15y snipcss0-9-82-83"
+                            >
+                              Thanh toán QR Code Momo
+                              <span
+                                className="snipcss0-10-83-84 style-DJQy2"
+                                id="style-DJQy2"
+                              ></span>
+                            </div>
+                            <div
+                              type="body"
+                              className="css-9o8e5m snipcss0-9-82-86"
+                            ></div>
+                          </Button>
+                        ) : (
+                          <Button
+                            data-content-region-name="paymentMethod"
+                            data-track-content="true"
+                            data-content-name="ZALOPAY_GATEWAY"
+                            data-content-target="ZALOPAY_GATEWAY"
+                            className="css-64rk53 snipcss0-8-81-82 style-OQooy"
+                            id="style-OQooy"
+                            onClick={handleBuyMoMoPay}
                           >
-                            Thanh toán QR Code Momo
-                            <span
-                              className="snipcss0-10-83-84 style-DJQy2"
-                              id="style-DJQy2"
-                            ></span>
-                          </div>
-                          <div
-                            type="body"
-                            className="css-9o8e5m snipcss0-9-82-86"
-                          ></div>
-                        </Button>}
+                            <div
+                              type="subtitle"
+                              className="css-qat15y snipcss0-9-82-83"
+                            >
+                              Thanh toán QR Code Momo
+                              <span
+                                className="snipcss0-10-83-84 style-DJQy2"
+                                id="style-DJQy2"
+                              ></span>
+                            </div>
+                            <div
+                              type="body"
+                              className="css-9o8e5m snipcss0-9-82-86"
+                            ></div>
+                          </Button>
+                        )}
                       </div>
                     ) : (
                       <div
@@ -1264,8 +1290,11 @@ export default function Buy() {
                                     className="lazyload css-jdz5ak snipcss0-7-11-14 snipcss0-11-110-113"
                                     alt="product"
                                     src={
-                                      process.env.REACT_APP_API_URL +
-                                      item.thumbnail
+                                      item.main_image
+                                        ? process.env.REACT_APP_API_URL +
+                                          item.main_image
+                                        : process.env.REACT_APP_API_URL +
+                                          item.thumbnail
                                     } // Lấy URL ảnh từ dữ liệu
                                     loading="lazy"
                                     decoding="async"
@@ -1371,7 +1400,7 @@ export default function Buy() {
                           {buysData && buysData.total && (
                             <MDBTableBody>
                               <tr>
-                                <td colSpan={1}>Tổng tiền tam tính</td>
+                                <td colSpan={1}>Tổng tiền tạm tính</td>
                                 <td colSpan={3}>
                                   {formatCurrency(buysData.total)}
                                 </td>

@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import PreviewImage from "../ImageComponent/PreviewImage";
 import "./StyleImage.css";
+import { Modal, Upload } from "antd";
 
-function ImageInput({ formik }) {
-  const [indexs, setIndexs] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+// const getBase64 = (file) =>
+//   new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(file);
+//     reader.onload = () => resolve(reader.result);
+//     reader.onerror = (error) => reject(error);
+//   });
+
+function ImageInput(props) {
+  const {formik , setMainImage} = props;
+  const indexs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const checkImage = (event) => {
     if (event.target.files.length === 0) {
@@ -25,12 +35,53 @@ function ImageInput({ formik }) {
     return true;
   };
 
+  // MAIN_IMAGE
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    setMainImage(fileList);
+  }, [fileList]);
+  
+  // nút upload image
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
   return (
     <div className="form-group">
       {/* title */}
       <label className="form-label">Hình ảnh</label>
       {/* image */}
       <div className="image_group">
+        {/* main image */}
+        <p style={{fontSize:"12px", margin:"0"}}>Ảnh chính (Ảnh được hiển thị chính)</p> 
+        <Upload
+          listType="picture-card"
+          accept=".png,.jpeg,.jpg"
+          // onPreview={handlePreview}
+          onChange={({ fileList: newFileList }) => {
+            setFileList(newFileList);
+          }}
+          beforeUpload={() => {
+            return false;
+          }}
+          multiple
+          name="main_image"
+        >
+          {fileList.length >= 1 ? null : uploadButton}
+        </Upload>
+        {/* <Modal
+          open={previewOpen}
+          title={previewTitle}
+          footer={null}
+          onCancel={handleCancel}
+        >
+          <img alt="example" style={{ width: "100%" }} src={previewImage} />
+        </Modal> */}
+        <p style={{fontSize:"12px", margin:"0"}} >Các ảnh khác (Ảnh được hiển thị trong chi tiết)</p>
+        {/* imagse */}
         {indexs.map((i) => (
           <div
             key={i}

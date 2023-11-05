@@ -15,6 +15,8 @@ import { message } from "antd";
 // import { CartProvider } from "../Cart/CartContext";
 import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
+import { useDispatch, useSelector } from "react-redux";
+import { addProductToCart } from "../../redux/cartSlice";
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
@@ -25,6 +27,7 @@ function Detail() {
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const dispatch = useDispatch();
   // sự kiện mở modal
   // const showModal = () => {
   //   setIsModalOpen(true);
@@ -105,12 +108,11 @@ function Detail() {
       .then((response) => {
         // Lưu thông tin chi tiết của sản phẩm vào state
         setDetail(response.data);
-
         const configurationData = JSON.parse(response.data.configuration);
         setConfiguration(configurationData);
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
-        const productThumbnails = response.data.thumbnails;
+        const productThumbnails = [ ...response.data.thumbnails];
         setThumbnails(productThumbnails);
       })
       .catch((error) => {
@@ -235,20 +237,29 @@ function Detail() {
   };
 
   // them giỏ hàng
-  const [cart, setCart] = useState(
-    JSON.parse(sessionStorage.getItem("cart")) || []
-  );
+  const cart = useSelector((state) => state.cart.products);
 
   const handleAddToCart = () => {
+    if (Detail.remaining_quantity === 0) {
+      message.warning("Sản phẩm đã hết hàng");
+      return false;
+    }
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.p_ID,
+      main_image: Detail.main_image,
       thumbnail: Detail.thumbnails[0].thumbnail,
       shortDescription: Detail.shortDescription,
-      price: Detail.price,
+      price:
+        Detail.discount > 0 && Detail.price > Detail.discount
+          ? Detail.discount
+          : Detail.price,
       brand: Detail.brand,
       quantity: 1,
-      totalPrice: Detail.price, // Tính giá trị tổng tiền cho sản phẩm
+      totalPrice:
+        Detail.discount > 0 && Detail.price > Detail.discount
+          ? Detail.discount
+          : Detail.price, // Tính giá trị tổng tiền cho sản phẩm
     };
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
@@ -262,11 +273,9 @@ function Detail() {
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
-      setCart(updatedCart);
+      // update redux state
+      dispatch(addProductToCart(updatedCart));
       message.success("Sản phẩm đã được thêm vào giỏ hàng");
-      window.location.reload();
-      // Lưu giỏ hàng đã cập nhật vào sessionStorage
-      sessionStorage.setItem("cart", JSON.stringify(updatedCart));
     }
   };
 
@@ -332,14 +341,14 @@ function Detail() {
                           {Detail &&
                             Detail.thumbnails &&
                             Detail.thumbnails.length > 0 &&
-                            Detail.thumbnails.map((thumbnail, index) => (
+                            [...Detail.thumbnails].map((thumbnail, index) => (
                               <div key={index}>
                                 <img
                                   src={
                                     process.env.REACT_APP_API_URL +
                                     thumbnail.thumbnail
                                   }
-                                  alt={`Image ${index + 1}`}
+                                  alt={""}
                                 />
                               </div>
                             ))}
@@ -348,13 +357,12 @@ function Detail() {
                     </MDBContainer>
                   </div>
                 </div>
-
                 {/* Slider hình nhỏ */}
                 <div className="thumbnail-slider">
                   {Detail &&
                     Detail.thumbnails &&
                     Detail.thumbnails.length > 0 &&
-                    Detail.thumbnails.map((thumbnail, index) => (
+                    [...Detail.thumbnails].map((thumbnail, index) => (
                       <Image.PreviewGroup
                         key={index}
                         preview={{
@@ -497,6 +505,7 @@ function Detail() {
                   data-content-target="cart"
                   data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
                   className="css-yp9swi"
+                  
                 >
                   <button
                     height="2.5rem"
@@ -506,9 +515,10 @@ function Detail() {
                     // onClick={showModal}
                     // sự kiện cho modal
                     onClick={(e) => {
-                      handleAddToCart();
-                      window.location.replace("/cart");
+                      const result = handleAddToCart();
+                      result && window.location.replace("/cart");
                     }}
+                    
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY

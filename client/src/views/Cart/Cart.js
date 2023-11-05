@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, Layout, Space, Col, Row, Card, Checkbox } from "antd";
-import { format } from "date-fns";
-import axios from "axios";
-import { useCart } from "../Cart/CartContext";
+
 import "./Cart.css";
+import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  MDBBtn,
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBCheckbox,
-} from "mdb-react-ui-kit";
-const { Header, Footer, Sider, Content } = Layout;
+  decreaseProduct,
+  deleteProductInCart,
+  increaseProduct,
+} from "../../redux/cartSlice";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -22,9 +18,8 @@ function formatCurrency(value) {
 function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
-  const initialCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  const [cart, setCart] = useState(initialCart);
-
+  const cart = useSelector((state) => state.cart.products);
+  const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -112,68 +107,38 @@ function Cart() {
 
   //xóa sp
   const removeFromCart = (productId) => {
-    // Tìm sản phẩm cần xóa trong giỏ hàng
-    const updatedCart = cart.filter((item) => item.id !== productId);
-
-    // Cập nhật danh sách giỏ hàng
-    setCart(updatedCart);
-
-    // Cập nhật danh sách sản phẩm được chọn (nếu sản phẩm bị xóa đang được chọn)
-    setSelectedProducts((prevSelected) =>
-      prevSelected.filter((productId) => productId !== productId)
-    );
-
-    // Lưu danh sách giỏ hàng đã cập nhật vào session
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
-    window.location.reload();
+    // xóa trong cart
+    dispatch(deleteProductInCart(productId));
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = (productId) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        // Tăng số lượng sản phẩm lên 1
-        item.quantity += 1;
-        // Cập nhật tổng tiền của sản phẩm
-        item.totalPrice = item.quantity * item.price;
-      }
-      return item;
-    });
-    // Cập nhật giỏ hàng
-    setCart(updatedCart);
+    const data = {
+      product_id: productId,
+    };
+    dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
-
-    // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
-
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
   const decreaseQuantity = (productId) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        // Giảm số lượng sản phẩm đi 1, nhưng không thấp hơn 1
-        item.quantity = Math.max(item.quantity - 1, 1);
-        // Cập nhật tổng tiền của sản phẩm
-        item.totalPrice = item.quantity * item.price;
-      }
-      return item;
-    });
+    const data = {
+      product_id: productId,
+    };
     // Cập nhật giỏ hàng
-    setCart(updatedCart);
+    dispatch(decreaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
-
-    // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
-    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
   };
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
-  const [totalPrice, setTotalPrice] = useState(0);
 
+  // const [selectedItems, setSelectedItems] = useState([]);
+  // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
+  const [totalPrice, setTotalPrice] = useState(0);
   const handleViewDetailProduct = (products) => {
+    console.log(products);
+
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
       console.error("Product ID is undefined!");
@@ -186,6 +151,7 @@ function Cart() {
       shortDescription: products.shortDescription,
       price: products.price,
       discount: products.discount,
+      main_image: products.main_image,
       thumbnail: products.thumbnail,
       brand: products.brand,
       id: products.id,
@@ -201,8 +167,6 @@ function Cart() {
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
-
-    console.log("click");
     navigate(`/detail/${products.id}`);
   };
 
@@ -226,7 +190,6 @@ function Cart() {
     };
     // Lưu thông tin vào sessionStorage
     sessionStorage.setItem("buys", JSON.stringify(buys));
-    console.log("buys", buys);
     // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
     navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
   };
@@ -264,15 +227,19 @@ function Cart() {
                           onChange={() => handleCheckboxChange(item.id)}
                         />
                       </td>
-                      <td style={{ width: "20%" }}>
+                      <td style={{ width: "15%" }}>
                         <img
                           onClick={() => handleViewDetailProduct(item)}
                           className="image-tiet"
-                          src={process.env.REACT_APP_API_URL + item.thumbnail}
-                          alt="thumbnail"
+                          src={
+                            item.main_image
+                              ? process.env.REACT_APP_API_URL + item.main_image
+                              : process.env.REACT_APP_API_URL + item.thumbnail
+                          }
+                          alt="main_image"
                         />
                       </td>
-                      <td style={{ lineHeight: "15px", fontSize: "12px" }}>
+                      <td style={{ lineHeight: "18px", fontSize: "14px" }}>
                         {item.shortDescription}
                       </td>
 

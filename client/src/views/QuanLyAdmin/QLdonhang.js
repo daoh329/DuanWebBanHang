@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "antd";
-import { format } from "date-fns";
 import axios from "axios";
+
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -46,11 +46,12 @@ function OrderList() {
         CreateNotification(
           record.user_id,
           record.order_id,
-          "Xác nhận đơn hàng",
+          "1",
           "Đơn hàng đã được xác nhận",
           `Đơn hàng ${record.order_id} đã được xác nhận và đang trong quá trình đóng gói`
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
+        // window.location.reload();
       } catch (error) {
         console.error("Error confirming order:", error);
       }

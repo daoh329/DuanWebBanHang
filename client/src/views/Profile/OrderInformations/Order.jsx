@@ -41,7 +41,7 @@ function Order(props) {
       parseFloat(order[0]?.price ? order[0]?.price : 0) *
       parseFloat(order[0]?.quantity ? order[0]?.quantity : 0),
     quantity: order[0]?.quantity,
-    imageUrl: productAPI?.galery[0],
+    imageUrl: productAPI?.main_image ? productAPI.main_image : productAPI?.galery[0],
   };
 
   return (

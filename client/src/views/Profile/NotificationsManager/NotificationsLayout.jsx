@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, List, Tag } from "antd";
+import { Avatar, Empty, List, Tag } from "antd";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { FileDoneOutlined, FileExcelOutlined } from "@ant-design/icons";
@@ -10,7 +10,7 @@ import { updateNotification } from "../../../redux/notificationsSlice";
 function NotificationsLayout(props) {
   const statusPage = props.statusPage;
 
-  const data = useSelector((state) => state.notifications);
+  const data = useSelector((state) => state.notifications.notifications);
   const dispatch = useDispatch();
 
   const handleReadAll = async () => {
@@ -90,64 +90,80 @@ function NotificationsLayout(props) {
         </p>
       </div>
       {/* content */}
-      <List
-        itemLayout="horizontal"
-        dataSource={data}
-        className="notifications-list"
-        renderItem={(item) => (
-          <List.Item
-            onClick={() => handleNext(item?.id, item?.order_id, item?.is_read)}
-            id="notifications-list-item"
-          >
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  style={{ backgroundColor: "white" }}
-                  size={64}
-                  icon={
-                    item.type === "Xác nhận đơn hàng" ? (
-                      <FileDoneOutlined style={{ color: "green" }} />
-                    ) : (
-                      <FileExcelOutlined style={{ color: "red" }} />
-                    )
-                  }
-                />
+      {data.length !== 0 ? (
+        <List
+          itemLayout="horizontal"
+          dataSource={data}
+          className="notifications-list"
+          renderItem={(item) => (
+            <List.Item
+              onClick={() =>
+                handleNext(item?.id, item?.order_id, item?.is_read)
               }
-              title={
-                item.is_read === 0 ? (
-                  <p className="notification-title">
-                    {item.title} <Tag color="red">Chưa đọc</Tag>
-                  </p>
-                ) : (
-                  <p
-                    className="notification-title"
-                    style={{ color: "#A9A9A9" }}
-                  >
-                    {item.title}
-                  </p>
-                )
-              }
-              description={
-                item.is_read === 0 ? (
-                  <p
-                    className="notification-description"
-                    style={{ color: "black" }}
-                  >
-                    {item.content}
-                  </p>
-                ) : (
-                  <p
-                    className="notification-description"
-                    style={{ color: "#A9A9A9" }}
-                  >
-                    {item.content}
-                  </p>
-                )
-              }
-            />
-          </List.Item>
-        )}
-      />
+              id="notifications-list-item"
+            >
+              <List.Item.Meta
+                avatar={
+                  <Avatar
+                    style={{ backgroundColor: "white" }}
+                    size={64}
+                    icon={
+                      item.type === "1" ? (
+                        <FileDoneOutlined style={{ color: "green" }} />
+                      ) : (
+                        <FileExcelOutlined style={{ color: "red" }} />
+                      )
+                    }
+                  />
+                }
+                title={
+                  item.is_read === 0 ? (
+                    <p className="notification-title">
+                      {item.title} <Tag color="red">Chưa đọc</Tag>
+                    </p>
+                  ) : (
+                    <p
+                      className="notification-title"
+                      style={{ color: "#A9A9A9" }}
+                    >
+                      {item.title}
+                    </p>
+                  )
+                }
+                description={
+                  item.is_read === 0 ? (
+                    <p
+                      className="notification-description"
+                      style={{ color: "black" }}
+                    >
+                      {item.content}
+                    </p>
+                  ) : (
+                    <p
+                      className="notification-description"
+                      style={{ color: "#A9A9A9" }}
+                    >
+                      {item.content}
+                    </p>
+                  )
+                }
+              />
+            </List.Item>
+          )}
+        />
+      ) : (
+        // hiển thị không có thông báo
+        <Empty
+          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+          imageStyle={{ height: 60 }}
+          style={{marginTop:"100px"}}
+          description={
+            <span style={{ color: "#A9A9A9" }}>
+              Hiện không có thông báo nào
+            </span>
+          }
+        ></Empty>
+      )}
     </div>
   );
 }

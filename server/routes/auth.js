@@ -283,7 +283,7 @@ router.post("/create-notification", async (req, res) => {
 router.get("/get-notifications/:id", async (req, res) => {
   try {
     const userId = req.params.id;
-    const q = `SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC;`;
+    const q = `SELECT * FROM notifications WHERE user_id = ? ORDER BY updated_at DESC;`;
     const notifications = await query(q, [userId]);
 
     res.status(200).json(notifications);

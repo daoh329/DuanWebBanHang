@@ -9,6 +9,7 @@ const createTables = () => {
     discount NUMERIC(10,2) default 0,
     shortDescription varchar(255),
     CategoryID int,
+    main_image longtext,
     status boolean,
     FOREIGN KEY (CategoryID) REFERENCES category (id)
   );
@@ -67,7 +68,7 @@ const createTables = () => {
   );`;
   const galery = `CREATE TABLE IF NOT EXISTS galery (
     id int PRIMARY KEY AUTO_INCREMENT,
-    thumbnail varchar(255),
+    thumbnail longtext,
     product_id int,
     FOREIGN KEY (product_id) REFERENCES product (id)
   );`;
@@ -125,6 +126,7 @@ const createTables = () => {
     title text NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     type text NOT NULL,  
     is_read BOOLEAN DEFAULT 0
 );`;
