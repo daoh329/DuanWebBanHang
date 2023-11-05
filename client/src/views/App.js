@@ -53,6 +53,8 @@ import TabsQLgiaohuy from "./QuanLyAdmin/Pages/TabsQLgiaohuy.js";
 import TabsDonDatHang from "./QuanLyAdmin/Pages/Tabsdondathang.js";
 import TabsVanChuyen from "./QuanLyAdmin/Pages/Tabsvanchuyen.js";
 import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
+import BillSuccess from "./Buy/BillSuccess.js";
+import QLOrder from "./Profile/OrderInformations/QLOrder.jsx";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -154,31 +156,34 @@ const App = () => {
             <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
             <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
             <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
-
-            <Route path="/deliveryfailedOrder" element={<QLdeliveryfailed />} />
-            <Route path="/alldelivered" element={<QLAlldelivered />} />
-            <Route path="/allorders" element={<QLAlldonhang />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/buy" element={<Buy user={user} />} />
-            <Route path="/success" element={<BuySuccess />} />
-            <Route
-              path="/profile"
-              element={isLogin ? <Profile /> : <Navigate to="/" />}
-            />
-            <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
-            <Route
-              path="/tat-ca-san-pham-laptop-moi"
-              element={<AllNewProductLaptop />}
-            />
-            <Route
-              path="/tat-ca-san-pham-phone"
-              element={<AllProductPhone />}
-            />
-            <Route
-              path="/tat-ca-san-pham-phone-moi"
-              element={<AllNewProductPhone />}
-            />
-
+              <Route
+                path="/deliveryfailedOrder"
+                element={<QLdeliveryfailed />}
+              />
+              <Route path="/alldelivered" element={<QLAlldelivered />} />
+              <Route path="/allorders" element={<QLAlldonhang />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/buy" element={<Buy user={user} />} />
+              <Route path="/success" element={<BuySuccess />} />
+              <Route path="/thanks" element={<BillSuccess />} />
+              <Route path="/qlbillorder/:id" element={<QLOrder />} />
+              <Route
+                path="/profile"
+                element={isLogin ? <Profile /> : <Navigate to="/" />}
+              />
+              <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
+              <Route
+                path="/tat-ca-san-pham-laptop-moi"
+                element={<AllNewProductLaptop />}
+              />
+              <Route
+                path="/tat-ca-san-pham-phone"
+                element={<AllProductPhone />}
+              />
+              <Route
+                path="/tat-ca-san-pham-phone-moi"
+                element={<AllNewProductPhone />}
+              />
             <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
             <Route path="/danhmuc-laptop" element={<AllProduct />} />
 

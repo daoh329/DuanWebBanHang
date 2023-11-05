@@ -5,6 +5,7 @@ const OrderController = require("../app/controllers/OrderController");
 
 // router.post('/create_payment_url', OrderController.payment);
 router.post('/pay', OrderController.order);
+router.post('/paymentmomo', OrderController.Paymentmomo);
 // Trong routes.js hoặc tệp tương tự
 // router.get('/quanlyOrder', OrderController.quanlyOrder);
 router.get('/quanlyAllOrder', OrderController.quanlyAllOrder);
