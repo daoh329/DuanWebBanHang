@@ -36,8 +36,47 @@ body {
     color: #333333;
     padding-bottom: 2px;
 }
-
-.css-rfz8yf {
+.zoom-image {
+    transition: transform 0.2s; /* Hiệu ứng chuyển đổi trong 0.2 giây */
+ 
+  
+  }
+  
+  /* Thêm hiệu ứng khi hover vào hình ảnh */
+  .zoom-image:hover {
+    transform: scale(1.4); /* Phóng to hình ảnh lên 120% */
+  }
+  .custom-checkbox-label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .custom-checkbox-input {
+    /* Tùy chỉnh kích thước và border */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333; /* Màu và kích thước border */
+    border-radius: 4px; /* Bo góc border */
+  
+    /* Tùy chỉnh màu nền khi checkbox được chọn */
+    background-color: #007BFF; /* Màu nền khi được chọn */
+  }
+  
+  .custom-checkbox-input:checked {
+    /* Tùy chỉnh màu của checkbox khi được chọn */
+    border: 2px solid #007BFF; /* Màu border khi được chọn */
+    background-color: #007BFF; /* Màu nền khi được chọn */
+  }
+  
+  /* Tùy chỉnh màu văn bản và khoảng cách giữa checkbox và văn bản */
+  .custom-checkbox-label {
+    display: flex;
+    align-items: center;
+    color: #333; /* Màu văn bản */
+    margin-left: 8px; /* Khoảng cách giữa checkbox và văn bản */
+  }
+  
+.style-1 {
     background: white;
     border-radius: 8px;
     padding: 24px;
@@ -55,11 +94,26 @@ body {
     margin: 0 auto;
     margin-top: 30px;
 }
+.style-3{
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 24px;
+}
 .fle-x{
         box-sizing: border-box;
         margin: 0px;
         min-width: 0px;
         display: flex;
+}
+.fle-x-sp-lien-quan{
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
 }
 .mo-ta{
 
@@ -68,6 +122,15 @@ body {
         min-width: 0px;
         width: 65%;
         padding-right: 16px;
+
+}
+.sp-lien-quan{
+
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    width: 65%;
+    padding-right: 16px;
 
 }
 .chi-tiet{
@@ -94,6 +157,143 @@ font-weight:
 700;
 line-height:
 28px
+}
+.title-sp-lien-quan{
+    color:
+#1b1d29;
+display:
+-webkit-box;
+font-size:
+20px;
+font-weight:
+700;
+line-height:
+28px
+}
+/*  */
+.glide * {
+    box-sizing: inherit;
+}
+.glide {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+.glide--swipeable {
+    cursor: grab;
+    cursor: -webkit-grab;
+}
+.css-npa7ru .glide__track {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+.glide__slides{
+    width: 4840px;
+    transform: translate3d(0px, 0px, 0px);
+    transition: transform 0ms cubic-bezier(0.165, 0.84, 0.44, 1) 0s;
+}
+
+.css-npa7ru .glide__slides {
+    height: 100%;
+}
+.glide__slides {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    touch-action: pan-Y;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    will-change: transform;
+}
+.glide__slides, .glide__track {
+    overflow: hidden;
+}
+.glide__slide {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    white-space: normal;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.css-1ei4kcr {
+    background: white;
+    border-radius: 0.5rem;
+    height: 100%;
+}
+.css-1msrncq {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+.css-pxdb0j {
+    text-decoration: none;
+    color: unset;
+    cursor: pointer;
+    display: block;
+}
+.css-4rhdrh {
+    position: relative;
+    flex: 1 0 auto;
+    margin-bottom: 0.5rem;
+}
+.css-1v97aik {
+    position: relative;
+    margin-bottom: 0.25rem;
+}
+.css-798fc {
+    position: relative;
+    padding-bottom: 100%;
+}
+.css-1uzm8bv {
+    display: inline-block;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    transition: transform 0.3s ease 0s;
+    position: absolute;
+    inset: 0px;
+    object-fit: contain;
+}
+.css-14q2k9d {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.css-zb7zul {
+    height: 36px;
+    line-height: 12px;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    background-repeat: no-repeat;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+.css-1bqeu8f {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgb(255, 213, 145);
+}
+.css-1rdv2qd {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 700;
+    color: rgb(255, 255, 255);
 }
 .khoi-tiet-cha{
 
@@ -160,6 +360,21 @@ center;
 :after {
     box-sizing: border-box;
 }
+@media (min-width: 1440px){
+    .style-1 {
+    width: 1232px;
+
+    }
+    .style-2 {
+        width: 1232px;
+    
+        }
+        .style-3 {
+            width: 1232px;
+        
+            }
+}
+
 
 .css-4cffwv {
     box-sizing: border-box;
@@ -993,7 +1208,7 @@ strong {
     .css-6b3ezu {
         width: 100%; /* Thay đổi giá trị width thành 100% */
     }
-    .css-rfz8yf {
+    .style-1 {
         border-radius: 8px;
         height: 100%;
         width: 80%;

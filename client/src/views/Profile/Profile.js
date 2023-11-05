@@ -41,6 +41,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
   const [iconsActive, setIconsActive] = useState("tab1");
+  const [paymentData, setPaymentData] = useState([]);
 
   // hook nhận hành động chuyển page
   useEffect(() => {
@@ -55,18 +56,32 @@ export default function Profile() {
   }, [data]);
 
   // Hàm tải dữ liệu
-  const loadData = useCallback(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
-      .then((res) => {
-        setData(res.data);
-        const sortedOrders = res.data.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-        setData(sortedOrders || []);
-      })
-      .catch((error) => console.log(error));
-  }, [user]);
+const loadData = useCallback(() => {
+  axios
+    .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
+    .then((res) => {
+      // Chuyển đổi paymentData từ chuỗi đã được mã hóa sang đối tượng JavaScript
+      const dataWithParsedPaymentData = res.data.map(order => {
+        let paymentData = {};
+        try {
+          paymentData = JSON.parse(decodeURIComponent(order.paymentData));
+        } catch (error) {
+          console.error("Error parsing paymentData:", error);
+        }
+        return {
+          ...order,
+          paymentData
+        };
+      });
+
+      setData(dataWithParsedPaymentData);
+      const sortedOrders = dataWithParsedPaymentData.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      setData(sortedOrders || []);
+    })
+    .catch((error) => console.log(error));
+}, [user]);
 
   useEffect(() => {
     loadData();
@@ -192,15 +207,7 @@ export default function Profile() {
       ),
     },
     { title: "Sản phẩm", dataIndex: "shortDescription", key: "name" },
-    {
-      title: "Tổng giá",
-      key: "totalPrice",
-      render: (text, record) => (
-        <p>
-          {formatCurrency(record?.totalAmount || 0)}
-        </p>
-      ),
-    },
+    { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
 
     {
       title: "Ngày mua",
@@ -218,6 +225,21 @@ export default function Profile() {
           </div>
         ),
     },
+
+    {
+      title: 'PTTT', 
+      dataIndex: 'paymentMenthod', 
+      key: 'paymentMenthod', 
+      render: status => (
+          <span style={{
+              fontWeight: 'bold', 
+              color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+          }}>
+              {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
+          </span>
+      )
+    },
+    
     {
       title: "Trạng thái",
       dataIndex: "order_status",

@@ -141,6 +141,118 @@ export default function Buy() {
     sessionStorage.setItem("quantity", JSON.stringify(quantity));
   }, [quantity]);
 
+  const removeFromCart = (productID) => {
+    // xóa trong cart
+    dispatch(deleteProductInCart(productID));
+  };
+
+  //Thanh toán VNPay
+
+  // Lấy dữ liệu từ sessionStorage khi component được tải
+  useEffect(() => {
+    const buysDataFromSession = sessionStorage.getItem("buys");
+    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+    if (buysDataFromSession) {
+      const parsedBuysData = JSON.parse(buysDataFromSession);
+      console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
+      // Chuyển đổi total thành số trước khi cập nhật vào state amount
+      setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
+      console.log("dữ liệu total:", Number(parsedBuysData.total));
+    }
+  }, []);
+
+  const handleBuyVNpay = async () => {
+    // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
+    // console.log('amount: '+totalAmount)
+    // setPaymentMenthod(0); // Cập nhật phương thức thanh toán
+
+    const data = {
+      amount,
+      bankCode,
+      language,
+      UserID: user.id,
+      addressID: deliveryAddress[addressChecked].id,
+      productID: productID,
+      quantity: quantity,
+      deliveryMethod: deliveryMethod,
+      paymentMenthod: 0,
+      note: note,
+      status: 0,
+    };
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
+
+        if (responseData && responseData.url) {
+            window.location.href = responseData.url;
+        }
+    } else {
+        const errorData = await response.json();
+        if (errorData === "Số lượng sản phẩm không đủ") {
+            message.error("Số lượng sản phẩm không đủ");
+        }
+    }
+    // navigate(`/createorder`); // Thêm totalAmount vào URL như một tham số truy vấn
+  };
+  // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
+  const handleBuyCOD = () => {
+    // Xử lý cho phương thức thanh toán COD
+    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
+  };
+
+  const handleBuyMoMoPay = async () => {
+    // Xử lý cho phương thức thanh toán ZaloPay
+    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
+
+    sessionStorage.setItem('UserID', user.id);
+    sessionStorage.setItem('addressID', deliveryAddress[addressChecked].id);
+    sessionStorage.setItem('productID', productID);
+    sessionStorage.setItem('quantity', quantity);
+    sessionStorage.setItem('deliveryMethod', deliveryMethod);
+    sessionStorage.setItem('paymentMenthod', 2);
+    sessionStorage.setItem('note', note);
+    sessionStorage.setItem('totalAmount', amount);
+    sessionStorage.setItem('status', 0);
+
+    const data = {
+      amount,
+      productID: productID,
+      quantity: quantity,
+    };
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/paymomo`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
+
+      if (responseData && responseData.url) {
+          window.location.href = responseData.url;
+      } else if (responseData && responseData.error) {
+        // Hiển thị thông báo lỗi
+        message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
+      }
+    } else {
+        const errorData = await response.json();
+        if (errorData === "Số lượng sản phẩm không đủ") {
+            message.error("Số lượng sản phẩm không đủ");
+        }
+    }
+  };
+
   const handleBuyClick = async () => {
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
@@ -150,6 +262,7 @@ export default function Buy() {
       quantity: quantity,
       deliveryMethod: deliveryMethod,
       paymentMenthod: paymentMenthod,
+      totalAmount: amount,
       note: note,
       status: 0,
     };
@@ -196,90 +309,7 @@ export default function Buy() {
       }
     }
   };
-
-  const removeFromCart = (productID) => {
-    dispatch(deleteProductInCart(productID));
-  };
-
-  //Thanh toán VNPay
-
-  // Lấy dữ liệu từ sessionStorage khi component được tải
-  useEffect(() => {
-    const buysDataFromSession = sessionStorage.getItem("buys");
-    // console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
-    if (buysDataFromSession) {
-      const parsedBuysData = JSON.parse(buysDataFromSession);
-      // console.log("parsedBuysData:", parsedBuysData); // Kiểm tra dữ liệu sau khi chuyển đổi
-      // Chuyển đổi total thành số trước khi cập nhật vào state amount
-      setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
-      // console.log("dữ liệu total:", Number(parsedBuysData.total));
-    }
-  }, []);
-
-  const handleBuyVNpay = async () => {
-    // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
-    // console.log('amount: '+totalAmount)
-    setPaymentMenthod(0); // Cập nhật phương thức thanh toán
-
-    const data = {
-      amount,
-      bankCode,
-      language,
-    };
-
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/pay/create_payment_url`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
-
-    if (responseData && responseData.url) {
-      window.location.href = responseData.url;
-    }
-    // navigate(`/createorder`); // Thêm totalAmount vào URL như một tham số truy vấn
-  };
-  // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
-  const handleBuyCOD = () => {
-    // Xử lý cho phương thức thanh toán COD
-    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
-  };
-
-  const handleBuyMoMoPay = async () => {
-    // Xử lý cho phương thức thanh toán ZaloPay
-    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
-
-    const data = {
-      amount,
-    };
-
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/pay/paymomo`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
-
-    if (responseData && responseData.url) {
-      window.location.href = responseData.url;
-    } else if (responseData && responseData.error) {
-      // Hiển thị thông báo lỗi
-      message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
-    }
-  };
-
+  
   const handleChecked = (value) => {
     setAddressChecked(value);
   };

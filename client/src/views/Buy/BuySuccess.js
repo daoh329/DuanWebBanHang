@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Result } from 'antd';
 const BuySuccess = () => (
+  
   <Result
     status="success"
     title={<div style={{color:'#52c41a'}}>Đặt hàng thành công!</div>}

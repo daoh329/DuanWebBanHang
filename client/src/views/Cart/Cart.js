@@ -196,7 +196,7 @@ function Cart() {
 
   return (
     <div>
-      <div className="style-2">
+      <div className="style-cart">
         <div className="fle-x">
           <div className="mo-ta">
             <div className="title-mo">Giỏ hàng</div>

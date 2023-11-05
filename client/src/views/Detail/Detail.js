@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-
 import { auth } from "../../firebaseConfig";
 // import firebase from 'firebase'
 import { Image, Button, Input, Radio, Modal, TreeSelect, Carousel } from "antd";
@@ -17,12 +16,46 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
 import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart } from "../../redux/cartSlice";
+
 const { Option } = Select;
 //text area
 const { TextArea } = Input;
 //select
 
 function Detail() {
+  
+  const [selectedColors, setSelectedColors] = useState([]);
+
+  // Hàm xử lý khi checkbox thay đổi
+  // const handleCheckboxChange = (event) => {
+  //   const colorId = parseInt(event.target.value); // Chuyển giá trị checkbox thành số
+  //   if (event.target.checked) {
+  //     // Nếu checkbox được chọn, thêm colorId vào danh sách selectedColors
+  //     setSelectedColors([...selectedColors, colorId]);
+  //   } else {
+  //     // Nếu checkbox bỏ chọn, loại bỏ colorId khỏi danh sách selectedColors
+  //     setSelectedColors(selectedColors.filter((id) => id !== colorId));
+  //   }
+  // };
+  const [selectedColor, setSelectedColor] = useState(null);
+
+  const handleCheckboxChange = (event, colorId) => {
+    if (event.target.checked) {
+      setSelectedColor(colorId);
+    } else {
+      setSelectedColor(null);
+    }
+  };
+  //
+  const [selectedMemory, setSelectedMemory] = useState(null);
+  const [selectedMemory2, setSelectedMemory2] = useState(null);
+
+  const handleMemoryChange = (memory) => {
+    setSelectedMemory(memory);
+  };
+  const handleMemoryChange2= (memory2) => {
+    setSelectedMemory2(memory2);
+  };
   // ------------------------------------------------------------------------------------------------------------------------main
   //Modal antd
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,7 +145,7 @@ function Detail() {
         setConfiguration(configurationData);
 
         // Lấy danh sách các thumbnail từ response.data và lưu vào state
-        const productThumbnails = [ ...response.data.thumbnails];
+        const productThumbnails = [...response.data.thumbnails];
         setThumbnails(productThumbnails);
       })
       .catch((error) => {
@@ -295,7 +328,7 @@ function Detail() {
   return (
     <>
       <div>
-        <div className="css-rfz8yf snipcss-lgA99 style-BooKL">
+        <div className="style-1">
           <div className="css-4cffwv">
             <div className="css-1i1dodm tether-abutted tether-abutted-top tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
               <div>
@@ -343,12 +376,14 @@ function Detail() {
                             Detail.thumbnails.length > 0 &&
                             [...Detail.thumbnails].map((thumbnail, index) => (
                               <div key={index}>
+                                {/* img main */}
                                 <img
                                   src={
                                     process.env.REACT_APP_API_URL +
                                     thumbnail.thumbnail
                                   }
                                   alt={""}
+                                  className="zoom-image"
                                 />
                               </div>
                             ))}
@@ -443,6 +478,57 @@ function Detail() {
                   </>
                 )}
               </div>
+              {/* check box dung lượng*/}
+              <div className="css-f1fyi0">
+              <div>
+                <label className="custom-checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="8GB"
+                    checked={selectedMemory === "8GB"}
+                    onChange={() => handleMemoryChange("8GB")}
+                    className="custom-checkbox-input"
+                  />
+                  8GB
+                </label>
+
+                <label className="custom-checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="16GB"
+                    checked={selectedMemory === "16GB"}
+                    onChange={() => handleMemoryChange("16GB")}
+                    className="custom-checkbox-input"
+                  />
+                  16GB
+                </label>
+
+                <p>Selected Memory: {selectedMemory}</p>
+              </div>
+              </div>
+              {/* check box màu sắc*/}
+              <div className="css-f1fyi0">
+              <div>
+      {Detail.Colorname ? (
+        <div>
+          {Detail.Colorname.map((color) => (
+            <label  className="custom-checkbox-label" key={color.id}>
+              <input
+                type="checkbox"
+                value={color.id}
+                onChange={(e) => handleCheckboxChange(e, color.id)}
+                checked={selectedColor === color.id}
+                className="custom-checkbox-input"
+              />
+              {color.Colorname}
+            </label>
+          ))}
+        </div>
+      ) : (
+        <span></span>
+      )}
+    </div>
+              </div>
 
               <div className="css-f1fyi0">
                 <div width="100%" color="divider" className="css-1fm9yfq"></div>
@@ -505,7 +591,6 @@ function Detail() {
                   data-content-target="cart"
                   data-content-payload='{"sku":"220300268","screenName":"productDetail"}'
                   className="css-yp9swi"
-                  
                 >
                   <button
                     height="2.5rem"
@@ -518,7 +603,6 @@ function Detail() {
                       const result = handleAddToCart();
                       result && window.location.replace("/cart");
                     }}
-                    
                   >
                     <div type="subtitle" className="css-ueraml">
                       MUA NGAY
@@ -669,7 +753,63 @@ function Detail() {
             </div>
           </div>
         </div>
-        {/* <div className="style-2"></div> */}
+        <div className="style-3">
+          <div className="fle-x-sp-lien-quan">
+            <div>
+              <div className="title-sp-lien-quan">Sản phẩm liên quan</div>
+            </div>
+
+            <div className="glide css-npa7ru glide--ltr glide--slider glide--swipeable">
+              <div className="glide__track" data-glide-el="track">
+                <div className="glide__slides">
+                  <div
+                    className="glide__slide glide__slide--active"
+                    style={{
+                      height: "unset",
+                      marginRight: "5px",
+                      width: "232px",
+                    }}
+                  >
+                    <div className="css-1ei4kcr">
+                      <div
+                        className="product-card css-1msrncq"
+                        data-content-region-name="relatedProducts"
+                        data-track-content="true"
+                        data-content-name="210400696"
+                        data-content-target="productDetail"
+                      >
+                        <a
+                          target="_self"
+                          class="css-pxdb0j"
+                          href="/acer-nitro-5-an515-45-r9sc-nh-qbrsv-001--s210400696"
+                        >
+                          <div className="css-4rhdrh">
+                            <div className="css-1v97aik">
+                              <div className="css-798fc">
+                                <div className="css-1uzm8bv"></div>
+                              </div>
+                              <div className="css-14q2k9d">
+                                <div className="css-zb7zul">
+                                  <div className="css-1bqeu8f">TIẾT KIỆM</div>
+                                  <div className="css-1rdv2qd">1.800.000 ₫</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="css-68cx5s"></div>
+                            <div className="css-1ybkowq"></div>
+                            <div className="css-kgkvir"></div>
+                            <div></div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* main */}
         {/* modal */}
         <Modal
@@ -867,6 +1007,7 @@ function Detail() {
                   </td>
                 </tr>
                 <tr>
+
                   <td colSpan={1}>Màu sắc</td>
                   <td colSpan={3}>
                     {Detail.Colorname ? (
@@ -882,6 +1023,7 @@ function Detail() {
                       <span></span>
                     )}
                   </td>
+
                 </tr>
                 <tr>
                   <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
