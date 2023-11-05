@@ -23,10 +23,6 @@ function Order(props) {
       const q = `${process.env.REACT_APP_API_URL}/order/${order[0].productID}`;
       const results = await axios.get(q);
       if (results.status === 200) {
-        if (results.data[0].discount > 0 && results.data[0].price > results.data[0].discount) {
-          const rp = results.data[0].price - results.data[0].discount;
-          setReducedPrice(rp)
-        }
         setProduct(results.data[0]);
       }
     } catch (error) {
@@ -42,7 +38,7 @@ function Order(props) {
     shortDescription: order[0]?.shortDescription,
     product_id: order[0]?.productID,
     price_total:
-      parseFloat(order[0]?.totalAmount ? order[0]?.totalAmount : 0),
+      order[0]?.totalAmount ? order[0]?.totalAmount : 0,
     quantity: order[0]?.quantity,
     imageUrl: productAPI?.main_image ? productAPI.main_image : productAPI?.galery[0],
   };
@@ -103,9 +99,9 @@ function Order(props) {
           </div>
           
           <div className="block-1-3">
+            <p>Thông tin xuất hóa đơn</p>
             {order[0] && order[0]?.paymentData && (order[0]?.paymentData?.vnp_OrderInfo || order[0]?.paymentData?.orderId) ? (
               <>
-                <p>Thông tin xuất hóa đơn</p>
                 <p>Mã thanh toán giao dịch: <span>{order[0]?.paymentData?.vnp_OrderInfo || order[0]?.paymentData?.orderId}</span></p>
                 <p>Mã tham chiếu giao dịch: <span>{order[0]?.paymentData?.vnp_TxnRef || order[0]?.paymentData?.transId}</span></p>
                 <p>Thời gian thực hiện: <span>{order[0]?.paymentData?.vnp_PayDate || order[0]?.paymentData?.responseTime}</span></p>
@@ -117,10 +113,6 @@ function Order(props) {
               </>
             ) : null}
           </div>
-
-
-
-
         </div>
 
         {/* block 2 */}
@@ -129,7 +121,6 @@ function Order(props) {
             <h6>Sản phẩm</h6>
           </div>
           <Divider style={{ margin: "0" }} />
-
           {/* product */}
           <ProductItem product={product} />
         </div>
@@ -139,7 +130,7 @@ function Order(props) {
           <div className="block-1">
             <div className="sub">
               <div>Tổng tạm tính</div>
-              <div className="price">{formatCurrency(product.price_total) }</div>
+              <div className="price">{formatCurrency(order[0].totalAmount) }</div>
             </div>
             <div className="sub">
               <div>Phí vận chuyển</div>
@@ -151,7 +142,7 @@ function Order(props) {
             </div>
             <div className="sub">
               <div>Thành tiền</div>
-              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatCurrency(product?.price_total - shippingFee)}</div>
+              <div className="price" style={{color:'red', fontSize:"16px", fontWeight:"600"}}>{formatCurrency(order[0]?.totalAmount)}</div>
             </div>
           </div>
           <div className="block-2">(Đã bao gồm VAT)</div>
