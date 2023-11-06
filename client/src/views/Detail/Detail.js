@@ -436,6 +436,15 @@ const handleViewDetailProduct = (products) => {
     }
   };
 
+  // Đối tượng chứa các cặp khóa-giá trị tương ứng
+  const labels = {
+    cpu: 'Thế hệ CPU',
+    chip: 'Chip',
+    vga: 'Chíp đồ họa',
+    screen: 'Màn hình',
+    // thêm các cặp khóa-giá trị khác nếu cần
+  };
+
 
   return (
     <>
@@ -794,7 +803,7 @@ const handleViewDetailProduct = (products) => {
                     </tr>
                     <tr>
                       <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                        Series laptop
+                        Series
                       </td>
                       <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
                         {Detail.name}
@@ -819,43 +828,53 @@ const handleViewDetailProduct = (products) => {
                         )}
                       </td>
                     </tr>
+                    { (configuration.demandn) && (
+                      <tr>
+                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                          Nhu cầu
+                        </td>
+                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                          {configuration.demand}
+                        </td>
+                      </tr>
+                    )}
                     <tr>
-                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                        Nhu cầu
-                      </td>
-                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                        {Detail.shortDescription}
-                      </td>
-                    </tr>
+                    <td className="style-tin-chung" colSpan={1}>
+                      Cấu hình chi tiết
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan={1}>{configuration.screen ? 'Màn hình' : (configuration.chip ? 'Màn hình' : '')}</td>
+                    <td colSpan={3}>{configuration.screen || configuration.screen}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>{configuration.cpu ? 'CPU' : (configuration.chip ? 'Chip' : '')}</td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                      {configuration.cpu || configuration.chip}
+                    </td>
+                  </tr>
+                  { (configuration.vga || configuration.resolution) && (
                     <tr>
-                      <td className="style-tin-chung" colSpan={1}>
-                        Cấu hình chi tiết
-                      </td>
+                      <td colSpan={1}>{configuration.vga ? 'Chip đồ họa' : (configuration.resolution ? 'Phân giải' : '')}</td>
+                      <td colSpan={3}>{configuration.vga || configuration.resolution}</td>
                     </tr>
-                    <tr>
-                      <td colSpan={1}>Thế hệ CPU</td>
-                      <td colSpan={3}>{configuration.cpu}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                        CPU
-                      </td>
-                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                        {configuration.cpu}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan={1}>Chíp đồ họa</td>
-                      <td colSpan={3}>{configuration.vga}</td>
-                    </tr>
-                    <tr>
-                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                        Ram
-                      </td>
-                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                        {configuration.ram}
-                      </td>
-                    </tr>
+                  )}
+                  <tr>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                      Ram
+                    </td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                      {configuration.ram}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                      Rom
+                    </td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                      {configuration.rom}
+                    </td>
+                  </tr>
                   </MDBTableBody>
                 </MDBTable>
               </div>
@@ -1038,11 +1057,10 @@ const handleViewDetailProduct = (products) => {
                   <td colSpan={3}>{Detail.brand}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                  <td colSpan={1}>
                     Bảo hành
                   </td>
                   <td
-                    style={{ backgroundColor: "#f6f6f6" }}
                     className="back-gr-tiet"
                     colSpan={3}
                   >
@@ -1055,10 +1073,10 @@ const handleViewDetailProduct = (products) => {
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                  <td colSpan={1}>
                     Series
                   </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                  <td colSpan={3}>
                     {Detail.name}
                   </td>
                 </tr>
@@ -1081,20 +1099,26 @@ const handleViewDetailProduct = (products) => {
                   </td>
 
                 </tr>
-                <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                    Nhu cầu
-                  </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                    {configuration.demand}
-                  </td>
-                </tr>
+                { (configuration.demandn) && (
+                  <tr>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                      Nhu cầu
+                    </td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {configuration.demand}
+                    </td>
+                  </tr>
+                )}
                 <tr>
                   <td className="style-tin-chung" colSpan={1}>
                     Cấu hình chi tiết
                   </td>
                 </tr>
                 <tr>
+                  <td colSpan={1}>Hệ điều hành</td>
+                  <td colSpan={3}>{configuration.os}</td>
+                </tr>
+                {/* <tr>
                   <td
                     style={{
                       display: configuration.cpu ? "table-cell" : "none",
@@ -1111,112 +1135,112 @@ const handleViewDetailProduct = (products) => {
                   >
                     {configuration.cpu}
                   </td>
-                </tr>
+                </tr> */}
                 <tr>
-                  <td
-                    style={{
-                      backgroundColor: "#f6f6f6",
-                      display: configuration.cpu ? "table-cell" : "none",
-                    }}
-                    colSpan={1}
-                  >
-                    CPU
-                  </td>
-                  <td
-                    style={{
-                      backgroundColor: "#f6f6f6",
-                      display: configuration.cpu ? "table-cell" : "none",
-                    }}
-                    colSpan={3}
-                  >
-                    {configuration.cpu}
+                  <td colSpan={1}>{configuration.cpu ? 'CPU' : (configuration.chip ? 'Chip' : '')}</td>
+                  <td colSpan={3}>
+                    {configuration.cpu || configuration.chip}
                   </td>
                 </tr>
-                <tr>
-                  <td
-                    style={{
-                      display: configuration.vga ? "table-cell" : "none",
-                    }}
-                    colSpan={1}
-                  >
-                    Chíp đồ họa
-                  </td>
-                  <td
-                    style={{
-                      display: configuration.vga ? "table-cell" : "none",
-                    }}
-                    colSpan={3}
-                  >
-                    {configuration.vga}
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                    Ram
-                  </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                    {configuration.ram}
-                  </td>
-                </tr>
+                { (configuration.vga || configuration.resolution) && (
+                  <tr>
+                    <td colSpan={1}>{configuration.vga ? 'Chip đồ họa' : (configuration.resolution ? 'Phân giải' : '')}</td>
+                    <td colSpan={3}>{configuration.vga || configuration.resolution}</td>
+                  </tr>
+                )}
                 <tr>
                   <td colSpan={1}>Màn hình</td>
                   <td colSpan={3}>{configuration.screen}</td>
                 </tr>
                 <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                  <td colSpan={1}>
+                    Ram
+                  </td>
+                  <td colSpan={3}>
+                    {configuration.ram}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={1}>
                     Lưu trữ
                   </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                  <td colSpan={3}>
                     {configuration.rom}
                   </td>
                 </tr>
+                { (configuration.maximum_number_of_storage_ports || configuration.charging_port) && (
                 <tr>
-                  <td colSpan={1}>Số cổng lưu chữ tối đa</td>
+                  <td colSpan={1}>{configuration.maximum_number_of_storage_ports ? 'Số cổng lưu trữ tối đa' : (configuration.charging_port ? 'Cổng sạc' : '')}</td>
                   <td colSpan={3}>
-                    {configuration.maximum_number_of_storage_ports}
+                    {configuration.maximum_number_of_storage_ports || configuration.charging_port}
                   </td>
                 </tr>
+                )}
+                { (configuration.M2_slot_type_supported || configuration.mobile_network) && (
+                  <tr>
+                    <td colSpan={1}>{configuration.M2_slot_type_supported ? 'Kiểu khe M.2 hỗ trợ' : (configuration.mobile_network ? 'Mạng di động' : '')}</td>
+                    <td colSpan={3}>
+                      {configuration.M2_slot_type_supported || configuration.mobile_network}
+                    </td>
+                  </tr>
+                )}
+                { (configuration.output_port || configuration.rear_camera) && (
+                  <tr>
+                    <td colSpan={1}>{configuration.output_port ? 'Cổng xuất hình' : (configuration.rear_camera ? 'Camera sau' : '')}</td>
+                    <td colSpan={3}>{configuration.output_port || configuration.rear_camera}</td>
+                  </tr>
+                )}
+                { (configuration.connector || configuration.front_camera) && (
                 <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                    Khe hở M.2 hỗ trợ
-                  </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                    {configuration.M2_slot_type_supported}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={1}>Cổng xuất hình</td>
-                  <td colSpan={3}>{configuration.output_port}</td>
-                </tr>
-                <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                    Cổng kết nối
-                  </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                    {configuration.connector}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={1}>Kết nối không dây</td>
-                  <td colSpan={3}>{configuration.wireless_connectivity}</td>
-                </tr>
-                <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                    Bàn phím
-                  </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                    {configuration.keyboard}
+                  <td colSpan={1}>{configuration.connector ? 'Cổng kết nối' : (configuration.front_camera ? 'Camera trước' : '')}</td>
+                  <td colSpan={3}>
+                    {configuration.connector || configuration.front_camera}
                   </td>
                 </tr>
+                )}
+                { (configuration.wireless_connectivity || configuration.wifi) && (
                 <tr>
-                  <td colSpan={1}>Hệ điều hành</td>
-                  <td colSpan={3}>{configuration.os}</td>
+                  <td colSpan={1}>{configuration.wireless_connectivity ? 'Kết nối không dây' : (configuration.wifi ? 'Wifi' : '')}</td>
+                  <td colSpan={3}>{configuration.wireless_connectivity || configuration.wifi}</td>
                 </tr>
+                )}
+                { (configuration.keyboard || configuration.gps) && (
+                  <tr>
+                    <td colSpan={1}>{configuration.keyboard ? 'Bàn phím' : (configuration.gps ? 'GPS' : '')}</td>
+                    <td colSpan={3}>
+                      {configuration.keyboard || configuration.gps}
+                    </td>
+                  </tr>
+                )}
+                { (configuration.bluetooth) && (
+                  <tr>
+                    <td colSpan={1}>Bluetooth</td>
+                    <td colSpan={3}>
+                      {configuration.bluetooth}
+                    </td>
+                  </tr>
+                )}
+                { (configuration.headphone_jack) && (
+                  <tr>
+                    <td colSpan={1}>Tai nghe</td>
+                    <td colSpan={3}>
+                      {configuration.headphone_jack}
+                    </td>
+                  </tr>
+                )}
+                { (configuration.size) && (
+                  <tr>
+                    <td colSpan={1}>Kích thước</td>
+                    <td colSpan={3}>
+                      {configuration.size}
+                    </td>
+                  </tr>
+                )}
                 <tr>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                  <td colSpan={1}>
                     Pin
                   </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                  <td colSpan={3}>
                     {configuration.pin}
                   </td>
                 </tr>
@@ -1224,23 +1248,27 @@ const handleViewDetailProduct = (products) => {
                   <td colSpan={1}>Khối lượng</td>
                   <td colSpan={3}>{configuration.mass}</td>
                 </tr>
-                <tr>
-                  <td className="style-tin-chung" colSpan={1}>
-                    Thông tin khác
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style={{ backgroundColor: "#f6f6f6" }}
-                    className="style-tin-chung"
-                    colSpan={1}
-                  >
-                    Phụ kiện đi kèm
-                  </td>
-                  <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                    {configuration.accessory}
-                  </td>
-                </tr>
+                
+                { (configuration.accessory) && (
+                  <>
+                    <tr>
+                      <td className="style-tin-chung" colSpan={1}>
+                        Thông tin khác
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="style-tin-chung"
+                        colSpan={1}
+                      >
+                        Phụ kiện đi kèm
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.accessory}
+                      </td>
+                    </tr>
+                  </>
+                )}
               </MDBTableBody>
             </MDBTable>
           </div>
