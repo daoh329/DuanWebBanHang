@@ -27,8 +27,8 @@ const { TextArea } = Input;
 //select
 
 function Detail() {
-  
-const navigate = useNavigate();
+
+  const navigate = useNavigate();
 
   const [selectedColors, setSelectedColors] = useState([]);
 
@@ -59,7 +59,7 @@ const navigate = useNavigate();
   const handleMemoryChange = (memory) => {
     setSelectedMemory(memory);
   };
-  const handleMemoryChange2= (memory2) => {
+  const handleMemoryChange2 = (memory2) => {
     setSelectedMemory2(memory2);
   };
   // ------------------------------------------------------------------------------------------------------------------------main
@@ -336,90 +336,82 @@ const navigate = useNavigate();
 
 
 
-
-// Khai báo state cho relatedProducts
+  // Hàm để lấy sản phẩm liên quan
   const [relatedProducts, setRelatedProducts] = useState([]);
+  useEffect(() => {
+    const getRelatedProducts = async (brand, categoryID) => {
+      let relatedProducts = [];
 
-  // Hàm để lấy sản phẩm liên quan
-useEffect(() => {
-  // Hàm để lấy sản phẩm liên quan
-  const getRelatedProducts = async (brand, categoryID) => {
-    let relatedProducts = [];
+      const laptopProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("Error fetching laptop data:", error);
+        });
 
-    // Lấy danh sách sản phẩm laptop và điện thoại
-    const laptopProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error fetching laptop data:", error);
+      const phoneProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("Error fetching phone data:", error);
+        });
+
+      const products = categoryID === 1 ? laptopProducts : phoneProducts;
+
+
+      relatedProducts = products.filter(product => product.CategoryID === categoryID && product.id !== Detail.p_ID);
+
+      relatedProducts.sort((a, b) => {
+        if (a.brand === brand) {
+          return -1;
+        } else if (b.brand === brand) {
+          return 1;
+        } else {
+          return 0;
+        }
       });
+      setRelatedProducts(relatedProducts);
+    };
 
-    const phoneProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error fetching phone data:", error);
-      });
+    if (Detail) {
+      getRelatedProducts(Detail.brand, Detail.CategoryID);
+      console.log(relatedProducts)
+    }
+  }, [Detail]);
 
-    // Lựa chọn danh sách sản phẩm tương ứng với CategoryID
-    const products = categoryID === 1 ? laptopProducts : phoneProducts;
 
-    // Lọc các sản phẩm có cùng brand
-    relatedProducts = products.filter(product => product.CategoryID === categoryID);
 
-    // Sắp xếp mảng sao cho các sản phẩm có cùng brand đứng đầu
-    relatedProducts.sort((a, b) => {
-      if (a.brand === brand) {
-        return -1;
-      } else if (b.brand === brand) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-    setRelatedProducts(relatedProducts);
+  // ------------------------
+  const handleViewDetailProduct = (products) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+    if (!products.id) {
+      console.error("Product ID is undefined!");
+      return;
+    }
+    // Lấy danh sách các sản phẩm đã xem từ session storage
+    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
+    // Tạo đối tượng sản phẩm mới
+    const historyproduct = {
+      shortDescription: products.shortDescription,
+      price: products.price,
+      discount: products.discount,
+      main_image: products.main_image,
+      thumbnail: products.thumbnail,
+      brand: products.brand,
+      id: products.id,
+    };
+    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+    const isViewed = historysp.some(
+      (product) => product.id === historyproduct.id
+    );
+    // Nếu sản phẩm mới chưa được xem
+    if (!isViewed) {
+      // Thêm đối tượng sản phẩm mới vào cuối danh sách
+      historysp.push(historyproduct);
+      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+      sessionStorage.setItem("products", JSON.stringify(historysp));
+    }
+    navigate(`/detail/${products.id}`);
+    window.scrollTo(0, 0)
   };
-
-  // Gọi hàm để lấy sản phẩm liên quan sau khi lấy chi tiết sản phẩm
-  if (Detail) {
-    getRelatedProducts(Detail.brand, Detail.CategoryID);
-    console.log(relatedProducts)
-  }
-}, [Detail]); // Mảng phụ thuộc bao gồm 'detail'
-
-
-
-// ------------------------
-const handleViewDetailProduct = (products) => {
-  // Kiểm tra xem 'id' có tồn tại hay không
-  if (!products.id) {
-    console.error("Product ID is undefined!");
-    return;
-  }
-  // Lấy danh sách các sản phẩm đã xem từ session storage
-  const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-  // Tạo đối tượng sản phẩm mới
-  const historyproduct = {
-    shortDescription: products.shortDescription,
-    price: products.price,
-    discount: products.discount,
-    main_image: products.main_image,
-    thumbnail: products.thumbnail,
-    brand: products.brand,
-    id: products.id,
-  };
-  // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
-  const isViewed = historysp.some(
-    (product) => product.id === historyproduct.id
-  );
-  // Nếu sản phẩm mới chưa được xem
-  if (!isViewed) {
-    // Thêm đối tượng sản phẩm mới vào cuối danh sách
-    historysp.push(historyproduct);
-    // Lưu trữ danh sách các sản phẩm đã xem vào session storage
-    sessionStorage.setItem("products", JSON.stringify(historysp));
-  }
-  navigate(`/detail/${products.id}`);
-  window.scrollTo(0, 0)
-};
 
   // logic scroll button product
   const ctnRef = useRef(null);
@@ -568,7 +560,7 @@ const handleViewDetailProduct = (products) => {
               {/* giá tiền */}
               <div className="css-1q5zfcu">
                 {Detail?.discount == 0 ||
-                Detail.price - Detail.discount <= 0 ? (
+                  Detail.price - Detail.discount <= 0 ? (
                   <div className="css-oj899w">
                     {formatCurrency(Detail.price)}
                   </div>
@@ -592,54 +584,54 @@ const handleViewDetailProduct = (products) => {
               </div>
               {/* check box dung lượng*/}
               <div className="css-f1fyi0">
-              <div>
-                <label className="custom-checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="8GB"
-                    checked={selectedMemory === "8GB"}
-                    onChange={() => handleMemoryChange("8GB")}
-                    className="custom-checkbox-input"
-                  />
-                  8GB
-                </label>
+                <div>
+                  <label className="custom-checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="8GB"
+                      checked={selectedMemory === "8GB"}
+                      onChange={() => handleMemoryChange("8GB")}
+                      className="custom-checkbox-input"
+                    />
+                    8GB
+                  </label>
 
-                <label className="custom-checkbox-label">
-                  <input
-                    type="checkbox"
-                    value="16GB"
-                    checked={selectedMemory === "16GB"}
-                    onChange={() => handleMemoryChange("16GB")}
-                    className="custom-checkbox-input"
-                  />
-                  16GB
-                </label>
+                  <label className="custom-checkbox-label">
+                    <input
+                      type="checkbox"
+                      value="16GB"
+                      checked={selectedMemory === "16GB"}
+                      onChange={() => handleMemoryChange("16GB")}
+                      className="custom-checkbox-input"
+                    />
+                    16GB
+                  </label>
 
-                <p>Selected Memory: {selectedMemory}</p>
-              </div>
+                  <p>Selected Memory: {selectedMemory}</p>
+                </div>
               </div>
               {/* check box màu sắc*/}
               <div className="css-f1fyi0">
-              <div>
-      {Detail.Colorname ? (
-        <div>
-          {Detail.Colorname.map((color) => (
-            <label  className="custom-checkbox-label" key={color.id}>
-              <input
-                type="checkbox"
-                value={color.id}
-                onChange={(e) => handleCheckboxChange(e, color.id)}
-                checked={selectedColor === color.id}
-                className="custom-checkbox-input"
-              />
-              {color.Colorname}
-            </label>
-          ))}
-        </div>
-      ) : (
-        <span></span>
-      )}
-    </div>
+                <div>
+                  {Detail.Colorname ? (
+                    <div>
+                      {Detail.Colorname.map((color) => (
+                        <label className="custom-checkbox-label" key={color.id}>
+                          <input
+                            type="checkbox"
+                            value={color.id}
+                            onChange={(e) => handleCheckboxChange(e, color.id)}
+                            checked={selectedColor === color.id}
+                            className="custom-checkbox-input"
+                          />
+                          {color.Colorname}
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <span></span>
+                  )}
+                </div>
               </div>
 
               <div className="css-f1fyi0">
@@ -865,7 +857,7 @@ const handleViewDetailProduct = (products) => {
             </div>
           </div>
         </div>
- 
+
         {/* main */}
         {/* modal */}
         <Modal

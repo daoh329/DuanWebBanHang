@@ -55,6 +55,7 @@ import TabsVanChuyen from "./QuanLyAdmin/Pages/Tabsvanchuyen.js";
 import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
 import BillSuccess from "./Buy/BillSuccess.js";
 import QLOrder from "./Profile/OrderInformations/QLOrder.jsx";
+import HuongDanMuaHang from "./Footer/MenuFooter/HuongDanMuaHang.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -189,6 +190,8 @@ const App = () => {
             <Route path="/createorder" element={<CreateOrder />} />
 
             <Route path="/chat" element={<Chatbot />} />
+
+            <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
           </Routes>
         </header>
         <MobileNav user={user} />

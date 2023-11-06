@@ -61,8 +61,8 @@ function Footer() {
                   Hỗ trợ khách hàng
                 </h6>
                 <p>
-                  <a href="#!" className="text-reset">
-                    Hướng dẫn mua hàng trực tuyến.
+                  <a href="/huong-dan-mua-hang" className="text-reset" target="_blank" rel="noopener noreferrer">
+                    Hướng dẫn mua hàng
                   </a>
                 </p>
                 <p>
@@ -140,7 +140,7 @@ function Footer() {
             </MDBRow>
           </MDBContainer>
         </section>
-        
+
         {/*  */}
         <div style={{ width: "100%", backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
           <MDBContainer className="p-4">
