@@ -1474,11 +1474,11 @@ export default function Buy() {
                       <div className="css-12xhfzh snipcss0-8-202-206">
                         <p className="snipcss0-9-206-207">
                           Nhấn "Thanh toán" đồng nghĩa với việc bạn đọc và đồng
-                          ý tuân theo
+                          ý tuân theo 
                           <a
                             href="https://help.phongvu.vn/chinh-sach-ban-hang/quyen-va-nghia-vu-cac-ben"
                             target="_blank"
-                            className="snipcss0-10-207-208"
+                            className="snipcss0-10-207-208" 
                           >
                             Điều khoản và Điều kiện
                           </a>
