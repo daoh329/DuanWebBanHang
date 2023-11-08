@@ -30,7 +30,9 @@ function LaptopInputFrom({ data, onClick, setModal }) {
     getBrandsList();
     getColorsList();
     getCapacitiesList();
-    setCapacitySubmit(product.capacities);
+    if (product.capacities) {
+      setCapacitySubmit(product.capacities);
+    }
   }, [product]);
 
   const getBrandsList = async () => {
@@ -228,7 +230,7 @@ function LaptopInputFrom({ data, onClick, setModal }) {
   };
 
   const handleAddRom = () => {
-    setCapacitySubmit([...capacitySubmit, { rom: "", price: 0 }]);
+    setCapacitySubmit([...capacitySubmit, { capacity: "", capacity_price: 0 }]);
   };
 
   const handleRemoveRom = (index) => {
