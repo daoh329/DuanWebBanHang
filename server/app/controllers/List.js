@@ -78,27 +78,49 @@ class List {
   async delete(req, res) {
     try {
       const { table, key } = req.params;
+      if (table == "Capacity") {
+        // Thực hiện truy vấn SQL để xóa danh mục từ cơ sở dữ liệu
+        const sql = `DELETE FROM ${table} WHERE Capacity = ?`;
+        mysql.query(sql, [key], (error, results) => {
+          if (error) {
+            console.error("Lỗi khi xóa danh mục:", error);
+            return res
+              .status(500)
+              .json({ message: "Đã xảy ra lỗi khi xóa danh mục" });
+          }
 
-      // Thực hiện truy vấn SQL để xóa danh mục từ cơ sở dữ liệu
-      const sql = `DELETE FROM ${table} WHERE name = ?`;
-      mysql.query(sql, [key], (error, results) => {
-        if (error) {
-          console.error("Lỗi khi xóa danh mục:", error);
+          if (results.affectedRows === 0) {
+            return res
+              .status(404)
+              .json({ message: "Không tìm thấy danh mục với ID đã cho" });
+          }
+
           return res
-            .status(500)
-            .json({ message: "Đã xảy ra lỗi khi xóa danh mục" });
-        }
+            .status(200)
+            .json({ message: "Danh mục đã được xóa thành công" });
+        });
+      } else {
+        // Thực hiện truy vấn SQL để xóa danh mục từ cơ sở dữ liệu
+        const sql = `DELETE FROM ${table} WHERE name = ?`;
+        mysql.query(sql, [key], (error, results) => {
+          if (error) {
+            console.error("Lỗi khi xóa danh mục:", error);
+            return res
+              .status(500)
+              .json({ message: "Đã xảy ra lỗi khi xóa danh mục" });
+          }
 
-        if (results.affectedRows === 0) {
+          if (results.affectedRows === 0) {
+            return res
+              .status(404)
+              .json({ message: "Không tìm thấy danh mục với ID đã cho" });
+          }
+
           return res
-            .status(404)
-            .json({ message: "Không tìm thấy danh mục với ID đã cho" });
-        }
-
-        return res
-          .status(200)
-          .json({ message: "Danh mục đã được xóa thành công" });
-      });
+            .status(200)
+            .json({ message: "Danh mục đã được xóa thành công" });
+        });
+      }
     } catch (error) {
       console.error("Lỗi:", error);
       return res
