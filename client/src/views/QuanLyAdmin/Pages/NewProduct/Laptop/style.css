@@ -152,9 +152,8 @@
 }
 
 .capacity-btn-delete-row{
-  border: 1px solid gray;
+  border: none;
   padding: 4px 8px;
-  border-radius: 5px;
 }
 
 .capacity-btn-delete-row:hover{
