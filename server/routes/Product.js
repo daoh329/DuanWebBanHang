@@ -28,6 +28,7 @@ router.put(
 router.get("/json", ProductControllers.json);
 router.get("/brands", ProductControllers.getBrands);
 router.get("/colors", ProductControllers.getColors);
+router.get("/capacity", ProductControllers.getCapacity);
 router.post("/disable-and-enable", ProductControllers.disable);
 router.post("/cart", ProductControllers.GetProductCart);
 module.exports = router;

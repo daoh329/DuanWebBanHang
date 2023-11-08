@@ -46,26 +46,44 @@ body {
   .zoom-image:hover {
     transform: scale(1.4); /* Phóng to hình ảnh lên 120% */
   }
+
+.title-btn-color{
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-style: none;
+    color: #82869e;
+    line-height: 16px;
+    font-weight: 500;
+}
+
+.flex-btn-color{
+    display: flex;
+    width: max-content;
+    margin: 8px 0 0 0;
+}
+
   .custom-checkbox-label {
     display: block;
     margin-bottom: 10px;
   }
   
   .custom-checkbox-input {
-    /* Tùy chỉnh kích thước và border */
-    width: 20px;
-    height: 20px;
-    border: 2px solid #333; /* Màu và kích thước border */
-    border-radius: 4px; /* Bo góc border */
-  
-    /* Tùy chỉnh màu nền khi checkbox được chọn */
-    background-color: #007BFF; /* Màu nền khi được chọn */
+    width: max-content;
+    height: 40px;
+    margin: 0 8px 8px 0;
+    padding: 8px 16px;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
   }
-  
-  .custom-checkbox-input:checked {
-    /* Tùy chỉnh màu của checkbox khi được chọn */
-    border: 2px solid #007BFF; /* Màu border khi được chọn */
-    background-color: #007BFF; /* Màu nền khi được chọn */
+
+  .custom-checkbox-input:hover{
+    color: #024dbc;
   }
   
   /* Tùy chỉnh màu văn bản và khoảng cách giữa checkbox và văn bản */
@@ -461,15 +479,10 @@ a:not([href]):hover {
     margin-bottom: 10px;
 }
 
-.css-f1fyi0 {
-    border-style: none;
-    border-width: 1px;
-    border-color: unset;
-    opacity: 1;
-    --divider-gap: 12px;
+.block-select-color {
     display: flex;
-    padding-top: var(--divider-gap);
-    padding-bottom: var(--divider-gap);
+    flex-direction: column;
+    text-align: left;
 }
 
 .css-1gs5ebu {

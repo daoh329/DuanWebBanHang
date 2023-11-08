@@ -11,6 +11,7 @@ function ActionButton({ record, getProduct }) {
   const [isOpenEditImageAndDescription, setIsOpenEditImageAndDescription] =
     useState(false);
 
+    // Hàm disable và enable sản phẩm
   async function handleDisableAndEnable() {
     try {
       const result = await axios.post(
@@ -29,14 +30,17 @@ function ActionButton({ record, getProduct }) {
     }
   }
 
+  // Hàm mở Modal update
   async function handleUpdate() {
     setOpenModal(true);
   }
 
+  // Hàm đóng Modal update
   function handleCancel() {
     setOpenModal(false);
   }
 
+  // Hàm xóa sản phẩm
   async function handleDelete() {
     // /product/delete/:id
     try {
@@ -53,10 +57,12 @@ function ActionButton({ record, getProduct }) {
     }
   }
 
+  // Hàm mở modal sửa image and description
   function handleOpenEditImage() {
     setIsOpenEditImageAndDescription(true);
   }
 
+  // Hàm đóng modal sửa image and description
   function handleCloseEditImage() {
     setIsOpenEditImageAndDescription(false);
   }

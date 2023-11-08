@@ -20,6 +20,12 @@ const Search = () => {
     fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => response.json())
       .then((data) => {
+        data.forEach((element) => {
+          element.capacities = JSON.parse(element.capacities);
+        });
+        data.forEach((element) => {
+          element.configuration = JSON.parse(element.configuration);
+        });
         setLaptopProducts(data);
       })
       .catch((error) => {
@@ -29,6 +35,12 @@ const Search = () => {
     fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => response.json())
       .then((data) => {
+        data.forEach((element) => {
+          element.capacities = JSON.parse(element.capacities);
+        });
+        data.forEach((element) => {
+          element.configuration = JSON.parse(element.configuration);
+        });
         setPhoneProducts(data);
       })
       .catch((error) => {
@@ -61,29 +73,17 @@ const Search = () => {
     }
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    // Tạo đối tượng sản phẩm mới
-    const historyproduct = {
-      shortDescription: products.shortDescription,
-      price: products.price,
-      discount: products.discount,
-      main_image: products.main_image,
-      thumbnail: products.thumbnail,
-      brand: products.brand,
-      id: products.id,
-    };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.shortDescription === historyproduct.shortDescription
+      (product) => product.shortDescription === products.shortDescription
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
       // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(historyproduct);
+      historysp.push(products);
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
-
-    console.log('click')
     navigate(`/detail/${products.id}`);
   };
   const itemsPerPage = 10; // Số sản phẩm trên mỗi trang

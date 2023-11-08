@@ -306,7 +306,12 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity,
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -338,7 +343,12 @@ class OrderController {
 
   async topDienthoai(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity,
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (

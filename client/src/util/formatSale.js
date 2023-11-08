@@ -1,3 +1,3 @@
 export function format_sale(price, discount) {
-  return Math.round(((price - discount) / price) * 100) + "%";
+  return Math.round((discount / price) * 100) + "%";
 }

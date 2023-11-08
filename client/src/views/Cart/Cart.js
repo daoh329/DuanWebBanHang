@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Cart.css";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
@@ -9,6 +9,7 @@ import {
   deleteProductInCart,
   increaseProduct,
 } from "../../redux/cartSlice";
+import { formatCapacity } from "../../util/formatCapacity";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -137,8 +138,6 @@ function Cart() {
   // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
   const handleViewDetailProduct = (products) => {
-    console.log(products);
-
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
       console.error("Product ID is undefined!");
@@ -147,23 +146,15 @@ function Cart() {
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
-    const historyproduct = {
-      shortDescription: products.shortDescription,
-      price: products.price,
-      discount: products.discount,
-      main_image: products.main_image,
-      thumbnail: products.thumbnail,
-      brand: products.brand,
-      id: products.id,
-    };
+
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.name === historyproduct.name
+      (product) => product.name === products.name
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
       // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(historyproduct);
+      historysp.push(products);
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
@@ -212,14 +203,21 @@ function Cart() {
                     </th>
                     <th scope="col">Hình</th>
                     <th scope="col">Sản Phẩm</th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Đơn giá</th>
-                    <th scope="col">Thành tiền</th>
+                    <th style={{ textAlign: "right" }} scope="col">
+                      Đơn giá
+                    </th>
+                    <th style={{ textAlign: "center" }} scope="col">
+                      Số lượng
+                    </th>
+                    <th style={{ textAlign: "right" }} scope="col">
+                      Thành tiền
+                    </th>
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
                   {[...cart].reverse().map((item, index) => (
                     <tr key={index}>
+                      {/* checkbox */}
                       <td>
                         <input
                           type="checkbox"
@@ -227,6 +225,7 @@ function Cart() {
                           onChange={() => handleCheckboxChange(item.id)}
                         />
                       </td>
+                      {/* image */}
                       <td style={{ width: "15%" }}>
                         <img
                           onClick={() => handleViewDetailProduct(item)}
@@ -239,33 +238,79 @@ function Cart() {
                           alt="main_image"
                         />
                       </td>
-                      <td style={{ lineHeight: "18px", fontSize: "14px" }}>
-                        {item.shortDescription}
-                      </td>
-
+                      {/* description */}
                       <td>
+                        <p className="cart-description-content">
+                          {item.shortDescription}
+                        </p>
+                        <p className="cart-description-SKU">SKU: {item.id}</p>
+                        <p className="cart-description-rom-color">
+                          {" "}
+                          {item?.capacity?.capacity &&
+                            formatCapacity(item?.capacity?.capacity) + ","}{" "}
+                          {item?.color}
+                        </p>
+                      </td>
+                      {/* Đơn giá */}
+                      <td style={{ textAlign: "right" }}>
+                        <p
+                          style={{
+                            margin: "0",
+                            fontWeight: "700",
+                            color: "black",
+                          }}
+                        >
+                          {formatCurrency(
+                            item.capacity.capacity_price - item.discount
+                          )}
+                        </p>
+                        {/* show discount */}
+                        {item.discount > 0 && (
+                          <p
+                            style={{
+                              margin: "0",
+                              textDecoration: "line-through",
+                              fontSize: "12px",
+                            }}
+                          >
+                            {formatCurrency(item.capacity.capacity_price)}
+                          </p>
+                        )}
+                      </td>
+                      {/* quantity */}
+                      <td style={{ display: "flex", justifyContent: "center" }}>
                         <div className="quantity-control">
-                          <a
+                          <Link
                             onClick={() => decreaseQuantity(item.id)}
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-minus"></i>
-                          </a>
+                          </Link>
                           <span>{item.quantity}</span>
-                          <a
+                          <Link
                             onClick={() => increaseQuantity(item.id)}
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-plus"></i>
-                          </a>
+                          </Link>
                         </div>
                       </td>
-                      <td>{formatCurrency(item.price)}</td>
-                      <td>{formatCurrency(item.totalPrice)}</td>
+                      {/* Thành tiền */}
+                      <td
+                        style={{
+                          margin: "0",
+                          fontWeight: "700",
+                          color: "black",
+                          textAlign: "right",
+                        }}
+                      >
+                        {formatCurrency(item.totalPrice)}
+                      </td>
+                      {/* btn delete product */}
                       <td>
-                        <a onClick={() => removeFromCart(item.id)}>
+                        <Link onClick={() => removeFromCart(item.id)}>
                           <i className="fa-solid fa-xmark"></i>
-                        </a>
+                        </Link>
                       </td>
                     </tr>
                   ))}
