@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import { message, Modal, notification, Select, Space, Spin } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  notification,
+  Select,
+  Space,
+  Spin,
+} from "antd";
+
+import "./style.css";
+import { formatCapacity } from "../../../../../util/formatCapacity";
 
 const { Option } = Select;
 
@@ -71,7 +85,7 @@ function NewProduct() {
             "Tệp hình ảnh quá lớn!",
             (value) => value && value.size < 5 * 1024 * 1024
           )
-      )
+      ),
     }),
     onSubmit: async (values) => {
       // Lấy dữ liệu ảnh chính
@@ -108,7 +122,7 @@ function NewProduct() {
         message.warning("Vui lòng điền đầy đủ thông tin dung lượng sản phẩm");
         return;
       }
-      
+
       setIsModalOpen(true);
       // call API
       await axios
@@ -223,8 +237,96 @@ function NewProduct() {
     setCapacitySubmit(updatedRomInfo);
   };
 
+  // function open modal
+  const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
+
+  const handleCancel = () => {
+    setIsOpenModalCapcity(false);
+  };
+
+  const openModalAddCapacity = () => {
+    setIsOpenModalCapcity(true);
+  };
+
+  // function logic modal
+  // modal capacity
+  const [isLoading, setIsLoading] = useState(false);
+  const onFinish = async (values) => {
+    setIsLoading(true);
+    try {
+      const result = await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/add/capacity`,
+        values
+      );
+
+      if (result.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.success({
+            message: "Cập nhật thành công!",
+          });
+        }, 2000);
+        getCapacity();
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }, 2000);
+      }
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        setIsLoading(false);
+        notification.error({
+          message: "Cập nhật thất bại!",
+        });
+      }, 2000);
+    }
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log(errorInfo);
+    // message.error("Thêm thất bại");
+  };
+
   return (
     <div className="container-content">
+      <Modal
+        title="Thêm lựa chọn cho dung lượng"
+        open={isOpenModalCapcity}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            name={"capacity"}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="Nhập dung lượng"
+              type="number"
+              min={0}
+              style={{ borderRadius: "3px", width: "100%" }}
+            />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 19, span: 4 }}>
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <form
         className="form"
         id="form-create-laptop"
@@ -423,7 +525,13 @@ function NewProduct() {
                 <tbody>
                   {capacitySubmit.map((rom, index) => (
                     <tr key={index}>
-                      <td>
+                      <td
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
                         <select
                           className="form-control"
                           type="text"
@@ -437,12 +545,15 @@ function NewProduct() {
                           </option>
                           {[...capacity].map((capacity, index) => (
                             <option value={capacity.capacity}>
-                              {capacity.capacity === 1024
-                                ? "1TB"
-                                : capacity.capacity + "GB"}
+                              {formatCapacity(capacity.capacity)}
                             </option>
                           ))}
                         </select>
+                        <Button
+                          onClick={openModalAddCapacity}
+                          icon={<PlusOutlined />}
+                          style={{ margin: "0 0 0 5px" }}
+                        />
                       </td>
                       <td>
                         <input
@@ -467,7 +578,11 @@ function NewProduct() {
                   ))}
                 </tbody>
               </table>
-              <button type="button" className="capacity-btn-add-row" onClick={handleAddRom}>
+              <button
+                type="button"
+                className="capacity-btn-add-row"
+                onClick={handleAddRom}
+              >
                 Thêm ROM
               </button>
             </div>
