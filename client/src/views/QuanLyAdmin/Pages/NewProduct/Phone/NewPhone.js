@@ -486,13 +486,49 @@ function NewPhone() {
                 <span className="form-message">{formik.errors.category}</span>
               )}
             </div>
+
+            {/* quantity */}
+            <div className="form-group">
+              <label className="form-label">Số lượng</label>
+              <input
+                name="quantity"
+                id="quantity"
+                type="number"
+                min={1}
+                className="form-control"
+                value={formik.values.quantity}
+                onChange={formik.handleChange}
+              ></input>
+              {formik.errors.quantity && (
+                <span className="form-message">{formik.errors.quantity}</span>
+              )}
+            </div>
             {/* capacity */}
             <div className="form-group">
               <label className="form-label">Dung lượng (ROM): </label>
               <table>
                 <thead>
                   <tr>
-                    <th>Dung lượng ROM</th>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "left",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span>Dung lượng ROM: &nbsp;</span>
+                        <Button
+                          onClick={openModalAddCapacity}
+                          icon={<PlusOutlined />}
+                          style={{
+                            margin: "0 10px 0 0",
+                            border: "none",
+                            background: "none",
+                          }}
+                        />
+                      </div>
+                    </th>
                     <th>Giá</th>
                     <th>Thao tác</th>
                   </tr>
@@ -524,11 +560,6 @@ function NewPhone() {
                             </option>
                           ))}
                         </select>
-                        <Button
-                          onClick={openModalAddCapacity}
-                          icon={<PlusOutlined />}
-                          style={{ margin: "0 0 0 5px" }}
-                        />
                       </td>
                       <td>
                         <input
@@ -560,22 +591,6 @@ function NewPhone() {
               >
                 Thêm ROM
               </button>
-            </div>
-            {/* quantity */}
-            <div className="form-group">
-              <label className="form-label">Số lượng</label>
-              <input
-                name="quantity"
-                id="quantity"
-                type="number"
-                min={1}
-                className="form-control"
-                value={formik.values.quantity}
-                onChange={formik.handleChange}
-              ></input>
-              {formik.errors.quantity && (
-                <span className="form-message">{formik.errors.quantity}</span>
-              )}
             </div>
             {/* image */}
             <ImageInput setMainImage={setMainImage} formik={formik} />
