@@ -468,6 +468,7 @@
     height: 350px;
     margin-top: 0px;
     width: 188px;
+    cursor: pointer;
   }
 
   .scroll-control-phone::-webkit-scrollbar {
@@ -584,6 +585,7 @@
     white-space: nowrap;
     display: block;
   }
+
   .css-nameproduct {
     margin: 0px;
     padding: 0px;
@@ -611,7 +613,8 @@
     line-height: 16px;
     text-align: -webkit-left
   }
-  .productname{
+
+  .productname {
     margin: 0px;
     padding: 0px;
     color: rgb(67, 70, 87);
@@ -661,6 +664,7 @@
     background-size: cover;
     background-image: url(https://lh3.googleusercontent.com/p5ptKVVkjCvtIZkez7PxuYDxFvYlW1PIHFW7EuII7xEVrQoc17HVhg2UAK5bVPSJKMSPOJAv6LmZgdFRh8V-vJr4BrslPFiN=w1232);
   }
+
   .laptop-group {
     position: relative;
     width: 1234px;
@@ -833,6 +837,8 @@
     // margin-top: 5px;
     width: 200px;
     position: relative;
+    cursor: pointer;
+    
   }
 
   .fa-mobile-phone:hover .sub-container {
@@ -944,11 +950,12 @@
     line-height: 16px;
     text-align: -webkit-left
   }
-  .logoweb{
+
+  .logoweb {
     display: none;
   }
 
-  .productname{
+  .productname {
     margin: 0px;
     padding: 0px;
     color: rgb(67, 70, 87);
@@ -966,4 +973,20 @@
     text-align: -webkit-left;
     text-overflow: ellipsis;
   }
+}
+
+// ---- CARD ----
+.show-discount {
+  margin: 0;
+  padding: 0;
+  color: #1435c3;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 24px;
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  word-break: break-all;
 }

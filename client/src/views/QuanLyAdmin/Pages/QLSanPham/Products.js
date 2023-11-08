@@ -12,6 +12,10 @@ function Product() {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/json`)
       .then((res) => {
+        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+        res.data.forEach((element) => {
+          element.capacities = JSON.parse(element.capacities);
+        });
         setProduct(res.data);
       })
       .catch((error) => console.log(error));
@@ -59,7 +63,7 @@ function Product() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => {
+      render: (status) => {
         var color;
         if (status === 1) {
           color = "green";

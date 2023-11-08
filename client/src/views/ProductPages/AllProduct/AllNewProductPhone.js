@@ -278,24 +278,14 @@ const AllNewProductPhone = () => {
     }
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    // Tạo đối tượng sản phẩm mới
-    const historyproduct = {
-      shortDescription: products.shortDescription,
-      price: products.price,
-      discount: products.discount,
-      main_image: products.main_image,
-      thumbnail: products.thumbnail,
-      brand: products.brand,
-      id: products.id,
-    };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.id === historyproduct.id
+      (product) => product.id === products.id
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
       // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(historyproduct);
+      historysp.push(products);
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
