@@ -24,22 +24,22 @@ export const cartSlice = createSlice({
       return { ...state, products: updatedProducts };
     },
     updateProductCart: (state, action) => {
-      const { id, price, brand, main_image, shortDescription } =
+      const { id, capacity, brand, main_image, shortDescription, discount } =
         action.payload;
       const productUpdate = [...state.products].find(
         (product) => product.id === id
       );
       if (productUpdate) {
-        productUpdate.price = price;
+        productUpdate.capacity = capacity;
         productUpdate.brand = brand;
         productUpdate.main_image = main_image;
         productUpdate.shortDescription = shortDescription;
-        productUpdate.totalPrice = price * productUpdate.quantity;
+        productUpdate.discount = discount;
+        productUpdate.totalPrice =
+          (capacity.capacity_price - discount) *
+          productUpdate.quantity;
       }
-      localStorage.setItem(
-        "cart",
-        JSON.stringify(state.products)
-      );
+      localStorage.setItem("cart", JSON.stringify(state.products));
     },
     increaseProduct: (state, action) => {
       const { product_id } = action.payload;
@@ -48,7 +48,9 @@ export const cartSlice = createSlice({
       );
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity + 1;
-        cartToUpdate.totalPrice = cartToUpdate.price * cartToUpdate.quantity;
+        cartToUpdate.totalPrice =
+          (cartToUpdate.capacity.capacity_price - cartToUpdate.discount) *
+          cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
       localStorage.setItem("cart", JSON.stringify(state.products));
@@ -60,7 +62,9 @@ export const cartSlice = createSlice({
       );
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity - 1;
-        cartToUpdate.totalPrice = cartToUpdate.price * cartToUpdate.quantity;
+        cartToUpdate.totalPrice =
+          (cartToUpdate.capacity.capacity_price - cartToUpdate.discount) *
+          cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
       localStorage.setItem("cart", JSON.stringify(state.products));

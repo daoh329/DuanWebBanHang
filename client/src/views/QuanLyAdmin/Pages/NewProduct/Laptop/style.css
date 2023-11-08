@@ -151,3 +151,23 @@
   border: 1px solid #b3b3b3;
 }
 
+.capacity-btn-delete-row{
+  border: none;
+  padding: 4px 8px;
+}
+
+.capacity-btn-delete-row:hover{
+  color: red;
+  border-color: red;
+}
+
+.capacity-btn-add-row{
+  border: 0.5px solid gray;
+  padding: 4px 8px;
+  margin-top: 5px;
+}
+
+.capacity-btn-add-row:hover{
+  color: blue;
+}
+
