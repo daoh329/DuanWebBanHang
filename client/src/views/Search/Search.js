@@ -21,9 +21,6 @@ const Search = () => {
       .then((response) => response.json())
       .then((data) => {
         data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
-        data.forEach((element) => {
           element.configuration = JSON.parse(element.configuration);
         });
         setLaptopProducts(data);
@@ -35,9 +32,6 @@ const Search = () => {
     fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => response.json())
       .then((data) => {
-        data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
         data.forEach((element) => {
           element.configuration = JSON.parse(element.configuration);
         });
@@ -86,6 +80,7 @@ const Search = () => {
     }
     navigate(`/detail/${products.id}`);
   };
+  
   const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
 
   // Tính tổng số trang dựa trên số lượng sản phẩm và số sản phẩm trên mỗi trang
@@ -97,7 +92,7 @@ const Search = () => {
   // Hàm xử lý sự kiện khi người dùng chọn trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  };
+  }; 
   // Tính index bắt đầu và index kết thúc cho sản phẩm trên trang hiện tại
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
