@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   Space,
   message,
@@ -11,6 +12,8 @@ import {
 } from "antd";
 import axios from "axios";
 import { formatCurrency } from "../../../../../util/FormatVnd";
+import { PlusOutlined } from "@ant-design/icons";
+import { formatCapacity } from "../../../../../util/formatCapacity";
 
 const { Option } = Select;
 
@@ -270,6 +273,56 @@ function PhoneInputFrom({ data, onClick, setModal }) {
     setCapacitySubmit(updatedRomInfo);
   };
 
+  // function open modal
+  const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
+
+  const handleCancel = () => {
+    setIsOpenModalCapcity(false);
+  };
+
+  const openModalAddCapacity = () => {
+    setIsOpenModalCapcity(true);
+  };
+
+  // function logic modal
+  // modal capacity
+  // const [isLoading, setIsLoading] = useState(false);
+  const onFinishCapacity = async (values) => {
+    setIsLoading(true);
+    try {
+      const result = await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/add/capacity`,
+        values
+      );
+
+      if (result.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.success({
+            message: "Cập nhật thành công!",
+          });
+        }, 2000);
+        setIsOpenModalCapcity(false);
+        getCapacitiesList();
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }, 2000);
+      }
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        setIsLoading(false);
+        notification.error({
+          message: "Cập nhật thất bại!",
+        });
+      }, 2000);
+    }
+  };
+
   return (
     <Form
       style={{ maxWidth: 800, textAlign: "start" }}
@@ -406,7 +459,26 @@ function PhoneInputFrom({ data, onClick, setModal }) {
         <table>
           <thead>
             <tr>
-              <th>Dung lượng</th>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "left",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>Dung lượng ROM: &nbsp;</span>
+                  <Button
+                    onClick={openModalAddCapacity}
+                    icon={<PlusOutlined />}
+                    style={{
+                      margin: "0 10px 0 0",
+                      border: "none",
+                      background: "none",
+                    }}
+                  />
+                </div>
+              </th>
               <th>Giá</th>
               <th>Thao tác</th>
             </tr>
@@ -431,9 +503,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
                             capacity.capacity == cpct.capacity ? true : false
                           }
                         >
-                          {cpct.capacity === 1024
-                            ? "1TB"
-                            : cpct.capacity + "GB"}
+                          {formatCapacity(cpct.capacity)}
                         </option>
                       ))}
                     </select>
@@ -473,6 +543,40 @@ function PhoneInputFrom({ data, onClick, setModal }) {
           Thêm ROM
         </button>
       </div>
+      <Modal
+        title="Thêm lựa chọn cho dung lượng"
+        open={isOpenModalCapcity}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          onFinish={onFinishCapacity}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            name={"capacity"}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="Nhập dung lượng"
+              type="number"
+              min={0}
+              style={{ borderRadius: "3px", width: "100%" }}
+            />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 19, span: 4 }}>
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
 
       {/* chip */}
       <Form.Item label="Chip" name="chip">

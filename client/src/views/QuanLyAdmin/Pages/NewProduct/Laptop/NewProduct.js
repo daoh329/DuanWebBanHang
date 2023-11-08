@@ -239,7 +239,6 @@ function NewProduct() {
 
   // function open modal
   const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
-
   const handleCancel = () => {
     setIsOpenModalCapcity(false);
   };
@@ -266,6 +265,7 @@ function NewProduct() {
             message: "Cập nhật thành công!",
           });
         }, 2000);
+        setIsOpenModalCapcity(false);
         getCapacity();
       } else {
         setTimeout(() => {
