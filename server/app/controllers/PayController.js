@@ -7,6 +7,8 @@ let User;
 let address;
 let product;
 let quantitys;
+let colors;
+let capacitys;
 let deliveryMethodd;
 let paymentMenthodd;
 let notee;
@@ -66,6 +68,8 @@ class PayController {
         address = req.body.addressID;
         product = req.body.productID;
         quantitys = req.body.quantity;
+        colors = req.body.color,
+        capacitys = req.body.capacity,
         deliveryMethodd = req.body.deliveryMethod;
         paymentMenthodd = req.body.paymentMenthod;
         notee = req.body.note;
@@ -154,6 +158,8 @@ class PayController {
         let addressID = address;
         let productID = product;
         let quantity = quantitys;
+        let color = colors;
+        let capacity = capacitys;
         let deliveryMethod = deliveryMethodd;
         let paymentMenthod = paymentMenthodd;
         let note = notee;
@@ -185,8 +191,8 @@ class PayController {
         mysql.query(sql, values, (err, result) => {
             if (err) throw err;
             const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-            sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-            values = [productID, quantity, orderID];
+            sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, orderID) VALUES (?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+            values = [productID, quantity, color, capacity, orderID];
             mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);

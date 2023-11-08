@@ -32,8 +32,8 @@ class OrderController {
         if (err) throw err;
         // console.log(result);
         const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-        sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-        values = [data.productID, data.quantity, orderID];
+        sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, orderID) VALUES (?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+        values = [data.productID, data.quantity, data.color, data.capacity, orderID];
         mysql.query(sql, values, (err, result) => {
           if (err) throw err;
           // console.log(result);
@@ -45,7 +45,7 @@ class OrderController {
 
   async Paymentmomo(req, res) {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
 
     if (!data) {
       return res.status(400).json("Invalid data");
@@ -56,8 +56,8 @@ class OrderController {
     if (err) throw err;
       // console.log(result);
       const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-      sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-      values = [data.productID, data.quantity, orderID];
+      sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, orderID) VALUES (?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+      values = [data.productID, data.quantity, data.color, data.capacity, orderID];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
         // console.log(result);

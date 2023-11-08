@@ -52,7 +52,7 @@ function Order(props) {
           id="order-informations-title-btn"
           icon={<LeftOutlined />}
         />
-        <h5>đơn hàng: {order[0].order_id}</h5>
+        <h5>mã đơn hàng: {order[0].order_id}</h5>
       </div>
 
       {/* content */}
@@ -99,7 +99,7 @@ function Order(props) {
           </div>
           
           <div className="block-1-3">
-            <p>Thông tin xuất hóa đơn</p>
+            <p>Thông tin hóa đơn</p>
             {order[0] && order[0]?.paymentData && (order[0]?.paymentData?.vnp_OrderInfo || order[0]?.paymentData?.orderId) ? (
               <>
                 <p>Mã thanh toán giao dịch: <span>{order[0]?.paymentData?.vnp_OrderInfo || order[0]?.paymentData?.orderId}</span></p>
@@ -111,7 +111,7 @@ function Order(props) {
                 <p>Tổng tiền: <span>{(parseInt(order[0]?.paymentData?.vnp_Amount ? order[0]?.paymentData?.vnp_Amount / 100 : order[0]?.paymentData?.amount)).toLocaleString()}</span></p>
                 {/* Thêm các trường khác của paymentData tại đây */}
               </>
-            ) : null}
+            ) : 'Thanh toán khi nhận hàng'}
           </div>
         </div>
 

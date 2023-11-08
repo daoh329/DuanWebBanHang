@@ -15,6 +15,8 @@ const BillSuccess = () => {
     const addressID = sessionStorage.getItem('addressID');
     const productID = sessionStorage.getItem('productID');
     const quantity = sessionStorage.getItem('quantity');
+    const color = sessionStorage.getItem('color');
+    const capacity = sessionStorage.getItem('capacity');
     const deliveryMethod = sessionStorage.getItem('deliveryMethod');
     const paymentMenthod = sessionStorage.getItem('paymentMenthod');
     const note = sessionStorage.getItem('note');
@@ -37,6 +39,8 @@ const BillSuccess = () => {
         addressID,
         productID,
         quantity,
+        color,
+        capacity,
         deliveryMethod,
         paymentMenthod,
         note,
