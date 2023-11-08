@@ -644,6 +644,10 @@ class Product {
       if (error) {
         return res.json({ error });
       }
+      // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+      results.forEach((element) => {
+        element.capacities = JSON.parse(element.capacities);
+      });
 
       res.json(results);
     });
@@ -677,7 +681,10 @@ class Product {
       if (error) {
         return res.json({ error });
       }
-
+      // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+      results.forEach((element) => {
+        element.capacities = JSON.parse(element.capacities);
+      });
       res.json(results);
     });
   }

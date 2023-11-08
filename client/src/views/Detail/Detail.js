@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 // import firebase from 'firebase'
-import { Image, Modal, Carousel } from "antd";
+import { Image, Modal, Carousel, Form, Radio } from "antd";
 // Thư viện mdb
 import { MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
 // link
@@ -14,10 +14,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 
+import { useNavigate } from "react-router-dom";
+import CardProduct from "../Home/Card/Card";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+
 function Detail() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedCapacity, setSelectedCapacity] = useState({});
-  // const [selectedPrice, setSelectedPrice] = useState(0);
+
+  const navigate = useNavigate();
 
   //Modal antd
   const [isModalOpen2, setIsModalOpen2] = useState(false);
@@ -103,11 +108,7 @@ function Detail() {
       message.warning("Vui lòng chọn màu sắc của sản phẩm");
       return false;
     }
-    // let capacityToCart = [...selectedCapacity];
-    // if (Detail.discount > 0) {
-    //   capacityToCart.capacity_price =
-    //     capacityToCart.capacity_price - Detail.discount;
-    // }
+
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.p_ID,
@@ -155,6 +156,108 @@ function Detail() {
   // Hàm thay đổi dung lượng
   const handleChangeCapacity = (capacity) => {
     setSelectedCapacity(capacity);
+  };
+
+  // Khai báo state cho relatedProducts
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  // Hàm để lấy sản phẩm liên quan
+  useEffect(() => {
+    // Hàm để lấy sản phẩm liên quan
+    const getRelatedProducts = async (brand, categoryID) => {
+      let relatedProducts = [];
+
+      // Lấy danh sách sản phẩm laptop và điện thoại
+      // laptop
+      const laptopProducts = await fetch(
+        `${process.env.REACT_APP_API_URL}/product/productslaptop`
+      )
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("Error fetching laptop data:", error);
+        });
+
+      // phone
+      const phoneProducts = await fetch(
+        `${process.env.REACT_APP_API_URL}/product/productsPhone`
+      )
+        .then((response) => response.json())
+        .catch((error) => {
+          console.error("Error fetching phone data:", error);
+        });
+      
+      // Lựa chọn danh sách sản phẩm tương ứng với CategoryID
+      const products = categoryID === 1 ? laptopProducts : phoneProducts;
+
+      // Lọc các sản phẩm có cùng brand
+      relatedProducts = products.filter(
+        (product) => product.CategoryID === categoryID
+      );
+
+      // Sắp xếp mảng sao cho các sản phẩm có cùng brand đứng đầu
+      relatedProducts.sort((a, b) => {
+        if (a.brand === brand) {
+          return -1;
+        } else if (b.brand === brand) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      setRelatedProducts(relatedProducts);
+    };
+
+    // Gọi hàm để lấy sản phẩm liên quan sau khi lấy chi tiết sản phẩm
+    if (Detail) {
+      getRelatedProducts(Detail.brand, Detail.CategoryID);
+    }
+  }, [Detail]); // Mảng phụ thuộc bao gồm 'detail'
+
+  // ------------------------
+  const handleViewDetailProduct = (products) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+    if (!products.id) {
+      console.error("Product ID is undefined!");
+      return;
+    }
+    // Lấy danh sách các sản phẩm đã xem từ session storage
+    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
+
+    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+    const isViewed = historysp.some((product) => product.id === products.id);
+    // Nếu sản phẩm mới chưa được xem
+    if (!isViewed) {
+      // Thêm đối tượng sản phẩm mới vào cuối danh sách
+      historysp.push(products);
+      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+      sessionStorage.setItem("products", JSON.stringify(historysp));
+    }
+    navigate(`/detail/${products.id}`);
+    window.scrollTo(0, 0);
+  };
+
+  // logic scroll button product
+  const ctnRef = useRef(null);
+
+  const scrollTrai = () => {
+    if (ctnRef.current) {
+      ctnRef.current.scrollLeft -= 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
+
+  const scrollPhai = () => {
+    if (ctnRef.current) {
+      ctnRef.current.scrollLeft += 230; // Điều chỉnh khoảng cách cuộn tùy ý
+    }
+  };
+
+  // Đối tượng chứa các cặp khóa-giá trị tương ứng
+  const labels = {
+    cpu: "Thế hệ CPU",
+    chip: "Chip",
+    vga: "Chíp đồ họa",
+    screen: "Màn hình",
+    // thêm các cặp khóa-giá trị khác nếu cần
   };
 
   return (
@@ -353,7 +456,7 @@ function Detail() {
                     </>
                   )}
                 </div>
-
+                {/* ------------------------------------------------------------ */}
                 <div className="css-f1fyi0">
                   <div
                     width="100%"
@@ -366,7 +469,6 @@ function Detail() {
                   <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                   {/* phần khuyến mãi */}
                 </div>
-
                 <div className="css-30n8gl" style={{ display: "none" }}>
                   <div className="css-ixp6xz">
                     Chọn 1 trong những khuyến mãi sau
@@ -516,7 +618,7 @@ function Detail() {
                       </tr>
                       <tr>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                          Series laptop
+                          Series
                         </td>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
                           {Detail.name}
@@ -525,44 +627,81 @@ function Detail() {
                       <tr>
                         <td colSpan={1}>Màu sắc</td>
                         <td colSpan={3}>
-                          {selectedColor ? (
+                          {Detail.Colorname ? (
                             <div>
-                              {selectedColor}
+                              {Detail.Colorname.map((color, index) => (
+                                <span key={color.id}>
+                                  {color.Colorname}
+                                  {index < Detail.Colorname.length - 1
+                                    ? ", "
+                                    : ""}
+                                </span>
+                              ))}
                             </div>
                           ) : (
                             <span></span>
                           )}
                         </td>
                       </tr>
-                      <tr>
-                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                          Nhu cầu
-                        </td>
-                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                          {Detail.shortDescription}
-                        </td>
-                      </tr>
+                      {configuration.demandn && (
+                        <tr>
+                          <td
+                            style={{ backgroundColor: "#f6f6f6" }}
+                            colSpan={1}
+                          >
+                            Nhu cầu
+                          </td>
+                          <td
+                            style={{ backgroundColor: "#f6f6f6" }}
+                            colSpan={3}
+                          >
+                            {configuration.demand}
+                          </td>
+                        </tr>
+                      )}
                       <tr>
                         <td className="style-tin-chung" colSpan={1}>
                           Cấu hình chi tiết
                         </td>
                       </tr>
                       <tr>
-                        <td colSpan={1}>Thế hệ CPU</td>
-                        <td colSpan={3}>{configuration.cpu}</td>
+                        <td colSpan={1}>
+                          {configuration.screen
+                            ? "Màn hình"
+                            : configuration.chip
+                            ? "Màn hình"
+                            : ""}
+                        </td>
+                        <td colSpan={3}>
+                          {configuration.screen || configuration.screen}
+                        </td>
                       </tr>
                       <tr>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                          CPU
+                          {configuration.cpu
+                            ? "CPU"
+                            : configuration.chip
+                            ? "Chip"
+                            : ""}
                         </td>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                          {configuration.cpu}
+                          {configuration.cpu || configuration.chip}
                         </td>
                       </tr>
-                      <tr>
-                        <td colSpan={1}>Chíp đồ họa</td>
-                        <td colSpan={3}>{configuration.vga}</td>
-                      </tr>
+                      {(configuration.vga || configuration.resolution) && (
+                        <tr>
+                          <td colSpan={1}>
+                            {configuration.vga
+                              ? "Chip đồ họa"
+                              : configuration.resolution
+                              ? "Phân giải"
+                              : ""}
+                          </td>
+                          <td colSpan={3}>
+                            {configuration.vga || configuration.resolution}
+                          </td>
+                        </tr>
+                      )}
                       <tr>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
                           Ram
@@ -571,69 +710,19 @@ function Detail() {
                           {configuration.ram}
                         </td>
                       </tr>
+                      <tr>
+                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                          Rom
+                        </td>
+                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                          {configuration.rom}
+                        </td>
+                      </tr>
                     </MDBTableBody>
                   </MDBTable>
                 </div>
                 <div onClick={showModal2} className="xem-tiet">
                   Xem chi tiết cấu hình
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="style-3">
-            <div className="fle-x-sp-lien-quan">
-              <div>
-                <div className="title-sp-lien-quan">Sản phẩm liên quan</div>
-              </div>
-
-              <div className="glide css-npa7ru glide--ltr glide--slider glide--swipeable">
-                <div className="glide__track" data-glide-el="track">
-                  <div className="glide__slides">
-                    <div
-                      className="glide__slide glide__slide--active"
-                      style={{
-                        height: "unset",
-                        marginRight: "5px",
-                        width: "232px",
-                      }}
-                    >
-                      <div className="css-1ei4kcr">
-                        <div
-                          className="product-card css-1msrncq"
-                          data-content-region-name="relatedProducts"
-                          data-track-content="true"
-                          data-content-name="210400696"
-                          data-content-target="productDetail"
-                        >
-                          <a
-                            target="_self"
-                            className="css-pxdb0j"
-                            href="/acer-nitro-5-an515-45-r9sc-nh-qbrsv-001--s210400696"
-                          >
-                            <div className="css-4rhdrh">
-                              <div className="css-1v97aik">
-                                <div className="css-798fc">
-                                  <div className="css-1uzm8bv"></div>
-                                </div>
-                                <div className="css-14q2k9d">
-                                  <div className="css-zb7zul">
-                                    <div className="css-1bqeu8f">TIẾT KIỆM</div>
-                                    <div className="css-1rdv2qd">
-                                      1.800.000 ₫
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="css-68cx5s"></div>
-                              <div className="css-1ybkowq"></div>
-                              <div className="css-kgkvir"></div>
-                              <div></div>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -659,14 +748,8 @@ function Detail() {
                     <td colSpan={3}>{Detail.brand}</td>
                   </tr>
                   <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Bảo hành
-                    </td>
-                    <td
-                      style={{ backgroundColor: "#f6f6f6" }}
-                      className="back-gr-tiet"
-                      colSpan={3}
-                    >
+                    <td colSpan={1}>Bảo hành</td>
+                    <td className="back-gr-tiet" colSpan={3}>
                       {configuration.guarantee}
                     </td>
                   </tr>
@@ -676,12 +759,8 @@ function Detail() {
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Series
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {Detail.name}
-                    </td>
+                    <td colSpan={1}>Series</td>
+                    <td colSpan={3}>{Detail.name}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Màu sắc</td>
@@ -700,171 +779,273 @@ function Detail() {
                       )}
                     </td>
                   </tr>
-                  <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Nhu cầu
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.demand}
-                    </td>
-                  </tr>
+                  {configuration.demandn && (
+                    <tr>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Nhu cầu
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {configuration.demand}
+                      </td>
+                    </tr>
+                  )}
                   <tr>
                     <td className="style-tin-chung" colSpan={1}>
                       Cấu hình chi tiết
                     </td>
                   </tr>
                   <tr>
-                    <td
-                      style={{
-                        display: configuration.cpu ? "table-cell" : "none",
-                      }}
-                      colSpan={1}
-                    >
-                      Thế hệ CPU
-                    </td>
-                    <td
-                      style={{
-                        display: configuration.cpu ? "table-cell" : "none",
-                      }}
-                      colSpan={3}
-                    >
-                      {configuration.cpu}
-                    </td>
+                    <td colSpan={1}>Hệ điều hành</td>
+                    <td colSpan={3}>{configuration.os}</td>
                   </tr>
+                  {/* <tr>
+                  <td
+                    style={{
+                      display: configuration.cpu ? "table-cell" : "none",
+                    }}
+                    colSpan={1}
+                  >
+                    Thế hệ CPU
+                  </td>
+                  <td
+                    style={{
+                      display: configuration.cpu ? "table-cell" : "none",
+                    }}
+                    colSpan={3}
+                  >
+                    {configuration.cpu}
+                  </td>
+                </tr> */}
                   <tr>
-                    <td
-                      style={{
-                        backgroundColor: "#f6f6f6",
-                        display: configuration.cpu ? "table-cell" : "none",
-                      }}
-                      colSpan={1}
-                    >
-                      CPU
+                    <td colSpan={1}>
+                      {configuration.cpu
+                        ? "CPU"
+                        : configuration.chip
+                        ? "Chip"
+                        : ""}
                     </td>
-                    <td
-                      style={{
-                        backgroundColor: "#f6f6f6",
-                        display: configuration.cpu ? "table-cell" : "none",
-                      }}
-                      colSpan={3}
-                    >
-                      {configuration.cpu}
+                    <td colSpan={3}>
+                      {configuration.cpu || configuration.chip}
                     </td>
                   </tr>
-                  <tr>
-                    <td
-                      style={{
-                        display: configuration.vga ? "table-cell" : "none",
-                      }}
-                      colSpan={1}
-                    >
-                      Chíp đồ họa
-                    </td>
-                    <td
-                      style={{
-                        display: configuration.vga ? "table-cell" : "none",
-                      }}
-                      colSpan={3}
-                    >
-                      {configuration.vga}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Ram
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.ram}
-                    </td>
-                  </tr>
+                  {(configuration.vga || configuration.resolution) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.vga
+                          ? "Chip đồ họa"
+                          : configuration.resolution
+                          ? "Phân giải"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.vga || configuration.resolution}
+                      </td>
+                    </tr>
+                  )}
                   <tr>
                     <td colSpan={1}>Màn hình</td>
                     <td colSpan={3}>{configuration.screen}</td>
                   </tr>
                   <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Lưu trữ
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {formatCapacity(selectedCapacity?.capacity)}
-                    </td>
+                    <td colSpan={1}>Ram</td>
+                    <td colSpan={3}>{configuration.ram}</td>
                   </tr>
                   <tr>
-                    <td colSpan={1}>Số cổng lưu chữ tối đa</td>
-                    <td colSpan={3}>
-                      {configuration.maximum_number_of_storage_ports}
-                    </td>
+                    <td colSpan={1}>Lưu trữ</td>
+                    <td colSpan={3}>{configuration.rom}</td>
                   </tr>
+                  {(configuration.maximum_number_of_storage_ports ||
+                    configuration.charging_port) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.maximum_number_of_storage_ports
+                          ? "Số cổng lưu trữ tối đa"
+                          : configuration.charging_port
+                          ? "Cổng sạc"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.maximum_number_of_storage_ports ||
+                          configuration.charging_port}
+                      </td>
+                    </tr>
+                  )}
+                  {(configuration.M2_slot_type_supported ||
+                    configuration.mobile_network) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.M2_slot_type_supported
+                          ? "Kiểu khe M.2 hỗ trợ"
+                          : configuration.mobile_network
+                          ? "Mạng di động"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.M2_slot_type_supported ||
+                          configuration.mobile_network}
+                      </td>
+                    </tr>
+                  )}
+                  {(configuration.output_port || configuration.rear_camera) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.output_port
+                          ? "Cổng xuất hình"
+                          : configuration.rear_camera
+                          ? "Camera sau"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.output_port || configuration.rear_camera}
+                      </td>
+                    </tr>
+                  )}
+                  {(configuration.connector || configuration.front_camera) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.connector
+                          ? "Cổng kết nối"
+                          : configuration.front_camera
+                          ? "Camera trước"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.connector || configuration.front_camera}
+                      </td>
+                    </tr>
+                  )}
+                  {(configuration.wireless_connectivity ||
+                    configuration.wifi) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.wireless_connectivity
+                          ? "Kết nối không dây"
+                          : configuration.wifi
+                          ? "Wifi"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.wireless_connectivity ||
+                          configuration.wifi}
+                      </td>
+                    </tr>
+                  )}
+                  {(configuration.keyboard || configuration.gps) && (
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.keyboard
+                          ? "Bàn phím"
+                          : configuration.gps
+                          ? "GPS"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.keyboard || configuration.gps}
+                      </td>
+                    </tr>
+                  )}
+                  {configuration.bluetooth && (
+                    <tr>
+                      <td colSpan={1}>Bluetooth</td>
+                      <td colSpan={3}>{configuration.bluetooth}</td>
+                    </tr>
+                  )}
+                  {configuration.headphone_jack && (
+                    <tr>
+                      <td colSpan={1}>Tai nghe</td>
+                      <td colSpan={3}>{configuration.headphone_jack}</td>
+                    </tr>
+                  )}
+                  {configuration.size && (
+                    <tr>
+                      <td colSpan={1}>Kích thước</td>
+                      <td colSpan={3}>{configuration.size}</td>
+                    </tr>
+                  )}
                   <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Khe hở M.2 hỗ trợ
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.M2_slot_type_supported}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={1}>Cổng xuất hình</td>
-                    <td colSpan={3}>{configuration.output_port}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Cổng kết nối
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.connector}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={1}>Kết nối không dây</td>
-                    <td colSpan={3}>{configuration.wireless_connectivity}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Bàn phím
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.keyboard}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={1}>Hệ điều hành</td>
-                    <td colSpan={3}>{configuration.os}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                      Pin
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.pin}
-                    </td>
+                    <td colSpan={1}>Pin</td>
+                    <td colSpan={3}>{configuration.pin}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Khối lượng</td>
                     <td colSpan={3}>{configuration.mass}</td>
                   </tr>
-                  <tr>
-                    <td className="style-tin-chung" colSpan={1}>
-                      Thông tin khác
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{ backgroundColor: "#f6f6f6" }}
-                      className="style-tin-chung"
-                      colSpan={1}
-                    >
-                      Phụ kiện đi kèm
-                    </td>
-                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                      {configuration.accessory}
-                    </td>
-                  </tr>
+
+                  {configuration.accessory && (
+                    <>
+                      <tr>
+                        <td className="style-tin-chung" colSpan={1}>
+                          Thông tin khác
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="style-tin-chung" colSpan={1}>
+                          Phụ kiện đi kèm
+                        </td>
+                        <td colSpan={3}>{configuration.accessory}</td>
+                      </tr>
+                    </>
+                  )}
                 </MDBTableBody>
               </MDBTable>
             </div>
           </Modal>
           {/*  */}
+          <div
+            className="product-container"
+            style={{
+              borderRadius: "5px",
+              position: "relative",
+              width: "1234px",
+              margin: "0 auto",
+              marginTop: "30px",
+              backgroundColor: "white",
+            }}
+          >
+            <div>
+              <div
+                className="product-title"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "20px",
+                  display: "-webkit-box",
+                  padding: "20px",
+                  color: "black",
+                  borderBottom: "1px solid rgb(228, 229, 240)",
+                }}
+              >
+                Sản phẩm tương tự
+              </div>
+            </div>
+            <div className="scroll-group-phone">
+              <div className="scroll-control-phone" ref={ctnRef}>
+                {relatedProducts &&
+                  relatedProducts.length > 0 &&
+                  relatedProducts.map((item, index) => (
+                    <CardProduct
+                      key={index}
+                      item={item}
+                      onClick={handleViewDetailProduct}
+                    />
+                  ))}
+              </div>
+              {/* button */}
+              <button
+                className="scroll-button"
+                id="scroll-left-button"
+                onClick={scrollTrai}
+              >
+                <LeftOutlined />
+              </button>
+              <button
+                className="scroll-button"
+                id="scroll-right-button"
+                onClick={scrollPhai}
+              >
+                <RightOutlined />
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>
