@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "./HuongDanMuaHang.css"
-function HuongDanMuaHang() {
 
+function HuongDanMuaHang() {
+    const arr = [20, 5 ,100, 1, 90, 200, 40, 29];
+    for (let item of arr){
+        setTimeout(() => console.log(item), item)
+    }
     return (
-        <div style={{ height: "1234px", width: "1000px", margin: '0 auto', backgroundColor: 'red', marginTop: '10px' }}>
-            <div className="content">
-                <div className="paragraph-wrapper">
-                    <div className="paragraph">
-                        <p className="a-high-quality-solut">
-                            A HIGH-QUALITY SOLUTION FOR THOSE WHO WANT A BEAUTIFUL STARTUP WEBSITE QUICKLY.
-                        </p>
-                        <p className="learn-more-about-sta">
-                            Learn more about Startup Framework in the light demo version. It has components from the full version, two
-                            great samples and documenta-tion. We hope you will like this introduction to Startup Framework!
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div style={{ height: "auto", width: "800px", margin: '0 auto', marginTop: '10px' , textAlign:'left'}}>
+         <h1 className="h1-hdmh">Hướng dẫn mua hàng </h1>
+         <span>
+         Nhằm giúp Khách hàng thuận lợi hơn trong mua sắm tại Phong Vũ,
+          dưới đây là hướng dẫn những bước cơ bản để Quý Khách hàng có thể mua hàng trên Website Phong Vũ một cách dễ dàng.
+         </span>
+         <div style={{display:"block"}}>
+            <a>
+            Mua hàng qua điện thoại
+            </a>
+            <a>
+            Mua hàng qua chat với nhân viên tư vấn (Facebook Chat, Zalo Chat được tích hợp trên Website Phong Vũ)
+            </a>
+            <span>
+            Đơn đặt hàng Online trên Website Phong Vũ
+            </span>
+         </div>
         </div>
     );
 }
