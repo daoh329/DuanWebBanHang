@@ -235,10 +235,13 @@ class Product {
       GROUP BY product.id, product.name, product.price, product.status, product.discount, product.shortDescription,product.main_image,
         productDetails.quantity, productDetails.created_at,  productDetails.brand,
         category.name;`;
-      
+
       const cartProducts = [];
       for (let i = 0; i < data.length; i++) {
-        const results = await query(sl_product, [data[i].capacity_id,data[i].product_id]);
+        const results = await query(sl_product, [
+          data[i].capacity_id,
+          data[i].product_id,
+        ]);
         cartProducts.push(results[0]);
       }
 
@@ -457,15 +460,37 @@ class Product {
       }
       // 4. Update capacity
       if (arrCapacity.length !== 0) {
-        const qr_update_capacities = `UPDATE capacity_list SET capacity = ?, capacity_price = ? WHERE id = ?`;
+        // Xóa các id đã có
+        const dl_capacity_list = `
+        DELETE FROM capacity_list
+        WHERE product_id = ?;
+        `;
+        await query(dl_capacity_list, [id]);
+
         for (let i = 0; i < arrCapacity.length; i++) {
-          await query(qr_update_capacities, [
-            arrCapacity[i].capacity,
-            arrCapacity[i].capacity_price,
-            arrCapacity[i].id,
-          ]);
+          // Nếu có id, Thêm trên id cũ
+          if (arrCapacity[i].id) {
+            const is_capacity_list =
+              "INSERT INTO capacity_list (`id`,`product_id`,`capacity`, `capacity_price`) VALUES (?,?,?,?);";
+            await query(is_capacity_list, [
+              arrCapacity[i].id,
+              id,
+              arrCapacity[i].capacity,
+              arrCapacity[i].capacity_price,
+            ]);
+          } else {
+            // Nếu id chưa tồn tại, thêm dữ liệu mới
+            const is_capacity_list =
+              "INSERT INTO capacity_list (`product_id`,`capacity`, `capacity_price`) VALUES (?,?,?);";
+            await query(is_capacity_list, [
+              id,
+              arrCapacity[i].capacity,
+              arrCapacity[i].capacity_price,
+            ]);
+          }
         }
       }
+      // return res.status(200).json({ message: "success" });
 
       // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
       // Nếu mảng images path không rỗng -> Thực hiện cập nhật

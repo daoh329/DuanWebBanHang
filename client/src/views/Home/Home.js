@@ -139,10 +139,7 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
+        // Chuyển thông tin cấu hình thành định dạng JSON
         data.forEach((element) => {
           element.configuration = JSON.parse(element.configuration);
         });
@@ -164,10 +161,7 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
+        // Chuyển thông tin cấu hình thành định dạng JSON
         data.forEach((element) => {
           element.configuration = JSON.parse(element.configuration);
         });

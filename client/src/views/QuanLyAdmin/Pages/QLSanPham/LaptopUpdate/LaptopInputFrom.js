@@ -438,6 +438,7 @@ function LaptopInputFrom({ data, onClick, setModal }) {
                     <button
                       className="capacity-btn-delete-row"
                       onClick={() => handleRemoveRom(index)}
+                      type="button"
                     >
                       Xóa
                     </button>
