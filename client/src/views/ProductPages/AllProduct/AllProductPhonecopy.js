@@ -272,33 +272,24 @@ const AllProductPhone = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const handleViewDetailProduct = (product) => {
-    if (!product.id) {
+  const handleViewDetailProduct = (products) => {
+    if (!products.id) {
       console.error('Product ID is undefined!');
       return;
     }
 
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    const historyproduct = {
-      shortDescription: products.shortDescription,
-      price: products.price,
-      discount: products.discount,
-      main_image: products.main_image,
-      thumbnail: products.thumbnail,
-      brand: products.brand,
-      id: products.id,
-    };
 
     const isViewed = historysp.some(
-      (product) => product.shortDescription === historyproduct.shortDescription
+      (product) => product.shortDescription === products.shortDescription
     );
 
     if (!isViewed) {
-      historysp.push(historyproduct);
+      historysp.push(products);
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
 
-    navigate(`/detail/${product.id}`);
+    navigate(`/detail/${products.id}`);
   };
 
   return (

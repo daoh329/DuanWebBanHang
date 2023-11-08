@@ -32,6 +32,11 @@ const configSession = (app) => {
 
   // mã hóa thông tin người dùng và tạo phiên (save)
   passport.serializeUser(async function (user, cb) {
+    cb(null, user);
+  });
+
+  // giải mã thông tin người dùng (get)
+  passport.deserializeUser(async function (user, cb) {
     // Câu lệnh lấy dữ liệu người dùng
     const queryCheckEmail = `SELECT * FROM users WHERE email = ?`;
     await query(queryCheckEmail, [user._json.email])
@@ -47,11 +52,6 @@ const configSession = (app) => {
           return console.log(error);
         }
       });
-    cb(null, user);
-  });
-
-  // giải mã thông tin người dùng (get)
-  passport.deserializeUser(function (user, cb) {
     cb(null, user);
   });
 };
