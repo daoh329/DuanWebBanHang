@@ -56,10 +56,11 @@ const createTables = () => {
     id int PRIMARY KEY AUTO_INCREMENT,
     productID int,
     quantity int,
+    color varchar(255),
+    capacity int,
     orderID int,
     FOREIGN KEY (orderID) REFERENCES orders (id),
     FOREIGN KEY (productID) REFERENCES product (id)
-    
   );
   `;
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
