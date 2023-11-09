@@ -159,43 +159,29 @@ function Detail() {
     setSelectedCapacity(capacity);
   };
 
-  // Khai báo state cho relatedProducts
-  const [relatedProducts, setRelatedProducts] = useState([]);
-
   // Hàm để lấy sản phẩm liên quan
+  const [relatedProducts, setRelatedProducts] = useState([]);
   useEffect(() => {
-    // Hàm để lấy sản phẩm liên quan
     const getRelatedProducts = async (brand, categoryID) => {
       let relatedProducts = [];
 
-      // Lấy danh sách sản phẩm laptop và điện thoại
-      // laptop
-      const laptopProducts = await fetch(
-        `${process.env.REACT_APP_API_URL}/product/productslaptop`
-      )
+      const laptopProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
         .then((response) => response.json())
         .catch((error) => {
           console.error("Error fetching laptop data:", error);
         });
 
-      // phone
-      const phoneProducts = await fetch(
-        `${process.env.REACT_APP_API_URL}/product/productsPhone`
-      )
+      const phoneProducts = await fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
         .then((response) => response.json())
         .catch((error) => {
           console.error("Error fetching phone data:", error);
         });
-      
-      // Lựa chọn danh sách sản phẩm tương ứng với CategoryID
+
       const products = categoryID === 1 ? laptopProducts : phoneProducts;
 
-      // Lọc các sản phẩm có cùng brand
-      relatedProducts = products.filter(
-        (product) => product.CategoryID === categoryID
-      );
 
-      // Sắp xếp mảng sao cho các sản phẩm có cùng brand đứng đầu
+      relatedProducts = products.filter(product => product.CategoryID === categoryID && product.id !== Detail.p_ID);
+
       relatedProducts.sort((a, b) => {
         if (a.brand === brand) {
           return -1;
@@ -208,12 +194,11 @@ function Detail() {
       setRelatedProducts(relatedProducts);
     };
 
-    // Gọi hàm để lấy sản phẩm liên quan sau khi lấy chi tiết sản phẩm
     if (Detail) {
       getRelatedProducts(Detail.brand, Detail.CategoryID);
+      console.log(relatedProducts)
     }
-  }, [Detail]); // Mảng phụ thuộc bao gồm 'detail'
-
+  }, [Detail]);
   // ------------------------
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
@@ -383,9 +368,9 @@ function Detail() {
                           style={
                             selectedColor === color?.Colorname
                               ? {
-                                  borderColor: "#024dbc",
-                                  color: "#024dbc",
-                                }
+                                borderColor: "#024dbc",
+                                color: "#024dbc",
+                              }
                               : {}
                           }
                           key={index}
@@ -412,9 +397,9 @@ function Detail() {
                         style={
                           selectedCapacity.capacity === capacity.capacity
                             ? {
-                                borderColor: "#024dbc",
-                                color: "#024dbc",
-                              }
+                              borderColor: "#024dbc",
+                              color: "#024dbc",
+                            }
                             : {}
                         }
                         onClick={() => handleChangeCapacity(capacity)}
@@ -670,8 +655,8 @@ function Detail() {
                           {configuration.screen
                             ? "Màn hình"
                             : configuration.chip
-                            ? "Màn hình"
-                            : ""}
+                              ? "Màn hình"
+                              : ""}
                         </td>
                         <td colSpan={3}>
                           {configuration.screen || configuration.screen}
@@ -682,8 +667,8 @@ function Detail() {
                           {configuration.cpu
                             ? "CPU"
                             : configuration.chip
-                            ? "Chip"
-                            : ""}
+                              ? "Chip"
+                              : ""}
                         </td>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
                           {configuration.cpu || configuration.chip}
@@ -695,8 +680,8 @@ function Detail() {
                             {configuration.vga
                               ? "Chip đồ họa"
                               : configuration.resolution
-                              ? "Phân giải"
-                              : ""}
+                                ? "Phân giải"
+                                : ""}
                           </td>
                           <td colSpan={3}>
                             {configuration.vga || configuration.resolution}
@@ -822,8 +807,8 @@ function Detail() {
                       {configuration.cpu
                         ? "CPU"
                         : configuration.chip
-                        ? "Chip"
-                        : ""}
+                          ? "Chip"
+                          : ""}
                     </td>
                     <td colSpan={3}>
                       {configuration.cpu || configuration.chip}
@@ -835,8 +820,8 @@ function Detail() {
                         {configuration.vga
                           ? "Chip đồ họa"
                           : configuration.resolution
-                          ? "Phân giải"
-                          : ""}
+                            ? "Phân giải"
+                            : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.vga || configuration.resolution}
@@ -857,44 +842,44 @@ function Detail() {
                   </tr>
                   {(configuration.maximum_number_of_storage_ports ||
                     configuration.charging_port) && (
-                    <tr>
-                      <td colSpan={1}>
-                        {configuration.maximum_number_of_storage_ports
-                          ? "Số cổng lưu trữ tối đa"
-                          : configuration.charging_port
-                          ? "Cổng sạc"
-                          : ""}
-                      </td>
-                      <td colSpan={3}>
-                        {configuration.maximum_number_of_storage_ports ||
-                          configuration.charging_port}
-                      </td>
-                    </tr>
-                  )}
+                      <tr>
+                        <td colSpan={1}>
+                          {configuration.maximum_number_of_storage_ports
+                            ? "Số cổng lưu trữ tối đa"
+                            : configuration.charging_port
+                              ? "Cổng sạc"
+                              : ""}
+                        </td>
+                        <td colSpan={3}>
+                          {configuration.maximum_number_of_storage_ports ||
+                            configuration.charging_port}
+                        </td>
+                      </tr>
+                    )}
                   {(configuration.M2_slot_type_supported ||
                     configuration.mobile_network) && (
-                    <tr>
-                      <td colSpan={1}>
-                        {configuration.M2_slot_type_supported
-                          ? "Kiểu khe M.2 hỗ trợ"
-                          : configuration.mobile_network
-                          ? "Mạng di động"
-                          : ""}
-                      </td>
-                      <td colSpan={3}>
-                        {configuration.M2_slot_type_supported ||
-                          configuration.mobile_network}
-                      </td>
-                    </tr>
-                  )}
+                      <tr>
+                        <td colSpan={1}>
+                          {configuration.M2_slot_type_supported
+                            ? "Kiểu khe M.2 hỗ trợ"
+                            : configuration.mobile_network
+                              ? "Mạng di động"
+                              : ""}
+                        </td>
+                        <td colSpan={3}>
+                          {configuration.M2_slot_type_supported ||
+                            configuration.mobile_network}
+                        </td>
+                      </tr>
+                    )}
                   {(configuration.output_port || configuration.rear_camera) && (
                     <tr>
                       <td colSpan={1}>
                         {configuration.output_port
                           ? "Cổng xuất hình"
                           : configuration.rear_camera
-                          ? "Camera sau"
-                          : ""}
+                            ? "Camera sau"
+                            : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.output_port || configuration.rear_camera}
@@ -907,8 +892,8 @@ function Detail() {
                         {configuration.connector
                           ? "Cổng kết nối"
                           : configuration.front_camera
-                          ? "Camera trước"
-                          : ""}
+                            ? "Camera trước"
+                            : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.connector || configuration.front_camera}
@@ -917,28 +902,28 @@ function Detail() {
                   )}
                   {(configuration.wireless_connectivity ||
                     configuration.wifi) && (
-                    <tr>
-                      <td colSpan={1}>
-                        {configuration.wireless_connectivity
-                          ? "Kết nối không dây"
-                          : configuration.wifi
-                          ? "Wifi"
-                          : ""}
-                      </td>
-                      <td colSpan={3}>
-                        {configuration.wireless_connectivity ||
-                          configuration.wifi}
-                      </td>
-                    </tr>
-                  )}
+                      <tr>
+                        <td colSpan={1}>
+                          {configuration.wireless_connectivity
+                            ? "Kết nối không dây"
+                            : configuration.wifi
+                              ? "Wifi"
+                              : ""}
+                        </td>
+                        <td colSpan={3}>
+                          {configuration.wireless_connectivity ||
+                            configuration.wifi}
+                        </td>
+                      </tr>
+                    )}
                   {(configuration.keyboard || configuration.gps) && (
                     <tr>
                       <td colSpan={1}>
                         {configuration.keyboard
                           ? "Bàn phím"
                           : configuration.gps
-                          ? "GPS"
-                          : ""}
+                            ? "GPS"
+                            : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.keyboard || configuration.gps}

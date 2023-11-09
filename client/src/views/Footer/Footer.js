@@ -58,26 +58,22 @@ function Footer() {
 
               <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
-                  Hỗ trợ khách hàng
+                  Hỗ trợ - dịch vụ
                 </h6>
                 <p>
-                  <a href="#!" className="text-reset">
-                    Hướng dẫn mua hàng trực tuyến.
+                  <a href="/huong-dan-mua-hang" className="text-reset" rel="noopener noreferrer">
+                    Hướng dẫn mua hàng
+                  </a>
+                </p>
+               
+                <p>
+                  <a href="/tra-cuu-don-hang" className="text-reset">
+                  Tra cứu đơn hàng
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">
-                    Hướng dẫn thanh toán.
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Gửi yêu cầu bảo hành.
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Góp ý, khiếu nại!
+                  <a href="/giai-quyet-khieu-nai" className="text-reset">
+                    Chính sách giải quyết khiếu nại
                   </a>
                 </p>
               </MDBCol>
@@ -85,62 +81,45 @@ function Footer() {
               <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
                   Chính sách mua hàng.
-                </h6>
+                </h6>               
                 <p>
-                  <a href="#!" className="text-reset">
-                    Điều kiện giao dịch chung.
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
+                  <a href="/chinh-sach-bao-hanh" className="text-reset">
                     Chính sách bảo hành.
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">
+                  <a href="/chinh-sach-doi-tra" className="text-reset">
                     Chính sách đổi trả.
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">
+                  <a href="/chinh-sach-thanh-toan" className="text-reset">
                     Chính sách thanh toán.
                   </a>
                 </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Giao hàng và lắp đặt tại nhà.
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Dịch vụ nâng cấp PC, Laptop.
-                  </a>
-                </p>
+             
               </MDBCol>
 
               <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">Liên Hệ</h6>
                 <p>
                   <MDBIcon color="secondary" icon="home" className="me-2" />
-                  200 Hà Huy Tập, Tân Lợi, Tp. BMT.
+                  300/6 Hà Huy Tập, Tân An, Tp. BMT.
                 </p>
                 <p>
                   <MDBIcon color="secondary" icon="envelope" className="me-3" />
-                  info@example.com
+                  dinhminhshop@gmail.com
                 </p>
                 <p>
                   <MDBIcon color="secondary" icon="phone" className="me-3" /> +
                   01 234 567 88
                 </p>
-                <p>
-                  <MDBIcon color="secondary" icon="print" className="me-3" /> +
-                  01 234 567 89
-                </p>
+                
               </MDBCol>
             </MDBRow>
           </MDBContainer>
         </section>
-        
+
         {/*  */}
         <div style={{ width: "100%", backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
           <MDBContainer className="p-4">
@@ -159,8 +138,7 @@ function Footer() {
                 <h6 className="text-uppercase">Địa chỉ trụ sở chính:</h6>
 
                 <p style={{ color: "#757575" }}>
-                  Địa chỉ: 200 Hà Huy Tập, Phường Tân Lợi, Tp. Buôn Ma Thuột,
-                  Tỉnh Đắk Lắk
+                  Địa chỉ: 300/6 Hà Huy Tập, Tổ dân phố 8, Phường Tân An, Buon Ma Thuot, Vietnam
                 </p>
               </MDBCol>
             </MDBRow>
@@ -172,8 +150,8 @@ function Footer() {
           style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
         >
           ©Copyright 2023: -
-          <a className="text-reset fw-bold" href="https://takatech.com.vn/">
-            by TakaTech
+          <a className="text-reset fw-bold" >
+             by DATN
           </a>
         </div>
       </MDBFooter>
