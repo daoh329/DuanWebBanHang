@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "./Home.scss";
 import CountdownTimer from "./CountdownTimer";
 import Chatbot from "../ChatBot/Chatbot";
-import CardProduct from "./Card/Card";
+import CardProduct from "../Card/Card";
 const { TabPane } = Tabs;
 
 const Home = () => {
@@ -96,10 +96,7 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/newphone`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
+        // Chuyển thông tin cấu hình thành định dạng JSON
         data.forEach((element) => {
           element.configuration = JSON.parse(element.configuration);
         });
@@ -118,10 +115,7 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
+        // Chuyển thông tin cấu hình thành định dạng JSON
         data.forEach((element) => {
           element.configuration = JSON.parse(element.configuration);
         });

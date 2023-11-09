@@ -5,7 +5,7 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -239,7 +239,6 @@ function NewProduct() {
 
   // function open modal
   const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
-
   const handleCancel = () => {
     setIsOpenModalCapcity(false);
   };
@@ -266,6 +265,7 @@ function NewProduct() {
             message: "Cập nhật thành công!",
           });
         }, 2000);
+        setIsOpenModalCapcity(false);
         getCapacity();
       } else {
         setTimeout(() => {
@@ -517,7 +517,20 @@ function NewProduct() {
               <table>
                 <thead>
                   <tr>
-                    <th>Dung lượng ROM</th>
+                    <th>
+                      <div style={{
+                        display:"flex",
+                        justifyContent:"left",
+                        alignItems:"center"
+                      }}>
+                        <span>Dung lượng ROM: &nbsp;</span>
+                        <Button
+                        onClick={openModalAddCapacity}
+                        icon={<PlusOutlined />}
+                        style={{ margin: "0 10px 0 0", border: "none", background:"none"}}
+                      />
+                      </div>
+                    </th>
                     <th>Giá</th>
                     <th>Thao tác</th>
                   </tr>
@@ -525,13 +538,7 @@ function NewProduct() {
                 <tbody>
                   {capacitySubmit.map((rom, index) => (
                     <tr key={index}>
-                      <td
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
+                      <td>
                         <select
                           className="form-control"
                           type="text"
@@ -549,11 +556,6 @@ function NewProduct() {
                             </option>
                           ))}
                         </select>
-                        <Button
-                          onClick={openModalAddCapacity}
-                          icon={<PlusOutlined />}
-                          style={{ margin: "0 0 0 5px" }}
-                        />
                       </td>
                       <td>
                         <input
@@ -567,12 +569,11 @@ function NewProduct() {
                         />
                       </td>
                       <td>
-                        <button
+                        <Button
                           className="capacity-btn-delete-row"
+                          icon={<CloseOutlined />}
                           onClick={() => handleRemoveRom(index)}
-                        >
-                          Xóa
-                        </button>
+                        />
                       </td>
                     </tr>
                   ))}
@@ -583,7 +584,7 @@ function NewProduct() {
                 className="capacity-btn-add-row"
                 onClick={handleAddRom}
               >
-                Thêm ROM
+                Thêm
               </button>
             </div>
 

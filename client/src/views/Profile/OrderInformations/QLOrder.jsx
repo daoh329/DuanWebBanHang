@@ -6,25 +6,46 @@ function QLOrder() {
   const location = useLocation();
   const orderData = location.state.orderData;
   const paymentData = JSON.parse(orderData.paymentData);
+  const color = orderData.color;
+  const productID = orderData.productID;
+  const shortDescription = orderData.shortDescription;
+  const totalAmount = orderData.totalAmount;
+  const capacity = orderData.capacity;
+  const quantity = orderData.quantity;
+
 
   return (
-    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 30}}>
-        <div style={{width: 450, backgroundColor: 'white', borderRadius: '10px', padding: '10px'}}>
-            <p style={{marginTop: 20, fontSize: 18, fontWeight: 'bold'}}>Thông tin hóa đơn</p>
-            {paymentData && (paymentData.vnp_OrderInfo || paymentData.orderId) ? (
-            <>
-                <p>Mã thanh toán giao dịch: <span>{paymentData.vnp_OrderInfo || paymentData.orderId}</span></p>
-                <p>Mã tham chiếu giao dịch: <span>{paymentData.vnp_TxnRef || paymentData.transId}</span></p>
-                <p>Thời gian thực hiện: <span>{paymentData.vnp_PayDate || paymentData.responseTime}</span></p>
-                <p>Loại thanh toán: <span>{paymentData.vnp_CardType || paymentData.payType}</span></p>
-                <p>Ngân hàng: <span>{paymentData.vnp_BankCode || paymentData.orderType}</span></p>
-                <p>Số giao dịch: <span>{paymentData.vnp_BankTranNo || paymentData.transId}</span></p>
-                <p>Tổng tiền: <span>{(parseInt(paymentData.vnp_Amount ? paymentData.vnp_Amount / 100 : paymentData.amount)).toLocaleString()}</span></p>
-                {/* Thêm các trường khác của paymentData tại đây */}
-            </>
-            ) : null}
-        </div>
+    <div style={{display:'flex', marginTop: 30}}>
+    <div style={{marginLeft: 200}}>
+      <div style={{width: 450, height: 370,backgroundColor: 'white', borderRadius: '10px', padding: '10px'}}>
+          <p style={{marginTop: 20, fontSize: 18, fontWeight: 'bold'}}>Thông tin sản phẩm</p>
+          <p><b>SKU:</b> <span style={{fontWeight: 'normal'}}>{productID}</span></p>
+          <p><b>Tên sản phẩm:</b> <span style={{fontWeight: 'normal'}}>{shortDescription}</span></p>
+          <p><b>Màu:</b> <span style={{fontWeight: 'normal'}}>{color}</span></p>
+          <p><b>Dung lượng:</b> <span style={{fontWeight: 'normal'}}>{capacity} gb</span></p>
+          <p><b>Số lượng:</b> <span style={{fontWeight: 'normal'}}>{quantity}</span></p>
+          <p><b>Tổng giá:</b> <span style={{fontWeight: 'normal'}}>{totalAmount} vnđ</span></p>       
+      </div>
     </div>
+
+    <div style={{marginLeft: 200}}>
+      <div style={{width: 450, height: 370,backgroundColor: 'white', borderRadius: '10px', padding: '10px'}}>
+          <p style={{marginTop: 20, fontSize: 18, fontWeight: 'bold'}}>Thông tin hóa đơn</p>
+          {paymentData && (paymentData.vnp_OrderInfo || paymentData.orderId) ? (
+          <>
+              <p><b>Mã thanh toán giao dịch:</b> <span style={{fontWeight: 'normal'}}>{paymentData.vnp_OrderInfo || paymentData.orderId}</span></p>
+              <p><b>Mã tham chiếu giao dịch:</b> <span style={{fontWeight: 'normal'}}>{paymentData.vnp_TxnRef || paymentData.transId}</span></p>
+              <p><b>Thời gian thực hiện:</b> <span style={{fontWeight: 'normal'}}>{paymentData.vnp_PayDate || paymentData.responseTime}</span></p>
+              <p><b>Loại thanh toán:</b> <span style={{fontWeight: 'normal'}}>{paymentData.vnp_CardType || paymentData.payType}</span></p>
+              <p><b>Ngân hàng:</b> <span style={{fontWeight: 'normal'}}>{paymentData.vnp_BankCode || paymentData.orderType}</span></p>
+              <p><b>Số giao dịch:</b> <span style={{fontWeight: 'normal'}}>{paymentData.vnp_BankTranNo || paymentData.transId}</span></p>
+              <p><b>Tổng tiền:</b> <span style={{fontWeight: 'normal'}}>{(parseInt(paymentData.vnp_Amount ? paymentData.vnp_Amount / 100 : paymentData.amount)).toLocaleString()}</span></p>
+              {/* Thêm các trường khác của paymentData tại đây */}
+          </>
+          ) : 'Thanh toán khi nhận hàng'}
+      </div>
+    </div>
+  </div>
   );
 }
 
