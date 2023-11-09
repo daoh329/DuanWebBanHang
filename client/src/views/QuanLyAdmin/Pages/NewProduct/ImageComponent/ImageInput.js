@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import PreviewImage from "../ImageComponent/PreviewImage";
 import "./StyleImage.css";
-import { Modal, Upload } from "antd";
+import { Upload } from "antd";
 
 // const getBase64 = (file) =>
 //   new Promise((resolve, reject) => {

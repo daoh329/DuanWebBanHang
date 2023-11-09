@@ -2,20 +2,17 @@ import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Layout, Carousel, Tabs, Pagination } from "antd";
-import {
-  LeftOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 import "./Home.scss";
 import CountdownTimer from "./CountdownTimer";
 import Chatbot from "../ChatBot/Chatbot";
-import CardProduct from "./Card/Card";
+import CardProduct from "../Card/Card";
 const { TabPane } = Tabs;
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
+  const [productsLaptop, setProductsLaptop] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
   const [topDienthoai, setTopDienthoai] = useState([]);
@@ -29,6 +26,10 @@ const Home = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
       .then((res) => {
+        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+        res.data.forEach((element) => {
+          element.capacities = JSON.parse(element.capacities);
+        });
         setTopLaptop(res.data);
         // console.log("Laptopbanchay: " +res.data);
       })
@@ -40,6 +41,10 @@ const Home = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/order/dienthoaibanchay`)
       .then((res) => {
+        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+        res.data.forEach((element) => {
+          element.capacities = JSON.parse(element.capacities);
+        });
         setTopDienthoai(res.data);
         // console.log("Laptopbanchay: " +res.data);
       })
@@ -48,6 +53,7 @@ const Home = () => {
 
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
+
     if (!products.id) {
       console.error("Product ID is undefined!");
       return;
@@ -55,23 +61,15 @@ const Home = () => {
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
     // Tạo đối tượng sản phẩm mới
-    const historyproduct = {
-      shortDescription: products.shortDescription,
-      price: products.price,
-      discount: products.discount,
-      main_image: products.main_image,
-      thumbnail: products.thumbnail,
-      brand: products.brand,
-      id: products.id,
-    };
+
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.id === historyproduct.id
+      (product) => product.id === products.id
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
       // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(historyproduct);
+      historysp.push(products);
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
@@ -92,11 +90,16 @@ const Home = () => {
     sethistorysp(storedProducts);
   }, []);
 
+  // New phones
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/product/newphone`)
       .then((response) => {
         let data = response.data;
+        // Chuyển thông tin cấu hình thành định dạng JSON
+        data.forEach((element) => {
+          element.configuration = JSON.parse(element.configuration);
+        });
         // Sắp xếp dữ liệu tại đây
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setNewphone(data);
@@ -106,11 +109,16 @@ const Home = () => {
       });
   }, []);
 
+  // New laptops
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then((response) => {
         let data = response.data;
+        // Chuyển thông tin cấu hình thành định dạng JSON
+        data.forEach((element) => {
+          element.configuration = JSON.parse(element.configuration);
+        });
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setNewLaptop(data);
       })
@@ -119,27 +127,39 @@ const Home = () => {
       });
   }, []);
 
+  // laptops
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => {
         let data = response.data;
+        // Chuyển thông tin cấu hình thành định dạng JSON
+        data.forEach((element) => {
+          element.configuration = JSON.parse(element.configuration);
+        });
+        // Sắp xếp lại mảng sản phẩm
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        setProducts(data);
+        setProductsLaptop(data);
       })
       .catch((error) => {
         console.error("There was an error!", error);
       });
   }, []);
-  const statusLaptop = products.filter(
+  const statusLaptop = productsLaptop.filter(
     (statusLaptop) => statusLaptop.status === 1
   );
 
+  // phones
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => {
         let data = response.data;
+        // Chuyển thông tin cấu hình thành định dạng JSON
+        data.forEach((element) => {
+          element.configuration = JSON.parse(element.configuration);
+        });
+        // Sắp xếp lại mảng sản phẩm
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setProductsPhone(data);
       })
@@ -192,7 +212,7 @@ const Home = () => {
   const itemsPerPage = 12; // Số sản phẩm trên mỗi trang
 
   // Tính tổng số trang dựa trên số lượng sản phẩm và số sản phẩm trên mỗi trang
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const totalPages = Math.ceil(productsLaptop.length / itemsPerPage);
 
   // State để lưu trang hiện tại
   const [currentPage1, setCurrentPage1] = useState(1);
@@ -448,13 +468,15 @@ const Home = () => {
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.slice(0, 5).map((item, index) => (
-                  <CardProduct
-                  key={index}
-                  item={item}
-                  onClick={handleViewDetailProduct}
-                />
-                ))}
+                topLaptop
+                  .slice(0, 5)
+                  .map((item, index) => (
+                    <CardProduct
+                      key={index}
+                      item={item}
+                      onClick={handleViewDetailProduct}
+                    />
+                  ))}
             </div>
           </TabPane>
           {/* Laptop bán chạy */}
@@ -465,13 +487,15 @@ const Home = () => {
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
-                topLaptop.slice(0, 5).map((item, index) => (
-                  <CardProduct
-                  key={index}
-                  item={item}
-                  onClick={handleViewDetailProduct}
-                />
-                ))}
+                topLaptop
+                  .slice(0, 5)
+                  .map((item, index) => (
+                    <CardProduct
+                      key={index}
+                      item={item}
+                      onClick={handleViewDetailProduct}
+                    />
+                  ))}
             </div>
           </TabPane>
           {/* Điện thoại bán chạy */}
@@ -482,13 +506,15 @@ const Home = () => {
               </div>
               {topDienthoai &&
                 topDienthoai.length > 0 &&
-                topDienthoai.slice(0, 5).map((item, index) => (
-                  <CardProduct
-                  key={index}
-                  item={item}
-                  onClick={handleViewDetailProduct}
-                />
-                ))}
+                topDienthoai
+                  .slice(0, 5)
+                  .map((item, index) => (
+                    <CardProduct
+                      key={index}
+                      item={item}
+                      onClick={handleViewDetailProduct}
+                    />
+                  ))}
             </div>
           </TabPane>
         </Tabs>
@@ -709,7 +735,7 @@ const Home = () => {
       ) : null}
 
       {/* ------------------box sản phẩm laptop------------------ */}
-      {products && products.length > 0 ? (
+      {productsLaptop && productsLaptop.length > 0 ? (
         <div
           className="product-container"
           style={{
@@ -749,7 +775,7 @@ const Home = () => {
           >
             <Pagination
               current={currentPage2}
-              total={products.length}
+              total={productsLaptop.length}
               pageSize={itemsPerPage}
               onChange={handlePageChange2}
             />

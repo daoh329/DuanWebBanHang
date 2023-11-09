@@ -1,16 +1,33 @@
-import React, { useEffect } from "react";
-
-import { formatCurrency } from "../../../util/FormatVnd";
-import { format_sale } from "../../../util/formatSale";
+import React, { useEffect, useState } from "react";
 
 import { Tag } from "antd";
+import { formatCurrency } from "../../util/FormatVnd";
+import { format_sale } from "../../util/formatSale";
 
 function CardProduct(props) {
   const { item, onClick } = props;
+  const [priceMin, setPriceMin] = useState(0);
+  const [priceMax, setPriceMax] = useState(0);
 
   useEffect(() => {
-    if (!item) return;
-  });
+    // Lấy giá nhỏ nhất và lớn nhất
+    const capacities = item?.capacities;
+    if (capacities && capacities.length > 1) {
+      // Tìm giá trị price lớn nhất và nhỏ nhất
+      let minPrice = Number.POSITIVE_INFINITY; // Giá trị ban đầu là dương vô cùng
+      let maxPrice = Number.NEGATIVE_INFINITY; // Giá trị ban đầu là âm vô cùng
+      for (const item of capacities) {
+        if (item.capacity_price < minPrice) {
+          minPrice = item.capacity_price;
+        }
+        if (item.capacity_price > maxPrice) {
+          maxPrice = item.capacity_price;
+        }
+      }
+      setPriceMin(minPrice);
+      setPriceMax(maxPrice);
+    }
+  }, [item]);
 
   function handleViewDetail() {
     onClick(item);
@@ -35,17 +52,13 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item.remaining_quantity !== 0 &&
-      item.discount > 0 &&
-      item.price - item.discount > 0 ? (
+      {item.remaining_quantity !== 0 && item.discount > 0 ? (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
               TIẾT KIỆM
             </div>
-            <div className="css-1rdv2qd">
-              {formatCurrency(item.price - item.discount)}
-            </div>
+            <div className="css-1rdv2qd">{formatCurrency(item.discount)}</div>
           </div>
         </div>
       ) : null}
@@ -69,6 +82,7 @@ function CardProduct(props) {
           {item.brand}
         </div>
       </div>
+
       {/* name */}
       <div className="productname">
         <h3
@@ -101,52 +115,44 @@ function CardProduct(props) {
         {/* Tag hết sản phẩm */}
         {item.remaining_quantity === 0 ? (
           <Tag color="red">Sản phẩm tạm hết</Tag>
-        ) : item.discount > 0 && item.price - item.discount > 0 ? (
+        ) : (
+          // Nếu còn sản phẩm
           <div>
             {/* discount */}
-            <div
-              style={{
-                color: "#1435c3",
-                display: "-webkit-box",
-                fontSize: "15px",
-                fontWeight: "700",
-                lineHeight: "24px",
-                width: "90px",
-              }}
-            >
-              {formatCurrency(item.discount)}
-            </div>
+            {item?.capacities?.length === 1 ? (
+              <div style={{ textAlign: "left" }} className="show-discount">
+                {formatCurrency(
+                  item?.capacities[0].capacity_price - item.discount
+                )}
+              </div>
+            ) : (
+              <div className="show-discount">
+                {formatCurrency(priceMin - item.discount)}
+                {" - "}
+                {formatCurrency(priceMax - item.discount)}
+              </div>
+            )}
+
             {/* price */}
-            <div
-              style={{
-                color: "gray",
-                display: "-webkit-box",
-                fontSize: "12px",
-                lineHeight: "12px",
-                fontWeight: "normal",
-              }}
-            >
-              <span style={{ textDecoration: "line-through" }}>
-                {formatCurrency(item.price)}
-              </span>
-              &nbsp;
-              <span style={{ color: "#1435c3" }}>
-                -{format_sale(item.price, item.discount)}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div
-            style={{
-              color: "#1435c3",
-              display: "-webkit-box",
-              fontSize: "15px",
-              fontWeight: "700",
-              width: "90px",
-              lineHeight: "24px",
-            }}
-          >
-            {formatCurrency(item.price)}
+            {item?.discount > 0 && (
+              <div
+                style={{
+                  color: "gray",
+                  display: "-webkit-box",
+                  fontSize: "12px",
+                  lineHeight: "12px",
+                  fontWeight: "normal",
+                }}
+              >
+                <span style={{ textDecoration: "line-through" }}>
+                  {formatCurrency(item.price)}
+                </span>
+                &nbsp;
+                <span style={{ color: "#1435c3" }}>
+                  -{format_sale(item.price, item.discount)}
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>

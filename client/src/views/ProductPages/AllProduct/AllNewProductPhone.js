@@ -22,15 +22,12 @@ import { Pagination } from "antd";
 import { Box, } from '@mui/material';
 import './AllProduct.css'
 import { useNavigate } from "react-router-dom";
-import CardProduct2 from './CardProducts/CardProducts';
+import { formatCurrency} from '../../../util/FormatVnd';
+import CardProduct from "../../Card/Card";
 
 const { Option } = Select;
 function valuetext(value) {
   return `${value}°C`;
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
 const AllNewProductPhone = () => {
@@ -278,24 +275,14 @@ const AllNewProductPhone = () => {
     }
     // Lấy danh sách các sản phẩm đã xem từ session storage
     const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    // Tạo đối tượng sản phẩm mới
-    const historyproduct = {
-      shortDescription: products.shortDescription,
-      price: products.price,
-      discount: products.discount,
-      main_image: products.main_image,
-      thumbnail: products.thumbnail,
-      brand: products.brand,
-      id: products.id,
-    };
     // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
     const isViewed = historysp.some(
-      (product) => product.id === historyproduct.id
+      (product) => product.id === products.id
     );
     // Nếu sản phẩm mới chưa được xem
     if (!isViewed) {
       // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(historyproduct);
+      historysp.push(products);
       // Lưu trữ danh sách các sản phẩm đã xem vào session storage
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
@@ -554,10 +541,12 @@ const AllNewProductPhone = () => {
           <div className='all-products'>
             <div className='y2krk0'>
               {displayedProducts.map((item, index) => (
-                <CardProduct2
-                  key={index}
-                  item={item}
-                  onClick={handleViewDetailProduct} />
+                <div className='div-card'>
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct} />
+                </div>
               ))}
             </div>
           </div>

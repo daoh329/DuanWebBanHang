@@ -297,33 +297,35 @@ const App = () => {
     }
   };
 
-  // cập nhật giỏ hàng khi onMouseEnter
-  const updateCart = async (arrProductId) => {
+  // cập nhật giỏ hàng khi onClick to Cart
+  const updateCart = async () => {
     try {
-      if (arrProductId.length === 0) {
-        return;
-      }
+      if (cart.length === 0) return;
+      let arrId = [];
       if (cart.length > 0) {
-        const arrId = [];
         for (let i = 0; i < cart.length; i++) {
-          arrId.push(cart[i].id);
+          const data = {
+            product_id : cart[i].id,
+            capacity_id: parseInt(cart[i].capacity.id),
+          }
+          arrId.push(data);
         }
-        updateCart(arrId);
       }
       const api = `${process.env.REACT_APP_API_URL}/product/cart`;
-      const results = await axios.post(api, arrProductId);
+      const results = await axios.post(api, arrId);
       if (results.status === 200) {
         const products = results.data;
+        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+        products.forEach((element) => {
+          element.capacities = JSON.parse(element.capacities);
+        });
         for (let i = 0; i < products.length; i++) {
           const newItem = {
             id: products[i].id,
             main_image: products[i].main_image,
             shortDescription: products[i].shortDescription,
-            price:
-              products[i].discount > 0 &&
-              products[i].price > products[i].discount
-                ? products[i].discount
-                : products[i].price,
+            capacity: products[i].capacities[0],
+            discount: products[i].discount,
             brand: products[i].brand,
           };
           dispatch(updateProductCart(newItem));
@@ -433,7 +435,7 @@ const App = () => {
                 ) : (
                   <Avatar
                     icon={<UserOutlined />}
-                    style={{ backgroundColor: "#ae69dd" }}
+                    style={{ backgroundColor: " #1435c3" }}
                   />
                 )}
               </Dropdown>
@@ -647,7 +649,7 @@ const App = () => {
                     <Avatar
                       icon={<UserOutlined />}
                       style={{
-                        backgroundColor: "#ae69dd",
+                        backgroundColor: " #1435c3",
                         margin: "10px",
                         fontSize: "24px",
                         cursor: "pointer",
@@ -823,7 +825,7 @@ const App = () => {
                     <BellOutlined
                       style={{
                         fontSize: "30px",
-                        color: "#ae69dd",
+                        color: " #1435c3",
                         margin: "10px",
                         cursor: "pointer",
                       }}
@@ -882,7 +884,9 @@ const App = () => {
                                   <>
                                     <div>
                                       Giá:{" "}
-                                      {formatCurrency(selectedItems?.price)}
+                                      {formatCurrency(
+                                        selectedItems?.totalPrice
+                                      )}
                                     </div>
                                     <div>
                                       Số lượng: {selectedItems?.quantity}
@@ -917,10 +921,9 @@ const App = () => {
                     style={{ marginRight: "10px", marginTop: "10px" }}
                   >
                     <ShoppingCartOutlined
-                      // onMouseEnter={updateCart}
                       style={{
                         fontSize: "30px",
-                        color: "#ae69dd",
+                        color: " #1435c3",
                         margin: "10px",
                         cursor: "pointer",
                       }}
@@ -942,7 +945,7 @@ const App = () => {
                     <SolutionOutlined
                       style={{
                         fontSize: "24px",
-                        color: "#ae69dd",
+                        color: " #1435c3",
                         margin: "10px",
                       }}
                     />

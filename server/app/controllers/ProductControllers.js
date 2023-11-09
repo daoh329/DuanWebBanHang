@@ -8,7 +8,10 @@ class Product {
     const data = req.body;
     const arrImage = req.files.images;
     const main_image = req.files.main_image;
+    const capacity = JSON.parse(data.capacity);
 
+    // res.status(200).send("success");
+    // return;
     var arrPathImage = [];
     var mainImagePath = "";
     // multer không nhận được ảnh sẽ trả về undefind
@@ -21,7 +24,7 @@ class Product {
         arrPathImage.push(pathImage);
       });
     }
-    
+
     const configuration =
       data.category === "Điện thoại"
         ? {
@@ -30,7 +33,6 @@ class Product {
             resolution: data.resolution,
             chip: data.chip,
             ram: data.ram,
-            rom: data.rom,
             screen: data.screen,
             os: data.os,
             pin: data.pin,
@@ -56,7 +58,6 @@ class Product {
             demand: data.demand,
             cpu: data.cpu,
             ram: data.ram,
-            rom: data.rom,
             screen: data.screen,
             vga: data.vga,
             os: data.os,
@@ -86,6 +87,8 @@ class Product {
       "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
     const is_ProDetailColor =
       "INSERT INTO prodetailcolor (`product_id`,`Colorname`) VALUES (?,?);";
+    const is_capacity_list =
+      "INSERT INTO capacity_list (`product_id`,`capacity`, `capacity_price`) VALUES (?,?,?);";
 
     // Hàm sử lí lỗi tập chung
     const handleError = (e, res, message) => {
@@ -95,6 +98,7 @@ class Product {
 
     try {
       const arrayCategoryid = await query(sl_categoryid, data.category);
+      // product
       const productValues = [
         nameP,
         data.price,
@@ -105,10 +109,12 @@ class Product {
       ];
       const resultP = await query(is_product, productValues);
       const id_Product = resultP.insertId;
+      // color
       for (const image of arrPathImage) {
         const galeryValues = [image, id_Product];
         await query(is_galery, galeryValues);
       }
+      // product details
       const PdValues = [
         data.quantity,
         data.brand,
@@ -119,6 +125,7 @@ class Product {
       ];
       await query(is_productdetail, PdValues);
 
+      // color
       if (Array.isArray(data.color)) {
         for (const x of data.color) {
           await query(is_ProDetailColor, [id_Product, x]);
@@ -126,6 +133,17 @@ class Product {
       } else {
         await query(is_ProDetailColor, [id_Product, data.color]);
       }
+
+      // capacity
+      capacity.forEach(async (capacity) => {
+        if (capacity.rom && parseInt(capacity.price) > 0) {
+          await query(is_capacity_list, [
+            id_Product,
+            capacity.rom,
+            capacity.price,
+          ]);
+        }
+      });
 
       res.status(200).send("success");
     } catch (error) {
@@ -135,13 +153,19 @@ class Product {
 
   async json(req, res) {
     // API: /product/json
-    const queryProduct = `SELECT 
+    const queryProduct = `
+    SELECT 
     product.id,
     product.name,
     product.price,
     product.discount,
     product.status,
     product.shortDescription,
+     (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities, 
     productDetails.brand,
     productDetails.quantity,
     productDetails.remaining_quantity,
@@ -189,57 +213,65 @@ class Product {
   async GetProductCart(req, res) {
     // /product/cart
     try {
-      const product_ids = req.body;
-      const sl_product = `SELECT 
-      product.id,
-      product.name,
-      product.price,
-      product.discount,
-      product.status,
-      product.main_image,
-      product.shortDescription,
-      productDetails.brand,
-      productDetails.quantity,
-      productDetails.created_at,
-      category.name as category,
-      CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color
+      const data = req.body;
+      const sl_product = `
+      SELECT 
+        product.id, product.name, product.price, product.status, product.discount, product.shortDescription, product.main_image,
+        productDetails.brand,
+        productDetails.quantity,
+          (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.id = ?
+        ) AS capacities,
+        productDetails.created_at,
+        category.name as category,
+        CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN category ON product.CategoryID = category.id
       LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
-      WHERE product.id IN (?)
-      GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
-      productDetails.quantity, product.shortDescription, productDetails.created_at,  
-      category.name;`;
+      WHERE product.id = ?
+      GROUP BY product.id, product.name, product.price, product.status, product.discount, product.shortDescription,product.main_image,
+        productDetails.quantity, productDetails.created_at,  productDetails.brand,
+        category.name;`;
 
-      const results = await query(sl_product, [product_ids]);
+      const cartProducts = [];
+      for (let i = 0; i < data.length; i++) {
+        const results = await query(sl_product, [
+          data[i].capacity_id,
+          data[i].product_id,
+        ]);
+        cartProducts.push(results[0]);
+      }
+
       // chuyển string thành mảng (color, image)
-      // color
-      for (let i = 0; i < results.length; i++) {
-        if (results[i]?.color) {
-          const colorRaw = JSON.parse(results[i].color);
+      for (let i = 0; i < cartProducts.length; i++) {
+        // color
+        if (cartProducts[i]?.color) {
+          const colorRaw = JSON.parse(cartProducts[i].color);
           let arrColor = [];
           colorRaw.forEach((color) => {
             if (!arrColor.includes(color.color)) {
               arrColor.push(color.color);
             }
           });
-          results[i].color = arrColor;
+          cartProducts[i].color = arrColor;
         }
         // image
-        if (results[i]?.galery) {
-          const imageRaw = JSON.parse(results[i].galery);
+        if (cartProducts[i]?.galery) {
+          const imageRaw = JSON.parse(cartProducts[i].galery);
           let arrimage = [];
           imageRaw.forEach((image) => {
             if (!arrimage.includes(image.galery)) {
               arrimage.push(image.galery);
             }
           });
-          results[i].galery = arrimage;
+          cartProducts[i].galery = arrimage;
         }
       }
 
-      res.status(200).json(results);
+      res.status(200).json(cartProducts);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Get product failed" });
@@ -333,13 +365,14 @@ class Product {
     const dataUpdate = req.body;
     const arrImage = req.files?.images;
     const main_image = req.files?.main_image;
-    
+    const arrCapacity = dataUpdate.capacity;
+
     var mainImagePath = "";
     var arrPathImage = [];
-    
+
     // create main image path
     if (main_image) {
-      mainImagePath = `/images/${path.basename(main_image[0].path)}`
+      mainImagePath = `/images/${path.basename(main_image[0].path)}`;
     }
     // create images path
     if (arrImage) {
@@ -357,7 +390,7 @@ class Product {
       "discount",
       "shortDescription",
     ];
-    const fieldsColor = ["color"];
+
     const fieldsProductDetails = [
       "quantity",
       "remaining_quantity",
@@ -365,6 +398,7 @@ class Product {
       "configuration",
       "description",
     ];
+    const fieldsColor = ["color"];
     // Tạo các đối tượng (object) chứa các field
     // và giá trị tương ứng cho từng bảng
     var dataGroupTableProduct = {};
@@ -424,6 +458,39 @@ class Product {
           await query(queryUpdateProDetailsColor, [color, id]);
         });
       }
+      // 4. Update capacity
+      if (arrCapacity.length !== 0) {
+        // Xóa các id đã có
+        const dl_capacity_list = `
+        DELETE FROM capacity_list
+        WHERE product_id = ?;
+        `;
+        await query(dl_capacity_list, [id]);
+
+        for (let i = 0; i < arrCapacity.length; i++) {
+          // Nếu có id, Thêm trên id cũ
+          if (arrCapacity[i].id) {
+            const is_capacity_list =
+              "INSERT INTO capacity_list (`id`,`product_id`,`capacity`, `capacity_price`) VALUES (?,?,?,?);";
+            await query(is_capacity_list, [
+              arrCapacity[i].id,
+              id,
+              arrCapacity[i].capacity,
+              arrCapacity[i].capacity_price,
+            ]);
+          } else {
+            // Nếu id chưa tồn tại, thêm dữ liệu mới
+            const is_capacity_list =
+              "INSERT INTO capacity_list (`product_id`,`capacity`, `capacity_price`) VALUES (?,?,?);";
+            await query(is_capacity_list, [
+              id,
+              arrCapacity[i].capacity,
+              arrCapacity[i].capacity_price,
+            ]);
+          }
+        }
+      }
+      // return res.status(200).json({ message: "success" });
 
       // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
       // Nếu mảng images path không rỗng -> Thực hiện cập nhật
@@ -495,7 +562,18 @@ class Product {
 
   async Newphone(req, res) {
     const query = `
-      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration,productDetails.created_at , galery.thumbnail
+      SELECT product.*, 
+      productDetails.quantity, 
+      productDetails.remaining_quantity, 
+      productDetails.brand, 
+      productDetails.configuration,
+      productDetails.created_at,
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities, 
+      galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -514,14 +592,28 @@ class Product {
       if (error) {
         return res.json({ error });
       }
-
+      // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+      results.forEach((element) => {
+        element.capacities = JSON.parse(element.capacities);
+      });
       res.json(results);
     });
   }
 
   async Newlaptop(req, res) {
     const query = `
-      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
+      SELECT product.*, 
+      productDetails.quantity, 
+      productDetails.remaining_quantity, 
+      productDetails.brand, 
+      productDetails.configuration, 
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities, 
+      productDetails.created_at, 
+      galery.thumbnail
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -540,33 +632,53 @@ class Product {
       if (error) {
         return res.json({ error });
       }
-
+      // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+      results.forEach((element) => {
+        element.capacities = JSON.parse(element.capacities);
+      });
       res.json(results);
     });
   }
 
+  //Truy vấn laptop hiển thị Home
   async QueryProductsLaptop(req, res) {
     const query = `
-      SELECT product.*, productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
-      FROM product
-      JOIN productDetails ON product.id = productDetails.product_id
-      JOIN (
-        SELECT id, thumbnail, product_id
-        FROM (
-          SELECT id, thumbnail, product_id,
-                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
-          FROM galery
-        ) tmp
-        WHERE rn = 1
-      ) galery ON product.id = galery.product_id
-      WHERE product.CategoryID = 1 AND product.status = 1;
+    SELECT
+      product.*,
+      productDetails.quantity,
+      productDetails.remaining_quantity,
+      productDetails.brand,
+      productDetails.configuration,
+      productDetails.created_at,
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities,
+      galery.thumbnail
+    FROM product
+    JOIN productDetails ON product.id = productDetails.product_id
+    JOIN (
+      SELECT id, thumbnail, product_id
+      FROM (
+        SELECT id, thumbnail, product_id,
+          ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+        FROM galery
+      ) tmp
+      WHERE rn = 1
+    ) galery ON product.id = galery.product_id
+    WHERE product.CategoryID = 1 AND product.status = 1;
+
     `;
 
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-
+      // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+      results.forEach((element) => {
+        element.capacities = JSON.parse(element.capacities);
+      });
       res.json(results);
     });
   }
@@ -574,26 +686,35 @@ class Product {
   //Truy vấn điện thoại hiển thị Home
   async QueryProductsDienThoai(req, res) {
     const query = `
-      SELECT product.*,productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail
-      FROM product
-      JOIN productDetails ON product.id = productDetails.product_id
-      JOIN (
-        SELECT id, thumbnail, product_id
-        FROM (
-          SELECT id, thumbnail, product_id,
-                ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
-          FROM galery
-        ) tmp
-        WHERE rn = 1
-      ) galery ON product.id = galery.product_id
-      WHERE product.CategoryID = 2 AND product.status = 1;
+    SELECT product.*,productDetails.quantity, productDetails.remaining_quantity, productDetails.brand, productDetails.configuration, productDetails.created_at, galery.thumbnail,
+    (
+      SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+      FROM capacity_list
+      WHERE capacity_list.product_id = product.id
+    ) AS capacities,
+    galery.thumbnail
+    FROM product
+    JOIN productDetails ON product.id = productDetails.product_id
+    JOIN (
+      SELECT id, thumbnail, product_id
+      FROM (
+        SELECT id, thumbnail, product_id,
+              ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
+        FROM galery
+      ) tmp
+      WHERE rn = 1
+    ) galery ON product.id = galery.product_id
+    WHERE product.CategoryID = 2 AND product.status = 1;
     `;
 
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
       }
-
+      // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
+      results.forEach((element) => {
+        element.capacities = JSON.parse(element.capacities);
+      });
       res.json(results);
     });
   }
@@ -625,37 +746,40 @@ class Product {
       WHERE product_id = ?
       ORDER BY id ASC;
     `;
-    // Thực hiện truy vấn
-    mysql.query(productQuery, [id], (error, productResults) => {
-      if (error) {
-        return res.json({ error });
-      }
 
-      // Thực hiện truy vấn màu sắc và hình ảnh
-      mysql.query(colorQuery, [id], (error, colorResults) => {
-        if (error) {
-          return res.json({ error });
-        }
-        mysql.query(imageQuery, [id], (error, imageResults) => {
-          if (error) {
-            return res.json({ error });
-          }
-          // Kết hợp kết quả và gửi lại cho client
-          const results = {
-            ...productResults[0],
-            Colorname: colorResults.map((result) => ({
-              id: result.id,
-              Colorname: result.Colorname,
-            })),
-            thumbnails: imageResults.map((result) => ({
-              id: result.id,
-              thumbnail: result.thumbnail,
-            })),
-          };
-          res.json(results);
-        });
-      });
-    });
+    // Truy vấn để lấy capacity
+    const capacityQuery = `
+      SELECT *
+      FROM capacity_list
+      WHERE product_id = ?
+    `;
+    try {
+      const product = await query(productQuery, [id]);
+      const color = await query(colorQuery, [id]);
+      const image = await query(imageQuery, [id]);
+      const capacity = await query(capacityQuery, [id]);
+      // Kết hợp kết quả và gửi lại cho client
+      const results = {
+        ...product[0],
+        Colorname: color.map((result) => ({
+          id: result.id,
+          Colorname: result.Colorname,
+        })),
+        thumbnails: image.map((result) => ({
+          id: result.id,
+          thumbnail: result.thumbnail,
+        })),
+        capacity_list: capacity.map((result) => ({
+          id: result.id,
+          capacity: result.capacity,
+          capacity_price: result.capacity_price,
+        })),
+      };
+      res.json(results);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Get product details failed" });
+    }
   }
 
   // getBrand, API: /product/brands
@@ -677,6 +801,18 @@ class Product {
       if (e) {
         console.log(e);
         res.status(500).json("Lỗi lấy dữ liệu color!");
+      }
+      res.status(200).send(results);
+    });
+  }
+
+  // get capacity, API: /product/capacity
+  getCapacity(req, res) {
+    const query = `SELECT * FROM capacity`;
+    mysql.query(query, (e, results, fields) => {
+      if (e) {
+        console.log(e);
+        res.status(500).json("Lỗi lấy dữ liệu capacity!");
       }
       res.status(200).send(results);
     });

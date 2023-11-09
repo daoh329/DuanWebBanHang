@@ -12,13 +12,22 @@ const createTables = () => {
     main_image longtext,
     status boolean,
     FOREIGN KEY (CategoryID) REFERENCES category (id)
-  );
-  `;
+  );`;
+  const capacity = `CREATE TABLE IF NOT EXISTS capacity (
+    capacity INT PRIMARY KEY
+  );`;
+  const capacity_list = `CREATE TABLE IF NOT EXISTS capacity_list (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    capacity INT NOT NULL,
+    capacity_price NUMERIC(10, 2) DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES product (id),
+    FOREIGN KEY (capacity) REFERENCES capacity (capacity)
+  );`;
   const category = `CREATE TABLE IF NOT EXISTS category (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255)
-  );
-  `;
+  );`;
   const orders = `CREATE TABLE IF NOT EXISTS orders (
     id int PRIMARY KEY AUTO_INCREMENT,
     addressID int,
@@ -47,10 +56,11 @@ const createTables = () => {
     id int PRIMARY KEY AUTO_INCREMENT,
     productID int,
     quantity int,
+    color varchar(255),
+    capacity int,
     orderID int,
     FOREIGN KEY (orderID) REFERENCES orders (id),
     FOREIGN KEY (productID) REFERENCES product (id)
-    
   );
   `;
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
@@ -129,7 +139,7 @@ const createTables = () => {
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     type text NOT NULL,  
     is_read BOOLEAN DEFAULT 0
-);`;
+  );`;
 
   mysql2.query(deliveryMethod, (error, results, fields) => {
     if (error) {
@@ -164,6 +174,16 @@ const createTables = () => {
   });
 
   mysql2.query(product, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(capacity, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(capacity_list, (error, results, fields) => {
     if (error) {
       console.error(error);
     }

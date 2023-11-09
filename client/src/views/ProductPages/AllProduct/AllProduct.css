@@ -9,14 +9,13 @@
     }
 
     .css-1usfas1 {
-        width: 1234px;
+        width: 1261px;
         height: auto;
         margin: 0 auto;
         color: #333333;
         font-size: 14px;
         line-height: 20px;
         padding: 0px 16px;
-
         display: flex;
     }
 
@@ -43,6 +42,7 @@
     }
 
     .box-products {
+        width: 1080;
         color: #333333;
         flex-basis: 83.33%;
         font-size: 14px;
@@ -239,7 +239,6 @@
     column-gap: 2px;
     /* place-content: flex-start space-between; */
     background: #F6F6F6;
-    padding: 2px 0;
 }
 .css-13w7uog {
     background: white;
@@ -514,8 +513,11 @@
     margin: 0 auto;
     padding: 0 11px;
 }
-
+.div-card{
+    margin-top: 2px;
 }
+}
+
 @media (max-width: 768px) {
     .box-1usfas1 {
         color: #333333;

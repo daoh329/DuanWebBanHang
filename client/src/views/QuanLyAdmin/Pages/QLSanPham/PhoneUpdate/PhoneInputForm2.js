@@ -27,7 +27,6 @@ function PhoneInputForm2({ data, onClick, setModal }) {
   const onFinish = async (values) => {
     // bật loading button submit
     setIsLoading(true);
-
     try {
       if (
         fileList.length === 0 &&

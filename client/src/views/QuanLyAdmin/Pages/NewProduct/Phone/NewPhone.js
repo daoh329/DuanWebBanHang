@@ -6,17 +6,31 @@ import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageInput from "../ImageComponent/ImageInput";
-import { Modal, Select, Space, Spin, notification } from "antd";
+import {
+  Button,
+  Form,
+  InputNumber,
+  Modal,
+  Select,
+  Space,
+  Spin,
+  message,
+  notification,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { formatCapacity } from "../../../../../util/formatCapacity";
 
 const { Option } = Select;
 
 function NewPhone() {
   // Tạo các biến trạng thái cục bộ
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [colorSubmit, setColorSubmit] = useState([]);
   const [mainImage, setMainImage] = useState([]);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
+  const [colorSubmit, setColorSubmit] = useState([]);
+  const [capacity, setCapacity] = useState([]);
+  const [capacitySubmit, setCapacitySubmit] = useState([{ rom: "", price: 0 }]);
 
   // Tạo các trường, giá trị mặc định, validate và submit form (use formik)
   const formik = useFormik({
@@ -59,7 +73,6 @@ function NewPhone() {
       name: Yup.string().required("Vui lòng nhập trường này."),
       price: Yup.number().required("Vui lòng nhập giá sản phẩm"),
       shortDescription: Yup.string().required("Vui lòng nhập trường này."),
-
       quantity: Yup.string().required("Vui lòng nhập trường này."),
       images: Yup.array().of(
         Yup.mixed()
@@ -80,8 +93,7 @@ function NewPhone() {
     onSubmit: async (values) => {
       // Lấy dữ liệu ảnh chính
       values.main_image = mainImage[0]?.originFileObj;
-      // Mở modal
-      setIsModalOpen(true);
+
       const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
 
@@ -108,6 +120,16 @@ function NewPhone() {
         });
       }
 
+      // sử lí mảng capacity
+      if (capacitySubmit[0].rom && capacitySubmit[0].price > 0) {
+        formData.append("capacity", JSON.stringify(capacitySubmit));
+      } else {
+        message.warning("Vui lòng điền đầy đủ thông tin dung lượng sản phẩm");
+        return;
+      }
+
+      // Mở modal
+      setIsModalOpen(true);
       // call API
       await axios
         .post(url, formData, {
@@ -184,7 +206,20 @@ function NewPhone() {
   useEffect(() => {
     getBrands();
     getColors();
+    getCapacity();
   }, []);
+
+  // function call api get capacity list
+  const getCapacity = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/capacity`)
+      .then((response) => {
+        setCapacity(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   // Hàm được gọi khi giá trị màu sắc thay đổi
   const handleChange = (value) => {
@@ -192,8 +227,114 @@ function NewPhone() {
     setColorSubmit(value);
   };
 
+  // select Capacity
+  const handleInputChange = (index, key, value) => {
+    const updatedRomInfo = [...capacitySubmit];
+    updatedRomInfo[index][key] = value;
+    setCapacitySubmit(updatedRomInfo);
+  };
+
+  const handleAddRom = () => {
+    setCapacitySubmit([...capacitySubmit, { rom: "", price: 0 }]);
+  };
+
+  const handleRemoveRom = (index) => {
+    const updatedRomInfo = [...capacitySubmit];
+    updatedRomInfo.splice(index, 1);
+    setCapacitySubmit(updatedRomInfo);
+  };
+
+  // function open modal
+  const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
+
+  const handleCancel = () => {
+    setIsOpenModalCapcity(false);
+  };
+
+  const openModalAddCapacity = () => {
+    setIsOpenModalCapcity(true);
+  };
+
+  // function logic modal
+  // modal capacity
+  const [isLoading, setIsLoading] = useState(false);
+  const onFinish = async (values) => {
+    setIsLoading(true);
+    try {
+      const result = await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/add/capacity`,
+        values
+      );
+
+      if (result.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.success({
+            message: "Cập nhật thành công!",
+          });
+        }, 2000);
+        getCapacity();
+        setIsOpenModalCapcity(false);
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }, 2000);
+      }
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        setIsLoading(false);
+        notification.error({
+          message: "Cập nhật thất bại!",
+        });
+      }, 2000);
+    }
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log(errorInfo);
+    // message.error("Thêm thất bại");
+  };
+
   return (
     <div className="container-content">
+      <Modal
+        title="Thêm lựa chọn cho dung lượng"
+        open={isOpenModalCapcity}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            name={"capacity"}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="Nhập dung lượng"
+              type="number"
+              min={0}
+              style={{ borderRadius: "3px", width: "100%" }}
+            />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 19, span: 4 }}>
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <form
         className="form"
         id="form-create-laptop"
@@ -345,6 +486,7 @@ function NewPhone() {
                 <span className="form-message">{formik.errors.category}</span>
               )}
             </div>
+
             {/* quantity */}
             <div className="form-group">
               <label className="form-label">Số lượng</label>
@@ -360,6 +502,95 @@ function NewPhone() {
               {formik.errors.quantity && (
                 <span className="form-message">{formik.errors.quantity}</span>
               )}
+            </div>
+            {/* capacity */}
+            <div className="form-group">
+              <label className="form-label">Dung lượng (ROM): </label>
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "left",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span>Dung lượng ROM: &nbsp;</span>
+                        <Button
+                          onClick={openModalAddCapacity}
+                          icon={<PlusOutlined />}
+                          style={{
+                            margin: "0 10px 0 0",
+                            border: "none",
+                            background: "none",
+                          }}
+                        />
+                      </div>
+                    </th>
+                    <th>Giá</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {capacitySubmit.map((rom, index) => (
+                    <tr key={index}>
+                      <td
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <select
+                          className="form-control"
+                          type="text"
+                          value={rom.rom}
+                          onChange={(e) =>
+                            handleInputChange(index, "rom", e.target.value)
+                          }
+                        >
+                          <option value="" defaultChecked>
+                            -- Chọn dung lượng --
+                          </option>
+                          {[...capacity].map((capacity, index) => (
+                            <option value={capacity.capacity}>
+                              {formatCapacity(capacity.capacity)}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          className="form-control"
+                          type="number"
+                          min={0}
+                          value={rom.price}
+                          onChange={(e) =>
+                            handleInputChange(index, "price", e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <button
+                          className="capacity-btn-delete-row"
+                          onClick={() => handleRemoveRom(index)}
+                        >
+                          Xóa
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button
+                type="button"
+                className="capacity-btn-add-row"
+                onClick={handleAddRom}
+              >
+                Thêm ROM
+              </button>
             </div>
             {/* image */}
             <ImageInput setMainImage={setMainImage} formik={formik} />

@@ -4,12 +4,16 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Select,
   Space,
+  message,
   notification,
 } from "antd";
 import axios from "axios";
 import { formatCurrency } from "../../../../../util/FormatVnd";
+import { PlusOutlined } from "@ant-design/icons";
+import { formatCapacity } from "../../../../../util/formatCapacity";
 
 const { Option } = Select;
 
@@ -21,9 +25,23 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   const [isLoading, setIsLoading] = useState(false);
   const [colors, setColors] = useState([]);
   const [colorSubmit, setColorSubmit] = useState(product.color);
+  const [capacities, setCapacities] = useState([]);
+  const [capacitySubmit, setCapacitySubmit] = useState([
+    { capacity: "", capacity_price: 0 },
+  ]);
+
+  // Lấy brands và colors khi lần đầu chạy
+  useEffect(() => {
+    getBrandsList();
+    getColorsList();
+    getCapacitiesList();
+    if (product.capacities) {
+      setCapacitySubmit(product.capacities);
+    }
+  }, [product]);
 
   // Hàm lấy dữ liệu thương hiệu (get csdl)
-  const getBrands = async () => {
+  const getBrandsList = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/brands`)
       .then((response) => {
@@ -36,7 +54,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   };
 
   // Hàm lấy dữ liệu màu sắc (get csdl)
-  const getColors = async () => {
+  const getColorsList = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/colors`)
       .then((response) => {
@@ -47,11 +65,17 @@ function PhoneInputFrom({ data, onClick, setModal }) {
       });
   };
 
-  // Lấy brands và colors khi lần đầu chạy
-  useEffect(() => {
-    getBrands();
-    getColors();
-  }, [product]);
+  // function call api get capacity list
+  const getCapacitiesList = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/product/capacity`)
+      .then((response) => {
+        setCapacities(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   // Hàm được gọi khi form hoàn thành
   const onFinish = async (values) => {
@@ -101,7 +125,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
             values.configuration[fieldName] = product.configuration[fieldName];
           }
           // TH1.2: Dữ liệu của field bị xóa
-          else if (values[fieldName] === "") {
+          else if (values[fieldName] == "" || values[fieldName] == 0) {
             if (fieldsConfiguraton.includes(fieldName)) {
               if (
                 product.configuration[fieldName] === undefined ||
@@ -112,7 +136,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
                 checkValuesChange = true;
               }
             } else {
-              if (values[fieldName] === product[fieldName]) {
+              if (values[fieldName] == product[fieldName]) {
                 values[fieldName] = undefined;
               } else {
                 checkValuesChange = true;
@@ -157,6 +181,19 @@ function PhoneInputFrom({ data, onClick, setModal }) {
         checkValuesChange = true;
       } else {
         values["color"] = product.color;
+      }
+
+      // sử lí mảng capacity
+      values["capacity"] = values["capacity"] || [];
+      if (capacitySubmit[0].capacity && capacitySubmit[0].capacity_price > 0) {
+        if (capacitySubmit !== product.capacities) {
+          values["capacity"] = capacitySubmit;
+          checkValuesChange = true;
+        }
+      } else {
+        setIsLoading(false);
+        message.warning("Vui lòng điền đầy đủ thông tin dung lượng sản phẩm");
+        return;
       }
 
       // Nếu không có dữ liệu trong form thay đổi (checkValuesChange === false)
@@ -219,6 +256,73 @@ function PhoneInputFrom({ data, onClick, setModal }) {
     setColorSubmit(value);
   };
 
+  // select Capacity
+  const handleInputChange = (index, key, value) => {
+    const updatedRomInfo = [...capacitySubmit];
+    updatedRomInfo[index][key] = value;
+    setCapacitySubmit(updatedRomInfo);
+  };
+
+  const handleAddRom = () => {
+    setCapacitySubmit([...capacitySubmit, { capacity: "", capacity_price: 0 }]);
+  };
+
+  const handleRemoveRom = (index) => {
+    const updatedRomInfo = [...capacitySubmit];
+    updatedRomInfo.splice(index, 1);
+    setCapacitySubmit(updatedRomInfo);
+  };
+
+  // function open modal
+  const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
+
+  const handleCancel = () => {
+    setIsOpenModalCapcity(false);
+  };
+
+  const openModalAddCapacity = () => {
+    setIsOpenModalCapcity(true);
+  };
+
+  // function logic modal
+  // modal capacity
+  // const [isLoading, setIsLoading] = useState(false);
+  const onFinishCapacity = async (values) => {
+    setIsLoading(true);
+    try {
+      const result = await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/add/capacity`,
+        values
+      );
+
+      if (result.status === 200) {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.success({
+            message: "Cập nhật thành công!",
+          });
+        }, 2000);
+        setIsOpenModalCapcity(false);
+        getCapacitiesList();
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }, 2000);
+      }
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        setIsLoading(false);
+        notification.error({
+          message: "Cập nhật thất bại!",
+        });
+      }, 2000);
+    }
+  };
+
   return (
     <Form
       style={{ maxWidth: 800, textAlign: "start" }}
@@ -268,9 +372,9 @@ function PhoneInputFrom({ data, onClick, setModal }) {
         />
       </Form.Item>
 
-      {/* Giá đã giảm */}
+      {/* Giá giảm */}
       <Form.Item
-        label={`Giá đã giảm (Max: ${formatCurrency(product.price)})`}
+        label={`Giá giảm (Max: ${formatCurrency(product.price)})`}
         name="discount"
       >
         <InputNumber
@@ -348,6 +452,131 @@ function PhoneInputFrom({ data, onClick, setModal }) {
       <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chi tiết
       </h6>
+
+      {/* capacity */}
+      <div className="form-group">
+        <label className="form-label">Dung lượng (ROM): </label>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "left",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>Dung lượng ROM: &nbsp;</span>
+                  <Button
+                    onClick={openModalAddCapacity}
+                    icon={<PlusOutlined />}
+                    style={{
+                      margin: "0 10px 0 0",
+                      border: "none",
+                      background: "none",
+                    }}
+                  />
+                </div>
+              </th>
+              <th>Giá</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {capacitySubmit &&
+              capacitySubmit.map((capacity, index) => (
+                <tr key={index}>
+                  <td>
+                    <select
+                      className="form-control"
+                      type="text"
+                      onChange={(e) =>
+                        handleInputChange(index, "capacity", e.target.value)
+                      }
+                    >
+                      {[...capacities].map((cpct, index) => (
+                        <option
+                          key={index}
+                          value={cpct?.capacity ? cpct?.capacity : ""}
+                          selected={
+                            capacity.capacity == cpct.capacity ? true : false
+                          }
+                        >
+                          {formatCapacity(cpct.capacity)}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      className="form-control"
+                      type="number"
+                      min={0}
+                      value={capacity.capacity_price}
+                      onChange={(e) =>
+                        handleInputChange(
+                          index,
+                          "capacity_price",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+                  <td>
+                    <button
+                      className="capacity-btn-delete-row"
+                      onClick={() => handleRemoveRom(index)}
+                    >
+                      Xóa
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <button
+          type="button"
+          className="capacity-btn-add-row"
+          onClick={handleAddRom}
+        >
+          Thêm ROM
+        </button>
+      </div>
+      <Modal
+        title="Thêm lựa chọn cho dung lượng"
+        open={isOpenModalCapcity}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          onFinish={onFinishCapacity}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            name={"capacity"}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="Nhập dung lượng"
+              type="number"
+              min={0}
+              style={{ borderRadius: "3px", width: "100%" }}
+            />
+          </Form.Item>
+          <Form.Item wrapperCol={{ offset: 19, span: 4 }}>
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
 
       {/* chip */}
       <Form.Item label="Chip" name="chip">

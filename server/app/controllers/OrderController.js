@@ -32,8 +32,8 @@ class OrderController {
         if (err) throw err;
         // console.log(result);
         const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-        sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-        values = [data.productID, data.quantity, orderID];
+        sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, orderID) VALUES (?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+        values = [data.productID, data.quantity, data.color, data.capacity, orderID];
         mysql.query(sql, values, (err, result) => {
           if (err) throw err;
           // console.log(result);
@@ -45,7 +45,7 @@ class OrderController {
 
   async Paymentmomo(req, res) {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
 
     if (!data) {
       return res.status(400).json("Invalid data");
@@ -56,8 +56,8 @@ class OrderController {
     if (err) throw err;
       // console.log(result);
       const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-      sql = `INSERT INTO orderDetailsProduct (productID, quantity, orderID) VALUES (?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-      values = [data.productID, data.quantity, orderID];
+      sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, orderID) VALUES (?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+      values = [data.productID, data.quantity, data.color, data.capacity, orderID];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
         // console.log(result);
@@ -306,7 +306,12 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity,
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (
@@ -338,7 +343,12 @@ class OrderController {
 
   async topDienthoai(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity
+      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity,
+      (
+        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
+        FROM capacity_list
+        WHERE capacity_list.product_id = product.id
+      ) AS capacities
       FROM product
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN (

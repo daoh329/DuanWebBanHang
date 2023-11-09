@@ -38,7 +38,6 @@ import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import AllNewProductLaptop from "./ProductPages/AllProduct/AllNewProductLaptop";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import AllNewProductPhone from "./ProductPages/AllProduct/AllNewProductPhone";
-import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import Chatbot from "./ChatBot/Chatbot";
@@ -55,6 +54,11 @@ import TabsVanChuyen from "./QuanLyAdmin/Pages/Tabsvanchuyen.js";
 import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
 import BillSuccess from "./Buy/BillSuccess.js";
 import QLOrder from "./Profile/OrderInformations/QLOrder.jsx";
+import HuongDanMuaHang from "./Footer/MenuFooter/HuongDanMuaHang.js";
+import ChinhSachThanhToan from "./Footer/MenuFooter/ChinhSachThanhToan.js";
+import GiaiQuyetKhieuNai from "./Footer/MenuFooter/GiaiQuyetKhieuNai.js";
+import ChinhSachBaoHanh from "./Footer/MenuFooter/ChinhSachBaoHanh.js";
+import ChinhSachDoiTra from "./Footer/MenuFooter/ChinhSachDoiTra.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -110,7 +114,6 @@ const App = () => {
       console.log(error);
     }
   };
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -190,6 +193,13 @@ const App = () => {
             <Route path="/createorder" element={<CreateOrder />} />
 
             <Route path="/chat" element={<Chatbot />} />
+
+            <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
+            <Route path="/chinh-sach-thanh-toan" element={<ChinhSachThanhToan />} />
+            <Route path="/tra-cuu-don-hang" element={<CheckSP />} />
+            <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
+            <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
+            <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
           </Routes>
         </header>
         <MobileNav user={user} />
