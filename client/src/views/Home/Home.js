@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "./Home.scss";
 import CountdownTimer from "./CountdownTimer";
 import Chatbot from "../ChatBot/Chatbot";
-import CardProduct from "./Card/Card";
+import CardProduct from "../Card/Card";
 const { TabPane } = Tabs;
 
 const Home = () => {
