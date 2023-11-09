@@ -38,7 +38,6 @@ import AllProduct from "./ProductPages/AllProduct/AllProduct";
 import AllNewProductLaptop from "./ProductPages/AllProduct/AllNewProductLaptop";
 import AllProductPhone from "./ProductPages/AllProduct/AllProductPhone";
 import AllNewProductPhone from "./ProductPages/AllProduct/AllNewProductPhone";
-import AllProductPhonecopy from "./ProductPages/AllProduct/AllProductPhonecopy";
 import Buy from "./Buy/Buy";
 import Noidung from "./Menu/Noidung";
 import Chatbot from "./ChatBot/Chatbot";

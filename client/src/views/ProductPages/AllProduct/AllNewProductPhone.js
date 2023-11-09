@@ -22,15 +22,12 @@ import { Pagination } from "antd";
 import { Box, } from '@mui/material';
 import './AllProduct.css'
 import { useNavigate } from "react-router-dom";
-import CardProduct2 from './CardProducts/CardProducts';
+import { formatCurrency} from '../../../util/FormatVnd';
+import CardProduct from "../../Card/Card";
 
 const { Option } = Select;
 function valuetext(value) {
   return `${value}°C`;
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
 
 const AllNewProductPhone = () => {
@@ -544,10 +541,12 @@ const AllNewProductPhone = () => {
           <div className='all-products'>
             <div className='y2krk0'>
               {displayedProducts.map((item, index) => (
-                <CardProduct2
-                  key={index}
-                  item={item}
-                  onClick={handleViewDetailProduct} />
+                <div className='div-card'>
+                  <CardProduct
+                    key={index}
+                    item={item}
+                    onClick={handleViewDetailProduct} />
+                </div>
               ))}
             </div>
           </div>
