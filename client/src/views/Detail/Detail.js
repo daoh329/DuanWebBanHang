@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 // import firebase from 'firebase'
-import { Image, Modal, Carousel, Form, Radio } from "antd";
+import { Image, Modal, Carousel } from "antd";
 // Thư viện mdb
 import { MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
 // link
@@ -15,8 +15,9 @@ import { addProductToCart } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 
 import { useNavigate } from "react-router-dom";
-import CardProduct from "../Home/Card/Card";
+
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import CardProduct from "../Card/Card";
 
 function Detail() {
   const [selectedColor, setSelectedColor] = useState("");

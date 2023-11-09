@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { formatCurrency } from "../../../util/FormatVnd";
-import { format_sale } from "../../../util/formatSale";
-
 import { Tag } from "antd";
+import { formatCurrency } from "../../util/FormatVnd";
+import { format_sale } from "../../util/formatSale";
 
 function CardProduct(props) {
   const { item, onClick } = props;
