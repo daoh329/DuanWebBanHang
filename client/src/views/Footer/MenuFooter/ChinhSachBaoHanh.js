@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ChinhSachThanhToan.css"
-function HuongDanMuaHang() {
+
+function ChinhSachBaoHanh() {
   return (
     <div style={{ height: "auto", width: "800px", margin: '0 auto', marginTop: '10px', textAlign: 'left' }}>
       <main className="r-1oszu61 r-1xc7w19 r-1phboty r-1yadl64 r-deolkf r-6koalj r-crgep1 r-ifefl9 r-bcqeeo r-t60dpp r-bnwqim r-417010 r-1ro0kt6 r-16y2uox r-1wbh5a2 r-eqz5dr snipcss-eTj1c">
@@ -25,7 +26,7 @@ function HuongDanMuaHang() {
                         className="r-1xnzce8 r-crgep1 r-1nf4jbm"
                         data-testid="page.title"
                       >
-                        Hướng dẫn mua hàng
+                        Chính Sách Bảo Hành
                       </h1>
                     </div>
                   </div>
@@ -83,7 +84,7 @@ function HuongDanMuaHang() {
                                   >
                                     <span data-key="ee12e15c4c544c098b4b923f151dac7b">
                                       <span data-offset-key="ee12e15c4c544c098b4b923f151dac7b:0">
-                                        Cách 1:
+                                        1. Điều kiện bảo hành
                                       </span>
                                     </span>
                                     <a
@@ -212,12 +213,31 @@ function HuongDanMuaHang() {
                                   dir="auto"
                                   className="css-1rynq56 r-gg6oyi r-ubezar r-16dba41 r-135wba7 r-1nf4jbm r-fdjqy7 r-1xnzce8"
                                 >
-                                  <div style={{ marginLeft: "30px" }}>
-                                    <p >
-                                      - Gọi điện thoại trực tiếp đến tổng đài tư vấn mua hàng 1800.6867 (miễn cước phí)  từ 8h00-21h00 (cả Chủ nhật & ngày lễ) để đặt hàng, nhân viên của Đình Minh luôn sẵn sàng phục vụ, tư vấn và hỗ trợ Quý khách để mua được sản phẩm ưng ý.
+                                  <span >
+                                    <p  style={{fontWeight:"bold"}}>
+                                    Sản phẩm phải đáp ứng các điều kiện sau đây:
                                     </p>
+                                    <p >
+                                    - Sản phẩm còn trong thời hạn bảo hành. (Thời hạn bảo hành được tính từ ngày mua hàng, căn cứ theo hóa đơn bán hàng).
+                                    </p>
+                                    <p>
+                                    - Sản phẩm lỗi kỹ thuật thuộc các tiêu chí được bảo hành của Nhà sản xuất/ Nhà phân phối. (tham khảo các điều kiện bảo hành của Nhà sản xuất dưới đây). Sản phẩm bị từ chối bảo hành nếu Nhà sản xuất/ Nhà phân phối xác nhận sản phẩm không đủ điều kiện bảo hành.
+                                    </p>
+                                    <p>
+                                    - Số Serial/ Imei/ Service Tag trên sản phẩm phải còn nguyên vẹn và rõ nét (và phải trùng khớp với phiếu bảo hành nếu là sản phẩm có phiếu bảo hành đi kèm).
+                                    </p>
+                                    <p>
+                                    - Đối với sản phẩm mua trước ngày 15/10/2022 và các sản phẩm không quản lý Serial/Imei thì phải có tem bảo hành của Đình Minh và còn nguyên vẹn/ rõ nét.
+                                    </p>
+                                    <p style={{fontWeight:"bold"}}>
+                                    Các trường hợp không bảo hành:
+                                    </p>
+                                    <p>
+                                     - Sản phẩm không đủ điều kiện bảo hành bên trên hoặc vi phạm điều kiện bảo hành của hãng.
+                                    </p>
+                                  </span>
 
-                                  </div>
+
                                   <span data-key="27b17f6d99f84e429b2cd5cb2d862870">
                                     <span data-offset-key="27b17f6d99f84e429b2cd5cb2d862870:0">
                                       <span data-slate-zero-width="z">​</span>
@@ -265,7 +285,7 @@ function HuongDanMuaHang() {
                                   >
                                     <span data-key="76f51ecb340d4959b53bdf2b530d671e">
                                       <span data-offset-key="76f51ecb340d4959b53bdf2b530d671e:0">
-                                        Cách 2:
+                                      2. Chính sách bảo hành 
                                       </span>
                                     </span>
                                     <a
@@ -395,28 +415,14 @@ function HuongDanMuaHang() {
                                   dir="auto"
                                   className="css-1rynq56 r-gg6oyi r-ubezar r-16dba41 r-135wba7 r-1nf4jbm r-fdjqy7 r-1xnzce8"
                                 >
-                                  <p>
-                                    Mua hàng qua Chat với nhân viên tư vấn của Đình Minh (FacebookChat, ZaloChat)
+
+                                  <p><a  style={{fontWeight:"bold"}}>-</a> Tất cả các sản phẩm do Đình Minh bán ra đều được bảo hành theo quy định của nhà sản xuất.
                                   </p>
-
-                                  <p><a style={{ fontWeight: "bold" }}>1. Chat trực tiếp trên Website của Đình Minh: Inbox ngay với chúng tôi bằng cách nhấn vào các nút
-                                    "Chat với tư vấn viên" và đặt hàng qua chat nhân viên Online sẽ tư vấn và xác nhận đơn hàng của quý khách.</a>
+                                  <p><a  style={{fontWeight:"bold"}}>-</a> Tất cả sản phẩm hư hỏng, sẽ được gửi cho nhà sản xuất hoặc đơn vị được nhà sản xuất uỷ quyền để bảo hành theo đúng chính sách bảo hành của nhà sản xuất đưa ra. Đình Minh không chịu trách nhiệm nếu nhà sản xuất và/ hoặc đơn vị được nhà sản xuất ủy quyền từ chối bảo hành.
                                   </p>
-
-                                  <p style={{ fontWeight: "bold" }} >
-                                    2. Chat trực tiếp trên Fanpage của Đình Minh
+                                  <p><a  style={{fontWeight:"bold"}}>- Dữ liệu</a> (lưu trữ trong sản phẩm: laptop/ máy tính để bàn/ Thẻ nhớ/ Ổ cứng… ) <a  style={{fontWeight:"bold"}}>không</a> thuộc phạm vi bảo hành. Khách Hàng vui lòng tự sao, lưu và/ hoặc xóa dữ liệu, các phần mềm, ứng dụng, hình ảnh hoặc bất kỳ nội dung nào khác được lưu trữ trong sản phẩm ("Dữ Liệu") trước khi gửi sản phẩm để bảo hành. Đình Minh không chịu trách nhiệm cho bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào gây ra cho khách hàng nếu Dữ Liệu lưu trong sản phẩm bị tiết lộ, bị mất, bị hư hỏng và/hoặc bị định dạng lại trong quá trình kiểm tra, xử lý bảo hành.
                                   </p>
-                                  <div style={{ marginLeft: "30px" }}>
-                                    <p>- Fanpage Đình Minh: <a href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL">Đình Minh</a>
-
-                                    </p>
-                                    <p>
-                                      - Quý khách sẽ được tư vấn miễn phí và nhanh chóng nhất.
-                                    </p>
-
-                                  </div>
-
-
+                                  
                                   <span data-key="ccf332afd49142a2bf81520093c6c97c">
                                     <span data-offset-key="ccf332afd49142a2bf81520093c6c97c:0">
                                       <span data-slate-zero-width="z">​</span>
@@ -432,264 +438,6 @@ function HuongDanMuaHang() {
                   </div>
                 </div>
               </div>
-              <div>
-                <div className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                  <div className="view_manYY blockWrapper_8BIg7 noneVertical_jpmaI autoHorizontal_dqmM-">
-                    <div
-                      data-rnwr1490-1777fci="true"
-                      data-rnwr700-1777fci="true"
-                      className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2 r-18u37iz r-1777fci"
-                    >
-                      <div className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                        <div className="css-175oi2r">
-                          <div className="css-175oi2r">
-                            <div
-                              data-key="a669a72a14cb400fb273b1f7e9ec9972"
-                              className="view_manYY relative_F68jE column_C3yiR mediumVertical_-Vaii largeTop_ejwCW smallBottom_BmSGf"
-                            >
-                              <div
-                                data-block-content="a669a72a14cb400fb273b1f7e9ec9972"
-                                className="r-1oszu61 r-1xc7w19 r-1phboty r-1yadl64 r-deolkf r-6koalj r-eqz5dr r-crgep1 r-ifefl9 r-bcqeeo r-t60dpp r-bnwqim r-417010 r-1ro0kt6 r-16y2uox r-1wbh5a2"
-                              >
-                                <h2
-                                  className="r-1xc7w19 r-1phboty r-1yadl64 r-deolkf r-6koalj r-1mlwlqe r-1q142lx r-crgep1 r-ifefl9 r-bcqeeo r-t60dpp r-bnwqim r-417010 r-18u37iz r-obd0qt"
-                                  id="thanh-toan-the-atm-noi-dia-internet-banking"
-                                >
-                                  <div
-                                    dir="auto"
-                                    data-rnwrdesktop-gg6oyi-1x35g6-37tt59-b88u0q="true"
-                                    data-rnwr700-gg6oyi-adyw6z-135wba7-b88u0q="true"
-                                    className="css-1rynq56 r-1nf4jbm r-fdjqy7 r-1xnzce8"
-                                    id="text-thanh-toan-the-atm-noi-dia-internet-banking"
-                                  >
-                                    <span data-key="f06103f72f24473189f38e151e6810c6">
-                                      <span data-offset-key="f06103f72f24473189f38e151e6810c6:0">
-                                        Cách 3:
-                                      </span>
-                                    </span>
-                                    <a
-                                      href="#thanh-toan-the-atm-noi-dia-internet-banking"
-                                      aria-label="Direct link to heading"
-                                      data-rnwi-1rasi3h-="true"
-                                      data-rnwi--1loepla-hover-focus="true"
-                                      data-rnwi-5xr8s6-dse9kg-2fw26j-16zom3r-focus-visible="true"
-                                      data-rnwi-handle="nearest"
-                                      className="css-1qaijid r-1awozwy r-xoduu5 r-1jkjb r-orgf3d r-1loqt21"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 16 16"
-                                        preserveAspectRatio="xMidYMid meet"
-                                        role="presentation"
-                                        style={{
-                                          verticalAlign: "middle",
-                                          width: 20,
-                                          height: 20
-                                        }}
-                                      >
-                                        <path
-                                          fill="currentColor"
-                                          fillRule="evenodd"
-                                          d="M7.42 1.925a.6.6 0 0 1 .405.745L7.167 4.9h3.998l.76-2.57a.6.6 0 1 1 1.15.34l-.659 2.23H14a.6.6 0 0 1 0 1.2h-1.938l-1.123 3.8H13a.6.6 0 0 1 0 1.2h-2.415l-.76 2.57a.6.6 0 0 1-1.15-.34l.658-2.23H5.335l-.76 2.57a.6.6 0 1 1-1.15-.34l.658-2.23H2a.6.6 0 1 1 0-1.2h2.438l1.123-3.8H3a.6.6 0 0 1 0-1.2h2.915l.76-2.57a.6.6 0 0 1 .745-.405ZM6.812 6.1 5.689 9.9h3.999l1.123-3.8H6.812Z"
-                                          clipRule="evenodd"
-                                        ></path>
-                                      </svg>
-                                    </a>
-                                  </div>
-                                </h2>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                  <div className="view_manYY blockWrapper_8BIg7 noneVertical_jpmaI autoHorizontal_dqmM-">
-                    <div
-                      data-rnwr1490-1777fci="true"
-                      data-rnwr700-1777fci="true"
-                      className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2 r-18u37iz r-1777fci"
-                    >
-                      <div className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                        <div className="css-175oi2r">
-                          <div className="css-175oi2r">
-                            <div
-                              data-key="b1e1740efbf24d45baedc0c17aecc387"
-                              className="view_manYY relative_F68jE column_C3yiR mediumVertical_-Vaii mediumTop_QDiZG mediumBottom_jdYUb"
-                            >
-                              <div
-                                data-block-content="b1e1740efbf24d45baedc0c17aecc387"
-                                className="r-1oszu61 r-1xc7w19 r-1phboty r-1yadl64 r-deolkf r-6koalj r-eqz5dr r-crgep1 r-ifefl9 r-bcqeeo r-t60dpp r-bnwqim r-417010 r-1ro0kt6 r-16y2uox r-1wbh5a2"
-                              >
-                                <div
-                                  data-rnwr700-1w6e6rj-1777fci="true"
-                                  className="css-175oi2r r-18u37iz r-1777fci r-zo7nv5 r-3mtglp"
-                                >
-                                  <div
-                                    data-slate-void="true"
-                                    data-key="3885b67c5b3e47208c3fbb1d8bde9ed7"
-                                  >
-                                    <div>
-                                      <div className="css-175oi2r r-1awozwy r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                                        <div
-                                          className="css-175oi2r r-z2wwpe r-bnwqim style-PqWHH"
-                                          id="style-PqWHH"
-                                        >
-                                          <div
-                                            data-rnwi-5xr8s6-dse9kg-2fw26j-16zom3r-focus-visible="true"
-                                            data-rnwi-handle="nearest"
-                                            tabIndex={0}
-                                            className="css-175oi2r r-1i6wzkk r-lrvibr r-1loqt21 r-1otgn73 r-1awozwy style-Tzo4k"
-                                            id="style-Tzo4k"
-                                          >
-                                            <img
-                                              alt=""
-                                              loading="lazy"
-                                              src="https://DinhMinh/landing/wp-content/uploads/2019/11/atm400.png"
-                                              width="100%"
-                                              height="auto"
-                                              decoding="async"
-                                              className="r-z2wwpe r-dnmrzs"
-                                            />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                  <div className="view_manYY blockWrapper_8BIg7 noneVertical_jpmaI autoHorizontal_dqmM-">
-                    <div
-                      data-rnwr1490-1777fci="true"
-                      data-rnwr700-1777fci="true"
-                      className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2 r-18u37iz r-1777fci"
-                    >
-                      <div className="css-175oi2r r-1ro0kt6 r-16y2uox r-1wbh5a2">
-                        <div className="css-175oi2r">
-                          <div className="css-175oi2r">
-                            <div
-                              data-key="f21287577f914508a7f85802d936cc08"
-                              className="view_manYY relative_F68jE column_C3yiR mediumVertical_-Vaii smallTop_crzBC smallBottom_BmSGf"
-                            >
-                              <div
-                                data-block-content="f21287577f914508a7f85802d936cc08"
-                                className="r-1oszu61 r-1xc7w19 r-1phboty r-1yadl64 r-deolkf r-6koalj r-eqz5dr r-crgep1 r-ifefl9 r-bcqeeo r-t60dpp r-bnwqim r-417010 r-1ro0kt6 r-16y2uox r-1wbh5a2"
-                              >
-                                <div
-                                  dir="auto"
-                                  className="css-1rynq56 r-gg6oyi r-ubezar r-16dba41 r-135wba7 r-1nf4jbm r-fdjqy7 r-1xnzce8"
-                                >
-                                  <p>
-                                    Đặt mua hàng online trên website DinhMinh
-                                  </p>
-                                  <p style={{ fontWeight: "bold" }} >
-                                    Bước 1:  Tìm sản phẩm cần mua
-                                  </p>
-                                  <div style={{ marginLeft: "30px" }}>
-                                    <p>
-                                      - Sử dụng ô tìm kiếm phía trên, gõ tên sản phẩm muốn mua (có thể tìm đích danh 1 sản phẩm, tìm theo hãng...). Website sẽ cung cấp cho bạn những gợi ý chính xác để lựa chọn:
-                                    </p>
-                                  </div>
-
-                                  <p style={{ fontWeight: "bold" }} >
-                                    Bước 2: Đặt mua sản phẩm
-                                  </p>
-                                  <div style={{ marginLeft: "30px" }}>
-                                    <p>
-                                      - Đăng ký/ đăng nhập tài khoản mua hàng bằng nhiều hình thức:
-                                    </p>
-                                    <p>
-                                      - Chọn sản phẩm cần mua, Bấm “MUA NGAY”, nếu bạn chỉ mua 1 sản phẩm
-                                    </p>
-                                    <p>
-                                      - Chọn sản phẩm cần mua, Bấm “Thêm vào giỏ hàng”, nếu bạn lựa chọn nhiều sản phẩm
-                                    </p>
-
-                                  </div>
-
-                                  <p style={{ fontWeight: "bold" }} >
-                                    Bước 3:  Kiểm tra giỏ hàng
-                                  </p>
-                                  <div style={{ marginLeft: "30px" }}>
-                                    <p>
-                                      - Chọn số lượng cần mua
-                                    </p>
-                                    <p>
-                                      - Chọn “Tiếp tục”
-                                    </p>
-
-                                  </div>
-
-                                  <p style={{ fontWeight: "bold" }} >
-                                    Bước 4: Lựa chọn phương thức nhận hàng và thanh toán
-                                  </p>
-                                  <div style={{ marginLeft: "30px" }}>
-                                    <p>
-                                      - Chọn hình thức “Ngày trong tuần” hoặc “Chủ nhật
-                                    </p>
-                                    <p>
-                                      - Nhận hàng tại nhà: Ở phần Thông tin nhận hàng, chọn Thêm địa chỉ, bạn nhập đầy đủ địa chỉ muốn nhận hàng và thông tin liên lạc của người nhận hàng
-                                    </p>
-                                    <p>
-                                      - Nhập thông tin nhận hàng
-                                    </p>
-                                    <p>
-                                      - Nhập email để chúng tôi gửi hóa đơn điện tử đến email của bạn
-                                    </p>
-                                    <p>
-                                      - Nhập ghi chú đơn hàng nếu bạn có bất kỳ yêu cầu gì cần chúng tôi hỗ trợ
-                                    </p>
-                                    <p style={{fontWeight:'bold'}}>
-                                    Chọn phương thức thanh toán
-                                    </p>
-                                    <p>
-                                      1. Thanh toán qua VNPAY-QR,  thanh Toán qua Internet Banking, Visa, Master, JCB
-                                    </p>
-                                    <p>
-                                      2. Thanh toán khi nhận hàng (COD, hoặc chuyển khoản trực tuyến qua tài khoản Đình Minh trong trường hợp xuất VAT với đơn hàng trên 20 triệu, 
-                                      Quý Khách buộc phải thanh toán bằng chuyển khoản từ tài khoản công ty Quý Khách sang tài Khoản công ty Đình Minh thông qua CSKH hoặc nhân viên bán hàng cung cấp)
-                                    </p>
-                                    <p>
-                                      3. Thanh toán qua Ví MoMo 
-                                    </p>
-                                    <p>
-                                      - Hoàn tất thanh toán
-                                    </p>
-                                  </div>
-
-                                  <span data-key="a2a61a055fba40bda7a54e0cb9858321">
-                                    <span data-offset-key="a2a61a055fba40bda7a54e0cb9858321:0">
-                                      <span data-slate-zero-width="z">​</span>
-                                    </span>
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-
 
               <div>
 
@@ -700,8 +448,9 @@ function HuongDanMuaHang() {
         </div>
       </main>
 
+
     </div>
   );
 }
 
-export default HuongDanMuaHang;
+export default ChinhSachBaoHanh;
