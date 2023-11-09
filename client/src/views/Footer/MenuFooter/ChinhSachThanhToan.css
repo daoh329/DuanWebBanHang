@@ -76,6 +76,8 @@
       --background-color:  var(--background-color-bad); 
       --background-color:  var(--background-color-ok); 
       --background-color:  var(--background-color-good); 
+      --hint-color:  var(--color-primary-base); 
+      --icon-size:  var(--icon-l);  
   } 
   
   * { 
@@ -93,6 +95,10 @@
   
   .column_C3yiR { 
       flex-direction: column;
+  } 
+  
+  .flex1_aMpAE { 
+      flex: 1 1 0%;
   } 
   
   .autoHorizontal_dqmM- { 
@@ -138,10 +144,6 @@
   
   .r-1wbh5a2 { 
       flex-shrink: 1;
-  } 
-  
-  .r-13awgt0 { 
-      flex: 1;
   } 
   
   *  { 
@@ -263,6 +265,8 @@
       --radius-m: 4px; 
       --radius-l: 6px; 
       --radius-xl: 8px; 
+      --icon-l: 20px; 
+      --z-index-promote: 99; 
       --spacing-none: 0; 
       --spacing-xs: 4px; 
       --spacing-s: 8px; 
@@ -816,6 +820,10 @@
       padding-bottom: var(--spacing-s);
   } 
   
+  .largeTop_ejwCW { 
+      padding-top: var(--spacing-l);
+  } 
+  
   .mediumTop_QDiZG { 
       padding-top: var(--spacing-m);
   } 
@@ -838,6 +846,10 @@
   
   .r-1jkjb { 
       margin-left: 8px;
+  } 
+  
+  .r-13qz1uu { 
+      width: 100%;
   } 
   
   .iconWrapper_x37cD { 
@@ -872,6 +884,10 @@
       text-align: left;
   } 
   
+  h2 { 
+      margin: 0;
+  } 
+  
   .r-1mlwlqe { 
       flex-basis: auto;
   } 
@@ -889,49 +905,46 @@
       column-gap: 16px;
   } 
   
+  .hint_rnF2j { 
+      background-color: var(--color-background-muted); 
+      padding-right: var(--spacing-l); 
+      border-left: var(--spacing-xs) solid var(--hint-color); 
+      border-radius: var(--radius-m);
+  } 
+  
+  .info_-xeCE { 
+      --hint-color: var(--color-primary-base);
+  } 
+  
   .icon_TnMUQ { 
       width: calc(0.75 * var(--rating-size)); 
       height: calc(0.75 * var(--rating-size));
   } 
   
-  .r-b88u0q { 
-      font-weight: 700;
-  } 
-  
-  .r-36ujnk { 
-      font-style: italic;
-  } 
-  
-  .noneTop_aMiQj { 
-      padding-top: var(--spacing-none);
-  } 
-  
-  .xsmallBottom_NnBZ6 { 
-      padding-bottom: var(--spacing-xs);
-  } 
-  
-  .xsmallTop_ABm9D { 
-      padding-top: var(--spacing-xs);
-  } 
-  
-  .noneBottom_ovUyz { 
-      padding-bottom: var(--spacing-none);
-  } 
-  
-  .r-q4m81j { 
-      text-align: center;
-  } 
-  
-  .r-tskmnb { 
-      padding-top: 8px;
-  } 
-  
-  .r-1kb76zh { 
-      margin-right: 8px;
+  [data-rnwrdesktop-gg6oyi-1x35g6-37tt59-b88u0q] { 
+      font-family: gitbook-content-font,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; 
+      font-size: 24px; 
+      font-weight: 700; 
+      line-height: 32px;
   } 
   
   .r-1471scf { 
       display: inline;
+  } 
+  
+  .justifyContentCenter_l8VjR { 
+      justify-content: center;
+  } 
+  
+  .iconWrapper_NJPs7 { 
+      width: calc(var(--spacing-xl) + var(--spacing-s)); 
+      color: var(--hint-color); 
+      z-index: var(--z-index-promote); 
+      align-self: start;
+  } 
+  
+  .r-36ujnk { 
+      font-style: italic;
   } 
   
   [data-rnwi-handle="link"] [data-rnwilink--1loepla-]  { 
@@ -944,250 +957,130 @@
       text-decoration-line: underline;
   } 
   
+  .r-b88u0q { 
+      font-weight: 700;
+  } 
+  
+  .r-xoduu5 { 
+      display: inline-flex;
+  } 
+  
+  .r-orgf3d { 
+      opacity: 0;
+  } 
+  
+  [data-rnwi-1rasi3h-] { 
+      color: rgba(136,153,168,1.00);
+  } 
+  
+  body:not(.dragging) [data-rnwi--1loepla-hover-focus]:hover { 
+      color: rgba(20,53,195,1.00);
+  } 
+  
+  .r-6dt33c { 
+      opacity: 1;
+  } 
+  
+  .icon_abDxV { 
+      --icon-size: var(--icon-l); 
+      width: var(--icon-size); 
+      height: var(--icon-size);
+  } 
+  
   
   /* These were inline style tags. Uses id+class to override almost everything */
-  #style-yTRnf.style-yTRnf {  
+  #style-19t9U.style-19t9U {  
      transition-duration: 0.15s;  
   }  
-  #style-f4wzs.style-f4wzs {  
+  #style-M7kco.style-M7kco {  
      outline: none;  
       white-space: pre-wrap;  
       overflow-wrap: break-word;  
   }  
-  #style-aaKSO.style-aaKSO {  
-     height: 24px;  
-  }  
-  #style-kLIbP.style-kLIbP {  
-     height: 24px;  
-  }  
-  #style-fvz8m.style-fvz8m {  
-     height: 24px;  
-  }  
-  #style-9Hb2X.style-9Hb2X {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-nsTvr.style-nsTvr {  
+  #style-H6Xpn.style-H6Xpn {  
      max-width: 100%;  
       max-height: 100%;  
   }  
-  #style-TsDsA.style-TsDsA {  
+  #style-TbaaV.style-TbaaV {  
      transition-duration: 0.15s;  
   }  
-  #style-qlCTH.style-qlCTH {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-wQW98.style-wQW98 {  
-     height: 24px;  
-  }  
-  #style-RIH6s.style-RIH6s {  
+  #style-i2Tl7.style-i2Tl7 {  
      transition-duration: 0.15s;  
   }  
-  #style-qt3iE.style-qt3iE {  
-     height: 24px;  
-  }  
-  #style-hJXdD.style-hJXdD {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-KXRIl.style-KXRIl {  
-     height: 24px;  
-  }  
-  #style-JfVE9.style-JfVE9 {  
+  #style-iCBso.style-iCBso {  
      max-width: 100%;  
       max-height: 100%;  
   }  
-  #style-Lsyg8.style-Lsyg8 {  
+  #style-Z8AoD.style-Z8AoD {  
      transition-duration: 0.15s;  
   }  
-  #style-V64zx.style-V64zx {  
-     height: 24px;  
+  #style-4ZHsa.style-4ZHsa {  
+     transition-duration: 0.15s;  
   }  
-  #style-vcFoD.style-vcFoD {  
+  #style-z3tNo.style-z3tNo {  
+     transition-duration: 0.15s;  
+  }  
+  #style-PqWHH.style-PqWHH {  
      max-width: 100%;  
       max-height: 100%;  
   }  
-  #style-6Wagw.style-6Wagw {  
+  #style-Tzo4k.style-Tzo4k {  
      transition-duration: 0.15s;  
   }  
-  #style-2vYiK.style-2vYiK {  
-     height: 24px;  
+  #style-TyO9i.style-TyO9i {  
+     transition-duration: 0.15s;  
   }  
-  #style-LUQVH.style-LUQVH {  
+  #style-irQFM.style-irQFM {  
      max-width: 100%;  
       max-height: 100%;  
   }  
-  #style-wLe7a.style-wLe7a {  
+  #style-bcd93.style-bcd93 {  
      transition-duration: 0.15s;  
   }  
-  #style-ox5sE.style-ox5sE {  
-     height: 24px;  
+  #style-jboTw.style-jboTw {  
+     transition-duration: 0.15s;  
   }  
-  #style-Zp4P9.style-Zp4P9 {  
-     height: 24px;  
-  }  
-  #style-k5f25.style-k5f25 {  
+  #style-sCkFS.style-sCkFS {  
      max-width: 100%;  
       max-height: 100%;  
   }  
-  #style-UJ2Q7.style-UJ2Q7 {  
+  #style-GddXi.style-GddXi {  
      transition-duration: 0.15s;  
   }  
-  #style-v2oHn.style-v2oHn {  
-     height: 24px;  
-  }  
-  #style-lIPLb.style-lIPLb {  
-     height: 24px;  
-  }  
-  #style-voJQ3.style-voJQ3 {  
-     height: 24px;  
-  }  
-  #style-rRgOb.style-rRgOb {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-UioMI.style-UioMI {  
+  #style-G7SHX.style-G7SHX {  
      transition-duration: 0.15s;  
   }  
-  #style-Og7RC.style-Og7RC {  
-     height: 24px;  
+  #style-EaKE4.style-EaKE4 {  
+     padding-top: 18px;  
+      --icon-size: 20px;  
   }  
-  #style-Hcy2Y.style-Hcy2Y {  
-     height: 24px;  
-  }  
-  #style-nNUS7.style-nNUS7 {  
-     height: 24px;  
-  }  
-  #style-5Xy1K.style-5Xy1K {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-tKJqO.style-tKJqO {  
+  #style-dxoVQ.style-dxoVQ {  
      transition-duration: 0.15s;  
   }  
-  #style-mw2TK.style-mw2TK {  
-     height: 24px;  
-  }  
-  #style-cEOrr.style-cEOrr {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-8wPoy.style-8wPoy {  
-     transition-duration: 0.15s;  
-  }  
-  #style-eNCxn.style-eNCxn {  
-     height: 24px;  
-  }  
-  #style-k5jWk.style-k5jWk {  
-     height: 24px;  
-  }  
-  #style-fjiSS.style-fjiSS {  
-     height: 24px;  
-  }  
-  #style-BaodR.style-BaodR {  
-     height: 24px;  
-  }  
-  #style-RU5SJ.style-RU5SJ {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-z4ADy.style-z4ADy {  
-     transition-duration: 0.15s;  
-  }  
-  #style-87kHA.style-87kHA {  
-     height: 24px;  
-  }  
-  #style-L49Vh.style-L49Vh {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-Yc9o5.style-Yc9o5 {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-3aWDM.style-3aWDM {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-llCVP.style-llCVP {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-IMaFz.style-IMaFz {  
-     height: 24px;  
-  }  
-  #style-tPBwq.style-tPBwq {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-ZlEwJ.style-ZlEwJ {  
-     transition-duration: 0.15s;  
-  }  
-  #style-etkbz.style-etkbz {  
-     height: 24px;  
-  }  
-  #style-JxqP5.style-JxqP5 {  
-     height: 24px;  
-  }  
-  #style-6NBaw.style-6NBaw {  
-     height: 24px;  
-  }  
-  #style-nYZT3.style-nYZT3 {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-DMt9J.style-DMt9J {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-SoLZS.style-SoLZS {  
-     transition-duration: 0.15s;  
-  }  
-  #style-L3xq9.style-L3xq9 {  
-     height: 24px;  
-      width: 16px;  
-  }  
-  #style-rtfbN.style-rtfbN {  
-     max-width: 100%;  
-      max-height: 100%;  
-  }  
-  #style-JQ7c5.style-JQ7c5 {  
-     transition-duration: 0.15s;  
-  }  
-  #style-RlMG3.style-RlMG3 {  
-     height: 24px;  
-  }  
-  #style-rsPKV.style-rsPKV {  
-     height: 24px;  
-  }  
-  #style-qgrNB.style-qgrNB {  
-     height: 24px;  
-  }  
-  #style-Innoe.style-Innoe {  
+  #style-7p58F.style-7p58F {  
      background-color: rgb(255, 255, 255);  
       transition-duration: 0.15s;  
   }  
-  #style-S7QsE.style-S7QsE {  
+  #style-QOTaT.style-QOTaT {  
      background-color: rgb(255, 255, 255);  
       transition-duration: 0.15s;  
   }  
-  #style-Q7N8C.style-Q7N8C {  
+  #style-fsDW9.style-fsDW9 {  
      transition-duration: 0.15s;  
   }  
-  #style-LLPND.style-LLPND {  
+  #style-E6PMd.style-E6PMd {  
      --rating-size: 24px;  
   }  
-  #style-coz1p.style-coz1p {  
+  #style-ydR1w.style-ydR1w {  
      transition-duration: 0.15s;  
   }  
-  #style-6Bnr2.style-6Bnr2 {  
+  #style-MA6AZ.style-MA6AZ {  
      --rating-size: 24px;  
   }  
-  #style-ac3Kc.style-ac3Kc {  
+  #style-5RlrR.style-5RlrR {  
      transition-duration: 0.15s;  
   }  
-  #style-4aHIv.style-4aHIv {  
+  #style-QK99Y.style-QK99Y {  
      --rating-size: 24px;  
   }  
   

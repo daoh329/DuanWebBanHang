@@ -56,6 +56,8 @@ import TabsXacNhanGiaoHuy from "./QuanLyAdmin/Pages/Tabsxacnhangiaohuy.js";
 import BillSuccess from "./Buy/BillSuccess.js";
 import QLOrder from "./Profile/OrderInformations/QLOrder.jsx";
 import HuongDanMuaHang from "./Footer/MenuFooter/HuongDanMuaHang.js";
+import ChinhSachThanhToan from "./Footer/MenuFooter/ChinhSachThanhToan.js";
+import GiaiQuyetKhieuNai from "./Footer/MenuFooter/GiaiQuyetKhieuNai.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -192,6 +194,9 @@ const App = () => {
             <Route path="/chat" element={<Chatbot />} />
 
             <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
+            <Route path="/chinh-sach-thanh-toan" element={<ChinhSachThanhToan />} />
+            <Route path="/tra-cuu-don-hang" element={<CheckSP />} />
+            <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
           </Routes>
         </header>
         <MobileNav user={user} />

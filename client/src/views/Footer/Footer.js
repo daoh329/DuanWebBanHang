@@ -58,26 +58,22 @@ function Footer() {
 
               <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
-                  Hỗ trợ khách hàng
+                  Hỗ trợ - dịch vụ
                 </h6>
                 <p>
-                  <a href="/huong-dan-mua-hang" className="text-reset" target="_blank" rel="noopener noreferrer">
+                  <a href="/huong-dan-mua-hang" className="text-reset" rel="noopener noreferrer">
                     Hướng dẫn mua hàng
                   </a>
                 </p>
+               
                 <p>
-                  <a href="#!" className="text-reset">
-                    Hướng dẫn thanh toán.
+                  <a href="/tra-cuu-don-hang" className="text-reset">
+                  Tra cứu đơn hàng
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">
-                    Gửi yêu cầu bảo hành.
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Góp ý, khiếu nại!
+                  <a href="/giai-quyet-khieu-nai" className="text-reset">
+                    Chính sách giải quyết khiếu nại
                   </a>
                 </p>
               </MDBCol>
@@ -102,20 +98,11 @@ function Footer() {
                   </a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">
+                  <a href="/chinh-sach-thanh-toan" className="text-reset">
                     Chính sách thanh toán.
                   </a>
                 </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Giao hàng và lắp đặt tại nhà.
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Dịch vụ nâng cấp PC, Laptop.
-                  </a>
-                </p>
+             
               </MDBCol>
 
               <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
