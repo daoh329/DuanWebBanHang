@@ -607,7 +607,7 @@ function ChinhSachThanhToan() {
                             <span data-key="c5f974dbeea04dabb46b53cf4d9dac68">
                               <span data-offset-key="c5f974dbeea04dabb46b53cf4d9dac68:0">
                                 Quý khách có thể thanh toán bằng MoMo cho tất cả các sản phẩm, khi mua hàng tại Đình Minh.
-                                Thanh toán MoMo được áp dụng thanh toán tại tất cả hệ thống showroom Phong Vũ toàn quốc và website 
+                                Thanh toán MoMo được áp dụng thanh toán tại tất cả hệ thống showroom Đình Minh toàn quốc và website 
                               </span>
                             </span>
                             <a
