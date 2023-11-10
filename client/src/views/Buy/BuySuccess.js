@@ -16,6 +16,7 @@ const BuySuccess = () => (
       <Button type="primary" key="console" href='/'>
         Về trang chủ
       </Button>,
+      <Button key="profile" href='/profile'>Lịch sử mua hàng</Button>,
       <Button key="buy" href='/cart'>Mua lại</Button>
     ]}
   />
