@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { Button, Divider } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
 import axios from "axios";
 
 function QLOrder() {
   const location = useLocation();
   const orderData = location.state.orderData;
+  const order_id = orderData.order_id;
   const paymentData = JSON.parse(orderData.paymentData);
   const color = orderData.color;
   const productID = orderData.productID;
@@ -12,12 +16,24 @@ function QLOrder() {
   const totalAmount = orderData.totalAmount;
   const capacity = orderData.capacity;
   const quantity = orderData.quantity;
+  const navigate = useNavigate();
 
-
+  const handleCancelOrder = () => {
+    navigate(-1);
+  };
   return (
     <div style={{display:'flex', marginTop: 30}}>
+      
     <div style={{marginLeft: 200}}>
-      <div style={{width: 450, height: 370,backgroundColor: 'white', borderRadius: '10px', padding: '10px'}}>
+      <div style={{width: '100%', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <Button
+          onClick={handleCancelOrder}
+          id="order-informations-title-btn"
+          icon={<LeftOutlined />}
+        />
+        <h5>mã đơn hàng: {order_id}</h5>
+      </div>
+      <div style={{width: 450, height: 370,backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 15}}>
           <p style={{marginTop: 20, fontSize: 18, fontWeight: 'bold'}}>Thông tin sản phẩm</p>
           <p><b>SKU:</b> <span style={{fontWeight: 'normal'}}>{productID}</span></p>
           <p><b>Tên sản phẩm:</b> <span style={{fontWeight: 'normal'}}>{shortDescription}</span></p>
@@ -29,7 +45,7 @@ function QLOrder() {
     </div>
 
     <div style={{marginLeft: 200}}>
-      <div style={{width: 450, height: 370,backgroundColor: 'white', borderRadius: '10px', padding: '10px'}}>
+      <div style={{width: 450, height: 370,backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 46}}>
           <p style={{marginTop: 20, fontSize: 18, fontWeight: 'bold'}}>Thông tin hóa đơn</p>
           {paymentData && (paymentData.vnp_OrderInfo || paymentData.orderId) ? (
           <>
