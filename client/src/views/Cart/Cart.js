@@ -162,7 +162,6 @@ function Cart() {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;

@@ -78,7 +78,6 @@ function Detail() {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
 
   const carouselRef = useRef(null);
@@ -201,6 +200,7 @@ function Detail() {
   }, [Detail]);
   // ------------------------
   const handleViewDetailProduct = (products) => {
+
     // Kiểm tra xem 'id' có tồn tại hay không
     if (!products.id) {
       console.error("Product ID is undefined!");
@@ -219,7 +219,6 @@ function Detail() {
       sessionStorage.setItem("products", JSON.stringify(historysp));
     }
     navigate(`/detail/${products.id}`);
-    window.scrollTo(0, 0);
   };
 
   // logic scroll button product
