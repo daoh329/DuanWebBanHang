@@ -700,7 +700,7 @@ function Detail() {
                           Rom
                         </td>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                          {configuration.rom}
+                          {selectedCapacity.capacity}gb
                         </td>
                       </tr>
                     </MDBTableBody>
@@ -836,8 +836,8 @@ function Detail() {
                     <td colSpan={3}>{configuration.ram}</td>
                   </tr>
                   <tr>
-                    <td colSpan={1}>Lưu trữ</td>
-                    <td colSpan={3}>{configuration.rom}</td>
+                    <td colSpan={1}>Rom</td>
+                    <td colSpan={3}>{selectedCapacity.capacity}gb</td>
                   </tr>
                   {(configuration.maximum_number_of_storage_ports ||
                     configuration.charging_port) && (
@@ -947,15 +947,18 @@ function Detail() {
                       <td colSpan={3}>{configuration.size}</td>
                     </tr>
                   )}
-                  <tr>
-                    <td colSpan={1}>Pin</td>
-                    <td colSpan={3}>{configuration.pin}</td>
-                  </tr>
-                  <tr>
-                    <td colSpan={1}>Khối lượng</td>
-                    <td colSpan={3}>{configuration.mass}</td>
-                  </tr>
-
+                  {configuration.pin && (
+                    <tr>
+                      <td colSpan={1}>Pin</td>
+                      <td colSpan={3}>{configuration.pin}</td>
+                    </tr>
+                  )}
+                  {configuration.mass && (
+                    <tr>
+                      <td colSpan={1}>Khối lượng</td>
+                      <td colSpan={3}>{configuration.mass}</td>
+                    </tr>
+                  )}
                   {configuration.accessory && (
                     <>
                       <tr>
