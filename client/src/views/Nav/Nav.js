@@ -36,6 +36,7 @@ import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
 import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
+import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
 
 const { Header } = Layout;
@@ -305,7 +306,7 @@ const App = () => {
       if (cart.length > 0) {
         for (let i = 0; i < cart.length; i++) {
           const data = {
-            product_id : cart[i].id,
+            product_id: cart[i].id,
             capacity_id: parseInt(cart[i].capacity.id),
           }
           arrId.push(data);
@@ -569,7 +570,7 @@ const App = () => {
               />
 
             </div> */}
-              <div
+              {/* <div
                 style={{ padding: "8px", minWidth: 0, flex: "1 1 auto" }}
                 className="teko-col css-388q1u"
               >
@@ -616,8 +617,8 @@ const App = () => {
                   </div>
                   <div className="css-1nb0ewh"></div>
                 </div>
-              </div>
-
+              </div> */}
+              <SearchComponent></SearchComponent>
               <div
                 className="right-icons"
                 style={{ display: "flex", alignItems: "center", gap: "1px" }}
@@ -811,8 +812,8 @@ const App = () => {
                     count={
                       arrayNotification
                         ? arrayNotification.filter(
-                            (notification) => notification.is_read === 0
-                          ).length
+                          (notification) => notification.is_read === 0
+                        ).length
                         : []
                     }
                     style={{
@@ -866,18 +867,18 @@ const App = () => {
                                     src={
                                       selectedItems?.main_image
                                         ? process.env.REACT_APP_API_URL +
-                                          selectedItems.main_image
+                                        selectedItems.main_image
                                         : process.env.REACT_APP_API_URL +
-                                          selectedItems.thumbnail
+                                        selectedItems.thumbnail
                                     }
                                   />
                                 }
                                 title={
                                   selectedItems.shortDescription.length > 20
                                     ? selectedItems.shortDescription.substring(
-                                        0,
-                                        20
-                                      ) + "..."
+                                      0,
+                                      20
+                                    ) + "..."
                                     : selectedItems.shortDescription
                                 }
                                 description={

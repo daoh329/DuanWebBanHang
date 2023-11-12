@@ -59,6 +59,7 @@ import ChinhSachThanhToan from "./Footer/MenuFooter/ChinhSachThanhToan.js";
 import GiaiQuyetKhieuNai from "./Footer/MenuFooter/GiaiQuyetKhieuNai.js";
 import ChinhSachBaoHanh from "./Footer/MenuFooter/ChinhSachBaoHanh.js";
 import ChinhSachDoiTra from "./Footer/MenuFooter/ChinhSachDoiTra.js";
+import ScrollToTop from "../util/scrollToTop.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -117,6 +118,7 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
+      <ScrollToTop/>
         <Nav />
         <header>
           <Routes>
@@ -204,6 +206,7 @@ const App = () => {
         </header>
         <MobileNav user={user} />
         <Footer />
+        
       </BrowserRouter>
     </div>
   );
