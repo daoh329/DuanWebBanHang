@@ -329,6 +329,7 @@ const App = () => {
             discount: products[i].discount,
             brand: products[i].brand,
           };
+          // Cập nhật giỏ hàng tại redux
           dispatch(updateProductCart(newItem));
         }
         return;

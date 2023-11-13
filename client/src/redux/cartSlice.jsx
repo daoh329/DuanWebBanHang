@@ -26,6 +26,7 @@ export const cartSlice = createSlice({
     updateProductCart: (state, action) => {
       const { id, capacity, brand, main_image, shortDescription, discount } =
         action.payload;
+        console.log(action.payload);
       const productUpdate = [...state.products].find(
         (product) => product.id === id
       );
