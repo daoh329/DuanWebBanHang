@@ -3,6 +3,7 @@ const { query } = require("../../util/callbackToPromise");
 const path = require("path");
 const fs = require("fs");
 const { da } = require("date-fns/locale");
+const { log } = require("console");
 class Product {
   async Addproduct(req, res) {
     const data = req.body;
@@ -246,7 +247,7 @@ class Product {
       }
 
       // chuyển string thành mảng (color, image)
-      for (let i = 0; i < cartProducts.length; i++) {
+      for (let i = 0; i < cartProducts?.length; i++) {
         // color
         if (cartProducts[i]?.color) {
           const colorRaw = JSON.parse(cartProducts[i].color);
@@ -289,7 +290,7 @@ class Product {
     `;
     const dl_prodetailcolor = `
     DELETE FROM prodetailcolor
-    WHERE product_id = ?;    
+    WHERE product_id = ?;
     `;
     const dl_productDetails = `
       DELETE productdetails
@@ -459,7 +460,7 @@ class Product {
         });
       }
       // 4. Update capacity
-      if (arrCapacity.length !== 0) {
+      if (arrCapacity?.length !== 0 && arrCapacity) {
         // Xóa các id đã có
         const dl_capacity_list = `
         DELETE FROM capacity_list
@@ -467,7 +468,7 @@ class Product {
         `;
         await query(dl_capacity_list, [id]);
 
-        for (let i = 0; i < arrCapacity.length; i++) {
+        for (let i = 0; i < arrCapacity?.length; i++) {
           // Nếu có id, Thêm trên id cũ
           if (arrCapacity[i].id) {
             const is_capacity_list =
