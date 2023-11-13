@@ -142,45 +142,46 @@ const SearchComponent = () => {
 
                         />
                         {showSuggestions && searchQuery && (
-                            <div style={{
-                                position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'white',
-                                boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)', zIndex: 1,
-                            }}>
-                                <List>
-                                    <VirtualList
-                                        data={suggestedProducts}
-                                        height={400}
-                                        itemHeight={20}
-                                        itemKey="id"
-                                        style={{ padding: '50px' }}
-                                    >
-                                        {(product) => (
-                                            <List.Item key={product.id}
-                                                onClick={() => handleViewDetailProduct(product)}
-                                            >
-                                                <List.Item.Meta
-                                                    avatar={<img src={
-                                                        product.main_image
-                                                            ? process.env.REACT_APP_API_URL + product.main_image
-                                                            : process.env.REACT_APP_API_URL + product.thumbnail
-                                                    } alt={product.shortDescription} style={{ width: '50px', height: '50px' }} />}
-                                                    title={
-                                                        <div style={{
-                                                            overflow: 'hidden',
-                                                            display: '-webkit-box',
-                                                            WebkitBoxOrient: 'vertical',
-                                                            WebkitLineClamp: 4,
-                                                        }}>
-                                                            {product.shortDescription}
-                                                        </div>
-                                                    }
-                                                    description={product.price}
-                                                />
-                                            </List.Item>
-                                        )}
-                                    </VirtualList>
-                                </List>
-                            </div>
+                          <div style={{
+                            position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'white',
+                            boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)', zIndex: 1,
+                        }}>
+                            <List>
+                                <VirtualList
+                                    data={suggestedProducts}
+                                    height={Math.min(suggestedProducts.length *70, 400)}
+                                    itemHeight={20}
+                                    itemKey="id"
+                                    style={{ padding: '50px' }}
+                                >
+                                    {(product) => (
+                                        <List.Item key={product.id}
+                                            onClick={() => handleViewDetailProduct(product)}
+                                        >
+                                            <List.Item.Meta
+                                                avatar={<img src={
+                                                    product.main_image
+                                                        ? process.env.REACT_APP_API_URL + product.main_image
+                                                        : process.env.REACT_APP_API_URL + product.thumbnail
+                                                } alt={product.shortDescription} style={{ width: '50px', height: '50px' }} />}
+                                                title={
+                                                    <div style={{
+                                                        overflow: 'hidden',
+                                                        display: '-webkit-box',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: 4,
+                                                        textAlign: 'left',
+                                                    }}>
+                                                        {product.shortDescription}
+                                                    </div>
+                                                }
+                                            />
+                                        </List.Item>
+                                    )}
+                                </VirtualList>
+                            </List>
+                        </div>
+                        
                         )}
                     </div>
                     <div
