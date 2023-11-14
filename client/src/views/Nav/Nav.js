@@ -393,7 +393,7 @@ const App = () => {
             </a>
             <Dropdown menu={{ items: menuContact }} placement="bottomRight">
               <a
-                href="/host"
+               
                 style={{
                   marginRight: "20px",
                   color: "#fff", // Chữ màu trắng
