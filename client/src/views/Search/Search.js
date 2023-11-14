@@ -36,28 +36,24 @@ const Search = () => {
           element.configuration = JSON.parse(element.configuration);
         });
         setPhoneProducts(data);
+        console.log('phone',phoneProducts)
       })
       .catch((error) => {
         console.error("Error fetching phone data:", error);
       });
   }, []);
-
   useEffect(() => {
     if (query) {
-      const filteredLaptopProducts = laptopProducts.filter((product) =>
-        product.shortDescription.toLowerCase().includes(query.toLowerCase())
-      );
-      const filteredPhoneProducts = phoneProducts.filter((product) =>
-        product.shortDescription.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const combinedResults = [...filteredLaptopProducts, ...filteredPhoneProducts];
-
-      setFilteredProducts(combinedResults);
+        const allProducts = [...laptopProducts, ...phoneProducts];
+        const results = allProducts.filter(product =>
+            product.shortDescription.toLowerCase().replace(/\s/g, '').includes(query.toLowerCase().replace(/\s/g, ''))
+        );
+        setFilteredProducts(results);
     } else {
-      setFilteredProducts([]);
+        setFilteredProducts([]);
     }
-  }, [query, laptopProducts, phoneProducts])
+}, [query, laptopProducts, phoneProducts]);
+
 
   const handleViewDetailProduct = (products) => {
     // Kiểm tra xem 'id' có tồn tại hay không
@@ -97,7 +93,6 @@ const Search = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   useEffect(() => {
-    window.scrollTo(0, 0); // Đặt vị trí cuộn lên đầu trang khi trang mới được tải
   }, []);
   return (
     
