@@ -93,7 +93,6 @@ function Detail() {
     findColorWithCapacity.forEach((element) => {
       cl.push(element.color);
     });
-    console.log("cl", cl);
     setColors(cl);
     // Mặc định chọn giá trị đầu tiên
     setSelectedColor(cl[0]);
