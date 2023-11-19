@@ -65,12 +65,6 @@ class Product {
       const is_productdetail =
         "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
 
-      // Hàm sử lí lỗi tập chung
-      const handleError = (e, res, message) => {
-        console.log(e);
-        return res.status(500).json(message);
-      };
-
       // product
       const productValues = [
         data.name,
@@ -124,7 +118,8 @@ class Product {
 
       res.status(200).send("success");
     } catch (error) {
-      handleError(error, res, { status: "failed" });
+      console.log(error);
+      res.status(500).send("failed");
     }
   }
 
