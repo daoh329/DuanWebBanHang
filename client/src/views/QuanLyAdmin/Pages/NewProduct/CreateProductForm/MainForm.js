@@ -84,6 +84,10 @@ function MainForm() {
   const onFinish = async (values) => {
     // Bật loading button submit
     setIsLoading(true);
+    // format release_date
+    values["release_date"] = values["release_date"].format("YYYY-MM-DD");
+    // console.log(values["release_date"]);
+    // return
     try {
       // Xóa các trường images, color, capacity, main_image, price, discount
       delete values.images;
@@ -109,6 +113,7 @@ function MainForm() {
         "main_image",
         "variations",
         "description",
+        "release_date",
       ];
 
       for (const fieldName in values) {
@@ -316,7 +321,7 @@ function MainForm() {
               margin: "0 8px",
             }}
           >
-            <DatePicker style={{height: 40,}}/>
+            <DatePicker style={{ height: 40 }} />
           </Form.Item>
         </Form.Item>
 

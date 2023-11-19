@@ -8,7 +8,7 @@ const createTables = () => {
     shortDescription varchar(255) NOT NULL,
     CategoryID INT NOT NULL,
     main_image longtext,
-    release_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    release_date DATE,
     status boolean NOT NULL,
     FOREIGN KEY (CategoryID) REFERENCES category (id)
   );`;

@@ -10,9 +10,13 @@ class Product {
       const main_image = [...arrImage].find(
         (file) => file.fieldname === "main_image"
       );
+      if (!data.variations) {
+        return res
+          .status(400)
+          .json({ message: "Không có thông tin biến thể sản phẩm" });
+      }
 
       var variations = data.variations;
-      // console.log(variations);
       for (let i = 0; i < variations.length; i++) {
         variations[i].images = [];
         const p = `variations[${i}]`;
@@ -51,6 +55,7 @@ class Product {
         colorAndImagesToDB.push({ color, images });
       });
 
+      // console.log(formattedDate);
       // res.status(200).send("success");
       // return;
       var mainImagePath = "";
@@ -61,17 +66,21 @@ class Product {
 
       const configurationString = JSON.stringify(data.configuration);
 
-      const is_product = `INSERT INTO products (name, main_image, shortDescription, CategoryID, status) VALUES (?, ?, ?, ?, ?)`;
+      const is_product = `INSERT INTO products (name, main_image, shortDescription, CategoryID, status, release_date) VALUES (?, ?, ?, ?, ?, ?)`;
       const is_productdetail =
         "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
-
       // product
+      // Chuyển đổi chuỗi release_date thành giá trị kiểu DATE
+      const formattedDate = new Date(data.release_date)
+        .toISOString()
+        .split("T")[0];
       const productValues = [
         data.name,
         mainImagePath,
         data.shortDescription,
         data.category,
         data.status ? 1 : 0,
+        formattedDate,
       ];
       const resultP = await query(is_product, productValues);
       const id_product = resultP.insertId;
@@ -584,9 +593,11 @@ class Product {
     const query = `
     SELECT
     p.*,
-    pd.quantity, 
-    pd.remaining_quantity, 
+    pd.quantity,
+    pd.remaining_quantity,
     pd.brand,
+    pd.configuration,
+    pd.created_at,
     (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -610,7 +621,7 @@ class Product {
     LEFT JOIN product_images AS pi ON p.id = pi.product_id
     WHERE p.CategoryID = 2 AND p.status = 1 AND pd.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
     GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-      pd.quantity, pd.remaining_quantity, pd.brand
+      pd.quantity, pd.remaining_quantity, pd.brand,configuration, pd.created_at;
     `;
 
     mysql.query(query, (error, results) => {
@@ -633,6 +644,8 @@ class Product {
     pd.quantity, 
     pd.remaining_quantity, 
     pd.brand,
+    pd.configuration,
+    pd.created_at,
     (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -656,7 +669,7 @@ class Product {
     LEFT JOIN product_images AS pi ON p.id = pi.product_id
     WHERE p.CategoryID = 1 AND p.status = 1 AND pd.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
     GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-      pd.quantity, pd.remaining_quantity, pd.brand
+      pd.quantity, pd.remaining_quantity, pd.brand,configuration, pd.created_at;
     `;
 
     mysql.query(query, (error, results) => {
