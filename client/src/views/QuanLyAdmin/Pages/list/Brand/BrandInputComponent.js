@@ -11,10 +11,9 @@ function FormInputBrand({ name,onUpdated }) {
 
     const onFinish = async (values) => {
         setIsLoading(true);
-
         try {
             const result = await axios.put(
-                `${process.env.REACT_APP_API_URL}/List/update/brand`,
+                `${process.env.REACT_APP_API_URL}/List/update/brands`,
                 [values.name, ol]
             );
 

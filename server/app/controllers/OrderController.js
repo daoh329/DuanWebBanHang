@@ -78,7 +78,7 @@ class OrderController {
   //     JOIN users u ON o.UserID = u.id
   //     JOIN delivery_address da ON o.addressID = da.id
   //     JOIN orderDetailsProduct odp ON o.id = odp.orderID
-  //     JOIN product p ON odp.productID = p.id
+  //     JOIN products p ON odp.productID = p.id
   //     WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
   //     ORDER BY o.created_at DESC
   //   `;
@@ -98,7 +98,7 @@ class OrderController {
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
+      JOIN products p ON odp.productID = p.id
       ORDER BY o.created_at DESC
     `;
     mysql.query(sql, (err, result) => {
@@ -170,7 +170,7 @@ class OrderController {
               });
             }
 
-            res.send('Order shipping and product quantity updated...');
+            res.send('Order shipping and products quantity updated...');
           });
         }
     });
@@ -222,7 +222,7 @@ class OrderController {
                 // console.log(result);
               });
             }
-            res.send('Order canceled and product quantity updated...');
+            res.send('Order canceled and products quantity updated...');
           });
         }
     });
@@ -272,7 +272,7 @@ class OrderController {
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
+      JOIN products p ON odp.productID = p.id
       WHERE u.phone = ?
       ORDER BY o.created_at DESC
     `;
@@ -294,7 +294,7 @@ class OrderController {
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
+      JOIN products p ON odp.productID = p.id
       WHERE u.id = ?
       ORDER BY o.created_at DESC
     `;
@@ -431,7 +431,7 @@ class OrderController {
     JOIN 
         orderDetailsProduct od ON o.id = od.orderID
     JOIN 
-        product p ON od.productID = p.id
+        products p ON od.productID = p.id
     WHERE
         o.status = 4
     GROUP BY 
@@ -568,50 +568,30 @@ class OrderController {
   async getProduct(req, res) {
     try {
       const product_id = req.params.id;
-      const sl_product = `SELECT 
-      product.*,
-      productDetails.brand,
-      productDetails.quantity,
-      productDetails.created_at,
-      productDetails.configuration,
-      category.name as category,
-      CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color,
-      CONCAT('[', GROUP_CONCAT('{"galery": "', galery.thumbnail, '"}' SEPARATOR ','), ']') as galery
-      FROM product
-      JOIN productDetails ON product.id = productDetails.product_id
-      JOIN category ON product.CategoryID = category.id
-      LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
-      LEFT JOIN galery ON product.id = galery.product_id
-      WHERE product.id = ?
-      GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
-      productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, 
-      category.name;`;
+      const sl_product = `
+      SELECT 
+      p.id,
+      p.name,
+      p.status,
+      p.main_image,
+      p.shortDescription,
+      pd.brand,
+      pd.quantity,
+      pd.created_at,
+      category.name as category
+      FROM products as p
+      JOIN productDetails as pd ON p.id = pd.product_id
+      JOIN category ON p.CategoryID = category.id
+      WHERE p.id = 2
+      GROUP BY p.id, p.name, p.status, p.shortDescription, p.main_image,
+		  pd.brand, pd.quantity, pd.created_at,
+		  category.name;
+      `;
       const results = await query(sl_product, [product_id]);
-      // chuyển string thành mảng (color, image)
-      // color
-      if (results[0]?.color) {
-        const colorRaw = JSON.parse(results[0].color);
-        let arrColor = [];
-        colorRaw.forEach((color) => {
-          arrColor.push(color.color);
-        });
-        results[0].color = arrColor;
-      }
-
-      // image
-      if (results[0]?.galery) {
-        const imageRaw = JSON.parse(results[0].galery);
-        let arrimage = [];
-        imageRaw.forEach((image) => {
-          arrimage.push(image.galery);
-        });
-        results[0].galery = arrimage;
-      }
-
       res.status(200).json(results);
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Get product failed" });
+      res.status(500).json({ message: "Get products failed" });
     }
   }
 

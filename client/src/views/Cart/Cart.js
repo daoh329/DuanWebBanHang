@@ -28,10 +28,10 @@ function Cart() {
     // Kiểm tra xem sản phẩm đã được chọn chưa
     const isSelected = selectedProducts.includes(productId);
     let updatedSelectedProducts;
-
+   
     if (isSelected) {
       // Nếu sản phẩm đã được chọn, hủy chọn nó
-      updatedSelectedProducts = selectedProducts.filter(
+      updatedSelectedProducts = selectedProducts?.filter(
         (id) => id !== productId
       );
       setSelectedProducts(updatedSelectedProducts);
@@ -41,7 +41,6 @@ function Cart() {
       setSelectedProducts(updatedSelectedProducts);
       setSelectAll(false);
     }
-
     // Lưu trạng thái checkbox vào sessionStorage
     const checkboxData = {
       selectAll,
@@ -89,12 +88,11 @@ function Cart() {
     const selectedItems = cart.filter((item) =>
       selectedProducts.includes(item.id)
     );
-
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
-      return acc + item.totalPrice;
+      return acc.price - acc.discount + item.totalPrice;
     }, 0);
-
+    
     return total;
   };
 
@@ -161,8 +159,7 @@ function Cart() {
     navigate(`/detail/${products.id}`);
   };
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;
   // Hàm xử lý khi nút "Tiếp tục" được ấn
@@ -245,8 +242,8 @@ function Cart() {
                         <p className="cart-description-SKU">SKU: {item.id}</p>
                         <p className="cart-description-rom-color">
                           {" "}
-                          {item?.capacity?.capacity &&
-                            formatCapacity(item?.capacity?.capacity) + ","}{" "}
+                          {item?.capacity &&
+                            formatCapacity(item?.capacity) + ","}{" "}
                           {item?.color}
                         </p>
                       </td>
@@ -259,9 +256,7 @@ function Cart() {
                             color: "black",
                           }}
                         >
-                          {formatCurrency(
-                            item.capacity.capacity_price - item.discount
-                          )}
+                          {formatCurrency(item.price - item.discount)}
                         </p>
                         {/* show discount */}
                         {item.discount > 0 && (
@@ -272,7 +267,7 @@ function Cart() {
                               fontSize: "12px",
                             }}
                           >
-                            {formatCurrency(item.capacity.capacity_price)}
+                            {formatCurrency(item.price)}
                           </p>
                         )}
                       </td>
