@@ -9,7 +9,7 @@ import FormInputColor from "./ColorInputComponent";
 
 function Color() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const table = 'color';
+  const table = 'colors';
   const [openModals, setOpenModals] = useState({});
   const formik = useFormik({
     initialValues: {
@@ -20,7 +20,7 @@ function Color() {
     }),
     onSubmit: async (values) => {
       setIsModalOpen(true);
-      const url = `${process.env.REACT_APP_API_URL}/List/add/color`;
+      const url = `${process.env.REACT_APP_API_URL}/List/add/colors`;
       try {
         const res = await axios.post(url, values);
         if (res.status === 200) {
@@ -54,7 +54,7 @@ function Color() {
 
   const getColors = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/color`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/colors`);
       setColor(response.data.results);
     } catch (e) {
       console.log(e);

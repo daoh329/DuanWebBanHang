@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "./style.css";
 import NewProduct from "../Laptop/NewProduct";
 import NewPhone from "../Phone/NewPhone";
+import MainForm from "../CreateProductForm/MainForm";
 
 function TypeProduct() {
-  const [state, setState] = useState("");
+  const [state, setState] = useState("product");
 
   const toggleComponentLaptop = () => {
     setState("laptop");
@@ -12,11 +13,15 @@ function TypeProduct() {
   const toggleComponentPhone = () => {
     setState("phone");
   };
+  const toggleComponentProduct = () => {
+    setState("product");
+  };
 
   return (
     <div className="container-type-product">
-      <h3>Loại sản phẩm muốn tạo</h3>
-      <div className="type-group">
+      {/* <h3>Loại sản phẩm muốn tạo</h3> */}
+      <br/>
+      {/* <div className="type-group">
         <button
           style={state === "laptop" ? { backgroundColor: "purple", color:"white" } : {}}
           className="btn-type"
@@ -31,9 +36,17 @@ function TypeProduct() {
         >
           Điện thoại
         </button>
-      </div>
+        <button
+          style={state === "product" ? { backgroundColor: "purple", color:'white' } : {}}
+          className="btn-type"
+          onClick={toggleComponentProduct}
+        >
+          Sản phẩm mới
+        </button>
+      </div> */}
       {state === "laptop" && <NewProduct />}
       {state === "phone" && <NewPhone />}
+      {state === "product" && <MainForm />}
     </div>
   );
 }

@@ -10,7 +10,7 @@ import FormInputBrand from './BrandInputComponent';
 function Brand() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openModals, setOpenModals] = useState({});
-  const table = 'brand';
+  const table = 'brands';
   const formik = useFormik({
     initialValues: {
       name: "",
