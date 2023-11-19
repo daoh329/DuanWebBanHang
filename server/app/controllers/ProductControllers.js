@@ -124,7 +124,8 @@ class Product {
 
       res.status(200).send("success");
     } catch (error) {
-      handleError(error, res, { status: "failed" });
+      res.status(500).send("failed");
+      console.log("lỗi:",error)
     }
   }
 

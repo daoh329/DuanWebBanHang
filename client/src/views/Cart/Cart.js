@@ -21,6 +21,7 @@ function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
   const cart = useSelector((state) => state.cart.products);
+  console.log("cart",cart)
   const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
