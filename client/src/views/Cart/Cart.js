@@ -10,6 +10,7 @@ import {
   increaseProduct,
 } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
+import { Checkbox } from "antd";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -28,20 +29,17 @@ function Cart() {
     // Kiểm tra xem sản phẩm đã được chọn chưa
     const isSelected = selectedProducts.includes(productId);
     let updatedSelectedProducts;
-
+  
     if (isSelected) {
-      // Nếu sản phẩm đã được chọn, hủy chọn nó
       updatedSelectedProducts = selectedProducts.filter(
         (id) => id !== productId
       );
-      setSelectedProducts(updatedSelectedProducts);
     } else {
-      // Nếu sản phẩm chưa được chọn, chọn nó và hủy chọn tất cả các sản phẩm khác
-      updatedSelectedProducts = [productId];
-      setSelectedProducts(updatedSelectedProducts);
-      setSelectAll(false);
+      updatedSelectedProducts = [...selectedProducts, productId];
     }
-
+  
+    setSelectedProducts(updatedSelectedProducts);
+  
     // Lưu trạng thái checkbox vào sessionStorage
     const checkboxData = {
       selectAll,
@@ -49,6 +47,7 @@ function Cart() {
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
+  
 
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
   const handleSelectAllChange = () => {
@@ -195,10 +194,10 @@ function Cart() {
                 <MDBTableHead light>
                   <tr>
                     <th scope="col">
-                      {/* <Checkbox
+                      <Checkbox
                         onChange={handleSelectAllChange}
                         checked={selectAll}>
-                      </Checkbox> */}
+                      </Checkbox>
                     </th>
                     <th scope="col">Hình</th>
                     <th scope="col">Sản Phẩm</th>
