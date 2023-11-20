@@ -450,19 +450,14 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT products.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity,
-      (
-        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
-        FROM capacity_list
-        WHERE capacity_list.product_id = product.id
-      ) AS capacities
+      SELECT products.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity
       FROM products
-      JOIN productDetails ON product.id = productDetails.product_id
-      JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
+      JOIN productDetails ON products.id = productDetails.product_id
+      JOIN orderDetailsProduct ON products.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
-      AND product.CategoryID = 1 AND product.status = 1
-      GROUP BY product.id, productDetails.remaining_quantity
+      AND products.CategoryID = 1 AND products.status = 1
+      GROUP BY products.id, productDetails.remaining_quantity
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
@@ -479,19 +474,14 @@ class OrderController {
 
   async topDienthoai(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity,
-      (
-        SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
-        FROM capacity_list
-        WHERE capacity_list.product_id = product.id
-      ) AS capacities
+      SELECT products.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity
       FROM products
-      JOIN productDetails ON product.id = productDetails.product_id
-      JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
+      JOIN productDetails ON products.id = productDetails.product_id
+      JOIN orderDetailsProduct ON products.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
-      AND product.CategoryID = 2 AND product.status = 1
-      GROUP BY product.id, productDetails.remaining_quantity
+      AND products.CategoryID = 2 AND products.status = 1
+      GROUP BY products.id, productDetails.remaining_quantity
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
