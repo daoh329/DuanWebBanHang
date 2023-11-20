@@ -116,7 +116,6 @@ class PayController {
             let vnpUrl = config.vnp_Url;
             let returnUrl = config.vnp_ReturnUrl;
             let orderId = moment(date).format('DDHHmmss');
-            let amount = req.body.amount;
             let bankCode = req.body.bankCode;
 
             // console.log('bank: '+bankCode)
@@ -136,7 +135,7 @@ class PayController {
             vnp_Params['vnp_TxnRef'] = orderId;
             vnp_Params['vnp_OrderInfo'] = orderId;
             vnp_Params['vnp_OrderType'] = 'other';
-            vnp_Params['vnp_Amount'] = amount * 100;
+            vnp_Params['vnp_Amount'] = amount*100;
             vnp_Params['vnp_ReturnUrl'] = returnUrl;
             vnp_Params['vnp_IpAddr'] = ipAddr;
             vnp_Params['vnp_CreateDate'] = createDate;
@@ -192,6 +191,7 @@ class PayController {
         let note = notee;
         let totalAmount = amount;
         let status = statuss;
+        totalAmount/100;
 
         let secureHash = vnp_Params['vnp_SecureHash'];
 
