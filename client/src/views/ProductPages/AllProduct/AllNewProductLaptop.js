@@ -163,9 +163,12 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo giá
     filteredProducts = filteredProducts?.filter((product) => {
-      const price = product.price;
-      return price >= minSliderValue && price <= maxSliderValue;
+      return product.variations.some((variation) => {
+        const price = variation.price;
+        return price >= minSliderValue && price <= maxSliderValue;
+      });
     });
+    
 
     // Lọc theo thương hiệu
     if (selectedBrand !== "ALL") {
