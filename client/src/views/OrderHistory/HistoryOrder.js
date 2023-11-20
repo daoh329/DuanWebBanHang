@@ -13,7 +13,7 @@ function HistoryOrder(props) {
         axios.get(`${process.env.REACT_APP_API_URL}/order/orderhistory/phone/${phone}`)
             .then(res => {
                 setData(res.data);
-                const sortedOrders = res.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                const sortedOrders = res.data.sort((a, b) => new Date(b.order_created_at) - new Date(a.order_created_at));
                 setData(sortedOrders || []);
             })
             .catch(error => console.log(error));
@@ -23,9 +23,9 @@ function HistoryOrder(props) {
         { title: 'Mã giao dịch', dataIndex: 'order_id', key: 'magd' },
         { title: 'Người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
-        { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-        { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
+        // { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
+        // { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        // { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
         {
             title: 'Thời gian tạo',
             dataIndex: 'order_updated_at',

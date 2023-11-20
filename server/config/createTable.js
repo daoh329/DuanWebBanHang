@@ -58,6 +58,7 @@ const createTables = () => {
     quantity int,
     color varchar(255),
     capacity int,
+    totalPrice NUMERIC(10,2),
     orderID int,
     FOREIGN KEY (orderID) REFERENCES orders (id),
     FOREIGN KEY (productID) REFERENCES product (id)

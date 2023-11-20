@@ -76,7 +76,7 @@ const loadData = useCallback(() => {
 
       setData(dataWithParsedPaymentData);
       const sortedOrders = dataWithParsedPaymentData.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        (a, b) => new Date(b.order_created_at) - new Date(a.order_created_at)
       );
       setData(sortedOrders || []);
     })
@@ -206,7 +206,7 @@ const loadData = useCallback(() => {
         </Link>
       ),
     },
-    { title: "Sản phẩm", dataIndex: "shortDescription", key: "name" },
+    // { title: "Sản phẩm", dataIndex: "shortDescription", key: "name" },
     { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
 
     {
