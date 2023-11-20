@@ -157,7 +157,6 @@ function Detail() {
     const newItem = {
       id: Detail.id,
       brand: Detail.brand,
-      main_image: Detail.main_image,
       thumbnail: imagesSelected[0],
       shortDescription: Detail.shortDescription,
       capacity: selectedCapacity,

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { da } from "date-fns/locale";
 
 const initialState = {
   products: [],
@@ -13,9 +14,12 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     deleteProductInCart: (state, action) => {
-      const product_id = action.payload;
+      const { product_id, color, capacity } = action.payload;
       const updatedProducts = state.products?.filter(
-        (product) => product.id !== product_id
+        (product) =>
+          product.id !== product_id ||
+          product.color !== color ||
+          product.capacity !== capacity
       );
       localStorage.setItem(
         "cart",
@@ -30,8 +34,6 @@ export const cartSlice = createSlice({
         color,
         price,
         brand,
-        main_image,
-        images,
         shortDescription,
         discount,
       } = action.payload;
@@ -47,9 +49,7 @@ export const cartSlice = createSlice({
         productUpdate.capacity = capacity;
         productUpdate.color = color;
         productUpdate.price = price;
-        productUpdate.thumbnail = images;
         productUpdate.brand = brand;
-        productUpdate.main_image = main_image;
         productUpdate.shortDescription = shortDescription;
         productUpdate.discount = discount;
         productUpdate.totalPrice =

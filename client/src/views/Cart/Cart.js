@@ -104,9 +104,13 @@ function Cart() {
   }, [selectedProducts, cart]);
 
   //xóa sp
-  const removeFromCart = (productId) => {
-    // xóa trong cart
-    dispatch(deleteProductInCart(productId));
+  const removeFromCart = (productId, color, capacity) => {
+    const data = {
+      product_id: productId,
+      color,
+      capacity,
+    }
+    dispatch(deleteProductInCart(data));
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
@@ -305,7 +309,7 @@ function Cart() {
                       </td>
                       {/* btn delete product */}
                       <td>
-                        <Link onClick={() => removeFromCart(item.id)}>
+                        <Link onClick={() => removeFromCart(item.id, item.color, item.capacity)}>
                           <i className="fa-solid fa-xmark"></i>
                         </Link>
                       </td>

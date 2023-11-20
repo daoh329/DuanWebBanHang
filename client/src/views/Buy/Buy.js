@@ -217,9 +217,27 @@ export default function Buy() {
   //   sessionStorage.setItem("quantity", JSON.stringify(quantity));
   // }, [quantity]);
 
-  const removeFromCart = (productID) => {
-    // xóa trong cart
-    dispatch(deleteProductInCart(productID));
+  const removeFromCart = () => {
+    // lấy sản phẩm được chọn mua
+    var informationSelected = sessionStorage.getItem("buys");
+    if (informationSelected) {
+      informationSelected = JSON.parse(informationSelected).selectedItems;
+      const data = [];
+      // Nếu informationSelected là mảng
+      Array.isArray(informationSelected) &&
+        [...informationSelected].forEach((value) => {
+          const item = {
+            product_id: value.id,
+            capacity: value.capacity,
+            color: value.color,
+          };
+          data.push(item);
+        });
+      // xóa trong cart redux
+      data.forEach((item) => {
+        dispatch(deleteProductInCart(item));
+      });
+    }
   };
 
   const handleBuyVNpay = async () => {
@@ -380,10 +398,6 @@ export default function Buy() {
       message.error("Vui lòng chọn phương thức thanh toán");
       return;
     }
-    console.log(data);
-    // Xóa sản phẩm khỏi giỏ hàng
-    removeFromCart(productID);
-    return;
 
     // Thêm thông báo xác nhận mua hàng
     Modal.confirm({
@@ -411,6 +425,8 @@ export default function Buy() {
 
           // Chuyển hướng người dùng đến trang thông báo thành công
           window.location.replace("/success");
+          // Xóa sản phẩm khỏi giỏ hàng
+          removeFromCart();
         } else {
           // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
           const responseData = await response.json();
