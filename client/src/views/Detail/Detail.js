@@ -233,7 +233,7 @@ function Detail() {
 
       relatedProducts = products?.filter(
         (product) =>
-          product.CategoryID === categoryID && product.id !== Detail.p_ID
+          product.CategoryID === categoryID && product.id !== Detail.id
       );
 
       relatedProducts.sort((a, b) => {
