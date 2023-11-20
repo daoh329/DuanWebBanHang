@@ -83,9 +83,15 @@ const App = () => {
   // const [cartList, setCartList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const removeFromCart = (productId) => {
-    dispatch(deleteProductInCart(productId));
+  const removeFromCart = (productId, color, capacity) => {
+    const data = {
+      product_id: productId,
+      color,
+      capacity,
+    }
+    dispatch(deleteProductInCart(data));
   };
+
   // phone
   const [phone, setPhone] = useState("");
   const handleConfirm = async () => {
@@ -309,7 +315,7 @@ const App = () => {
             product_id: cart[i].id,
             capacity: parseInt(cart[i].capacity),
             color: cart[i].color,
-          }
+          };
           arrId.push(data);
         }
       }
@@ -813,8 +819,8 @@ const App = () => {
                     count={
                       arrayNotification
                         ? arrayNotification.filter(
-                          (notification) => notification.is_read === 0
-                        ).length
+                            (notification) => notification.is_read === 0
+                          ).length
                         : []
                     }
                     style={{
@@ -857,7 +863,11 @@ const App = () => {
                                   type="danger"
                                   icon={<DeleteOutlined />}
                                   onClick={() =>
-                                    removeFromCart(selectedItems.id)
+                                    removeFromCart(
+                                      selectedItems.id,
+                                      selectedItems.color,
+                                      selectedItems.capacity
+                                    )
                                   }
                                 ></Button>,
                               ]}
@@ -868,18 +878,18 @@ const App = () => {
                                     src={
                                       selectedItems?.main_image
                                         ? process.env.REACT_APP_API_URL +
-                                        selectedItems.main_image
+                                          selectedItems.main_image
                                         : process.env.REACT_APP_API_URL +
-                                        selectedItems.thumbnail
+                                          selectedItems.thumbnail
                                     }
                                   />
                                 }
                                 title={
                                   selectedItems.shortDescription.length > 20
                                     ? selectedItems.shortDescription.substring(
-                                      0,
-                                      20
-                                    ) + "..."
+                                        0,
+                                        20
+                                      ) + "..."
                                     : selectedItems.shortDescription
                                 }
                                 description={

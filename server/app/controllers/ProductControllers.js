@@ -857,6 +857,58 @@ class Product {
     });
   }
 
+  // /product/order/:id
+  async getProduct(req, res) {
+    try {
+      const product_id = req.params.id;
+      const sl_product = `
+        SELECT 
+        product.*,
+        productDetails.brand,
+        productDetails.quantity,
+        productDetails.created_at,
+        productDetails.configuration,
+        category.name as category,
+        CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color,
+        CONCAT('[', GROUP_CONCAT('{"galery": "', galery.thumbnail, '"}' SEPARATOR ','), ']') as galery
+        FROM products
+        JOIN productDetails ON product.id = productDetails.product_id
+        JOIN category ON product.CategoryID = category.id
+        LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
+        LEFT JOIN galery ON product.id = galery.product_id
+        WHERE product.id = ?
+        GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
+        productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, 
+        category.name;`;
+      const results = await query(sl_product, [product_id]);
+      // chuyển string thành mảng (color, image)
+      // color
+      if (results[0]?.color) {
+        const colorRaw = JSON.parse(results[0].color);
+        let arrColor = [];
+        colorRaw.forEach((color) => {
+          arrColor.push(color.color);
+        });
+        results[0].color = arrColor;
+      }
+
+      // image
+      if (results[0]?.galery) {
+        const imageRaw = JSON.parse(results[0].galery);
+        let arrimage = [];
+        imageRaw.forEach((image) => {
+          arrimage.push(image.galery);
+        });
+        results[0].galery = arrimage;
+      }
+
+      res.status(200).json(results);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Get product failed" });
+    }
+  }
+
   // get capacity, API: /product/capacity
   getCapacity(req, res) {
     const query = `SELECT * FROM capacity`;
