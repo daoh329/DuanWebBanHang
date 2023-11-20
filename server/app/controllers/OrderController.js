@@ -514,7 +514,7 @@ async quanlyAllOrder(req, res, next) {
     JOIN 
         orderDetailsProduct od ON o.id = od.orderID
     JOIN 
-        product p ON od.productID = p.id
+        products p ON od.productID = p.id
     WHERE
         o.status = 4 AND
         DATE_FORMAT(o.updated_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
@@ -557,7 +557,7 @@ async quanlyAllOrder(req, res, next) {
     JOIN 
         orderDetailsProduct od ON o.id = od.orderID
     JOIN 
-        product p ON od.productID = p.id
+        products p ON od.productID = p.id
     WHERE
         o.status = 4
     GROUP BY 
@@ -703,7 +703,7 @@ async quanlyAllOrder(req, res, next) {
       category.name as category,
       CONCAT('[', GROUP_CONCAT('{"color": "', prodetailcolor.Colorname, '"}' SEPARATOR ','), ']') as color,
       CONCAT('[', GROUP_CONCAT('{"galery": "', galery.thumbnail, '"}' SEPARATOR ','), ']') as galery
-      FROM product
+      FROM products
       JOIN productDetails ON product.id = productDetails.product_id
       JOIN category ON product.CategoryID = category.id
       LEFT JOIN prodetailcolor ON product.id = prodetailcolor.product_id
