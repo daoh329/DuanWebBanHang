@@ -230,7 +230,7 @@ function Detail() {
 
       relatedProducts = products?.filter(
         (product) =>
-          product.CategoryID === categoryID && product.id !== Detail.p_ID
+          product.CategoryID === categoryID && product.id !== Detail.id
       );
 
       relatedProducts.sort((a, b) => {
@@ -660,14 +660,16 @@ function Detail() {
                           Thông tin chung
                         </td>
                       </tr>
-                      <tr>
-                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
-                          Series
-                        </td>
-                        <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                          {configuration.series}
-                        </td>
-                      </tr>
+                      {configuration.series && (
+                        <tr>
+                          <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                            Series
+                          </td>
+                          <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                            {configuration.series}
+                          </td>
+                        </tr>
+                      )}
                       <tr>
                         <td colSpan={1}>Màu sắc</td>
                         <td colSpan={3}>
@@ -800,10 +802,12 @@ function Detail() {
                       Thông tin chung
                     </td>
                   </tr>
-                  <tr>
-                    <td colSpan={1}>Series</td>
-                    <td colSpan={3}>{configuration.series}</td>
-                  </tr>
+                  {configuration.series && (
+                    <tr>
+                      <td colSpan={1}>Series</td>
+                      <td colSpan={3}>{configuration.series}</td>
+                    </tr>
+                  )}
                   <tr>
                     <td colSpan={1}>Màu sắc</td>
                     <td colSpan={3}>

@@ -89,10 +89,10 @@ function QLdelivered() {
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'SDT nhận', dataIndex: 'delivery_phone', key: 'phonerecipient' },
-        { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
+        // { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
         { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        // { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
 
         {
             title: 'PTTT', 

@@ -84,7 +84,7 @@ const DashboardRevenue = () => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="updated_month" />
-          <YAxis domain={[0, 10000000000]} />
+          <YAxis domain={[0, 5000000000]} />
           <Tooltip formatter={(value) => [value.toLocaleString('en-US'), 'Revenue']} labelFormatter={(value) => new Date(value).toISOString().slice(0, 7)} />
           <Legend />
           <Line type="monotone" dataKey="Revenue" stroke="#FF3366" activeDot={{ r: 10 }} dot={{ stroke: '#FF3366', strokeWidth: 2 }} />
