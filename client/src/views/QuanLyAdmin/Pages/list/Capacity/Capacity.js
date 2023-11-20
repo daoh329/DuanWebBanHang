@@ -13,9 +13,9 @@ function Capacity() {
   // function call api get capacity list
   const getCapacity = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/product/capacity`)
+      .get(`${process.env.REACT_APP_API_URL}/List/capacity`)
       .then((response) => {
-        setCapacities(response.data);
+        setCapacities(response.data.results);
       })
       .catch((e) => {
         console.log(e);

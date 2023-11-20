@@ -162,21 +162,21 @@ const AllNewProductLaptop = () => {
     let filteredProducts = products;
 
     // Lọc theo giá
-    filteredProducts = filteredProducts.filter((product) => {
+    filteredProducts = filteredProducts?.filter((product) => {
       const price = product.price;
       return price >= minSliderValue && price <= maxSliderValue;
     });
 
     // Lọc theo thương hiệu
     if (selectedBrand !== "ALL") {
-      filteredProducts = filteredProducts.filter(
+      filteredProducts = filteredProducts?.filter(
         (product) => product.brand === selectedBrand
       );
     }
 
     // Lọc theo ROM
     if (selectedRom !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.rom === selectedRom;
       });
@@ -184,14 +184,14 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo Cpu
     if (selectedCpu !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.cpu === selectedCpu;
       });
     }
     // Lọc theo series
     if (selectedSeries !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.series === selectedSeries;
       });
@@ -199,7 +199,7 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo ram
     if (selectedRam !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.ram === selectedRam;
       });
@@ -207,7 +207,7 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo pin
     if (selectedPin !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.pin === selectedPin;
       });
@@ -215,7 +215,7 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo  Vga
     if (selectedVga !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.vga === selectedVga;
       });
@@ -223,7 +223,7 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo  front_camera
     if (selectedFront_camera !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.front_camera === selectedFront_camera;
       });
@@ -231,7 +231,7 @@ const AllNewProductLaptop = () => {
 
     // Lọc theo  screen
     if (selectedScreen !== "ALL") {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.screen === selectedScreen;
       });

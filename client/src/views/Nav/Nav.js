@@ -112,13 +112,13 @@ const App = () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    // Lọc sản phẩm dựa trên từ khóa tìm kiếm
-    const filtered = products.filter((product) =>
-      product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery, products]);
+  // useEffect(() => {
+  //   // Lọc sản phẩm dựa trên từ khóa tìm kiếm
+  //     const filtered = [...products]?.filter((product) =>
+  //     product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  //   setFilteredProducts(filtered);
+  // }, [searchQuery, products]);
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -307,7 +307,8 @@ const App = () => {
         for (let i = 0; i < cart.length; i++) {
           const data = {
             product_id: cart[i].id,
-            capacity_id: parseInt(cart[i].capacity.id),
+            capacity: parseInt(cart[i].capacity),
+            color: cart[i].color,
           }
           arrId.push(data);
         }
@@ -316,17 +317,16 @@ const App = () => {
       const results = await axios.post(api, arrId);
       if (results.status === 200) {
         const products = results.data;
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        products.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
         for (let i = 0; i < products.length; i++) {
           const newItem = {
             id: products[i].id,
             main_image: products[i].main_image,
             shortDescription: products[i].shortDescription,
-            capacity: products[i].capacities[0],
-            discount: products[i].discount,
+            capacity: products[i].variations.capacity,
+            color: products[i].variations.color,
+            price: products[i].variations.price,
+            discount: products[i].variations.discount_amount,
+            thumbnail: products[i].images[0],
             brand: products[i].brand,
           };
           // Cập nhật giỏ hàng tại redux

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Tag, Popconfirm, Modal, message } from "antd";
+import { Table, Tag} from "antd";
 import { format } from "date-fns";
 import axios from "axios";
 import ActionButton from "./ActionComponent/ActionButton";
-import { formatCurrency } from "../../../../util/FormatVnd";
 
 function Product() {
   const [Product, setProduct] = useState([]);
@@ -12,10 +11,6 @@ function Product() {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/json`)
       .then((res) => {
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        res.data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
         setProduct(res.data);
       })
       .catch((error) => console.log(error));
@@ -47,12 +42,6 @@ function Product() {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Tên sản phẩm", dataIndex: "name", key: "name" },
-    {
-      title: "Giá gốc",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => <div>{formatCurrency(price)}</div>,
-    },
     {
       title: "SL còn lại",
       dataIndex: "remaining_quantity",
@@ -106,6 +95,7 @@ function Product() {
 
   return (
     <div>
+      <br/>
       <h1>Quản lý Sản Phẩm</h1>
       <Table columns={columns} dataSource={Product} />
     </div>

@@ -14,7 +14,7 @@ export const cartSlice = createSlice({
     },
     deleteProductInCart: (state, action) => {
       const product_id = action.payload;
-      const updatedProducts = state.products.filter(
+      const updatedProducts = state.products?.filter(
         (product) => product.id !== product_id
       );
       localStorage.setItem(
@@ -24,20 +24,22 @@ export const cartSlice = createSlice({
       return { ...state, products: updatedProducts };
     },
     updateProductCart: (state, action) => {
-      const { id, capacity, brand, main_image, shortDescription, discount } =
+      const { id, capacity, color,price, brand, main_image, images, shortDescription, discount } =
         action.payload;
-        console.log(action.payload);
       const productUpdate = [...state.products].find(
         (product) => product.id === id
       );
       if (productUpdate) {
         productUpdate.capacity = capacity;
+        productUpdate.color = color;
+        productUpdate.price = price;
+        productUpdate.thumbnail = images;
         productUpdate.brand = brand;
         productUpdate.main_image = main_image;
         productUpdate.shortDescription = shortDescription;
         productUpdate.discount = discount;
         productUpdate.totalPrice =
-          (capacity.capacity_price - discount) *
+          (productUpdate.price - discount) *
           productUpdate.quantity;
       }
       localStorage.setItem("cart", JSON.stringify(state.products));
@@ -50,7 +52,7 @@ export const cartSlice = createSlice({
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity + 1;
         cartToUpdate.totalPrice =
-          (cartToUpdate.capacity.capacity_price - cartToUpdate.discount) *
+          (cartToUpdate.price - cartToUpdate.discount) *
           cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
@@ -64,7 +66,7 @@ export const cartSlice = createSlice({
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity - 1;
         cartToUpdate.totalPrice =
-          (cartToUpdate.capacity.capacity_price - cartToUpdate.discount) *
+          (cartToUpdate.price - cartToUpdate.discount) *
           cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật

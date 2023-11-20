@@ -45,7 +45,7 @@ const Search = () => {
   useEffect(() => {
     if (query) {
         const allProducts = [...laptopProducts, ...phoneProducts];
-        const results = allProducts.filter(product =>
+        const results = allProducts?.filter(product =>
             product.shortDescription.toLowerCase().replace(/\s/g, '').includes(query.toLowerCase().replace(/\s/g, ''))
         );
         setFilteredProducts(results);

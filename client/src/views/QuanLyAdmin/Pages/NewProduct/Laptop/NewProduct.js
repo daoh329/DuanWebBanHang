@@ -91,7 +91,6 @@ function NewProduct() {
       // Lấy dữ liệu ảnh chính
       values.main_image = mainImage[0]?.originFileObj;
 
-      const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       const formData = new FormData();
       // Lặp qua các trường dữ liệu và thêm chúng vào formData
       for (const fieldName in values) {
@@ -125,6 +124,7 @@ function NewProduct() {
 
       setIsModalOpen(true);
       // call API
+      const url = `${process.env.REACT_APP_API_URL}/product/Add`;
       await axios
         .post(url, formData, {
           headers: {

@@ -20,9 +20,6 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import CardProduct from "../Card/Card";
 
 function Detail() {
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedCapacity, setSelectedCapacity] = useState({});
-
   const navigate = useNavigate();
 
   //Modal antd
@@ -49,33 +46,87 @@ function Detail() {
   const htmlContent = Detail?.description;
   const [currentImage, setCurrentImage] = useState(0);
 
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedCapacity, setSelectedCapacity] = useState({});
+  const [imagesSelected, setImagesSelected] = useState([]);
+  const [variationSelected, setVariationSelected] = useState([]);
+
+  const [capacities, setCapacities] = useState([]);
+  const [colors, setColors] = useState([]);
+
   useEffect(() => {
-    // Gửi yêu cầu GET đến server để lấy thông tin chi tiết của sản phẩm
-    getProduct();
+    if (Detail) {
+      let cp = [];
+      [...Detail.variations].forEach((element) => {
+        cp.push(element.capacity);
+      });
+      const sortColor = cp.sort((a, b) => a - b);
+      setCapacities([...new Set(sortColor)]);
+      setSelectedCapacity(sortColor[0]);
+      colorChangeByCapacity(Detail, cp[0]);
+    }
+  }, [Detail]);
+
+  // change color
+  useEffect(() => {
+    if (selectedColor && Detail) {
+      const images = [...Detail.images].filter(
+        (element) => element.color === selectedColor
+      );
+      setImagesSelected(images[0].path);
+    }
+  }, [selectedColor, Detail]);
+
+  // change capacity
+  useEffect(() => {
+    if (selectedCapacity && Detail) {
+      // Thay đổi color theo capacity
+      colorChangeByCapacity(Detail, selectedCapacity);
+    }
+  }, [selectedCapacity, Detail]);
+
+  const colorChangeByCapacity = (Detail, capacitySelected) => {
+    const findColorWithCapacity = Detail.variations.filter(
+      (vatiation) => vatiation.capacity === capacitySelected
+    );
+    let cl = [];
+    findColorWithCapacity.forEach((element) => {
+      cl.push(element.color);
+    });
+    setColors(cl);
+    // Mặc định chọn giá trị đầu tiên
+    setSelectedColor(cl[0]);
+  };
+
+  useEffect(() => {
+    if (selectedColor && Detail && selectedCapacity) {
+      const vs = [...Detail.variations].filter(
+        (element) =>
+          element.color === selectedColor &&
+          element.capacity === selectedCapacity
+      );
+      setVariationSelected(vs[0]);
+    }
+  }, [selectedCapacity, selectedColor, Detail]);
+
+  useEffect(() => {
+    id && getProduct();
   }, [id]);
 
   const getProduct = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
       .then((response) => {
+        const data = response.data[0];
         // Lưu thông tin chi tiết của sản phẩm vào state
-        // Sắp xếp "capacity_list" theo mức dung lượng thấp nhất
-        const sortCapacity = response.data.capacity_list.sort(
-          (a, b) => a.capacity - b.capacity
-        );
-        // Đặt giá trị mặc định của color và capacity
-        setSelectedCapacity(sortCapacity[0]);
-        setSelectedColor(response.data.Colorname[0].Colorname);
-        setDetail(response.data);
-        const configurationData = JSON.parse(response.data.configuration);
-        setConfiguration(configurationData);
+        setDetail(data);
+        // Lưu thông tin cấu hình của sản phẩm vào state
+        setConfiguration(data.configuration);
       })
       .catch((error) => {
         console.error("There was an error!", error);
       });
   };
-
-  useEffect(() => {}, []);
 
   const carouselRef = useRef(null);
 
@@ -107,16 +158,18 @@ function Detail() {
 
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
-      id: Detail.p_ID,
-      main_image: Detail?.main_image,
-      thumbnail: Detail?.thumbnails[0].thumbnail,
-      shortDescription: Detail?.shortDescription,
+      id: Detail.id,
+      main_image: Detail.main_image,
+      thumbnail: imagesSelected[0],
+      shortDescription: Detail.shortDescription,
       capacity: selectedCapacity,
-      discount: Detail?.discount,
+      price: variationSelected.price,
+      discount: variationSelected.discount_amount,
       brand: Detail.brand,
-      quantity: 1,
       color: selectedColor,
-      totalPrice: selectedCapacity.capacity_price - Detail?.discount,
+      //----
+      quantity: 1,
+      totalPrice: variationSelected.price - variationSelected.discount_amount,
     };
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
@@ -178,7 +231,7 @@ function Detail() {
 
       const products = categoryID === 1 ? laptopProducts : phoneProducts;
 
-      relatedProducts = products.filter(
+      relatedProducts = products?.filter(
         (product) =>
           product.CategoryID === categoryID && product.id !== Detail.p_ID
       );
@@ -276,16 +329,13 @@ function Detail() {
                             ref={carouselRef}
                             afterChange={(current) => setCurrentImage(current)}
                           >
-                            {Detail.thumbnails &&
-                              Detail.thumbnails.length > 0 &&
-                              [...Detail.thumbnails].map((thumbnail, index) => (
+                            {/* img main */}
+                            {imagesSelected &&
+                              [...imagesSelected].length > 0 &&
+                              [...imagesSelected].map((path, index) => (
                                 <div key={index}>
-                                  {/* img main */}
                                   <img
-                                    src={
-                                      process.env.REACT_APP_API_URL +
-                                      thumbnail.thumbnail
-                                    }
+                                    src={process.env.REACT_APP_API_URL + path}
                                     alt={""}
                                     className="zoom-image"
                                   />
@@ -298,9 +348,9 @@ function Detail() {
                   </div>
                   {/* Slider hình nhỏ */}
                   <div className="thumbnail-slider">
-                    {Detail.thumbnails &&
-                      Detail.thumbnails.length > 0 &&
-                      [...Detail.thumbnails].map((thumbnail, index) => (
+                    {imagesSelected &&
+                      imagesSelected.length > 0 &&
+                      [...imagesSelected].map((path, index) => (
                         <Image.PreviewGroup
                           key={index}
                           preview={{
@@ -312,10 +362,7 @@ function Detail() {
                         >
                           <Image
                             width={80}
-                            src={
-                              process.env.REACT_APP_API_URL +
-                              thumbnail.thumbnail
-                            }
+                            src={process.env.REACT_APP_API_URL + path}
                             onMouseEnter={() => handleThumbnailHover(index)} // Thay đổi từ onClick sang onMouseEnter
                             style={{
                               border:
@@ -333,8 +380,8 @@ function Detail() {
               <div className="css-6b3ezu">
                 {/* ten, mã , thương hiệu */}
                 <div>
-                  <h1 className="css-4kh4rf">{Detail?.shortDescription}</h1>
-                  <div>
+                  <h1 className="css-4kh4rf">{Detail.shortDescription}</h1>
+                  <div style={{ marginTop: "8px" }}>
                     <div
                       type="caption"
                       color="textSecondary"
@@ -350,53 +397,28 @@ function Detail() {
                         <span className="css-n67qkj"> {Detail?.brand}</span>
                       </a>
                       <span className="css-1qgvt7n"></span>
-                      SKU: {Detail?.id}
+                      SKU: {Detail.id}
                       <span className="css-1qgvt7n"></span>
-                      Mã vạch: &nbsp;{configuration.part_number}
+                      Mã vạch: &nbsp;
+                      {configuration.part_number && configuration.part_number}
                     </div>
                   </div>
                 </div>
                 <br />
-                {/* check box màu sắc*/}
-                {Detail?.Colorname.length > 1 && (
-                  <div className="block-select-color">
-                    <p className="title-btn-color">màu sắc: {selectedColor}</p>
-                    <div className="flex-btn-color">
-                      {Detail.Colorname.map((color, index) => (
-                        <div
-                          style={
-                            selectedColor === color?.Colorname
-                              ? {
-                                  borderColor: "#024dbc",
-                                  color: "#024dbc",
-                                }
-                              : {}
-                          }
-                          key={index}
-                          onClick={() => handleChangeColor(color?.Colorname)}
-                          className="custom-checkbox-input"
-                        >
-                          {color?.Colorname}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* check box dung lượng*/}
-                {Detail?.capacity_list.length > 1 && (
+                {capacities && capacities.length > 1 && (
                   <div className="block-select-color">
                     <p className="title-btn-color">
-                      dung lượng (ROM):{" "}
-                      {formatCapacity(selectedCapacity.capacity)}
+                      dung lượng (ROM): {formatCapacity(selectedCapacity)}
                     </p>
                     <div className="flex-btn-color">
-                      {[...Detail.capacity_list].map((capacity, index) => (
+                      {[...capacities].map((capacity, index) => (
                         <>
                           <div
                             key={index}
                             style={
-                              selectedCapacity.capacity === capacity.capacity
+                              selectedCapacity === capacity
                                 ? {
                                     borderColor: "#024dbc",
                                     color: "#024dbc",
@@ -406,7 +428,7 @@ function Detail() {
                             onClick={() => handleChangeCapacity(capacity)}
                             className="custom-checkbox-input"
                           >
-                            {formatCapacity(capacity.capacity)}
+                            {formatCapacity(capacity)}
                           </div>
                           <br />
                         </>
@@ -415,36 +437,73 @@ function Detail() {
                   </div>
                 )}
 
-                {/* giá tiền */}
-                <div className="css-1q5zfcu">
-                  {parseInt(Detail.discount) === 0 ? (
-                    <div className="css-oj899w">
-                      {formatCurrency(selectedCapacity.capacity_price)}
+                {/* check box màu sắc*/}
+                {capacities &&
+                  colors &&
+                  (colors.length > 1 || capacities.length > 1) && (
+                    <div className="block-select-color">
+                      <p className="title-btn-color">
+                        màu sắc: {selectedColor}
+                      </p>
+                      <div className="flex-btn-color">
+                        {[...colors].map((color, index) => (
+                          <div
+                            style={
+                              selectedColor === color
+                                ? {
+                                    borderColor: "#024dbc",
+                                    color: "#024dbc",
+                                  }
+                                : {}
+                            }
+                            key={index}
+                            onClick={() => handleChangeColor(color)}
+                            className="custom-checkbox-input"
+                          >
+                            {color}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ) : (
-                    <>
+                  )}
+
+                {/* giá tiền */}
+                <br />
+                {variationSelected && (
+                  <div className="css-1q5zfcu">
+                    {parseInt(variationSelected.discount_amount) === 0 ? (
                       <div className="css-oj899w">
                         {formatCurrency(
-                          selectedCapacity.capacity_price - Detail?.discount
+                          selectedCapacity.price ? selectedCapacity.price : 0
                         )}
                       </div>
-                      <div style={{ fontSize: "12px" }}>
-                        <span style={{ textDecoration: "line-through" }}>
-                          {formatCurrency(selectedCapacity.capacity_price)}
-                        </span>
-                        &nbsp;
-                        <span style={{ color: "#1435c3" }}>
-                          {" "}
-                          -
-                          {format_sale(
-                            selectedCapacity.capacity_price,
-                            Detail?.discount
+                    ) : (
+                      <>
+                        <div className="css-oj899w">
+                          {formatCurrency(
+                            variationSelected.price -
+                              variationSelected.discount_amount || 0
                           )}
-                        </span>
-                      </div>
-                    </>
-                  )}
-                </div>
+                        </div>
+                        <div style={{ fontSize: "12px" }}>
+                          <span style={{ textDecoration: "line-through" }}>
+                            {formatCurrency(variationSelected.price)}
+                          </span>
+                          &nbsp;
+                          <span style={{ color: "#1435c3" }}>
+                            {" "}
+                            -
+                            {format_sale(
+                              variationSelected.price,
+                              variationSelected.discount_amount
+                            )}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
                 {/* ------------------------------------------------------------ */}
                 <div className="css-f1fyi0">
                   <div
@@ -572,7 +631,6 @@ function Detail() {
             <div className="fle-x">
               <div className="mo-ta">
                 <div className="title-mo">Mô tả sản phẩm</div>
-
                 <div
                   style={{ textAlign: "start" }}
                   dangerouslySetInnerHTML={{ __html: htmlContent }}
@@ -610,20 +668,18 @@ function Detail() {
                           Series
                         </td>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                          {Detail.name}
+                          {configuration.series}
                         </td>
                       </tr>
                       <tr>
                         <td colSpan={1}>Màu sắc</td>
                         <td colSpan={3}>
-                          {Detail.Colorname ? (
+                          {colors ? (
                             <div>
-                              {Detail.Colorname.map((color, index) => (
-                                <span key={color.id}>
-                                  {color.Colorname}
-                                  {index < Detail.Colorname.length - 1
-                                    ? ", "
-                                    : ""}
+                              {colors.map((color, index) => (
+                                <span key={index}>
+                                  {color}
+                                  {index < colors.length - 1 ? ", " : ""}
                                 </span>
                               ))}
                             </div>
@@ -632,7 +688,7 @@ function Detail() {
                           )}
                         </td>
                       </tr>
-                      {configuration.demandn && (
+                      {configuration.demand && (
                         <tr>
                           <td
                             style={{ backgroundColor: "#f6f6f6" }}
@@ -704,7 +760,7 @@ function Detail() {
                           Rom
                         </td>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
-                          {selectedCapacity.capacity}gb
+                          {formatCapacity(selectedCapacity)}
                         </td>
                       </tr>
                     </MDBTableBody>
@@ -749,17 +805,17 @@ function Detail() {
                   </tr>
                   <tr>
                     <td colSpan={1}>Series</td>
-                    <td colSpan={3}>{Detail.name}</td>
+                    <td colSpan={3}>{configuration.series}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Màu sắc</td>
                     <td colSpan={3}>
-                      {Detail.Colorname ? (
+                      {colors ? (
                         <div>
-                          {Detail.Colorname.map((color, index) => (
-                            <span key={color.id}>
-                              {color.Colorname}
-                              {index < Detail.Colorname.length - 1 ? ", " : ""}
+                          {colors.map((color, index) => (
+                            <span key={index}>
+                              {color}
+                              {index < colors.length - 1 ? ", " : ""}
                             </span>
                           ))}
                         </div>
@@ -768,7 +824,7 @@ function Detail() {
                       )}
                     </td>
                   </tr>
-                  {configuration.demandn && (
+                  {configuration.demand && (
                     <tr>
                       <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
                         Nhu cầu
@@ -841,7 +897,7 @@ function Detail() {
                   </tr>
                   <tr>
                     <td colSpan={1}>Rom</td>
-                    <td colSpan={3}>{selectedCapacity.capacity}gb</td>
+                    <td colSpan={3}>{formatCapacity(selectedCapacity)}</td>
                   </tr>
                   {(configuration.maximum_number_of_storage_ports ||
                     configuration.charging_port) && (
@@ -1017,6 +1073,7 @@ function Detail() {
                     <CardProduct
                       key={index}
                       item={item}
+                      items={relatedProducts}
                       onClick={handleViewDetailProduct}
                     />
                   ))}

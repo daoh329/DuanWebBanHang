@@ -24,14 +24,9 @@ const Home = () => {
   //top 10 laptop bán chạy
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/order/laptopbanchay`)
+      .get(`${process.env.REACT_APP_API_URL}/product/laptopbanchay`)
       .then((res) => {
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        res.data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
         setTopLaptop(res.data);
-        // console.log("Laptopbanchay: " +res.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -39,14 +34,10 @@ const Home = () => {
   //top 10 dien thoai bán chạy
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/order/dienthoaibanchay`)
+      .get(`${process.env.REACT_APP_API_URL}/product/dienthoaibanchay`)
       .then((res) => {
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        res.data.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
+        // console.log(res.data);
         setTopDienthoai(res.data);
-        // console.log("Laptopbanchay: " +res.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -76,13 +67,7 @@ const Home = () => {
     navigate(`/detail/${products.id}`);
   };
 
-  // const handleViewDetailproducts = (products) => {
-  //   console.log("click oke");
-  //   navigate(`/detail/${products.id}`);
-  // };
-
   const [historysp, sethistorysp] = useState([]);
-
   useEffect(() => {
     // Lấy giá trị từ session storage
     const storedProducts = JSON.parse(sessionStorage.getItem("products")) || [];
@@ -96,10 +81,6 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/newphone`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.configuration = JSON.parse(element.configuration);
-        });
         // Sắp xếp dữ liệu tại đây
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setNewphone(data);
@@ -115,10 +96,6 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.configuration = JSON.parse(element.configuration);
-        });
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setNewLaptop(data);
       })
@@ -133,10 +110,6 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.configuration = JSON.parse(element.configuration);
-        });
         // Sắp xếp lại mảng sản phẩm
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setProductsLaptop(data);
@@ -155,10 +128,6 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => {
         let data = response.data;
-        // Chuyển thông tin cấu hình thành định dạng JSON
-        data.forEach((element) => {
-          element.configuration = JSON.parse(element.configuration);
-        });
         // Sắp xếp lại mảng sản phẩm
         data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setProductsPhone(data);
