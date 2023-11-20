@@ -116,9 +116,9 @@ function OrderList() {
     { title: "SDT mua", dataIndex: "user_phone", key: "phone" },
     { title: "SDT nhận", dataIndex: "delivery_phone", key: "phonerecipient" },
     { title: "Địa chỉ", dataIndex: "address", key: "address" },
-    { title: "Tên sản phẩm", dataIndex: "shortDescription", key: "name" },
+    // { title: "Tên sản phẩm", dataIndex: "shortDescription", key: "name" },
     { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
-    { title: "SL", dataIndex: "quantity", key: "quantity" },
+    // { title: "SL", dataIndex: "quantity", key: "quantity" },
     { title: "PTGH", dataIndex: "deliveryMethod", key: "deliveryMethod" },
 
     {
