@@ -21,7 +21,6 @@ function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
   const cart = useSelector((state) => state.cart.products);
-  console.log("cart",cart)
   const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -71,7 +70,6 @@ function Cart() {
   useEffect(() => {
     // Kiểm tra nếu có dữ liệu trong sessionStorage
     const savedCheckboxData = sessionStorage.getItem("checkboxData");
-
     if (savedCheckboxData) {
       const {
         selectAll: savedSelectAll,
@@ -112,9 +110,11 @@ function Cart() {
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
-  const increaseQuantity = (productId) => {
+  const increaseQuantity = (productId, color, capacity) => {
     const data = {
       product_id: productId,
+      color,
+      capacity
     };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
@@ -122,9 +122,11 @@ function Cart() {
     setTotalPrice(total);
   };
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
-  const decreaseQuantity = (productId) => {
+  const decreaseQuantity = (productId, color, capacity) => {
     const data = {
       product_id: productId,
+      color,
+      capacity
     };
     // Cập nhật giỏ hàng
     dispatch(decreaseProduct(data));
@@ -276,14 +278,14 @@ function Cart() {
                       <td style={{ display: "flex", justifyContent: "center" }}>
                         <div className="quantity-control">
                           <Link
-                            onClick={() => decreaseQuantity(item.id)}
+                            onClick={() => decreaseQuantity(item.id, item.color, item.capacity)}
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-minus"></i>
                           </Link>
                           <span>{item.quantity}</span>
                           <Link
-                            onClick={() => increaseQuantity(item.id)}
+                            onClick={() => increaseQuantity(item.id, item.color, item.capacity)}
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-plus"></i>

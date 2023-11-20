@@ -20,7 +20,7 @@ function Order(props) {
 
   const getProductOfOrder = async () => {
     try {
-      const q = `${process.env.REACT_APP_API_URL}/order/${order[0].productID}`;
+      const q = `${process.env.REACT_APP_API_URL}/product/order/${order[0].productID}`;
       const results = await axios.get(q);
       if (results.status === 200) {
         setProduct(results.data[0]);
