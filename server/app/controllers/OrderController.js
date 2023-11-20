@@ -450,32 +450,23 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity,
+      SELECT products.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity,
       (
         SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
         FROM capacity_list
         WHERE capacity_list.product_id = product.id
       ) AS capacities
-      FROM product
+      FROM products
       JOIN productDetails ON product.id = productDetails.product_id
-      JOIN (
-          SELECT id, thumbnail, product_id
-          FROM (
-              SELECT id, thumbnail, product_id,
-              ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
-              FROM galery
-          ) tmp
-          WHERE rn = 1
-      ) galery ON product.id = galery.product_id
       JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       AND product.CategoryID = 1 AND product.status = 1
-      GROUP BY product.id, galery.thumbnail, productDetails.remaining_quantity
+      GROUP BY product.id, productDetails.remaining_quantity
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
-
+  
       mysql.query(query, (error, results) => {
         if (error) {
           return res.json({ error });
@@ -484,31 +475,23 @@ class OrderController {
         res.json(results);
       });
   }
+  
 
   async topDienthoai(req, res) {
     const query = `
-      SELECT product.*, MAX(productDetails.brand) as brand, galery.thumbnail, productDetails.remaining_quantity,
+      SELECT product.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity,
       (
         SELECT CONCAT('[', GROUP_CONCAT('{"id": "', capacity_list.id, '" , "capacity": "', capacity_list.capacity,'" , "capacity_price": "',  capacity_list.capacity_price,'"}' SEPARATOR ','), ']')
         FROM capacity_list
         WHERE capacity_list.product_id = product.id
       ) AS capacities
-      FROM product
+      FROM products
       JOIN productDetails ON product.id = productDetails.product_id
-      JOIN (
-          SELECT id, thumbnail, product_id
-          FROM (
-              SELECT id, thumbnail, product_id,
-              ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY id) as rn
-              FROM galery
-          ) tmp
-          WHERE rn = 1
-      ) galery ON product.id = galery.product_id
       JOIN orderDetailsProduct ON product.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       AND product.CategoryID = 2 AND product.status = 1
-      GROUP BY product.id, galery.thumbnail, productDetails.remaining_quantity
+      GROUP BY product.id, productDetails.remaining_quantity
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;

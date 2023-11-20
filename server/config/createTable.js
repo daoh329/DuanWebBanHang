@@ -58,7 +58,7 @@ const createTables = () => {
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
     paymentData longtext,
-    totalAmount NUMERIC(10,2),
+    totalAmount NUMERIC(12,2),
     status tinyINT,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
     FOREIGN KEY (UserID) REFERENCES users (id),
@@ -77,7 +77,7 @@ const createTables = () => {
     quantity INT,
     color varchar(255),
     capacity int,
-    totalPrice NUMERIC(10,2),
+    totalPrice NUMERIC(12,2),
     orderID int,
     FOREIGN KEY (orderID) REFERENCES orders (id),
     FOREIGN KEY (productID) REFERENCES products (id)
