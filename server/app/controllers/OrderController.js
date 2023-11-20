@@ -99,62 +99,68 @@ class OrderController {
   // }
 
   // API /order/order
-async quanlyAllOrder(req, res, next) {
-  const sql = `
-    SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
-    u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
-    CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-    odp.*, p.*
-    FROM orders o
-    JOIN users u ON o.UserID = u.id
-    JOIN delivery_address da ON o.addressID = da.id
-    JOIN orderDetailsProduct odp ON o.id = odp.orderID
-    JOIN products p ON odp.productID = p.id
-    ORDER BY o.created_at DESC
-  `;
-  mysql.query(sql, (err, result) => {
-    if (err) throw err;
-
-    // Nhóm các sản phẩm theo order_id
-    let orders = {};
-    result.forEach(row => {
-      if (!orders[row.order_id]) {
-        orders[row.order_id] = {
-          order_id: row.order_id,
-          deliveryMethod: row.deliveryMethod,
-          paymentMenthod: row.paymentMenthod,
-          order_created_at: row.order_created_at,
-          order_updated_at: row.order_updated_at,
-          order_note: row.order_note,
-          totalAmount: row.totalAmount,
-          paymentData: row.paymentData,
-          order_status: row.order_status,
-          addressID: row.addressID,
-          user_id: row.user_id,
-          user_name: row.user_name,
-          user_phone: row.user_phone,
-          user_email: row.user_email,
-          delivery_email: row.delivery_email,
-          delivery_phone: row.delivery_phone,
-          address: row.address,
-          products: []
-        };
-      }
-      orders[row.order_id].products.push({
-        productID: row.productID,
-        quantity: row.quantity,
-        color: row.color,
-        capacity: row.capacity,
-        totalPrice: row.totalPrice
+  async quanlyAllOrder(req, res, next) {
+    const sql = `
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
+      u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
+      CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
+      odp.*, p.*
+      FROM orders o
+      JOIN users u ON o.UserID = u.id
+      JOIN delivery_address da ON o.addressID = da.id
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN products p ON odp.productID = p.id
+      ORDER BY o.created_at DESC
+    `;
+    mysql.query(sql, (err, result) => {
+      if (err) throw err;
+  
+      // Nhóm các sản phẩm theo order_id
+      let orders = {};
+      result.forEach(row => {
+        if (!orders[row.order_id]) {
+          orders[row.order_id] = {
+            order_id: row.order_id,
+            deliveryMethod: row.deliveryMethod,
+            paymentMenthod: row.paymentMenthod,
+            order_created_at: row.order_created_at,
+            order_updated_at: row.order_updated_at,
+            order_note: row.order_note,
+            totalAmount: row.totalAmount,
+            paymentData: row.paymentData,
+            order_status: row.order_status,
+            addressID: row.addressID,
+            user_id: row.user_id,
+            user_name: row.user_name,
+            user_phone: row.user_phone,
+            user_email: row.user_email,
+            delivery_email: row.delivery_email,
+            delivery_phone: row.delivery_phone,
+            address: row.address,
+            products: []
+          };
+        }
+        orders[row.order_id].products.push({
+          productID: row.productID,
+          quantity: row.quantity,
+          color: row.color,
+          capacity: row.capacity,
+          totalPrice: row.totalPrice,
+          name: row.name,
+          shortDescription: row.shortDescription,
+          CategoryID: row.CategoryID,
+          main_image: row.main_image,
+          release_date: row.release_date,
+          status: row.status
+        });
       });
+  
+      // Chuyển đổi đối tượng orders thành một mảng
+      orders = Object.values(orders);
+  
+      res.send(orders);
     });
-
-    // Chuyển đổi đối tượng orders thành một mảng
-    orders = Object.values(orders);
-
-    res.send(orders);
-  });
-}
+  }  
 
 
   async confirmOrder(req, res) {
@@ -358,8 +364,14 @@ async quanlyAllOrder(req, res, next) {
           productID: row.productID,
           quantity: row.quantity,
           color: row.color,
-          capacity: row.capacity
-          // thêm các trường khác của sản phẩm nếu cần
+          capacity: row.capacity,
+          totalPrice: row.totalPrice,
+          name: row.name,
+          shortDescription: row.shortDescription,
+          CategoryID: row.CategoryID,
+          main_image: row.main_image,
+          release_date: row.release_date,
+          status: row.status
         });
       });
 
@@ -418,8 +430,14 @@ async quanlyAllOrder(req, res, next) {
           productID: row.productID,
           quantity: row.quantity,
           color: row.color,
-          capacity: row.capacity
-          // thêm các trường khác của sản phẩm nếu cần
+          capacity: row.capacity,
+          totalPrice: row.totalPrice,
+          name: row.name,
+          shortDescription: row.shortDescription,
+          CategoryID: row.CategoryID,
+          main_image: row.main_image,
+          release_date: row.release_date,
+          status: row.status
         });
       });
 
@@ -508,13 +526,9 @@ async quanlyAllOrder(req, res, next) {
     let sql = `
     SELECT 
         DATE_FORMAT(o.updated_at, '%Y-%m-%d') as updated_day, 
-        SUM(p.price * od.quantity) as Revenue
+        SUM(totalAmount) as Revenue
     FROM 
         orders o
-    JOIN 
-        orderDetailsProduct od ON o.id = od.orderID
-    JOIN 
-        products p ON od.productID = p.id
     WHERE
         o.status = 4 AND
         DATE_FORMAT(o.updated_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
@@ -551,13 +565,9 @@ async quanlyAllOrder(req, res, next) {
     let sql = `
     SELECT 
         DATE_FORMAT(o.updated_at, '%Y-%m') as updated_month, 
-        SUM(p.price * od.quantity) as Revenue
+        SUM(totalAmount) as Revenue
     FROM 
         orders o
-    JOIN 
-        orderDetailsProduct od ON o.id = od.orderID
-    JOIN 
-        products p ON od.productID = p.id
     WHERE
         o.status = 4
     GROUP BY 
