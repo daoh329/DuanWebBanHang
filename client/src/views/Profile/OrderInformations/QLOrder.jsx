@@ -19,19 +19,41 @@ function QLOrder() {
 
   const products = orderData.products;
 
+  const productIDs = products.map(product => product.productID);
+
   const navigate = useNavigate();
 
   const handleCancelOrder = () => {
     navigate(-1);
   };
-  const handleDetails = () => {
-    navigate(`/detail/${productID}`);
-  }
+  const handleDetails = (product) => {
+    // Kiểm tra xem 'id' có tồn tại hay không
+    if (!product.productID) {
+      console.error("Product ID is undefined!");
+      return;
+    }
+    // Lấy danh sách các sản phẩm đã xem từ session storage
+    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
+
+    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+    const isViewed = historysp.some((historyProduct) => historyProduct.id === product.productID);
+    // Nếu sản phẩm mới chưa được xem
+    if (!isViewed) {
+      // Thêm đối tượng sản phẩm mới vào cuối danh sách
+      historysp.push(product);
+      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+      sessionStorage.setItem("products", JSON.stringify(historysp));
+    }
+    navigate(`/detail/${product.productID}`);
+  };
+
+
+
   return (
-    <div style={{ display: "block" , width:'1100px', margin:'0 auto'}}>
+    <div style={{ display: "block", width: '1100px', margin: '0 auto' }}>
 
       <div style={{ display: 'flex', marginTop: 30 }}>
-        <div style={{ margin:"0 auto"}}>
+        <div style={{ margin: "0 auto" }}>
           <div style={{ width: '100%', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button
               onClick={handleCancelOrder}
@@ -79,10 +101,10 @@ function QLOrder() {
         {products.map((product, index) => (
           <div key={index} className="product-item">
             <div className="product-image">
-              {/* <img onClick={handleDetails} src={process.env.REACT_APP_API_URL + imageUrl} alt="" /> */}
+              <img onClick={() => handleDetails(product)} src={process.env.REACT_APP_API_URL + product.main_image} alt="" />
             </div>
-            <div className="product-infomations">
-              {/* <p onClick={handleDetails} className="name">{shortDescription}</p> */}
+            <div className="product-infomations" style={{textAlign:'left'}}>
+              <p onClick={() => handleDetails(product)} className="name">{product.name}</p>
               <p style={{ margin: "0", color: "#a6a4a4" }}>SKU: {product.productID}</p>
               <p style={{ margin: "0", color: "#a6a4a4" }}>
                 Cung cấp bởi <span>Đình Minh</span>
