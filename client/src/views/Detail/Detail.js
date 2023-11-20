@@ -30,10 +30,7 @@ function Detail() {
   const showModal2 = () => {
     setIsModalOpen2(true);
   };
-  //sự kiện ok
-  const handleOk = () => {
-    setIsModalOpen2(false);
-  };
+  
   //sự kiện đóng
   const handleCancel = () => {
     setIsModalOpen2(false);
@@ -776,9 +773,9 @@ function Detail() {
           {/* modal xem-chi-tiet */}
           <Modal
             open={isModalOpen2}
-            onOk={handleOk}
             onCancel={handleCancel}
             width={700}
+            footer={false}
           >
             {/* body */}
             <div className="khoi-tiet-cha">
