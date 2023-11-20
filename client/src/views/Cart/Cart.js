@@ -21,6 +21,7 @@ function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
   const cart = useSelector((state) => state.cart.products);
+  console.log("cart",cart)
   const dispatch = useDispatch();
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -81,6 +82,7 @@ function Cart() {
     }
   }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
 
+
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) =>
@@ -88,12 +90,13 @@ function Cart() {
     );
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
-      return acc.price - acc.discount + item.totalPrice;
+      return acc + item.totalPrice;
     }, 0);
     
     return total;
   };
-
+  
+  
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
