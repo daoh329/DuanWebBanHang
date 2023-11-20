@@ -109,7 +109,7 @@ async quanlyAllOrder(req, res, next) {
     JOIN users u ON o.UserID = u.id
     JOIN delivery_address da ON o.addressID = da.id
     JOIN orderDetailsProduct odp ON o.id = odp.orderID
-    JOIN product p ON odp.productID = p.id
+    JOIN products p ON odp.productID = p.id
     ORDER BY o.created_at DESC
   `;
   mysql.query(sql, (err, result) => {
@@ -322,7 +322,7 @@ async quanlyAllOrder(req, res, next) {
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
+      JOIN products p ON odp.productID = p.id
       WHERE u.phone = ?
       ORDER BY o.created_at DESC
     `;
@@ -382,7 +382,7 @@ async quanlyAllOrder(req, res, next) {
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
-      JOIN product p ON odp.productID = p.id
+      JOIN products p ON odp.productID = p.id
       WHERE u.id = ?
       ORDER BY o.created_at DESC
     `;
