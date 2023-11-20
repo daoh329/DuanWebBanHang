@@ -94,9 +94,9 @@ function QLdeliveryfailed() {
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
         { title: 'SDT người mua', dataIndex: 'user_phone', key: 'phone' },
         { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
-        { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
+        // { title: 'Tên sản phẩm', dataIndex: 'shortDescription', key: 'name' },
         { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
-        { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
+        // { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
         { title: 'PTGH', dataIndex: 'deliveryMethod', key: 'deliveryMethod' },
 
         {

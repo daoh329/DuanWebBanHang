@@ -47,9 +47,9 @@ function Product() {
     // };
 
     const columns = [
-        { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
+        // { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
         { title: 'Giá', dataIndex: 'price', key: 'price' },
-        { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+        // { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
         { title: 'Loại sản phẩm', dataIndex: 'Type', key: 'Type' },
         { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
         {

@@ -41,6 +41,7 @@ export default function Buy() {
 
   const [productID, setProductID] = useState(null);
   const [amount, setAmount] = useState(null);
+  const [totalPrice,settotalPrice] = useState(null);
   const [color, setColor] = useState(null);
   const [capacity, setCapacity] = useState(null);
   const [bankCode, setBankCode] = useState("");
@@ -125,27 +126,60 @@ export default function Buy() {
 
   //Thanh toán VNPay
 
+  // useEffect(() => {
+  //   const buysDataFromSession = sessionStorage.getItem("buys");
+  //   console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+  //   if (buysDataFromSession) {
+  //     const parsedBuysData = JSON.parse(buysDataFromSession);
+  //     setBuysData(parsedBuysData);
+  //     console.log("parsedBuysData:", JSON.stringify(parsedBuysData, null, 2)); // Kiểm tra dữ liệu sau khi chuyển đổi
+  
+  //     // Chuyển đổi total thành số trước khi cập nhật vào state amount
+  //     setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
+  //     console.log("dữ liệu total:", Number(parsedBuysData.total));
+  //     // Truy cập vào mảng selectedItems và lấy ra tất cả productID
+  //     const productIDs = parsedBuysData.selectedItems.map(item => item.id);
+  //     setProductID(productIDs); // Cập nhật mảng productIDs vào state
+  
+  //     // Truy cập vào mảng selectedItems và lấy ra đối tượng đầu tiên
+  //     const firstSelectedItem = parsedBuysData.selectedItems[0];
+  //     if (firstSelectedItem) {
+  //       setQuantity(firstSelectedItem.quantity);
+  //       setColor(firstSelectedItem.color);
+  //       setCapacity(firstSelectedItem.capacity.capacity); // Lưu ý: capacity là một đối tượng có thuộc tính capacity
+  //     }
+  //   }
+  // }, []);
+
   useEffect(() => {
     const buysDataFromSession = sessionStorage.getItem("buys");
-    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
     if (buysDataFromSession) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
       setBuysData(parsedBuysData);
-      console.log("parsedBuysData:", JSON.stringify(parsedBuysData, null, 2)); // Kiểm tra dữ liệu sau khi chuyển đổi
+      // console.log("parsedBuysData:", JSON.stringify(parsedBuysData, null, 2)); // Kiểm tra dữ liệu sau khi chuyển đổi
   
       // Chuyển đổi total thành số trước khi cập nhật vào state amount
-      setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
-      console.log("dữ liệu total:", Number(parsedBuysData.total));
+      setAmount(Number(parsedBuysData.total));
   
-      // Truy cập vào mảng selectedItems và lấy ra đối tượng đầu tiên
-      const firstSelectedItem = parsedBuysData.selectedItems[0];
-      if (firstSelectedItem) {
-        setProductID(firstSelectedItem.id)
-        setColor(firstSelectedItem.color);
-        setCapacity(firstSelectedItem.capacity.capacity); // Lưu ý: capacity là một đối tượng có thuộc tính capacity
-      }
+      // Truy cập vào mảng selectedItems và lấy ra tất cả productID
+      const productIDs = parsedBuysData.selectedItems.map(item => item.id);
+      setProductID(productIDs); // Cập nhật mảng productIDs vào state
+  
+      // Lấy ra tất cả color, quantity và capacity
+      const colors = parsedBuysData.selectedItems.map(item => item.color);
+      setColor(colors); // Cập nhật mảng colors vào state
+  
+      const quantities = parsedBuysData.selectedItems.map(item => item.quantity);
+      setQuantity(quantities); // Cập nhật mảng quantities vào state
+  
+      const capacities = parsedBuysData.selectedItems.map(item => item.capacity.capacity);
+      setCapacity(capacities); // Cập nhật mảng capacities vào state
+
+      const totalPrices = parsedBuysData.selectedItems.map(item => item.totalPrice);
+      settotalPrice(totalPrices);
     }
   }, []);
+  
 
   // useEffect(() => {
   //   console.log("Color:", color);
@@ -158,25 +192,25 @@ export default function Buy() {
   //   console.log("Capacity:", capacity);
   // }, [capacity]);
 
-  // Cập nhật quantity mỗi khi nó thay đổi
-  useEffect(() => {
-    if (buysData && buysData.selectedItems) {
-      // Tính toán tổng quantity từ selectedItems
-      const totalQuantity = buysData.selectedItems.reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
+  // // Cập nhật quantity mỗi khi nó thay đổi
+  // useEffect(() => {
+  //   if (buysData && buysData.selectedItems) {
+  //     // Tính toán tổng quantity từ selectedItems
+  //     const totalQuantity = buysData.selectedItems.reduce(
+  //       (total, item) => total + item.quantity,
+  //       0
+  //     );
 
-      // Cập nhật biến trạng thái quantity
-      setQuantity(totalQuantity);
-    }
-  }, [buysData]);
+  //     // Cập nhật biến trạng thái quantity
+  //     setQuantity(totalQuantity);
+  //   }
+  // }, [buysData]);
 
-  // Cập nhật sessionStorage mỗi khi quantity thay đổi
-  useEffect(() => {
-    // Lưu quantity vào sessionStorage
-    sessionStorage.setItem("quantity", JSON.stringify(quantity));
-  }, [quantity]);
+  // // Cập nhật sessionStorage mỗi khi quantity thay đổi
+  // useEffect(() => {
+  //   // Lưu quantity vào sessionStorage
+  //   sessionStorage.setItem("quantity", JSON.stringify(quantity));
+  // }, [quantity]);
 
   const removeFromCart = (productID) => {
     // xóa trong cart
@@ -196,14 +230,16 @@ export default function Buy() {
       UserID: user.id,
       addressID: deliveryAddress[addressChecked].id,
       productID: productID,
-      quantity: quantity,
       color: color,
       capacity: capacity,
+      quantity: quantity,
+      totalPrice: totalPrice,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 0,
       note: note,
       status: 0,
     };
+    // console.log("data: "+ data)
 
   
     if (!deliveryMethod) {
@@ -251,10 +287,11 @@ export default function Buy() {
   
     sessionStorage.setItem('UserID', user.id);
     sessionStorage.setItem('addressID', deliveryAddress[addressChecked].id);
-    sessionStorage.setItem('productID', productID);
-    sessionStorage.setItem('quantity', quantity);
-    sessionStorage.setItem('color', color);
-    sessionStorage.setItem('capacity', capacity);
+    sessionStorage.setItem('productID', JSON.stringify(productID));
+    sessionStorage.setItem('quantity', JSON.stringify(quantity));
+    sessionStorage.setItem('color', JSON.stringify(color));
+    sessionStorage.setItem('capacity', JSON.stringify(capacity));
+    sessionStorage.setItem('totalPrice', JSON.stringify(totalPrice));
     sessionStorage.setItem('deliveryMethod', deliveryMethod);
     sessionStorage.setItem('paymentMenthod', 2);
     sessionStorage.setItem('note', note);
@@ -313,6 +350,7 @@ export default function Buy() {
       color: color,
       capacity: capacity,
       quantity: quantity,
+      totalPrice: totalPrice,
       deliveryMethod: deliveryMethod,
       paymentMenthod: paymentMenthod,
       totalAmount: amount,
@@ -320,7 +358,7 @@ export default function Buy() {
       status: 0,
     };
 
-    console.log(data)
+    // console.log(data)
 
     if (!deliveryMethod) {
       message.error("Vui lòng chọn hình thức giao hàng");
