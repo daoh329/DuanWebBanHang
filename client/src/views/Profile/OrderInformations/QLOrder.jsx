@@ -105,7 +105,7 @@ function QLOrder() {
             </div>
             <div className="product-infomations" style={{textAlign:'left'}}>
               <p onClick={() => handleDetails(product)} className="name">{product.name}</p>
-              <p style={{ margin: "0", color: "#a6a4a4" }}>SKU: {product.productID}</p>
+              <p style={{ margin: "0", color: "#a6a4a4" }}>Màu sắc: {product.color}</p>
               <p style={{ margin: "0", color: "#a6a4a4" }}>
                 Cung cấp bởi <span>Đình Minh</span>
               </p>
