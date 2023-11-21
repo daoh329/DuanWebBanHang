@@ -199,6 +199,11 @@ class Product {
       FROM product_images
       WHERE product_id = ?;
     `;
+    const sl_main_image = `
+      SELECT main_image
+      FROM products
+      WHERE id = ?;
+    `;
     const dl_productDetails = `
       DELETE FROM productdetails
       WHERE product_id = ?;
@@ -224,11 +229,21 @@ class Product {
       }
 
       // select imagePath galery
-      var arrayImagePath = await query(sl_product_images, [id]);
-      arrayImagePath = JSON.parse(arrayImagePath[0].imagePath);
+      var resultsImagesPath = await query(sl_product_images, [id]);
+      var resultsMainImagesPath = await query(sl_main_image, [id]);
+      // Tạo mảng chứa các đường dẫn hình ảnh của sản phẩm
+      const arrayImagePath = [];
+      resultsImagesPath.forEach((element) => {
+        const ip = JSON.parse(element.imagePath);
+        ip.forEach((value) => {
+          arrayImagePath.push(value);
+        });
+      });
+      // Thêm đường dẫn ảnh chính của sản phẩm vào danh sách xóa
+      arrayImagePath.push(resultsMainImagesPath[0].main_image);
       // check nếu có ảnh thì mới xóa trong server và sql
       if (arrayImagePath.length != 0) {
-        await arrayImagePath.forEach(async (imagePath) => {
+        arrayImagePath.forEach(async (imagePath) => {
           // Đường dẫn tới thư mục public chứa hình ảnh
           const publicImagePath = path.join(
             __dirname,
@@ -267,7 +282,7 @@ class Product {
         query(dl_product, [id]),
       ]);
 
-      return res.json({ message: "success" });
+      return res.status(200).json({ message: "success" });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "failed" });

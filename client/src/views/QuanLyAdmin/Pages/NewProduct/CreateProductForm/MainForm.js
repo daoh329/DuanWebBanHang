@@ -190,7 +190,7 @@ function MainForm() {
     setArrVariations(updatedRomInfo);
   };
 
-  const add = () => {
+  const add = () => { 
     setArrVariations([
       ...arrVariations,
       {
