@@ -37,7 +37,11 @@ function MainForm() {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [arrVariations, setArrVariations] = useState([
-    { color: "", capacity: 0, price: 0, discount_amount: 0, images: [] },
+    {
+      color: "",
+      capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+      images: [],
+    },
   ]);
   const [inputs, setInputs] = useState([]);
   const [description, setDescription] = useState("");
@@ -86,8 +90,7 @@ function MainForm() {
     setIsLoading(true);
     // format release_date
     values["release_date"] = values["release_date"].format("YYYY-MM-DD");
-    // console.log(values["release_date"]);
-    // return
+
     try {
       // Xóa các trường images, color, capacity, main_image, price, discount
       delete values.images;
@@ -187,10 +190,14 @@ function MainForm() {
     setArrVariations(updatedRomInfo);
   };
 
-  const add = () => {
+  const add = () => { 
     setArrVariations([
       ...arrVariations,
-      { color: "", capacity: 0, price: 0, discount_amount: 0, images: [] },
+      {
+        color: "",
+        capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+        images: [],
+      },
     ]);
   };
 

@@ -6,21 +6,18 @@ import {
   Select,
   Upload,
   notification,
+  Space,
 } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { formatCapacity } from "../../../../../util/formatCapacity";
 import { PlusOutlined } from "@ant-design/icons";
 
+const { Option } = Select;
+
 function ProductVariations(props) {
-  const {
-    index,
-    handlePreview,
-    fileList,
-    // uploadButton,
-    arrVariations,
-    setArrVariations,
-  } = props;
+  const { index, handlePreview, fileList, arrVariations, setArrVariations } =
+    props;
   const [colors, setColors] = useState([]);
   const [capacities, setCapacities] = useState([]);
 
@@ -68,6 +65,22 @@ function ProductVariations(props) {
     }
     const updatedVariations = [...arrVariations];
     updatedVariations[index][key] = value;
+    setArrVariations(updatedVariations);
+  };
+
+  const handleSubFieldChange = (fieldIndex, subFieldIndex, key, value) => {
+    const updatedVariations = [...arrVariations];
+    updatedVariations[fieldIndex].capacityGroup[subFieldIndex][key] = value;
+    setArrVariations(updatedVariations);
+  };
+
+  const addSubField = () => {
+    const updatedVariations = [...arrVariations];
+    updatedVariations[index].capacityGroup.push({
+      price: 0,
+      discount_amount: 0,
+      capacity: 0,
+    });
     setArrVariations(updatedVariations);
   };
 
@@ -162,72 +175,37 @@ function ProductVariations(props) {
         </Form>
       </Modal>
 
-      <Form.Item style={{ margin: 0 }}>
-        {/* capacity */}
-        <Form.Item
-          label="Dung lượng (ROM)"
-          style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+      {/* colors*/}
+      <h5>Màu sắc</h5>
+      <Form.Item
+        label="Màu sắc"
+        style={{
+          display: "inline-block",
+          width: "calc(50% - 8px)",
+        }}
+      >
+        <Select
+          placeholder="Chọn màu sắc"
+          optionLabelProp="label"
+          style={{ height: 40 }}
+          onChange={(value) => handleInputChange(index, "color", value)}
+          allowClear //cho phép xóa
+          showSearch //cho phép tìm kiếm
         >
-          <Select
-            placeholder="Chọn dung lượng (ROM)"
-            optionLabelProp="label"
-            style={{ height: 40 }}
-            onChange={(value) => handleInputChange(index, "capacity", value)}
-            allowClear
-          >
-            {capacities &&
-              capacities.map((capacity, index) => (
-                <Select.Option
-                  key={index}
-                  value={capacity.capacity}
-                  label={formatCapacity(capacity.capacity)}
-                >
-                  {formatCapacity(capacity.capacity)}
-                </Select.Option>
-              ))}
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            onClick={openModalAddCapacity}
-            icon={<PlusOutlined />}
-            style={{ margin: "0 10px 0 0", border: "none", background: "none" }}
-          >
-            Thêm dung lượng
-          </Button>
-        </Form.Item>
-
-        {/* colors and image*/}
-        <Form.Item
-          label="Màu sắc"
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: "0 8px",
-          }}
-        >
-          <Select
-            placeholder="Chọn màu sắc"
-            optionLabelProp="label"
-            style={{ height: 40 }}
-            onChange={(value) => handleInputChange(index, "color", value)}
-            allowClear
-          >
-            {colors &&
-              colors.map((color, index) => (
-                <Select.Option
-                  key={index}
-                  value={color.name}
-                  label={color.name}
-                />
-              ))}
-          </Select>
-        </Form.Item>
+          {colors &&
+            colors.map((color, index) => (
+              <Select.Option
+                key={index}
+                value={color.name}
+                label={color.name}
+              />
+            ))}
+        </Select>
       </Form.Item>
 
       {/* images */}
       <Form.Item
-        label="Hình ảnh"
+        label="Hình ảnh sản phẩm cho màu sắc"
         rules={[{ required: true, message: "Vui lòng chọn dung lượng (ROM)" }]}
       >
         <Upload
@@ -247,6 +225,89 @@ function ProductVariations(props) {
           {fileList.length >= 10 ? null : uploadButton}
         </Upload>
       </Form.Item>
+      
+      <h5>Dung lượng</h5>
+      {arrVariations[index].capacityGroup.map((item, i) => (
+        <div key={i}>
+          <CapacityGroup
+            capacities={capacities}
+            fieldIndex={index}
+            subFieldIndex={i}
+            openModalAddCapacity={openModalAddCapacity}
+            handleSubFieldChange={handleSubFieldChange}
+          />
+        </div>
+      ))}
+      {/* btn add subField */}
+      <Form.Item style={{ margin: "8px 0 0 0" }} wrapperCol={{ offset: 11, span: 4 }}>
+        <Button
+          icon={<PlusOutlined />}
+          onClick={addSubField}
+          type="primary"
+          shape="round"
+        />
+      </Form.Item>
+    </>
+  );
+}
+
+// component capacity group form
+function CapacityGroup(props) {
+  const {
+    capacities,
+    fieldIndex,
+    subFieldIndex,
+    openModalAddCapacity,
+    handleSubFieldChange,
+  } = props;
+
+  return (
+    <>
+      <br />
+      {/* capacity */}
+      <hr/>
+      <Form.Item style={{ margin: 0 }}>
+        <Form.Item
+          label={"Dung lượng (ROM) "+ subFieldIndex}
+          style={{
+            display: "inline-block",
+            width: "calc(50% - 8px)",
+            margin: 0,
+          }}
+        >
+          <Select
+            placeholder="Chọn dung lượng (ROM)"
+            optionLabelProp="label"
+            style={{ height: 40 }}
+            onChange={(value) =>
+              handleSubFieldChange(fieldIndex, subFieldIndex, "capacity", value)
+            }
+            allowClear //cho phép xóa
+            showSearch //cho phép tìm kiếm
+          >
+            {capacities &&
+              capacities.map((capacity, index) => (
+                <Option
+                  key={index}
+                  value={capacity.capacity}
+                  label={formatCapacity(capacity.capacity)}
+                >
+                  <Space>{formatCapacity(capacity.capacity)}</Space>
+                </Option>
+              ))}
+          </Select>
+        </Form.Item>
+        {/* btn add capacity */}
+        <Form.Item>
+          <Button
+            onClick={openModalAddCapacity}
+            icon={<PlusOutlined />}
+            style={{ margin: "0 10px 0 0", border: "none", background: "none" }}
+          >
+            Thêm dung lượng (ROM)
+          </Button>
+        </Form.Item>
+      </Form.Item>
 
       {/* Giá */}
       {/* Giá giảm */}
@@ -263,7 +324,9 @@ function ProductVariations(props) {
             style={{ width: "100%" }}
             placeholder="Nhập giá sản phẩm"
             min={0}
-            onChange={(value) => handleInputChange(index, "price", value)}
+            onChange={(value) =>
+              handleSubFieldChange(fieldIndex, subFieldIndex, "price", value)
+            }
           />
         </Form.Item>
         <Form.Item
@@ -279,7 +342,12 @@ function ProductVariations(props) {
             style={{ width: "100%" }}
             placeholder="Nhập giá giảm"
             onChange={(value) =>
-              handleInputChange(index, "discount_amount", value)
+              handleSubFieldChange(
+                fieldIndex,
+                subFieldIndex,
+                "discount_amount",
+                value
+              )
             }
           />
         </Form.Item>
