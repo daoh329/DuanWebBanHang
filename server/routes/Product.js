@@ -23,7 +23,7 @@ router.post("/disable-and-enable", ProductControllers.disable);
 // get data
 router.get("/json", ProductControllers.json);
 router.post("/cart", ProductControllers.GetProductCart);
-router.post("/order/:id", ProductControllers.GetProductCart);
+router.post("/order/:id", ProductControllers.getProductOfOrder);
 router.get("/productslaptop", ProductControllers.QueryProductsLaptop);
 router.get("/newphone", ProductControllers.Newphone);
 router.get("/newlaptop", ProductControllers.Newlaptop);

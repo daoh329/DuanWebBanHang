@@ -246,10 +246,9 @@ function ReceiverInformationModal({
       <h5>Thông tin người nhận hàng</h5>
       <Form
         form={form}
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 16 }}
         onFinish={action === "add" ? onFinishInsert : onFinishUpdate}
         onFinishFailed={onFinishFailed}
+        layout="vertical"
         initialValues={
           receiverInformation && {
             name: receiverInformation.name,
@@ -272,81 +271,135 @@ function ReceiverInformationModal({
         </Form.Item>
 
         {/* Số điện thoại */}
-        <Form.Item
-          label="Số điện thoại"
-          name="phone"
-          rules={[
-            { required: true, message: "Số điện thoại không được bỏ trống" },
-          ]}
-        >
-          <Input placeholder="Nhập số điện thoại người nhận" />
+        <Form.Item style={{ margin: "0" }}>
+          <Form.Item
+            label="Số điện thoại"
+            name="phone"
+            rules={[
+              { required: true, message: "Số điện thoại không được bỏ trống" },
+            ]}
+            style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+          >
+            <Input placeholder="Nhập số điện thoại người nhận" />
+          </Form.Item>
+
+          {/* Email */}
+          <Form.Item
+            label="Email"
+            name="email"
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+          >
+            <Input placeholder="Nhập email người nhận" />
+          </Form.Item>
         </Form.Item>
 
-        {/* Email */}
-        <Form.Item label="Email" name="email">
-          <Input placeholder="Nhập email người nhận" />
-        </Form.Item>
-
-        <Divider />
+        <Divider style={{ margin: "0 0 10px 0" }} />
+        <h5 style={{ fontWeight: "bold", margin: "0 0 10px 0" }}>
+          Địa chỉ nhận hàng
+        </h5>
         {/* Tỉnh/Thành phố */}
-        <Form.Item
-          label="Tỉnh/Thành phố"
-          name="city"
-          rules={[
-            { required: true, message: "Tỉnh/Thành phố không được bỏ trống" },
-          ]}
-        >
-          <Select placeholder="Chọn" onChange={handleCityChange}>
-            {city.map((city) => (
-              <Option key={city.Id} value={city.Name}>
-                {city.Name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-
         {/* Quận/huyện */}
-        <Form.Item
-          name="district"
-          label="Quận/huyện"
-          rules={[
-            { required: true, message: "Quận/huyện không được bỏ trống" },
-          ]}
-        >
-          <Select placeholder="Chọn" onChange={handleDistrictChange}>
-            {selectedCity &&
-              selectedCity.Districts.map((district) => (
-                <Option key={district.Id} value={district.Name}>
-                  {district.Name}
+        <Form.Item style={{ margin: "0" }}>
+          <Form.Item
+            label="Tỉnh/Thành phố"
+            name="city"
+            rules={[
+              { required: true, message: "Tỉnh/Thành phố không được bỏ trống" },
+            ]}
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+            }}
+          >
+            <Select
+              placeholder="Chọn"
+              onChange={handleCityChange}
+              style={{ height: "40px" }}
+            >
+              {city.map((city) => (
+                <Option key={city.Id} value={city.Name}>
+                  {city.Name}
                 </Option>
               ))}
-          </Select>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="district"
+            label="Quận/huyện"
+            rules={[
+              { required: true, message: "Quận/huyện không được bỏ trống" },
+            ]}
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+          >
+            <Select
+              placeholder="Chọn"
+              onChange={handleDistrictChange}
+              style={{ height: "40px" }}
+            >
+              {selectedCity &&
+                selectedCity.Districts.map((district) => (
+                  <Option key={district.Id} value={district.Name}>
+                    {district.Name}
+                  </Option>
+                ))}
+            </Select>
+          </Form.Item>
         </Form.Item>
 
-        <Form.Item
-          name="commune"
-          label="Xã/Phường"
-          rules={[{ required: true, message: "Xã/Phường không được bỏ trống" }]}
-        >
-          <Select placeholder="Chọn" onChange={handleWardChange}>
-            {selectedDistrict &&
-              selectedDistrict.Wards.map((ward) => (
-                <Option key={ward.Id} value={ward.Name}>
-                  {ward.Name}
-                </Option>
-              ))}
-          </Select>
+        {/* Phường/Xã and Địa chỉ cụ thể*/}
+        <Form.Item style={{ margin: "0" }}>
+          <Form.Item
+            name="commune"
+            label="Xã/Phường"
+            rules={[
+              { required: true, message: "Xã/Phường không được bỏ trống" },
+            ]}
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+            }}
+          >
+            <Select
+              placeholder="Chọn"
+              onChange={handleWardChange}
+              style={{ height: "40px" }}
+            >
+              {selectedDistrict &&
+                selectedDistrict.Wards.map((ward) => (
+                  <Option key={ward.Id} value={ward.Name}>
+                    {ward.Name}
+                  </Option>
+                ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="street"
+            label="Địa chỉ cụ thể"
+            rules={[
+              { required: true, message: "Địa chỉ cụ thể không được bỏ trống" },
+            ]}
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+          >
+            <Input
+              placeholder="Số nhà,ngõ,tên đường..."
+              style={{ height: "40px" }}
+            />
+          </Form.Item>
         </Form.Item>
 
-        <Form.Item
-          name="street"
-          label="Địa chỉ cụ thể"
-          rules={[
-            { required: true, message: "Địa chỉ cụ thể không được bỏ trống" },
-          ]}
-        >
-          <Input placeholder="Số nhà,ngõ,tên đường..." />
-        </Form.Item>
+        {/* check default */}
         <Form.Item
           name="setdefault"
           valuePropName="checked"

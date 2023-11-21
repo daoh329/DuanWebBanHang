@@ -16,6 +16,7 @@ class Product {
           .json({ message: "Không có thông tin biến thể sản phẩm" });
       }
 
+      // Đưa images trở lại variations
       var variations = data.variations;
       for (let i = 0; i < variations.length; i++) {
         variations[i].images = [];
@@ -30,34 +31,25 @@ class Product {
         variations[i].images = files;
       }
 
-      var colorAndImagesFromClient = [];
-      [...variations].forEach((variation) => {
-        const colorAndImage = {
-          color: variation.color,
-          images: variation.images,
-        };
-        colorAndImagesFromClient.push(colorAndImage);
-      });
+      // Lấy ra mảng dữ liệu cho bảng product_variations
+      const arrValueTableProductVariations = [];
 
-      // Sử dụng Set để lấy ra các màu duy nhất
-      const uniqueColors = [
-        ...new Set(colorAndImagesFromClient.map((item) => item.color)),
-      ];
-
-      // Tạo một đối tượng để lưu trữ các màu và ảnh tương ứng
-      const colorAndImagesToDB = [];
-
-      // Lặp qua mảng để gán ảnh cho từng màu
-      uniqueColors.forEach((color) => {
-        const images = colorAndImagesFromClient.find(
-          (item) => item.color === color
-        ).images;
-        colorAndImagesToDB.push({ color, images });
-      });
-
-      // console.log(formattedDate);
+      for (let i = 0; i < variations.length; i++) {
+        const capacityGroup = variations[i].capacityGroup;
+        capacityGroup.forEach((item) => {
+          const data = {
+            capacity: item.capacity,
+            price: item.price,
+            discount_amount: item.discount_amount ? item.discount_amount : 0,
+            color: variations[i].color,
+          };
+          arrValueTableProductVariations.push(data);
+        });
+      }
+      // console.log(variations);
       // res.status(200).send("success");
       // return;
+
       var mainImagePath = "";
       // multer không nhận được ảnh sẽ trả về undefind
       if (main_image) {
@@ -69,7 +61,7 @@ class Product {
       const is_product = `INSERT INTO products (name, main_image, shortDescription, CategoryID, status, release_date) VALUES (?, ?, ?, ?, ?, ?)`;
       const is_productdetail =
         "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
-      // product
+      // PRODUCT
       // Chuyển đổi chuỗi release_date thành giá trị kiểu DATE
       const formattedDate = new Date(data.release_date)
         .toISOString()
@@ -85,7 +77,7 @@ class Product {
       const resultP = await query(is_product, productValues);
       const id_product = resultP.insertId;
 
-      // product details
+      // PRODUCT DETAILS
       const PdValues = [
         data.quantity,
         data.brand,
@@ -101,29 +93,31 @@ class Product {
       INSERT INTO product_variations(color, capacity, product_id, price, discount_amount) VALUES (?,?,?,?,?);
     `;
       // insert to product_variations
-      [...variations].forEach(async (variation) => {
-        const variationsValues = [
-          variation.color,
-          variation.capacity,
-          id_product,
-          variation.price,
-          variation.discount_amount ? variation.discount_amount : 0,
-        ];
-        await query(is_product_variations, variationsValues);
-      });
+      arrValueTableProductVariations &&
+        [...arrValueTableProductVariations].forEach(async (variation) => {
+          const variationsValues = [
+            variation.color,
+            variation.capacity,
+            id_product,
+            variation.price,
+            variation.discount_amount,
+          ];
+          await query(is_product_variations, variationsValues);
+        });
 
       // insert to product_images
       const is_product_images = `
       INSERT INTO product_images( product_id, color, path) VALUES (?,?,?);
       `;
-      [...colorAndImagesToDB].forEach(async (colorAndImage) => {
-        const imagesValues = [
-          id_product,
-          colorAndImage.color,
-          JSON.stringify(colorAndImage.images),
-        ];
-        await query(is_product_images, imagesValues);
-      });
+      variations &&
+        [...variations].forEach(async (item) => {
+          const imagesValues = [
+            id_product,
+            item.color,
+            JSON.stringify(item.images),
+          ];
+          await query(is_product_images, imagesValues);
+        });
 
       res.status(200).send("success");
     } catch (error) {
@@ -858,7 +852,7 @@ class Product {
   }
 
   // /product/order/:id
-  async getProduct(req, res) {
+  async getProductOfOrder(req, res) {
     try {
       const product_id = req.params.id;
       const sl_product = `
