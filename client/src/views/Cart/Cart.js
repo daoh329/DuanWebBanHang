@@ -25,18 +25,22 @@ function Cart() {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const handleCheckboxChange = (productId) => {
+  const handleCheckboxChange = (productId, color, capacity) => {
     // Kiểm tra xem sản phẩm đã được chọn chưa
-    const isSelected = selectedProducts.includes(productId);
+    const isSelected = selectedProducts.some(product =>
+      product.id === productId && product.color === color && product.capacity === capacity
+    );
+
     let updatedSelectedProducts;
-  
+
     if (isSelected) {
       updatedSelectedProducts = selectedProducts.filter(
-        (id) => id !== productId
+        product => !(product.id === productId && product.color === color && product.capacity === capacity)
       );
     } else {
-      updatedSelectedProducts = [...selectedProducts, productId];
+      updatedSelectedProducts = [...selectedProducts, { id: productId, color, capacity }];
     }
+
     setSelectedProducts(updatedSelectedProducts);
     // Lưu trạng thái checkbox vào sessionStorage
     const checkboxData = {
@@ -45,27 +49,29 @@ function Cart() {
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
-  
+
+
 
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
   const handleSelectAllChange = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-
+  
     if (newSelectAll) {
-      const allProductIds = cart.map((item) => item.id);
-      setSelectedProducts(allProductIds);
+      const allProducts = cart.map((item) => ({id: item.id, color: item.color, capacity: item.capacity}));
+      setSelectedProducts(allProducts);
     } else {
       setSelectedProducts([]);
     }
-
+  
     // Lưu trạng thái selectAll và selectedProducts vào sessionStorage
     const checkboxData = {
       selectAll: newSelectAll,
-      selectedProducts: newSelectAll ? cart.map((item) => item.id) : [],
+      selectedProducts: newSelectAll ? cart.map((item) => ({id: item.id, color: item.color, capacity: item.capacity})) : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
+  
 
   useEffect(() => {
     // Kiểm tra nếu có dữ liệu trong sessionStorage
@@ -76,21 +82,21 @@ function Cart() {
         selectedProducts: savedSelectedProducts,
       } = JSON.parse(savedCheckboxData);
       setSelectAll(savedSelectAll);
-      setSelectedProducts(savedSelectedProducts);
+      setSelectedProducts(savedSelectedProducts.map(product => ({id: product.id, color: product.color, capacity: product.capacity})));
     }
   }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
-
+  
 
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) =>
-      selectedProducts.includes(item.id)
+      selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
     );
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
       return acc + item.totalPrice;
     }, 0);
-    
+  
     return total;
   };
   
@@ -98,11 +104,11 @@ function Cart() {
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-
+  
     // Cập nhật biến state tổng tiền
     setTotalPrice(total);
   }, [selectedProducts, cart]);
-
+  
   //xóa sp
   const removeFromCart = (productId, color, capacity) => {
     const data = {
@@ -166,27 +172,28 @@ function Cart() {
     navigate(`/detail/${products.id}`);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;
-  // Hàm xử lý khi nút "Tiếp tục" được ấn
-  const handleContinueClick = () => {
-    // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
-    const selectedItems = cart.filter((item) =>
-      selectedProducts.includes(item.id)
-    );
-    // Tính tổng tiền của các sản phẩm được chọn
-    const total = calculateTotalPrice();
-    // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
-    const buys = {
-      selectedItems,
-      total,
-    };
-    // Lưu thông tin vào sessionStorage
-    sessionStorage.setItem("buys", JSON.stringify(buys));
-    // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
-    navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
+// Hàm xử lý khi nút "Tiếp tục" được ấn
+const handleContinueClick = () => {
+  // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
+  const selectedItems = cart.filter((item) =>
+    selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
+  );
+  // Tính tổng tiền của các sản phẩm được chọn
+  const total = calculateTotalPrice();
+  // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
+  const buys = {
+    selectedItems,
+    total,
   };
+  // Lưu thông tin vào sessionStorage
+  sessionStorage.setItem("buys", JSON.stringify(buys));
+  // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
+  navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
+};
+
 
   return (
     <div>
@@ -224,10 +231,11 @@ function Cart() {
                       <td>
                         <input
                           type="checkbox"
-                          checked={selectedProducts.includes(item.id)}
-                          onChange={() => handleCheckboxChange(item.id)}
+                          checked={selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)}
+                          onChange={() => handleCheckboxChange(item.id, item.color, item.capacity)}
                         />
                       </td>
+
                       {/* image */}
                       <td style={{ width: "15%" }}>
                         <img
