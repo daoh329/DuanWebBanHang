@@ -30,10 +30,7 @@ function Detail() {
   const showModal2 = () => {
     setIsModalOpen2(true);
   };
-  //sự kiện ok
-  const handleOk = () => {
-    setIsModalOpen2(false);
-  };
+
   //sự kiện đóng
   const handleCancel = () => {
     setIsModalOpen2(false);
@@ -54,6 +51,7 @@ function Detail() {
   const [capacities, setCapacities] = useState([]);
   const [colors, setColors] = useState([]);
 
+  // Lọc những capacity có trong product (ko trùng nhau)
   useEffect(() => {
     if (Detail) {
       let cp = [];
@@ -67,7 +65,7 @@ function Detail() {
     }
   }, [Detail]);
 
-  // change color
+  // sự kiện khi color thay đổi (Thay đổi image)
   useEffect(() => {
     if (selectedColor && Detail) {
       const images = [...Detail.images].filter(
@@ -77,7 +75,7 @@ function Detail() {
     }
   }, [selectedColor, Detail]);
 
-  // change capacity
+  // sự kiện khi capacity thay đổi
   useEffect(() => {
     if (selectedCapacity && Detail) {
       // Thay đổi color theo capacity
@@ -85,6 +83,7 @@ function Detail() {
     }
   }, [selectedCapacity, Detail]);
 
+  // hàm thay đổi màu theo capacity
   const colorChangeByCapacity = (Detail, capacitySelected) => {
     const findColorWithCapacity = Detail.variations.filter(
       (vatiation) => vatiation.capacity === capacitySelected
@@ -98,6 +97,7 @@ function Detail() {
     setSelectedColor(cl[0]);
   };
 
+  // Hàm thay đổi giá khi color, capacity thay đổi
   useEffect(() => {
     if (selectedColor && Detail && selectedCapacity) {
       const vs = [...Detail.variations].filter(
@@ -109,10 +109,12 @@ function Detail() {
     }
   }, [selectedCapacity, selectedColor, Detail]);
 
+  // Lấy thông tin sản phẩm khi có id
   useEffect(() => {
     id && getProduct();
   }, [id]);
 
+  // Hàm lấy thông tin sản phẩm
   const getProduct = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/detail/${id}`)
@@ -150,23 +152,17 @@ function Detail() {
       message.warning("Sản phẩm đã hết hàng");
       return false;
     }
-    // Check color
-    if (!selectedColor) {
-      message.warning("Vui lòng chọn màu sắc của sản phẩm");
-      return false;
-    }
 
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.id,
-      main_image: Detail.main_image,
+      brand: Detail.brand,
       thumbnail: imagesSelected[0],
       shortDescription: Detail.shortDescription,
       capacity: selectedCapacity,
+      color: selectedColor,
       price: variationSelected.price,
       discount: variationSelected.discount_amount,
-      brand: Detail.brand,
-      color: selectedColor,
       //----
       quantity: 1,
       totalPrice: variationSelected.price - variationSelected.discount_amount,
@@ -174,7 +170,10 @@ function Detail() {
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingItemIndex = cart.findIndex(
-      (cartItem) => cartItem.id === newItem.id
+      (cartItem) =>
+        cartItem.id === newItem.id &&
+        cartItem.color === newItem.color &&
+        cartItem.capacity === newItem.capacity
     );
 
     if (existingItemIndex !== -1) {
@@ -665,10 +664,16 @@ function Detail() {
                       </tr>
                       {configuration.series && (
                         <tr>
-                          <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                          <td
+                            style={{ backgroundColor: "#f6f6f6" }}
+                            colSpan={1}
+                          >
                             Series
                           </td>
-                          <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                          <td
+                            style={{ backgroundColor: "#f6f6f6" }}
+                            colSpan={3}
+                          >
                             {configuration.series}
                           </td>
                         </tr>
@@ -778,9 +783,9 @@ function Detail() {
           {/* modal xem-chi-tiet */}
           <Modal
             open={isModalOpen2}
-            onOk={handleOk}
             onCancel={handleCancel}
             width={700}
+            footer={false}
           >
             {/* body */}
             <div className="khoi-tiet-cha">

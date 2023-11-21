@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { da } from "date-fns/locale";
 
 const initialState = {
   products: [],
@@ -13,9 +14,12 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     deleteProductInCart: (state, action) => {
-      const product_id = action.payload;
+      const { product_id, color, capacity } = action.payload;
       const updatedProducts = state.products?.filter(
-        (product) => product.id !== product_id
+        (product) =>
+          product.id !== product_id ||
+          product.color !== color ||
+          product.capacity !== capacity
       );
       localStorage.setItem(
         "cart",
@@ -24,50 +28,63 @@ export const cartSlice = createSlice({
       return { ...state, products: updatedProducts };
     },
     updateProductCart: (state, action) => {
-      const { id, capacity, color,price, brand, main_image, images, shortDescription, discount } =
-        action.payload;
+      const {
+        id,
+        capacity,
+        color,
+        price,
+        brand,
+        shortDescription,
+        discount,
+      } = action.payload;
+      // Tìm sản phẩm có cùng id, color và capacity trong cart để update
       const productUpdate = [...state.products].find(
-        (product) => product.id === id
+        (product) =>
+          product.id === id &&
+          product.color === color &&
+          product.capacity === capacity
       );
+      // Nếu tìm được thì update sản phẩm
       if (productUpdate) {
         productUpdate.capacity = capacity;
         productUpdate.color = color;
         productUpdate.price = price;
-        productUpdate.thumbnail = images;
         productUpdate.brand = brand;
-        productUpdate.main_image = main_image;
         productUpdate.shortDescription = shortDescription;
         productUpdate.discount = discount;
         productUpdate.totalPrice =
-          (productUpdate.price - discount) *
-          productUpdate.quantity;
+          (productUpdate.price - discount) * productUpdate.quantity;
       }
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     increaseProduct: (state, action) => {
-      const { product_id } = action.payload;
+      const { product_id, color, capacity } = action.payload;
       const cartToUpdate = state.products.find(
-        (product) => product.id === product_id
+        (product) =>
+          product.id === product_id &&
+          product.color === color &&
+          product.capacity === capacity
       );
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity + 1;
         cartToUpdate.totalPrice =
-          (cartToUpdate.price - cartToUpdate.discount) *
-          cartToUpdate.quantity;
+          (cartToUpdate.price - cartToUpdate.discount) * cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     decreaseProduct: (state, action) => {
-      const { product_id } = action.payload;
+      const { product_id, color, capacity } = action.payload;
       const cartToUpdate = state.products.find(
-        (product) => product.id === product_id
+        (product) =>
+          product.id === product_id &&
+          product.color === color &&
+          product.capacity === capacity
       );
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity - 1;
         cartToUpdate.totalPrice =
-          (cartToUpdate.price - cartToUpdate.discount) *
-          cartToUpdate.quantity;
+          (cartToUpdate.price - cartToUpdate.discount) * cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
       localStorage.setItem("cart", JSON.stringify(state.products));
