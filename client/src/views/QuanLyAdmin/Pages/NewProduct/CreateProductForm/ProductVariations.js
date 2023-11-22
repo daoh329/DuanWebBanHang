@@ -183,6 +183,8 @@ function ProductVariations(props) {
           display: "inline-block",
           width: "calc(50% - 8px)",
         }}
+        rules={[{ required: true, message: "Vui lòng chọn màu sắc" }]}
+        name={"color" + index}
       >
         <Select
           placeholder="Chọn màu sắc"
@@ -263,12 +265,11 @@ function CapacityGroup(props) {
 
   return (
     <>
-      <br />
       {/* capacity */}
-      <hr/>
+      <h6>{subFieldIndex}</h6>
       <Form.Item style={{ margin: 0 }}>
         <Form.Item
-          label={"Dung lượng (ROM) "+ subFieldIndex}
+          label={"Dung lượng (ROM)"}
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
@@ -352,6 +353,8 @@ function CapacityGroup(props) {
           />
         </Form.Item>
       </Form.Item>
+      <hr/>
+      <br />
     </>
   );
 }
