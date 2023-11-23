@@ -4,8 +4,8 @@ const createTables = () => {
   const products = `
   CREATE TABLE IF NOT EXISTS products (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name varchar(255) NOT NULL UNIQUE,
-    shortDescription varchar(255) NOT NULL,
+    name varchar(255) NOT NULL,
+    shortDescription varchar(255) NOT NULL UNIQUE,
     CategoryID INT NOT NULL,
     main_image longtext,
     release_date DATE,

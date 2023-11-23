@@ -184,7 +184,7 @@ function ProductVariations(props) {
           width: "calc(50% - 8px)",
         }}
         rules={[{ required: true, message: "Vui lòng chọn màu sắc" }]}
-        name={"color" + index}
+        // name={"color" + index}
       >
         <Select
           placeholder="Chọn màu sắc"
