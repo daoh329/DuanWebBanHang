@@ -537,22 +537,10 @@ function MainForm() {
         </h5>
         {inputs.map((input, index) => (
           <Form.Item key={index}>
-            {/* <Input
-              type="text"
-              placeholder="Tên trường"
-              value={input.inputName}
-              onChange={(e) =>
-                handleInputChange(index, "inputName", e.target.value)
-              }
-              style={{
-                display: "inline-block",
-                width: "calc(15% - 8px)",
-              }}
-            /> */}
             <Form.Item
               style={{
                 display: "inline-block",
-                width: "calc(15% - 8px)",
+                width: "calc(25% - 8px)",
                 margin: "0",
               }}
             >
