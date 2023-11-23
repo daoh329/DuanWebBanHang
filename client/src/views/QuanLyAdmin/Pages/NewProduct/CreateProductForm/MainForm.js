@@ -117,7 +117,8 @@ function MainForm() {
 
   useEffect(() => {
     if (selectedCategory) {
-      if (selectedCategory === "Laptop") {
+      const c = categories.find((c) => c.id === selectedCategory);
+      if (c.name === "Laptop") {
         setSelectedSpecifications(laptop_specifications);
       } else {
         setSelectedSpecifications(phone_specifications);
