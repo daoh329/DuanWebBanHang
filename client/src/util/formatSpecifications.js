@@ -51,7 +51,7 @@ export function formatSpecifications(value) {
     case "ramType":
       return "Loại RAM";
     case "graphicsCard":
-      return "Card màn hình";
+      return "Card đồ họa";
     case "graphicsCardMemory":
       return "Bộ nhớ Card màn hình (VRAM)";
     case "batteryLife":
