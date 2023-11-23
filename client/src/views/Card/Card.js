@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Tag } from "antd";
 import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
-import { formatCapacity } from "../../util/formatCapacity";
+// import { formatCapacity } from "../../util/formatCapacity";
 
 function CardProduct(props) {
   const { item, onClick } = props;
@@ -69,18 +69,18 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item?.remaining_quantity !== 0 && item?.discount_amount > 0 ? (
+      {item?.remaining_quantity !== 0 && discountOfPiceMin > 0 && (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
               TIẾT KIỆM
             </div>
             <div className="css-1rdv2qd">
-              {formatCurrency(item.discount_amount)}
+              {formatCurrency(discountOfPiceMin)}
             </div>
           </div>
         </div>
-      ) : null}
+      )}
 
       {/* brand */}
       <div
