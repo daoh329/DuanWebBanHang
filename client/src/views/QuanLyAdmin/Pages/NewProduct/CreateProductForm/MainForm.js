@@ -21,6 +21,7 @@ import {
 } from "@ant-design/icons";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { formatSpecifications } from "../../../../../util/formatSpecifications";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -36,6 +37,8 @@ function MainForm() {
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSpecifications, setSelectedSpecifications] = useState("");
   const [arrVariations, setArrVariations] = useState([
     {
       color: "",
@@ -45,6 +48,56 @@ function MainForm() {
   ]);
   const [inputs, setInputs] = useState([]);
   const [description, setDescription] = useState("");
+  const phone_specifications = [
+    "os",
+    "cpu",
+    "ram",
+    "memoryStick",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "mainCamera",
+    "frontCamera",
+    "pin",
+    "chargingTechnology",
+    "connector",
+    "size",
+    "weight",
+    "audioTechnology",
+    "loudspeaker",
+    "sensor",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+  ];
+  const laptop_specifications = [
+    "os",
+    "operatingSystemVersion",
+    "cpu",
+    "NumberOfCPUCoresAndThreads",
+    "CPUProcessingSpeed",
+    "ram",
+    "ramType",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "graphicsCard",
+    "graphicsCardMemory",
+    "connector",
+    "pin",
+    "batteryLife",
+    "keyboard",
+    "keyboardBacklight",
+    "touchpad",
+    "loudspeaker",
+    "audioTechnology",
+    "webcam",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+    "opticalDrive",
+    "radiators",
+  ];
 
   //   images and colors
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -61,6 +114,17 @@ function MainForm() {
   useEffect(() => {
     getCategoryList();
   }, []);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const c = categories.find((c) => c.id === selectedCategory);
+      if (c.name === "Laptop") {
+        setSelectedSpecifications(laptop_specifications);
+      } else {
+        setSelectedSpecifications(phone_specifications);
+      }
+    }
+  }, [selectedCategory]);
 
   const getBrandsList = async () => {
     try {
@@ -82,6 +146,11 @@ function MainForm() {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  // function selected category
+  const handleSelectedCategory = (value) => {
+    setSelectedCategory(value);
   };
 
   // function call api create product
@@ -190,7 +259,7 @@ function MainForm() {
     setArrVariations(updatedRomInfo);
   };
 
-  const add = () => { 
+  const add = () => {
     setArrVariations([
       ...arrVariations,
       {
@@ -310,7 +379,11 @@ function MainForm() {
               width: "calc(50% - 8px)",
             }}
           >
-            <Select placeholder="Chọn loại sản phẩm" style={{ height: 40 }}>
+            <Select
+              placeholder="Chọn loại sản phẩm"
+              style={{ height: 40 }}
+              onChange={handleSelectedCategory}
+            >
               {categories &&
                 [...categories].map((category) => (
                   <Select.Option key={category.id} value={category.id}>
@@ -403,6 +476,15 @@ function MainForm() {
             {mainImage.length === 1 ? null : uploadButton}
           </Upload>
         </Form.Item>
+        {/* modal preview image */}
+        <Modal
+          open={previewOpen}
+          title={previewTitle}
+          footer={null}
+          onCancel={handleCancel}
+        >
+          <img alt="example" style={{ width: "100%" }} src={previewImage} />
+        </Modal>
 
         {/* product variations */}
         <>
@@ -436,7 +518,7 @@ function MainForm() {
             </Card>
           ))}
         </>
-
+        {/* btn add variations */}
         <Form.Item>
           <Button
             type="dashed"
@@ -448,15 +530,6 @@ function MainForm() {
           </Button>
         </Form.Item>
 
-        <Modal
-          open={previewOpen}
-          title={previewTitle}
-          footer={null}
-          onCancel={handleCancel}
-        >
-          <img alt="example" style={{ width: "100%" }} src={previewImage} />
-        </Modal>
-
         {/* Other information */}
         <br />
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
@@ -464,18 +537,32 @@ function MainForm() {
         </h5>
         {inputs.map((input, index) => (
           <Form.Item key={index}>
-            <Input
-              type="text"
-              placeholder="Tên trường"
-              value={input.inputName}
-              onChange={(e) =>
-                handleInputChange(index, "inputName", e.target.value)
-              }
+            <Form.Item
               style={{
                 display: "inline-block",
-                width: "calc(15% - 8px)",
+                width: "calc(25% - 8px)",
+                margin: "0",
               }}
-            />
+            >
+              <Select
+                placeholder="Chọn thông tin"
+                // value={input.inputName}
+                onChange={(value) =>
+                  handleInputChange(index, "inputName", value)
+                }
+                style={{ height: 40 }}
+                showSearch
+                allowClear
+              >
+                {selectedSpecifications &&
+                  selectedSpecifications.map((specification) => (
+                    <Select.Option value={specification}>
+                      {formatSpecifications(specification)}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Form.Item>
+
             <Form.Item
               name={input.inputName}
               style={{

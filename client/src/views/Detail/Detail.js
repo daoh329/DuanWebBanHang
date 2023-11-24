@@ -473,7 +473,7 @@ function Detail() {
                     {parseInt(variationSelected.discount_amount) === 0 ? (
                       <div className="css-oj899w">
                         {formatCurrency(
-                          selectedCapacity.price ? selectedCapacity.price : 0
+                          variationSelected.price
                         )}
                       </div>
                     ) : (
@@ -481,7 +481,7 @@ function Detail() {
                         <div className="css-oj899w">
                           {formatCurrency(
                             variationSelected.price -
-                              variationSelected.discount_amount || 0
+                              variationSelected.discount_amount
                           )}
                         </div>
                         <div style={{ fontSize: "12px" }}>
