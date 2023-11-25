@@ -61,9 +61,9 @@ const AllNewProductPhone = () => {
   const uniqueSeries = [...new Set(configurations.map(config => config.series))];
   const uniqueRam = [...new Set(configurations.map(config => config.ram))];
   const uniquePin = [...new Set(configurations.map(config => config.pin))];
-  const uniqueRear_camera = [...new Set(configurations.map(config => config.rear_camera))];
-  const uniqueFront_camera = [...new Set(configurations.map(config => config.front_camera))];
-  const uniqueScreen = [...new Set(configurations.map(config => config.screen))];
+  const uniqueRear_camera = [...new Set(configurations.map(config => config.mainCamera))];
+  const uniqueFront_camera = [...new Set(configurations.map(config => config.frontCamera))];
+  const uniqueScreen = [...new Set(configurations.map(config => config.screenTechnology))];
 
   useEffect(() => {
     axios
@@ -204,7 +204,7 @@ const AllNewProductPhone = () => {
     if (selectedRear_camera !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.rear_camera === selectedRear_camera;
+        return config.mainCamera === selectedRear_camera;
       });
     }
 
@@ -212,7 +212,7 @@ const AllNewProductPhone = () => {
     if (selectedFront_camera !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.front_camera === selectedFront_camera;
+        return config.frontCamera === selectedFront_camera;
       });
     }
 
@@ -220,7 +220,7 @@ const AllNewProductPhone = () => {
     if (selectedScreen !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.screen === selectedScreen;
+        return config.screenTechnology === selectedScreen;
       });
     }
 
