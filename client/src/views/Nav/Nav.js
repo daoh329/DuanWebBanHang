@@ -38,7 +38,7 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
-
+import { useLocation } from 'react-router-dom';
 const { Header } = Layout;
 
 const App = () => {
@@ -345,6 +345,10 @@ const App = () => {
       console.log(error);
     }
   };
+  const location = useLocation();
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
 
   return (
     <Layout className="nav-container">
