@@ -3,8 +3,11 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { Button, Divider } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
+
 import axios from "axios";
 import { formatCurrency } from "../../../util/FormatVnd";
+import { format } from "date-fns";
+
 function QLOrder() {
   const location = useLocation();
   const orderData = location.state.orderData;
@@ -18,7 +21,11 @@ function QLOrder() {
   const quantity = orderData.quantity;
 
   const products = orderData.products;
-
+  const user_name = orderData.user_name;
+  const deliveryMethod = orderData.deliveryMethod;
+  const address = orderData.address;
+  const delivery_phone = orderData.delivery_phone;
+  const delivery_email = orderData.delivery_email;
   const productIDs = products.map(product => product.productID);
 
   const navigate = useNavigate();
@@ -52,7 +59,8 @@ function QLOrder() {
   return (
     <div style={{ display: "block", width: '1100px', margin: '0 auto' }}>
 
-      <div style={{ display: 'flex', marginTop: 30 }}>
+      <div style={{ display: 'flex', marginTop: 30, columnGap: '10px' }}>
+
         <div style={{ margin: "0 auto" }}>
           <div style={{ width: '100%', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button
@@ -62,19 +70,43 @@ function QLOrder() {
             />
             <h5>mã đơn hàng: {order_id}</h5>
           </div>
-          <div style={{ width: 450, height: 370, backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 15 }}>
-            <p style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Thông tin sản phẩm</p>
-            <p><b>SKU:</b> <span style={{ fontWeight: 'normal' }}>{productID}</span></p>
-            <p><b>Tên sản phẩm:</b> <span style={{ fontWeight: 'normal' }}>{shortDescription}</span></p>
-            <p><b>Màu:</b> <span style={{ fontWeight: 'normal' }}>{color}</span></p>
-            <p><b>Dung lượng:</b> <span style={{ fontWeight: 'normal' }}>{capacity} gb</span></p>
-            <p><b>Số lượng:</b> <span style={{ fontWeight: 'normal' }}>{quantity}</span></p>
-            <p><b>Tổng giá:</b> <span style={{ fontWeight: 'normal' }}>{totalAmount} vnđ</span></p>
+          <div style={{ width: 366, height: 370, backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 15, textAlign: 'left' }}>
+            <p style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Thông tin người nhận</p>
+            <p><b>Người nhận:</b> <span style={{ fontWeight: 'normal' }}>{user_name}</span></p>
+            <p><b>Email:</b> <span style={{ fontWeight: 'normal' }}>{delivery_email}</span></p>
+            <p><b>Điện thoại:</b> <span style={{ fontWeight: 'normal' }}>{delivery_phone}</span></p>
+            <p><b>Địa chỉ:</b> <span style={{ fontWeight: 'normal' }}>{address}</span></p>
+            <p><b>Hình thức nhận hàng:</b> <span style={{ fontWeight: 'normal' }}>{deliveryMethod}</span></p>
+
           </div>
         </div>
 
-        <div style={{ marginLeft: 200 }}>
-          <div style={{ width: 450, height: 370, backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 46 }}>
+        <div style={{ width: 366, height: 370, backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 46, textAlign: 'left' }}>
+          <p style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Thông tin đơn hàng</p>
+          <p>
+            <b>Trạng thái đơn hàng:</b>{" "}
+            <span>
+              {(() => {
+                switch (orderData.order_status) {
+                  case 0: return "Chờ xác nhận";
+                  case 1: return "Đã xác nhận";
+                  case 2: return "Đã hủy";
+                  case 3: return "Đang vận chuyển";
+                  case 4: return "Đã giao hàng";
+                  case 5: return "Giao hàng không thành công";
+                  default: return "Không xác định";
+                }
+              })()}
+            </span>
+          </p>
+          <p>
+            <b>Thời gian tạo: </b>
+            <span>{format(new Date(orderData.order_created_at), "HH:mm:ss dd/MM/yyyy")}</span>
+          </p>
+        </div>
+
+        <div>
+          <div style={{ width: 366, height: 370, backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 46, textAlign: 'left' }}>
             <p style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Thông tin hóa đơn</p>
             {paymentData && (paymentData.vnp_OrderInfo || paymentData.orderId) ? (
               <>
@@ -90,6 +122,7 @@ function QLOrder() {
             ) : 'Thanh toán khi nhận hàng'}
           </div>
         </div>
+
       </div>
 
 
@@ -98,12 +131,13 @@ function QLOrder() {
           <h6>Sản phẩm</h6>
         </div>
         <Divider style={{ margin: "0" }} />
+        <div style={{ display: 'grid', gap: '10px' }}>
         {products.map((product, index) => (
           <div key={index} className="product-item">
             <div className="product-image">
               <img onClick={() => handleDetails(product)} src={process.env.REACT_APP_API_URL + product.main_image} alt="" />
             </div>
-            <div className="product-infomations" style={{textAlign:'left'}}>
+            <div className="product-infomations" style={{ textAlign: 'left' }}>
               <p onClick={() => handleDetails(product)} className="name">{product.name}</p>
               <p style={{ margin: "0", color: "#a6a4a4" }}>Màu sắc: {product.color}</p>
               <p style={{ margin: "0", color: "#a6a4a4" }}>
@@ -116,8 +150,11 @@ function QLOrder() {
             </div>
           </div>
         ))}
+        
       </div>
+
     </div>
+    </div >
   );
 }
 
