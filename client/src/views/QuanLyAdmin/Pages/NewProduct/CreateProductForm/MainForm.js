@@ -97,6 +97,7 @@ function MainForm() {
     "dustproof",
     "opticalDrive",
     "radiators",
+    "weight",
   ];
 
   //   images and colors
