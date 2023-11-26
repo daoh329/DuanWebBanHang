@@ -271,7 +271,7 @@ function LaptopInputFrom({ data, onClick, setModal }) {
             message: "Cập nhật thành công!",
           });
         }, 2000);
-        setIsOpenModalCapcity(false)
+        setIsOpenModalCapcity(false);
         getCapacitiesList();
       } else {
         setTimeout(() => {
@@ -304,24 +304,41 @@ function LaptopInputFrom({ data, onClick, setModal }) {
       <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chung
       </h6>
-      {/* thương hiệu */}
-      <Form.Item label="Thương hiệu" name="brand">
-        <Select defaultValue={product.brand} placeholder="Chọn thương hiệu">
-          {brands &&
-            brands.map((brand) => (
-              <Select.Option key={brand.name} value={brand.name}>
-                {brand.name}
-              </Select.Option>
-            ))}
-        </Select>
-      </Form.Item>
-
-      {/* bảo hành */}
-      <Form.Item label="Bảo hành" name="guarantee">
-        <Input
-          defaultValue={product ? product.configuration.guarantee : null}
-          placeholder="Nhập thời gian bảo hành"
-        />
+      <Form.Item>
+        {/* thương hiệu */}
+        <Form.Item
+          label="Thương hiệu"
+          name="brand"
+          style={{
+            margin: "0",
+            display: "inline-block",
+            width: "calc(50% - 8px)",
+          }}
+        >
+          <Select defaultValue={product.brand} placeholder="Chọn thương hiệu">
+            {brands &&
+              brands.map((brand) => (
+                <Select.Option key={brand.name} value={brand.name}>
+                  {brand.name}
+                </Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
+        {/* bảo hành */}
+        <Form.Item
+          label="Bảo hành"
+          name="guarantee"
+          style={{
+            margin: "0",
+            display: "inline-block",
+            width: "calc(50% - 8px)",
+          }}
+        >
+          <Input
+            defaultValue={product ? product.configuration.guarantee : null}
+            placeholder="Nhập thời gian bảo hành"
+          />
+        </Form.Item>
       </Form.Item>
 
       {/* tên */}

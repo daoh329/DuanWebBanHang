@@ -134,6 +134,7 @@ class Product {
     p.name,
     p.status,
     p.shortDescription,
+    p.release_date,
     pd.brand,
     pd.quantity,
     pd.remaining_quantity,
