@@ -104,7 +104,7 @@ function ActionButton({ record, getProduct }) {
         title="Cập nhật sản phẩm"
         onCancel={handleCancel}
         footer={false}
-        style={ isOpenEditImageAndDescription && {minWidth:"800px"}}
+        style={ isOpenEditImageAndDescription ? {minWidth:"800px"} : {minWidth:"800px"}}
       >
         {/* edit Laptop */}
         {record.category === "Laptop" &&
