@@ -38,7 +38,7 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
-
+import { useLocation } from 'react-router-dom';
 const { Header } = Layout;
 
 const App = () => {
@@ -345,9 +345,13 @@ const App = () => {
       console.log(error);
     }
   };
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
 
   return (
     <Layout className="nav-container">
+        {!isAdminRoute && (
       <div className="danhmuc">
         <img
           alt=""
@@ -355,10 +359,11 @@ const App = () => {
           src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
         ></img>
       </div>
-
+        )}
       <div className="logoweb">
         <img alt="" style={{ objectFit: "cover" }} src={Hinh}></img>
       </div>
+      {!isAdminRoute && (
       <div className="menu-container">
         <div className="menu1">
           <div className="css-1e7ahm9">
@@ -424,7 +429,7 @@ const App = () => {
           </div>
         </div>
       </div>
-
+      )}
       <Affix offsetTop={0}>
         <div>
           {/* <div className="hd-logo">
