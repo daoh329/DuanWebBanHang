@@ -76,6 +76,8 @@ function MainForm() {
     "cpu",
     "NumberOfCPUCoresAndThreads",
     "CPUProcessingSpeed",
+    "romType",
+    "spinSpeedRom",
     "ram",
     "ramType",
     "screenSize",

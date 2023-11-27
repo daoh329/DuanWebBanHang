@@ -68,6 +68,10 @@ export function formatSpecifications(value) {
       return "Ổ đĩa quang";
     case "radiators":
       return "Tản nhiệt";
+      case "romType":
+      return "Loại ROM";
+      case "spinSpeedRom":
+      return "Tốc độ quay của ROM (Chỉ HDD)";
     default:
       return value;
   }
