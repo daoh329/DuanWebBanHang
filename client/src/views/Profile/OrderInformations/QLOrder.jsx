@@ -26,6 +26,7 @@ function QLOrder() {
   const address = orderData.address;
   const delivery_phone = orderData.delivery_phone;
   const delivery_email = orderData.delivery_email;
+
   const productIDs = products.map(product => product.productID);
 
   const navigate = useNavigate();
@@ -140,9 +141,8 @@ function QLOrder() {
             <div className="product-infomations" style={{ textAlign: 'left' }}>
               <p onClick={() => handleDetails(product)} className="name">{product.name}</p>
               <p style={{ margin: "0", color: "#a6a4a4" }}>Màu sắc: {product.color}</p>
-              <p style={{ margin: "0", color: "#a6a4a4" }}>
-                Cung cấp bởi <span>Đình Minh</span>
-              </p>
+              <p style={{ margin: "0", color: "#a6a4a4" }}>Dung lượng: {product.capacity}</p>
+             
             </div>
             <div className="product-total">
               <p style={{ fontWeight: "500" }}>{formatCurrency(product.totalPrice)}</p>
