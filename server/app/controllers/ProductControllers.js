@@ -871,8 +871,11 @@ class Product {
   async getProductOfOrder(req, res) {
     try {
       const product_id = req.params.id;
+      console.log(req.body);
+      return res.status(200);
+
       const sl_product = `
-        SELECT 
+        SELECT
         product.*,
         productDetails.brand,
         productDetails.quantity,
@@ -889,7 +892,8 @@ class Product {
         WHERE product.id = ?
         GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
         productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, 
-        category.name;`;
+        category.name;
+        `;
       const results = await query(sl_product, [product_id]);
       // chuyển string thành mảng (color, image)
       // color
