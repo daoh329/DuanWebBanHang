@@ -178,7 +178,6 @@ export default function Buy() {
         (item) => item.capacity
       );
       setCapacity(capacities); // Cập nhật mảng capacities vào state
-      console.log("capacities: "+capacities);
 
       const totalPrices = parsedBuysData.selectedItems.map(
         (item) => item.totalPrice
