@@ -76,6 +76,8 @@ function MainForm() {
     "cpu",
     "NumberOfCPUCoresAndThreads",
     "CPUProcessingSpeed",
+    "romType",
+    "spinSpeedRom",
     "ram",
     "ramType",
     "screenSize",
@@ -97,6 +99,7 @@ function MainForm() {
     "dustproof",
     "opticalDrive",
     "radiators",
+    "weight",
   ];
 
   //   images and colors
@@ -116,7 +119,7 @@ function MainForm() {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory) {
+    if (selectedCategory && categories.length > 0) {
       const c = categories.find((c) => c.id === selectedCategory);
       if (c.name === "Laptop") {
         setSelectedSpecifications(laptop_specifications);
@@ -124,7 +127,7 @@ function MainForm() {
         setSelectedSpecifications(phone_specifications);
       }
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, categories]);
 
   const getBrandsList = async () => {
     try {
