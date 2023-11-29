@@ -367,65 +367,6 @@ const App = () => {
       <div className="menu-container">
         <div className="menu1">
           <div className="css-1e7ahm9">
-            <a
-              href="/sale"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Khuyến mãi
-            </a>
-            <a
-              href="/showroom"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <EnvironmentOutlined
-                style={{ marginRight: "8px", color: "#fff" }}
-              />{" "}
-              Hệ thống showroom
-            </a>
-            <a
-              href="/support"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Tư vẫn doanh nghiệp
-            </a>
-            <Dropdown menu={{ items: menuContact }} placement="bottomRight">
-              <a
-               
-                style={{
-                  marginRight: "20px",
-                  color: "#fff", // Chữ màu trắng
-                  textDecoration: "none",
-                }}
-              >
-                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-                Liên hệ
-              </a>
-            </Dropdown>
-            <a
-              href="/tin-tuc"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Tin tức
-            </a>
           </div>
         </div>
       </div>
