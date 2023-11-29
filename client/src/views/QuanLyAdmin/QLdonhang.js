@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { Link, useNavigate } from "react-router-dom";
+import { utcToZonedTime, format } from 'date-fns-tz';
 
 function OrderList() {
 
@@ -91,6 +92,7 @@ function OrderList() {
     navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
   };
 
+  
   const columns = [
     {
       title: "Mã ĐH",
@@ -142,6 +144,11 @@ function OrderList() {
       title: "Thời gian tạo",
       dataIndex: "order_created_at",
       key: "created_at",
+      render: (date) => {
+        const fmt = 'HH:mm:ss - dd/MM/yyyy';
+        const zonedDate = utcToZonedTime(date, 'Etc/UTC');
+        return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
+      },
     },
 
     // {
