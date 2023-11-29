@@ -1,6 +1,7 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import './Support.css'
+import { Button, Flex } from 'antd';
 const Support = () => (
   <div>
     <Breadcrumb
@@ -17,7 +18,7 @@ const Support = () => (
 
 
     <body>
-      <h1 style={{ textAlign: "center" }}>Thông tin chi tiết phòng ban</h1><br />
+      
       {/*  */}
       <div className="snipcss-UfJbt">
         <div className="css-dniawc">
@@ -151,16 +152,7 @@ const Support = () => (
                         </div>
                       </div>
                       <div className=" css-qiail1">
-                        <button data-uniq-id="EcEUdruUbI" className="css-1is5g1a">
-                          <span id="style-l2vHF" className="style-l2vHF">
-                            <span>
-                              <p>
-                                <strong>ĐĂNG KÍ</strong>
-                              </p>
-                            </span>
-                          </span>
-                          <div className="css-157jl91"></div>
-                        </button>
+                      <Button type="primary" href='/'>Đăng ký</Button>
                       </div>
                     </form>
                   </div>
@@ -834,12 +826,7 @@ const Support = () => (
                         </div>
                         <div className="css-qiail1">
                           
-                            <button className="css-1sjt6s8">
-                              <span id="style-NsAUQ" className="style-NsAUQ">
-                                <span>Xem thêm</span>
-                              </span>
-                              <div className="css-157jl91"></div>
-                            </button>
+                        <Button type="primary"href='/'>Xem Thêm</Button>
                         
                         </div>
                       </div>
@@ -1419,12 +1406,7 @@ const Support = () => (
                         </div>
                         <div className="css-qiail1">
                          
-                            <button className="css-1sjt6s8">
-                              <span id="style-moGwT" className="style-moGwT">
-                                <span>Xem thêm</span>
-                              </span>
-                              <div className="css-157jl91"></div>
-                            </button>
+                        <Button type="primary"href='/'>Xem Thêm</Button>
                         
                         </div>
                       </div>
@@ -2032,13 +2014,7 @@ const Support = () => (
                         </div>
                         <div className="css-qiail1">
                         
-                            <button className="css-1sjt6s8">
-                              <span id="style-eYaLR" className="style-eYaLR">
-                                <span>Xem thêm</span>
-                              </span>
-                              <div className="css-157jl91"></div>
-                            </button>
-                    
+                        <Button type="primary"href='/'>Xem thêm</Button>
                         </div>
                       </div>
                     </div>
@@ -2623,12 +2599,7 @@ const Support = () => (
                         </div>
                         <div className="css-qiail1">
                         
-                            <button className="css-1sjt6s8">
-                              <span id="style-Fvr7Z" className="style-Fvr7Z">
-                                <span>Xem thêm</span>
-                              </span>
-                              <div className="css-157jl91"></div>
-                            </button>
+                        <Button type="primary"href='/'>Xem thêm</Button>
                      
                         </div>
                       </div>
@@ -3186,13 +3157,7 @@ const Support = () => (
                         </div>
                         <div className="css-qiail1">
                           
-                            <button className="css-1sjt6s8">
-                              <span id="style-M3fXk" className="style-M3fXk">
-                                <span>Xem thêm</span>
-                              </span>
-                              <div className="css-157jl91"></div>
-                            </button>
-                         
+                        <Button type="primary"href='/'>Xem thêm</Button>
                         </div>
                       </div>
                     </div>
@@ -3231,14 +3196,7 @@ const Support = () => (
                 </div>
                 <div className=" css-1sq3jq6">
                   <div>
-                    <button data-uniq-id=".ct63fhxs" className="css-a4gxdq">
-                      <span id="style-775Cx" className="style-775Cx">
-                        <span>
-                          <p>Xác nhận</p>
-                        </span>
-                      </span>
-                      <div className="css-157jl91"></div>
-                    </button>
+                  <Button type="primary" href='/'>Xác nhận</Button>
                   </div>
                 </div>
               </div>
