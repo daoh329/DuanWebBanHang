@@ -13,36 +13,48 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    // Tạo một đơn hàng mới
-    let sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
-    let values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.totalAmount, data.status];
-    mysql.query(sql, values, (err, result) => {
-      if (err) throw err;
-      const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
+    // Kiểm tra số lượng sản phẩm hiện có
+    let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
 
-      // Kiểm tra số lượng sản phẩm hiện có
-      sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+    let canBuy = true;
 
-      // Duyệt qua mỗi productID trong mảng
-      for (let i = 0; i < data.productID.length; i++) {
-        values = [data.productID[i]];
-        mysql.query(sql, values, (err, result) => {
-          if (err) throw err;
+    // Duyệt qua mỗi productID trong mảng
+    for (let i = 0; i < data.productID.length; i++) {
+        let values = [data.productID[i]];
 
-          // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-          if (data.quantity[i] > result[0].remaining_quantity) {
-            return res.status(400).json("Số lượng sản phẩm không đủ");
-          }
-      
-          // Nếu số lượng mua hàng không vượt quá số lượng sản phẩm hiện có
-          sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, orderID) VALUES (?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-          values = [data.productID[i], data.quantity[i], data.color[i], data.capacity[i], data.totalPrice[i], orderID];
-          mysql.query(sql, values, (err, result) => {
-            if (err) throw err;
-          });
+        // Sử dụng Promise để đảm bảo rằng truy vấn này hoàn thành trước khi tiếp tục
+        const productResult = await new Promise((resolve, reject) => {
+            mysql.query(sql, values, (err, result) => {
+                if (err) reject(err);
+                resolve(result);
+            });
         });
-      }
-    });
+
+        // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
+        if (data.quantity[i] > productResult[0].remaining_quantity) {
+            canBuy = false;
+            return res.status(400).json("Số lượng sản phẩm không đủ");
+        }
+    }
+
+    // Tạo một đơn hàng mới
+    if (canBuy) {
+      sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
+      let values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.totalAmount, data.status];
+      mysql.query(sql, values, (err, result) => {
+        if (err) throw err;
+          // console.log(result);
+          const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
+          // Duyệt qua mỗi productID trong mảng
+          for (let i = 0; i < data.productID.length; i++) {
+            sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, orderID) VALUES (?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+            values = [data.productID[i], data.quantity[i], data.color[i], data.capacity[i], data.totalPrice[i], orderID]; // Thêm dữ liệu vào bảng orderDetailsProduct
+            mysql.query(sql, values, (err, result) => {
+                if (err) throw err;
+            });
+          }
+      });
+    }
     // Gửi phản hồi sau khi tất cả các sản phẩm đã được xử lý
     res.send('Order details added...');
   }
