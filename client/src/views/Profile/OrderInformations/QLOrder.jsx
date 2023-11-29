@@ -6,9 +6,11 @@ import { LeftOutlined } from "@ant-design/icons";
 
 import axios from "axios";
 import { formatCurrency } from "../../../util/FormatVnd";
-import { format } from "date-fns";
+import { utcToZonedTime, format } from 'date-fns-tz';
 
 function QLOrder() {
+
+
   const location = useLocation();
   const orderData = location.state.orderData;
   const order_id = orderData.order_id;
@@ -26,7 +28,7 @@ function QLOrder() {
   const address = orderData.address;
   const delivery_phone = orderData.delivery_phone;
   const delivery_email = orderData.delivery_email;
-
+  const order_created_at = orderData.order_created_at;
   const productIDs = products.map(product => product.productID);
 
   const navigate = useNavigate();
@@ -55,6 +57,14 @@ function QLOrder() {
     navigate(`/detail/${product.productID}`);
   };
 
+  const date = new Date(orderData.order_created_at);
+  const fmt = 'HH:mm:ss -  dd/MM/yyyy';
+
+  // Chuyển đổi thời gian thành thời gian theo múi giờ UTC
+  const zonedDate = utcToZonedTime(date, 'Etc/UTC');
+
+  // Định dạng thời gian theo múi giờ UTC
+  const output = format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
 
 
   return (
@@ -102,7 +112,8 @@ function QLOrder() {
           </p>
           <p>
             <b>Thời gian tạo: </b>
-            <span>{format(new Date(orderData.order_created_at), "HH:mm:ss dd/MM/yyyy")}</span>
+            {/* <span>{format(new Date(orderData.order_created_at), "HH:mm:ss dd/MM/yyyy")}</span><br /> */}
+            <span>{output}</span>
           </p>
         </div>
 
@@ -133,27 +144,27 @@ function QLOrder() {
         </div>
         <Divider style={{ margin: "0" }} />
         <div style={{ display: 'grid', gap: '10px' }}>
-        {products.map((product, index) => (
-          <div key={index} className="product-item">
-            <div className="product-image">
-              <img onClick={() => handleDetails(product)} src={process.env.REACT_APP_API_URL + product.main_image} alt="" />
-            </div>
-            <div className="product-infomations" style={{ textAlign: 'left' }}>
-              <p onClick={() => handleDetails(product)} className="name">{product.name}</p>
-              <p style={{ margin: "0", color: "#a6a4a4" }}>Màu sắc: {product.color}</p>
-              <p style={{ margin: "0", color: "#a6a4a4" }}>Dung lượng: {product.capacity}</p>
-             
-            </div>
-            <div className="product-total">
-              <p style={{ fontWeight: "500" }}>{formatCurrency(product.totalPrice)}</p>
-              <p style={{ color: "#a6a4a4" }}>x{product.quantity}</p>
-            </div>
-          </div>
-        ))}
-        
-      </div>
+          {products.map((product, index) => (
+            <div key={index} className="product-item">
+              <div className="product-image">
+                <img onClick={() => handleDetails(product)} src={process.env.REACT_APP_API_URL + product.main_image} alt="" />
+              </div>
+              <div className="product-infomations" style={{ textAlign: 'left' }}>
+                <p onClick={() => handleDetails(product)} className="name">{product.name}</p>
+                <p style={{ margin: "0", color: "#a6a4a4" }}>Màu sắc: {product.color}</p>
+                <p style={{ margin: "0", color: "#a6a4a4" }}>Dung lượng: {product.capacity}</p>
 
-    </div>
+              </div>
+              <div className="product-total">
+                <p style={{ fontWeight: "500" }}>{formatCurrency(product.totalPrice)}</p>
+                <p style={{ color: "#a6a4a4" }}>x{product.quantity}</p>
+              </div>
+            </div>
+          ))}
+
+        </div>
+
+      </div>
     </div >
   );
 }
