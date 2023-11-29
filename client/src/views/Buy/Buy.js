@@ -484,7 +484,7 @@ export default function Buy() {
                         Nhận hàng tại nhà
                       </MDBTabsLink>
                     </MDBTabsItem>
-                    <MDBTabsItem className="nav-tabs-buy">
+                    {/* <MDBTabsItem className="nav-tabs-buy">
                       <MDBTabsLink
                         className="nav-link-buy"
                         onClick={() => handleFillClick("tab2")}
@@ -492,7 +492,7 @@ export default function Buy() {
                       >
                         Nhận hàng tại điểm
                       </MDBTabsLink>
-                    </MDBTabsItem>
+                    </MDBTabsItem> */}
                   </MDBTabs>
 
                   <MDBTabsContent>
@@ -539,7 +539,7 @@ export default function Buy() {
                             fontWeight: "bold",
                           }}
                         >
-                          Phương thức giao hàng
+                          Ngày giao hàng thức giao hàng
                         </label>
                         <div style={{ justifyContent: "space-between" }}>
                           <label
@@ -555,7 +555,7 @@ export default function Buy() {
                                 )
                               }
                             />
-                            Ngày trong tuần
+                              Tất cả ngày trong tuần
                           </label>
                           <label
                             style={{ display: "flex", alignItems: "center" }}
@@ -592,412 +592,6 @@ export default function Buy() {
                       </div> */}
                     </MDBTabsPane>
 
-                    <MDBTabsPane show={fillActive === "tab2"}>
-                      {/*  */}
-                      <div className="css-11tnwen snipcss0-0-0-1 snipcss-DLdxM">
-                        <div className="css-1xehz2l snipcss0-1-1-2">
-                          <div className="css-au5p93 snipcss0-2-2-3">
-                            Chọn khu vực nhận hàng
-                          </div>
-                          <div className="css-q55v4i snipcss0-2-2-4">
-                            <div className="css-12bxpw5 snipcss0-3-4-5">
-                              <div
-                                className="css-en0qru snipcss0-4-5-6"
-                                tabIndex={0}
-                              >
-                                <button
-                                  type="button"
-                                  className="css-ff84vc snipcss0-5-6-7"
-                                >
-                                  <span className="css-1denlqa snipcss0-6-7-8">
-                                    <span className="css-1fnfu41 snipcss0-7-8-9">
-                                      Thành phố Hồ Chí Minh
-                                    </span>
-                                  </span>
-                                  <span
-                                    direction="down"
-                                    size={12}
-                                    className="css-er4drj snipcss0-6-7-10"
-                                  ></span>
-                                </button>
-                              </div>
-                              <div
-                                className="css-43jsjt snipcss0-4-5-11 style-F8tYz"
-                                data-popper-reference-hidden="false"
-                                data-popper-escaped="false"
-                                data-popper-placement="bottom-start"
-                                id="style-F8tYz"
-                              >
-                                <div
-                                  origin="center top"
-                                  className="css-1x7vo2d snipcss0-5-11-12"
-                                >
-                                  <ul className="css-1ymolov snipcss0-6-12-13">
-                                    <li className="css-zsmsql snipcss0-7-13-14">
-                                      Tỉnh Bà Rịa - Vũng Tàu
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-15">
-                                      Thành phố Thái Nguyên
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-16">
-                                      Tỉnh Nghệ An
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-17">
-                                      Tỉnh Thừa Thiên Huế
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-18">
-                                      Tỉnh Long An
-                                    </li>
-                                    <li className="css-ip2e5w snipcss0-7-13-19">
-                                      Thành phố Hồ Chí Minh
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-20">
-                                      Thành phố Cần Thơ
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-21">
-                                      Tỉnh Bình Dương
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-22">
-                                      Thành phố Hà Nội
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-23">
-                                      Tỉnh Đồng Nai
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-24">
-                                      Tỉnh Đắk Lắk
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-25">
-                                      Tỉnh Bắc Ninh
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-26">
-                                      Tỉnh Tây Ninh
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-27">
-                                      Tỉnh Tiền Giang
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-28">
-                                      Tỉnh Quảng Trị
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-29">
-                                      Tỉnh Thanh Hóa
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-30">
-                                      Tỉnh Bến Tre
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-31">
-                                      Tỉnh Ninh Thuận
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-32">
-                                      Tỉnh Khánh Hòa
-                                    </li>
-                                    <li className="css-zsmsql snipcss0-7-13-33">
-                                      Tỉnh Đồng Tháp
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="snipcss0-5-11-34 style-V8nJR"
-                                  id="style-V8nJR"
-                                ></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="css-1hqpg snipcss0-1-1-35">
-                          <div className="css-1x5w71s snipcss0-2-35-36">
-                            <div
-                              className="css-1sks6na snipcss0-3-36-37 style-R9YTz"
-                              id="style-R9YTz"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-37-38 style-hxlik"
-                                id="style-hxlik"
-                              >
-                                <div className="css-un3w91 snipcss0-5-38-39">
-                                  <div className="css-1a6d6qm snipcss0-6-39-40">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1cjp49c snipcss0-7-40-41"
-                                    />
-                                    <div className="radio-inner css-nyq1jm snipcss0-7-40-42">
-                                      <div className="css-1q6g407 snipcss0-8-42-43"></div>
-                                    </div>
-                                  </div>
-                                  <div className="active css-1yyu6fw snipcss0-6-39-44">
-                                    <p className="css-1eud8hl snipcss0-7-44-45"></p>
-                                    <p className="css-j662fd snipcss0-8-45-46">
-                                      ĐỊA ĐIỂM KINH DOANH 6 - CÔNG TY CỔ PHẦN
-                                      THƯƠNG MẠI - DỊCH VỤ PHONG VŨ -
-                                      02873096867
-                                    </p>
-                                    Số 2A, Nguyễn Oanh, Phường 7, Quận Gò Vấp,
-                                    Thành phố Hồ Chí Minh, Phường 07, Quận Gò
-                                    Vấp, Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-38-47"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-48 style-Jj6to"
-                              id="style-Jj6to"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-48-49 style-y1k2b"
-                                id="style-y1k2b"
-                              >
-                                <div className="css-un3w91 snipcss0-5-49-50">
-                                  <div className="css-1a6d6qm snipcss0-6-50-51">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-51-52"
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-51-53">
-                                      <div className="css-1mdu17v snipcss0-8-53-54"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-50-55">
-                                    <p className="css-1eud8hl snipcss0-7-55-56"></p>
-                                    <p className="css-j662fd snipcss0-8-56-57">
-                                      ĐỊA ĐIỂM KINH DOANH 1 - CÔNG TY CỔ PHẦN
-                                      THƯƠNG MẠI - DỊCH VỤ PHONG VŨ -
-                                      02873016867
-                                    </p>
-                                    264A-264B-264C, Nguyễn Thị Minh Khai, Phường
-                                    6, Quận 3, Thành phố Hồ Chí Minh, Phường Võ
-                                    Thị Sáu, Quận 3, Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-49-58"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-59 style-H8Cjr"
-                              id="style-H8Cjr"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-59-60 style-dwrd8"
-                                id="style-dwrd8"
-                              >
-                                <div className="css-un3w91 snipcss0-5-60-61">
-                                  <div className="css-1a6d6qm snipcss0-6-61-62">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-62-63"
-                                      defaultChecked=""
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-62-64">
-                                      <div className="css-1mdu17v snipcss0-8-64-65"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-61-66">
-                                    <p className="css-1eud8hl snipcss0-7-66-67"></p>
-                                    <p className="css-j662fd snipcss0-8-67-68">
-                                      ĐỊA ĐIỂM KINH DOANH 50 - CÔNG TY CỔ PHẦN
-                                      THƯƠNG MẠI - DỊCH VỤ PHONG VŨ -
-                                      02873066867
-                                    </p>
-                                    677/2A Điện Biên Phủ, Phường 25, Quận Bình
-                                    Thạnh, TP. HCM, Phường 25, Quận Bình Thạnh,
-                                    Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-60-69"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-70 style-CNont"
-                              id="style-CNont"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-70-71 style-eGA26"
-                                id="style-eGA26"
-                              >
-                                <div className="css-un3w91 snipcss0-5-71-72">
-                                  <div className="css-1a6d6qm snipcss0-6-72-73">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-73-74"
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-73-75">
-                                      <div className="css-1mdu17v snipcss0-8-75-76"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-72-77">
-                                    <p className="css-1eud8hl snipcss0-7-77-78"></p>
-                                    <p className="css-j662fd snipcss0-8-78-79">
-                                      ĐỊA ĐIỂM KINH DOANH 3 - CÔNG TY CỔ PHẦN
-                                      THƯƠNG MẠI - DỊCH VỤ PHONG VŨ -
-                                      02873036867
-                                    </p>
-                                    1081C, Hậu Giang, Phường 11, Quận 6, Thành
-                                    phố Hồ Chí Minh, Phường 11, Quận 6, Thành
-                                    phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-71-80"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-81 style-Ed1mU"
-                              id="style-Ed1mU"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-81-82 style-LFTP1"
-                                id="style-LFTP1"
-                              >
-                                <div className="css-un3w91 snipcss0-5-82-83">
-                                  <div className="css-1a6d6qm snipcss0-6-83-84">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-84-85"
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-84-86">
-                                      <div className="css-1mdu17v snipcss0-8-86-87"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-83-88">
-                                    <p className="css-1eud8hl snipcss0-7-88-89"></p>
-                                    <p className="css-j662fd snipcss0-8-89-90">
-                                      Địa điểm Kinh doanh 4 - Công Ty Cổ Phần
-                                      Thương Mại Dịch Vụ Phong Vũ - 02873046867
-                                    </p>
-                                    164, Lê Văn Việt, Tăng Nhơn Phú B, TP.Thủ
-                                    Đức, Phường Tăng Nhơn Phú B, Thành phố Thủ
-                                    Đức, Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-82-91"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-92 style-HPgd2"
-                              id="style-HPgd2"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-92-93 style-dcaRg"
-                                id="style-dcaRg"
-                              >
-                                <div className="css-un3w91 snipcss0-5-93-94">
-                                  <div className="css-1a6d6qm snipcss0-6-94-95">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-95-96"
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-95-97">
-                                      <div className="css-1mdu17v snipcss0-8-97-98"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-94-99">
-                                    <p className="css-1eud8hl snipcss0-7-99-100"></p>
-                                    <p className="css-j662fd snipcss0-8-100-101">
-                                      ĐỊA ĐIỂM KINH DOANH 39 - CÔNG TY CỔ PHẦN
-                                      THƯƠNG MẠI - DỊCH VỤ PHONG VŨ
-                                    </p>
-                                    292/15 Cách Mạng Tháng 8, Phường 10, Quận 3,
-                                    Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-93-102"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-103 style-Xt7gL"
-                              id="style-Xt7gL"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-103-104 style-wkpDD"
-                                id="style-wkpDD"
-                              >
-                                <div className="css-un3w91 snipcss0-5-104-105">
-                                  <div className="css-1a6d6qm snipcss0-6-105-106">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-106-107"
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-106-108">
-                                      <div className="css-1mdu17v snipcss0-8-108-109"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-105-110">
-                                    <p className="css-1eud8hl snipcss0-7-110-111"></p>
-                                    <p className="css-j662fd snipcss0-8-111-112">
-                                      Địa điểm kinh doanh 48 - Công ty cổ phần
-                                      Thương mại - Dịch vụ Phong Vũ -
-                                      02873026867
-                                    </p>
-                                    Số 2, Đường Hoàng Hoa Thám, Phương 12, ,
-                                    Quận Tân Bình, Thành phố Hồ Chí Minh, Phường
-                                    12, Quận Tân Bình, Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-104-113"></div>
-                              </div>
-                            </div>
-                            <div
-                              className="css-1sks6na snipcss0-3-36-114 style-oIpVj"
-                              id="style-oIpVj"
-                            >
-                              <div
-                                className="teko-col css-gr7r8o snipcss0-4-114-115 style-sZmG5"
-                                id="style-sZmG5"
-                              >
-                                <div className="css-un3w91 snipcss0-5-115-116">
-                                  <div className="css-1a6d6qm snipcss0-6-116-117">
-                                    <input
-                                      type="radio"
-                                      className="teko-radio-input css-1ef6d5l snipcss0-7-117-118"
-                                    />
-                                    <div className="radio-inner css-1q3w26f snipcss0-7-117-119">
-                                      <div className="css-1mdu17v snipcss0-8-119-120"></div>
-                                    </div>
-                                  </div>
-                                  <div className="css-1yyu6fw snipcss0-6-116-121">
-                                    <p className="css-1eud8hl snipcss0-7-121-122"></p>
-                                    <p className="css-j662fd snipcss0-8-122-123">
-                                      ĐỊA ĐIỂM KINH DOANH 5 - CÔNG TY CỔ PHẦN
-                                      THƯƠNG MẠI - DỊCH VỤ PHONG VŨ -
-                                      02873056867
-                                    </p>
-                                    Số 9 - 11, Nguyễn Thị Thập, Phường Tân Phú,
-                                    Quận 7, Thành phố Hồ Chí Minh, Phường Tân
-                                    Phú, Quận 7, Thành phố Hồ Chí Minh
-                                    <p></p>
-                                  </div>
-                                </div>
-                                <div className="css-1wr4ueo snipcss0-5-115-124"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{ display: "inline-grid" }}>
-                        <h6>Thông tin khách hàng</h6>
-                        <label>
-                          Tên khách hàng
-                          <Input
-                            placeholder="Tên khách hàng"
-                            allowClear
-                            onChange={onChange}
-                          />
-                        </label>
-                        <label>
-                          Số điện thoại
-                          <Input
-                            placeholder="Số điện thoại"
-                            allowClear
-                            onChange={onChange}
-                          />
-                        </label>
-                      </div>
-                    </MDBTabsPane>
                   </MDBTabsContent>
                 </div>
               </div>
@@ -1006,14 +600,11 @@ export default function Buy() {
               {/*  */}
 
               <div className="css-18c0ysw snipcss0-4-4-52">
-                <div type="subtitle" className="css-1realo9 snipcss0-5-52-53">
-                  Ghi chú cho đơn hàng
-                </div>
                 <div className="css-boqvfl snipcss0-5-52-54">
                   <Input
                     type="text"
                     maxLength={255}
-                    placeholder="Ghi chú"
+                    placeholder="Ghi chú (Nếu có)"
                     onChange={(e) => setNote(e.target.value)}
                     value={note}
                   />
@@ -1352,35 +943,15 @@ export default function Buy() {
                 </div>
               </div>
 
-              <div className="teko-row teko-row-start teko-row-middle css-1dmv21i snipcss0-4-4-87">
+              {/* <div className="teko-row teko-row-start teko-row-middle css-1dmv21i snipcss0-4-4-87">
                 <label className="check-box css-1arb6mh snipcss0-5-87-88">
-                  <Checkbox onChange={onChange}></Checkbox>
+                  <Checkbox checked onChange={onChange}></Checkbox>
                 </label>
                 <div type="body" className="css-1os8pr0 snipcss0-5-87-93">
                   Tôi muốn xuất hóa đơn
                 </div>
-              </div>
+              </div> */}
 
-              <div
-                data-content-region-name="staffCode"
-                data-track-content="true"
-                data-content-name="referralCode"
-                data-content-target="checkout"
-                className="css-18c0ysw snipcss0-4-4-94"
-              >
-                <div className="css-18c0ysw snipcss0-4-4-52">
-                  <div type="subtitle" className="css-1realo9 snipcss0-5-52-53">
-                    Nhập mã nhân viên tư vấn
-                  </div>
-                  <div className="css-boqvfl snipcss0-5-52-54">
-                    <Input
-                      type="text"
-                      maxLength={255}
-                      placeholder="Đây là mã giới thiệu không có tác dụng cho đơn hàng"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
             <div
               className="teko-col teko-col-4 css-gr7r8o2 tether-target-attached-top snipcss0-3-3-99 tether-element-attached-top tether-element-attached-center tether-target-attached-center style-FJLy3"
@@ -1477,7 +1048,7 @@ export default function Buy() {
                   <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-156-157">
                     <div className="teko-col css-gr7r8o2 snipcss0-7-157-158">
                       <label className="check-box css-1arb6mh snipcss0-8-158-159">
-                        <Checkbox onChange={onChange}></Checkbox>
+                        <Checkbox checked onChange={onChange}></Checkbox>
                         <div
                           type="body"
                           className="checkbox-label css-10md8qb snipcss0-9-159-164 style-Aggjr"
@@ -1500,7 +1071,7 @@ export default function Buy() {
                   <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-169-170">
                     <div className="teko-col css-gr7r8o2 snipcss0-7-170-171">
                       <label className="check-box css-1arb6mh snipcss0-8-171-172">
-                        <Checkbox onChange={onChange}></Checkbox>
+                        <Checkbox checked  onChange={onChange}></Checkbox>
                         <div
                           type="body"
                           className="checkbox-label css-10md8qb snipcss0-9-172-177 style-aUwfK"
@@ -1576,19 +1147,19 @@ export default function Buy() {
                           )}
                         </div>
                       </div>
-                      <div className="css-12xhfzh snipcss0-8-202-206">
+                      {/* <div className="css-12xhfzh snipcss0-8-202-206">
                         <p className="snipcss0-9-206-207">
                           Nhấn "Thanh toán" đồng nghĩa với việc bạn đọc và đồng
                           ý tuân theo 
                           <a
-                            href="https://help.phongvu.vn/chinh-sach-ban-hang/quyen-va-nghia-vu-cac-ben"
+                            href=""
                             target="_blank"
                             className="snipcss0-10-207-208"
                           >
                             Điều khoản và Điều kiện
                           </a>
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

@@ -27,6 +27,7 @@
     "botpress": "^10.51.10",
     "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
     "dotenv": "^16.3.1",
     "firebase": "^10.4.0",
     "flatted": "^3.2.9",

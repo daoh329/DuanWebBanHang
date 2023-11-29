@@ -165,62 +165,7 @@ function Sale(){
     </div>
   </div>
 </div>
-{/* card3 */}
-<div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss0-2-510-511 snipcss-49RPz">
-  <div
-    data-uniq-id=".0rromt62"
-    className="teko-col1 css-1ezrukj snipcss0-3-511-512"
-  >
-    <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-4-512-513">
-      <a
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="snipcss0-5-513-514 style-DNvSb"
-        id="style-DNvSb"
-      >
-        <div
-          className="css-1q0vk5q snipcss0-6-514-515"
-          data-uniq-id=".wjhyxv3t"
-        >
-          <picture className="css-4mc33u snipcss0-7-515-516">
-            <img
-              src="https://lh3.googleusercontent.com/lqgzLzkFQviY1PUvcOM7XEiouyUWHZaVetnf_v1guvxhPAG6m7JQA5HdXggo6VWXQsbs4AvzrOUyGIt5DmorrouwPW2ZvmHj=rw-w524"
-              alt=""
-              decoding="async"
-              className="lazyload css-fj9uxg snipcss0-8-516-520"
-              loading="lazy"
-              naptha_cursor="text"
-            />
-          </picture>
-        </div>
-      </a>
-      <div className="css-17v6u7d snipcss0-5-513-521" data-uniq-id=".jx03v6vk">
-        <p style={{ fontSize: 16 }} className="snipcss0-6-521-522">
-          <span style={{ fontSize: 16 }} className="snipcss0-7-522-523">
-            <strong className="snipcss0-8-523-524">
-              LAPTOP MSI GIẢM THÊM 500.000Đ
-            </strong>
-          </span>
-        </p>
-      </div>
-      <div className="css-1xbgrjh snipcss0-5-513-525" data-uniq-id=".y4olpmr3">
-        <p className="snipcss0-6-525-526">
-          <span style={{ fontSize: 14 }} className="snipcss0-7-526-527">
-            11/08 - 31/08/2023
-          </span>
-        </p>
-      </div>
-<div className="css-1hjg543 snipcss0-5-90-105">
-            <button
-              data-uniq-id=".g2nlyehu"
-              className="css-kx6lpr snipcss0-7-106-107">
-              <p className="snipcss0-10-109-110">Xem chi tiết</p>
-            </button>
-        </div>
-    </div>
-  </div>
-</div>
+
 {/* card4 */}
 <div
   className="bg-lazy bg-visible-lazy css-123dyzu snipcss0-1-1-87 snipcss-QOjRY"
@@ -427,56 +372,8 @@ function Sale(){
     </div>
   </div>
 </div>
-{/*  */}
-<div className="teko-row bg-lazy bg-visible-lazy css-1klnydi snipcss-3qYfC">
-  <div data-uniq-id=".flt15z72" className="teko-col1 css-1ezrukj">
-    <div className="bg-lazy bg-visible-lazy css-2t7lu2 snipcss0-0-0-1">
-      <a
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="snipcss0-1-1-2 style-Ui96b"
-        id="style-Ui96b"
-      >
-        <div className="css-1q0vk5q snipcss0-2-2-3" data-uniq-id=".mwxmculv">
-          <picture className="css-4mc33u snipcss0-3-3-4">
-            <img
-              src="https://lh3.googleusercontent.com/t_5UU9AdsrMByJz5SLvusnT7HuM2jZhj8G2-wA_r1A6uTBmOSMrW6ibDgS0S3fFciZmWQY7hlhXxiujjcLK3DzQmcHjlsXV6=rw-w523"
-              alt=""
-              decoding="async"
-              className="lazyload css-fj9uxg snipcss0-4-4-8"
-              loading="lazy"
-            />
-          </picture>
-        </div>
-      </a>
-      <div className="css-17v6u7d snipcss0-1-1-9" data-uniq-id=".lmwpnm88">
-        <p style={{ fontSize: 16 }} className="snipcss0-2-9-10">
-          <span style={{ fontSize: 16 }} className="snipcss0-3-10-11">
-            <strong className="snipcss0-4-11-12">
-              MUA LATOP MSI NHẬN VẬT PHẨM TRONG GAME
-            </strong>
-          </span>
-        </p>
-      </div>
-      <div className="css-1xbgrjh snipcss0-1-1-13" data-uniq-id=".3cdmnwh4">
-        <p className="snipcss0-2-13-14">
-          <span style={{ fontSize: 14 }} className="snipcss0-3-14-15">
-            11/08 - 09/09/2023
-          </span>
-        </p>
-      </div>
-      <div className="css-1hjg543 snipcss0-5-90-105">
-            <button
-              data-uniq-id=".g2nlyehu"
-              className="css-kx6lpr snipcss0-7-106-107">
-              <p className="snipcss0-10-109-110">Xem chi tiết</p>
-            </button>
-        </div>
-    </div>
-  </div>
-</div>
-{/*  */}
+
+
 <div
   className="bg-lazy bg-visible-lazy css-123dyzu snipcss-HRFkk"
   data-uniq-id=".kdbrjgnv"
