@@ -268,6 +268,12 @@ export default function Buy() {
       return;
     }
 
+    // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 1 tỷ không
+    if (amount < 5000 || amount > 1000000000) {
+      message.error("Thanh toán VNPAY chỉ hỗ trợ mốc giá từ 5 nghìn đến 1 tỷ");
+      return;
+    }
+
     // Thêm thông báo xác nhận mua hàng
     Modal.confirm({
       title: "Xác nhận",
@@ -309,19 +315,6 @@ export default function Buy() {
     // Xử lý cho phương thức thanh toán ZaloPay
     setPaymentMenthod(2); // Cập nhật phương thức thanh toán
 
-    sessionStorage.setItem("UserID", user.id);
-    sessionStorage.setItem("addressID", deliveryAddress[addressChecked].id);
-    sessionStorage.setItem("productID", JSON.stringify(productID));
-    sessionStorage.setItem("quantity", JSON.stringify(quantity));
-    sessionStorage.setItem("color", JSON.stringify(color));
-    sessionStorage.setItem("capacity", JSON.stringify(capacity));
-    sessionStorage.setItem("totalPrice", JSON.stringify(totalPrice));
-    sessionStorage.setItem("deliveryMethod", deliveryMethod);
-    sessionStorage.setItem("paymentMenthod", 2);
-    sessionStorage.setItem("note", note);
-    sessionStorage.setItem("totalAmount", amount);
-    sessionStorage.setItem("status", 0);
-
     const data = {
       amount,
       productID: productID,
@@ -350,13 +343,25 @@ export default function Buy() {
         );
 
         if (response.ok) {
+          sessionStorage.setItem("UserID", user.id);
+          sessionStorage.setItem("addressID", deliveryAddress[addressChecked].id);
+          sessionStorage.setItem("productID", JSON.stringify(productID));
+          sessionStorage.setItem("quantity", JSON.stringify(quantity));
+          sessionStorage.setItem("color", JSON.stringify(color));
+          sessionStorage.setItem("capacity", JSON.stringify(capacity));
+          sessionStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+          sessionStorage.setItem("deliveryMethod", deliveryMethod);
+          sessionStorage.setItem("paymentMenthod", 2);
+          sessionStorage.setItem("note", note);
+          sessionStorage.setItem("totalAmount", amount);
+          sessionStorage.setItem("status", 0);
           const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
 
           if (responseData && responseData.url) {
             window.location.href = responseData.url;
           } else if (responseData && responseData.error) {
             // Hiển thị thông báo lỗi
-            message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
+            message.error("Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 10 nghìn đến 50 triệu");
           }
         } else {
           const errorData = await response.json();
@@ -1055,7 +1060,7 @@ export default function Buy() {
                               type="subtitle"
                               className="css-qat15y snipcss0-9-76-77"
                             >
-                              Thanh toán VNPAY-QR
+                              Thanh toán VN Pay
                               <span
                                 className="snipcss0-10-77-78 style-NANX3"
                                 id="style-NANX3"
@@ -1088,7 +1093,7 @@ export default function Buy() {
                               type="subtitle"
                               className="css-qat15y snipcss0-9-76-77"
                             >
-                              Thanh toán VNPAY-QR
+                              Thanh toán VN Pay
                               <span
                                 className="snipcss0-10-77-78 style-NANX3"
                                 id="style-NANX3"
@@ -1127,7 +1132,7 @@ export default function Buy() {
                             type="subtitle"
                             className="css-qat15y snipcss0-9-76-77"
                           >
-                            Thanh toán VNPAY-QR
+                            Thanh toán VN Pay
                             <span
                               className="snipcss0-10-77-78 style-NANX3"
                               id="style-NANX3"
@@ -1274,7 +1279,7 @@ export default function Buy() {
                               type="subtitle"
                               className="css-qat15y snipcss0-9-82-83"
                             >
-                              Thanh toán QR Code Momo
+                              Thanh toán bằng ví điện từ MOMO
                               <span
                                 className="snipcss0-10-83-84 style-DJQy2"
                                 id="style-DJQy2"
@@ -1299,7 +1304,7 @@ export default function Buy() {
                               type="subtitle"
                               className="css-qat15y snipcss0-9-82-83"
                             >
-                              Thanh toán QR Code Momo
+                              Thanh toán bằng ví điện từ MOMO
                               <span
                                 className="snipcss0-10-83-84 style-DJQy2"
                                 id="style-DJQy2"
@@ -1330,7 +1335,7 @@ export default function Buy() {
                             type="subtitle"
                             className="css-qat15y snipcss0-9-82-83"
                           >
-                            Thanh toán QR Code Momo
+                            Thanh toán bằng ví điện từ MOMO
                             <span
                               className="snipcss0-10-83-84 style-DJQy2"
                               id="style-DJQy2"
