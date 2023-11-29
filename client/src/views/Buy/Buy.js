@@ -534,7 +534,7 @@ export default function Buy() {
                             fontWeight: "bold",
                           }}
                         >
-                          Ngày giao hàng thức giao hàng
+                          Thời gian giao hàng
                         </label>
                         <div style={{ justifyContent: "space-between" }}>
                           <label
