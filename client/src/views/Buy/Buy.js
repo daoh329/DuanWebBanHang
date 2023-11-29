@@ -270,7 +270,7 @@ export default function Buy() {
 
     // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 1 tỷ không
     if (amount < 5000 || amount > 1000000000) {
-      message.error("Thanh toán VNPAY chỉ hỗ trợ mốc giá từ 5 nghìn đến 1 tỷ");
+      message.error("Thanh toán VN Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 1 tỷ");
       return;
     }
 
@@ -323,6 +323,12 @@ export default function Buy() {
 
     if (!deliveryMethod) {
       message.error("Vui lòng chọn hình thức giao hàng");
+      return;
+    }
+
+    // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 50 triệu không
+    if (amount < 5000 || amount > 50000000) {
+      message.error("Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 50 triệu");
       return;
     }
 
