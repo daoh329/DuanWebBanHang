@@ -19,7 +19,7 @@ class List {
           return res.status(200).send("success");
         });
       } else {
-        const { data } = req.body;
+        const data = req.body.name;
         if (!data) {
           return res
             .status(400)
@@ -132,6 +132,7 @@ class List {
   get(req, res) {
     try {
       const table = req.params.table;
+
       const sql = `SELECT * FROM ${table}`;
       mysql.query(sql, (error, results) => {
         if (error) {

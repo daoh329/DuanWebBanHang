@@ -41,6 +41,7 @@ export default function Buy() {
 
   const [productID, setProductID] = useState(null);
   const [amount, setAmount] = useState(null);
+  const [totalPrice, settotalPrice] = useState(null);
   const [color, setColor] = useState(null);
   const [capacity, setCapacity] = useState(null);
   const [bankCode, setBankCode] = useState("");
@@ -125,25 +126,63 @@ export default function Buy() {
 
   //Thanh toán VNPay
 
+  // useEffect(() => {
+  //   const buysDataFromSession = sessionStorage.getItem("buys");
+  //   console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
+  //   if (buysDataFromSession) {
+  //     const parsedBuysData = JSON.parse(buysDataFromSession);
+  //     setBuysData(parsedBuysData);
+  //     console.log("parsedBuysData:", JSON.stringify(parsedBuysData, null, 2)); // Kiểm tra dữ liệu sau khi chuyển đổi
+
+  //     // Chuyển đổi total thành số trước khi cập nhật vào state amount
+  //     setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
+  //     console.log("dữ liệu total:", Number(parsedBuysData.total));
+  //     // Truy cập vào mảng selectedItems và lấy ra tất cả productID
+  //     const productIDs = parsedBuysData.selectedItems.map(item => item.id);
+  //     setProductID(productIDs); // Cập nhật mảng productIDs vào state
+
+  //     // Truy cập vào mảng selectedItems và lấy ra đối tượng đầu tiên
+  //     const firstSelectedItem = parsedBuysData.selectedItems[0];
+  //     if (firstSelectedItem) {
+  //       setQuantity(firstSelectedItem.quantity);
+  //       setColor(firstSelectedItem.color);
+  //       setCapacity(firstSelectedItem.capacity.capacity); // Lưu ý: capacity là một đối tượng có thuộc tính capacity
+  //     }
+  //   }
+  // }, []);
+
   useEffect(() => {
     const buysDataFromSession = sessionStorage.getItem("buys");
-    console.log("buysDataFromSession:", buysDataFromSession); // Kiểm tra dữ liệu trong sessionStorage
     if (buysDataFromSession) {
       const parsedBuysData = JSON.parse(buysDataFromSession);
       setBuysData(parsedBuysData);
       console.log("parsedBuysData:", JSON.stringify(parsedBuysData, null, 2)); // Kiểm tra dữ liệu sau khi chuyển đổi
-  
+
       // Chuyển đổi total thành số trước khi cập nhật vào state amount
-      setAmount(Number(parsedBuysData.total)); // Cập nhật giá trị total vào state amount
-      console.log("dữ liệu total:", Number(parsedBuysData.total));
-  
-      // Truy cập vào mảng selectedItems và lấy ra đối tượng đầu tiên
-      const firstSelectedItem = parsedBuysData.selectedItems[0];
-      if (firstSelectedItem) {
-        setProductID(firstSelectedItem.id)
-        setColor(firstSelectedItem.color);
-        setCapacity(firstSelectedItem.capacity.capacity); // Lưu ý: capacity là một đối tượng có thuộc tính capacity
-      }
+      setAmount(Number(parsedBuysData.total));
+
+      // Truy cập vào mảng selectedItems và lấy ra tất cả productID
+      const productIDs = parsedBuysData.selectedItems.map((item) => item.id);
+      setProductID(productIDs); // Cập nhật mảng productIDs vào state
+
+      // Lấy ra tất cả color, quantity và capacity
+      const colors = parsedBuysData.selectedItems.map((item) => item.color);
+      setColor(colors); // Cập nhật mảng colors vào state
+
+      const quantities = parsedBuysData.selectedItems.map(
+        (item) => item.quantity
+      );
+      setQuantity(quantities); // Cập nhật mảng quantities vào state
+
+      const capacities = parsedBuysData.selectedItems.map(
+        (item) => item.capacity
+      );
+      setCapacity(capacities); // Cập nhật mảng capacities vào state
+
+      const totalPrices = parsedBuysData.selectedItems.map(
+        (item) => item.totalPrice
+      );
+      settotalPrice(totalPrices);
     }
   }, []);
 
@@ -153,42 +192,59 @@ export default function Buy() {
   // useEffect(() => {
   //   console.log("product:", productID);
   // }, [color]);
-  
+
   // useEffect(() => {
   //   console.log("Capacity:", capacity);
   // }, [capacity]);
 
-  // Cập nhật quantity mỗi khi nó thay đổi
-  useEffect(() => {
-    if (buysData && buysData.selectedItems) {
-      // Tính toán tổng quantity từ selectedItems
-      const totalQuantity = buysData.selectedItems.reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
+  // // Cập nhật quantity mỗi khi nó thay đổi
+  // useEffect(() => {
+  //   if (buysData && buysData.selectedItems) {
+  //     // Tính toán tổng quantity từ selectedItems
+  //     const totalQuantity = buysData.selectedItems.reduce(
+  //       (total, item) => total + item.quantity,
+  //       0
+  //     );
 
-      // Cập nhật biến trạng thái quantity
-      setQuantity(totalQuantity);
+  //     // Cập nhật biến trạng thái quantity
+  //     setQuantity(totalQuantity);
+  //   }
+  // }, [buysData]);
+
+  // // Cập nhật sessionStorage mỗi khi quantity thay đổi
+  // useEffect(() => {
+  //   // Lưu quantity vào sessionStorage
+  //   sessionStorage.setItem("quantity", JSON.stringify(quantity));
+  // }, [quantity]);
+
+  const removeFromCart = () => {
+    // lấy sản phẩm được chọn mua
+    var informationSelected = sessionStorage.getItem("buys");
+    if (informationSelected) {
+      informationSelected = JSON.parse(informationSelected).selectedItems;
+      const data = [];
+      // Nếu informationSelected là mảng
+      Array.isArray(informationSelected) &&
+        [...informationSelected].forEach((value) => {
+          const item = {
+            product_id: value.id,
+            capacity: value.capacity,
+            color: value.color,
+          };
+          data.push(item);
+        });
+      // xóa trong cart redux
+      data.forEach((item) => {
+        dispatch(deleteProductInCart(item));
+      });
     }
-  }, [buysData]);
-
-  // Cập nhật sessionStorage mỗi khi quantity thay đổi
-  useEffect(() => {
-    // Lưu quantity vào sessionStorage
-    sessionStorage.setItem("quantity", JSON.stringify(quantity));
-  }, [quantity]);
-
-  const removeFromCart = (productID) => {
-    // xóa trong cart
-    dispatch(deleteProductInCart(productID));
   };
-  
 
   const handleBuyVNpay = async () => {
     // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
     // console.log('amount: '+totalAmount)
     // setPaymentMenthod(0); // Cập nhật phương thức thanh toán
-  
+
     const data = {
       amount,
       bankCode,
@@ -196,45 +252,49 @@ export default function Buy() {
       UserID: user.id,
       addressID: deliveryAddress[addressChecked].id,
       productID: productID,
-      quantity: quantity,
       color: color,
       capacity: capacity,
+      quantity: quantity,
+      totalPrice: totalPrice,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 0,
       note: note,
       status: 0,
     };
+    // console.log("data: "+ data)
 
-  
     if (!deliveryMethod) {
       message.error("Vui lòng chọn hình thức giao hàng");
       return;
     }
-  
+
     // Thêm thông báo xác nhận mua hàng
     Modal.confirm({
-      title: 'Xác nhận',
-      content: 'Bạn có chắc chắn muốn mua hàng không?',
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn mua hàng không?",
       onOk: async () => {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/create_payment_url`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-  
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/pay/create_payment_url`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
         if (response.ok) {
-            const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
-  
-            if (responseData && responseData.url) {
-                window.location.href = responseData.url;
-            }
+          const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
+
+          if (responseData && responseData.url) {
+            window.location.href = responseData.url;
+          }
         } else {
-            const errorData = await response.json();
-            if (errorData === "Số lượng sản phẩm không đủ") {
-                message.error("Số lượng sản phẩm không đủ");
-            }
+          const errorData = await response.json();
+          if (errorData === "Số lượng sản phẩm không đủ") {
+            message.error("Số lượng sản phẩm không đủ");
+          }
         }
       },
     });
@@ -248,57 +308,61 @@ export default function Buy() {
   const handleBuyMoMoPay = async () => {
     // Xử lý cho phương thức thanh toán ZaloPay
     setPaymentMenthod(2); // Cập nhật phương thức thanh toán
-  
-    sessionStorage.setItem('UserID', user.id);
-    sessionStorage.setItem('addressID', deliveryAddress[addressChecked].id);
-    sessionStorage.setItem('productID', productID);
-    sessionStorage.setItem('quantity', quantity);
-    sessionStorage.setItem('color', color);
-    sessionStorage.setItem('capacity', capacity);
-    sessionStorage.setItem('deliveryMethod', deliveryMethod);
-    sessionStorage.setItem('paymentMenthod', 2);
-    sessionStorage.setItem('note', note);
-    sessionStorage.setItem('totalAmount', amount);
-    sessionStorage.setItem('status', 0);
-  
+
+    sessionStorage.setItem("UserID", user.id);
+    sessionStorage.setItem("addressID", deliveryAddress[addressChecked].id);
+    sessionStorage.setItem("productID", JSON.stringify(productID));
+    sessionStorage.setItem("quantity", JSON.stringify(quantity));
+    sessionStorage.setItem("color", JSON.stringify(color));
+    sessionStorage.setItem("capacity", JSON.stringify(capacity));
+    sessionStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+    sessionStorage.setItem("deliveryMethod", deliveryMethod);
+    sessionStorage.setItem("paymentMenthod", 2);
+    sessionStorage.setItem("note", note);
+    sessionStorage.setItem("totalAmount", amount);
+    sessionStorage.setItem("status", 0);
+
     const data = {
       amount,
       productID: productID,
       quantity: quantity,
     };
-  
+
     if (!deliveryMethod) {
       message.error("Vui lòng chọn hình thức giao hàng");
       return;
     }
-  
+
     // Thêm thông báo xác nhận mua hàng
     Modal.confirm({
-      title: 'Xác nhận',
-      content: 'Bạn có chắc chắn muốn mua hàng?',
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn mua hàng?",
       onOk: async () => {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/pay/paymomo`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-  
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/pay/paymomo`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
         if (response.ok) {
           const responseData = await response.json(); // Phân tích cú pháp body yêu cầu thành JSON
-  
+
           if (responseData && responseData.url) {
-              window.location.href = responseData.url;
+            window.location.href = responseData.url;
           } else if (responseData && responseData.error) {
             // Hiển thị thông báo lỗi
             message.error("Thanh toán momo chỉ hỗ trợ mốc giá dưới 50 triệu");
           }
         } else {
-            const errorData = await response.json();
-            if (errorData === "Số lượng sản phẩm không đủ") {
-                message.error("Số lượng sản phẩm không đủ");
-            }
+          const errorData = await response.json();
+          if (errorData === "Số lượng sản phẩm không đủ") {
+            message.error("Số lượng sản phẩm không đủ");
+          }
         }
       },
     });
@@ -313,6 +377,7 @@ export default function Buy() {
       color: color,
       capacity: capacity,
       quantity: quantity,
+      totalPrice: totalPrice,
       deliveryMethod: deliveryMethod,
       paymentMenthod: paymentMenthod,
       totalAmount: amount,
@@ -320,7 +385,7 @@ export default function Buy() {
       status: 0,
     };
 
-    console.log(data)
+    // console.log(data)
 
     if (!deliveryMethod) {
       message.error("Vui lòng chọn hình thức giao hàng");
@@ -336,19 +401,22 @@ export default function Buy() {
 
     // Thêm thông báo xác nhận mua hàng
     Modal.confirm({
-      title: 'Xác nhận',
-      content: 'Bạn có chắc chắn muốn mua hàng?',
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn mua hàng?",
       onOk: async () => {
         // In ra giá trị của biến data
         // console.log("Data:", data);
         // Gửi thông tin đăng ký lên server
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/order/pay`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/order/pay`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
 
         // Xử lý kết quả trả về từ server NodeJS
         if (response.ok) {
@@ -358,7 +426,7 @@ export default function Buy() {
           // Chuyển hướng người dùng đến trang thông báo thành công
           window.location.replace("/success");
           // Xóa sản phẩm khỏi giỏ hàng
-          removeFromCart(productID);
+          removeFromCart();
         } else {
           // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
           const responseData = await response.json();
@@ -372,7 +440,7 @@ export default function Buy() {
       },
     });
   };
-  
+
   const handleChecked = (value) => {
     setAddressChecked(value);
   };
@@ -1510,7 +1578,7 @@ export default function Buy() {
                           <a
                             href="https://help.phongvu.vn/chinh-sach-ban-hang/quyen-va-nghia-vu-cac-ben"
                             target="_blank"
-                            className="snipcss0-10-207-208" 
+                            className="snipcss0-10-207-208"
                           >
                             Điều khoản và Điều kiện
                           </a>

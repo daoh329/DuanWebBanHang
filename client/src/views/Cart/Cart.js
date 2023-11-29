@@ -10,6 +10,7 @@ import {
   increaseProduct,
 } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
+import { Checkbox } from "antd";
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -24,24 +25,23 @@ function Cart() {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const handleCheckboxChange = (productId) => {
+  const handleCheckboxChange = (productId, color, capacity) => {
     // Kiểm tra xem sản phẩm đã được chọn chưa
-    const isSelected = selectedProducts.includes(productId);
+    const isSelected = selectedProducts.some(product =>
+      product.id === productId && product.color === color && product.capacity === capacity
+    );
+
     let updatedSelectedProducts;
 
     if (isSelected) {
-      // Nếu sản phẩm đã được chọn, hủy chọn nó
       updatedSelectedProducts = selectedProducts.filter(
-        (id) => id !== productId
+        product => !(product.id === productId && product.color === color && product.capacity === capacity)
       );
-      setSelectedProducts(updatedSelectedProducts);
     } else {
-      // Nếu sản phẩm chưa được chọn, chọn nó và hủy chọn tất cả các sản phẩm khác
-      updatedSelectedProducts = [productId];
-      setSelectedProducts(updatedSelectedProducts);
-      setSelectAll(false);
+      updatedSelectedProducts = [...selectedProducts, { id: productId, color, capacity }];
     }
 
+    setSelectedProducts(updatedSelectedProducts);
     // Lưu trạng thái checkbox vào sessionStorage
     const checkboxData = {
       selectAll,
@@ -50,72 +50,81 @@ function Cart() {
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
 
+
+
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
   const handleSelectAllChange = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-
+  
     if (newSelectAll) {
-      const allProductIds = cart.map((item) => item.id);
-      setSelectedProducts(allProductIds);
+      const allProducts = cart.map((item) => ({id: item.id, color: item.color, capacity: item.capacity}));
+      setSelectedProducts(allProducts);
     } else {
       setSelectedProducts([]);
     }
-
+  
     // Lưu trạng thái selectAll và selectedProducts vào sessionStorage
     const checkboxData = {
       selectAll: newSelectAll,
-      selectedProducts: newSelectAll ? cart.map((item) => item.id) : [],
+      selectedProducts: newSelectAll ? cart.map((item) => ({id: item.id, color: item.color, capacity: item.capacity})) : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
+  
 
   useEffect(() => {
     // Kiểm tra nếu có dữ liệu trong sessionStorage
     const savedCheckboxData = sessionStorage.getItem("checkboxData");
-
     if (savedCheckboxData) {
       const {
         selectAll: savedSelectAll,
         selectedProducts: savedSelectedProducts,
       } = JSON.parse(savedCheckboxData);
       setSelectAll(savedSelectAll);
-      setSelectedProducts(savedSelectedProducts);
+      setSelectedProducts(savedSelectedProducts.map(product => ({id: product.id, color: product.color, capacity: product.capacity})));
     }
   }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
+  
 
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) =>
-      selectedProducts.includes(item.id)
+      selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
     );
-
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
       return acc + item.totalPrice;
     }, 0);
-
+  
     return total;
   };
-
+  
+  
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-
+  
     // Cập nhật biến state tổng tiền
     setTotalPrice(total);
   }, [selectedProducts, cart]);
-
+  
   //xóa sp
-  const removeFromCart = (productId) => {
-    // xóa trong cart
-    dispatch(deleteProductInCart(productId));
+  const removeFromCart = (productId, color, capacity) => {
+    const data = {
+      product_id: productId,
+      color,
+      capacity,
+    }
+    dispatch(deleteProductInCart(data));
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
-  const increaseQuantity = (productId) => {
+  const increaseQuantity = (productId, color, capacity) => {
     const data = {
       product_id: productId,
+      color,
+      capacity
     };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
@@ -123,9 +132,11 @@ function Cart() {
     setTotalPrice(total);
   };
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
-  const decreaseQuantity = (productId) => {
+  const decreaseQuantity = (productId, color, capacity) => {
     const data = {
       product_id: productId,
+      color,
+      capacity
     };
     // Cập nhật giỏ hàng
     dispatch(decreaseProduct(data));
@@ -161,28 +172,28 @@ function Cart() {
     navigate(`/detail/${products.id}`);
   };
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => { }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;
-  // Hàm xử lý khi nút "Tiếp tục" được ấn
-  const handleContinueClick = () => {
-    // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
-    const selectedItems = cart.filter((item) =>
-      selectedProducts.includes(item.id)
-    );
-    // Tính tổng tiền của các sản phẩm được chọn
-    const total = calculateTotalPrice();
-    // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
-    const buys = {
-      selectedItems,
-      total,
-    };
-    // Lưu thông tin vào sessionStorage
-    sessionStorage.setItem("buys", JSON.stringify(buys));
-    // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
-    navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
+// Hàm xử lý khi nút "Tiếp tục" được ấn
+const handleContinueClick = () => {
+  // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
+  const selectedItems = cart.filter((item) =>
+    selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
+  );
+  // Tính tổng tiền của các sản phẩm được chọn
+  const total = calculateTotalPrice();
+  // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
+  const buys = {
+    selectedItems,
+    total,
   };
+  // Lưu thông tin vào sessionStorage
+  sessionStorage.setItem("buys", JSON.stringify(buys));
+  // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
+  navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
+};
+
 
   return (
     <div>
@@ -195,10 +206,10 @@ function Cart() {
                 <MDBTableHead light>
                   <tr>
                     <th scope="col">
-                      {/* <Checkbox
+                      <Checkbox
                         onChange={handleSelectAllChange}
                         checked={selectAll}>
-                      </Checkbox> */}
+                      </Checkbox>
                     </th>
                     <th scope="col">Hình</th>
                     <th scope="col">Sản Phẩm</th>
@@ -220,10 +231,11 @@ function Cart() {
                       <td>
                         <input
                           type="checkbox"
-                          checked={selectedProducts.includes(item.id)}
-                          onChange={() => handleCheckboxChange(item.id)}
+                          checked={selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)}
+                          onChange={() => handleCheckboxChange(item.id, item.color, item.capacity)}
                         />
                       </td>
+
                       {/* image */}
                       <td style={{ width: "15%" }}>
                         <img
@@ -245,8 +257,8 @@ function Cart() {
                         <p className="cart-description-SKU">SKU: {item.id}</p>
                         <p className="cart-description-rom-color">
                           {" "}
-                          {item?.capacity?.capacity &&
-                            formatCapacity(item?.capacity?.capacity) + ","}{" "}
+                          {item?.capacity &&
+                            formatCapacity(item?.capacity) + ","}{" "}
                           {item?.color}
                         </p>
                       </td>
@@ -259,9 +271,7 @@ function Cart() {
                             color: "black",
                           }}
                         >
-                          {formatCurrency(
-                            item.capacity.capacity_price - item.discount
-                          )}
+                          {formatCurrency(item.price - item.discount)}
                         </p>
                         {/* show discount */}
                         {item.discount > 0 && (
@@ -272,7 +282,7 @@ function Cart() {
                               fontSize: "12px",
                             }}
                           >
-                            {formatCurrency(item.capacity.capacity_price)}
+                            {formatCurrency(item.price)}
                           </p>
                         )}
                       </td>
@@ -280,14 +290,14 @@ function Cart() {
                       <td style={{ display: "flex", justifyContent: "center" }}>
                         <div className="quantity-control">
                           <Link
-                            onClick={() => decreaseQuantity(item.id)}
+                            onClick={() => decreaseQuantity(item.id, item.color, item.capacity)}
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-minus"></i>
                           </Link>
                           <span>{item.quantity}</span>
                           <Link
-                            onClick={() => increaseQuantity(item.id)}
+                            onClick={() => increaseQuantity(item.id, item.color, item.capacity)}
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-plus"></i>
@@ -307,7 +317,7 @@ function Cart() {
                       </td>
                       {/* btn delete product */}
                       <td>
-                        <Link onClick={() => removeFromCart(item.id)}>
+                        <Link onClick={() => removeFromCart(item.id, item.color, item.capacity)}>
                           <i className="fa-solid fa-xmark"></i>
                         </Link>
                       </td>

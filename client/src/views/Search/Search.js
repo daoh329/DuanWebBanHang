@@ -13,16 +13,13 @@ const Search = () => {
   const [laptopProducts, setLaptopProducts] = useState([]);
   const [phoneProducts, setPhoneProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
       .then((response) => response.json())
       .then((data) => {
-        data.forEach((element) => {
-          element.configuration = JSON.parse(element.configuration);
-        });
         setLaptopProducts(data);
       })
       .catch((error) => {
@@ -32,27 +29,25 @@ const Search = () => {
     fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
       .then((response) => response.json())
       .then((data) => {
-        data.forEach((element) => {
-          element.configuration = JSON.parse(element.configuration);
-        });
         setPhoneProducts(data);
-        console.log('phone',phoneProducts)
+        console.log('phone', phoneProducts)
       })
       .catch((error) => {
         console.error("Error fetching phone data:", error);
       });
   }, []);
+
   useEffect(() => {
     if (query) {
-        const allProducts = [...laptopProducts, ...phoneProducts];
-        const results = allProducts.filter(product =>
-            product.shortDescription.toLowerCase().replace(/\s/g, '').includes(query.toLowerCase().replace(/\s/g, ''))
-        );
-        setFilteredProducts(results);
+      const allProducts = [...laptopProducts, ...phoneProducts];
+      const results = allProducts?.filter(product =>
+        product.shortDescription.toLowerCase().replace(/\s/g, '').includes(query.toLowerCase().replace(/\s/g, ''))
+      );
+      setFilteredProducts(results);
     } else {
-        setFilteredProducts([]);
+      setFilteredProducts([]);
     }
-}, [query, laptopProducts, phoneProducts]);
+  }, [query, laptopProducts, phoneProducts]);
 
 
   const handleViewDetailProduct = (products) => {
@@ -76,7 +71,7 @@ const Search = () => {
     }
     navigate(`/detail/${products.id}`);
   };
-  
+
   const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
 
   // Tính tổng số trang dựa trên số lượng sản phẩm và số sản phẩm trên mỗi trang
@@ -88,14 +83,14 @@ const Search = () => {
   // Hàm xử lý sự kiện khi người dùng chọn trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  }; 
+  };
   // Tính index bắt đầu và index kết thúc cho sản phẩm trên trang hiện tại
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   useEffect(() => {
   }, []);
   return (
-    
+
     // <div
     //   style={{
     //     borderRadius: "20px",
@@ -164,33 +159,33 @@ const Search = () => {
 
 
     <div
-    className="product-container"
-    style={{
-      width: "1234px",
-      margin: "0 auto",
-      marginTop: "20px",
-      backgroundSize: "cover",
-      backgroundColor: "#ededed",
-    }}
-  >
-    <div className="title-group">
-      <div className="products-title">Bạn đang tìm kiếm "{query}": ({filteredProducts.length} sản phẩm)</div>     
-    </div>
-    <div className="scroll-control-product">
+      className="product-container"
+      style={{
+        width: "1234px",
+        margin: "0 auto",
+        marginTop: "20px",
+        backgroundSize: "cover",
+        backgroundColor: "#ededed",
+      }}
+    >
+      <div className="title-group">
+        <div className="products-title">Bạn đang tìm kiếm "{query}": ({filteredProducts.length} sản phẩm)</div>
+      </div>
+      <div className="scroll-control-product">
 
-      {filteredProducts &&
-        filteredProducts.length > 0 &&
-        filteredProducts.map((item, index) => (
-          <CardProduct
-          key={index}
-          item={item}
-          onClick={handleViewDetailProduct}
-        />
-        ))}
+        {filteredProducts &&
+          filteredProducts.length > 0 &&
+          filteredProducts.map((item, index) => (
+            <CardProduct
+              key={index}
+              item={item}
+              onClick={handleViewDetailProduct}
+            />
+          ))}
 
-    </div>
-    {/* Phân trang */}
-    {/* <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
+      </div>
+      {/* Phân trang */}
+      {/* <div className="pagination-container" style={{ textAlign: "center", marginTop: "10px" }}>
       <Pagination
         current={currentPage2}
         total={products.length}
@@ -198,7 +193,7 @@ const Search = () => {
         onChange={handlePageChange2}
       />
     </div> */}
-  </div>
+    </div>
 
 
   );

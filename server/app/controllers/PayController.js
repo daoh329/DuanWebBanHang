@@ -13,6 +13,7 @@ let deliveryMethodd;
 let paymentMenthodd;
 let notee;
 let amount;
+let totalPrices;
 let statuss;
 
 
@@ -73,82 +74,106 @@ class PayController {
         deliveryMethodd = req.body.deliveryMethod;
         paymentMenthodd = req.body.paymentMenthod;
         notee = req.body.note;
+        totalPrices = req.body.totalPrice,
         amount = req.body.amount;
         statuss = req.body.status;
-
+        
         // Kiểm tra số lượng sản phẩm hiện có
         let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
-        let values = [product];
+
+        let canBuy = true;
+
+        // Duyệt qua mỗi productID trong mảng
+        for (let i = 0; i < product.length; i++) {
+        let values = [product[i]];
         mysql.query(sql, values, (err, result) => {
             if (err) throw err;
-            // console.log(result);
 
             // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-            if (quantitys > result[0].remaining_quantity) {
-                return res.status(400).json("Số lượng sản phẩm không đủ");
+            if (quantitys[i] > result[0].remaining_quantity) {
+            canBuy = false;
+            return res.status(400).json("Số lượng sản phẩm không đủ");
+            }
+        });
+        }
+
+        // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
+        if (canBuy) {
+            process.env.TZ = 'Asia/Ho_Chi_Minh';
+        
+            let date = new Date();
+            let createDate = moment(date).format('YYYYMMDDHHmmss');
+            
+            let ipAddr = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress;
+
+            let config = require('../../config/default.json');
+            
+            let tmnCode = config.vnp_TmnCode;
+            let secretKey = config.vnp_HashSecret;
+            let vnpUrl = config.vnp_Url;
+            let returnUrl = config.vnp_ReturnUrl;
+            let orderId = moment(date).format('DDHHmmss');
+            let bankCode = req.body.bankCode;
+
+            // console.log('bank: '+bankCode)
+            
+            let locale = req.body.language;
+            if(locale === null || locale === ''){
+                locale = 'vn';
+            }
+            // console.log(locale)
+            let currCode = 'VND';
+            let vnp_Params = {};
+            vnp_Params['vnp_Version'] = '2.1.0';
+            vnp_Params['vnp_Command'] = 'pay';
+            vnp_Params['vnp_TmnCode'] = tmnCode;
+            vnp_Params['vnp_Locale'] = locale;
+            vnp_Params['vnp_CurrCode'] = currCode;
+            vnp_Params['vnp_TxnRef'] = orderId;
+            vnp_Params['vnp_OrderInfo'] = orderId;
+            vnp_Params['vnp_OrderType'] = 'other';
+            vnp_Params['vnp_Amount'] = amount*100;
+            vnp_Params['vnp_ReturnUrl'] = returnUrl;
+            vnp_Params['vnp_IpAddr'] = ipAddr;
+            vnp_Params['vnp_CreateDate'] = createDate;
+            
+            if(bankCode !== null && bankCode !== ''){
+                vnp_Params['vnp_BankCode'] = bankCode;
             }
 
-            // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
-            if (quantitys <= result[0].remaining_quantity) {
-                process.env.TZ = 'Asia/Ho_Chi_Minh';
-        
-                let date = new Date();
-                let createDate = moment(date).format('YYYYMMDDHHmmss');
+            vnp_Params = sortObject(vnp_Params);
+
+            let querystring = require('qs');
+            let signData = querystring.stringify(vnp_Params, { encode: false });
+            let crypto = require("crypto");     
+            let hmac = crypto.createHmac("sha512", secretKey);
+            let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
+            vnp_Params['vnp_SecureHash'] = signed;
+            vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+            res.json({ url: vnpUrl }); // Trả về URL trong một đối tượng JSON
+        }
+
+        // // Kiểm tra số lượng sản phẩm hiện có
+        // let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+        // let values = [product];
+        // mysql.query(sql, values, (err, result) => {
+        //     if (err) throw err;
+        //     // console.log(result);
+
+        //     // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
+        //     if (quantitys > result[0].remaining_quantity) {
+        //         return res.status(400).json("Số lượng sản phẩm không đủ");
+        //     }
+
+        //     // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
+        //     if (quantitys <= result[0].remaining_quantity) {
                 
-                let ipAddr = req.headers['x-forwarded-for'] ||
-                    req.connection.remoteAddress ||
-                    req.socket.remoteAddress ||
-                    req.connection.socket.remoteAddress;
-
-                let config = require('../../config/default.json');
-                
-                let tmnCode = config.vnp_TmnCode;
-                let secretKey = config.vnp_HashSecret;
-                let vnpUrl = config.vnp_Url;
-                let returnUrl = config.vnp_ReturnUrl;
-                let orderId = moment(date).format('DDHHmmss');
-                let amount = req.body.amount;
-                let bankCode = req.body.bankCode;
-
-                // console.log('bank: '+bankCode)
-                
-                let locale = req.body.language;
-                if(locale === null || locale === ''){
-                    locale = 'vn';
-                }
-                // console.log(locale)
-                let currCode = 'VND';
-                let vnp_Params = {};
-                vnp_Params['vnp_Version'] = '2.1.0';
-                vnp_Params['vnp_Command'] = 'pay';
-                vnp_Params['vnp_TmnCode'] = tmnCode;
-                vnp_Params['vnp_Locale'] = locale;
-                vnp_Params['vnp_CurrCode'] = currCode;
-                vnp_Params['vnp_TxnRef'] = orderId;
-                vnp_Params['vnp_OrderInfo'] = orderId;
-                vnp_Params['vnp_OrderType'] = 'other';
-                vnp_Params['vnp_Amount'] = amount * 100;
-                vnp_Params['vnp_ReturnUrl'] = returnUrl;
-                vnp_Params['vnp_IpAddr'] = ipAddr;
-                vnp_Params['vnp_CreateDate'] = createDate;
-                
-                if(bankCode !== null && bankCode !== ''){
-                    vnp_Params['vnp_BankCode'] = bankCode;
-                }
-
-                vnp_Params = sortObject(vnp_Params);
-
-                let querystring = require('qs');
-                let signData = querystring.stringify(vnp_Params, { encode: false });
-                let crypto = require("crypto");     
-                let hmac = crypto.createHmac("sha512", secretKey);
-                let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
-                vnp_Params['vnp_SecureHash'] = signed;
-                vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-
-                res.json({ url: vnpUrl }); // Trả về URL trong một đối tượng JSON
-            }  
-        });
+        //     }  
+        // });
     }
 
     async Vnpay_return(req, res, next){
@@ -160,11 +185,13 @@ class PayController {
         let quantity = quantitys;
         let color = colors;
         let capacity = capacitys;
+        let totalPrice = totalPrices;
         let deliveryMethod = deliveryMethodd;
         let paymentMenthod = paymentMenthodd;
         let note = notee;
         let totalAmount = amount;
         let status = statuss;
+        totalAmount/100;
 
         let secureHash = vnp_Params['vnp_SecureHash'];
 
@@ -186,22 +213,35 @@ class PayController {
         let paymentData = JSON.stringify(vnp_Params);
 
         //Lưu đơn hàng vào csdl
-        let sql = `INSERT INTO orders (UserID,addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, paymentData, totalAmount, status) VALUES (?,?, ?, ?, NOW(), NOW(), ?, ?, ?, ?)`;
+        let sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, paymentData, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?, ?)`;
         let values = [UserID, addressID, deliveryMethod, paymentMenthod, note, paymentData, totalAmount, status];
         mysql.query(sql, values, (err, result) => {
             if (err) throw err;
             const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
-            sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, orderID) VALUES (?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-            values = [productID, quantity, color, capacity, orderID];
-            mysql.query(sql, values, (err, result) => {
-                if (err) throw err;
-                // console.log(result);
-                if(secureHash === signed){
-                    res.redirect(`${process.env.CLIENT_URL}/success`);
-                } else{
-                    res.send('Order details added...');
-                }
-            });
+            // Biến đếm số lượng sản phẩm đã được lưu
+            let count = 0;
+
+            // Duyệt qua mỗi productID trong mảng
+            for (let i = 0; i < productID.length; i++) {
+                let values = [productID[i], quantity[i], color[i], capacity[i], totalPrice[i], orderID];
+                sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, orderID) VALUES (?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+                mysql.query(sql, values, (err, result) => {
+                    if (err) throw err;
+
+                    // Tăng biến đếm
+                    count++;
+
+                    // Nếu tất cả sản phẩm đã được lưu
+                    if (count === product.length) {
+                        // xử lý thanh toán VNPay
+                        if(secureHash === signed){
+                            res.redirect(`${process.env.CLIENT_URL}/success`);
+                        } else{
+                            res.send('Order details added...');
+                        }
+                    }
+                });
+            }
         });
     }
 
@@ -405,7 +445,7 @@ class PayController {
         var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
         var requestType = "payWithMethod";
         var amount = request.body.amount;
-        console.log("amount: "+amount)
+        // console.log("amount: "+amount)
         var orderId = partnerCode + new Date().getTime();
         var requestId = orderId;
         var extraData ='';
@@ -416,19 +456,26 @@ class PayController {
 
         // Kiểm tra số lượng sản phẩm hiện có
         let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
-        let values = [productID];
+
+        let canBuy = true;
+
+        // Duyệt qua mỗi productID trong mảng
+        for (let i = 0; i < productID.length; i++) {
+        let values = [productID[i]];
         mysql.query(sql, values, (err, result) => {
             if (err) throw err;
-            // console.log(result);
 
             // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-            if (quantity > result[0].remaining_quantity) {
-                return res.status(400).json("Số lượng sản phẩm không đủ");
+            if (quantity[i] > result[0].remaining_quantity) {
+            canBuy = false;
+            return res.status(400).json("Số lượng sản phẩm không đủ");
             }
+        });
+        }
 
-            // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
-            if (quantity <= result[0].remaining_quantity) {
-                //before sign HMAC SHA256 with format
+        // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
+        if (canBuy) {
+            //before sign HMAC SHA256 with format
                 //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
                 var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
                 //signature
@@ -480,10 +527,10 @@ class PayController {
                     res.on('end', () => {
                         console.log('No more data in response.');
                         const body = JSON.parse(data);
-                        console.log('Body: ');
-                        console.log(body);
-                        console.log('payUrl: ');
-                        console.log(body.payUrl);
+                        // console.log('Body: ');
+                        // console.log(body);
+                        // console.log('payUrl: ');
+                        // console.log(body.payUrl);
                         if (body.payUrl === undefined) {
                             response.json({ error: body.message });
                         } else {
@@ -492,13 +539,12 @@ class PayController {
                     });
                 })
                 paymentReq.on('error', (e) => {
-                    console.log(`problem with request: ${e.message}`);
+                    // console.log(`problem with request: ${e.message}`);
                 });
                 paymentReq.write(requestBody);
                 paymentReq.end();
-                // console.log("return: "+redirectUrl);              
-            }
-        })
+                // console.log("return: "+redirectUrl);
+        }
     }
 }
     function sortObject(obj) {

@@ -26,7 +26,7 @@ import { update } from "../../redux/userSlice";
 import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
-import { format } from "date-fns";
+import { utcToZonedTime, format } from 'date-fns-tz';
 import { formatCurrency } from "../../util/FormatVnd";
 
 export default function Profile() {
@@ -35,7 +35,7 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
-
+  
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,32 +56,32 @@ export default function Profile() {
   }, [data]);
 
   // Hàm tải dữ liệu
-const loadData = useCallback(() => {
-  axios
-    .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
-    .then((res) => {
-      // Chuyển đổi paymentData từ chuỗi đã được mã hóa sang đối tượng JavaScript
-      const dataWithParsedPaymentData = res.data.map(order => {
-        let paymentData = {};
-        try {
-          paymentData = JSON.parse(decodeURIComponent(order.paymentData));
-        } catch (error) {
-          console.error("Error parsing paymentData:", error);
-        }
-        return {
-          ...order,
-          paymentData
-        };
-      });
+  const loadData = useCallback(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/order/orderhistory/id/${user.id}`)
+      .then((res) => {
+        // Chuyển đổi paymentData từ chuỗi đã được mã hóa sang đối tượng JavaScript
+        const dataWithParsedPaymentData = res.data.map((order) => {
+          let paymentData = {};
+          try {
+            paymentData = JSON.parse(decodeURIComponent(order.paymentData));
+          } catch (error) {
+            console.error("Error parsing paymentData:", error);
+          }
+          return {
+            ...order,
+            paymentData,
+          };
+        });
 
-      setData(dataWithParsedPaymentData);
-      const sortedOrders = dataWithParsedPaymentData.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
-      setData(sortedOrders || []);
-    })
-    .catch((error) => console.log(error));
-}, [user]);
+        setData(dataWithParsedPaymentData);
+        const sortedOrders = dataWithParsedPaymentData.sort(
+          (a, b) => new Date(b.order_created_at) - new Date(a.order_created_at)
+        );
+        setData(sortedOrders || []);
+      })
+      .catch((error) => console.log(error));
+  }, [user]);
 
   useEffect(() => {
     loadData();
@@ -206,40 +206,37 @@ const loadData = useCallback(() => {
         </Link>
       ),
     },
-    { title: "Sản phẩm", dataIndex: "shortDescription", key: "name" },
-    { title: 'Tổng giá', dataIndex: 'totalAmount', key: 'totalPrice' },
+    // { title: "Sản phẩm", dataIndex: "shortDescription", key: "name" },
+    { title: "Tổng giá", dataIndex: "totalAmount", key: "totalPrice" },
 
     {
       title: "Ngày mua",
       dataIndex: "order_updated_at",
       key: "updated_at",
-      // render: (order_updated_at) =>
-      //   order_updated_at && (
-      //     <div>
-      //       <p style={{ margin: "0" }}>
-      //         {new Date(order_updated_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-      //       </p>
-      //       <p style={{ margin: "0" }}>
-      //         {new Date(order_updated_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", day: '2-digit', month: '2-digit', year: 'numeric' })}
-      //       </p>
-      //     </div>
-      //   ),
-    },    
-
-    {
-      title: 'PTTT', 
-      dataIndex: 'paymentMenthod', 
-      key: 'paymentMenthod', 
-      render: status => (
-          <span style={{
-              fontWeight: 'bold', 
-              color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
-          }}>
-              {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
-          </span>
-      )
+      render: (date) => {
+        const fmt = 'HH:mm:ss - dd/MM/yyyy';
+        const zonedDate = utcToZonedTime(date, 'Etc/UTC');
+        return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
+      },
     },
     
+
+    {
+      title: "PTTT",
+      dataIndex: "paymentMenthod",
+      key: "paymentMenthod",
+      render: (status) => (
+        <span
+          style={{
+            fontWeight: "bold",
+            color: status === 1 ? "blue" : status === 2 ? "blue" : "blue",
+          }}
+        >
+          {status === 2 ? "MOMO" : status === 1 ? "COD" : "VNPAY"}
+        </span>
+      ),
+    },
+
     {
       title: "Trạng thái",
       dataIndex: "order_status",
@@ -304,8 +301,7 @@ const loadData = useCallback(() => {
     },
   ];
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -331,7 +327,7 @@ const loadData = useCallback(() => {
 
             {/* Orders Manager */}
             <MDBTabsItem>
-              <MDBTabsLink  
+              <MDBTabsLink
                 onClick={() => handleVerticalClick("tab2")}
                 active={verticalActive === "tab2"}
               >
@@ -366,87 +362,66 @@ const loadData = useCallback(() => {
           <MDBTabsContent>
             {/*  */}
             <MDBTabsPane show={verticalActive === "tab1"}>
-              <div className="css-gjf6g1 snipcss-NrJii">
-                <div className="css-z54kij">
-                  <div className="css-hveu7a">
-                    <div
-                      className="teko-row css-1o3gs9x style-QHQSn"
-                      id="style-QHQSn"
+              <br />
+              <div
+                style={{
+                  textAlign: "left",
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  padding: "15px",
+                }}
+              >
+                <h5>Thông tin tài khoản</h5>
+                <Form
+                  labelCol={{ span: 8 }}
+                  wrapperCol={{ span: 16 }}
+                  form={form}
+                  onFinish={onFinish}
+                  style={{ maxWidth: 600 }}
+                  initialValues={{
+                    name: user.name,
+                    phone: user.phone,
+                  }}
+                >
+                  {/* name */}
+                  <Form.Item
+                    name="name"
+                    label="Họ tên"
+                    tooltip="Bạn muốn chúng tôi gọi bạn như thế nào."
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  {/* phone */}
+                  <Form.Item
+                    name="phone"
+                    rules={[
+                      {
+                        required: true,
+                        pattern: new RegExp(/(0)[3|5|7|8|9]+([0-9]{8})\b/g),
+                        message: "Vui lòng nhập số điện thoại đúng định dạng",
+                      },
+                    ]}
+                    label="Số điện thoại"
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  {/* email */}
+                  <Form.Item label="Email">
+                    <Input disabled value={user.email} />
+                  </Form.Item>
+
+                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button
+                      loading={isLoading}
+                      type="primary"
+                      htmlType="submit"
                     >
-                      <div
-                        className="teko-col teko-col-8 css-gr7r8o style-rBeFA"
-                        id="style-rBeFA"
-                      >
-                        <div className="teko-card css-jjszbd">
-                          <div className="teko-card-body css-0">
-                            <div
-                              className="teko-row teko-row-space-between css-1o3gs9x"
-                              data-allytip="true"
-                            >
-                              <div type="title" className="css-vdbely">
-                                Thông tin tài khoản
-                              </div>
-                            </div>
-                            <Form
-                              labelCol={{ span: 8 }}
-                              wrapperCol={{ span: 16 }}
-                              form={form}
-                              onFinish={onFinish}
-                              style={{ maxWidth: 600 }}
-                              initialValues={{
-                                name: user.name,
-                                phone: user.phone,
-                              }}
-                            >
-                              {/* name */}
-                              <Form.Item
-                                name="name"
-                                label="Họ tên"
-                                tooltip="Bạn muốn chúng tôi gọi bạn như thế nào."
-                              >
-                                <Input />
-                              </Form.Item>
-
-                              {/* phone */}
-                              <Form.Item
-                                name="phone"
-                                rules={[
-                                  {
-                                    required: true,
-                                    pattern: new RegExp(
-                                      /(0)[3|5|7|8|9]+([0-9]{8})\b/g
-                                    ),
-                                    message:
-                                      "Vui lòng nhập số điện thoại đúng định dạng",
-                                  },
-                                ]}
-                                label="Số điện thoại"
-                              >
-                                <Input />
-                              </Form.Item>
-
-                              {/* email */}
-                              <Form.Item label="Email">
-                                <Input disabled value={user.email} />
-                              </Form.Item>
-
-                              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                <Button
-                                  loading={isLoading}
-                                  type="primary"
-                                  htmlType="submit"
-                                >
-                                  Cập nhật
-                                </Button>
-                              </Form.Item>
-                            </Form>
-                            {/*  */}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      Cập nhật
+                    </Button>
+                  </Form.Item>
+                </Form>
               </div>
             </MDBTabsPane>
 

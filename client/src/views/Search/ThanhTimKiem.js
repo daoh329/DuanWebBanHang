@@ -16,9 +16,6 @@ const SearchComponent = () => {
         fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
             .then((response) => response.json())
             .then((data) => {
-                data.forEach((element) => {
-                    element.configuration = JSON.parse(element.configuration);
-                });
                 setLaptopProducts(data);
             })
             .catch((error) => {
@@ -28,9 +25,6 @@ const SearchComponent = () => {
         fetch(`${process.env.REACT_APP_API_URL}/product/productsPhone`)
             .then((response) => response.json())
             .then((data) => {
-                data.forEach((element) => {
-                    element.configuration = JSON.parse(element.configuration);
-                });
                 setPhoneProducts(data);
             })
             .catch((error) => {
@@ -41,7 +35,7 @@ const SearchComponent = () => {
     useEffect(() => {
         if (searchQuery) {
             const allProducts = [...laptopProducts, ...phoneProducts];
-            const results = allProducts.filter(product =>
+            const results = allProducts?.filter(product =>
                 product.shortDescription.toLowerCase().replace(/\s/g, '').includes(searchQuery.toLowerCase().replace(/\s/g, ''))
             );
             setSuggestedProducts(results);
@@ -50,20 +44,16 @@ const SearchComponent = () => {
         }
     }, [searchQuery, laptopProducts, phoneProducts]);
 
-
-
     const handleSearch = () => {
         navigate(`/search?query=${encodeURIComponent(searchQuery.toLowerCase())}`);
         setSearchHistory([...searchHistory, searchQuery]);
-
         setShowSuggestions(false);
-
     };
 
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
         const allProducts = [...laptopProducts, ...phoneProducts];
-        const results = allProducts.filter(product => {
+        const results = allProducts?.filter(product => {
             const words = product.shortDescription.toLowerCase().split(' ');
             return words.some(word => word.startsWith(event.target.value.toLowerCase()));
         });
@@ -91,7 +81,6 @@ const SearchComponent = () => {
 
     // quaqua trang chi tiết 
     const handleViewDetailProduct = (products) => {
-
         // Kiểm tra xem 'id' có tồn tại hay không
         if (!products.id) {
             console.error("Product ID is undefined!");
@@ -99,7 +88,6 @@ const SearchComponent = () => {
         }
         // Lấy danh sách các sản phẩm đã xem từ session storage
         const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-
         // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
         const isViewed = historysp.some((product) => product.id === products.id);
         // Nếu sản phẩm mới chưa được xem

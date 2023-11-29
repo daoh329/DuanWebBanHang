@@ -61,9 +61,9 @@ const AllNewProductPhone = () => {
   const uniqueSeries = [...new Set(configurations.map(config => config.series))];
   const uniqueRam = [...new Set(configurations.map(config => config.ram))];
   const uniquePin = [...new Set(configurations.map(config => config.pin))];
-  const uniqueRear_camera = [...new Set(configurations.map(config => config.rear_camera))];
-  const uniqueFront_camera = [...new Set(configurations.map(config => config.front_camera))];
-  const uniqueScreen = [...new Set(configurations.map(config => config.screen))];
+  const uniqueRear_camera = [...new Set(configurations.map(config => config.mainCamera))];
+  const uniqueFront_camera = [...new Set(configurations.map(config => config.frontCamera))];
+  const uniqueScreen = [...new Set(configurations.map(config => config.screenTechnology))];
 
   useEffect(() => {
     axios
@@ -146,19 +146,22 @@ const AllNewProductPhone = () => {
     let filteredProducts = products;
 
     // Lọc theo giá
-    filteredProducts = filteredProducts.filter((product) => {
-      const price = product.price;
-      return price >= minSliderValue && price <= maxSliderValue;
+    filteredProducts = filteredProducts?.filter((product) => {
+      return product.variations.some((variation) => {
+        const price = variation.price;
+        return price >= minSliderValue && price <= maxSliderValue;
+      });
     });
+    
 
     // Lọc theo thương hiệu
     if (selectedBrand !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => product.brand === selectedBrand);
+      filteredProducts = filteredProducts?.filter((product) => product.brand === selectedBrand);
     }
 
     // Lọc theo ROM
     if (selectedRom !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.rom === selectedRom;
       });
@@ -167,7 +170,7 @@ const AllNewProductPhone = () => {
 
     // Lọc theo chip
     if (selectedChip !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.chip === selectedChip;
       });
@@ -175,7 +178,7 @@ const AllNewProductPhone = () => {
     }
     // Lọc theo series
     if (selectedSeries !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.series === selectedSeries;
       });
@@ -183,7 +186,7 @@ const AllNewProductPhone = () => {
 
     // Lọc theo ram
     if (selectedRam !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.ram === selectedRam;
       });
@@ -191,7 +194,7 @@ const AllNewProductPhone = () => {
 
     // Lọc theo pin
     if (selectedPin !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.pin === selectedPin;
       });
@@ -199,25 +202,25 @@ const AllNewProductPhone = () => {
 
     // Lọc theo  rear_camera
     if (selectedRear_camera !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.rear_camera === selectedRear_camera;
+        return config.mainCamera === selectedRear_camera;
       });
     }
 
     // Lọc theo  front_camera
     if (selectedFront_camera !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.front_camera === selectedFront_camera;
+        return config.frontCamera === selectedFront_camera;
       });
     }
 
     // Lọc theo  screen
     if (selectedScreen !== 'ALL') {
-      filteredProducts = filteredProducts.filter((product) => {
+      filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.screen === selectedScreen;
+        return config.screenTechnology === selectedScreen;
       });
     }
 

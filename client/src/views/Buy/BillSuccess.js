@@ -8,30 +8,21 @@ const BillSuccess = () => {
     const params = new URLSearchParams(location.search);
     const paymentDataobject = Object.fromEntries(params);
     const paymentData= JSON.stringify(paymentDataobject);
-    console.log('Momo payment data:', paymentData);
+    // console.log('Momo payment data:', paymentData);
   
     // Lấy các giá trị từ sessionStorage
     const UserID = sessionStorage.getItem('UserID');
     const addressID = sessionStorage.getItem('addressID');
-    const productID = sessionStorage.getItem('productID');
-    const quantity = sessionStorage.getItem('quantity');
-    const color = sessionStorage.getItem('color');
-    const capacity = sessionStorage.getItem('capacity');
+    const productID = JSON.parse(sessionStorage.getItem('productID'));
+    const quantity = JSON.parse(sessionStorage.getItem('quantity'));
+    const color = JSON.parse(sessionStorage.getItem('color'));
+    const capacity = JSON.parse(sessionStorage.getItem('capacity'));
+    const totalPrice = JSON.parse(sessionStorage.getItem('totalPrice'));
     const deliveryMethod = sessionStorage.getItem('deliveryMethod');
     const paymentMenthod = sessionStorage.getItem('paymentMenthod');
     const note = sessionStorage.getItem('note');
     const totalAmount = sessionStorage.getItem('totalAmount');
     const status = sessionStorage.getItem('status');
-  
-    // // In ra các giá trị
-    // console.log('UserID:', userID);
-    // console.log('addressID:', addressID);
-    // console.log('productID:', productID);
-    // console.log('quantity:', quantity);
-    // console.log('deliveryMethod:', deliveryMethod);
-    // console.log('paymentMenthod:', paymentMenthod);
-    // console.log('note:', note);
-    // console.log('status:', status);
   
     // Gửi dữ liệu lên server
     const data = {
@@ -41,6 +32,7 @@ const BillSuccess = () => {
         quantity,
         color,
         capacity,
+        totalPrice,
         deliveryMethod,
         paymentMenthod,
         note,
@@ -48,6 +40,8 @@ const BillSuccess = () => {
         totalAmount,
         status,
     };
+
+    // console.log("data: " + data)
   
     fetch(`${process.env.REACT_APP_API_URL}/order/paymentmomo`, {
       method: "POST",

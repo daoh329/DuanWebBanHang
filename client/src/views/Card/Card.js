@@ -3,29 +3,48 @@ import React, { useEffect, useState } from "react";
 import { Tag } from "antd";
 import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
+// import { formatCapacity } from "../../util/formatCapacity";
 
 function CardProduct(props) {
   const { item, onClick } = props;
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(0);
+  const [variations, setVariations] = useState([]);
+  const [discountOfPiceMin, setDiscountOfPiceMin] = useState(0);
+  const [discountOfPiceMax, setDiscountOfPiceMax] = useState(0);
+
+  // useEffect(() => {
+  //   const productsFilter = items && [...items].filter((data) => data.id === item.id);
+  //   setProducts(productsFilter);
+  // }, [items, item]);
 
   useEffect(() => {
     // Lấy giá nhỏ nhất và lớn nhất
-    const capacities = item?.capacities;
-    if (capacities && capacities.length > 1) {
+    const variations = item.variations;
+    setVariations(variations);
+    if (variations && variations.length > 1) {
       // Tìm giá trị price lớn nhất và nhỏ nhất
       let minPrice = Number.POSITIVE_INFINITY; // Giá trị ban đầu là dương vô cùng
       let maxPrice = Number.NEGATIVE_INFINITY; // Giá trị ban đầu là âm vô cùng
-      for (const item of capacities) {
-        if (item.capacity_price < minPrice) {
-          minPrice = item.capacity_price;
+      for (const item of variations) {
+        if (item.price < minPrice) {
+          minPrice = item.price;
         }
-        if (item.capacity_price > maxPrice) {
-          maxPrice = item.capacity_price;
+        if (item.price > maxPrice) {
+          maxPrice = item.price;
         }
       }
       setPriceMin(minPrice);
       setPriceMax(maxPrice);
+      // Lấy discount_amount của giá nhỏ nhất và lớn nhất
+      const variationOfPriceMin = variations.find(
+        (data) => data.price === minPrice
+      );
+      const variationOfPriceMax = variations.find(
+        (data) => data.price === maxPrice
+      );
+      setDiscountOfPiceMin(variationOfPriceMin?.discount_amount);
+      setDiscountOfPiceMax(variationOfPriceMax?.discount_amount);
     }
   }, [item]);
 
@@ -37,9 +56,7 @@ function CardProduct(props) {
     <div className="sanpham-card" onClick={handleViewDetail}>
       <img
         src={
-          item.main_image
-            ? process.env.REACT_APP_API_URL + item.main_image
-            : process.env.REACT_APP_API_URL + item.thumbnail
+          item?.main_image && process.env.REACT_APP_API_URL + item?.main_image
         }
         style={{
           color: "#333333",
@@ -52,16 +69,18 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item.remaining_quantity !== 0 && item.discount > 0 ? (
+      {item?.remaining_quantity !== 0 && discountOfPiceMin > 0 && (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
               TIẾT KIỆM
             </div>
-            <div className="css-1rdv2qd">{formatCurrency(item.discount)}</div>
+            <div className="css-1rdv2qd">
+              {formatCurrency(discountOfPiceMin)}
+            </div>
           </div>
         </div>
-      ) : null}
+      )}
 
       {/* brand */}
       <div
@@ -83,7 +102,7 @@ function CardProduct(props) {
         </div>
       </div>
 
-      {/* name */}
+      {/* shortDescription */}
       <div className="productname">
         <h3
           style={{
@@ -118,40 +137,66 @@ function CardProduct(props) {
         ) : (
           // Nếu còn sản phẩm
           <div>
-            {/* discount */}
-            {item?.capacities?.length === 1 ? (
+            {variations && [...variations].length === 1 ? (
+              // Nếu chỉ có một biến thể
+              <>
+              {/* Giá mới */}
               <div style={{ textAlign: "left" }} className="show-discount">
                 {formatCurrency(
-                  item?.capacities[0].capacity_price - item.discount
+                  variations[0]?.price - variations[0]?.discount_amount
                 )}
               </div>
+              {/* Giá cũ */}
+              {variations[0]?.discount_amount > 0 && (
+                <div
+                  style={{
+                    color: "gray",
+                    display: "-webkit-box",
+                    fontSize: "12px",
+                    lineHeight: "12px",
+                    fontWeight: "normal",
+                  }}
+                >
+                  <span style={{ textDecoration: "line-through" }}>
+                    {formatCurrency(variations[0]?.price)}
+                  </span>
+                  &nbsp;
+                  <span style={{ color: "#1435c3" }}>
+                    -{format_sale(variations[0]?.price, variations[0]?.discount_amount)}
+                  </span>
+                </div>
+              )}
+              </>
             ) : (
-              <div className="show-discount">
-                {formatCurrency(priceMin - item.discount)}
-                {" - "}
-                {formatCurrency(priceMax - item.discount)}
-              </div>
-            )}
-
-            {/* price */}
-            {item?.discount > 0 && (
-              <div
-                style={{
-                  color: "gray",
-                  display: "-webkit-box",
-                  fontSize: "12px",
-                  lineHeight: "12px",
-                  fontWeight: "normal",
-                }}
-              >
-                <span style={{ textDecoration: "line-through" }}>
-                  {formatCurrency(item.price)}
-                </span>
-                &nbsp;
-                <span style={{ color: "#1435c3" }}>
-                  -{format_sale(item.price, item.discount)}
-                </span>
-              </div>
+              // Nếu có nhiều biến thể
+              <>
+                {/* Giá mới */}
+                <div className="show-discount">
+                  {formatCurrency(priceMin - discountOfPiceMin)}
+                  {" - "}
+                  {formatCurrency(priceMax - discountOfPiceMax)}
+                </div>
+                {/* Giá cũ */}
+                {discountOfPiceMin > 0 && (
+                  <div
+                    style={{
+                      color: "gray",
+                      display: "-webkit-box",
+                      fontSize: "12px",
+                      lineHeight: "12px",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    <span style={{ textDecoration: "line-through" }}>
+                      {formatCurrency(priceMin)}
+                    </span>
+                    &nbsp;
+                    <span style={{ color: "#1435c3" }}>
+                      -{format_sale(priceMin, discountOfPiceMin)}
+                    </span>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

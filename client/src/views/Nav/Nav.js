@@ -38,7 +38,7 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
-
+import { useLocation } from 'react-router-dom';
 const { Header } = Layout;
 
 const App = () => {
@@ -83,9 +83,15 @@ const App = () => {
   // const [cartList, setCartList] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
 
-  const removeFromCart = (productId) => {
-    dispatch(deleteProductInCart(productId));
+  const removeFromCart = (productId, color, capacity) => {
+    const data = {
+      product_id: productId,
+      color,
+      capacity,
+    }
+    dispatch(deleteProductInCart(data));
   };
+
   // phone
   const [phone, setPhone] = useState("");
   const handleConfirm = async () => {
@@ -112,13 +118,13 @@ const App = () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    // Lọc sản phẩm dựa trên từ khóa tìm kiếm
-    const filtered = products.filter((product) =>
-      product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery, products]);
+  // useEffect(() => {
+  //   // Lọc sản phẩm dựa trên từ khóa tìm kiếm
+  //     const filtered = [...products]?.filter((product) =>
+  //     product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  //   setFilteredProducts(filtered);
+  // }, [searchQuery, products]);
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -307,8 +313,9 @@ const App = () => {
         for (let i = 0; i < cart.length; i++) {
           const data = {
             product_id: cart[i].id,
-            capacity_id: parseInt(cart[i].capacity.id),
-          }
+            capacity: parseInt(cart[i].capacity),
+            color: cart[i].color,
+          };
           arrId.push(data);
         }
       }
@@ -316,17 +323,16 @@ const App = () => {
       const results = await axios.post(api, arrId);
       if (results.status === 200) {
         const products = results.data;
-        // Chuyển thông tin dung lượng và cấu hình thành định dạng JSON
-        products.forEach((element) => {
-          element.capacities = JSON.parse(element.capacities);
-        });
         for (let i = 0; i < products.length; i++) {
           const newItem = {
             id: products[i].id,
             main_image: products[i].main_image,
             shortDescription: products[i].shortDescription,
-            capacity: products[i].capacities[0],
-            discount: products[i].discount,
+            capacity: products[i].variations.capacity,
+            color: products[i].variations.color,
+            price: products[i].variations.price,
+            discount: products[i].variations.discount_amount,
+            thumbnail: products[i].images[0],
             brand: products[i].brand,
           };
           // Cập nhật giỏ hàng tại redux
@@ -339,9 +345,13 @@ const App = () => {
       console.log(error);
     }
   };
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
 
   return (
     <Layout className="nav-container">
+        {!isAdminRoute && (
       <div className="danhmuc">
         <img
           alt=""
@@ -349,10 +359,11 @@ const App = () => {
           src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
         ></img>
       </div>
-
+        )}
       <div className="logoweb">
         <img alt="" style={{ objectFit: "cover" }} src={Hinh}></img>
       </div>
+      {!isAdminRoute && (
       <div className="menu-container">
         <div className="menu1">
           <div className="css-1e7ahm9">
@@ -418,7 +429,7 @@ const App = () => {
           </div>
         </div>
       </div>
-
+      )}
       <Affix offsetTop={0}>
         <div>
           {/* <div className="hd-logo">
@@ -813,8 +824,8 @@ const App = () => {
                     count={
                       arrayNotification
                         ? arrayNotification.filter(
-                          (notification) => notification.is_read === 0
-                        ).length
+                            (notification) => notification.is_read === 0
+                          ).length
                         : []
                     }
                     style={{
@@ -857,7 +868,11 @@ const App = () => {
                                   type="danger"
                                   icon={<DeleteOutlined />}
                                   onClick={() =>
-                                    removeFromCart(selectedItems.id)
+                                    removeFromCart(
+                                      selectedItems.id,
+                                      selectedItems.color,
+                                      selectedItems.capacity
+                                    )
                                   }
                                 ></Button>,
                               ]}
@@ -868,18 +883,18 @@ const App = () => {
                                     src={
                                       selectedItems?.main_image
                                         ? process.env.REACT_APP_API_URL +
-                                        selectedItems.main_image
+                                          selectedItems.main_image
                                         : process.env.REACT_APP_API_URL +
-                                        selectedItems.thumbnail
+                                          selectedItems.thumbnail
                                     }
                                   />
                                 }
                                 title={
                                   selectedItems.shortDescription.length > 20
                                     ? selectedItems.shortDescription.substring(
-                                      0,
-                                      20
-                                    ) + "..."
+                                        0,
+                                        20
+                                      ) + "..."
                                     : selectedItems.shortDescription
                                 }
                                 description={
