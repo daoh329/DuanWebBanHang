@@ -6,7 +6,7 @@ import axios from "axios";
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
 import { formatCurrency } from "../../../util/FormatVnd";
-import { format } from "date-fns";
+import { utcToZonedTime, format } from 'date-fns-tz';
 
 function Order(props) {
   const { order, setOrder } = props;
@@ -102,19 +102,21 @@ function Order(props) {
               Thời gian tạo:{" "}
               <span>
                 {format(
-                  new Date(order[0].order_created_at),
-                  "HH:mm:ss dd/MM/yyyy"
+                  utcToZonedTime(new Date(order[0].order_created_at), 'Etc/UTC'),
+                  "HH:mm:ss - dd/MM/yyyy",
+                  { timeZone: 'Etc/UTC' }
                 )}
               </span>
             </p>
+
           </div>
 
           <div className="block-1-3">
             <p>Thông tin hóa đơn</p>
             {order[0] &&
-            order[0]?.paymentData &&
-            (order[0]?.paymentData?.vnp_OrderInfo ||
-              order[0]?.paymentData?.orderId) ? (
+              order[0]?.paymentData &&
+              (order[0]?.paymentData?.vnp_OrderInfo ||
+                order[0]?.paymentData?.orderId) ? (
               <>
                 <p>
                   Mã thanh toán giao dịch:{" "}
