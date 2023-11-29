@@ -39,6 +39,60 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   const [categories, setCategories] = useState([]);
   const [categorySubmit, setCategorySubmit] = useState(product.category);
 
+  // logic orther informations
+  const [inputs, setInputs] = useState([]);
+  const [selectedSpecifications, setSelectedSpecifications] = useState("");
+  const phone_specifications = [
+    "os",
+    "cpu",
+    "ram",
+    "memoryStick",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "mainCamera",
+    "frontCamera",
+    "pin",
+    "chargingTechnology",
+    "connector",
+    "size",
+    "weight",
+    "audioTechnology",
+    "loudspeaker",
+    "sensor",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+  ];
+  const laptop_specifications = [
+    "os",
+    "operatingSystemVersion",
+    "cpu",
+    "NumberOfCPUCoresAndThreads",
+    "CPUProcessingSpeed",
+    "ram",
+    "ramType",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "graphicsCard",
+    "graphicsCardMemory",
+    "connector",
+    "pin",
+    "batteryLife",
+    "keyboard",
+    "keyboardBacklight",
+    "touchpad",
+    "loudspeaker",
+    "audioTechnology",
+    "webcam",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+    "opticalDrive",
+    "radiators",
+  ];
+
   // Lấy brands và colors khi lần đầu chạy
   useEffect(() => {
     getBrandsList();
@@ -281,87 +335,51 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   const handleInputChange = (index, key, value) => {
     const updatedRomInfo = [...capacitySubmit];
     updatedRomInfo[index][key] = value;
-    setCapacitySubmit(updatedRomInfo);
+    setInputs(updatedRomInfo);
   };
 
-  // logic orther informations
-  const [inputs, setInputs] = useState([]);
-  const [selectedSpecifications, setSelectedSpecifications] = useState("");
-  const phone_specifications = [
-    "os",
-    "cpu",
-    "ram",
-    "memoryStick",
-    "screenSize",
-    "screenResolution",
-    "screenTechnology",
-    "mainCamera",
-    "frontCamera",
-    "pin",
-    "chargingTechnology",
-    "connector",
-    "size",
-    "weight",
-    "audioTechnology",
-    "loudspeaker",
-    "sensor",
-    "networkConnections",
-    "waterproof",
-    "dustproof",
-  ];
-  const laptop_specifications = [
-    "os",
-    "operatingSystemVersion",
-    "cpu",
-    "NumberOfCPUCoresAndThreads",
-    "CPUProcessingSpeed",
-    "ram",
-    "ramType",
-    "screenSize",
-    "screenResolution",
-    "screenTechnology",
-    "graphicsCard",
-    "graphicsCardMemory",
-    "connector",
-    "pin",
-    "batteryLife",
-    "keyboard",
-    "keyboardBacklight",
-    "touchpad",
-    "loudspeaker",
-    "audioTechnology",
-    "webcam",
-    "networkConnections",
-    "waterproof",
-    "dustproof",
-    "opticalDrive",
-    "radiators",
-  ];
-
+  // Tạo mảng chứa các thông số kĩ thuật (specifications)
   useEffect(() => {
-    // Tạo mảng chứa các thông số kĩ thuật (specifications)
     if (product) {
-      const arr = []
-      for(let fieldName in product.configuration) {
+      const arr = [];
+      const arrDelete = ["guarantee", "series", "demand"];
+      for (let fieldName in product.configuration) {
         let ob = {};
-        ob[fieldName] = product.configuration[fieldName].trim();
-        arr.push(ob);
+        ob["inputName"] = fieldName;
+        ob["value"] = product.configuration[fieldName].trim();
+        if (!arrDelete.includes(fieldName)) {
+          arr.push(ob);
+        }
       }
       setInputs(arr);
     }
-  }, [product])
+  }, [product]);
 
   useEffect(() => {
     if (categorySubmit && categories.length > 0) {
       const c = categories.find((c) => c.id === categorySubmit);
       if (c.name === "Laptop") {
-        setSelectedSpecifications(laptop_specifications);
+        const arr = [];
+        laptop_specifications.forEach((item) => {
+          const oj = {};
+          oj["value"] = item;
+          oj["label"] = formatSpecifications(item);
+          arr.push(oj);
+        });
+        setSelectedSpecifications(arr);
       } else {
-        setSelectedSpecifications(phone_specifications);
+        const arr = [];
+        phone_specifications.forEach((item) => {
+          const oj = {};
+          oj["value"] = item;
+          oj["label"] = formatSpecifications(item);
+          arr.push(oj);
+        });
+        setSelectedSpecifications(arr);
       }
     }
   }, [categorySubmit, categories]);
-  
+
   // logic add field
   const handleAddInput = () => {
     setInputs([...inputs, { value: "", inputName: "" }]);
@@ -383,6 +401,9 @@ function PhoneInputFrom({ data, onClick, setModal }) {
     display: "inline-block",
     width: "calc(50% - 8px)",
   };
+
+  console.log("inputs", inputs);
+  // console.log("selectedSpecifications:" , selectedSpecifications);
 
   return (
     <Form
@@ -520,19 +541,12 @@ function PhoneInputFrom({ data, onClick, setModal }) {
               style={{ height: 40 }}
               showSearch
               allowClear
-              name={input.inputName}
-            >
-              {selectedSpecifications &&
-                selectedSpecifications.map((specification) => (
-                  <Select.Option value={specification}>
-                    {formatSpecifications(specification)}
-                  </Select.Option>
-                ))}
-            </Select>
+              defaultValue={input.inputName}
+              options={selectedSpecifications}
+            />
           </Form.Item>
 
           <Form.Item
-            name={input.inputName}
             style={{
               display: "inline-block",
               width: "calc(50% - 8px)",
