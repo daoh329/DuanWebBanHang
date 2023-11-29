@@ -368,7 +368,7 @@ const App = () => {
         <div className="menu1">
           <div className="css-1e7ahm9">
             <a
-              href="/sale"
+              href="/huong-dan-mua-hang"
               style={{
                 marginRight: "20px",
                 color: "#fff", // Chữ màu trắng
@@ -376,10 +376,10 @@ const App = () => {
               }}
             >
               <TagOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Khuyến mãi
+              Hướng dẫn mua hàng
             </a>
             <a
-              href="/showroom"
+              href="/chinh-sach-doi-tra"
               style={{
                 marginRight: "20px",
                 color: "#fff", // Chữ màu trắng
@@ -389,10 +389,10 @@ const App = () => {
               <EnvironmentOutlined
                 style={{ marginRight: "8px", color: "#fff" }}
               />{" "}
-              Hệ thống showroom
+                Chính sách đổi trả.
             </a>
             <a
-              href="/support"
+              href="/chinh-sach-bao-hanh"
               style={{
                 marginRight: "20px",
                 color: "#fff", // Chữ màu trắng
@@ -400,7 +400,7 @@ const App = () => {
               }}
             >
               <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Tư vẫn doanh nghiệp
+              Chính sách bảo hành
             </a>
             <Dropdown menu={{ items: menuContact }} placement="bottomRight">
               <a
@@ -416,7 +416,7 @@ const App = () => {
               </a>
             </Dropdown>
             <a
-              href="/tin-tuc"
+              href="/chinh-sach-thanh-toan"
               style={{
                 marginRight: "20px",
                 color: "#fff", // Chữ màu trắng
@@ -424,7 +424,7 @@ const App = () => {
               }}
             >
               <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Tin tức
+              Chính sách thanh toán
             </a>
           </div>
         </div>
