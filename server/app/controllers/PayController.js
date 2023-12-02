@@ -85,16 +85,21 @@ class PayController {
 
         // Duyệt qua mỗi productID trong mảng
         for (let i = 0; i < product.length; i++) {
-        let values = [product[i]];
-        mysql.query(sql, values, (err, result) => {
-            if (err) throw err;
+            let values = [product[i]];
+
+            // Sử dụng Promise để đảm bảo rằng truy vấn này hoàn thành trước khi tiếp tục
+            const productResult = await new Promise((resolve, reject) => {
+                mysql.query(sql, values, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
 
             // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-            if (quantitys[i] > result[0].remaining_quantity) {
-            canBuy = false;
-            return res.status(400).json("Số lượng sản phẩm không đủ");
+            if (quantitys[i] > productResult[0].remaining_quantity) {
+                canBuy = false;
+                return res.status(400).json("Số lượng sản phẩm không đủ");
             }
-        });
         }
 
         // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có
@@ -461,16 +466,21 @@ class PayController {
 
         // Duyệt qua mỗi productID trong mảng
         for (let i = 0; i < productID.length; i++) {
-        let values = [productID[i]];
-        mysql.query(sql, values, (err, result) => {
-            if (err) throw err;
+            let values = [productID[i]];
+
+            // Sử dụng Promise để đảm bảo rằng truy vấn này hoàn thành trước khi tiếp tục
+            const productResult = await new Promise((resolve, reject) => {
+                mysql.query(sql, values, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
 
             // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-            if (quantity[i] > result[0].remaining_quantity) {
-            canBuy = false;
-            return res.status(400).json("Số lượng sản phẩm không đủ");
+            if (quantity[i] > productResult[0].remaining_quantity) {
+                canBuy = false;
+                return response.status(400).json("Số lượng sản phẩm không đủ");
             }
-        });
         }
 
         // Nếu số lượng mua hàng ít hơn hoặc bằng số lượng sản phẩm hiện có

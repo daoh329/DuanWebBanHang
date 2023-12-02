@@ -132,7 +132,7 @@ const SearchComponent = () => {
                         {showSuggestions && searchQuery && (
                           <div style={{
                             position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'white',
-                            boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)', zIndex: 1,
+                            boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)', zIndex: 2,
                         }}>
                             <List>
                                 <VirtualList
