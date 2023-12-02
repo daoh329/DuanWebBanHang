@@ -30,7 +30,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
-import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
+import Hinh from "../../../src/assets/LogoWeb.png";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
