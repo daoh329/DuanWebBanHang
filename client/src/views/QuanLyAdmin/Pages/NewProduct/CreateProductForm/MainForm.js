@@ -403,6 +403,12 @@ function MainForm() {
               width: "calc(50% - 8px)",
               margin: "0 8px",
             }}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn ngày phát hành",
+              },
+            ]}
           >
             <DatePicker style={{ height: 40 }} />
           </Form.Item>

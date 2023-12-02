@@ -114,7 +114,7 @@ function ActionButton({ record, getProduct }) {
                 onClick={handleOpenEditImage}
                 style={{ marginBottom: "10px" }}
               >
-                Cập nhật ảnh và mô tả sản phẩm
+                Cập nhật hình ảnh, dung lượng lưu trữ, giá và màu sắc
               </Button>
               <LaptopInputFrom setModal={setOpenModal} onClick={getProduct} data={record} />
             </div>
@@ -140,7 +140,7 @@ function ActionButton({ record, getProduct }) {
                 onClick={handleOpenEditImage}
                 style={{ marginBottom: "10px" }}
               >
-                Cập nhật ảnh và mô tả sản phẩm
+                Cập nhật hình ảnh, dung lượng lưu trữ, giá và màu sắc
               </Button>
               <PhoneInputFrom setModal={setOpenModal} onClick={getProduct} data={record} />
             </div>
