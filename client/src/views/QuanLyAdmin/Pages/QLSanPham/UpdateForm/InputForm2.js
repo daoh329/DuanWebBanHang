@@ -12,7 +12,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-function PhoneInputForm2({ data, onClick, setModal }) {
+function InputForm2({ data, onClick, setModal }) {
   const product = data;
   const [isLoading, setIsLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -20,46 +20,46 @@ function PhoneInputForm2({ data, onClick, setModal }) {
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState([]);
   const [mainImage, setMainImage] = useState([]);
-  // const [arrVariations, setArrVariations] = useState([
-  //   {
-  //     color: "",
-  //     capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
-  //     // images: [],
-  //   },
-  // ]);
+  const [arrVariations, setArrVariations] = useState([
+    {
+      color: "",
+      capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+      // images: [],
+    },
+  ]);
 
   // gán giá trị variations hiện tại vào state arrVariations
-  // useEffect(() => {
-  //   if (product) {
-  //     var arrUniqueColor = [];
-  //     const arrColor = new Set();
-  //     [...product.variations].forEach((obj) => {
-  //       const color = obj["color"];
-  //       arrColor.add(color);
-  //     });
-  //     arrUniqueColor = Array.from(arrColor);
-  //     var arrVariationsDB = [];
-  //     arrUniqueColor.forEach((color) => {
-  //       const objVariation = {
-  //         color: color,
-  //         capacityGroup: [],
-  //       };
-  //       [...product.variations].forEach((obj) => {
-  //         if (obj["color"] === color) {
-  //           const objCapacityGroup = {
-  //             price: obj.price,
-  //             discount_amount: obj.discount_amount,
-  //             capacity: obj.capacity,
-  //           };
-  //           objVariation.capacityGroup.push(objCapacityGroup);
-  //         }
-  //       });
-  //       arrVariationsDB.push(objVariation);
-  //     });
-  //     // console.log(arrVariationsDB);
-  //     setArrVariations(arrVariationsDB);
-  //   }
-  // }, [product]);
+  useEffect(() => {
+    if (product) {
+      var arrUniqueColor = [];
+      const arrColor = new Set();
+      [...product.variations].forEach((obj) => {
+        const color = obj["color"];
+        arrColor.add(color);
+      });
+      arrUniqueColor = Array.from(arrColor);
+      var arrVariationsDB = [];
+      arrUniqueColor.forEach((color) => {
+        const objVariation = {
+          color: color,
+          capacityGroup: [],
+        };
+        [...product.variations].forEach((obj) => {
+          if (obj["color"] === color) {
+            const objCapacityGroup = {
+              price: obj.price,
+              discount_amount: obj.discount_amount,
+              capacity: obj.capacity,
+            };
+            objVariation.capacityGroup.push(objCapacityGroup);
+          }
+        });
+        arrVariationsDB.push(objVariation);
+      });
+      // console.log(arrVariationsDB);
+      setArrVariations(arrVariationsDB);
+    }
+  }, [product]);
 
   // Hàm được gọi khi không bị lỗi form
   const onFinish = async (values) => {
@@ -197,7 +197,7 @@ function PhoneInputForm2({ data, onClick, setModal }) {
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
 
-      {/* {arrVariations &&
+      {arrVariations &&
         [...arrVariations].map((item, index) => (
           <div key={index}>
             <ProductVariations
@@ -210,7 +210,7 @@ function PhoneInputForm2({ data, onClick, setModal }) {
               setArrVariations={setArrVariations}
             />
           </div>
-        ))} */}
+        ))}
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={isLoading}>
@@ -221,4 +221,4 @@ function PhoneInputForm2({ data, onClick, setModal }) {
   );
 }
 
-export default PhoneInputForm2;
+export default InputForm2;

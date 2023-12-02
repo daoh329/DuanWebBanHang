@@ -19,10 +19,11 @@ function ProductVariations(props) {
   const { index, handlePreview, fileList, arrVariations, setArrVariations , variations} =
     props;
   const [colors, setColors] = useState([]);
+  const [arrColorsCurrent, setArrColorsCurrent] = useState([]);
   const [capacities, setCapacities] = useState([]);
   // const [variationsData, setVariationsData] = useState([]);
   
-
+console.log(variations);
   useEffect(() => {
     getColorsList();
   }, []);
@@ -185,7 +186,6 @@ function ProductVariations(props) {
         }}
         rules={[{ required: true, message: "Vui lòng chọn màu sắc" }]}
         // name={"color" + index}
-        
       >
         <Select
           disabled

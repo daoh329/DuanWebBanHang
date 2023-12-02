@@ -27,7 +27,7 @@ import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
 
 const { Option } = Select;
 
-function PhoneInputFrom({ data, onClick, setModal }) {
+function InputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
   const product = data;
   // Tạo state toàn cục
@@ -593,4 +593,4 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   );
 }
 
-export default PhoneInputFrom;
+export default InputFrom;
