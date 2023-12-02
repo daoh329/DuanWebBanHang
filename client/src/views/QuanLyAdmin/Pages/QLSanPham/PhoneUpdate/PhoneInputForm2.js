@@ -1,9 +1,8 @@
 import { Button, Form, Modal, Upload, notification } from "antd";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ProductVariations from "./ProductVariations";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -21,18 +20,53 @@ function PhoneInputForm2({ data, onClick, setModal }) {
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState([]);
   const [mainImage, setMainImage] = useState([]);
-  const [description, setDescription] = useState(product.description);
+  // const [arrVariations, setArrVariations] = useState([
+  //   {
+  //     color: "",
+  //     capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+  //     // images: [],
+  //   },
+  // ]);
+
+  // gán giá trị variations hiện tại vào state arrVariations
+  // useEffect(() => {
+  //   if (product) {
+  //     var arrUniqueColor = [];
+  //     const arrColor = new Set();
+  //     [...product.variations].forEach((obj) => {
+  //       const color = obj["color"];
+  //       arrColor.add(color);
+  //     });
+  //     arrUniqueColor = Array.from(arrColor);
+  //     var arrVariationsDB = [];
+  //     arrUniqueColor.forEach((color) => {
+  //       const objVariation = {
+  //         color: color,
+  //         capacityGroup: [],
+  //       };
+  //       [...product.variations].forEach((obj) => {
+  //         if (obj["color"] === color) {
+  //           const objCapacityGroup = {
+  //             price: obj.price,
+  //             discount_amount: obj.discount_amount,
+  //             capacity: obj.capacity,
+  //           };
+  //           objVariation.capacityGroup.push(objCapacityGroup);
+  //         }
+  //       });
+  //       arrVariationsDB.push(objVariation);
+  //     });
+  //     // console.log(arrVariationsDB);
+  //     setArrVariations(arrVariationsDB);
+  //   }
+  // }, [product]);
 
   // Hàm được gọi khi không bị lỗi form
   const onFinish = async (values) => {
     // bật loading button submit
     setIsLoading(true);
     try {
-      if (
-        fileList.length === 0 &&
-        description === product.description &&
-        mainImage.length === 0
-      ) {
+      if (fileList.length === 0 && mainImage.length === 0) {
         setIsLoading(false);
         return notification.warning({
           message: "Không có dữ liệu nào được thay đổi!",
@@ -45,19 +79,13 @@ function PhoneInputForm2({ data, onClick, setModal }) {
       if (mainImage.length !== 0) {
         formData.append("main_image", mainImage[0].originFileObj);
       }
-      // Các ảnh khác
-      if (fileList.length !== 0) {
-        // đọc qua từ image và push vào formData
-        fileList.forEach((file) => {
-          formData.append("images", file.originFileObj);
-        });
-      }
-
-      // Nếu description có sự thay đổi dữ liệu
-      if (description !== product.description) {
-        // append vào formData
-        formData.append("description", description);
-      }
+      // // Các ảnh khác
+      // if (fileList.length !== 0) {
+      //   // đọc qua từ image và push vào formData
+      //   fileList.forEach((file) => {
+      //     formData.append("images", file.originFileObj);
+      //   });
+      // }
 
       // call API update
       const result = await axios.put(
@@ -132,48 +160,34 @@ function PhoneInputForm2({ data, onClick, setModal }) {
   return (
     <Form
       style={{ maxWidth: 800, textAlign: "start" }}
-      layout="horizontal"
+      layout="vertical"
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
       {...props}
     >
       {/* main image */}
-      <p>Ảnh chính:</p>
-      <Upload
-        listType="picture-card"
-        accept=".png,.jpeg,.jpg"
-        onPreview={handlePreview}
-        onChange={({ fileList: newFileList }) => {
-          setMainImage(newFileList);
-        }}
-        beforeUpload={() => {
-          return false;
-        }}
-        multiple
+      <br />
+      <Form.Item
+        label="Ảnh mặc định"
         name="main_image"
+        rules={[{ required: true }]}
       >
-        {mainImage.length === 1 ? null : uploadButton}
-      </Upload>
-
-      {/* images */}
-      <p>Các ảnh khác:</p>
-      <Upload
-        listType="picture-card"
-        accept=".png,.jpeg,.jpg"
-        onPreview={handlePreview}
-        onChange={({ fileList: newFileList }) => {
-          setFileList(newFileList);
-        }}
-        beforeUpload={() => {
-          return false;
-        }}
-        multiple
-        name="images"
-      >
-        {fileList.length >= 10 ? null : uploadButton}
-      </Upload>
-
+        <Upload
+          listType="picture-card"
+          accept=".png,.jpeg,.jpg"
+          onPreview={handlePreview}
+          onChange={({ fileList: newFileList }) => {
+            setMainImage(newFileList);
+          }}
+          beforeUpload={() => {
+            return false;
+          }}
+          multiple
+        >
+          {mainImage.length === 1 ? null : uploadButton}
+        </Upload>
+      </Form.Item>
       <Modal
         open={previewOpen}
         title={previewTitle}
@@ -183,18 +197,20 @@ function PhoneInputForm2({ data, onClick, setModal }) {
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
 
-      {/* description */}
-      <Form.Item>
-        <CKEditor
-          editor={ClassicEditor}
-          onReady={(editor) => {}}
-          data={description}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            setDescription(data);
-          }}
-        />
-      </Form.Item>
+      {/* {arrVariations &&
+        [...arrVariations].map((item, index) => (
+          <div key={index}>
+            <ProductVariations
+              index={index}
+              variations={item}
+              handlePreview={handlePreview}
+              fileList={fileList}
+              setFileList={setFileList}
+              arrVariations={arrVariations}
+              setArrVariations={setArrVariations}
+            />
+          </div>
+        ))} */}
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={isLoading}>
