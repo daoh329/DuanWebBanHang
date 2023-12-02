@@ -300,7 +300,7 @@ class Product {
     const arrCapacity = dataUpdate.capacity;
 
     // console.log("id: ", id);
-    // console.log("dataUpdate: ", dataUpdate);
+    // console.log("main_image: ", main_image);
     // return res.status(200).json({ message: "success" });
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)

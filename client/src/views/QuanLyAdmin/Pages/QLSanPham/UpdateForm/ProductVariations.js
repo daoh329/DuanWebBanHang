@@ -11,19 +11,25 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { formatCapacity } from "../../../../../util/formatCapacity";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
 function ProductVariations(props) {
-  const { index, handlePreview, fileList, arrVariations, setArrVariations , variations} =
-    props;
+  const {
+    index,
+    handlePreview,
+    fileList,
+    arrVariations,
+    setArrVariations,
+    variations,
+  } = props;
   const [colors, setColors] = useState([]);
-  const [arrColorsCurrent, setArrColorsCurrent] = useState([]);
+  const [arrColorsCurrentShow, setArrColorsCurrentShow] = useState([]);
   const [capacities, setCapacities] = useState([]);
   // const [variationsData, setVariationsData] = useState([]);
-  
-console.log(variations);
+
+  console.log(variations);
   useEffect(() => {
     getColorsList();
   }, []);
@@ -76,14 +82,20 @@ console.log(variations);
   };
 
   const addSubField = () => {
-    const updatedVariations = [...arrVariations];
-    updatedVariations[index].capacityGroup.push({
-      price: 0,
-      discount_amount: 0,
-      capacity: 0,
-    });
-    setArrVariations(updatedVariations);
+    // const updatedVariations = [...arrVariations];
+    // updatedVariations[index].capacityGroup.push({
+    //   price: 0,
+    //   discount_amount: 0,
+    //   capacity: 0,
+    // });
+    // setArrVariations(updatedVariations);
   };
+
+  const removeSubField = (indexToRemove) => {
+    // const updatedVariations = [...arrVariations];
+    // updatedVariations[index].capacityGroup.splice(indexToRemove, 1); // Xóa 1 phần tử từ vị trí indexToRemove
+    // setArrVariations(updatedVariations); // Cập nhật state hoặc mảng gốc của bạn
+  }
 
   // function open modal
   const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
@@ -195,7 +207,7 @@ console.log(variations);
           onChange={(value) => handleInputChange(index, "color", value)}
           allowClear //cho phép xóa
           showSearch //cho phép tìm kiếm
-          defaultValue={variations.color}
+          defaultValue={variations?.color}
         >
           {colors &&
             colors.map((color, index) => (
@@ -240,6 +252,7 @@ console.log(variations);
             subFieldIndex={i}
             openModalAddCapacity={openModalAddCapacity}
             handleSubFieldChange={handleSubFieldChange}
+            removeSubField={removeSubField}
           />
         </div>
       ))}
@@ -253,6 +266,7 @@ console.log(variations);
           onClick={addSubField}
           type="primary"
           shape="round"
+          disabled
         />
       </Form.Item>
     </>
@@ -267,12 +281,17 @@ function CapacityGroup(props) {
     subFieldIndex,
     openModalAddCapacity,
     handleSubFieldChange,
+    removeSubField
   } = props;
 
   return (
     <>
       {/* capacity */}
-      <h6>{subFieldIndex+1}</h6>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h6>{subFieldIndex + 1}</h6>
+        <Button disabled onClick={() => removeSubField(subFieldIndex)} icon={<MinusCircleOutlined />}>Xóa</Button>
+      </div>
+
       <Form.Item style={{ margin: 0 }}>
         <Form.Item
           label={"Dung lượng (ROM)"}
@@ -291,6 +310,7 @@ function CapacityGroup(props) {
             }
             allowClear //cho phép xóa
             showSearch //cho phép tìm kiếm
+            // defaultValue={capacities.capacity}
           >
             {capacities &&
               capacities.map((capacity, index) => (
@@ -334,6 +354,7 @@ function CapacityGroup(props) {
             onChange={(value) =>
               handleSubFieldChange(fieldIndex, subFieldIndex, "price", value)
             }
+            // defaultValue={0}
           />
         </Form.Item>
         <Form.Item
@@ -360,7 +381,7 @@ function CapacityGroup(props) {
         </Form.Item>
       </Form.Item>
       <hr />
-      <br />
+      {/* <br /> */}
     </>
   );
 }

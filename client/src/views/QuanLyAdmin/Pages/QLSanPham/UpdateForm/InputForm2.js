@@ -72,25 +72,21 @@ function InputForm2({ data, onClick, setModal }) {
           message: "Không có dữ liệu nào được thay đổi!",
         });
       }
-      // Tạo FormData lưu dữ liệu
-      const formData = new FormData();
       // Nếu có image được chọn
       // Ảnh chính
       if (mainImage.length !== 0) {
-        formData.append("main_image", mainImage[0].originFileObj);
+        values.main_image = mainImage[0].originFileObj;
       }
-      // // Các ảnh khác
-      // if (fileList.length !== 0) {
-      //   // đọc qua từ image và push vào formData
-      //   fileList.forEach((file) => {
-      //     formData.append("images", file.originFileObj);
-      //   });
-      // }
 
       // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
-        formData
+        values,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       if (result.status === 200) {
@@ -197,7 +193,7 @@ function InputForm2({ data, onClick, setModal }) {
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
 
-      {arrVariations &&
+      {/* {arrVariations &&
         [...arrVariations].map((item, index) => (
           <div key={index}>
             <ProductVariations
@@ -209,8 +205,9 @@ function InputForm2({ data, onClick, setModal }) {
               arrVariations={arrVariations}
               setArrVariations={setArrVariations}
             />
+            <br/>
           </div>
-        ))}
+        ))} */}
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={isLoading}>
