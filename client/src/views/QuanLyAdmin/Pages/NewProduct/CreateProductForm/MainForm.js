@@ -22,6 +22,7 @@ import {
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { formatSpecifications } from "../../../../../util/formatSpecifications";
+import config from "../../../../../config";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -48,59 +49,6 @@ function MainForm() {
   ]);
   const [inputs, setInputs] = useState([]);
   const [description, setDescription] = useState("");
-  const phone_specifications = [
-    "os",
-    "cpu",
-    "ram",
-    "memoryStick",
-    "screenSize",
-    "screenResolution",
-    "screenTechnology",
-    "mainCamera",
-    "frontCamera",
-    "pin",
-    "chargingTechnology",
-    "connector",
-    "size",
-    "weight",
-    "audioTechnology",
-    "loudspeaker",
-    "sensor",
-    "networkConnections",
-    "waterproof",
-    "dustproof",
-  ];
-  const laptop_specifications = [
-    "os",
-    "operatingSystemVersion",
-    "cpu",
-    "NumberOfCPUCoresAndThreads",
-    "CPUProcessingSpeed",
-    "romType",
-    "spinSpeedRom",
-    "ram",
-    "ramType",
-    "screenSize",
-    "screenResolution",
-    "screenTechnology",
-    "graphicsCard",
-    "graphicsCardMemory",
-    "connector",
-    "pin",
-    "batteryLife",
-    "keyboard",
-    "keyboardBacklight",
-    "touchpad",
-    "loudspeaker",
-    "audioTechnology",
-    "webcam",
-    "networkConnections",
-    "waterproof",
-    "dustproof",
-    "opticalDrive",
-    "radiators",
-    "weight",
-  ];
 
   //   images and colors
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -122,9 +70,9 @@ function MainForm() {
     if (selectedCategory && categories.length > 0) {
       const c = categories.find((c) => c.id === selectedCategory);
       if (c.name === "Laptop") {
-        setSelectedSpecifications(laptop_specifications);
+        setSelectedSpecifications(config.laptop_specifications);
       } else {
-        setSelectedSpecifications(phone_specifications);
+        setSelectedSpecifications(config.phone_specifications);
       }
     }
   }, [selectedCategory, categories]);

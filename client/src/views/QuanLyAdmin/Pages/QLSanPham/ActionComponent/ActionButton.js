@@ -1,10 +1,8 @@
 import { Button, Modal, Popconfirm, message } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
-import LaptopInputFrom from "../LaptopUpdate/LaptopInputFrom";
-import LaptopInputForm2 from "../LaptopUpdate/LaptopInputForm2";
-import PhoneInputFrom from "../PhoneUpdate/PhoneInputFrom";
-import PhoneInputFrom2 from "../PhoneUpdate/PhoneInputForm2";
+import InputFrom from "../UpdateForm/InputFrom";
+import InputFrom2 from "../UpdateForm/InputForm2";
 
 function ActionButton({ record, getProduct }) {
   const [openModal, setOpenModal] = useState(false);
@@ -119,7 +117,7 @@ function ActionButton({ record, getProduct }) {
             >
               Cập nhật hình ảnh, dung lượng lưu trữ, giá và màu sắc
             </Button>
-            <PhoneInputFrom
+            <InputFrom
               setModal={setOpenModal}
               onClick={getProduct}
               data={record}
@@ -134,14 +132,13 @@ function ActionButton({ record, getProduct }) {
             >
               Trở lại
             </Button>
-            <PhoneInputFrom2
+            <InputFrom2
               setModal={setOpenModal}
               onClick={getProduct}
               data={record}
             />
           </div>
         )}
-        
       </Modal>
       {/* delete */}
       <Popconfirm
