@@ -83,7 +83,7 @@ const AllProduct = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+      .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then((response) => {
         setProducts(response.data);
         // Ban đầu hiển thị tất cả sản phẩm

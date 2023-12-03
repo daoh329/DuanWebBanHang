@@ -6,14 +6,24 @@ import {
   InputNumber,
   Modal,
   Select,
-  Space,
   message,
   notification,
+  DatePicker,
 } from "antd";
+import {
+  CloseOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
-import { formatCurrency } from "../../../../../util/FormatVnd";
-import { PlusOutlined } from "@ant-design/icons";
+import moment from "moment"; // Import thư viện moment để xử lý ngày tháng
+
+// import { formatCurrency } from "../../../../../util/FormatVnd";
 import { formatCapacity } from "../../../../../util/formatCapacity";
+import { formatSpecifications } from "../../../../../util/formatSpecifications";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
 
 const { Option } = Select;
 
@@ -29,48 +39,124 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   const [capacitySubmit, setCapacitySubmit] = useState([
     { capacity: "", capacity_price: 0 },
   ]);
+  const [categories, setCategories] = useState([]);
+  const [categorySubmit, setCategorySubmit] = useState(product.category);
+  const [description, setDescription] = useState(product.description);
+
+  // logic orther informations
+  const [inputs, setInputs] = useState([]);
+  const [selectedSpecifications, setSelectedSpecifications] = useState("");
+  const phone_specifications = [
+    "os",
+    "cpu",
+    "ram",
+    "memoryStick",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "mainCamera",
+    "frontCamera",
+    "pin",
+    "chargingTechnology",
+    "connector",
+    "size",
+    "weight",
+    "audioTechnology",
+    "loudspeaker",
+    "sensor",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+  ];
+  const laptop_specifications = [
+    "os",
+    "operatingSystemVersion",
+    "cpu",
+    "NumberOfCPUCoresAndThreads",
+    "CPUProcessingSpeed",
+    "ram",
+    "ramType",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "graphicsCard",
+    "graphicsCardMemory",
+    "connector",
+    "pin",
+    "batteryLife",
+    "keyboard",
+    "keyboardBacklight",
+    "touchpad",
+    "loudspeaker",
+    "audioTechnology",
+    "webcam",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+    "opticalDrive",
+    "radiators",
+  ];
+  const errorMessage = "Trường này là bắt buộc";
 
   // Lấy brands và colors khi lần đầu chạy
   useEffect(() => {
     getBrandsList();
     getColorsList();
     getCapacitiesList();
+    getCategoryList();
     if (product.capacities) {
       setCapacitySubmit(product.capacities);
     }
   }, [product]);
 
+  useEffect(() => {
+    if (product.category && categories) {
+      const c = categories.filter((item) => item.name === product.category);
+      setCategorySubmit(c[0]?.id);
+    }
+  }, [product, categories]);
+
   // Hàm lấy dữ liệu thương hiệu (get csdl)
   const getBrandsList = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}/product/brands`)
-      .then((response) => {
-        const datas = response.data;
-        setBrands(datas);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/List/brands`
+      );
+      setBrands(response.data.results);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   // Hàm lấy dữ liệu màu sắc (get csdl)
   const getColorsList = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}/product/colors`)
-      .then((response) => {
-        setColors(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/List/colors`
+      );
+      setColors(response.data.results);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getCategoryList = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/List/category`
+      );
+      setCategories(response.data.results);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   // function call api get capacity list
   const getCapacitiesList = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/product/capacity`)
+      .get(`${process.env.REACT_APP_API_URL}/List/capacity`)
       .then((response) => {
-        setCapacities(response.data);
+        setCapacities(response.data.results);
       })
       .catch((e) => {
         console.log(e);
@@ -78,131 +164,76 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   };
 
   // Hàm được gọi khi form hoàn thành
-  const onFinish = async (values) => {
+  const onFinishUpdate = async (values) => {
     // bật loading button
     setIsLoading(true);
     try {
-      // kiểm tra nếu "" thì set là undefined
-      // (undefined không được đưa lên server)
-      var checkValuesChange = false;
-      // tạo tên field cho thuộc tính configuration
-      const fieldsConfiguraton = [
-        "screen",
-        "resolution",
-        "rom",
-        "os",
-        "ram",
-        "chip",
-        "pin",
-        "charging_port",
-        "sim_type",
-        "mobile_network",
-        "rear_camera",
-        "front_camera",
-        "wifi",
-        "gps",
-        "bluetooth",
-        "headphone_jack",
-        "size",
-        "mass",
-        "accessory",
-        "guarantee",
-        "series",
-      ];
-
-      // Tạo thuộc tính configuration
-      values.configuration = values.configuration || {};
-      // Lặp qua từng field của values
-      for (const fieldName in values) {
-        //TH1: Nếu dữ dữ liệu của field hiện tại không được nhập hoăc bị xóa đy
-        if (!values[fieldName]) {
-          // TH1.1: Dữ liệu của field không được nhập và thuộc configuration
+      // xử lí ngày phát hành
+      // format release_date
+      values["release_date"] = values["release_date"].format("YYYY-MM-DD");
+      // format release_date of old product
+      const d = new Date(product.release_date);
+      product.release_date = moment(d).format("YYYY-MM-DD");
+      // Tạo và sử lí configuration
+      // chuyển đổi định dạng configuration ({inputName: "", value : ""} => {inputName: value})
+      var arrayDataRawConfiguration = {};
+      inputs.forEach((item) => {
+        const oj = {
+          ...arrayDataRawConfiguration,
+          [item.inputName]: item.value,
+        };
+        arrayDataRawConfiguration = oj;
+      });
+      values["configuration"] = arrayDataRawConfiguration;
+      // Đưa các thông tin còn lại của configuaration vào configuaration
+      if (values.demand) {
+        values["configuration"]["demand"] = values["demand"];
+        delete values["demand"];
+      }
+      if (values.guarantee) {
+        values["configuration"]["guarantee"] = values["guarantee"];
+        delete values["guarantee"];
+      }
+      if (values.series) {
+        values["configuration"]["series"] = values["series"];
+        delete values["series"];
+      }
+      // Lọc và xóa những trường dữ liệu không thay đổi
+      for (let fieldName in values) {
+        if (
+          values[fieldName] === product[fieldName] &&
+          fieldName !== "configuaration"
+        ) {
+          delete values[fieldName];
+        }
+        if (fieldName === "configuration") {
           if (
-            values[fieldName] === undefined &&
-            fieldsConfiguraton.includes(fieldName)
+            ObjectCompareObject(values.configuration, product.configuration)
           ) {
-            // Thực hiện gán giá trị mặc định cho field đó
-            values.configuration[fieldName] = product.configuration[fieldName];
-          }
-          // TH1.2: Dữ liệu của field bị xóa
-          else if (values[fieldName] == "" || values[fieldName] == 0) {
-            if (fieldsConfiguraton.includes(fieldName)) {
-              if (
-                product.configuration[fieldName] === undefined ||
-                values[fieldName] === product.configuration[fieldName]
-              ) {
-                values[fieldName] = undefined;
-              } else {
-                checkValuesChange = true;
-              }
-            } else {
-              if (values[fieldName] == product[fieldName]) {
-                values[fieldName] = undefined;
-              } else {
-                checkValuesChange = true;
-              }
-            }
-          }
-        }
-        // TH2: Nếu field có giá trị mới (giá trị field bị thay đổi)
-        else if (values[fieldName]) {
-          // Nếu field đó thuộc configuaration
-          if (fieldsConfiguraton.includes(fieldName)) {
-            // kiểm tra xem giá trị field đó có khác mặc định không?
-            if (values[fieldName] == product.configuration[fieldName]) {
-              // Nếu không khác
-              // gán giá trị cho field đó vào thuộc tính configuration
-              values.configuration[fieldName] = values[fieldName];
-              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
-              delete values[fieldName];
-            } else {
-              // Nếu dữ liệu khác mặc định
-              // Đặt là có dữ liệu thay đổi
-              checkValuesChange = true;
-              // gán giá trị cho field đó vào thuộc tính configuration
-              values.configuration[fieldName] = values[fieldName];
-              // Xóa thuộc tính đó khỏi values (tránh trùng lặp gây thừa dữ liệu)
-              delete values[fieldName];
-            }
-          } else {
-            // Nếu có giá trị thay đổi trong form thì đặt thành true
-            // ( = true sẽ tiếp tục call API)
-            if (fieldName !== "configuration") {
-              checkValuesChange = true;
-            }
+            delete values[fieldName];
           }
         }
       }
 
-      // color
-      values["color"] = values["color"] || [];
-      if (colorSubmit.toString() !== product.color.toString()) {
-        values["color"] = colorSubmit;
-        checkValuesChange = true;
-      } else {
-        values["color"] = product.color;
+      // console.log(ObjectCompareObject(values.configuration, product.configuration));
+      // console.log(values.configuration);
+      // console.log(product.configuration);
+
+      // Nếu description có sự thay đổi dữ liệu
+      if (description !== product.description) {
+        // Thêm vào values
+        values["description"] = description;
       }
 
-      // sử lí mảng capacity
-      values["capacity"] = values["capacity"] || [];
-      if (capacitySubmit[0].capacity && capacitySubmit[0].capacity_price > 0) {
-        if (capacitySubmit !== product.capacities) {
-          values["capacity"] = capacitySubmit;
-          checkValuesChange = true;
-        }
-      } else {
+      // console.log("product: ", product);
+      // console.log("values: ", values);
+      // return;
+
+      // Nếu values không có dữ liệu thì dừng và show thông báo
+      if (Object.keys(values).length === 0) {
+        message.warning("Không có dữ liệu thay đổi!");
         setIsLoading(false);
-        message.warning("Vui lòng điền đầy đủ thông tin dung lượng sản phẩm");
         return;
-      }
-
-      // Nếu không có dữ liệu trong form thay đổi (checkValuesChange === false)
-      // Bật thông báo, tắt loading button và dừng call API
-      if (!checkValuesChange) {
-        setIsLoading(false);
-        return notification.warning({
-          message: "Không có dữ liệu thay đổi",
-        });
       }
 
       // call API update
@@ -250,483 +281,306 @@ function PhoneInputFrom({ data, onClick, setModal }) {
     console.log("Failed:", errorInfo);
   };
 
-  // Hàm được gọi khi input color thay đổi
-  const handleChange = (value) => {
-    // Đặt giá trị cho state colorSubmit
-    setColorSubmit(value);
+  // Tạo mảng chứa các thông số kĩ thuật (specifications)
+  useEffect(() => {
+    if (product) {
+      const arr = [];
+      const arrDelete = ["guarantee", "series", "demand"];
+      for (let fieldName in product.configuration) {
+        let ob = {};
+        ob["inputName"] = fieldName;
+        ob["value"] = product.configuration[fieldName].trim();
+        if (!arrDelete.includes(fieldName)) {
+          arr.push(ob);
+        }
+      }
+      setInputs(arr);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (categorySubmit && categories.length > 0) {
+      const c = categories.find((c) => c.id === categorySubmit);
+      if (c.name === "Laptop") {
+        const arr = [];
+        laptop_specifications.forEach((item) => {
+          const oj = {};
+          oj["value"] = item;
+          oj["label"] = formatSpecifications(item);
+          arr.push(oj);
+        });
+        setSelectedSpecifications(arr);
+      } else {
+        const arr = [];
+        phone_specifications.forEach((item) => {
+          const oj = {};
+          oj["value"] = item;
+          oj["label"] = formatSpecifications(item);
+          arr.push(oj);
+        });
+        setSelectedSpecifications(arr);
+      }
+    }
+  }, [categorySubmit, categories]);
+
+  // logic add field
+  const handleAddInput = () => {
+    setInputs([...inputs, { value: "", inputName: "" }]);
+  };
+  const handleRemoveElement = (index) => {
+    const updatedInputs = [...inputs];
+    updatedInputs.splice(index, 1);
+    setInputs(updatedInputs);
   };
 
   // select Capacity
   const handleInputChange = (index, key, value) => {
-    const updatedRomInfo = [...capacitySubmit];
+    // return;
+    const updatedRomInfo = [...inputs];
     updatedRomInfo[index][key] = value;
-    setCapacitySubmit(updatedRomInfo);
+    setInputs(updatedRomInfo);
   };
 
-  const handleAddRom = () => {
-    setCapacitySubmit([...capacitySubmit, { capacity: "", capacity_price: 0 }]);
+  // style
+  const firstInput = {
+    margin: "0",
+    display: "inline-block",
+    width: "calc(50% - 8px)",
+  };
+  const lastInput = {
+    margin: "0 8px",
+    display: "inline-block",
+    width: "calc(50% - 8px)",
   };
 
-  const handleRemoveRom = (index) => {
-    const updatedRomInfo = [...capacitySubmit];
-    updatedRomInfo.splice(index, 1);
-    setCapacitySubmit(updatedRomInfo);
-  };
-
-  // function open modal
-  const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
-
-  const handleCancel = () => {
-    setIsOpenModalCapcity(false);
-  };
-
-  const openModalAddCapacity = () => {
-    setIsOpenModalCapcity(true);
-  };
-
-  // function logic modal
-  // modal capacity
-  // const [isLoading, setIsLoading] = useState(false);
-  const onFinishCapacity = async (values) => {
-    setIsLoading(true);
-    try {
-      const result = await axios.post(
-        `${process.env.REACT_APP_API_URL}/List/add/capacity`,
-        values
-      );
-
-      if (result.status === 200) {
-        setTimeout(() => {
-          setIsLoading(false);
-          notification.success({
-            message: "Cập nhật thành công!",
-          });
-        }, 2000);
-        setIsOpenModalCapcity(false);
-        getCapacitiesList();
-      } else {
-        setTimeout(() => {
-          setIsLoading(false);
-          notification.error({
-            message: "Cập nhật thất bại!",
-          });
-        }, 2000);
-      }
-    } catch (error) {
-      console.log(error);
-      setTimeout(() => {
-        setIsLoading(false);
-        notification.error({
-          message: "Cập nhật thất bại!",
-        });
-      }, 2000);
-    }
-  };
+  // console.log("inputs", inputs);
+  // console.log("product", product);
+  // console.log("selectedSpecifications:" , selectedSpecifications);
 
   return (
     <Form
       style={{ maxWidth: 800, textAlign: "start" }}
       layout="vertical"
-      onFinish={onFinish}
+      onFinish={onFinishUpdate}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
+      initialValues={{
+        brand: product.brand,
+        guarantee: product.configuration.guarantee,
+        name: product.name,
+        series: product.configuration.series,
+        category: categorySubmit,
+        release_date: product ? moment(product.release_date) : null,
+        quantity: product.quantity,
+        remaining_quantity: product.remaining_quantity,
+        demand: product.configuration.demand,
+        shortDescription: product.shortDescription,
+      }}
     >
       <hr />
-      <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+      <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chung
-      </h6>
-      {/* thương hiệu */}
-      <Form.Item label="Thương hiệu" name="brand">
-        <Select defaultValue={product.brand} placeholder="Chọn thương hiệu">
-          {brands &&
-            brands.map((brand) => (
-              <Select.Option key={brand.name} value={brand.name}>
-                {brand.name}
-              </Select.Option>
-            ))}
-        </Select>
+      </h5>
+      <Form.Item>
+        {/* thương hiệu */}
+        <Form.Item
+          label="Thương hiệu"
+          name="brand"
+          style={firstInput}
+          rules={[{ required: true, message: errorMessage }]}
+        >
+          <Select placeholder="Chọn thương hiệu" style={{ height: "40px" }}>
+            {brands &&
+              brands.map((brand) => (
+                <Select.Option key={brand.name} value={brand.name}>
+                  {brand.name}
+                </Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
+        {/* bảo hành */}
+        <Form.Item
+          label="Bảo hành"
+          name="guarantee"
+          style={lastInput}
+          rules={[{ required: true, message: errorMessage }]}
+        >
+          <Input
+            placeholder="Nhập thời gian bảo hành"
+            style={{ height: "40px" }}
+          />
+        </Form.Item>
       </Form.Item>
 
-      {/* bảo hành */}
-      <Form.Item label="Bảo hành" name="guarantee">
-        <Input
-          defaultValue={product ? product.configuration.guarantee : null}
-          placeholder="Nhập thời gian bảo hành"
-        />
+      <Form.Item>
+        {/* tên */}
+        <Form.Item
+          label="Tên"
+          name="name"
+          style={firstInput}
+          rules={[{ required: true, message: errorMessage }]}
+        >
+          <Input placeholder="Nhập tên sản phẩm" />
+        </Form.Item>
+        {/* Series */}
+        <Form.Item label="Series" name="series" style={lastInput}>
+          <Input placeholder="Nhập Series sản phẩm" />
+        </Form.Item>
       </Form.Item>
 
-      {/* tên */}
-      <Form.Item label="Tên" name="name">
-        <Input
-          defaultValue={product ? product.name : null}
-          placeholder="Nhập tên sản phẩm"
-        />
+      {/* Loại sản phẩm */}
+      {/* Ngày phát hành */}
+      <Form.Item>
+        <Form.Item
+          label="Loại sản phẩm"
+          name="category"
+          rules={[
+            {
+              required: true,
+              message: errorMessage,
+            },
+          ]}
+          style={firstInput}
+        >
+          <Select
+            disabled
+            placeholder="Chọn loại sản phẩm"
+            style={{ height: 40 }}
+          >
+            {categories &&
+              [...categories].map((category) => (
+                <Select.Option key={category.id} value={category.id}>
+                  {category.name}
+                </Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name={"release_date"}
+          label="Ngày phát hành"
+          style={lastInput}
+        >
+          <DatePicker style={{ height: 40 }} />
+        </Form.Item>
       </Form.Item>
 
-      {/* Giá */}
-      <Form.Item label="Giá" name="price">
-        <InputNumber
-          defaultValue={product ? product.price : null}
-          style={{ width: "100%" }}
-          placeholder="Nhập giá sản phẩm"
-        />
+      <Form.Item>
+        {/* số lượng */}
+        <Form.Item
+          label="Số lượng"
+          name="quantity"
+          style={firstInput}
+          rules={[{ required: true, message: errorMessage }]}
+        >
+          <InputNumber placeholder="Nhập số lượng sản phẩm đang bán" />
+        </Form.Item>
+
+        {/* số lượng còn lại */}
+        <Form.Item
+          label="Số lượng còn lại"
+          name="remaining_quantity"
+          style={lastInput}
+        >
+          <InputNumber placeholder="Nhập số lượng sản phẩm còn lại" />
+        </Form.Item>
       </Form.Item>
 
-      {/* Giá giảm */}
-      <Form.Item
-        label={`Giá giảm (Max: ${formatCurrency(product.price)})`}
-        name="discount"
-      >
-        <InputNumber
-          max={product.price}
-          min={0}
-          defaultValue={product ? product.discount : null}
-          style={{ width: "100%" }}
-          placeholder="Nhập giá sản phẩm đã giảm"
-        />
+      {/* nhu cầu */}
+      <Form.Item label="Nhu cầu" name="demand">
+        <Input placeholder="Nhập nhu cầu sản phẩm" />
       </Form.Item>
 
       {/* Mô tả ngắn */}
-      <Form.Item label="Mô tả ngắn" name="shortDescription">
-        <Input.TextArea
-          defaultValue={product ? product.shortDescription : null}
-          placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)"
-        />
-      </Form.Item>
-
-      {/* Series */}
-      <Form.Item label="Series" name="series">
-        <Input
-          defaultValue={product ? product.configuration.series : null}
-          placeholder="Nhập Series sản phẩm"
-        />
-      </Form.Item>
-
-      {/* colors */}
-      <div className="form-group">
-        <label>Màu sắc</label>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Select
-            mode="multiple"
-            style={{ width: "100%" }}
-            placeholder="Chọn màu sắc"
-            value={colorSubmit}
-            onChange={handleChange}
-            optionLabelProp="label"
-            size="large"
-          >
-            {colors &&
-              colors.map((color, index) => (
-                <Option key={index} value={color.name} label={color.name}>
-                  <Space>{color.name}</Space>
-                </Option>
-              ))}
-          </Select>
-        </div>
-      </div>
-
-      {/* số lượng */}
-      <Form.Item label="Số lượng" name="quantity">
-        <InputNumber
-          defaultValue={product ? product.quantity : null}
-          placeholder="Nhập số lượng sản phẩm đang bán"
-        />
-      </Form.Item>
-
-      {/* số lượng còn lại */}
-      <Form.Item label="Số lượng còn lại" name="remaining_quantity">
-        <InputNumber
-          defaultValue={product ? product.remaining_quantity : null}
-          placeholder="Nhập số lượng sản phẩm còn lại"
-        />
+      <Form.Item
+        label="Mô tả ngắn"
+        name="shortDescription"
+        rules={[{ required: true, message: errorMessage }]}
+      >
+        <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
       </Form.Item>
 
       {/* ====================================== */}
       <hr />
-      <h6 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+      <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chi tiết
-      </h6>
+      </h5>
 
-      {/* capacity */}
-      <div className="form-group">
-        <label className="form-label">Dung lượng (ROM): </label>
-        <table>
-          <thead>
-            <tr>
-              <th>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                  }}
-                >
-                  <span>Dung lượng ROM: &nbsp;</span>
-                  <Button
-                    onClick={openModalAddCapacity}
-                    icon={<PlusOutlined />}
-                    style={{
-                      margin: "0 10px 0 0",
-                      border: "none",
-                      background: "none",
-                    }}
-                  />
-                </div>
-              </th>
-              <th>Giá</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {capacitySubmit &&
-              capacitySubmit.map((capacity, index) => (
-                <tr key={index}>
-                  <td>
-                    <select
-                      className="form-control"
-                      type="text"
-                      onChange={(e) =>
-                        handleInputChange(index, "capacity", e.target.value)
-                      }
-                    >
-                      {[...capacities].map((cpct, index) => (
-                        <option
-                          key={index}
-                          value={cpct?.capacity ? cpct?.capacity : ""}
-                          selected={
-                            capacity.capacity == cpct.capacity ? true : false
-                          }
-                        >
-                          {formatCapacity(cpct.capacity)}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      className="form-control"
-                      type="number"
-                      min={0}
-                      value={capacity.capacity_price}
-                      onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "capacity_price",
-                          e.target.value
-                        )
-                      }
-                    />
-                  </td>
-                  <td>
-                    <button
-                      className="capacity-btn-delete-row"
-                      onClick={() => handleRemoveRom(index)}
-                    >
-                      Xóa
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <button
-          type="button"
-          className="capacity-btn-add-row"
-          onClick={handleAddRom}
-        >
-          Thêm ROM
-        </button>
-      </div>
-      <Modal
-        title="Thêm lựa chọn cho dung lượng"
-        open={isOpenModalCapcity}
-        onCancel={handleCancel}
-        footer={false}
-      >
-        <Form
-          onFinish={onFinishCapacity}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
+      {/* Other information */}
+      {inputs.map((input, index) => (
+        <Form.Item key={index}>
           <Form.Item
-            name={"capacity"}
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
-              },
-            ]}
+            style={{
+              display: "inline-block",
+              width: "calc(25% - 8px)",
+              margin: "0",
+            }}
           >
-            <InputNumber
-              placeholder="Nhập dung lượng"
-              type="number"
-              min={0}
-              style={{ borderRadius: "3px", width: "100%" }}
+            <Select
+              placeholder="Chọn thông tin"
+              onChange={(value) => handleInputChange(index, "inputName", value)}
+              style={{ height: 40 }}
+              showSearch
+              allowClear
+              value={input.inputName}
+              options={selectedSpecifications}
             />
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 19, span: 4 }}>
-            <Button loading={isLoading} type="primary" htmlType="submit">
-              Xác nhận
-            </Button>
+
+          <Form.Item
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+          >
+            <Input
+              type="text"
+              placeholder="Nhập thông tin"
+              value={input.value}
+              onChange={(e) =>
+                handleInputChange(index, "value", e.target.value)
+              }
+            />
           </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* chip */}
-      <Form.Item label="Chip" name="chip">
-        <Input
-          defaultValue={product ? product.configuration.chip : null}
-          placeholder="Nhập thông số cpu sản phẩm"
-        />
+          <Form.Item
+            style={{
+              display: "inline-block",
+              width: "calc(10% - 8px)",
+              margin: "0 8px",
+            }}
+          >
+            <Button
+              onClick={() => handleRemoveElement(index)}
+              icon={<MinusCircleOutlined />}
+              style={{
+                border: "none",
+                background: "none",
+                margin: "3px 0 0 0",
+              }}
+            />
+          </Form.Item>
+        </Form.Item>
+      ))}
+      <Form.Item>
+        <Button onClick={handleAddInput} type="dashed" icon={<PlusOutlined />}>
+          Thêm thẻ
+        </Button>
       </Form.Item>
 
-      {/* màn hình */}
-      <Form.Item label="Màn hình" name="screen">
-        <Input
-          defaultValue={product ? product.configuration.screen : null}
-          placeholder="Nhập thông tin màn hình"
-        />
-      </Form.Item>
-
-      {/* ram */}
-      <Form.Item label="RAM" name="ram">
-        <Input
-          defaultValue={product ? product.configuration.ram : null}
-          placeholder="Nhập dung lượng ram"
-        />
-      </Form.Item>
-
-      {/* resolution */}
-      <Form.Item label="Độ phân giải" name="resolution">
-        <Input
-          defaultValue={product ? product.configuration.resolution : null}
-          placeholder="Nhập thông tin độ phân giải màn hình"
-        />
-      </Form.Item>
-
-      {/* rom */}
-      <Form.Item label="Bộ nhớ" name="rom">
-        <Input
-          defaultValue={product ? product.configuration.rom : null}
-          placeholder="Nhập dung lượng bộ nhớ lưu trữ"
-        />
-      </Form.Item>
-
-      {/* Cổng sạc */}
-      <Form.Item label="Cổng sạc" name="charging_port">
-        <Input
-          defaultValue={product ? product.configuration.charging_port : null}
-          placeholder="Nhập thông tin cổng sạc"
-        />
-      </Form.Item>
-
-      {/* Kiểu sim */}
-      <Form.Item label="Kiểu sim" name="sim_type">
-        <Input
-          defaultValue={product ? product.configuration.sim_type : null}
-          placeholder="Nhập kiểu sim hỗ trợ"
-        />
-      </Form.Item>
-
-      {/* mobile_network */}
-      <Form.Item label="Mạng di động" name="mobile_network">
-        <Input
-          defaultValue={product ? product.configuration.mobile_network : null}
-          placeholder="Nhập thông tin mạng di động"
-        />
-      </Form.Item>
-
-      {/* rear_camera */}
-      <Form.Item label="Camera sau" name="rear_camera">
-        <Input
-          defaultValue={product ? product.configuration.rear_camera : null}
-          placeholder="Nhập thông tin camera sau"
-        />
-      </Form.Item>
-
-      {/* front_camera */}
-      <Form.Item label="Camera trước" name="front_camera">
-        <Input
-          defaultValue={product ? product.configuration.front_camera : null}
-          placeholder="Nhập thông tin camera trước"
-        />
-      </Form.Item>
-
-      {/* wifi */}
-      <Form.Item label="Wifi" name="wifi">
-        <Input
-          defaultValue={product ? product.configuration.wifi : null}
-          placeholder="Nhập thông tin wifi"
-        />
-      </Form.Item>
-
-      {/* Hệ điều hành */}
-      <Form.Item label="Hệ điều hành" name="os">
-        <Input
-          defaultValue={product ? product.configuration.os : null}
-          placeholder="Nhập thông tin hệ điều hành"
-        />
-      </Form.Item>
-
-      {/* gps */}
-      <Form.Item label="Gps" name="gps">
-        <Input
-          defaultValue={product ? product.configuration.gps : null}
-          placeholder="Nhập thông tin gps"
-        />
-      </Form.Item>
-
-      {/* bluetooth */}
-      <Form.Item label="Bluetooth" name="bluetooth">
-        <Input
-          defaultValue={product ? product.configuration.bluetooth : null}
-          placeholder="Nhập thông tin bluetooth"
-        />
-      </Form.Item>
-
-      {/* headphone_jack */}
-      <Form.Item label="Tai nghe" name="headphone_jack">
-        <Input
-          defaultValue={product ? product.configuration.headphone_jack : null}
-          placeholder="Nhập thông tin tai nghe"
-        />
-      </Form.Item>
-
-      {/* size */}
-      <Form.Item label="Kích thước" name="size">
-        <Input
-          defaultValue={product ? product.configuration.size : null}
-          placeholder="Nhập thông tin kích thước"
-        />
-      </Form.Item>
-
-      {/* Pin */}
-      <Form.Item label="Pin" name="pin">
-        <Input
-          defaultValue={product ? product.configuration.pin : null}
-          placeholder="Nhập thông tin pin sản phẩm"
-        />
-      </Form.Item>
-
-      {/* Khối lượng */}
-      <Form.Item label="Khối lượng" name="mass">
-        <Input
-          defaultValue={product ? product.configuration.mass : null}
-          placeholder="Nhập khối lượng sản phẩm"
-        />
-      </Form.Item>
-
-      {/* Phụ kiện đi kèm */}
-      <Form.Item label="Phụ kiện đi kèm" name="accessory">
-        <Input
-          defaultValue={product ? product.configuration.accessory : null}
-          placeholder="Nhập các phụ kiện đi kèm của sản phẩm"
+      <hr />
+      <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+        Thông tin mô tả
+      </h5>
+      {/* description */}
+      <Form.Item>
+        <CKEditor
+          editor={ClassicEditor}
+          onReady={(editor) => {}}
+          data={description}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            setDescription(data);
+          }}
         />
       </Form.Item>
 

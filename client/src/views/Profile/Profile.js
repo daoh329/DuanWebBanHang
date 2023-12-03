@@ -26,7 +26,7 @@ import { update } from "../../redux/userSlice";
 import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
-import { format } from "date-fns";
+import { utcToZonedTime, format } from 'date-fns-tz';
 import { formatCurrency } from "../../util/FormatVnd";
 
 export default function Profile() {
@@ -213,18 +213,13 @@ export default function Profile() {
       title: "Ngày mua",
       dataIndex: "order_updated_at",
       key: "updated_at",
-      // render: (order_updated_at) =>
-      //   order_updated_at && (
-      //     <div>
-      //       <p style={{ margin: "0" }}>
-      //         {new Date(order_updated_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-      //       </p>
-      //       <p style={{ margin: "0" }}>
-      //         {new Date(order_updated_at).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", day: '2-digit', month: '2-digit', year: 'numeric' })}
-      //       </p>
-      //     </div>
-      //   ),
+      render: (date) => {
+        const fmt = 'HH:mm:ss - dd/MM/yyyy';
+        const zonedDate = utcToZonedTime(date, 'Etc/UTC');
+        return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
+      },
     },
+    
 
     {
       title: "PTTT",

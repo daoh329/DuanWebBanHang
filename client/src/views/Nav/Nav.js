@@ -30,7 +30,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
-import Hinh from "../../../src/assets/ĐINHMINH.VN.png";
+import Hinh from "../../../src/assets/LogoWebGIF.gif";
 import { useDispatch, useSelector } from "react-redux";
 import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
@@ -38,7 +38,7 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
-
+import { useLocation } from 'react-router-dom';
 const { Header } = Layout;
 
 const App = () => {
@@ -345,9 +345,13 @@ const App = () => {
       console.log(error);
     }
   };
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
 
   return (
     <Layout className="nav-container">
+        {!isAdminRoute && (
       <div className="danhmuc">
         <img
           alt=""
@@ -355,76 +359,18 @@ const App = () => {
           src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
         ></img>
       </div>
-
+        )}
       <div className="logoweb">
         <img alt="" style={{ objectFit: "cover" }} src={Hinh}></img>
       </div>
+      {!isAdminRoute && (
       <div className="menu-container">
         <div className="menu1">
           <div className="css-1e7ahm9">
-            <a
-              href="/sale"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Khuyến mãi
-            </a>
-            <a
-              href="/showroom"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <EnvironmentOutlined
-                style={{ marginRight: "8px", color: "#fff" }}
-              />{" "}
-              Hệ thống showroom
-            </a>
-            <a
-              href="/support"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Tư vẫn doanh nghiệp
-            </a>
-            <Dropdown menu={{ items: menuContact }} placement="bottomRight">
-              <a
-                href="/host"
-                style={{
-                  marginRight: "20px",
-                  color: "#fff", // Chữ màu trắng
-                  textDecoration: "none",
-                }}
-              >
-                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-                Liên hệ
-              </a>
-            </Dropdown>
-            <a
-              href="/tin-tuc"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
-              Tin tức
-            </a>
           </div>
         </div>
       </div>
-
+      )}
       <Affix offsetTop={0}>
         <div>
           {/* <div className="hd-logo">

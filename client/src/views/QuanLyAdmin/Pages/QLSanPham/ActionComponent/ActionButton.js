@@ -11,7 +11,7 @@ function ActionButton({ record, getProduct }) {
   const [isOpenEditImageAndDescription, setIsOpenEditImageAndDescription] =
     useState(false);
 
-    // Hàm disable và enable sản phẩm
+  // Hàm disable và enable sản phẩm
   async function handleDisableAndEnable() {
     try {
       const result = await axios.post(
@@ -104,59 +104,44 @@ function ActionButton({ record, getProduct }) {
         title="Cập nhật sản phẩm"
         onCancel={handleCancel}
         footer={false}
-        style={ isOpenEditImageAndDescription && {minWidth:"800px"}}
+        style={
+          isOpenEditImageAndDescription
+            ? { minWidth: "800px" }
+            : { minWidth: "800px" }
+        }
       >
-        {/* edit Laptop */}
-        {record.category === "Laptop" &&
-          !isOpenEditImageAndDescription &&(
-            <div>
-              <Button
-                onClick={handleOpenEditImage}
-                style={{ marginBottom: "10px" }}
-              >
-                Cập nhật ảnh và mô tả sản phẩm
-              </Button>
-              <LaptopInputFrom setModal={setOpenModal} onClick={getProduct} data={record} />
-            </div>
-          )}
-        {record.category === "Laptop" &&
-          isOpenEditImageAndDescription &&(
-            <div>
-              <Button
-                onClick={handleCloseEditImage}
-                style={{ marginBottom: "10px" }}
-              >
-                Trở lại
-              </Button>
-              <LaptopInputForm2 setModal={setOpenModal} onClick={getProduct} data={record} />
-            </div>
-          )}
-
-          {/* edit phone */}
-        {record.category === "Điện thoại" &&
-          !isOpenEditImageAndDescription &&(
-            <div>
-              <Button
-                onClick={handleOpenEditImage}
-                style={{ marginBottom: "10px" }}
-              >
-                Cập nhật ảnh và mô tả sản phẩm
-              </Button>
-              <PhoneInputFrom setModal={setOpenModal} onClick={getProduct} data={record} />
-            </div>
-          )}
-        {record.category === "Điện thoại" &&
-          isOpenEditImageAndDescription &&(
-            <div>
-              <Button
-                onClick={handleCloseEditImage}
-                style={{ marginBottom: "10px" }}
-              >
-                Trở lại
-              </Button>
-              <PhoneInputFrom2 setModal={setOpenModal} onClick={getProduct} data={record} />
-            </div>
-          )}
+        {/* edit phone */}
+        {!isOpenEditImageAndDescription && (
+          <div>
+            <Button
+              onClick={handleOpenEditImage}
+              style={{ marginBottom: "10px" }}
+            >
+              Cập nhật hình ảnh, dung lượng lưu trữ, giá và màu sắc
+            </Button>
+            <PhoneInputFrom
+              setModal={setOpenModal}
+              onClick={getProduct}
+              data={record}
+            />
+          </div>
+        )}
+        {isOpenEditImageAndDescription && (
+          <div>
+            <Button
+              onClick={handleCloseEditImage}
+              style={{ marginBottom: "10px" }}
+            >
+              Trở lại
+            </Button>
+            <PhoneInputFrom2
+              setModal={setOpenModal}
+              onClick={getProduct}
+              data={record}
+            />
+          </div>
+        )}
+        
       </Modal>
       {/* delete */}
       <Popconfirm
