@@ -22,7 +22,7 @@ function Brand() {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/${table}`;
       try {
-        const res = await axios.post(url, values, {withCredentials: true});
+        const res = await axios.post(url, values, { withCredentials: true });
         if (res.status === 200) {
           getBrands();
           const timer = setTimeout(() => {
@@ -135,6 +135,7 @@ function Brand() {
   };
 
   const handleDelete = async (name) => {
+    console.log("deleteBrand");
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,

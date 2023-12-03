@@ -14,7 +14,8 @@ function ActionButton({ record, getProduct }) {
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/product/disable-and-enable`,
-        { id: record.id, status: record.status }
+        { id: record.id, status: record.status },
+        { withCredentials: true }
       );
       // window.location.reload();
       if (result.status === 200) {
@@ -43,7 +44,8 @@ function ActionButton({ record, getProduct }) {
     // /product/delete/:id
     try {
       const result = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`
+        `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`,
+        { withCredentials: true }
       );
       if (result.status === 200) {
         message.success("Đã xóa sản phẩm.");
