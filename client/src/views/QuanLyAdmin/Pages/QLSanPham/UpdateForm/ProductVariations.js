@@ -1,28 +1,19 @@
-import {
-  Button,
-  Form,
-  InputNumber,
-  Modal,
-  Select,
-  Upload,
-  notification,
-  Space,
-} from "antd";
+import { Button, Form, InputNumber, Modal, Select, notification } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { formatCapacity } from "../../../../../util/formatCapacity";
-import { PlusOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
 function ProductVariations(props) {
-  const { index, handlePreview, fileList, arrVariations, setArrVariations , variations} =
-    props;
+  const {
+    index,
+    arrVariations,
+    setArrVariations,
+    variations,
+  } = props;
   const [colors, setColors] = useState([]);
   const [capacities, setCapacities] = useState([]);
   // const [variationsData, setVariationsData] = useState([]);
-  
-
   useEffect(() => {
     getColorsList();
   }, []);
@@ -37,7 +28,16 @@ function ProductVariations(props) {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/List/colors`
       );
-      setColors(response.data.results);
+      const c = response.data.results;
+      const arr = [];
+      [...c].forEach((item) => {
+        const obj = {
+          value: item.name,
+          label: item.name,
+        };
+        arr.push(obj);
+      });
+      setColors(arr);
     } catch (e) {
       console.log(e);
     }
@@ -48,19 +48,28 @@ function ProductVariations(props) {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/List/capacity`)
       .then((response) => {
-        setCapacities(response.data.results);
+        const c = response.data.results;
+        const arr = [];
+        [...c].forEach((item) => {
+          const obj = {
+            value: item.capacity,
+            label: formatCapacity(item.capacity),
+          };
+          arr.push(obj);
+        });
+        setCapacities(arr);
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Tải lên</div>
-    </div>
-  );
+  // const uploadButton = (
+  //   <div>
+  //     <PlusOutlined />
+  //     <div style={{ marginTop: 8 }}>Tải lên</div>
+  //   </div>
+  // );
 
   const handleInputChange = (index, key, value) => {
     const updatedVariations = [...arrVariations];
@@ -75,13 +84,19 @@ function ProductVariations(props) {
   };
 
   const addSubField = () => {
-    const updatedVariations = [...arrVariations];
-    updatedVariations[index].capacityGroup.push({
-      price: 0,
-      discount_amount: 0,
-      capacity: 0,
-    });
-    setArrVariations(updatedVariations);
+    // const updatedVariations = [...arrVariations];
+    // updatedVariations[index].capacityGroup.push({
+    //   price: 0,
+    //   discount_amount: 0,
+    //   capacity: 0,
+    // });
+    // setArrVariations(updatedVariations);
+  };
+
+  const removeSubField = (indexToRemove) => {
+    // const updatedVariations = [...arrVariations];
+    // updatedVariations[index].capacityGroup.splice(indexToRemove, 1); // Xóa 1 phần tử từ vị trí indexToRemove
+    // setArrVariations(updatedVariations); // Cập nhật state hoặc mảng gốc của bạn
   };
 
   // function open modal
@@ -178,14 +193,13 @@ function ProductVariations(props) {
       {/* colors*/}
       <h5>Màu sắc</h5>
       <Form.Item
-        label="Màu sắc"
+        label="Chọn màu sắc"
         style={{
           display: "inline-block",
           width: "calc(50% - 8px)",
+          padding:"0 15px"
         }}
         rules={[{ required: true, message: "Vui lòng chọn màu sắc" }]}
-        // name={"color" + index}
-        
       >
         <Select
           disabled
@@ -195,17 +209,9 @@ function ProductVariations(props) {
           onChange={(value) => handleInputChange(index, "color", value)}
           allowClear //cho phép xóa
           showSearch //cho phép tìm kiếm
-          defaultValue={variations.color}
-        >
-          {colors &&
-            colors.map((color, index) => (
-              <Select.Option
-                key={index}
-                value={color.name}
-                label={color.name}
-              />
-            ))}
-        </Select>
+          value={variations.color}
+          options={colors}
+        ></Select>
       </Form.Item>
 
       {/* images */}
@@ -233,13 +239,15 @@ function ProductVariations(props) {
 
       <h5>Dung lượng</h5>
       {arrVariations[index].capacityGroup.map((item, i) => (
-        <div key={i}>
+        <div key={i} style={{padding:"0 15px"}}>
           <CapacityGroup
             capacities={capacities}
+            capacityGroupDefault={item}
             fieldIndex={index}
             subFieldIndex={i}
             openModalAddCapacity={openModalAddCapacity}
             handleSubFieldChange={handleSubFieldChange}
+            removeSubField={removeSubField}
           />
         </div>
       ))}
@@ -253,6 +261,7 @@ function ProductVariations(props) {
           onClick={addSubField}
           type="primary"
           shape="round"
+          disabled
         />
       </Form.Item>
     </>
@@ -267,12 +276,24 @@ function CapacityGroup(props) {
     subFieldIndex,
     openModalAddCapacity,
     handleSubFieldChange,
+    removeSubField,
+    capacityGroupDefault,
   } = props;
 
   return (
     <>
       {/* capacity */}
-      <h6>{subFieldIndex+1}</h6>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h6>{subFieldIndex + 1}</h6>
+        <Button
+          disabled
+          onClick={() => removeSubField(subFieldIndex)}
+          icon={<MinusCircleOutlined />}
+        >
+          Xóa
+        </Button>
+      </div>
+
       <Form.Item style={{ margin: 0 }}>
         <Form.Item
           label={"Dung lượng (ROM)"}
@@ -291,18 +312,10 @@ function CapacityGroup(props) {
             }
             allowClear //cho phép xóa
             showSearch //cho phép tìm kiếm
-          >
-            {capacities &&
-              capacities.map((capacity, index) => (
-                <Option
-                  key={index}
-                  value={capacity.capacity}
-                  label={formatCapacity(capacity.capacity)}
-                >
-                  <Space>{formatCapacity(capacity.capacity)}</Space>
-                </Option>
-              ))}
-          </Select>
+            value={capacityGroupDefault.capacity}
+            options={capacities}
+            disabled
+          ></Select>
         </Form.Item>
         {/* btn add capacity */}
         <Form.Item>
@@ -320,7 +333,7 @@ function CapacityGroup(props) {
       {/* Giá giảm */}
       <Form.Item style={{ margin: "0" }}>
         <Form.Item
-          label="Giá"
+          label="Giá (VND)"
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
@@ -334,10 +347,11 @@ function CapacityGroup(props) {
             onChange={(value) =>
               handleSubFieldChange(fieldIndex, subFieldIndex, "price", value)
             }
+            value={capacityGroupDefault.price}
           />
         </Form.Item>
         <Form.Item
-          label={`Giá giảm (Tùy chọn)`}
+          label={`Giá giảm (VND)`}
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
@@ -356,11 +370,12 @@ function CapacityGroup(props) {
                 value
               )
             }
+            value={capacityGroupDefault.discount_amount}
           />
         </Form.Item>
       </Form.Item>
       <hr />
-      <br />
+      {/* <br /> */}
     </>
   );
 }

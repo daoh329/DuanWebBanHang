@@ -11,6 +11,7 @@ import { auth } from "../../firebaseConfig";
 import OtpInput from "otp-input-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import config from "../../config";
 
 const Login = () => {
 
@@ -159,8 +160,7 @@ const Login = () => {
       <div className="login">
         {/* title */}
         <p className="title-login">
-          Chào mừng bạn đến với DinhMinh.vn | Laptop, PC, Màn hình, điện thoại,
-          linh kiện Chính Hãng!
+          Chào mừng bạn đến với {config.websiteLogo} | Laptop, điện thoại Chính Hãng!
         </p>
         <div id="recaptcha-container"></div>
         {/* btn login fb */}

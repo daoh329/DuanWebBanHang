@@ -181,10 +181,13 @@ class Product {
     try {
       const results = await query(queryProduct);
       results.forEach((element) => {
-        element.configuration = JSON.parse(element.configuration);
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.configuration)
+          element.configuration = JSON.parse(element.configuration);
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.status(200).send(results);
     } catch (error) {
@@ -295,12 +298,12 @@ class Product {
     // API: /product/update/:id
     const id = req.params.id;
     const dataUpdate = req.body;
-    const arrImage = req.files?.images;
+    // const arrImage = req.files?.images;
     const main_image = req.files?.main_image;
-    const arrCapacity = dataUpdate.capacity;
+    const arrVariations = dataUpdate.variations;
 
     // console.log("id: ", id);
-    // console.log("dataUpdate: ", dataUpdate);
+    // console.log("arrVariations: ", arrVariations);
     // return res.status(200).json({ message: "success" });
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)
@@ -386,6 +389,23 @@ class Product {
           dataGroupTableProductDetails,
           id,
         ]);
+      }
+
+      // 3. update product variations
+      if (arrVariations && arrVariations.length != 0) {
+        arrVariations.forEach(async (variation) => {
+          const queryUpdateProductVariations = `UPDATE product_variations SET price = ?, discount_amount = ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+          await query(queryUpdateProductVariations, [
+            variation.price,
+            variation.discount_amount,
+            id,
+            variation.color,
+            variation.capacity,
+          ]).catch((error) => {
+            console.log(error);
+            return;
+          });
+        });
       }
 
       // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
