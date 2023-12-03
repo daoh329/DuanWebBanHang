@@ -10,7 +10,7 @@ router.post(
   passportConfig.isAuthenticated,
   ListController.delete
 );
-router.get("/:table", passportConfig.isAuthenticated, ListController.get);
+router.get("/:table", ListController.get);
 router.put(
   "/update/:table",
   passportConfig.isAuthenticated,
