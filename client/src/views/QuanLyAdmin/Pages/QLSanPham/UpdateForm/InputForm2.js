@@ -193,7 +193,7 @@ function InputForm2({ data, onClick, setModal }) {
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
 
-      {/* {arrVariations &&
+      {arrVariations &&
         [...arrVariations].map((item, index) => (
           <div key={index}>
             <ProductVariations
@@ -207,7 +207,7 @@ function InputForm2({ data, onClick, setModal }) {
             />
             <br/>
           </div>
-        ))} */}
+        ))}
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={isLoading}>

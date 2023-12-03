@@ -25,11 +25,8 @@ function ProductVariations(props) {
     variations,
   } = props;
   const [colors, setColors] = useState([]);
-  const [arrColorsCurrentShow, setArrColorsCurrentShow] = useState([]);
   const [capacities, setCapacities] = useState([]);
   // const [variationsData, setVariationsData] = useState([]);
-
-  console.log(variations);
   useEffect(() => {
     getColorsList();
   }, []);
@@ -44,7 +41,16 @@ function ProductVariations(props) {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/List/colors`
       );
-      setColors(response.data.results);
+      const c = response.data.results;
+      const arr = [];
+      [...c].forEach((item) => {
+        const obj = {
+          value: item.name,
+          label: item.name,
+        };
+        arr.push(obj);
+      })
+      setColors(arr);
     } catch (e) {
       console.log(e);
     }
@@ -55,7 +61,16 @@ function ProductVariations(props) {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/List/capacity`)
       .then((response) => {
-        setCapacities(response.data.results);
+        const c = response.data.results;
+        const arr = [];
+        [...c].forEach((item) => {
+          const obj = {
+            value: item.capacity,
+            label: formatCapacity(item.capacity),
+          };
+          arr.push(obj);
+        });
+        setCapacities(arr);
       })
       .catch((e) => {
         console.log(e);
@@ -95,7 +110,7 @@ function ProductVariations(props) {
     // const updatedVariations = [...arrVariations];
     // updatedVariations[index].capacityGroup.splice(indexToRemove, 1); // Xóa 1 phần tử từ vị trí indexToRemove
     // setArrVariations(updatedVariations); // Cập nhật state hoặc mảng gốc của bạn
-  }
+  };
 
   // function open modal
   const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
@@ -200,7 +215,7 @@ function ProductVariations(props) {
         // name={"color" + index}
       >
         <Select
-          disabled
+          // disabled
           placeholder="Chọn màu sắc"
           optionLabelProp="label"
           style={{ height: 40 }}
@@ -208,15 +223,8 @@ function ProductVariations(props) {
           allowClear //cho phép xóa
           showSearch //cho phép tìm kiếm
           defaultValue={variations?.color}
+          options={colors}
         >
-          {colors &&
-            colors.map((color, index) => (
-              <Select.Option
-                key={index}
-                value={color.name}
-                label={color.name}
-              />
-            ))}
         </Select>
       </Form.Item>
 
@@ -248,6 +256,7 @@ function ProductVariations(props) {
         <div key={i}>
           <CapacityGroup
             capacities={capacities}
+            capacityDefaultValue={item.capacity}
             fieldIndex={index}
             subFieldIndex={i}
             openModalAddCapacity={openModalAddCapacity}
@@ -281,7 +290,8 @@ function CapacityGroup(props) {
     subFieldIndex,
     openModalAddCapacity,
     handleSubFieldChange,
-    removeSubField
+    removeSubField,
+    capacityDefaultValue,
   } = props;
 
   return (
@@ -289,7 +299,13 @@ function CapacityGroup(props) {
       {/* capacity */}
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h6>{subFieldIndex + 1}</h6>
-        <Button disabled onClick={() => removeSubField(subFieldIndex)} icon={<MinusCircleOutlined />}>Xóa</Button>
+        <Button
+          disabled
+          onClick={() => removeSubField(subFieldIndex)}
+          icon={<MinusCircleOutlined />}
+        >
+          Xóa
+        </Button>
       </div>
 
       <Form.Item style={{ margin: 0 }}>
@@ -310,18 +326,9 @@ function CapacityGroup(props) {
             }
             allowClear //cho phép xóa
             showSearch //cho phép tìm kiếm
-            // defaultValue={capacities.capacity}
+            defaultValue={capacityDefaultValue}
+            options={capacities}
           >
-            {capacities &&
-              capacities.map((capacity, index) => (
-                <Option
-                  key={index}
-                  value={capacity.capacity}
-                  label={formatCapacity(capacity.capacity)}
-                >
-                  <Space>{formatCapacity(capacity.capacity)}</Space>
-                </Option>
-              ))}
           </Select>
         </Form.Item>
         {/* btn add capacity */}
