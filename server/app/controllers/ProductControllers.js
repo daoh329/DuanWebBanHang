@@ -182,9 +182,10 @@ class Product {
       const results = await query(queryProduct);
       results.forEach((element) => {
         element.configuration = JSON.parse(element.configuration);
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        element.images &&
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
       });
       res.status(200).send(results);
     } catch (error) {
