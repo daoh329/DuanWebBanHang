@@ -4,7 +4,7 @@ const { query } = require("../util/callbackToPromise");
 const passportConfig = require("../config/passport");
 
 // API
-router.get("/login/success", (req, res) => {
+router.get("/login/success", passportConfig.isAuthenticated, (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json({
       error: false,

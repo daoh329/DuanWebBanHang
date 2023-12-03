@@ -19,6 +19,7 @@ import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Moda
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProductInCart } from "../../redux/cartSlice";
 import { formatCurrency } from "../../util/FormatVnd";
+import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -63,12 +64,16 @@ export default function Buy() {
   const getDeliveryAddress = async () => {
     try {
       const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`,
+        { withCredentials: true }
       );
       setDeliveryAddress(result.data);
       DedaultAddress(result.data);
     } catch (error) {
       console.log(error);
+      if (error.response.status === 401) {
+        NotificationBeenLoggedOut();
+      }
     }
   };
 
@@ -328,7 +333,9 @@ export default function Buy() {
 
     // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 50 triệu không
     if (amount < 5000 || amount > 50000000) {
-      message.error("Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 50 triệu");
+      message.error(
+        "Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 50 triệu"
+      );
       return;
     }
 
@@ -350,7 +357,10 @@ export default function Buy() {
 
         if (response.ok) {
           sessionStorage.setItem("UserID", user.id);
-          sessionStorage.setItem("addressID", deliveryAddress[addressChecked].id);
+          sessionStorage.setItem(
+            "addressID",
+            deliveryAddress[addressChecked].id
+          );
           sessionStorage.setItem("productID", JSON.stringify(productID));
           sessionStorage.setItem("quantity", JSON.stringify(quantity));
           sessionStorage.setItem("color", JSON.stringify(color));
@@ -367,7 +377,9 @@ export default function Buy() {
             window.location.href = responseData.url;
           } else if (responseData && responseData.error) {
             // Hiển thị thông báo lỗi
-            message.error("Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 10 nghìn đến 50 triệu");
+            message.error(
+              "Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 10 nghìn đến 50 triệu"
+            );
           }
         } else {
           const errorData = await response.json();
@@ -561,7 +573,7 @@ export default function Buy() {
                                 )
                               }
                             />
-                              Tất cả ngày trong tuần
+                            Tất cả ngày trong tuần
                           </label>
                           <label
                             style={{ display: "flex", alignItems: "center" }}
@@ -597,7 +609,6 @@ export default function Buy() {
                         </div>
                       </div> */}
                     </MDBTabsPane>
-
                   </MDBTabsContent>
                 </div>
               </div>
@@ -957,7 +968,6 @@ export default function Buy() {
                   Tôi muốn xuất hóa đơn
                 </div>
               </div> */}
-
             </div>
             <div
               className="teko-col teko-col-4 css-gr7r8o2 tether-target-attached-top snipcss0-3-3-99 tether-element-attached-top tether-element-attached-center tether-target-attached-center style-FJLy3"

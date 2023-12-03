@@ -6,6 +6,7 @@ import { differenceWith, isEqual } from "lodash";
 
 import ProductVariations from "./ProductVariations";
 import { ArrayCompareArray } from "../../../../../util/servicesGlobal";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -141,10 +142,15 @@ function InputForm2({ data, onClick, setModal }) {
     } catch (error) {
       console.log(error);
       setTimeout(() => {
-        setIsLoading(false);
-        notification.error({
-          message: "Cập nhật thất bại!",
-        });
+        if (error.reponse.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        } else {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }
       }, 2000);
     }
   };

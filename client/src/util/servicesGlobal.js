@@ -1,5 +1,7 @@
-var _ = require("lodash");
+import _ from "lodash";
+import axios from "axios";
 
+// ========= UTIL
 // so sánh 2 object (Chỉ so sánh các phần tử ở cấp đầu tiên)
 export const ObjectCompareObject = (obj1, obj2) => {
   if (
@@ -25,4 +27,24 @@ export const ArrayCompareArray = (arr1, arr2) => {
   }
 
   return _(arr1).differenceWith(arr2, _.isEqual).isEmpty();
+};
+
+// =========== SERVICES
+export const checkLogin = async () => {
+  // kiểm tra phiên đăng nhập bằng cách gọi API lấy thông tin user
+  try {
+    const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+    const result = await axios.get(url, { withCredentials: true });
+    if (result.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    if (e.response.status === 401) {
+      return "Unauthorized";
+    } else {
+      return false;
+    }
+  }
 };

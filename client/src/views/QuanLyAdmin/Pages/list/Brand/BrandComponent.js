@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import "./style.css";
-import { Form, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormInputBrand from "./BrandInputComponent";
+import { NotificationBeenLoggedOut, NotificationLogout } from "../../../../NotificationsForm/Authenticated";
 
 function Brand() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,40 +26,44 @@ function Brand() {
         const res = await axios.post(url, values, { withCredentials: true });
         if (res.status === 200) {
           getBrands();
-          const timer = setTimeout(() => {
+          setTimeout(() => {
             setIsModalOpen(false);
             notification.success({
               message: "Thành công",
               description: "Dữ liệu đã được lưu thành công!",
             });
           }, 1000);
-          return () => clearTimeout(timer);
         } else {
-          const timer = setTimeout(() => {
+          setTimeout(() => {
             setIsModalOpen(false);
             notification.error({
               message: "Lỗi",
               description: "Có lỗi xảy ra khi lưu dữ liệu!",
             });
           }, 1000);
-          return () => clearTimeout(timer);
         }
       } catch (e) {
-        const timer = setTimeout(() => {
-          console.log(e);
-          setIsModalOpen(false);
-          notification.error({
-            message: "Lỗi",
-            description: "Có lỗi xảy ra khi lưu dữ liệu!",
-          });
-        }, 1000);
-        return () => clearTimeout(timer);
+        // Nếu lỗi chưa đăng nhập
+        if (e.response.data.message === "Unauthorized") {
+          setTimeout(() => {
+            setIsModalOpen(false);
+            NotificationBeenLoggedOut();
+          }, 500);
+        } else {
+          // Các lỗi khác
+          setTimeout(() => {
+            setIsModalOpen(false);
+            notification.error({
+              message: "Lỗi",
+              description: "Có lỗi xảy ra khi lưu dữ liệu!",
+            });
+          }, 1000);
+        }
       }
     },
   });
 
   const [brand, setBrand] = useState([]);
-
   useEffect(() => {
     getBrands();
   }, []);
@@ -72,6 +77,38 @@ function Brand() {
       setBrand(response.data.results);
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const handleUpdate = (name) => {
+    setOpenModals({
+      ...openModals,
+      [name]: true,
+    });
+  };
+
+  const handleCancel = (name) => {
+    setOpenModals({
+      ...openModals,
+      [name]: false,
+    });
+  };
+
+  const handleBrandUpdated = () => {
+    getBrands();
+  };
+
+  const handleDelete = async (name) => {
+    console.log("deleteBrand");
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
+        null,
+        { withCredentials: true }
+      );
+      getBrands();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -115,38 +152,6 @@ function Brand() {
       ),
     },
   ];
-
-  const handleUpdate = (name) => {
-    setOpenModals({
-      ...openModals,
-      [name]: true,
-    });
-  };
-
-  const handleCancel = (name) => {
-    setOpenModals({
-      ...openModals,
-      [name]: false,
-    });
-  };
-
-  const handleBrandUpdated = () => {
-    getBrands();
-  };
-
-  const handleDelete = async (name) => {
-    console.log("deleteBrand");
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
-        null,
-        { withCredentials: true }
-      );
-      getBrands();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className="container-content">

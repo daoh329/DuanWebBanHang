@@ -106,7 +106,7 @@ const App = () => {
   const getNotifications = async (id) => {
     try {
       const api = `${process.env.REACT_APP_API_URL}/auth/get-notifications/${id}`;
-      const results = await axios.get(api);
+      const results = await axios.get(api, {withCredentials: true});
       if (results.status === 200) {
         const notifications = results.data;
         dispatch(addNotification(notifications));

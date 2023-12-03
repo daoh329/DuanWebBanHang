@@ -25,6 +25,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
 import config from "../../../../../config";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 const { Option } = Select;
 
@@ -166,10 +167,6 @@ function InputFrom({ data, onClick, setModal }) {
         }
       }
 
-      // console.log(ObjectCompareObject(values.configuration, product.configuration));
-      // console.log(values.configuration);
-      // console.log(product.configuration);
-
       // Nếu description có sự thay đổi dữ liệu
       if (description !== product.description) {
         // Thêm vào values
@@ -190,13 +187,14 @@ function InputFrom({ data, onClick, setModal }) {
       // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
-        values ,{withCredentials: true}
+        values,
+        { withCredentials: true }
       );
 
       // Nếu trạng thái trả về bằng 200
       // thì thông báo thành công và tắt loading button
       if (result.status === 200) {
-        // Set độ trễ 2s
+        // Set độ trễ 0.5s
         return setTimeout(() => {
           setIsLoading(false);
           notification.success({
@@ -204,7 +202,7 @@ function InputFrom({ data, onClick, setModal }) {
           });
           setModal(false);
           onClick();
-        }, 2000);
+        }, 500);
       }
       // Nếu trạng thái trả về khác 200
       // Thông báo thất bại và tắt loading button
@@ -213,16 +211,21 @@ function InputFrom({ data, onClick, setModal }) {
         notification.error({
           message: "Cập nhật thất bại!",
         });
-      }, 2000);
+      }, 500);
     } catch (error) {
       // Log ra lỗi, tắt loading button và thông báo thất bại
       console.log(error);
-      // set độ trễ 2s
+      // set độ trễ 0.5s
       setTimeout(() => {
-        setIsLoading(false);
-        notification.error({
-          message: "Cập nhật thất bại!",
-        });
+        if (error.response.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        } else {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }
       }, 2000);
     }
   };
@@ -527,7 +530,7 @@ function InputFrom({ data, onClick, setModal }) {
         Thông tin mô tả
       </h5>
       {/* description */}
-      <Form.Item style={{padding: "0 15px"}}>
+      <Form.Item style={{ padding: "0 15px" }}>
         <CKEditor
           editor={ClassicEditor}
           onReady={(editor) => {}}
@@ -536,7 +539,6 @@ function InputFrom({ data, onClick, setModal }) {
             const data = editor.getData();
             setDescription(data);
           }}
-          
         />
       </Form.Item>
 
