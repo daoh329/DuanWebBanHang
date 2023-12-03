@@ -1049,7 +1049,7 @@ export default function Buy() {
                     ))}
                 </div>
               </div>
-              <div className="snipcss0-4-99-155">
+              {/* <div className="snipcss0-4-99-155">
                 <div className="css-1pnc6ez snipcss0-5-155-156">
                   <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-156-157">
                     <div className="teko-col css-gr7r8o2 snipcss0-7-157-158">
@@ -1095,7 +1095,7 @@ export default function Buy() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="css-cssveg snipcss0-4-99-181">
                 <div className="css-27abj6 snipcss0-5-181-182">
                   <div className="teko-card css-516rdm snipcss0-6-182-183">
@@ -1110,10 +1110,10 @@ export default function Buy() {
                                   {formatCurrency(buysData.total)}
                                 </td>
                               </tr>
-                              <tr>
+                              {/* <tr>
                                 <td colSpan={1}>Phí vận chuyển</td>
                                 <td colSpan={3}>Miễn Phí</td>
-                              </tr>
+                              </tr> */}
                               <tr>
                                 <td colSpan={1}>Thanh tiền</td>
                                 <td colSpan={3}>
