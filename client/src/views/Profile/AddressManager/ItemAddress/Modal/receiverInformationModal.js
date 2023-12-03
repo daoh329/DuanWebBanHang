@@ -99,7 +99,7 @@ function ReceiverInformationModal({
       // Tạo đường dẫn API
       const url = `${process.env.REACT_APP_API_URL}/auth/add-delivery-address`;
       // Call API
-      const result = await axios.post(url, values);
+      const result = await axios.post(url, values, {withCredentials: true});
 
       // Thông báo thành công nếu status === 200
       if (result.status === 200) {
@@ -184,7 +184,7 @@ function ReceiverInformationModal({
       }
       // Call API Update
       const url = `${process.env.REACT_APP_API_URL}/auth/update-delivery-address/${receiverInformation.id}`;
-      const result = await axios.put(url, values);
+      const result = await axios.put(url, values, {withCredentials: true});
 
       // Nếu status === 200 -> thông báo thành công
       if (result.status === 200) {

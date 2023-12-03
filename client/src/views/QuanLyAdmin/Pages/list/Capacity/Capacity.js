@@ -13,7 +13,7 @@ function Capacity() {
   // function call api get capacity list
   const getCapacity = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/List/capacity`)
+      .get(`${process.env.REACT_APP_API_URL}/List/capacity`, {withCredentials: true})
       .then((response) => {
         setCapacities(response.data.results);
       })
@@ -24,7 +24,7 @@ function Capacity() {
 
   const handleDelete = async (value) => {
     try {
-        const results = await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/Capacity/${value}`);
+        const results = await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/Capacity/${value}`, {withCredentials: true});
         if (results.status === 200) {
             getCapacity();
         }

@@ -151,6 +151,7 @@ function MainForm() {
         `${process.env.REACT_APP_API_URL}/product/Add`,
         values,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },

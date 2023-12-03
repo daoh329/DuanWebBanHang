@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const path = require("path");
 const cors = require("cors");
 const passport = require("passport");
-const session = require("express-session");
+// const session = require("express-session");
 const app = express();
 const fs = require('fs');
 
@@ -13,7 +13,7 @@ require("./config/createTable");
 require("./config/db/mySQL");
 const authRoute = require("./routes/auth");
 const configSession = require("./config/session");
-const configPassport = require("./config/passport");
+const passportConfig = require("./config/passport");
 
 // Đường dẫn đến thư mục bạn muốn tạo
 const directoryPath = path.join(__dirname, 'src/public/images');
@@ -28,6 +28,7 @@ if (!fs.existsSync(directoryPath)) {
     }
   });
 }
+// cors
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -39,7 +40,9 @@ app.use(cookieParser());
 // config session
 configSession(app);
 app.set('view engine', 'jade');
-app.use(passport.authenticate('session'));
+// app.use(passport.authenticate('session'));
+app.use(passportConfig.initialize);
+app.use(passportConfig.session);
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -48,8 +51,6 @@ app.use(express.static(path.join(__dirname, "./src/public")));
 // Định nghĩa các tuyến (routes)
 app.use("/auth", authRoute);
 route(app);
-
-configPassport();
 
 // Khởi chạy máy chủ
 const port = process.env.PORT || 3000;

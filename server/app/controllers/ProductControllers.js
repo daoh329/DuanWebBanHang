@@ -1,7 +1,9 @@
-const mysql = require("../../config/db/mySQL");
-const { query } = require("../../util/callbackToPromise");
 const path = require("path");
 const fs = require("fs");
+
+const mysql = require("../../config/db/mySQL");
+const { query } = require("../../util/callbackToPromise");
+
 class Product {
   async Addproduct(req, res) {
     try {
