@@ -123,7 +123,7 @@ function Category() {
 
   const handleDelete = async (name) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`, {withCredentials: true});
+      await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`, null, {withCredentials: true});
       getCategories();
     } catch (error) {
       console.log(error);

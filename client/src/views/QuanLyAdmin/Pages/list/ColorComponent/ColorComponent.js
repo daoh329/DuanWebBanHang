@@ -9,7 +9,7 @@ import FormInputColor from "./ColorInputComponent";
 
 function Color() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const table = 'colors';
+  const table = "colors";
   const [openModals, setOpenModals] = useState({});
   const formik = useFormik({
     initialValues: {
@@ -22,7 +22,7 @@ function Color() {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/colors`;
       try {
-        const res = await axios.post(url, values, {withCredentials: true});
+        const res = await axios.post(url, values, { withCredentials: true });
         if (res.status === 200) {
           setTimeout(() => {
             getColors();
@@ -54,7 +54,10 @@ function Color() {
 
   const getColors = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/colors`, {withCredentials: true});
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/List/colors`,
+        { withCredentials: true }
+      );
       setColor(response.data.results);
     } catch (e) {
       console.log(e);
@@ -97,10 +100,7 @@ function Color() {
             justifyContent: "space-around",
           }}
         >
-          <Button
-            className="confirm-button"
-            onClick={() => handleUpdate(name)}
-          >
+          <Button className="confirm-button" onClick={() => handleUpdate(name)}>
             <EditOutlined /> Edit
           </Button>
 
@@ -131,7 +131,9 @@ function Color() {
   const handleDelete = async (name) => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,{withCredentials: true}
+        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
+        null,
+        { withCredentials: true }
       );
       getColors();
     } catch (error) {
@@ -171,11 +173,7 @@ function Color() {
             <button type="submit" className="btn-submit-form">
               Xác nhận
             </button>
-            <Modal
-              open={isModalOpen}
-              footer={null}
-              closeIcon={null}
-            >
+            <Modal open={isModalOpen} footer={null} closeIcon={null}>
               <Spin tip="Đang tải lên..." spinning={true}>
                 <div style={{ minHeight: "50px" }} className="content" />
               </Spin>
