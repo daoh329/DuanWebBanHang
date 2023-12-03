@@ -525,10 +525,13 @@ class Product {
     try {
       const results = await query(productQuery, [id]);
       results.forEach((element) => {
-        element.configuration = JSON.parse(element.configuration);
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.configuration)
+          element.configuration = JSON.parse(element.configuration);
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     } catch (error) {
@@ -579,7 +582,9 @@ class Product {
           data[i].product_id,
         ]);
         results.forEach((result) => {
-          result.images = JSON.parse(result.images);
+          if (results.images) {
+            result.images = JSON.parse(result.images);
+          }
         });
         cartProducts.push(results[0]);
       }
@@ -630,9 +635,11 @@ class Product {
         return res.json({ error });
       }
       results.forEach((element) => {
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     });
@@ -678,9 +685,11 @@ class Product {
         return res.json({ error });
       }
       results.forEach((element) => {
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     });
@@ -725,9 +734,11 @@ class Product {
         return res.json({ error });
       }
       results.forEach((element) => {
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     });
@@ -853,7 +864,11 @@ class Product {
       if (error) {
         return res.json({ error });
       }
-
+      results.forEach((element) => {
+        [...element.images].forEach((image) => {
+          image.path = JSON.parse(image.path);
+        });
+      });
       res.json(results);
     });
   }
