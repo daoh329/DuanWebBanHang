@@ -481,7 +481,7 @@ export default function Buy() {
               <div className="teko-card css-svl62k snipcss0-4-4-5">
                 <div className="teko-card-body css-0 snipcss0-5-5-6">
                   <MDBTabs fill className="mb-3-buy">
-                    <MDBTabsItem className="nav-tabs-buy">
+                    {/* <MDBTabsItem className="nav-tabs-buy">
                       <MDBTabsLink
                         className="nav-link-buy"
                         onClick={() => handleFillClick("tab1")}
@@ -489,7 +489,7 @@ export default function Buy() {
                       >
                         Nhận hàng tại nhà
                       </MDBTabsLink>
-                    </MDBTabsItem>
+                    </MDBTabsItem> */}
                     {/* <MDBTabsItem className="nav-tabs-buy">
                       <MDBTabsLink
                         className="nav-link-buy"
@@ -545,7 +545,7 @@ export default function Buy() {
                             fontWeight: "bold",
                           }}
                         >
-                          Ngày giao hàng thức giao hàng
+                          Thời gian giao hàng
                         </label>
                         <div style={{ justifyContent: "space-between" }}>
                           <label

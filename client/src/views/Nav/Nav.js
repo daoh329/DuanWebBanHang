@@ -367,6 +367,65 @@ const App = () => {
       <div className="menu-container">
         <div className="menu1">
           <div className="css-1e7ahm9">
+            <a
+              href="/huong-dan-mua-hang"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              Hướng dẫn mua hàng
+            </a>
+            <a
+              href="/chinh-sach-doi-tra"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <EnvironmentOutlined
+                style={{ marginRight: "8px", color: "#fff" }}
+              />{" "}
+                Chính sách đổi trả.
+            </a>
+            <a
+              href="/chinh-sach-bao-hanh"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              Chính sách bảo hành
+            </a>
+            <Dropdown menu={{ items: menuContact }} placement="bottomRight">
+              <a
+               
+                style={{
+                  marginRight: "20px",
+                  color: "#fff", // Chữ màu trắng
+                  textDecoration: "none",
+                }}
+              >
+                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+                Liên hệ
+              </a>
+            </Dropdown>
+            <a
+              href="/chinh-sach-thanh-toan"
+              style={{
+                marginRight: "20px",
+                color: "#fff", // Chữ màu trắng
+                textDecoration: "none",
+              }}
+            >
+              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              Chính sách thanh toán
+            </a>
           </div>
         </div>
       </div>
