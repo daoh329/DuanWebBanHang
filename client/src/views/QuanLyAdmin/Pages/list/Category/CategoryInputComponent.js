@@ -23,7 +23,7 @@ function FormInputCategory({ name,onUpdated }) {
         try {
             const result = await axios.put(
                 `${process.env.REACT_APP_API_URL}/List/update/category`,
-                [values.name, ol]
+                [values.name, ol], {withCredentials: true}
             );
 
             if (result.status === 200) {

@@ -22,7 +22,7 @@ function Color() {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/colors`;
       try {
-        const res = await axios.post(url, values);
+        const res = await axios.post(url, values, {withCredentials: true});
         if (res.status === 200) {
           setTimeout(() => {
             getColors();
@@ -54,7 +54,7 @@ function Color() {
 
   const getColors = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/colors`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/colors`, {withCredentials: true});
       setColor(response.data.results);
     } catch (e) {
       console.log(e);
@@ -131,7 +131,7 @@ function Color() {
   const handleDelete = async (name) => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`
+        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,{withCredentials: true}
       );
       getColors();
     } catch (error) {

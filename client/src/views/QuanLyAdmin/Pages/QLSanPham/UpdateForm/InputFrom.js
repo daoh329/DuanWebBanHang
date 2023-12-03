@@ -190,7 +190,7 @@ function InputFrom({ data, onClick, setModal }) {
       // call API update
       const result = await axios.put(
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
-        values
+        values ,{withCredentials: true}
       );
 
       // Nếu trạng thái trả về bằng 200

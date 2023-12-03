@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 const { query } = require("../util/callbackToPromise");
+const passportConfig = require("../config/passport");
 
 // API
 router.get("/login/success", (req, res) => {
@@ -48,7 +49,7 @@ router.get("/logout", (req, res, next) => {
 });
 
 // update profile
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id", passportConfig.isAuthenticated, async (req, res) => {
   try {
     const id = req.params.id;
     const { name, phone } = req.body;
@@ -110,203 +111,237 @@ router.post("/login-otp", async (req, res, next) => {
 });
 
 // /auth/add-delivery-address
-router.post("/add-delivery-address", async (req, res) => {
-  try {
-    const {
-      idUser,
-      name,
-      phone,
-      email,
-      city,
-      district,
-      commune,
-      street,
-      setdefault,
-    } = req.body;
+router.post(
+  "/add-delivery-address",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      const {
+        idUser,
+        name,
+        phone,
+        email,
+        city,
+        district,
+        commune,
+        street,
+        setdefault,
+      } = req.body;
 
-    const arrayValues = [
-      idUser,
-      name,
-      phone,
-      email,
-      city,
-      district,
-      commune,
-      street,
-      setdefault,
-    ];
+      const arrayValues = [
+        idUser,
+        name,
+        phone,
+        email,
+        city,
+        district,
+        commune,
+        street,
+        setdefault,
+      ];
 
-    // Nếu đặt địa chỉ mới làm mặc định
-    if (setdefault === 1) {
-      // tìm địa chỉ mặc định hiện tại
-      const sl_default_address = `select id from delivery_address where setdefault = 1`;
-      const result = await query(sl_default_address);
-      // Xóa mặc định của địa chỉ mặc định hiện tại (nếu có)
-      if (result[0]) {
-        const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
-        const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
+      // Nếu đặt địa chỉ mới làm mặc định
+      if (setdefault === 1) {
+        // tìm địa chỉ mặc định hiện tại
+        const sl_default_address = `select id from delivery_address where setdefault = 1`;
+        const result = await query(sl_default_address);
+        // Xóa mặc định của địa chỉ mặc định hiện tại (nếu có)
+        if (result[0]) {
+          const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
+          const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
         VALUES (?,?,?,?,?,?,?,?,?);`;
-        await query(dl_default, [result[0].id]);
-        await query(insert_query, arrayValues);
-        return res.status(200).send("Thành công");
+          await query(dl_default, [result[0].id]);
+          await query(insert_query, arrayValues);
+          return res.status(200).send("Thành công");
+        }
       }
-    }
 
-    const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
+      const insert_query = `INSERT INTO delivery_address (idUser, name, phone, email, city, district, commune, street, setdefault)
     VALUES (?,?,?,?,?,?,?,?,?);`;
-    await query(insert_query, arrayValues);
-    res.status(200).send("Thành công");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Insert delivery address failed");
+      await query(insert_query, arrayValues);
+      res.status(200).send("Thành công");
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Insert delivery address failed");
+    }
   }
-});
+);
 
 // /auth/delete-delivery-address/:id
-router.delete("/delete-delivery-address/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const dl_address = `DELETE FROM delivery_address WHERE id = ?`;
-    await query(dl_address, [id]);
-    res.status(200).send("delete success");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Delete failed");
+router.delete(
+  "/delete-delivery-address/:id",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      const id = req.params.id;
+      const dl_address = `DELETE FROM delivery_address WHERE id = ?`;
+      await query(dl_address, [id]);
+      res.status(200).send("delete success");
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Delete failed");
+    }
   }
-});
+);
 
 // /auth/update-delivery-address/:id
-router.put("/update-delivery-address/:id", async (req, res) => {
-  try {
-    // get values and id
-    const values = req.body;
-    const id = req.params.id;
-    if (values.setdefault === 1) {
-      const sl_default_address = `select id from delivery_address where setdefault = 1`;
-      const result = await query(sl_default_address);
-      if (result[0]) {
-        const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
-        const insert_query = `UPDATE delivery_address SET ? WHERE id = ?`;
-        await query(dl_default, [result[0].id]);
-        await query(insert_query, [values, id]);
-        return res.status(200).send("Thành công");
+router.put(
+  "/update-delivery-address/:id",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      // get values and id
+      const values = req.body;
+      const id = req.params.id;
+      if (values.setdefault === 1) {
+        const sl_default_address = `select id from delivery_address where setdefault = 1`;
+        const result = await query(sl_default_address);
+        if (result[0]) {
+          const dl_default = `update delivery_address set setdefault = 0 where id = ?`;
+          const insert_query = `UPDATE delivery_address SET ? WHERE id = ?`;
+          await query(dl_default, [result[0].id]);
+          await query(insert_query, [values, id]);
+          return res.status(200).send("Thành công");
+        }
       }
-    }
-    // create query SQL update
-    const insert_query = `UPDATE delivery_address SET ? WHERE id = ?;
+      // create query SQL update
+      const insert_query = `UPDATE delivery_address SET ? WHERE id = ?;
     `;
-    // update csdl
-    await query(insert_query, [values, id]);
-    // response success
-    res.status(200).send("Thành công");
-  } catch (error) {
-    // log error
-    console.log(error);
-    // response error
-    res.status(500).send("Insert delivery address failed");
+      // update csdl
+      await query(insert_query, [values, id]);
+      // response success
+      res.status(200).send("Thành công");
+    } catch (error) {
+      // log error
+      console.log(error);
+      // response error
+      res.status(500).send("Insert delivery address failed");
+    }
   }
-});
+);
 
 // /auth/delivery-address/:id
-router.get("/delivery-address/:id", async (req, res) => {
-  try {
-    const idUser = req.params.id;
-    const sl_query = `SELECT * FROM delivery_address WHERE idUser = ?`;
-    const result = await query(sl_query, [idUser]);
+router.get(
+  "/delivery-address/:id",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      const idUser = req.params.id;
+      const sl_query = `SELECT * FROM delivery_address WHERE idUser = ?`;
+      const result = await query(sl_query, [idUser]);
 
-    res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Get delivery address failed");
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Get delivery address failed");
+    }
   }
-});
+);
 
 // /auth/add-notification/:id
-router.post("/create-notification", async (req, res) => {
-  try {
-    const { title, content, order_id, user_id, type } = req.body;
-    // Kiểm tra dữ liệu tải lên
-    if (!user_id) throw new Error("Thiếu id người dùng");
-    if (!order_id) throw new Error("Thiếu id đơn hàng");
-    if (!type) throw new Error("Thiếu loại thông báo");
-    if (!title) throw new Error("Thiếu tiêu đề thông báo");
-    if (!content) throw new Error("Thiếu nội dung thông báo");
+router.post(
+  "/create-notification",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      const { title, content, order_id, user_id, type } = req.body;
+      // Kiểm tra dữ liệu tải lên
+      if (!user_id) throw new Error("Thiếu id người dùng");
+      if (!order_id) throw new Error("Thiếu id đơn hàng");
+      if (!type) throw new Error("Thiếu loại thông báo");
+      if (!title) throw new Error("Thiếu tiêu đề thông báo");
+      if (!content) throw new Error("Thiếu nội dung thông báo");
 
-    // Tìm kiếm thông báo
-    const sl_notificationByOrderId = `SELECT * FROM notifications WHERE order_id = ?`;
-    const resultCount = await query(sl_notificationByOrderId, [order_id]);
-    // Kiểm tra thông báo của đơn hàng đã tồn tại chưa
-    if (resultCount.length === 0) {
-      // Nếu chưa tồn tại
-      // Tạo thông báo
-      const sl_notification = `SELECT * FROM notifications WHERE id = ?`;
-      const q_insert_notification = `INSERT INTO notifications (user_id, order_id, title, content, type) VALUES (?,?,?,?,?)`;
-      const results = await query(q_insert_notification, [
-        user_id,
-        order_id,
-        title,
-        content,
-        type,
-      ]);
-      // Nếu không có dòng nào bị ảnh hưởng
-      // Bắn lỗi ra catch
-      if (results.affectedRows === 0) throw new Error("Tạo thông báo thất bại");
-      // Nếu không bị lỗi thì tiếp tục
-      // Lấy id của thông báo vừa được tạo
-      const insertId = results.insertId;
-      // Lấy thông báo vừa tạo
-      const data = await query(sl_notification, [insertId]);
-      // Trả dữ liệu vừa tạo về client
-      res.status(200).json(data);
-    } else {
-      // Nếu đã tồn tại
-      // Cập nhật thông báo
-      const up_notification = `UPDATE notifications SET title = ?, content = ?, type = ?, is_read = 0 WHERE order_id = ?`;
-      const sl_notification = `SELECT * FROM notifications WHERE order_id = ?`;
-      const results = await query(up_notification, [title, content, type, order_id]);
-      if (results.affectedRows === 1) {
+      // Tìm kiếm thông báo
+      const sl_notificationByOrderId = `SELECT * FROM notifications WHERE order_id = ?`;
+      const resultCount = await query(sl_notificationByOrderId, [order_id]);
+      // Kiểm tra thông báo của đơn hàng đã tồn tại chưa
+      if (resultCount.length === 0) {
+        // Nếu chưa tồn tại
+        // Tạo thông báo
+        const sl_notification = `SELECT * FROM notifications WHERE id = ?`;
+        const q_insert_notification = `INSERT INTO notifications (user_id, order_id, title, content, type) VALUES (?,?,?,?,?)`;
+        const results = await query(q_insert_notification, [
+          user_id,
+          order_id,
+          title,
+          content,
+          type,
+        ]);
+        // Nếu không có dòng nào bị ảnh hưởng
+        // Bắn lỗi ra catch
+        if (results.affectedRows === 0)
+          throw new Error("Tạo thông báo thất bại");
+        // Nếu không bị lỗi thì tiếp tục
+        // Lấy id của thông báo vừa được tạo
+        const insertId = results.insertId;
         // Lấy thông báo vừa tạo
-        const data = await query(sl_notification, [order_id]);
-        // trả dữ liệu vừa cập nhật về client
+        const data = await query(sl_notification, [insertId]);
+        // Trả dữ liệu vừa tạo về client
         res.status(200).json(data);
       } else {
-        throw new Error("Cập nhật thông báo thất bại");
+        // Nếu đã tồn tại
+        // Cập nhật thông báo
+        const up_notification = `UPDATE notifications SET title = ?, content = ?, type = ?, is_read = 0 WHERE order_id = ?`;
+        const sl_notification = `SELECT * FROM notifications WHERE order_id = ?`;
+        const results = await query(up_notification, [
+          title,
+          content,
+          type,
+          order_id,
+        ]);
+        if (results.affectedRows === 1) {
+          // Lấy thông báo vừa tạo
+          const data = await query(sl_notification, [order_id]);
+          // trả dữ liệu vừa cập nhật về client
+          res.status(200).json(data);
+        } else {
+          throw new Error("Cập nhật thông báo thất bại");
+        }
       }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 // /auth/get-notification/:id
-router.get("/get-notifications/:id", async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const q = `SELECT * FROM notifications WHERE user_id = ? ORDER BY updated_at DESC;`;
-    const notifications = await query(q, [userId]);
+router.get(
+  "/get-notifications/:id",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const q = `SELECT * FROM notifications WHERE user_id = ? ORDER BY updated_at DESC;`;
+      const notifications = await query(q, [userId]);
 
-    res.status(200).json(notifications);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Get notification failed" });
+      res.status(200).json(notifications);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Get notification failed" });
+    }
   }
-});
+);
 
 // /auth/read-notifications
-router.put("/read-notifications", async (req, res) => {
-  try {
-    const arrId = req.body;
-    const q = `UPDATE notifications SET is_read = 1 WHERE id = ?`;
-    for (let i = 0; i < arrId.length; i++) {
-      await query(q, [arrId[i]]);
-    }
+router.put(
+  "/read-notifications",
+  passportConfig.isAuthenticated,
+  async (req, res) => {
+    try {
+      const arrId = req.body;
+      const q = `UPDATE notifications SET is_read = 1 WHERE id = ?`;
+      for (let i = 0; i < arrId.length; i++) {
+        await query(q, [arrId[i]]);
+      }
 
-    res.status(200).json({ message: "Read notifications success" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Read notifications failed" });
+      res.status(200).json({ message: "Read notifications success" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Read notifications failed" });
+    }
   }
-});
+);
 
 module.exports = router;

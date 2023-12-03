@@ -93,8 +93,8 @@ export default function Profile() {
     setIsLoading(true);
     try {
       const id = user.id;
-      const url = `${process.env.REACT_APP_API_URL}/auth/update/${id}`;
-      const result = await axios.put(url, values);
+      const url = `${process.env.REACT_APP_API_URL}/auth/update/${id}` ;
+      const result = await axios.put(url, values, {withCredentials: true});
       if (result.status === 200) {
         // Set lại state user
         const newData = {
