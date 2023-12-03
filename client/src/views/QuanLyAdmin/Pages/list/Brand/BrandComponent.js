@@ -139,6 +139,7 @@ function Brand() {
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
+        null,
         { withCredentials: true }
       );
       getBrands();
