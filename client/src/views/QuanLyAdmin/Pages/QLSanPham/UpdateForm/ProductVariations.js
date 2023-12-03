@@ -117,7 +117,7 @@ function ProductVariations(props) {
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/List/add/capacity`,
-        values
+        values, {withCredentials: true}
       );
 
       if (result.status === 200) {

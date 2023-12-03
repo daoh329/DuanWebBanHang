@@ -2,7 +2,7 @@ import { Button, Form, Modal, Upload, notification } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {differenceWith, isEqual} from "lodash";
+import { differenceWith, isEqual } from "lodash";
 
 import ProductVariations from "./ProductVariations";
 import { ArrayCompareArray } from "../../../../../util/servicesGlobal";
@@ -115,6 +115,7 @@ function InputForm2({ data, onClick, setModal }) {
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
         values,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },

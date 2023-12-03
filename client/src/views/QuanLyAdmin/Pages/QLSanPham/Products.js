@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag} from "antd";
+import { Table, Tag } from "antd";
 import { format } from "date-fns";
 import axios from "axios";
 import ActionButton from "./ActionComponent/ActionButton";
@@ -7,18 +7,20 @@ import ActionButton from "./ActionComponent/ActionButton";
 function Product() {
   const [Product, setProduct] = useState([]);
 
+  useEffect(() => {
+    getProduct();
+  }, []);
+
   const getProduct = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/product/json`)
+      .get(`${process.env.REACT_APP_API_URL}/product/json`, {
+        withCredentials: true,
+      })
       .then((res) => {
         setProduct(res.data);
       })
       .catch((error) => console.log(error));
   };
-
-  useEffect(() => {
-    getProduct();
-  }, []);
 
   // const handleConfirmOrder = async (record) => {
   //     console.log('Confirm order button clicked for order:', record.id);
@@ -95,7 +97,7 @@ function Product() {
 
   return (
     <div>
-      <br/>
+      <br />
       <h1>Quản lý Sản Phẩm</h1>
       <Table columns={columns} dataSource={Product} />
     </div>
