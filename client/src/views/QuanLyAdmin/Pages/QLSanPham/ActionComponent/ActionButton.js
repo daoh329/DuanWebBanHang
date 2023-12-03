@@ -1,10 +1,8 @@
 import { Button, Modal, Popconfirm, message } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
-import LaptopInputFrom from "../LaptopUpdate/LaptopInputFrom";
-import LaptopInputForm2 from "../LaptopUpdate/LaptopInputForm2";
-import PhoneInputFrom from "../PhoneUpdate/PhoneInputFrom";
-import PhoneInputFrom2 from "../PhoneUpdate/PhoneInputForm2";
+import InputFrom from "../UpdateForm/InputFrom";
+import InputFrom2 from "../UpdateForm/InputForm2";
 
 function ActionButton({ record, getProduct }) {
   const [openModal, setOpenModal] = useState(false);
@@ -16,7 +14,8 @@ function ActionButton({ record, getProduct }) {
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/product/disable-and-enable`,
-        { id: record.id, status: record.status }
+        { id: record.id, status: record.status },
+        { withCredentials: true }
       );
       // window.location.reload();
       if (result.status === 200) {
@@ -45,7 +44,8 @@ function ActionButton({ record, getProduct }) {
     // /product/delete/:id
     try {
       const result = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`
+        `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`,
+        { withCredentials: true }
       );
       if (result.status === 200) {
         message.success("Đã xóa sản phẩm.");
@@ -119,7 +119,7 @@ function ActionButton({ record, getProduct }) {
             >
               Cập nhật hình ảnh, dung lượng lưu trữ, giá và màu sắc
             </Button>
-            <PhoneInputFrom
+            <InputFrom
               setModal={setOpenModal}
               onClick={getProduct}
               data={record}
@@ -134,14 +134,13 @@ function ActionButton({ record, getProduct }) {
             >
               Trở lại
             </Button>
-            <PhoneInputFrom2
+            <InputFrom2
               setModal={setOpenModal}
               onClick={getProduct}
               data={record}
             />
           </div>
         )}
-        
       </Modal>
       {/* delete */}
       <Popconfirm

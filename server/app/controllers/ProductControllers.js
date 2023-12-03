@@ -1,7 +1,9 @@
-const mysql = require("../../config/db/mySQL");
-const { query } = require("../../util/callbackToPromise");
 const path = require("path");
 const fs = require("fs");
+
+const mysql = require("../../config/db/mySQL");
+const { query } = require("../../util/callbackToPromise");
+
 class Product {
   async Addproduct(req, res) {
     try {
@@ -181,10 +183,13 @@ class Product {
     try {
       const results = await query(queryProduct);
       results.forEach((element) => {
-        element.configuration = JSON.parse(element.configuration);
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.configuration)
+          element.configuration = JSON.parse(element.configuration);
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.status(200).send(results);
     } catch (error) {
@@ -295,12 +300,12 @@ class Product {
     // API: /product/update/:id
     const id = req.params.id;
     const dataUpdate = req.body;
-    const arrImage = req.files?.images;
+    // const arrImage = req.files?.images;
     const main_image = req.files?.main_image;
-    const arrCapacity = dataUpdate.capacity;
+    const arrVariations = dataUpdate.variations;
 
     // console.log("id: ", id);
-    // console.log("dataUpdate: ", dataUpdate);
+    // console.log("arrVariations: ", arrVariations);
     // return res.status(200).json({ message: "success" });
 
     // Tạo tên của các field (Xác định các field muốn cập nhật)
@@ -386,6 +391,23 @@ class Product {
           dataGroupTableProductDetails,
           id,
         ]);
+      }
+
+      // 3. update product variations
+      if (arrVariations && arrVariations.length != 0) {
+        arrVariations.forEach(async (variation) => {
+          const queryUpdateProductVariations = `UPDATE product_variations SET price = ?, discount_amount = ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+          await query(queryUpdateProductVariations, [
+            variation.price,
+            variation.discount_amount,
+            id,
+            variation.color,
+            variation.capacity,
+          ]).catch((error) => {
+            console.log(error);
+            return;
+          });
+        });
       }
 
       // ===== Vì images không lấy trong req.body nên sẽ sử lí riêng =====
@@ -505,10 +527,13 @@ class Product {
     try {
       const results = await query(productQuery, [id]);
       results.forEach((element) => {
-        element.configuration = JSON.parse(element.configuration);
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.configuration)
+          element.configuration = JSON.parse(element.configuration);
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     } catch (error) {
@@ -559,7 +584,9 @@ class Product {
           data[i].product_id,
         ]);
         results.forEach((result) => {
-          result.images = JSON.parse(result.images);
+          if (results.images) {
+            result.images = JSON.parse(result.images);
+          }
         });
         cartProducts.push(results[0]);
       }
@@ -610,9 +637,11 @@ class Product {
         return res.json({ error });
       }
       results.forEach((element) => {
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     });
@@ -658,9 +687,11 @@ class Product {
         return res.json({ error });
       }
       results.forEach((element) => {
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     });
@@ -705,9 +736,11 @@ class Product {
         return res.json({ error });
       }
       results.forEach((element) => {
-        [...element.images].forEach((image) => {
-          image.path = JSON.parse(image.path);
-        });
+        if (element.images) {
+          [...element.images].forEach((image) => {
+            image.path = JSON.parse(image.path);
+          });
+        }
       });
       res.json(results);
     });
@@ -833,7 +866,11 @@ class Product {
       if (error) {
         return res.json({ error });
       }
-
+      results.forEach((element) => {
+        [...element.images].forEach((image) => {
+          image.path = JSON.parse(image.path);
+        });
+      });
       res.json(results);
     });
   }

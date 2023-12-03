@@ -14,7 +14,7 @@ function FormInputBrand({ name,onUpdated }) {
         try {
             const result = await axios.put(
                 `${process.env.REACT_APP_API_URL}/List/update/brands`,
-                [values.name, ol]
+                [values.name, ol], {withCredentials: true}
             );
 
             if (result.status === 200) {
