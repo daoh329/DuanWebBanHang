@@ -125,12 +125,12 @@ function NewProduct() {
                 onChange={formik.handleChange}
               >
                 <option value="">-- Chọn thương hiệu --</option>
-                {brands &&
+                {/* {brands &&
                   brands.map((brand) => (
                     <option key={brand.name} value={brand.name}>
                       {brand.name}
                     </option>
-                  ))}
+                  ))} */}
               </select>
               {formik.errors.brand && (
                 <span className="form-message">{formik.errors.brand}</span>

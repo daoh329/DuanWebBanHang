@@ -25,7 +25,7 @@ function Layout({ data, getValues }) {
     try {
       const id = value.id;
       const url = `${process.env.REACT_APP_API_URL}/auth/delete-delivery-address/${id}`;
-      const result = await axios.delete(url);
+      const result = await axios.delete(url, {withCredentials: true});
 
       if (result.status === 200) {
         getValues();

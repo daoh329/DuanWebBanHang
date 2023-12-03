@@ -39,6 +39,8 @@ import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
 import { useLocation } from 'react-router-dom';
+import { checkLogin } from "../../util/servicesGlobal";
+import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
 const { Header } = Layout;
 
 const App = () => {
@@ -141,8 +143,12 @@ const App = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
   };
   // tới profile
-  const profile = () => {
-    navigate("/profile");
+  const profile = async () => {
+    if (await checkLogin() === true) {
+      navigate("/profile");
+    }else if (await checkLogin() === "Unauthorized") {
+      NotificationBeenLoggedOut();
+    }
   };
 
   // tới profile
