@@ -1,6 +1,59 @@
 // src/config.js
 const config = {
-    websiteLogo: "DINH MINH COMPUTER", // Thay đổi thành tên của logo của bạn
-  };
-  
+  websiteLogo: "DINH MINH COMPUTER", // Thay đổi thành tên của logo của bạn
+  phone_specifications: [
+    "os",
+    "cpu",
+    "ram",
+    "memoryStick",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "mainCamera",
+    "frontCamera",
+    "pin",
+    "chargingTechnology",
+    "connector",
+    "size",
+    "weight",
+    "audioTechnology",
+    "loudspeaker",
+    "sensor",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+  ],
+  laptop_specifications: [
+    "os",
+    "operatingSystemVersion",
+    "cpu",
+    "NumberOfCPUCoresAndThreads",
+    "CPUProcessingSpeed",
+    "romType",
+    "spinSpeedRom",
+    "ram",
+    "ramType",
+    "screenSize",
+    "screenResolution",
+    "screenTechnology",
+    "graphicsCard",
+    "graphicsCardMemory",
+    "connector",
+    "pin",
+    "batteryLife",
+    "keyboard",
+    "keyboardBacklight",
+    "touchpad",
+    "loudspeaker",
+    "audioTechnology",
+    "webcam",
+    "networkConnections",
+    "waterproof",
+    "dustproof",
+    "opticalDrive",
+    "radiators",
+    "weight",
+  ],
+};
+
 export default config;

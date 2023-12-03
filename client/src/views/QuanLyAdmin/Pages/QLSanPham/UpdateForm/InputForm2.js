@@ -2,7 +2,10 @@ import { Button, Form, Modal, Upload, notification } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
+import {differenceWith, isEqual} from "lodash";
+
 import ProductVariations from "./ProductVariations";
+import { ArrayCompareArray } from "../../../../../util/servicesGlobal";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -66,16 +69,45 @@ function InputForm2({ data, onClick, setModal }) {
     // bật loading button submit
     setIsLoading(true);
     try {
-      if (fileList.length === 0 && mainImage.length === 0) {
+      // So sánh giá trị variations hiện tại và giá trị variations mới
+      const arrVariationsOld = [...product.variations];
+      const arrVariationsNew = [...arrVariations];
+      var arrNew = [];
+      arrVariationsNew.forEach((item) => {
+        item.capacityGroup.forEach((itemCapacity) => {
+          const objCapacity = {
+            color: item.color,
+            price: itemCapacity.price,
+            discount_amount: itemCapacity.discount_amount,
+            capacity: itemCapacity.capacity,
+          };
+          arrNew.push(objCapacity);
+        });
+      });
+      // Nếu ảnh chính được chọn
+      if (mainImage && mainImage.length !== 0) {
+        // Thì gán giá trị ảnh chính vào values
+        values.main_image = mainImage[0].originFileObj;
+      } else {
+        delete values.main_image;
+      }
+      // Nếu giá trị variations mới khác giá trị variations hiện tại
+      if (!ArrayCompareArray(arrVariationsOld, arrNew)) {
+        // Lấy các variations khác biệt
+        const difference = differenceWith(arrNew, arrVariationsOld, isEqual);
+        // Gán giá trị variations mới vào values
+        values.variations = difference;
+      }
+      // Nếu giá trị variations mới giống giá trị variations hiện tại và không có ảnh chính đc chọn
+      if (
+        ArrayCompareArray(arrVariationsOld, arrNew) &&
+        mainImage.length === 0
+      ) {
+        // Thông báo và dừng cập nhật
         setIsLoading(false);
         return notification.warning({
           message: "Không có dữ liệu nào được thay đổi!",
         });
-      }
-      // Nếu có image được chọn
-      // Ảnh chính
-      if (mainImage.length !== 0) {
-        values.main_image = mainImage[0].originFileObj;
       }
 
       // call API update
@@ -164,11 +196,7 @@ function InputForm2({ data, onClick, setModal }) {
     >
       {/* main image */}
       <br />
-      <Form.Item
-        label="Ảnh mặc định"
-        name="main_image"
-        rules={[{ required: true }]}
-      >
+      <Form.Item label="Ảnh mặc định" name="main_image">
         <Upload
           listType="picture-card"
           accept=".png,.jpeg,.jpg"
@@ -205,7 +233,7 @@ function InputForm2({ data, onClick, setModal }) {
               arrVariations={arrVariations}
               setArrVariations={setArrVariations}
             />
-            <br/>
+            <br />
           </div>
         ))}
 

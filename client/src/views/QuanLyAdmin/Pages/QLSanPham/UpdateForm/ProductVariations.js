@@ -1,25 +1,12 @@
-import {
-  Button,
-  Form,
-  InputNumber,
-  Modal,
-  Select,
-  Upload,
-  notification,
-  Space,
-} from "antd";
+import { Button, Form, InputNumber, Modal, Select, notification } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { formatCapacity } from "../../../../../util/formatCapacity";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
-const { Option } = Select;
-
 function ProductVariations(props) {
   const {
     index,
-    handlePreview,
-    fileList,
     arrVariations,
     setArrVariations,
     variations,
@@ -49,7 +36,7 @@ function ProductVariations(props) {
           label: item.name,
         };
         arr.push(obj);
-      })
+      });
       setColors(arr);
     } catch (e) {
       console.log(e);
@@ -77,12 +64,12 @@ function ProductVariations(props) {
       });
   };
 
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Tải lên</div>
-    </div>
-  );
+  // const uploadButton = (
+  //   <div>
+  //     <PlusOutlined />
+  //     <div style={{ marginTop: 8 }}>Tải lên</div>
+  //   </div>
+  // );
 
   const handleInputChange = (index, key, value) => {
     const updatedVariations = [...arrVariations];
@@ -206,26 +193,25 @@ function ProductVariations(props) {
       {/* colors*/}
       <h5>Màu sắc</h5>
       <Form.Item
-        label="Màu sắc"
+        label="Chọn màu sắc"
         style={{
           display: "inline-block",
           width: "calc(50% - 8px)",
+          padding:"0 15px"
         }}
         rules={[{ required: true, message: "Vui lòng chọn màu sắc" }]}
-        // name={"color" + index}
       >
         <Select
-          // disabled
+          disabled
           placeholder="Chọn màu sắc"
           optionLabelProp="label"
           style={{ height: 40 }}
           onChange={(value) => handleInputChange(index, "color", value)}
           allowClear //cho phép xóa
           showSearch //cho phép tìm kiếm
-          defaultValue={variations?.color}
+          value={variations.color}
           options={colors}
-        >
-        </Select>
+        ></Select>
       </Form.Item>
 
       {/* images */}
@@ -253,10 +239,10 @@ function ProductVariations(props) {
 
       <h5>Dung lượng</h5>
       {arrVariations[index].capacityGroup.map((item, i) => (
-        <div key={i}>
+        <div key={i} style={{padding:"0 15px"}}>
           <CapacityGroup
             capacities={capacities}
-            capacityDefaultValue={item.capacity}
+            capacityGroupDefault={item}
             fieldIndex={index}
             subFieldIndex={i}
             openModalAddCapacity={openModalAddCapacity}
@@ -291,7 +277,7 @@ function CapacityGroup(props) {
     openModalAddCapacity,
     handleSubFieldChange,
     removeSubField,
-    capacityDefaultValue,
+    capacityGroupDefault,
   } = props;
 
   return (
@@ -326,10 +312,10 @@ function CapacityGroup(props) {
             }
             allowClear //cho phép xóa
             showSearch //cho phép tìm kiếm
-            defaultValue={capacityDefaultValue}
+            value={capacityGroupDefault.capacity}
             options={capacities}
-          >
-          </Select>
+            disabled
+          ></Select>
         </Form.Item>
         {/* btn add capacity */}
         <Form.Item>
@@ -347,7 +333,7 @@ function CapacityGroup(props) {
       {/* Giá giảm */}
       <Form.Item style={{ margin: "0" }}>
         <Form.Item
-          label="Giá"
+          label="Giá (VND)"
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
@@ -361,11 +347,11 @@ function CapacityGroup(props) {
             onChange={(value) =>
               handleSubFieldChange(fieldIndex, subFieldIndex, "price", value)
             }
-            // defaultValue={0}
+            value={capacityGroupDefault.price}
           />
         </Form.Item>
         <Form.Item
-          label={`Giá giảm (Tùy chọn)`}
+          label={`Giá giảm (VND)`}
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
@@ -384,6 +370,7 @@ function CapacityGroup(props) {
                 value
               )
             }
+            value={capacityGroupDefault.discount_amount}
           />
         </Form.Item>
       </Form.Item>
