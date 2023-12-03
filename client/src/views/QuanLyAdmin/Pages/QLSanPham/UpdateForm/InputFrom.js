@@ -24,10 +24,11 @@ import { formatSpecifications } from "../../../../../util/formatSpecifications";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
+import config from "../../../../../config";
 
 const { Option } = Select;
 
-function PhoneInputFrom({ data, onClick, setModal }) {
+function InputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
   const product = data;
   // Tạo state toàn cục
@@ -46,56 +47,6 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   // logic orther informations
   const [inputs, setInputs] = useState([]);
   const [selectedSpecifications, setSelectedSpecifications] = useState("");
-  const phone_specifications = [
-    "os",
-    "cpu",
-    "ram",
-    "memoryStick",
-    "screenSize",
-    "screenResolution",
-    "screenTechnology",
-    "mainCamera",
-    "frontCamera",
-    "pin",
-    "chargingTechnology",
-    "connector",
-    "size",
-    "weight",
-    "audioTechnology",
-    "loudspeaker",
-    "sensor",
-    "networkConnections",
-    "waterproof",
-    "dustproof",
-  ];
-  const laptop_specifications = [
-    "os",
-    "operatingSystemVersion",
-    "cpu",
-    "NumberOfCPUCoresAndThreads",
-    "CPUProcessingSpeed",
-    "ram",
-    "ramType",
-    "screenSize",
-    "screenResolution",
-    "screenTechnology",
-    "graphicsCard",
-    "graphicsCardMemory",
-    "connector",
-    "pin",
-    "batteryLife",
-    "keyboard",
-    "keyboardBacklight",
-    "touchpad",
-    "loudspeaker",
-    "audioTechnology",
-    "webcam",
-    "networkConnections",
-    "waterproof",
-    "dustproof",
-    "opticalDrive",
-    "radiators",
-  ];
   const errorMessage = "Trường này là bắt buộc";
 
   // Lấy brands và colors khi lần đầu chạy
@@ -303,7 +254,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
       const c = categories.find((c) => c.id === categorySubmit);
       if (c.name === "Laptop") {
         const arr = [];
-        laptop_specifications.forEach((item) => {
+        config.laptop_specifications.forEach((item) => {
           const oj = {};
           oj["value"] = item;
           oj["label"] = formatSpecifications(item);
@@ -312,7 +263,7 @@ function PhoneInputFrom({ data, onClick, setModal }) {
         setSelectedSpecifications(arr);
       } else {
         const arr = [];
-        phone_specifications.forEach((item) => {
+        config.phone_specifications.forEach((item) => {
           const oj = {};
           oj["value"] = item;
           oj["label"] = formatSpecifications(item);
@@ -381,198 +332,202 @@ function PhoneInputFrom({ data, onClick, setModal }) {
       <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chung
       </h5>
-      <Form.Item>
-        {/* thương hiệu */}
-        <Form.Item
-          label="Thương hiệu"
-          name="brand"
-          style={firstInput}
-          rules={[{ required: true, message: errorMessage }]}
-        >
-          <Select placeholder="Chọn thương hiệu" style={{ height: "40px" }}>
-            {brands &&
-              brands.map((brand) => (
-                <Select.Option key={brand.name} value={brand.name}>
-                  {brand.name}
-                </Select.Option>
-              ))}
-          </Select>
-        </Form.Item>
-        {/* bảo hành */}
-        <Form.Item
-          label="Bảo hành"
-          name="guarantee"
-          style={lastInput}
-          rules={[{ required: true, message: errorMessage }]}
-        >
-          <Input
-            placeholder="Nhập thời gian bảo hành"
-            style={{ height: "40px" }}
-          />
-        </Form.Item>
-      </Form.Item>
-
-      <Form.Item>
-        {/* tên */}
-        <Form.Item
-          label="Tên"
-          name="name"
-          style={firstInput}
-          rules={[{ required: true, message: errorMessage }]}
-        >
-          <Input placeholder="Nhập tên sản phẩm" />
-        </Form.Item>
-        {/* Series */}
-        <Form.Item label="Series" name="series" style={lastInput}>
-          <Input placeholder="Nhập Series sản phẩm" />
-        </Form.Item>
-      </Form.Item>
-
-      {/* Loại sản phẩm */}
-      {/* Ngày phát hành */}
-      <Form.Item>
-        <Form.Item
-          label="Loại sản phẩm"
-          name="category"
-          rules={[
-            {
-              required: true,
-              message: errorMessage,
-            },
-          ]}
-          style={firstInput}
-        >
-          <Select
-            disabled
-            placeholder="Chọn loại sản phẩm"
-            style={{ height: 40 }}
+      <div style={{ padding: "0 15px" }}>
+        <Form.Item>
+          {/* thương hiệu */}
+          <Form.Item
+            label="Thương hiệu"
+            name="brand"
+            style={firstInput}
+            rules={[{ required: true, message: errorMessage }]}
           >
-            {categories &&
-              [...categories].map((category) => (
-                <Select.Option key={category.id} value={category.id}>
-                  {category.name}
-                </Select.Option>
-              ))}
-          </Select>
+            <Select placeholder="Chọn thương hiệu" style={{ height: "40px" }}>
+              {brands &&
+                brands.map((brand) => (
+                  <Select.Option key={brand.name} value={brand.name}>
+                    {brand.name}
+                  </Select.Option>
+                ))}
+            </Select>
+          </Form.Item>
+          {/* bảo hành */}
+          <Form.Item
+            label="Bảo hành"
+            name="guarantee"
+            style={lastInput}
+            rules={[{ required: true, message: errorMessage }]}
+          >
+            <Input
+              placeholder="Nhập thời gian bảo hành"
+              style={{ height: "40px" }}
+            />
+          </Form.Item>
         </Form.Item>
-        <Form.Item
-          name={"release_date"}
-          label="Ngày phát hành"
-          style={lastInput}
-        >
-          <DatePicker style={{ height: 40 }} />
-        </Form.Item>
-      </Form.Item>
 
-      <Form.Item>
-        {/* số lượng */}
+        <Form.Item>
+          {/* tên */}
+          <Form.Item
+            label="Tên"
+            name="name"
+            style={firstInput}
+            rules={[{ required: true, message: errorMessage }]}
+          >
+            <Input placeholder="Nhập tên sản phẩm" />
+          </Form.Item>
+          {/* Series */}
+          <Form.Item label="Series" name="series" style={lastInput}>
+            <Input placeholder="Nhập Series sản phẩm" />
+          </Form.Item>
+        </Form.Item>
+
+        {/* Loại sản phẩm */}
+        {/* Ngày phát hành */}
+        <Form.Item>
+          <Form.Item
+            label="Loại sản phẩm"
+            name="category"
+            rules={[
+              {
+                required: true,
+                message: errorMessage,
+              },
+            ]}
+            style={firstInput}
+          >
+            <Select
+              disabled
+              placeholder="Chọn loại sản phẩm"
+              style={{ height: 40 }}
+            >
+              {categories &&
+                [...categories].map((category) => (
+                  <Select.Option key={category.id} value={category.id}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name={"release_date"}
+            label="Ngày phát hành"
+            style={lastInput}
+          >
+            <DatePicker style={{ height: 40 }} />
+          </Form.Item>
+        </Form.Item>
+
+        <Form.Item>
+          {/* số lượng */}
+          <Form.Item
+            label="Số lượng"
+            name="quantity"
+            style={firstInput}
+            rules={[{ required: true, message: errorMessage }]}
+          >
+            <InputNumber placeholder="Nhập số lượng sản phẩm đang bán" />
+          </Form.Item>
+
+          {/* số lượng còn lại */}
+          <Form.Item
+            label="Số lượng còn lại"
+            name="remaining_quantity"
+            style={lastInput}
+          >
+            <InputNumber placeholder="Nhập số lượng sản phẩm còn lại" />
+          </Form.Item>
+        </Form.Item>
+
+        {/* nhu cầu */}
+        <Form.Item label="Nhu cầu" name="demand">
+          <Input placeholder="Nhập nhu cầu sản phẩm" />
+        </Form.Item>
+
+        {/* Mô tả ngắn */}
         <Form.Item
-          label="Số lượng"
-          name="quantity"
-          style={firstInput}
+          label="Mô tả ngắn"
+          name="shortDescription"
           rules={[{ required: true, message: errorMessage }]}
         >
-          <InputNumber placeholder="Nhập số lượng sản phẩm đang bán" />
+          <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
         </Form.Item>
-
-        {/* số lượng còn lại */}
-        <Form.Item
-          label="Số lượng còn lại"
-          name="remaining_quantity"
-          style={lastInput}
-        >
-          <InputNumber placeholder="Nhập số lượng sản phẩm còn lại" />
-        </Form.Item>
-      </Form.Item>
-
-      {/* nhu cầu */}
-      <Form.Item label="Nhu cầu" name="demand">
-        <Input placeholder="Nhập nhu cầu sản phẩm" />
-      </Form.Item>
-
-      {/* Mô tả ngắn */}
-      <Form.Item
-        label="Mô tả ngắn"
-        name="shortDescription"
-        rules={[{ required: true, message: errorMessage }]}
-      >
-        <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
-      </Form.Item>
-
-      {/* ====================================== */}
-      <hr />
+      </div>
       <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chi tiết
       </h5>
-
-      {/* Other information */}
-      {inputs.map((input, index) => (
-        <Form.Item key={index}>
-          <Form.Item
-            style={{
-              display: "inline-block",
-              width: "calc(25% - 8px)",
-              margin: "0",
-            }}
-          >
-            <Select
-              placeholder="Chọn thông tin"
-              onChange={(value) => handleInputChange(index, "inputName", value)}
-              style={{ height: 40 }}
-              showSearch
-              allowClear
-              value={input.inputName}
-              options={selectedSpecifications}
-            />
-          </Form.Item>
-
-          <Form.Item
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-          >
-            <Input
-              type="text"
-              placeholder="Nhập thông tin"
-              value={input.value}
-              onChange={(e) =>
-                handleInputChange(index, "value", e.target.value)
-              }
-            />
-          </Form.Item>
-          <Form.Item
-            style={{
-              display: "inline-block",
-              width: "calc(10% - 8px)",
-              margin: "0 8px",
-            }}
-          >
-            <Button
-              onClick={() => handleRemoveElement(index)}
-              icon={<MinusCircleOutlined />}
+      <div style={{ padding: "0 15px" }}>
+        {/* Other information */}
+        {inputs.map((input, index) => (
+          <Form.Item key={index}>
+            <Form.Item
               style={{
-                border: "none",
-                background: "none",
-                margin: "3px 0 0 0",
+                display: "inline-block",
+                width: "calc(25% - 8px)",
+                margin: "0",
               }}
-            />
-          </Form.Item>
-        </Form.Item>
-      ))}
-      <Form.Item>
-        <Button onClick={handleAddInput} type="dashed" icon={<PlusOutlined />}>
-          Thêm thẻ
-        </Button>
-      </Form.Item>
+            >
+              <Select
+                placeholder="Chọn thông tin"
+                onChange={(value) =>
+                  handleInputChange(index, "inputName", value)
+                }
+                style={{ height: 40 }}
+                showSearch
+                allowClear
+                value={input.inputName}
+                options={selectedSpecifications}
+              />
+            </Form.Item>
 
-      <hr />
+            <Form.Item
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+            >
+              <Input
+                type="text"
+                placeholder="Nhập thông tin"
+                value={input.value}
+                onChange={(e) =>
+                  handleInputChange(index, "value", e.target.value)
+                }
+              />
+            </Form.Item>
+            <Form.Item
+              style={{
+                display: "inline-block",
+                width: "calc(10% - 8px)",
+                margin: "0 8px",
+              }}
+            >
+              <Button
+                onClick={() => handleRemoveElement(index)}
+                icon={<MinusCircleOutlined />}
+                style={{
+                  border: "none",
+                  background: "none",
+                  margin: "3px 0 0 0",
+                }}
+              />
+            </Form.Item>
+          </Form.Item>
+        ))}
+        <Form.Item>
+          <Button
+            onClick={handleAddInput}
+            type="dashed"
+            icon={<PlusOutlined />}
+          >
+            Thêm thẻ
+          </Button>
+        </Form.Item>
+      </div>
       <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin mô tả
       </h5>
       {/* description */}
-      <Form.Item>
+      <Form.Item style={{padding: "0 15px"}}>
         <CKEditor
           editor={ClassicEditor}
           onReady={(editor) => {}}
@@ -581,10 +536,11 @@ function PhoneInputFrom({ data, onClick, setModal }) {
             const data = editor.getData();
             setDescription(data);
           }}
+          
         />
       </Form.Item>
 
-      <Form.Item>
+      <Form.Item wrapperCol={{ offset: 20, span: 8 }}>
         <Button type="primary" htmlType="submit" loading={isLoading}>
           Xác nhận
         </Button>
@@ -593,4 +549,4 @@ function PhoneInputFrom({ data, onClick, setModal }) {
   );
 }
 
-export default PhoneInputFrom;
+export default InputFrom;
