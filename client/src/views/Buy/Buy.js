@@ -1054,7 +1054,8 @@ export default function Buy() {
                   <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-156-157">
                     <div className="teko-col css-gr7r8o2 snipcss0-7-157-158">
                       <label className="check-box css-1arb6mh snipcss0-8-158-159">
-                        <Checkbox onChange={onChange}></Checkbox>
+                        <Checkbox 
+                        onChange={onChange}></Checkbox>
                         <div
                           type="body"
                           className="checkbox-label css-10md8qb snipcss0-9-159-164 style-Aggjr"
