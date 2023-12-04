@@ -26,6 +26,7 @@ import {
   CheckOutlined,
   FileDoneOutlined,
   FileExcelOutlined,
+  FileSearchOutlined,
 } from "@ant-design/icons";
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -966,7 +967,7 @@ const App = () => {
                   }}
                 >
                   <NavLink to="/checkSP">
-                    <SolutionOutlined
+                    <FileSearchOutlined
                       style={{
                         fontSize: "24px",
                         color: " #1435c3",
