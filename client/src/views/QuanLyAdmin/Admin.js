@@ -34,6 +34,8 @@ import QLdeliveryfailed from "./QLdeliveryfailed";
 import TabsQLdonhang from "./Pages/TabsQLdonhang";
 
 import QLAlldelivered from "./QLAlldelivered";
+import AccountList from "./Pages/AccountManagement/List";
+import { max } from "lodash";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
@@ -57,23 +59,17 @@ function Admin() {
         {
           key: "2",
           icon: <HomeOutlined />,
-          label: (
-            <Link to="dashboardrevenue">Biểu đồ thống kê doanh thu</Link>
-          ),
+          label: <Link to="dashboardrevenue">Biểu đồ thống kê doanh thu</Link>,
         },
         {
           key: "3",
           icon: <AppstoreAddOutlined />,
-          label: (
-            <Link to="newproduct">Tạo sản phẩm mới</Link>
-          ),
+          label: <Link to="newproduct">Tạo sản phẩm mới</Link>,
         },
         {
           key: "4",
           icon: <GiftOutlined />,
-          label: (
-            <Link to="newcoupon">Tạo mã giảm giá</Link>
-          ),
+          label: <Link to="newcoupon">Tạo mã giảm giá</Link>,
         },
       ],
     },
@@ -85,27 +81,23 @@ function Admin() {
         {
           key: "5",
           icon: <ShoppingOutlined />,
-          label: (
-            <Link to="products">Tất cả sản phẩm</Link>
-          ),
+          label: <Link to="products">Tất cả sản phẩm</Link>,
         },
         {
           key: "6",
           icon: <OrderedListOutlined />,
-          label: (
-            <Link to="ListCate">Danh mục</Link>
-          ),
+          label: <Link to="ListCate">Danh mục</Link>,
         },
-        {
-          key: "7",
-          icon: <BookOutlined />,
-          label: "Bộ sưu tập",
-        },
-        {
-          key: "8",
-          icon: <DatabaseOutlined />,
-          label: "Thuộc tính",
-        },
+        // {
+        //   key: "7",
+        //   icon: <BookOutlined />,
+        //   label: "Bộ sưu tập",
+        // },
+        // {
+        //   key: "8",
+        //   icon: <DatabaseOutlined />,
+        //   label: "Thuộc tính",
+        // },
       ],
     },
     {
@@ -116,28 +108,18 @@ function Admin() {
         {
           key: "9",
           icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/dondathang">Đơn đặt hàng</Link>
-           
-          ),
+          label: <Link to="/dondathang">Đơn đặt hàng</Link>,
         },
         {
           key: "10",
           icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/vanchuyen">Xác nhận vận chuyển</Link>
-           
-          ),
+          label: <Link to="/vanchuyen">Xác nhận vận chuyển</Link>,
         },
         {
           key: "11",
           icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/xacnhangiaohang">Xác nhận đơn hàng</Link>
-           
-          ),
+          label: <Link to="/xacnhangiaohang">Xác nhận đơn hàng</Link>,
         },
-
       ],
     },
 
@@ -149,33 +131,29 @@ function Admin() {
         {
           key: "12",
           icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/quanlydonhang">Tất cả đơn hàng</Link>
-           
-          ),
-        },  
+          label: <Link to="/quanlydonhang">Tất cả đơn hàng</Link>,
+        },
 
         {
           key: "18",
           icon: <ShoppingCartOutlined />,
-          label: (
-            <Link to="/quanlydagiao">Đơn hàng đã giao</Link>
-           
-          ),
-        },  
+          label: <Link to="/quanlydagiao">Đơn hàng đã giao</Link>,
+        },
 
         {
           key: "13",
           icon: <ShoppingCartOutlined />,
           label: (
             <Link to="/quanlygiaohuy">Đã hủy hoặc giao không thành công</Link>
-           
           ),
-        },  
-
+        },
       ],
     },
-
+    {
+      key: "account_management",
+      icon: <UserOutlined />,
+      label: <Link to="account_list">Quản lí tài khoản</Link>,
+    },
     {
       key: "sub5",
       icon: <GiftOutlined />,
@@ -188,33 +166,33 @@ function Admin() {
         },
       ],
     },
-    {
-      key: "sub6",
-      icon: <ReadOutlined />,
-      label: "CMS",
-      children: [
-        {
-          key: "15",
-          label: "Trang",
-          icon: <FileProtectOutlined />,
-        },
-      ],
-    },
-    {
-      key: "sub2",
-      icon: <SettingOutlined />,
-      label: "Setting",
-      children: [
-        {
-          key: "16",
-          label: "Option 1",
-        },
-        {
-          key: "17",
-          label: "Option 2",
-        },
-      ],
-    },
+    // {
+    //   key: "sub6",
+    //   icon: <ReadOutlined />,
+    //   label: "CMS",
+    //   children: [
+    //     {
+    //       key: "15",
+    //       label: "Trang",
+    //       icon: <FileProtectOutlined />,
+    //     },
+    //   ],
+    // },
+    // {
+    //   key: "sub2",
+    //   icon: <SettingOutlined />,
+    //   label: "Setting",
+    //   children: [
+    //     {
+    //       key: "16",
+    //       label: "Option 1",
+    //     },
+    //     {
+    //       key: "17",
+    //       label: "Option 2",
+    //     },
+    //   ],
+    // },
 
     {
       type: "divider",
@@ -244,58 +222,52 @@ function Admin() {
   //   return null;
   // });
 
-  useEffect(() => {
-  }, []);
-  
+  useEffect(() => {}, []);
+
   return (
-    <>
-      <Row>
-        <Col
-          className="custom-scrollbar"
-          span={18}
-          push={5}
-          style={{ overflowY: "scroll", height: "100vh" }}
-        >
-          {/* {currentPath === "1" && <Dashboard />}
-          {currentPath === "2" && <TypeProduct />}
-          {currentPath === "3" && <NewCoupon />}
-          {currentPath === "4" && <Products />}
-          {currentPath === "5" && <TypeList />} */}
-          {/* {currentPath === "8" && <OrderList />} */}
-          
-          <Routes>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="dashboardrevenue" element={<DashboardRevenue />} />
-            <Route path="newproduct" element={<TypeProduct />} />
-            <Route path="newcoupon" element={<NewCoupon />} />
-            <Route
-              path="products"
-              element={<Products style={{ marginRight: "20px" }} />}
-            />
-            <Route path="orders" element={<OrderList />} />
-            <Route path="shippingOrder" element={<QLshipping />} />
-            <Route path="deliveredOrder" element={<QLdelivered />} />
-            <Route path="allOrders" element={<QLAlldonhang />} />
-            <Route path="alldelivered" element={<QLAlldelivered />} />
-            <Route path="deliveryfailedOrder" element={<QLdeliveryfailed />} />
-            <Route path="ListCate" element={<TypeList />} />
-          
-          </Routes>
-        </Col>
-        <Col span={6} pull={18}>
-          <Menu
-            onClick={onClick}
-            style={{
-              width: 256,
-            }}
-            mode="inline"
-            selectedKeys={[currentPath]}
-            items={menuData}
-          >
-          </Menu>
-        </Col>
-      </Row>
-    </>
+    <div
+      style={{
+        display: "flex",
+        padding: "10px",
+        height: "max-content",
+        minHeight: "100vh",
+        backgroundColor: "#D5D8DC"
+      }}
+    >
+      <Menu
+        onClick={onClick}
+        mode="inline"
+        selectedKeys={[currentPath]}
+        items={menuData}
+        style={{
+          flex: "1",
+          height: "max-content",
+          margin: "0 20px 0 0"
+        }}
+      ></Menu>
+
+      <div style={{ flex: "4"}}>
+        <Routes>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboardrevenue" element={<DashboardRevenue />} />
+          <Route path="newproduct" element={<TypeProduct />} />
+          <Route path="newcoupon" element={<NewCoupon />} />
+          <Route
+            path="products"
+            element={<Products style={{ marginRight: "20px" }} />}
+          />
+          <Route path="orders" element={<OrderList />} />
+          <Route path="shippingOrder" element={<QLshipping />} />
+          <Route path="deliveredOrder" element={<QLdelivered />} />
+          <Route path="allOrders" element={<QLAlldonhang />} />
+          <Route path="alldelivered" element={<QLAlldelivered />} />
+          <Route path="deliveryfailedOrder" element={<QLdeliveryfailed />} />
+          <Route path="ListCate" element={<TypeList />} />
+          {/* accounts */}
+          <Route path="account_list" element={<AccountList />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
 
