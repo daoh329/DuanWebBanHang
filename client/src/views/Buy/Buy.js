@@ -549,21 +549,22 @@ export default function Buy() {
                         {/*  */}
                       </div>
                       <div className="radio">
-                        <label
+                        <div
                           style={{
                             display: "block",
-                            fontSize: "15px",
+                            fontSize: "17px",
                             marginBottom: "10px",
                             fontWeight: "bold",
                           }}
                         >
                           Thời gian giao hàng
-                        </label>
-                        <div style={{ justifyContent: "space-between" }}>
-                          <label
-                            style={{ display: "flex", alignItems: "center" }}
+                        </div>
+                        
+                        <div className="check_box" >
+                          <div
+                            
                           >
-                            <input
+                            {/* <input
                               type="checkbox"
                               value="ngày trong tuần"
                               checked={deliveryMethod === "ngày trong tuần"}
@@ -572,13 +573,22 @@ export default function Buy() {
                                   e.target.checked ? e.target.value : ""
                                 )
                               }
-                            />
-                            Tất cả ngày trong tuần
-                          </label>
-                          <label
-                            style={{ display: "flex", alignItems: "center" }}
+                            /> */}
+                            
+                            <Checkbox type="checkbox"
+                              value="ngày trong tuần"
+                              checked={deliveryMethod === "ngày trong tuần"}
+                              onChange={(e) =>
+                                setDeliveryMethod(
+                                  e.target.checked ? e.target.value : ""
+                                )
+                              }>Tất cả ngày trong tuần</Checkbox>
+                          </div>
+                          {/*  */}
+                          <div
+                            style={{marginTop:"5px" ,marginRight:"82px"}}
                           >
-                            <input
+                            {/* <input
                               type="checkbox"
                               value="Chủ nhật"
                               checked={deliveryMethod === "Chủ nhật"}
@@ -587,11 +597,21 @@ export default function Buy() {
                                   e.target.checked ? e.target.value : ""
                                 )
                               }
-                            />
-                            Chủ nhật
-                          </label>
+                            /> */}
+                         
+                            <Checkbox type="checkbox"
+                              value="Chủ nhật"
+                              checked={deliveryMethod === "Chủ nhật"}
+                              onChange={(e) =>
+                                setDeliveryMethod(
+                                  e.target.checked ? e.target.value : ""
+                                )
+                              }>Chủ nhật</Checkbox>
+                           
+                          </div>
                         </div>
                       </div>
+
 
                       {/* <div className="css-18c0ysw snipcss0-4-4-52">
                         <div
