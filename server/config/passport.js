@@ -20,7 +20,7 @@ passport.use(
       // Lấy thông tin tên và email từ profile
       const nameProfile = profile._json.name;
       const emailProfile = profile._json.email;
-      const permission = "Khách";
+      const permission = "user";
       // Lưu thông tin người dùng vào csdl
       try {
         // Kiểm tra xem tk đã tồn tại chưa

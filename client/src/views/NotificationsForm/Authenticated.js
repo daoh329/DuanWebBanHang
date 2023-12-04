@@ -26,4 +26,4 @@ export const NotificationBeenLoggedOut = () => {
         </div>
       ),
     });
-  };
+};

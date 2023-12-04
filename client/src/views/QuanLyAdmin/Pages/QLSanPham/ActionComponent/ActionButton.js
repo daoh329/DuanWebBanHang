@@ -132,7 +132,7 @@ function ActionButton({ record, getProduct }) {
               onClick={handleOpenEditImage}
               style={{ marginBottom: "10px" }}
             >
-              Cập nhật hình ảnh, dung lượng lưu trữ, giá và màu sắc
+              Cập nhật hình ảnh, giá và khuyến mại
             </Button>
             <InputFrom
               setModal={setOpenModal}

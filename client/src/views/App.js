@@ -106,7 +106,7 @@ const App = () => {
   const getNotifications = async (id) => {
     try {
       const api = `${process.env.REACT_APP_API_URL}/auth/get-notifications/${id}`;
-      const results = await axios.get(api, {withCredentials: true});
+      const results = await axios.get(api, { withCredentials: true });
       if (results.status === 200) {
         const notifications = results.data;
         dispatch(addNotification(notifications));
@@ -115,99 +115,95 @@ const App = () => {
       console.log(error);
     }
   };
-  
+
   return (
     <div className="App">
       <BrowserRouter>
-      <ScrollToTop/>
+        <ScrollToTop />
         <Nav />
-        <header>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/detail/:id" element={<Detail />} />
-            <Route
-              path="/login"
-              element={isLogin ? <Navigate to="/" /> : <Login />}
-            />
-            {/* <Route path="/adminPage" element={<AdminPage />} />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route
+            path="/login"
+            element={isLogin ? <Navigate to="/" /> : <Login />}
+          />
+          {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
 
-            <Route
-              path="/admin/*"
-              element={
-                isLogin === "admin" ? (
-                  <>
-                    <Admin /> <Outlet />
-                  </>
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
-            />
-            <Route path="/search" element={<Search />} />
-            <Route path="/showroom" element={<ShowRoom />} />
-            <Route path="/tin-tuc" element={<Tintuc />} />
-            <Route path="/noi-dung" element={<Noidung />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/checkSP" element={<CheckSP />} />
-            <Route path="/sale" element={<Sale />} />
-            <Route path="/orderhistory/:phone" element={<OrderHistory />} />
-            <Route path="/orders" element={<QLdonhang />} />
-            <Route path="/shippingOrder" element={<QLshipping />} />
-            <Route path="/deliveredOrder" element={<QLdelivered />} />
+          <Route
+            path="/admin/*"
+            element={
+              isLogin === "admin" ? (
+                <>
+                  <Admin /> <Outlet />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route path="/search" element={<Search />} />
+          <Route path="/showroom" element={<ShowRoom />} />
+          <Route path="/tin-tuc" element={<Tintuc />} />
+          <Route path="/noi-dung" element={<Noidung />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/checkSP" element={<CheckSP />} />
+          <Route path="/sale" element={<Sale />} />
+          <Route path="/orderhistory/:phone" element={<OrderHistory />} />
+          <Route path="/orders" element={<QLdonhang />} />
+          <Route path="/shippingOrder" element={<QLshipping />} />
+          <Route path="/deliveredOrder" element={<QLdelivered />} />
 
-            <Route path="/dondathang" element={<TabsDonDatHang />} />
-            <Route path="/vanchuyen" element={<TabsVanChuyen />} />
-            <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
-            <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
-            <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
-            <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
-              <Route
-                path="/deliveryfailedOrder"
-                element={<QLdeliveryfailed />}
-              />
-              <Route path="/alldelivered" element={<QLAlldelivered />} />
-              <Route path="/allorders" element={<QLAlldonhang />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/buy" element={<Buy user={user} />} />
-              <Route path="/success" element={<BuySuccess />} />
-              <Route path="/thanks" element={<BillSuccess />} />
-              <Route path="/qlbillorder/:id" element={<QLOrder />} />
-              <Route
-                path="/profile"
-                element={isLogin ? <Profile /> : <Navigate to="/" />}
-              />
-              <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
-              <Route
-                path="/tat-ca-san-pham-laptop-moi"
-                element={<AllNewProductLaptop />}
-              />
-              <Route
-                path="/tat-ca-san-pham-phone"
-                element={<AllProductPhone />}
-              />
-              <Route
-                path="/tat-ca-san-pham-phone-moi"
-                element={<AllNewProductPhone />}
-              />
-            <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
-            <Route path="/danhmuc-laptop" element={<AllProduct />} />
+          <Route path="/dondathang" element={<TabsDonDatHang />} />
+          <Route path="/vanchuyen" element={<TabsVanChuyen />} />
+          <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
+          <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
+          <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
+          <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
+          <Route path="/deliveryfailedOrder" element={<QLdeliveryfailed />} />
+          <Route path="/alldelivered" element={<QLAlldelivered />} />
+          <Route path="/allorders" element={<QLAlldonhang />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/buy" element={<Buy user={user} />} />
+          <Route path="/success" element={<BuySuccess />} />
+          <Route path="/thanks" element={<BillSuccess />} />
+          <Route path="/qlbillorder/:id" element={<QLOrder />} />
+          <Route
+            path="/profile"
+            element={isLogin ? <Profile /> : <Navigate to="/" />}
+          />
+          <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
+          <Route
+            path="/tat-ca-san-pham-laptop-moi"
+            element={<AllNewProductLaptop />}
+          />
+          <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
+          <Route
+            path="/tat-ca-san-pham-phone-moi"
+            element={<AllNewProductPhone />}
+          />
+          <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
+          <Route path="/danhmuc-laptop" element={<AllProduct />} />
 
-            <Route path="/createorder" element={<CreateOrder />} />
+          <Route path="/createorder" element={<CreateOrder />} />
 
-            <Route path="/chat" element={<Chatbot />} />
+          <Route path="/chat" element={<Chatbot />} />
 
-            <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
-            <Route path="/chinh-sach-thanh-toan" element={<ChinhSachThanhToan />} />
-            <Route path="/tra-cuu-don-hang" element={<CheckSP />} />
-            <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
-            <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
-            <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
-          </Routes>
-        </header>
+          <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
+          <Route
+            path="/chinh-sach-thanh-toan"
+            element={<ChinhSachThanhToan />}
+          />
+          <Route path="/tra-cuu-don-hang" element={<CheckSP />} />
+          <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
+          <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
+          <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
+        </Routes>
+
         <MobileNav user={user} />
         <Footer />
-        
       </BrowserRouter>
     </div>
   );
