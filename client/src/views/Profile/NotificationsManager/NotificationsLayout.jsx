@@ -6,6 +6,7 @@ import { FileDoneOutlined, FileExcelOutlined } from "@ant-design/icons";
 
 import "./style.css";
 import { updateNotification } from "../../../redux/notificationsSlice";
+import { NotificationBeenLoggedOut } from "../../NotificationsForm/Authenticated";
 
 function NotificationsLayout(props) {
   const statusPage = props.statusPage;
@@ -29,7 +30,7 @@ function NotificationsLayout(props) {
 
       const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
       // gọi api cập nhật trạng thái thông báo tại db
-      const results = await axios.put(api, arrId);
+      const results = await axios.put(api, arrId, { withCredentials: true });
 
       if (results.status === 200) {
         arrId.forEach((id) => {
@@ -43,9 +44,13 @@ function NotificationsLayout(props) {
       }
     } catch (error) {
       console.log(error);
+      if (error.response.status === 401) {
+        NotificationBeenLoggedOut();
+      }
     }
   };
 
+  // Hàm đọc 1 thông báo
   const handleNext = async (id, order_id, is_read) => {
     try {
       // tạo mảng chứa id thông báo (API nhận kiểu mảng)
@@ -56,7 +61,7 @@ function NotificationsLayout(props) {
         // tạo api
         const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
         // gọi api cập nhật trạng thái thông báo tại db
-        const results = await axios.put(api, arrId);
+        const results = await axios.put(api, arrId, {withCredentials:true});
 
         if (results.status === 200) {
           arrId.forEach((id) => {
@@ -77,6 +82,10 @@ function NotificationsLayout(props) {
     } catch (error) {
       // Log ra lỗi nếu có
       console.log(error);
+      // Lỗi đăng nhập
+      if (error.response.status === 401) {
+        NotificationBeenLoggedOut();
+      }
     }
   };
 

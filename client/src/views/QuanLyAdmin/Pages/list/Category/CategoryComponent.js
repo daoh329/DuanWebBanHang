@@ -22,7 +22,7 @@ function Category() {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/category`;
       try {
-        const res = await axios.post(url, values);
+        const res = await axios.post(url, values, {withCredentials: true});
         if (res.status === 200) {
           setTimeout(() => {
             getCategories();
@@ -54,7 +54,7 @@ function Category() {
 
   const getCategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/${table}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/${table}`, {withCredentials: true});
       setCategory(response.data.results);
     } catch (e) {
       console.log(e);
@@ -123,7 +123,7 @@ function Category() {
 
   const handleDelete = async (name) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`);
+      await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`, null, {withCredentials: true});
       getCategories();
     } catch (error) {
       console.log(error);

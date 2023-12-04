@@ -2,10 +2,11 @@ import { Button, Form, Modal, Upload, notification } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {differenceWith, isEqual} from "lodash";
+import { differenceWith, isEqual } from "lodash";
 
 import ProductVariations from "./ProductVariations";
 import { ArrayCompareArray } from "../../../../../util/servicesGlobal";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -115,6 +116,7 @@ function InputForm2({ data, onClick, setModal }) {
         `${process.env.REACT_APP_API_URL}/product/update/${product.id}`,
         values,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -140,10 +142,15 @@ function InputForm2({ data, onClick, setModal }) {
     } catch (error) {
       console.log(error);
       setTimeout(() => {
-        setIsLoading(false);
-        notification.error({
-          message: "Cập nhật thất bại!",
-        });
+        if (error.reponse.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        } else {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập nhật thất bại!",
+          });
+        }
       }, 2000);
     }
   };

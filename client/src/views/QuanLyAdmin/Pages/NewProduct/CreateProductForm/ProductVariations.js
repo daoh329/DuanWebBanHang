@@ -102,7 +102,8 @@ function ProductVariations(props) {
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/List/add/capacity`,
-        values
+        values,
+        { withCredentials: true }
       );
 
       if (result.status === 200) {
@@ -227,7 +228,7 @@ function ProductVariations(props) {
           {fileList.length >= 10 ? null : uploadButton}
         </Upload>
       </Form.Item>
-      
+
       <h5>Dung lượng</h5>
       {arrVariations[index].capacityGroup.map((item, i) => (
         <div key={i}>
@@ -241,7 +242,10 @@ function ProductVariations(props) {
         </div>
       ))}
       {/* btn add subField */}
-      <Form.Item style={{ margin: "8px 0 0 0" }} wrapperCol={{ offset: 11, span: 4 }}>
+      <Form.Item
+        style={{ margin: "8px 0 0 0" }}
+        wrapperCol={{ offset: 11, span: 4 }}
+      >
         <Button
           icon={<PlusOutlined />}
           onClick={addSubField}
@@ -353,7 +357,7 @@ function CapacityGroup(props) {
           />
         </Form.Item>
       </Form.Item>
-      <hr/>
+      <hr />
       <br />
     </>
   );

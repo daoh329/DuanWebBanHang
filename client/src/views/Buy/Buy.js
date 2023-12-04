@@ -19,6 +19,7 @@ import ReceiverInformationModal from "../Profile/AddressManager/ItemAddress/Moda
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProductInCart } from "../../redux/cartSlice";
 import { formatCurrency } from "../../util/FormatVnd";
+import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -63,12 +64,16 @@ export default function Buy() {
   const getDeliveryAddress = async () => {
     try {
       const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`
+        `${process.env.REACT_APP_API_URL}/auth/delivery-address/${user.id}`,
+        { withCredentials: true }
       );
       setDeliveryAddress(result.data);
       DedaultAddress(result.data);
     } catch (error) {
       console.log(error);
+      if (error.response.status === 401) {
+        NotificationBeenLoggedOut();
+      }
     }
   };
 
@@ -328,7 +333,9 @@ export default function Buy() {
 
     // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 50 triệu không
     if (amount < 5000 || amount > 50000000) {
-      message.error("Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 50 triệu");
+      message.error(
+        "Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 50 triệu"
+      );
       return;
     }
 
@@ -350,7 +357,10 @@ export default function Buy() {
 
         if (response.ok) {
           sessionStorage.setItem("UserID", user.id);
-          sessionStorage.setItem("addressID", deliveryAddress[addressChecked].id);
+          sessionStorage.setItem(
+            "addressID",
+            deliveryAddress[addressChecked].id
+          );
           sessionStorage.setItem("productID", JSON.stringify(productID));
           sessionStorage.setItem("quantity", JSON.stringify(quantity));
           sessionStorage.setItem("color", JSON.stringify(color));
@@ -367,7 +377,9 @@ export default function Buy() {
             window.location.href = responseData.url;
           } else if (responseData && responseData.error) {
             // Hiển thị thông báo lỗi
-            message.error("Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 10 nghìn đến 50 triệu");
+            message.error(
+              "Thanh toán MOMO Pay chỉ hỗ trợ mốc giá từ 10 nghìn đến 50 triệu"
+            );
           }
         } else {
           const errorData = await response.json();
@@ -481,7 +493,7 @@ export default function Buy() {
               <div className="teko-card css-svl62k snipcss0-4-4-5">
                 <div className="teko-card-body css-0 snipcss0-5-5-6">
                   <MDBTabs fill className="mb-3-buy">
-                    <MDBTabsItem className="nav-tabs-buy">
+                    {/* <MDBTabsItem className="nav-tabs-buy">
                       <MDBTabsLink
                         className="nav-link-buy"
                         onClick={() => handleFillClick("tab1")}
@@ -489,7 +501,7 @@ export default function Buy() {
                       >
                         Nhận hàng tại nhà
                       </MDBTabsLink>
-                    </MDBTabsItem>
+                    </MDBTabsItem> */}
                     {/* <MDBTabsItem className="nav-tabs-buy">
                       <MDBTabsLink
                         className="nav-link-buy"
@@ -545,7 +557,7 @@ export default function Buy() {
                             fontWeight: "bold",
                           }}
                         >
-                          Ngày giao hàng thức giao hàng
+                          Thời gian giao hàng
                         </label>
                         <div style={{ justifyContent: "space-between" }}>
                           <label
@@ -561,7 +573,7 @@ export default function Buy() {
                                 )
                               }
                             />
-                              Tất cả ngày trong tuần
+                            Tất cả ngày trong tuần
                           </label>
                           <label
                             style={{ display: "flex", alignItems: "center" }}
@@ -597,7 +609,6 @@ export default function Buy() {
                         </div>
                       </div> */}
                     </MDBTabsPane>
-
                   </MDBTabsContent>
                 </div>
               </div>
@@ -957,7 +968,6 @@ export default function Buy() {
                   Tôi muốn xuất hóa đơn
                 </div>
               </div> */}
-
             </div>
             <div
               className="teko-col teko-col-4 css-gr7r8o2 tether-target-attached-top snipcss0-3-3-99 tether-element-attached-top tether-element-attached-center tether-target-attached-center style-FJLy3"
@@ -1049,12 +1059,13 @@ export default function Buy() {
                     ))}
                 </div>
               </div>
-              <div className="snipcss0-4-99-155">
+              {/* <div className="snipcss0-4-99-155">
                 <div className="css-1pnc6ez snipcss0-5-155-156">
                   <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-156-157">
                     <div className="teko-col css-gr7r8o2 snipcss0-7-157-158">
                       <label className="check-box css-1arb6mh snipcss0-8-158-159">
-                        <Checkbox checked onChange={onChange}></Checkbox>
+                        <Checkbox 
+                        onChange={onChange}></Checkbox>
                         <div
                           type="body"
                           className="checkbox-label css-10md8qb snipcss0-9-159-164 style-Aggjr"
@@ -1077,7 +1088,7 @@ export default function Buy() {
                   <div className="teko-row teko-row-no-wrap teko-row-space-between css-1o3gs9x2 snipcss0-6-169-170">
                     <div className="teko-col css-gr7r8o2 snipcss0-7-170-171">
                       <label className="check-box css-1arb6mh snipcss0-8-171-172">
-                        <Checkbox checked  onChange={onChange}></Checkbox>
+                        <Checkbox onChange={onChange}></Checkbox>
                         <div
                           type="body"
                           className="checkbox-label css-10md8qb snipcss0-9-172-177 style-aUwfK"
@@ -1094,7 +1105,7 @@ export default function Buy() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="css-cssveg snipcss0-4-99-181">
                 <div className="css-27abj6 snipcss0-5-181-182">
                   <div className="teko-card css-516rdm snipcss0-6-182-183">
@@ -1109,10 +1120,10 @@ export default function Buy() {
                                   {formatCurrency(buysData.total)}
                                 </td>
                               </tr>
-                              <tr>
+                              {/* <tr>
                                 <td colSpan={1}>Phí vận chuyển</td>
                                 <td colSpan={3}>Miễn Phí</td>
-                              </tr>
+                              </tr> */}
                               <tr>
                                 <td colSpan={1}>Thanh tiền</td>
                                 <td colSpan={3}>

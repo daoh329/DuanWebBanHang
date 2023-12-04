@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import "./style.css";
-import NewProduct from "../Laptop/NewProduct";
-import NewPhone from "../Phone/NewPhone";
 import MainForm from "../CreateProductForm/MainForm";
 
 function TypeProduct() {
   const [state, setState] = useState("product");
 
-  const toggleComponentLaptop = () => {
-    setState("laptop");
-  };
-  const toggleComponentPhone = () => {
-    setState("phone");
-  };
+  // const toggleComponentLaptop = () => {
+  //   setState("laptop");
+  // };
+  // const toggleComponentPhone = () => {
+  //   setState("phone");
+  // };
   const toggleComponentProduct = () => {
     setState("product");
   };
@@ -44,8 +42,8 @@ function TypeProduct() {
           Sản phẩm mới
         </button>
       </div> */}
-      {state === "laptop" && <NewProduct />}
-      {state === "phone" && <NewPhone />}
+      {/* {state === "laptop" && <NewProduct />}
+      {state === "phone" && <NewPhone />} */}
       {state === "product" && <MainForm />}
     </div>
   );

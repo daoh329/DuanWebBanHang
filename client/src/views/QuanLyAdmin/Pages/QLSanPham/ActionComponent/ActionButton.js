@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import InputFrom from "../UpdateForm/InputFrom";
 import InputFrom2 from "../UpdateForm/InputForm2";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 function ActionButton({ record, getProduct }) {
   const [openModal, setOpenModal] = useState(false);
@@ -14,7 +15,8 @@ function ActionButton({ record, getProduct }) {
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/product/disable-and-enable`,
-        { id: record.id, status: record.status }
+        { id: record.id, status: record.status },
+        { withCredentials: true }
       );
       // window.location.reload();
       if (result.status === 200) {
@@ -23,8 +25,15 @@ function ActionButton({ record, getProduct }) {
       }
       return message.error("Vô hiệu hóa thất bại.");
     } catch (error) {
-      console.log(error);
-      message.error("Vô hiệu hóa thất bại.");
+      setTimeout(() => {
+        if (error.response.status === 401) {
+          NotificationBeenLoggedOut();
+        }else {
+          console.log(error);
+          message.error("Vô hiệu hóa thất bại.");
+        }
+      },500);
+
     }
   }
 
@@ -43,7 +52,8 @@ function ActionButton({ record, getProduct }) {
     // /product/delete/:id
     try {
       const result = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`
+        `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`,
+        { withCredentials: true }
       );
       if (result.status === 200) {
         message.success("Đã xóa sản phẩm.");
@@ -51,7 +61,14 @@ function ActionButton({ record, getProduct }) {
       }
       return message.success("Đã xóa sản phẩm.");
     } catch (error) {
-      message.error("Xóa sản phẩm thất bại.");
+      setTimeout(() => {
+        if (error.response.status === 401) {
+          NotificationBeenLoggedOut();
+        } else {
+          console.log(error);
+          message.error("Xóa sản phẩm thất bại.");
+        }
+      }, 500);
     }
   }
 

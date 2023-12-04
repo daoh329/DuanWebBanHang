@@ -23,6 +23,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { formatSpecifications } from "../../../../../util/formatSpecifications";
 import config from "../../../../../config";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -151,6 +152,7 @@ function MainForm() {
         `${process.env.REACT_APP_API_URL}/product/Add`,
         values,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -158,21 +160,30 @@ function MainForm() {
       );
 
       if (result.status === 200) {
-        setIsLoading(false);
-        notification.success({
-          message: "Thành công",
-          description: "Sản phẩm đã được tạo thành công!",
-        });
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.success({
+            message: "Thành công",
+            description: "Sản phẩm đã được tạo thành công!",
+          });
+        }, 500);
       }
 
       setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-      notification.error({
-        message: "Lỗi",
-        description: "Có lỗi xảy ra khi tạo sản phẩm!",
-      });
+      setTimeout(() => {
+        if (error.response.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        } else {
+          setIsLoading(false);
+          console.log(error);
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi tạo sản phẩm!",
+          });
+        }
+      }, 500);
     }
   };
 

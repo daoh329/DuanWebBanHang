@@ -1,7 +1,8 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 function Capacity() {
   const [capacities, setCapacities] = useState([]);
@@ -13,7 +14,9 @@ function Capacity() {
   // function call api get capacity list
   const getCapacity = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/List/capacity`)
+      .get(`${process.env.REACT_APP_API_URL}/List/capacity`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setCapacities(response.data.results);
       })
@@ -24,13 +27,23 @@ function Capacity() {
 
   const handleDelete = async (value) => {
     try {
-        const results = await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/Capacity/${value}`);
-        if (results.status === 200) {
-            getCapacity();
-        }
-      } catch (error) {
-        console.log(error);
+      const results = await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/delete/Capacity/${value}`,
+        null,
+        { withCredentials: true }
+      );
+      if (results.status === 200) {
+        message.success("Xóa thành công");
+        getCapacity();
       }
+    } catch (error) {
+      if (error.response.status === 401) {
+        NotificationBeenLoggedOut();
+      }else {
+        console.log(error);
+        message.error("Xóa thất bại");
+      }
+    }
   };
 
   const columns = [
@@ -49,7 +62,7 @@ function Capacity() {
         >
           <Popconfirm
             title="Cảnh báo!!!"
-            description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
+            description="Bạn có chắc chắn muốn xóa?"
             onConfirm={() => handleDelete(capacity)}
             okText="Yes"
             cancelText="No"

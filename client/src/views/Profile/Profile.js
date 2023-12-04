@@ -26,8 +26,9 @@ import { update } from "../../redux/userSlice";
 import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
-import { utcToZonedTime, format } from 'date-fns-tz';
+import { utcToZonedTime, format } from "date-fns-tz";
 import { formatCurrency } from "../../util/FormatVnd";
+import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
@@ -35,7 +36,7 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
-  
+
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -94,7 +95,7 @@ export default function Profile() {
     try {
       const id = user.id;
       const url = `${process.env.REACT_APP_API_URL}/auth/update/${id}`;
-      const result = await axios.put(url, values);
+      const result = await axios.put(url, values, { withCredentials: true });
       if (result.status === 200) {
         // Set lại state user
         const newData = {
@@ -116,6 +117,10 @@ export default function Profile() {
     } catch (error) {
       console.log(error);
       return setTimeout(() => {
+        if (error.response.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        }
         setIsLoading(false);
         message.error("Cập nhật thất bại");
       }, 1000);
@@ -142,10 +147,15 @@ export default function Profile() {
       console.log("Confirm order button clicked for order:", record.order_id);
       try {
         await axios.put(
-          `${process.env.REACT_APP_API_URL}/order/buyback/${record.order_id}`
+          `${process.env.REACT_APP_API_URL}/order/buyback/${record.order_id}`,
+          null,
+          { withCredentials: true }
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
       } catch (error) {
+        if (error.response.status === 401) {
+          NotificationBeenLoggedOut();
+        }
         console.error("Error confirming order:", error);
       }
     } else {
@@ -158,7 +168,9 @@ export default function Profile() {
     if (record.order_id) {
       try {
         await axios.put(
-          `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`
+          `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`,
+          null,
+          { withCredentials: true }
         );
         CreateNotification(
           record.user_id,
@@ -169,6 +181,9 @@ export default function Profile() {
         );
         loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
       } catch (error) {
+        if (error.response.status === 401) {
+          NotificationBeenLoggedOut();
+        }
         console.error("Error canceling order:", error);
       }
     } else {
@@ -214,12 +229,11 @@ export default function Profile() {
       dataIndex: "order_updated_at",
       key: "updated_at",
       render: (date) => {
-        const fmt = 'HH:mm:ss - dd/MM/yyyy';
-        const zonedDate = utcToZonedTime(date, 'Etc/UTC');
-        return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
+        const fmt = "HH:mm:ss - dd/MM/yyyy";
+        const zonedDate = utcToZonedTime(date, "Etc/UTC");
+        return format(zonedDate, fmt, { timeZone: "Etc/UTC" });
       },
     },
-    
 
     {
       title: "PTTT",
