@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import InputFrom from "../UpdateForm/InputFrom";
 import InputFrom2 from "../UpdateForm/InputForm2";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 function ActionButton({ record, getProduct }) {
   const [openModal, setOpenModal] = useState(false);
@@ -24,8 +25,15 @@ function ActionButton({ record, getProduct }) {
       }
       return message.error("Vô hiệu hóa thất bại.");
     } catch (error) {
-      console.log(error);
-      message.error("Vô hiệu hóa thất bại.");
+      setTimeout(() => {
+        if (error.response.status === 401) {
+          NotificationBeenLoggedOut();
+        }else {
+          console.log(error);
+          message.error("Vô hiệu hóa thất bại.");
+        }
+      },500);
+
     }
   }
 
@@ -53,7 +61,14 @@ function ActionButton({ record, getProduct }) {
       }
       return message.success("Đã xóa sản phẩm.");
     } catch (error) {
-      message.error("Xóa sản phẩm thất bại.");
+      setTimeout(() => {
+        if (error.response.status === 401) {
+          NotificationBeenLoggedOut();
+        } else {
+          console.log(error);
+          message.error("Xóa sản phẩm thất bại.");
+        }
+      }, 500);
     }
   }
 

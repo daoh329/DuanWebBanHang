@@ -10,7 +10,6 @@ import { utcToZonedTime, format } from 'date-fns-tz';
 
 function QLOrder() {
 
-
   const location = useLocation();
   const orderData = location.state.orderData;
   const order_id = orderData.order_id;

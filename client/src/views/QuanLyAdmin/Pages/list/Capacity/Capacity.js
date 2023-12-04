@@ -1,7 +1,8 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 function Capacity() {
   const [capacities, setCapacities] = useState([]);
@@ -32,10 +33,16 @@ function Capacity() {
         { withCredentials: true }
       );
       if (results.status === 200) {
+        message.success("Xóa thành công");
         getCapacity();
       }
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 401) {
+        NotificationBeenLoggedOut();
+      }else {
+        console.log(error);
+        message.error("Xóa thất bại");
+      }
     }
   };
 
@@ -55,7 +62,7 @@ function Capacity() {
         >
           <Popconfirm
             title="Cảnh báo!!!"
-            description="Bạn có chắc chắn muốn vô hiệu hóa sản phẩm này?"
+            description="Bạn có chắc chắn muốn xóa?"
             onConfirm={() => handleDelete(capacity)}
             okText="Yes"
             cancelText="No"

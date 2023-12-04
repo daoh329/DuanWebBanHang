@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
 const { Option } = Select;
 
@@ -99,7 +100,7 @@ function ReceiverInformationModal({
       // Tạo đường dẫn API
       const url = `${process.env.REACT_APP_API_URL}/auth/add-delivery-address`;
       // Call API
-      const result = await axios.post(url, values, {withCredentials: true});
+      const result = await axios.post(url, values, { withCredentials: true });
 
       // Thông báo thành công nếu status === 200
       if (result.status === 200) {
@@ -126,12 +127,17 @@ function ReceiverInformationModal({
       }, 1000);
     } catch (error) {
       // Thông báo thất bại nếu lỗi
+      console.log(error);
       setTimeout(() => {
-        console.log(error);
-        setIsLoading(false);
-        notification.error({
-          message: "Thất bại!",
-        });
+        if (error.response.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        } else {
+          setIsLoading(false);
+          notification.error({
+            message: "Thất bại!",
+          });
+        }
       }, 1000);
     }
   };
@@ -180,11 +186,11 @@ function ReceiverInformationModal({
         return setTimeout(() => {
           setIsLoading(false);
           message.warning("Không có dữ liệu được thay đổi");
-        }, 1000);
+        }, 500);
       }
       // Call API Update
       const url = `${process.env.REACT_APP_API_URL}/auth/update-delivery-address/${receiverInformation.id}`;
-      const result = await axios.put(url, values, {withCredentials: true});
+      const result = await axios.put(url, values, { withCredentials: true });
 
       // Nếu status === 200 -> thông báo thành công
       if (result.status === 200) {
@@ -197,21 +203,26 @@ function ReceiverInformationModal({
           notification.success({
             message: "Cập nhật thành công",
           });
-        }, 1000);
+        }, 500);
       }
       setTimeout(() => {
         setIsLoading(false);
         notification.warning({
           message: "Cập nhật thất bại",
         });
-      }, 1000);
+      }, 500);
     } catch (error) {
       console.log(error);
       setTimeout(() => {
-        setIsLoading(false);
-        notification.error({
-          message: "Cập thật thất bại",
-        });
+        if (error.response.status === 401) {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        } else {
+          setIsLoading(false);
+          notification.error({
+            message: "Cập thật thất bại",
+          });
+        }
       }, 1000);
     }
   };
