@@ -21,6 +21,7 @@ function Footer() {
           </div>
 
           <div>
+
             <a href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="facebook-f" />
             </a>
@@ -65,10 +66,10 @@ function Footer() {
                     Hướng dẫn mua hàng
                   </a>
                 </p>
-               
+
                 <p>
                   <a href="/tra-cuu-don-hang" className="text-reset">
-                  Tra cứu đơn hàng
+                    Tra cứu đơn hàng
                   </a>
                 </p>
                 <p>
@@ -81,7 +82,7 @@ function Footer() {
               <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
                   Chính sách mua hàng.
-                </h6>               
+                </h6>
                 <p>
                   <a href="/chinh-sach-bao-hanh" className="text-reset">
                     Chính sách bảo hành.
@@ -97,24 +98,34 @@ function Footer() {
                     Chính sách thanh toán.
                   </a>
                 </p>
-             
+
               </MDBCol>
 
               <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">Liên Hệ</h6>
                 <p>
-                  <MDBIcon color="secondary" icon="home" className="me-2" />
-                  300/6 Hà Huy Tập, Tân An, Tp. BMT.
+                  <i class="fas fa-map-location-dot"></i>
+                  <a href="https://www.google.com/maps/search/?api=1&query=300/6+Hà+Huy+Tập,+Tân+An,+Tp.+BMT"
+                    style={{ marginLeft: '5px', color: "#757575" }}>
+                    300/6 Hà Huy Tập, Tân An, Tp. BMT
+                  </a>
                 </p>
+
                 <p>
-                  <MDBIcon color="secondary" icon="envelope" className="me-3" />
-                  dinhminhshop@gmail.com
+                  <i class="fas fa-envelope"></i>
+                  <a href="mailto:dinhminhshop@gmail.com" style={{ marginLeft: '5px', color: "#757575" }}>
+                    dinhminhshop@gmail.com
+                  </a>
                 </p>
+
+
                 <p>
-                  <MDBIcon color="secondary" icon="phone" className="me-3" /> +
-                  01 234 567 88
+                  <i class="fas fa-phone"></i>  <a style={{ marginLeft: '5px', color: "#757575" }}>+ 01 234 567 88</a>
                 </p>
-                
+
+                <p>
+                  <i class="fab fa-facebook"></i><a style={{ marginLeft: '5px', color: "#757575" }} href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL">DINH MINH COMPUTER</a>
+                </p>
               </MDBCol>
             </MDBRow>
           </MDBContainer>
@@ -151,7 +162,7 @@ function Footer() {
         >
           ©Copyright 2023: -
           <a className="text-reset fw-bold" >
-             by DATN
+            by DATN
           </a>
         </div>
       </MDBFooter>
