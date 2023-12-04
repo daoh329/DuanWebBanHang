@@ -367,7 +367,8 @@ const App = () => {
       </div>
         )}
       <div className="logoweb">
-        <img alt="" style={{ objectFit: "cover" }} src={Hinh}></img>
+        <a href="/"> <img alt="" style={{ objectFit: "cover" }} src={Hinh}/></a>
+       
       </div>
       {!isAdminRoute && (
       <div className="menu-container">
