@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-import "./Cart.css";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
+import { Checkbox, Modal } from "antd";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+
+import "./Cart.css";
 import {
   decreaseProduct,
   deleteProductInCart,
   increaseProduct,
 } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
-import { Checkbox } from "antd";
-function formatCurrency(value) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
-}
+import { formatCurrency } from "../../util/FormatVnd";
+
+const { confirm } = Modal;
+
 function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
@@ -27,18 +26,29 @@ function Cart() {
 
   const handleCheckboxChange = (productId, color, capacity) => {
     // Kiểm tra xem sản phẩm đã được chọn chưa
-    const isSelected = selectedProducts.some(product =>
-      product.id === productId && product.color === color && product.capacity === capacity
+    const isSelected = selectedProducts.some(
+      (product) =>
+        product.id === productId &&
+        product.color === color &&
+        product.capacity === capacity
     );
 
     let updatedSelectedProducts;
 
     if (isSelected) {
       updatedSelectedProducts = selectedProducts.filter(
-        product => !(product.id === productId && product.color === color && product.capacity === capacity)
+        (product) =>
+          !(
+            product.id === productId &&
+            product.color === color &&
+            product.capacity === capacity
+          )
       );
     } else {
-      updatedSelectedProducts = [...selectedProducts, { id: productId, color, capacity }];
+      updatedSelectedProducts = [
+        ...selectedProducts,
+        { id: productId, color, capacity },
+      ];
     }
 
     setSelectedProducts(updatedSelectedProducts);
@@ -50,28 +60,35 @@ function Cart() {
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
 
-
-
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
   const handleSelectAllChange = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-  
+
     if (newSelectAll) {
-      const allProducts = cart.map((item) => ({id: item.id, color: item.color, capacity: item.capacity}));
+      const allProducts = cart.map((item) => ({
+        id: item.id,
+        color: item.color,
+        capacity: item.capacity,
+      }));
       setSelectedProducts(allProducts);
     } else {
       setSelectedProducts([]);
     }
-  
+
     // Lưu trạng thái selectAll và selectedProducts vào sessionStorage
     const checkboxData = {
       selectAll: newSelectAll,
-      selectedProducts: newSelectAll ? cart.map((item) => ({id: item.id, color: item.color, capacity: item.capacity})) : [],
+      selectedProducts: newSelectAll
+        ? cart.map((item) => ({
+            id: item.id,
+            color: item.color,
+            capacity: item.capacity,
+          }))
+        : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
-  
 
   useEffect(() => {
     // Kiểm tra nếu có dữ liệu trong sessionStorage
@@ -82,41 +99,68 @@ function Cart() {
         selectedProducts: savedSelectedProducts,
       } = JSON.parse(savedCheckboxData);
       setSelectAll(savedSelectAll);
-      setSelectedProducts(savedSelectedProducts.map(product => ({id: product.id, color: product.color, capacity: product.capacity})));
+      setSelectedProducts(
+        savedSelectedProducts.map((product) => ({
+          id: product.id,
+          color: product.color,
+          capacity: product.capacity,
+        }))
+      );
     }
   }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
-  
 
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) =>
-      selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
+      selectedProducts.some(
+        (product) =>
+          product.id === item.id &&
+          product.color === item.color &&
+          product.capacity === item.capacity
+      )
     );
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
       return acc + item.totalPrice;
     }, 0);
-  
+
     return total;
   };
-  
-  
+
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
-  
+
     // Cập nhật biến state tổng tiền
     setTotalPrice(total);
   }, [selectedProducts, cart]);
-  
+
   //xóa sp
   const removeFromCart = (productId, color, capacity) => {
     const data = {
       product_id: productId,
       color,
       capacity,
-    }
+    };
     dispatch(deleteProductInCart(data));
+  };
+
+  // Hàm show modal
+  const showDeleteConfirm = (productId, color, capacity) => {
+    confirm({
+      title: "Bạn chắc chắn muốn bỏ sản phẩm này?",
+      icon: <ExclamationCircleFilled />,
+      content: "Some descriptions",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        removeFromCart(productId, color, capacity);
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
@@ -124,25 +168,37 @@ function Cart() {
     const data = {
       product_id: productId,
       color,
-      capacity
+      capacity,
     };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
   };
+
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
   const decreaseQuantity = (productId, color, capacity) => {
-    const data = {
-      product_id: productId,
-      color,
-      capacity
-    };
-    // Cập nhật giỏ hàng
-    dispatch(decreaseProduct(data));
-    // Cập nhật tổng tiền
-    const total = calculateTotalPrice();
-    setTotalPrice(total);
+    const cartToUpdate = [...cart].find(
+      (product) =>
+        product.id === productId &&
+        product.color === color &&
+        product.capacity === capacity
+    );
+    if (cartToUpdate.quantity <= 1) {
+      showDeleteConfirm(productId, color, capacity);
+      return;
+    } else if (cartToUpdate.quantity > 1) {
+      const data = {
+        product_id: productId,
+        color,
+        capacity,
+      };
+      // Cập nhật giỏ hàng
+      dispatch(decreaseProduct(data));
+      // Cập nhật tổng tiền
+      const total = calculateTotalPrice();
+      setTotalPrice(total);
+    }
   };
 
   // const [selectedItems, setSelectedItems] = useState([]);
@@ -172,28 +228,32 @@ function Cart() {
     navigate(`/detail/${products.id}`);
   };
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;
-// Hàm xử lý khi nút "Tiếp tục" được ấn
-const handleContinueClick = () => {
-  // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
-  const selectedItems = cart.filter((item) =>
-    selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
-  );
-  // Tính tổng tiền của các sản phẩm được chọn
-  const total = calculateTotalPrice();
-  // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
-  const buys = {
-    selectedItems,
-    total,
+  // Hàm xử lý khi nút "Tiếp tục" được ấn
+  const handleContinueClick = () => {
+    // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
+    const selectedItems = cart.filter((item) =>
+      selectedProducts.some(
+        (product) =>
+          product.id === item.id &&
+          product.color === item.color &&
+          product.capacity === item.capacity
+      )
+    );
+    // Tính tổng tiền của các sản phẩm được chọn
+    const total = calculateTotalPrice();
+    // Tạo đối tượng chứa thông tin các sản phẩm và tổng tiền
+    const buys = {
+      selectedItems,
+      total,
+    };
+    // Lưu thông tin vào sessionStorage
+    sessionStorage.setItem("buys", JSON.stringify(buys));
+    // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
+    navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
   };
-  // Lưu thông tin vào sessionStorage
-  sessionStorage.setItem("buys", JSON.stringify(buys));
-  // Chuyển hướng đến trang tiếp theo (ví dụ: trang thanh toán)
-  navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
-};
-
 
   return (
     <div>
@@ -208,8 +268,8 @@ const handleContinueClick = () => {
                     <th scope="col">
                       <Checkbox
                         onChange={handleSelectAllChange}
-                        checked={selectAll}>
-                      </Checkbox>
+                        checked={selectAll}
+                      ></Checkbox>
                     </th>
                     <th scope="col">Hình</th>
                     <th scope="col">Sản Phẩm</th>
@@ -231,8 +291,19 @@ const handleContinueClick = () => {
                       <td>
                         <input
                           type="checkbox"
-                          checked={selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)}
-                          onChange={() => handleCheckboxChange(item.id, item.color, item.capacity)}
+                          checked={selectedProducts.some(
+                            (product) =>
+                              product.id === item.id &&
+                              product.color === item.color &&
+                              product.capacity === item.capacity
+                          )}
+                          onChange={() =>
+                            handleCheckboxChange(
+                              item.id,
+                              item.color,
+                              item.capacity
+                            )
+                          }
                         />
                       </td>
 
@@ -290,14 +361,26 @@ const handleContinueClick = () => {
                       <td style={{ display: "flex", justifyContent: "center" }}>
                         <div className="quantity-control">
                           <Link
-                            onClick={() => decreaseQuantity(item.id, item.color, item.capacity)}
+                            onClick={() =>
+                              decreaseQuantity(
+                                item.id,
+                                item.color,
+                                item.capacity
+                              )
+                            }
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-minus"></i>
                           </Link>
                           <span>{item.quantity}</span>
                           <Link
-                            onClick={() => increaseQuantity(item.id, item.color, item.capacity)}
+                            onClick={() =>
+                              increaseQuantity(
+                                item.id,
+                                item.color,
+                                item.capacity
+                              )
+                            }
                             className="quantity-button"
                           >
                             <i className="fa-solid fa-plus"></i>
@@ -317,7 +400,11 @@ const handleContinueClick = () => {
                       </td>
                       {/* btn delete product */}
                       <td>
-                        <Link onClick={() => removeFromCart(item.id, item.color, item.capacity)}>
+                        <Link
+                          onClick={() =>
+                            removeFromCart(item.id, item.color, item.capacity)
+                          }
+                        >
                           <i className="fa-solid fa-xmark"></i>
                         </Link>
                       </td>
