@@ -174,12 +174,12 @@ const App = () => {
             path="/profile"
             element={isLogin ? <Profile /> : <Navigate to="/" />}
           />
-          <Route path="/tat-ca-san-pham-laptop" element={<AllProduct />} />
+          <Route path="/tat-ca-san-pham-laptop" element={<AllNewProductLaptop />} />
           <Route
             path="/tat-ca-san-pham-laptop-moi"
             element={<AllNewProductLaptop />}
           />
-          <Route path="/tat-ca-san-pham-phone" element={<AllProductPhone />} />
+          <Route path="/tat-ca-san-pham-phone" element={<AllNewProductPhone />} />
           <Route
             path="/tat-ca-san-pham-phone-moi"
             element={<AllNewProductPhone />}

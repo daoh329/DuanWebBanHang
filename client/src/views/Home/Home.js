@@ -19,7 +19,8 @@ const Home = () => {
   const [newPhone, setNewphone] = useState([]);
   const [newLaptop, setNewLaptop] = useState([]);
   const navigate = useNavigate();
-  const initialTime = 111300;
+  
+  const saleEndTime = new Date(2023, 11, 18, 19, 0, 0); 
 
   //top 10 laptop bán chạy
   useEffect(() => {
@@ -433,7 +434,7 @@ const Home = () => {
           <TabPane tab="Tuần lễ giảm giá" key="1">
             <div className="scroll-control-phone" ref={containerRef}>
               <div>
-                <CountdownTimer initialTime={initialTime} />
+              <CountdownTimer endTime={saleEndTime} />
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
@@ -452,12 +453,12 @@ const Home = () => {
           <TabPane tab="Laptop bán chạy" key="2">
             <div className="scroll-control-phone" ref={containerRef}>
               <div>
-                <CountdownTimer initialTime={initialTime} />
+                
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop
-                  .slice(0, 5)
+                  .slice(0, 6)
                   .map((item, index) => (
                     <CardProduct
                       key={index}
@@ -471,12 +472,12 @@ const Home = () => {
           <TabPane tab="Điện thoại bán chạy" key="3">
             <div className="scroll-control-phone" ref={containerRef}>
               <div>
-                <CountdownTimer initialTime={initialTime} />
+               
               </div>
               {topDienthoai &&
                 topDienthoai.length > 0 &&
                 topDienthoai
-                  .slice(0, 5)
+                  .slice(0, 6)
                   .map((item, index) => (
                     <CardProduct
                       key={index}
