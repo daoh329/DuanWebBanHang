@@ -13,6 +13,7 @@ import {
 } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 import { formatCurrency } from "../../util/FormatVnd";
+import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
 
 const { confirm } = Modal;
 
@@ -150,10 +151,10 @@ function Cart() {
     confirm({
       title: "Bạn chắc chắn muốn bỏ sản phẩm này?",
       icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
+      centered: true,
       onOk() {
         removeFromCart(productId, color, capacity);
       },
@@ -205,26 +206,7 @@ function Cart() {
   // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
   const handleViewDetailProduct = (products) => {
-    // Kiểm tra xem 'id' có tồn tại hay không
-    if (!products.id) {
-      console.error("Product ID is undefined!");
-      return;
-    }
-    // Lấy danh sách các sản phẩm đã xem từ session storage
-    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    // Tạo đối tượng sản phẩm mới
-
-    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
-    const isViewed = historysp.some(
-      (product) => product.name === products.name
-    );
-    // Nếu sản phẩm mới chưa được xem
-    if (!isViewed) {
-      // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(products);
-      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
-      sessionStorage.setItem("products", JSON.stringify(historysp));
-    }
+    addToRecentlyViewedProduct(products);
     navigate(`/detail/${products.id}`);
   };
 

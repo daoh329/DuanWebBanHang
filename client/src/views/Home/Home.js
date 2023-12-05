@@ -9,6 +9,10 @@ import "./Home.scss";
 import CountdownTimer from "./CountdownTimer";
 import Chatbot from "../ChatBot/Chatbot";
 import CardProduct from "../Card/Card";
+import {
+  addToRecentlyViewedProduct,
+  getRecentlyViewedProducts,
+} from "../../util/servicesGlobal";
 const { TabPane } = Tabs;
 
 const Home = () => {
@@ -43,36 +47,17 @@ const Home = () => {
   }, []);
 
   const handleViewDetailProduct = (products) => {
-    // Kiểm tra xem 'id' có tồn tại hay không
-
-    if (!products.id) {
-      console.error("Product ID is undefined!");
-      return;
-    }
-    // Lấy danh sách các sản phẩm đã xem từ session storage
-    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    // Tạo đối tượng sản phẩm mới
-
-    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
-    const isViewed = historysp.some(
-      (product) => product.id === products.id
-    );
-    // Nếu sản phẩm mới chưa được xem
-    if (!isViewed) {
-      // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(products);
-      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
-      sessionStorage.setItem("products", JSON.stringify(historysp));
-    }
+    addToRecentlyViewedProduct(products);
     navigate(`/detail/${products.id}`);
   };
 
-  const [historysp, sethistorysp] = useState([]);
+  const [historysp, setHistorysp] = useState([]);
   useEffect(() => {
-    // Lấy giá trị từ session storage
-    const storedProducts = JSON.parse(sessionStorage.getItem("products")) || [];
+    // Lấy product id từ session storage
+    var arrProductId =
+      JSON.parse(sessionStorage.getItem("historyProductId")) || [];
     // Cập nhật state
-    sethistorysp(storedProducts);
+    getRecentlyViewedProducts(arrProductId, setHistorysp);
   }, []);
 
   // New phones
