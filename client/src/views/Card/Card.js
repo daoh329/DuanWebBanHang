@@ -13,14 +13,7 @@ function CardProduct(props) {
   const [variations, setVariations] = useState([]);
   const [discountOfPiceMin, setDiscountOfPiceMin] = useState(0);
   const [discountOfPiceMax, setDiscountOfPiceMax] = useState(0);
-  const [isBlinking, setIsBlinking] = useState(false);
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setIsBlinking((prev) => !prev);
-  //   }, 200); // Đổi số 500 thành thời gian mong muốn (milliseconds)
-  //   return () => clearInterval(intervalId); // Clear interval khi component unmount
-  // }, []);
 
   // useEffect(() => {
   //   const productsFilter = items && [...items].filter((data) => data.id === item.id);
@@ -176,7 +169,7 @@ function CardProduct(props) {
                     </span>
                     &nbsp;
                     <span
-                      className={`blinking-text ${isBlinking ? "blink" : ""}`}
+                      className="blinking-text"
                     >
                       -
                       {format_sale(
