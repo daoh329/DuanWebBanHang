@@ -9,7 +9,7 @@ import {
   MDBRow,
   MDBCol,
 } from "mdb-react-ui-kit";
-import { Button, Form, Input, Avatar, Table, message } from "antd";
+import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import axios from "axios";
 
 //hỗ trợ icon
@@ -183,33 +183,50 @@ export default function Profile() {
     }
   };
 
-  // Hàm hủy đơn hàng
   const handleCancelOrder = async (record) => {
-    if (record.order_id) {
-      try {
-        await axios.put(
-          `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`,
-          null,
-          { withCredentials: true }
-        );
-        CreateNotification(
-          record.user_id,
-          record.order_id,
-          "2",
-          "Hủy đơn hàng thành công",
-          `Đơn hàng ${record.order_id} của hạn đã được hủy thành công`
-        );
-        loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-      } catch (error) {
-        if (error.response.status === 401) {
-          NotificationBeenLoggedOut();
-        }
-        console.error("Error canceling order:", error);
-      }
-    } else {
-      console.error("Order ID is undefined:", record);
+    // Nếu paymentMenthod là 0 hoặc 2, hiển thị thông báo yêu cầu liên hệ để hủy đơn hàng
+    if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
+      Modal.confirm({
+        title: 'Yêu cầu hủy đơn hàng',
+        content: `Bạn đã thanh toán bằng ví điện tử nếu bạn muốn hủy đơn hàng, vui lòng liên hệ đến số 0338112099 để yêu cầu hoàn tiền và hủy đơn hàng.`,
+        okText: 'Đồng ý',
+        cancelButtonProps: { style: { display: 'none' } }, // Ẩn nút "Cancel"
+      });
+    // Nếu paymentMenthod là 1, hiển thị thông báo xác nhận hủy đơn hàng và thực hiện hủy nếu đồng ý
+    } else if (record.paymentMenthod === 1) {
+      Modal.confirm({
+        title: 'Xác nhận hủy đơn hàng',
+        content: `Bạn có chắc chắn muốn hủy đơn hàng ${record.order_id} không?`,
+        okText: 'Đồng ý',
+        cancelText: 'Không đồng ý',
+        onOk: async () => {
+          // Đặt logic hủy đơn hàng ở đây
+          if (record.order_id) {
+            try {
+              await axios.put(
+                `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`,
+                null,
+                { withCredentials: true }
+              );
+              CreateNotification(
+                record.user_id,
+                record.order_id,
+                "2",
+                "Hủy đơn hàng thành công",
+                `Đơn hàng ${record.order_id} của bạn đã được hủy thành công`
+              );
+              loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+            } catch (error) {
+              if (error.response && error.response.status === 401) {
+                NotificationBeenLoggedOut();
+              }
+            }
+          }
+        },
+      });
     }
   };
+  
 
   // Tạo state order để chuyển sang page order mỗi khi có dữ liệu
   const [order, setOrder] = useState(null);
@@ -320,14 +337,6 @@ export default function Profile() {
               onClick={() => handleCancelOrder(record)}
             >
               Hủy
-            </Button>
-          ) : record.order_status === 2 || record.order_status === 5 ? (
-            <Button
-              className="buy-again-button"
-              style={{ backgroundColor: "#33CCFF", color: "white" }}
-              onClick={() => handleConfirmOrder(record)}
-            >
-              Mua lại
             </Button>
           ) : null}
         </span>

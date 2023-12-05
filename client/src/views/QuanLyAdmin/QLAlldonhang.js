@@ -15,7 +15,7 @@ function QLAlldonhang() {
                 const sortedOrders = res.data
                     .sort((a, b) => {
                         // Sắp xếp theo thời gian tạo
-                        return new Date(b.order_created_at) - new Date(a.order_created_at);
+                        return new Date(b.order_updated_at) - new Date(a.order_updated_at);
                     });
 
                 setData(sortedOrders || []);
@@ -103,7 +103,7 @@ function QLAlldonhang() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold',
-                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                    color: status === 1 ? 'blue' : (status === 2 ? 'red' : 'red')
                 }}>
                     {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
                 </span>
