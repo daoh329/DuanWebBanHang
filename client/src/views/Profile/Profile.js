@@ -36,9 +36,20 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
+  const [form] = Form.useForm();
+  useEffect(() => {
+    // Đặt giá trị mặc định sau khi component được render
+    if (user) {
+      form.setFieldsValue({
+        name: user?.name,
+        phone: user?.phone,
+      });
+    }
+  }, [user, form]);
 
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
+  const [dataTable, setDataTable] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
   const [iconsActive, setIconsActive] = useState("tab1");
@@ -53,6 +64,16 @@ export default function Profile() {
       // lấy order_id, xác định đơn hàng và chuyển page
       const order_id = location.state?.order_id;
       handleOpenOrderInformations(order_id);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      const arrCopy = [...data];
+      arrCopy.forEach((item, index) => {
+        item.key = index;
+      });
+      setDataTable(arrCopy);
     }
   }, [data]);
 
@@ -88,7 +109,6 @@ export default function Profile() {
     loadData();
   }, [loadData]);
 
-  const [form] = Form.useForm();
   // Hàm được gọi khi submit update profile
   const onFinish = async (values) => {
     setIsLoading(true);
@@ -315,8 +335,6 @@ export default function Profile() {
     },
   ];
 
-  useEffect(() => {}, []);
-
   return (
     <>
       <MDBRow>
@@ -392,16 +410,18 @@ export default function Profile() {
                   form={form}
                   onFinish={onFinish}
                   style={{ maxWidth: 600 }}
-                  initialValues={{
-                    name: user.name,
-                    phone: user.phone,
-                  }}
                 >
                   {/* name */}
                   <Form.Item
                     name="name"
                     label="Họ tên"
                     tooltip="Bạn muốn chúng tôi gọi bạn như thế nào."
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập tên của bạn",
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
@@ -497,11 +517,11 @@ export default function Profile() {
                 {/* order informations */}
                 <MDBTabsContent>
                   <MDBTabsPane show={iconsActive === "tab1"}>
-                    {data.filter((order) => order.order_status === 0).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 0)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) => order.order_status === 0
                         )}
                       />
@@ -510,8 +530,8 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab2"}>
-                    {data.filter((order) => order.order_status === 1).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 1)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
                         dataSource={data.filter(
@@ -523,11 +543,11 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab3"}>
-                    {data.filter((order) => order.order_status === 3).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 3)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) => order.order_status === 3
                         )}
                       />
@@ -536,11 +556,11 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab4"}>
-                    {data.filter((order) => order.order_status === 4).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 4)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) => order.order_status === 4
                         )}
                       />
@@ -549,13 +569,13 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab5"}>
-                    {data.filter(
+                    {dataTable.filter(
                       (order) =>
                         order.order_status === 5 || order.order_status === 2
                     ).length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) =>
                             order.order_status === 5 || order.order_status === 2
                         )}
