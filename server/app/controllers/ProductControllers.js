@@ -128,8 +128,8 @@ class Product {
     }
   }
 
+  // API: /product/json
   async json(req, res) {
-    // API: /product/json
     const queryProduct = `
     SELECT 
     p.id,
@@ -137,6 +137,7 @@ class Product {
     p.status,
     p.shortDescription,
     p.release_date,
+    p.main_image,
     pd.brand,
     pd.quantity,
     pd.remaining_quantity,
@@ -169,7 +170,7 @@ class Product {
     FROM products as p
     JOIN productDetails as pd ON p.id = pd.product_id
     JOIN category ON p.CategoryID = category.id
-    GROUP BY p.id, p.name, p.status,
+    GROUP BY p.id, p.name, p.status, p.main_image,
     pd.brand, pd.quantity, pd.remaining_quantity, 
     p.shortDescription, pd.created_at, pd.configuration, pd.description, category.name;
     `;
