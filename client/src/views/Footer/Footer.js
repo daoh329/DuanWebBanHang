@@ -106,7 +106,7 @@ function Footer() {
                   <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                     <h6 className="text-uppercase fw-bold mb-4">Liên Hệ</h6>
                     <p>
-                      <i class="fas fa-map-location-dot"></i>
+                      <i className="fas fa-map-location-dot"></i>
                       <a href="https://www.google.com/maps/search/?api=1&query=300/6+Hà+Huy+Tập,+Tân+An,+Tp.+BMT" target="_blank"
                         style={{ marginLeft: '5px', color: "#757575" }}>
                         300/6 Hà Huy Tập, Tân An, Tp. BMT
@@ -114,7 +114,7 @@ function Footer() {
                     </p>
 
                     <p>
-                      <i class="fas fa-envelope"></i>
+                      <i className="fas fa-envelope"></i>
                       <a href="mailto:dinhminhcomputer@gmail.com" target="_blank"
                         style={{ marginLeft: '5px', color: "#757575" }}>
                         dinhminhcomputer@gmail.com
@@ -123,7 +123,7 @@ function Footer() {
 
 
                     <p>
-                      <i class="fas fa-phone"></i>
+                      <i className="fas fa-phone"></i>
                       <a href="tel:+0123456788" style={{ marginLeft: '5px', color: "#757575" }}>
                         + 01 234 567 88
                       </a>
@@ -131,7 +131,7 @@ function Footer() {
 
 
                     <p>
-                      <i class="fab fa-facebook"></i>
+                      <i className="fab fa-facebook"></i>
                       <a style={{ marginLeft: '5px', color: "#757575" }} href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL" target="_blank">
                         DINH MINH COMPUTER</a>
                     </p>

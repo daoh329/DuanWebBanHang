@@ -1,34 +1,24 @@
-import React, { Component } from 'react';
-import './Home.scss'
-class CountdownTimer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      timeLeft: props.initialTime, // Thời gian ban đầu (được đặt bởi props)
-    };
-  }
+import React, { useState, useEffect } from 'react';
+import './Home.scss';
 
-  componentDidMount() {
-    this.interval = setInterval(this.updateTimer, 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  updateTimer = () => {
-    if (this.state.timeLeft > 0) {
-      this.setState(prevState => ({
-        timeLeft: prevState.timeLeft - 1,
-      }));
-    } else {
-      clearInterval(this.interval);
-      // Xử lý khi đếm giờ kết thúc
-    }
+function CountdownTimer({ endTime }) {
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const difference = endTime - now;
+    return Math.floor(difference / 1000);
   };
 
-  // Hàm chuyển đổi số giây thành ngày - giờ - phút - giây
-  convertSecondsToTime = (seconds) => {
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [endTime]);
+
+  const convertSecondsToTime = (seconds) => {
     const days = Math.floor(seconds / (3600 * 24));
     seconds %= 3600 * 24;
     const hours = Math.floor(seconds / 3600);
@@ -44,28 +34,25 @@ class CountdownTimer extends Component {
     };
   };
 
-  render() {
-    const { timeLeft } = this.state;
-    const { days, hours, minutes, seconds } = this.convertSecondsToTime(timeLeft);
+  const { days, hours, minutes, seconds } = convertSecondsToTime(timeLeft);
 
-    return (
-      <div className='div_main_km'>
-        <p className='p_km'>Khuyến mãi còn lại:</p>
-      <div className='div_km'> 
-
-      <div className='div_ngay'>{days}  </div>
-      
-      <div className='div_gio'>{hours}  </div>
-      
-      <div className='div_phut'>{minutes}  </div>
-      
-      <div className='div_giay'>{seconds} </div>
-      
-      
-      </div>
-      </div>
-    );
-  }
+  return (
+    <div className='div_main_km'>
+      {timeLeft > 0 ? (
+        <>
+          <p className='p_km'>Khuyến mãi còn lại:</p>
+          <div className='div_km'> 
+            <div className='div_ngay'>{days}  </div>
+            <div className='div_gio'>{hours}  </div>
+            <div className='div_phut'>{minutes}  </div>
+            <div className='div_giay'>{seconds} </div>
+          </div>
+        </>
+      ) : (
+        <p className='p_km'>Giảm giá đã kết thúc</p>
+      )}
+    </div>
+  );
 }
 
 export default CountdownTimer;
