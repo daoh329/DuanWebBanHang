@@ -4,13 +4,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import FormInputCategory from './CategoryInputComponent';
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import FormInputCategory from "./CategoryInputComponent";
 
 function Category() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openModals, setOpenModals] = useState({});
-  const table = 'category';
+  const table = "category";
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -22,7 +22,7 @@ function Category() {
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/category`;
       try {
-        const res = await axios.post(url, values, {withCredentials: true});
+        const res = await axios.post(url, values, { withCredentials: true });
         if (res.status === 200) {
           setTimeout(() => {
             getCategories();
@@ -54,8 +54,18 @@ function Category() {
 
   const getCategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/List/${table}`, {withCredentials: true});
-      setCategory(response.data.results);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/List/${table}`,
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        const arrCopy = [...response.data.results];
+        arrCopy.forEach((item, index) => {
+          item.key = index + 1;
+        });
+        setCategory(arrCopy);
+      }
+      
     } catch (e) {
       console.log(e);
     }
@@ -84,11 +94,11 @@ function Category() {
   };
 
   const columns = [
-    { title: 'Tên danh mục', dataIndex: 'name', key: 'name' },
+    { title: "Tên danh mục", dataIndex: "name", key: "name" },
     {
-      title: 'Hành động',
-      dataIndex: 'name',
-      key: 'action',
+      title: "Hành động",
+      dataIndex: "name",
+      key: "action",
       render: (name, record) => (
         <div
           style={{
@@ -97,7 +107,9 @@ function Category() {
             justifyContent: "space-around",
           }}
         >
-          <Button className="confirm-button" onClick={() => handleUpdate(name)}><EditOutlined /> Edit </Button>
+          <Button className="confirm-button" onClick={() => handleUpdate(name)}>
+            <EditOutlined /> Edit{" "}
+          </Button>
 
           <Modal
             open={openModals[name]}
@@ -114,16 +126,22 @@ function Category() {
             okText="Yes"
             cancelText="No"
           >
-            <Button danger><DeleteOutlined /> Delete</Button>
+            <Button danger>
+              <DeleteOutlined /> Delete
+            </Button>
           </Popconfirm>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const handleDelete = async (name) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`, null, {withCredentials: true});
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
+        null,
+        { withCredentials: true }
+      );
       getCategories();
     } catch (error) {
       console.log(error);
@@ -161,11 +179,7 @@ function Category() {
             <button type="submit" className="btn-submit-form">
               Xác nhận
             </button>
-            <Modal
-              open={isModalOpen}
-              footer={null}
-              closeIcon={null}
-            >
+            <Modal open={isModalOpen} footer={null} closeIcon={null}>
               <Spin tip="Đang tải lên..." spinning={true}>
                 <div style={{ minHeight: "50px" }} className="content" />
               </Spin>

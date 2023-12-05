@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-
 import { Tag } from "antd";
+
+import "./Card.css";
 import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
 // import { formatCapacity } from "../../util/formatCapacity";
@@ -12,6 +13,14 @@ function CardProduct(props) {
   const [variations, setVariations] = useState([]);
   const [discountOfPiceMin, setDiscountOfPiceMin] = useState(0);
   const [discountOfPiceMax, setDiscountOfPiceMax] = useState(0);
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setIsBlinking((prev) => !prev);
+  //   }, 200); // Đổi số 500 thành thời gian mong muốn (milliseconds)
+  //   return () => clearInterval(intervalId); // Clear interval khi component unmount
+  // }, []);
 
   // useEffect(() => {
   //   const productsFilter = items && [...items].filter((data) => data.id === item.id);
@@ -19,6 +28,7 @@ function CardProduct(props) {
   // }, [items, item]);
 
   useEffect(() => {
+    // Nếu có nhiều biến thể
     // Lấy giá nhỏ nhất và lớn nhất
     const variations = item.variations;
     setVariations(variations);
@@ -45,6 +55,10 @@ function CardProduct(props) {
       );
       setDiscountOfPiceMin(variationOfPriceMin?.discount_amount);
       setDiscountOfPiceMax(variationOfPriceMax?.discount_amount);
+    }
+    // nếu chỉ có 1 biến thể
+    if (variations && variations.length === 1) {
+      setDiscountOfPiceMin(variations[0].discount_amount);
     }
   }, [item]);
 
@@ -137,47 +151,17 @@ function CardProduct(props) {
         ) : (
           // Nếu còn sản phẩm
           <div>
-            {variations && [...variations].length === 1 ? (
+            {variations && (
               // Nếu chỉ có một biến thể
               <>
-              {/* Giá mới */}
-              <div style={{ textAlign: "left" }} className="show-discount">
-                {formatCurrency(
-                  variations[0]?.price - variations[0]?.discount_amount
-                )}
-              </div>
-              {/* Giá cũ */}
-              {variations[0]?.discount_amount > 0 && (
-                <div
-                  style={{
-                    color: "gray",
-                    display: "-webkit-box",
-                    fontSize: "12px",
-                    lineHeight: "12px",
-                    fontWeight: "normal",
-                  }}
-                >
-                  <span style={{ textDecoration: "line-through" }}>
-                    {formatCurrency(variations[0]?.price)}
-                  </span>
-                  &nbsp;
-                  <span style={{ color: "#1435c3" }}>
-                    -{format_sale(variations[0]?.price, variations[0]?.discount_amount)}
-                  </span>
-                </div>
-              )}
-              </>
-            ) : (
-              // Nếu có nhiều biến thể
-              <>
                 {/* Giá mới */}
-                <div className="show-discount">
-                  {formatCurrency(priceMin - discountOfPiceMin)}
-                  {" - "}
-                  {formatCurrency(priceMax - discountOfPiceMax)}
+                <div style={{ textAlign: "left" }} className="show-discount">
+                  {formatCurrency(
+                    variations[0]?.price - variations[0]?.discount_amount
+                  )}
                 </div>
                 {/* Giá cũ */}
-                {discountOfPiceMin > 0 && (
+                {variations[0]?.discount_amount > 0 && (
                   <div
                     style={{
                       color: "gray",
@@ -188,11 +172,17 @@ function CardProduct(props) {
                     }}
                   >
                     <span style={{ textDecoration: "line-through" }}>
-                      {formatCurrency(priceMin)}
+                      {formatCurrency(variations[0]?.price)}
                     </span>
                     &nbsp;
-                    <span style={{ color: "#1435c3" }}>
-                      -{format_sale(priceMin, discountOfPiceMin)}
+                    <span
+                      className={`blinking-text ${isBlinking ? "blink" : ""}`}
+                    >
+                      -
+                      {format_sale(
+                        variations[0]?.price,
+                        variations[0]?.discount_amount
+                      )}
                     </span>
                   </div>
                 )}

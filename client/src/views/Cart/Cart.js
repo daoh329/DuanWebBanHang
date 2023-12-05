@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-import "./Cart.css";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
+import { Checkbox, Modal } from "antd";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+
+import "./Cart.css";
 import {
   decreaseProduct,
   deleteProductInCart,
   increaseProduct,
 } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
-import { Checkbox } from "antd";
+import { formatCurrency } from "../../util/FormatVnd";
 import EmptyCart from "./EmptyCart ";
-function formatCurrency(value) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
-}
+
+const { confirm } = Modal;
+
 function Cart() {
   const navigate = useNavigate();
   // Lấy dữ liệu từ session
@@ -31,9 +30,9 @@ function Cart() {
     const isSelected = selectedProducts.some(product =>
       product.id === productId && product.color === color && product.capacity === capacity
     );
-  
+
     let updatedSelectedProducts;
-  
+
     if (isSelected) {
       updatedSelectedProducts = selectedProducts.filter(
         product => !(product.id === productId && product.color === color && product.capacity === capacity)
@@ -41,18 +40,18 @@ function Cart() {
     } else {
       updatedSelectedProducts = [...selectedProducts, { id: productId, color, capacity }];
     }
-  
+
     setSelectedProducts(updatedSelectedProducts);
-  
+
     // Kiểm tra xem tất cả sản phẩm đã được chọn hay chưa
     const allProductsSelected = cart.every(item =>
       updatedSelectedProducts.some(product =>
         product.id === item.id && product.color === item.color && product.capacity === item.capacity
       )
     );
-  
+
     setSelectAll(allProductsSelected);
-  
+
     // Lưu trạng thái checkbox vào sessionStorage
     const checkboxData = {
       selectAll: allProductsSelected,
@@ -60,8 +59,6 @@ function Cart() {
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
-  
-
 
 
   // Hàm này được gọi khi checkbox "Chọn tất cả" thay đổi trạng thái
@@ -70,7 +67,11 @@ function Cart() {
     setSelectAll(newSelectAll);
 
     if (newSelectAll) {
-      const allProducts = cart.map((item) => ({ id: item.id, color: item.color, capacity: item.capacity }));
+      const allProducts = cart.map((item) => ({
+        id: item.id,
+        color: item.color,
+        capacity: item.capacity,
+      }));
       setSelectedProducts(allProducts);
     } else {
       setSelectedProducts([]);
@@ -79,11 +80,16 @@ function Cart() {
     // Lưu trạng thái selectAll và selectedProducts vào sessionStorage
     const checkboxData = {
       selectAll: newSelectAll,
-      selectedProducts: newSelectAll ? cart.map((item) => ({ id: item.id, color: item.color, capacity: item.capacity })) : [],
+      selectedProducts: newSelectAll
+        ? cart.map((item) => ({
+          id: item.id,
+          color: item.color,
+          capacity: item.capacity,
+        }))
+        : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
-
 
   useEffect(() => {
     // Kiểm tra nếu có dữ liệu trong sessionStorage
@@ -94,15 +100,25 @@ function Cart() {
         selectedProducts: savedSelectedProducts,
       } = JSON.parse(savedCheckboxData);
       setSelectAll(savedSelectAll);
-      setSelectedProducts(savedSelectedProducts.map(product => ({ id: product.id, color: product.color, capacity: product.capacity })));
+      setSelectedProducts(
+        savedSelectedProducts.map((product) => ({
+          id: product.id,
+          color: product.color,
+          capacity: product.capacity,
+        }))
+      );
     }
-  }, []); 
-
+  }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
 
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
     const selectedItems = cart.filter((item) =>
-      selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
+      selectedProducts.some(
+        (product) =>
+          product.id === item.id &&
+          product.color === item.color &&
+          product.capacity === item.capacity
+      )
     );
     // Tính tổng tiền của các sản phẩm được chọn
     const total = selectedItems.reduce((acc, item) => {
@@ -111,7 +127,6 @@ function Cart() {
 
     return total;
   };
-
 
   useEffect(() => {
     // Tính tổng tiền của các sản phẩm được chọn
@@ -127,8 +142,26 @@ function Cart() {
       product_id: productId,
       color,
       capacity,
-    }
+    };
     dispatch(deleteProductInCart(data));
+  };
+
+  // Hàm show modal
+  const showDeleteConfirm = (productId, color, capacity) => {
+    confirm({
+      title: "Bạn chắc chắn muốn bỏ sản phẩm này?",
+      icon: <ExclamationCircleFilled />,
+      content: "Some descriptions",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        removeFromCart(productId, color, capacity);
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
@@ -136,25 +169,37 @@ function Cart() {
     const data = {
       product_id: productId,
       color,
-      capacity
+      capacity,
     };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
   };
+
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
   const decreaseQuantity = (productId, color, capacity) => {
-    const data = {
-      product_id: productId,
-      color,
-      capacity
-    };
-    // Cập nhật giỏ hàng
-    dispatch(decreaseProduct(data));
-    // Cập nhật tổng tiền
-    const total = calculateTotalPrice();
-    setTotalPrice(total);
+    const cartToUpdate = [...cart].find(
+      (product) =>
+        product.id === productId &&
+        product.color === color &&
+        product.capacity === capacity
+    );
+    if (cartToUpdate.quantity <= 1) {
+      showDeleteConfirm(productId, color, capacity);
+      return;
+    } else if (cartToUpdate.quantity > 1) {
+      const data = {
+        product_id: productId,
+        color,
+        capacity,
+      };
+      // Cập nhật giỏ hàng
+      dispatch(decreaseProduct(data));
+      // Cập nhật tổng tiền
+      const total = calculateTotalPrice();
+      setTotalPrice(total);
+    }
   };
 
   // const [selectedItems, setSelectedItems] = useState([]);
@@ -191,7 +236,12 @@ function Cart() {
   const handleContinueClick = () => {
     // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
     const selectedItems = cart.filter((item) =>
-      selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)
+      selectedProducts.some(
+        (product) =>
+          product.id === item.id &&
+          product.color === item.color &&
+          product.capacity === item.capacity
+      )
     );
     // Tính tổng tiền của các sản phẩm được chọn
     const total = calculateTotalPrice();
@@ -206,26 +256,24 @@ function Cart() {
     navigate("/buy"); // Điều này đòi hỏi bạn đã cấu hình routing cho trang thanh toán
   };
 
-
   return (
     <div>
       <div className="style-cart">
         <div className="fle-x">
           {cart.length > 0 ? (
             <>
+
               <div className="mo-ta">
                 <div className="title-mo">Giỏ hàng</div>
-
                 <div className="khoi-tiet-cha">
-
                   <MDBTable borderless>
                     <MDBTableHead light>
                       <tr>
                         <th scope="col">
                           <Checkbox
                             onChange={handleSelectAllChange}
-                            checked={selectAll}>
-                          </Checkbox>
+                            checked={selectAll}
+                          ></Checkbox>
                         </th>
                         <th scope="col">Hình</th>
                         <th scope="col">Sản Phẩm</th>
@@ -247,8 +295,19 @@ function Cart() {
                           <td>
                             <input
                               type="checkbox"
-                              checked={selectedProducts.some(product => product.id === item.id && product.color === item.color && product.capacity === item.capacity)}
-                              onChange={() => handleCheckboxChange(item.id, item.color, item.capacity)}
+                              checked={selectedProducts.some(
+                                (product) =>
+                                  product.id === item.id &&
+                                  product.color === item.color &&
+                                  product.capacity === item.capacity
+                              )}
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  item.id,
+                                  item.color,
+                                  item.capacity
+                                )
+                              }
                             />
                           </td>
 
@@ -306,14 +365,26 @@ function Cart() {
                           <td style={{ display: "flex", justifyContent: "center" }}>
                             <div className="quantity-control">
                               <Link
-                                onClick={() => decreaseQuantity(item.id, item.color, item.capacity)}
+                                onClick={() =>
+                                  decreaseQuantity(
+                                    item.id,
+                                    item.color,
+                                    item.capacity
+                                  )
+                                }
                                 className="quantity-button"
                               >
                                 <i className="fa-solid fa-minus"></i>
                               </Link>
                               <span>{item.quantity}</span>
                               <Link
-                                onClick={() => increaseQuantity(item.id, item.color, item.capacity)}
+                                onClick={() =>
+                                  increaseQuantity(
+                                    item.id,
+                                    item.color,
+                                    item.capacity
+                                  )
+                                }
                                 className="quantity-button"
                               >
                                 <i className="fa-solid fa-plus"></i>
@@ -333,7 +404,11 @@ function Cart() {
                           </td>
                           {/* btn delete product */}
                           <td>
-                            <Link onClick={() => removeFromCart(item.id, item.color, item.capacity)}>
+                            <Link
+                              onClick={() =>
+                                removeFromCart(item.id, item.color, item.capacity)
+                              }
+                            >
                               <i className="fa-solid fa-xmark"></i>
                             </Link>
                           </td>
@@ -341,10 +416,10 @@ function Cart() {
                       ))}
                     </MDBTableBody>
                   </MDBTable>
-
                 </div>
               </div>
               <div className="chi-tiet-cart">
+
                 <div className="title-thanh">Thanh Toán</div>
                 <div className="khoi-tiet-cha">
                   <MDBTable className="table-tiet" borderless>
@@ -379,4 +454,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default Cart;  

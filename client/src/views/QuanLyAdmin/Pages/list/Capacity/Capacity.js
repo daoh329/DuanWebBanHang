@@ -18,7 +18,11 @@ function Capacity() {
         withCredentials: true,
       })
       .then((response) => {
-        setCapacities(response.data.results);
+        const arrCopy = [...response.data.results];
+        for (let i = 0; i < arrCopy.length; i++) {
+          arrCopy[i].key = i + 1;
+        }
+        setCapacities(arrCopy);
       })
       .catch((e) => {
         console.log(e);
@@ -39,7 +43,7 @@ function Capacity() {
     } catch (error) {
       if (error.response.status === 401) {
         NotificationBeenLoggedOut();
-      }else {
+      } else {
         console.log(error);
         message.error("Xóa thất bại");
       }
