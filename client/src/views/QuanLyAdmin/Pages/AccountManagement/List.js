@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Space, Select, Input, Button, Tooltip } from "antd";
+import { Table, Space, Input, Button, Tooltip, message, Tag } from "antd";
 import axios from "axios";
 import {
   SearchOutlined,
   ReloadOutlined,
   CloseOutlined,
+  LockOutlined,
+  UnlockOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
@@ -55,6 +58,7 @@ function AccountList() {
     setSearchText("");
   };
 
+  // Hàm search filter
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -109,41 +113,65 @@ function AccountList() {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
+    // render: (text) =>
+    //   searchedColumn === dataIndex ? (
+    //     <Highlighter
+    //       highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+    //       searchWords={[searchText]}
+    //       autoEscape
+    //       textToHighlight={text ? text.toString() : ""}
+    //     />
+    //   ) : (
+    //     text
+    //   ),
   });
+
+  const handleLockAccount = (accoutId) => {
+    message.info("Tính năng sẽ được hoàn thiện trong thời gian tới");
+    // console.log("accoutId: ", accoutId);
+  };
+
+  const handleDeleteAccount = (accoutId) => {
+    message.info("Tính năng sẽ được hoàn thiện trong thời gian tới");
+    // console.log("accoutId: ", accoutId);
+  };
 
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      width: "5%",
     },
     {
       title: "Tên",
       dataIndex: "name",
       key: "name",
+      width: "18%",
       ...getColumnSearchProps("name"),
+      render: (name, record) => (
+        <Tooltip title={name}>
+          <p className="table-text-column">{name}</p>
+        </Tooltip>
+      ),
     },
     {
       title: "Số điện thoại",
       dataIndex: "phone",
       key: "phone",
+      width: "10%",
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      width: "22%",
       ...getColumnSearchProps("email"),
+      render: (email, record) => (
+        <Tooltip title={email}>
+          <p className="table-text-column">{email}</p>
+        </Tooltip>
+      ),
     },
     {
       title: "Quyền",
@@ -152,12 +180,52 @@ function AccountList() {
         { text: "Admin", value: "admin" },
         { text: "Người dùng", value: "user" },
       ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
+      width: "8%",
       onFilter: (value, record) => record.permission.indexOf(value) === 0,
+    },
+    {
+      title: "Trạng thái",
+      key: "status",
+      dataIndex: "status",
+      width: "10%",
+      render: (status) => (
+        <Tag color={status === 1 ? "success" : "error"}>
+          {status === 1 ? "Đang hoạt động" : "Bị khóa"}
+        </Tag>
+      ),
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      // width: "10%",
+      render: (_, record) => (
+        <div>
+          <Tooltip
+            title={
+              record?.status === 1 ? "Khóa tài khoản" : "Mở khóa tài khoản"
+            }
+          >
+            <Button
+              onClick={() => handleLockAccount(record.id)}
+              icon={
+                record?.status === 1 ? <LockOutlined /> : <UnlockOutlined />
+              }
+              style={{ margin: "0 10px 0 0" }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa tài khoản">
+            <Button
+              onClick={() => handleDeleteAccount(record.id)}
+              danger
+              icon={<DeleteOutlined />}
+            />
+          </Tooltip>
+        </div>
+      ),
     },
   ];
 
+  // reload data
   const start = () => {
     setIsLoadingTable(true);
     setTimeout(() => {
@@ -177,6 +245,7 @@ function AccountList() {
         </Space>
       </div>
       <Table
+        bordered={true}
         dataSource={accountList}
         columns={columns}
         loading={isLoadingTable}
