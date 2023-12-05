@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -43,19 +43,39 @@ function QLdelivered() {
         }
     };
 
-    // Hàm giao hàng không thành công
     const handleFailed = async (record) => {
         if (record.order_id) {
-            try {
-                await axios.put(`${process.env.REACT_APP_API_URL}/order/deliveryfailed/${record.order_id}`);
-                loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-            } catch (error) {
-                console.error("Error delivered order:", error);
+            if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
+                // Hiển thị thông báo cho phương thức thanh toán ví điện tử
+                Modal.confirm({
+                    title: 'Xác nhận',
+                    content: 'Bạn đã xử lý đơn hàng thanh toán bằng ví điện tử?',
+                    okText: 'Đã xử lý',
+                    cancelText: 'Chưa xử lý',
+                    onOk: async () => {
+                        // Thực hiện hành động nếu đã xử lý
+                        try {
+                            await axios.put(`${process.env.REACT_APP_API_URL}/order/deliveryfailed/${record.order_id}`);
+                            loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
+                        } catch (error) {
+                            console.error("Error delivered order:", error);
+                        }
+                    },
+                });
+            } else {
+                // Thực hiện hành động giao hàng không thành công cho các phương thức thanh toán khác
+                try {
+                    await axios.put(`${process.env.REACT_APP_API_URL}/order/deliveryfailed/${record.order_id}`);
+                    loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
+                } catch (error) {
+                    console.error("Error delivered order:", error);
+                }
             }
         } else {
             console.error("Order ID is undefined:", record);
         }
     };
+    
 
     const handleOpenOrderInformations = (order_id) => {
         // Lấy dữ liệu đơn hàng dựa trên order_id
@@ -101,7 +121,7 @@ function QLdelivered() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                    color: status === 1 ? 'blue' : (status === 2 ? 'red' : 'red')
                 }}>
                     {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
                 </span>
