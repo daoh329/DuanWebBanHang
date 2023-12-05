@@ -27,35 +27,17 @@ function Footer() {
               </div>
 
               <div>
-                <a
-                  href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL"
-                  className="me-4 text-reset"
-                >
-                  <MDBIcon color="secondary" fab icon="facebook-f" />
+                <a href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL" className="me-4 text-reset" target="_blank">
+                  <MDBIcon color="secondary" fab icon="facebook" />
                 </a>
-                <a
-                  href="https://twitter.com/fpl_tn_minh"
-                  className="me-4 text-reset"
-                >
-                  <MDBIcon color="secondary" fab icon="twitter" />
+                <a href="mailto:dinhminhshop@gmail.com" className="me-4 text-reset" >
+                  <MDBIcon color="secondary" fas icon="envelope" />
                 </a>
-                {/* <a href="" className="me-4 text-reset">
-                <MDBIcon color="secondary" fab icon="google" />
-              </a> */}
-                <a
-                  href="https://www.instagram.com/minhnguyen.2032/"
-                  className="me-4 text-reset"
-                >
-                  <MDBIcon color="secondary" fab icon="instagram" />
+                <a href="tel:+0123456788" className="me-4 text-reset">
+                  <MDBIcon color="secondary" fas icon="phone" />
                 </a>
-                {/* <a href="" className="me-4 text-reset">
-                <MDBIcon color="secondary" fab icon="linkedin" />
-              </a> */}
-                <a
-                  href="https://github.com/MinhPK02434"
-                  className="me-4 text-reset"
-                >
-                  <MDBIcon color="secondary" fab icon="github" />
+                <a href="https://www.google.com/maps/search/?api=1&query=300/6+Hà+Huy+Tập,+Tân+An,+Tp.+BMT" className="me-4 text-reset" target="_blank">
+                  <MDBIcon color="secondary" fas icon="map-marker-alt" />
                 </a>
               </div>
             </section>
@@ -124,24 +106,34 @@ function Footer() {
                   <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                     <h6 className="text-uppercase fw-bold mb-4">Liên Hệ</h6>
                     <p>
-                      <MDBIcon color="secondary" icon="home" className="me-2" />
-                      300/6 Hà Huy Tập, Tân An, Tp. BMT.
+                      <i class="fas fa-map-location-dot"></i>
+                      <a href="https://www.google.com/maps/search/?api=1&query=300/6+Hà+Huy+Tập,+Tân+An,+Tp.+BMT" target="_blank"
+                        style={{ marginLeft: '5px', color: "#757575" }}>
+                        300/6 Hà Huy Tập, Tân An, Tp. BMT
+                      </a>
                     </p>
+
                     <p>
-                      <MDBIcon
-                        color="secondary"
-                        icon="envelope"
-                        className="me-3"
-                      />
-                      dinhminhshop@gmail.com
+                      <i class="fas fa-envelope"></i>
+                      <a href="mailto:dinhminhcomputer@gmail.com" target="_blank"
+                        style={{ marginLeft: '5px', color: "#757575" }}>
+                        dinhminhcomputer@gmail.com
+                      </a>
                     </p>
+
+
                     <p>
-                      <MDBIcon
-                        color="secondary"
-                        icon="phone"
-                        className="me-3"
-                      />{" "}
-                      + 01 234 567 88
+                      <i class="fas fa-phone"></i>
+                      <a href="tel:+0123456788" style={{ marginLeft: '5px', color: "#757575" }}>
+                        + 01 234 567 88
+                      </a>
+                    </p>
+
+
+                    <p>
+                      <i class="fab fa-facebook"></i>
+                      <a style={{ marginLeft: '5px', color: "#757575" }} href="https://www.facebook.com/profile.php?id=61552136980563&mibextid=ZbWKwL" target="_blank">
+                        DINH MINH COMPUTER</a>
                     </p>
                   </MDBCol>
                 </MDBRow>

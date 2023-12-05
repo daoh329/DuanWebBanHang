@@ -419,7 +419,7 @@ const Home = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           // borderRadius: "20px",
-          marginTop: "30px",
+          marginTop: "100px",
         }}
       >
         <Tabs
