@@ -52,21 +52,29 @@ function Color() {
 
   const [color, setColor] = useState([]);
 
+  useEffect(() => {
+    getColors();
+  }, []);
+
   const getColors = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/List/colors`,
         { withCredentials: true }
       );
-      setColor(response.data.results);
+      if (response.status === 200) {
+        const arrCopy = [...response.data.results];
+        arrCopy.forEach((item, index) => {
+          item.key = index + 1;
+        })
+        setColor(response.data.results);
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    getColors();
-  }, []);
+
 
   const handleUpdate = (name) => {
     setOpenModals({

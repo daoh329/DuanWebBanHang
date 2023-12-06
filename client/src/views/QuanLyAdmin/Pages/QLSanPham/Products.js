@@ -17,7 +17,11 @@ function Product() {
         withCredentials: true,
       })
       .then((res) => {
-        setProduct(res.data);
+        const arrCopy = [...res.data];
+        arrCopy.forEach((item) => {
+          item.key = item.id;
+        });
+        setProduct(arrCopy);
       })
       .catch((error) => console.log(error));
   };

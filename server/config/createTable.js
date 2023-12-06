@@ -113,7 +113,8 @@ const createTables = () => {
     name varchar(255),
     phone varchar(255),
     email varchar(255) UNIQUE,
-    permission varchar(50)
+    permission varchar(50),
+    status boolean DEFAULT 1
   );`;
   const delivery_address = `CREATE TABLE IF NOT EXISTS delivery_address (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -149,7 +150,7 @@ const createTables = () => {
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    type text NOT NULL,  
+    type text NOT NULL,
     is_read BOOLEAN DEFAULT 0
   );`;
 

@@ -1,5 +1,6 @@
 import _ from "lodash";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // ========= UTIL
 // so sánh 2 object (Chỉ so sánh các phần tử ở cấp đầu tiên)
@@ -46,5 +47,47 @@ export const checkLogin = async () => {
     } else {
       return false;
     }
+  }
+};
+// add recently viewed product id
+export const addToRecentlyViewedProduct = (products) => {
+  // Kiểm tra xem 'id' có tồn tại hay không
+  if (!products.id) {
+    console.error("Product ID is undefined!");
+    return;
+  }
+  // Lấy danh sách các sản phẩm đã xem từ session storage
+  var historysp =
+    JSON.parse(sessionStorage.getItem("historyProductId")) || [];
+  if (typeof historysp === "number") {
+    historysp = [historysp];
+  }
+  // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+  const isViewed = historysp === products.id;
+  // Nếu sản phẩm mới chưa được xem
+  if (!isViewed) {
+    // Thêm đối tượng sản phẩm mới vào cuối danh sách
+    historysp.push(products.id);
+    // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+    sessionStorage.setItem("historyProductId", JSON.stringify(historysp));
+  }
+};
+// get recently viewed products
+export const getRecentlyViewedProducts = async (product_id, setHistorysp) => {
+  if (!Array.isArray(product_id)) {
+    return [];
+  }
+  try {
+    const url = `${process.env.REACT_APP_API_URL}/product/json`;
+    const results = await axios.get(url, { withCredentials: true });
+    const data = [];
+    [...product_id].forEach((id) => {
+      const dataFinded = [...results.data].find((item) => item.id === id);
+      data.push(dataFinded);
+    });
+    setHistorysp(data);
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 };

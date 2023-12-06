@@ -74,7 +74,13 @@ function Brand() {
         `${process.env.REACT_APP_API_URL}/List/${table}`,
         { withCredentials: true }
       );
-      setBrand(response.data.results);
+      if (response.status === 200) {
+        const arrCopy = [...response.data.results];
+        for (let i = 0; i < arrCopy.length; i++) {
+          arrCopy[i].key = i+1;
+        }
+        setBrand(arrCopy);
+      }
     } catch (e) {
       console.log(e);
     }

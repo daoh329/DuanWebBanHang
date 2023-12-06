@@ -9,7 +9,7 @@ import {
   MDBRow,
   MDBCol,
 } from "mdb-react-ui-kit";
-import { Button, Form, Input, Avatar, Table, message } from "antd";
+import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import axios from "axios";
 
 //hỗ trợ icon
@@ -36,9 +36,20 @@ export default function Profile() {
   const tab = location.state?.tab;
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
+  const [form] = Form.useForm();
+  useEffect(() => {
+    // Đặt giá trị mặc định sau khi component được render
+    if (user) {
+      form.setFieldsValue({
+        name: user?.name,
+        phone: user?.phone,
+      });
+    }
+  }, [user, form]);
 
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
+  const [dataTable, setDataTable] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [verticalActive, setVerticalActive] = useState(tab ? tab : "tab1");
   const [iconsActive, setIconsActive] = useState("tab1");
@@ -53,6 +64,16 @@ export default function Profile() {
       // lấy order_id, xác định đơn hàng và chuyển page
       const order_id = location.state?.order_id;
       handleOpenOrderInformations(order_id);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      const arrCopy = [...data];
+      arrCopy.forEach((item, index) => {
+        item.key = index;
+      });
+      setDataTable(arrCopy);
     }
   }, [data]);
 
@@ -88,7 +109,6 @@ export default function Profile() {
     loadData();
   }, [loadData]);
 
-  const [form] = Form.useForm();
   // Hàm được gọi khi submit update profile
   const onFinish = async (values) => {
     setIsLoading(true);
@@ -163,33 +183,50 @@ export default function Profile() {
     }
   };
 
-  // Hàm hủy đơn hàng
   const handleCancelOrder = async (record) => {
-    if (record.order_id) {
-      try {
-        await axios.put(
-          `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`,
-          null,
-          { withCredentials: true }
-        );
-        CreateNotification(
-          record.user_id,
-          record.order_id,
-          "2",
-          "Hủy đơn hàng thành công",
-          `Đơn hàng ${record.order_id} của hạn đã được hủy thành công`
-        );
-        loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-      } catch (error) {
-        if (error.response.status === 401) {
-          NotificationBeenLoggedOut();
-        }
-        console.error("Error canceling order:", error);
-      }
-    } else {
-      console.error("Order ID is undefined:", record);
+    // Nếu paymentMenthod là 0 hoặc 2, hiển thị thông báo yêu cầu liên hệ để hủy đơn hàng
+    if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
+      Modal.confirm({
+        title: 'Yêu cầu hủy đơn hàng',
+        content: `Bạn đã thanh toán bằng ví điện tử nếu bạn muốn hủy đơn hàng, vui lòng liên hệ đến số 0338112099 để yêu cầu hoàn tiền và hủy đơn hàng.`,
+        okText: 'Đồng ý',
+        cancelButtonProps: { style: { display: 'none' } }, // Ẩn nút "Cancel"
+      });
+    // Nếu paymentMenthod là 1, hiển thị thông báo xác nhận hủy đơn hàng và thực hiện hủy nếu đồng ý
+    } else if (record.paymentMenthod === 1) {
+      Modal.confirm({
+        title: 'Xác nhận hủy đơn hàng',
+        content: `Bạn có chắc chắn muốn hủy đơn hàng ${record.order_id} không?`,
+        okText: 'Đồng ý',
+        cancelText: 'Không đồng ý',
+        onOk: async () => {
+          // Đặt logic hủy đơn hàng ở đây
+          if (record.order_id) {
+            try {
+              await axios.put(
+                `${process.env.REACT_APP_API_URL}/order/cancelorder/${record.order_id}`,
+                null,
+                { withCredentials: true }
+              );
+              CreateNotification(
+                record.user_id,
+                record.order_id,
+                "2",
+                "Hủy đơn hàng thành công",
+                `Đơn hàng ${record.order_id} của bạn đã được hủy thành công`
+              );
+              loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+            } catch (error) {
+              if (error.response && error.response.status === 401) {
+                NotificationBeenLoggedOut();
+              }
+            }
+          }
+        },
+      });
     }
   };
+  
 
   // Tạo state order để chuyển sang page order mỗi khi có dữ liệu
   const [order, setOrder] = useState(null);
@@ -301,21 +338,11 @@ export default function Profile() {
             >
               Hủy
             </Button>
-          ) : record.order_status === 2 || record.order_status === 5 ? (
-            <Button
-              className="buy-again-button"
-              style={{ backgroundColor: "#33CCFF", color: "white" }}
-              onClick={() => handleConfirmOrder(record)}
-            >
-              Mua lại
-            </Button>
           ) : null}
         </span>
       ),
     },
   ];
-
-  useEffect(() => {}, []);
 
   return (
     <>
@@ -392,16 +419,18 @@ export default function Profile() {
                   form={form}
                   onFinish={onFinish}
                   style={{ maxWidth: 600 }}
-                  initialValues={{
-                    name: user.name,
-                    phone: user.phone,
-                  }}
                 >
                   {/* name */}
                   <Form.Item
                     name="name"
                     label="Họ tên"
                     tooltip="Bạn muốn chúng tôi gọi bạn như thế nào."
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập tên của bạn",
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
@@ -497,11 +526,11 @@ export default function Profile() {
                 {/* order informations */}
                 <MDBTabsContent>
                   <MDBTabsPane show={iconsActive === "tab1"}>
-                    {data.filter((order) => order.order_status === 0).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 0)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) => order.order_status === 0
                         )}
                       />
@@ -510,8 +539,8 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab2"}>
-                    {data.filter((order) => order.order_status === 1).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 1)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
                         dataSource={data.filter(
@@ -523,11 +552,11 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab3"}>
-                    {data.filter((order) => order.order_status === 3).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 3)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) => order.order_status === 3
                         )}
                       />
@@ -536,11 +565,11 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab4"}>
-                    {data.filter((order) => order.order_status === 4).length >
-                    0 ? (
+                    {dataTable.filter((order) => order.order_status === 4)
+                      .length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) => order.order_status === 4
                         )}
                       />
@@ -549,13 +578,13 @@ export default function Profile() {
                     )}
                   </MDBTabsPane>
                   <MDBTabsPane show={iconsActive === "tab5"}>
-                    {data.filter(
+                    {dataTable.filter(
                       (order) =>
                         order.order_status === 5 || order.order_status === 2
                     ).length > 0 ? (
                       <Table
                         columns={columns}
-                        dataSource={data.filter(
+                        dataSource={dataTable.filter(
                           (order) =>
                             order.order_status === 5 || order.order_status === 2
                         )}
