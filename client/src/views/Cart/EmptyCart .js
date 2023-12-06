@@ -13,7 +13,7 @@ const EmptyCart = () => {
             </span>
           }
         >
-          <Button style={{ marginTop: '16px' }} o href='/'>
+          <Button style={{ marginTop: '16px' }} href='/'>
             Mua sắm ngay
           </Button>
         </Empty>

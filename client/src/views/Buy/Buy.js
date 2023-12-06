@@ -521,7 +521,7 @@ export default function Buy() {
                     </MDBTabsItem> */}
                   </MDBTabs>
 
-                  <MDBTabsContent>
+                  <MDBTabsContent style={{padding:'20px'}}>
                     <MDBTabsPane show={fillActive === "tab1"}>
                       <h6 style={{ marginTop: "10px" }}>Thông tin nhận hàng</h6>
                       <div className="address-group">
