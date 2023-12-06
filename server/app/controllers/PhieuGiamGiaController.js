@@ -1,97 +1,113 @@
 const { query } = require("../../util/callbackToPromise");
 
 class PhieuGiamGia {
+   // Add discount code
    async add(req, res) {
       const data = req.body;
       try {
+         // Update query with new column names and data types
          const insertQuery = `
-          INSERT INTO discount_code (name, value_vnd, value_percent, start_date, end_date)
-          VALUES (?, ?, ?, ?, ?)
-        `;
+         INSERT INTO discount_code (content, value_vnd, value_percent, start_date, end_date)
+         VALUES (?, ?, ?, ?, ?)
+       `;
          const insertValues = [
-            data.name,
+            data.content,
             data.value_vnd,
             data.value_percent,
             data.start_date,
             data.end_date,
          ];
-         const result = await query(insertQuery, insertValues);
-         res.status(200).send("success");
+         await query(insertQuery, insertValues);
+         res.status(200).send("Discount code added successfully");
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
       }
    }
-   async setStaus(req, res) {
+
+   // Set discount code end date current
+   async setEnd(req, res) {
       const { id } = req.params;
       try {
+         // Update query to update status column
          const updateQuery = `
-       UPDATE discount_code
-       SET status = 'fault'
-       WHERE id = ?`;
-         const result = await query(updateQuery, [id]);
-         res.status(200).send("Status set to 'fault'");
+         UPDATE discount_code
+         SET end_date = Now()
+         WHERE id = ?
+       `;
+         await query(updateQuery, [id]);
+         res.status(200).send("Discount code set End");
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
       }
    }
+
+   // Update discount code
    async update(req, res) {
       const { id } = req.params;
       const data = req.body;
       try {
+         // Update query with new column names and data types
          const updateQuery = `
-          UPDATE discount_code
-          SET 
-            name = ?,
-            value_vnd = ?,
-            value_percent = ?,
-            start_date = ?,
-            end_date = ?
-          WHERE id = ?
-        `;
+         UPDATE discount_code
+         SET
+           content = ?,
+           value_vnd = ?,
+           value_percent = ?,
+           start_date = ?,
+           end_date = ?
+         WHERE id = ?
+       `;
          const updateValues = [
-            data.name,
+            data.content,
             data.value_vnd,
             data.value_percent,
             data.start_date,
             data.end_date,
             id,
          ];
-         const result = await query(updateQuery, updateValues);
+         await query(updateQuery, updateValues);
          res.status(200).send("Discount code updated successfully");
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
       }
    }
+
+   // Get all discount codes
    async get(req, res) {
       try {
+         // Select all columns from the updated table
          const getQuery = `
-          SELECT * FROM discount_code
-        `;
-         const result = await query(getQuery);
-         if (result.length > 0) {
-            res.status(200).json(result);
+         SELECT *
+         FROM discount_code
+       `;
+         const results = await query(getQuery);
+         if (results.length > 0) {
+            res.status(200).json(results);
          } else {
-            res.status(404).send("Discount code not found");
+            res.status(404).send("No discount codes found");
          }
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
       }
    }
+
+   // Add product to discount code
    async addSanPhamOnDiscountCode(req, res) {
-      const { sanpham_id, discountCode_id } = req.body;
+      const { products_id, discountCode_id } = req.body;
 
       try {
+         // Use new table name and column names
          const insertQuery = `
-          INSERT INTO sanpham_discountCode (sanpham_id, discountCode_id)
-          VALUES (?, ?)
-        `;
-         const insertValues = [sanpham_id, discountCode_id];
+         INSERT INTO sanpham_discountCode (products_id, discountCode_id)
+         VALUES (?, ?)
+       `;
+         const insertValues = [products_id, discountCode_id];
 
-         const result = await query(insertQuery, insertValues);
+         await query(insertQuery, insertValues);
 
          res.status(200).send("Product added to Discount Code successfully");
       } catch (error) {
@@ -99,6 +115,8 @@ class PhieuGiamGia {
          res.status(500).send("Internal Server Error");
       }
    }
+
+   // Remove product from discount code
    async deleteSanPhamOnDiscountCode(req, res) {
       const { sanpham_id, discountCode_id } = req.body;
 
@@ -117,44 +135,44 @@ class PhieuGiamGia {
          res.status(500).send("Internal Server Error");
       }
    }
+   // Get all products associated with a discount code
    async getSanPhamOnDiscountCode(req, res) {
+      const { discountCode_id } = req.params;
       try {
+         // Use new table name and column names
          const getQuery = `
-          SELECT * FROM sanpham_discountCode
-        `;
-         const result = await query(getQuery);
-
-         res.status(200).json(result);
+       SELECT *
+       FROM sanpham_discountCode
+       WHERE discountCode_id = ?
+     `;
+         const results = await query(getQuery, [discountCode_id]);
+         if (results.length > 0) {
+            res.status(200).json(results);
+         } else {
+            res.status(404).send("No products associated with this discount code");
+         }
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
       }
    }
+
+   // Get all products associated with a product
    async getSanPhamOnDiscountCodeByIdSanPham(req, res) {
+      const { sanpham_id } = req.params;
       try {
-         const sanphamId = req.params.id;
+         // Use new table name and column names
          const getQuery = `
-          SELECT * FROM sanpham_discountCode
-          WHERE sanpham_id = ?
-        `;
-         const result = await query(getQuery, [sanphamId]);
-
-         res.status(200).json(result);
-      } catch (error) {
-         console.error(error);
-         res.status(500).send("Internal Server Error");
-      }
-   }
-   async getSanPhamOnDiscountCodeByIdDiscountCode(req, res) {
-      try {
-         const discountCodeId = req.params.id;
-         const getQuery = `
-          SELECT * FROM sanpham_discountCode
-          WHERE discountCode_id = ?
-        `;
-         const result = await query(getQuery, [discountCodeId]);
-
-         res.status(200).json(result);
+       SELECT *
+       FROM sanpham_discountCode
+       WHERE sanpham_id = ?
+     `;
+         const results = await query(getQuery, [sanpham_id]);
+         if (results.length > 0) {
+            res.status(200).json(results);
+         } else {
+            res.status(404).send("No products associated with this product");
+         }
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
