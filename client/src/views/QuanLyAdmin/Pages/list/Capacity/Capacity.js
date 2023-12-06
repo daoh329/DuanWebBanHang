@@ -80,8 +80,8 @@ function Capacity() {
     },
   ];
   return (
-    <div style={{ padding: "0 100px 0 50px" }}>
-      <h3 style={{ fontWeight: "bold" }}>Capacity</h3>
+    <div style={{ padding: "0 100px 0 50px" , backgroundColor:'white', borderRadius:'5px', marginTop:'10px'}}>
+      <h3 style={{ fontWeight: "bold", paddingTop:'10px' }}>Capacity</h3>
       <Table columns={columns} dataSource={capacities} />
     </div>
   );

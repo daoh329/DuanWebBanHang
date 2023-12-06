@@ -46,15 +46,15 @@ const DashboardRevenue = () => {
 
   return (
     <>
-      <div style={{ marginRight: '10px', }}>
+      <div >
 
-        <div style={{ backgroundColor: 'white', borderRadius: "10px" }}>
+        <div style={{ backgroundColor: 'white', borderRadius: "5px" }}>
 
 
-          <h4 style={{ textAlign: 'center', paddingTop:'10px' }}>Biểu đồ doanh thu từng ngày trong tháng</h4>
+          <h4 style={{ padding:'20px 0px 10px 20px' }}>Biểu đồ doanh thu từng ngày trong tháng</h4>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <LineChart
-              width={1000}
+              width={1100}
               height={500}
               data={revenueDate}
               margin={{
@@ -74,13 +74,13 @@ const DashboardRevenue = () => {
             </LineChart>
           </div>
         </div>
-        <div style={{ backgroundColor: 'white', borderRadius: "10px" }}>
+        <div style={{ backgroundColor: 'white', borderRadius: "5px" }}>
 
 
-          <h4 style={{ textAlign: 'center', marginTop: '20px' , paddingTop:'10px'}}>Biểu đồ doanh thu từng tháng</h4>
+          <h4 style={{ marginTop: '10px' , padding: '20px 0px 0px 20px'}}>Biểu đồ doanh thu từng tháng</h4>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <LineChart
-              width={1000}
+              width={1100}
               height={500}
               data={revenue}
               margin={{

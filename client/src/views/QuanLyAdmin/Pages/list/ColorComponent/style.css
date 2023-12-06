@@ -7,7 +7,6 @@
 }
 
 .container-content{
-    background: #f1f1f1;
     min-height: 100vh;
     display: flex;
     justify-content: flex-start;
@@ -42,6 +41,7 @@
     width: 45%;
     height: max-content;
     margin-top: 0;
+    padding: 0 10px 0 10px;
 }
 
 .page2-control{

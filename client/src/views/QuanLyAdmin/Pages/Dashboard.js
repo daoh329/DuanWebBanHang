@@ -48,11 +48,11 @@ const Dashboard = () => {
 
   return (
     <>
-      <div style={{ marginRight: '10px', }}>
-        <div style={{ backgroundColor: 'white', borderRadius: "10px" }}>
-          <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong ngày</h4>
+      <div>
+        <div style={{ backgroundColor: 'white', borderRadius: "5px" }}>
+          <h4 style={{ padding: '20px 0px 0px 20px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong ngày</h4>
           <div style={{ display: 'flex', justifyContent: 'center', }}>
-            <BarChart width={1000} height={500} data={orderDate}>
+            <BarChart width={1100} height={500} data={orderDate}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis domain={[0, 100]} />
@@ -64,10 +64,10 @@ const Dashboard = () => {
 
         </div>
 
-        <div style={{ backgroundColor: 'white', borderRadius: "10px" }}>
-          <h4 style={{ textAlign: 'center', marginTop: '20px', paddingTop: '10px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong tháng</h4>
+        <div style={{ backgroundColor: 'white', borderRadius: "5px" }}>
+          <h4 style={{  marginTop: '20px', padding: '20px 0px 0px 20px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong tháng</h4>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <BarChart width={1000} height={500} data={data}>
+            <BarChart width={1100} height={500} data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis domain={[0, 200]} />
