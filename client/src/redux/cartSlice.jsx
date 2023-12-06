@@ -35,7 +35,7 @@ export const cartSlice = createSlice({
         brand,
         shortDescription,
         discount,
-        remaining_quantity
+        remaining_quantity,
       } = action.payload;
       // Tìm sản phẩm có cùng id, color và capacity trong cart để update
       const productUpdate = [...state.products].find(

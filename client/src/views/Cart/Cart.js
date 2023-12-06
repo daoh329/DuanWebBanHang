@@ -29,10 +29,12 @@ function Cart() {
   // Lấy dữ liệu từ redux
   const cart = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
+  const [productsOfCartBD, setProductOfCartDB] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [arrDisable, setArrDisable] = useState([]);
-  
+  const [checkQuantityChange, setCheckQuantityChange] = useState(false);
+
   // Hàm show modal delete product
   const showDeleteConfirm = (productId, color, capacity) => {
     confirm({
@@ -56,15 +58,83 @@ function Cart() {
     confirm({
       title: "Thông báo!",
       icon: <ExclamationCircleFilled />,
-      content:"Chúng tôi đã điều chỉnh lại số lượng một số sản phẩm do số lượng sản phẩm còn lại không đủ so với số lượng trong giỏ hàng của bạn",
+      content:
+        "Chúng tôi đã điều chỉnh lại số lượng một số sản phẩm do số lượng sản phẩm còn lại không đủ so với số lượng trong giỏ hàng của bạn",
       centered: true,
-      footer:false
+      footer: false,
+      maskClosable: true,
     });
   };
 
+  const checkDisable = (arrDisable, productId, color, capacity) => {
+    const result = [...arrDisable].some(
+      (item) =>
+        item.productId === productId &&
+        item.color === color &&
+        item.capacity === capacity
+    );
+    return result;
+  };
+
+  // Set disable Button (+) sp to cart when start
+  useEffect(() => {
+    if (productsOfCartBD.length !== 0 && cart.length !== 0) {
+      [...productsOfCartBD].forEach((product) => {
+        [...cart].forEach((item) => {
+          if (
+            product.id === item.id &&
+            product.variations.color === item.color &&
+            product.variations.capacity === item.capacity &&
+            product.variations.remaining_quantity_variant === item.quantity
+          ) {
+            // Kiểm tra xem btn có đang bị tắt không
+            if (!checkDisable(arrDisable, item.id, item.color, item.capacity)) {
+              // Nếu không bị tắt thì thực hiện tắt
+              setArrDisable((prevArrDisable) => [
+                ...prevArrDisable,
+                {
+                  productId: item.id,
+                  color: item.color,
+                  capacity: item.capacity,
+                },
+              ]);
+            }
+          } else if (
+            product.id === item.id &&
+            product.variations.color === item.color &&
+            product.variations.capacity === item.capacity &&
+            product.variations.remaining_quantity_variant > item.quantity
+          ) {
+            // Kiểm tra xem btn có đang bị tắt không
+            if (checkDisable(arrDisable, item.id, item.color, item.capacity)) {
+              const newArr = arrDisable.filter(
+                (v) =>
+                  !(
+                    v.productId === item.id &&
+                    v.color === item.color &&
+                    v.capacity === item.capacity
+                  )
+              );
+              setArrDisable(newArr);
+            }
+          }
+        });
+      });
+    }
+  }, [productsOfCartBD, cart]);
+
+  // Bật thông báo nếu số lượng còn lại ít hơn trong giỏ hàng
+  // và đã cập nhật số lượng trong giỏ hàng bằng số lượng còn lại
+  useEffect(() => {
+    if (checkQuantityChange) {
+      showAutoChangeQuantity();
+      setCheckQuantityChange(false);
+    }
+  }, [checkQuantityChange]);
+
   useEffect(() => {
     updateCart();
-  }, []);
+  }, [cart]);
 
   // cập nhật giỏ hàng khi onClick to Cart
   const updateCart = async () => {
@@ -82,9 +152,9 @@ function Cart() {
         }
       }
       const api = `${process.env.REACT_APP_API_URL}/product/cart`;
-      const results = await axios.post(api, arrId);
-      if (results.status === 200) {
+      await axios.post(api, arrId).then((results) => {
         const products = results.data;
+        setProductOfCartDB(products);
         for (let i = 0; i < products.length; i++) {
           const newItem = {
             id: products[i].id,
@@ -99,35 +169,24 @@ function Cart() {
             remaining_quantity:
               products[i].variations.remaining_quantity_variant,
           };
-          [...cart].forEach((item) => {
+          [...cart].forEach((product) => {
             if (
-              (item.id === newItem.id &&
-                item.color === newItem.color &&
-                item.capacity === newItem.capacity) &&
-              item.quantity > newItem.remaining_quantity
+              product.id === newItem.id &&
+              product.color === newItem.color &&
+              product.capacity === newItem.capacity &&
+              product.quantity > newItem.remaining_quantity
             ) {
-              showAutoChangeQuantity();
+              setCheckQuantityChange(true);
             }
           });
+
           // Cập nhật giỏ hàng tại redux
-          // dispatch(updateProductCart(newItem));
+          dispatch(updateProductCart(newItem));
         }
-        return;
-      }
-      throw new Error("get product cart faild");
+      });
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const checkDisable = (arrDisable, productId, color, capacity) => {
-    const result = [...arrDisable].some(
-      (item) =>
-        item.productId === productId &&
-        item.color === color &&
-        item.capacity === capacity
-    );
-    return result;
   };
 
   const handleCheckboxChange = (productId, color, capacity) => {
@@ -261,43 +320,45 @@ function Cart() {
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = async (productId, color, capacity) => {
+    updateCart();
     const data = {
       product_id: productId,
       color,
       capacity,
     };
-    const url = `${process.env.REACT_APP_API_URL}/product/${productId}/variant`;
-    await axios
-      .post(url, data, { withCredentials: true })
-      .then((results) => {
-        const remaining_quantity = results.data[0].remaining_quantity_variant;
-        const cartToUpdate = [...cart].find(
-          (product) =>
-            product.id === productId &&
-            product.color === color &&
-            product.capacity === capacity
-        );
-        if (cartToUpdate && remaining_quantity) {
-          if (remaining_quantity - cartToUpdate.quantity > 1) {
-            dispatch(increaseProduct(data));
-            // Cập nhật tổng tiền
-            const total = calculateTotalPrice();
-            setTotalPrice(total);
-          } else if (remaining_quantity - cartToUpdate.quantity === 1) {
-            dispatch(increaseProduct(data));
-            // Cập nhật tổng tiền
-            const total = calculateTotalPrice();
-            setTotalPrice(total);
-            // setIsDisableIncreaseQuantity(true);
-            const dataDisable = [...arrDisable];
-            dataDisable.push({ productId, color, capacity });
-            setArrDisable(dataDisable);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    dispatch(increaseProduct(data));
+    // Cập nhật tổng tiền
+    const total = calculateTotalPrice();
+    setTotalPrice(total);
+    // const url = `${process.env.REACT_APP_API_URL}/product/${productId}/variant`;
+    // await axios
+    //   .post(url, data, { withCredentials: true })
+    //   .then((results) => {
+    //     const remaining_quantity = results.data[0].remaining_quantity_variant;
+    //     const cartToUpdate = [...cart].find(
+    //       (product) =>
+    //         product.id === productId &&
+    //         product.color === color &&
+    //         product.capacity === capacity
+    //     );
+    //     if (cartToUpdate && remaining_quantity) {
+    //       if (remaining_quantity - cartToUpdate.quantity > 1) {
+
+    //       } else if (remaining_quantity - cartToUpdate.quantity === 1) {
+    //         dispatch(increaseProduct(data));
+    //         // Cập nhật tổng tiền
+    //         const total = calculateTotalPrice();
+    //         setTotalPrice(total);
+    //         // setIsDisableIncreaseQuantity(true);
+    //         const dataDisable = [...arrDisable];
+    //         dataDisable.push({ productId, color, capacity });
+    //         setArrDisable(dataDisable);
+    //       }
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
@@ -317,47 +378,52 @@ function Cart() {
         color,
         capacity,
       };
-      const url = `${process.env.REACT_APP_API_URL}/product/${productId}/variant`;
-      await axios
-        .post(url, data, { withCredentials: true })
-        .then((results) => {
-          const remaining_quantity = results.data[0].remaining_quantity_variant;
-          if (cartToUpdate && remaining_quantity) {
-            // Cập nhật giỏ hàng
-            dispatch(decreaseProduct(data));
-            // Cập nhật tổng tiền
-            const total = calculateTotalPrice();
-            setTotalPrice(total);
-            if (remaining_quantity - (cartToUpdate.quantity - 1) === 0) {
-              // Nếu sản phẩm còn lại bằng sản phẩm trong giỏ hàng
-              // Thực hiện tắt btn
-              const dataDisable = [...arrDisable];
-              dataDisable.push({ productId, color, capacity });
-              setArrDisable(dataDisable);
-            } else if (remaining_quantity - (cartToUpdate.quantity - 1) > 0) {
-              // Nếu sản phẩm còn lại lớn hơn sản phẩm trong giỏ hàng
-              // Thực hiện bật btn
-              const dataDisable = [...arrDisable];
-              // Kiểm tra xem btn có đang bị tắt không
-              if (checkDisable(dataDisable, productId, color, capacity)) {
-                const newData = dataDisable.find(
-                  (item) =>
-                    item.productId !== productId &&
-                    item.color !== color &&
-                    item.capacity !== capacity
-                );
-                if (newData) {
-                  setArrDisable([newData]);
-                } else {
-                  setArrDisable([]);
-                }
-              }
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      // Cập nhật giỏ hàng
+      dispatch(decreaseProduct(data));
+      // Cập nhật tổng tiền
+      const total = calculateTotalPrice();
+      setTotalPrice(total);
+      // const url = `${process.env.REACT_APP_API_URL}/product/${productId}/variant`;
+      // await axios
+      //   .post(url, data, { withCredentials: true })
+      //   .then((results) => {
+      //     const remaining_quantity = results.data[0].remaining_quantity_variant;
+      //     if (cartToUpdate && remaining_quantity) {
+      //       // Cập nhật giỏ hàng
+      //       dispatch(decreaseProduct(data));
+      //       // Cập nhật tổng tiền
+      //       const total = calculateTotalPrice();
+      //       setTotalPrice(total);
+      //       if (remaining_quantity - (cartToUpdate.quantity - 1) === 0) {
+      //         // Nếu sản phẩm còn lại bằng sản phẩm trong giỏ hàng
+      //         // Thực hiện tắt btn
+      //         const dataDisable = [...arrDisable];
+      //         dataDisable.push({ productId, color, capacity });
+      //         setArrDisable(dataDisable);
+      //       } else if (remaining_quantity - (cartToUpdate.quantity - 1) > 0) {
+      //         // Nếu sản phẩm còn lại lớn hơn sản phẩm trong giỏ hàng
+      //         // Thực hiện bật btn
+      //         const dataDisable = [...arrDisable];
+      //         // Kiểm tra xem btn có đang bị tắt không
+      //         if (checkDisable(dataDisable, productId, color, capacity)) {
+      //           const newData = dataDisable.find(
+      //             (item) =>
+      //               item.productId !== productId &&
+      //               item.color !== color &&
+      //               item.capacity !== capacity
+      //           );
+      //           if (newData) {
+      //             setArrDisable([newData]);
+      //           } else {
+      //             setArrDisable([]);
+      //           }
+      //         }
+      //       }
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     }
   };
 
