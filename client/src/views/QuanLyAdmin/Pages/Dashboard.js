@@ -22,9 +22,9 @@ const Dashboard = () => {
         console.error('Error fetching data: ', error);
       }
     };
-  
+
     fetchData();
-  }, []);  
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
@@ -41,37 +41,45 @@ const Dashboard = () => {
         console.error('Error fetching data: ', error);
       }
     };
-  
+
     fetch();
   }, []);
-  
+
 
   return (
     <>
-    <h4 style={{textAlign: 'center'}}>Biểu đồ số lượng từng sản phẩm đã giao trong ngày</h4>
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <BarChart width={1200} height={500} data={orderDate}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis domain={[0, 100]} />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="Total_Quantity" fill="#33CCFF" barSize={40}/>
-      </BarChart>
-    </div>
+      <div style={{ marginRight: '10px', }}>
+        <div style={{ backgroundColor: 'white', borderRadius: "10px" }}>
+          <h4 style={{ textAlign: 'center', paddingTop: '10px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong ngày</h4>
+          <div style={{ display: 'flex', justifyContent: 'center', }}>
+            <BarChart width={1000} height={500} data={orderDate}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Total_Quantity" fill="#33CCFF" barSize={40} />
+            </BarChart>
+          </div>
 
+        </div>
 
-    <h4 style={{textAlign: 'center', marginTop: '50px'}}>Biểu đồ số lượng từng sản phẩm đã giao trong tháng</h4>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <BarChart width={1200} height={500} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis domain={[0, 200]} />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="Total_Quantity" fill="#33CCFF" barSize={40}/>
-        </BarChart>
+        <div style={{ backgroundColor: 'white', borderRadius: "10px" }}>
+          <h4 style={{ textAlign: 'center', marginTop: '20px', paddingTop: '10px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong tháng</h4>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <BarChart width={1000} height={500} data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 200]} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Total_Quantity" fill="#33CCFF" barSize={40} />
+            </BarChart>
+          </div>
+        </div>
+
       </div>
+
     </>
   );
 };
