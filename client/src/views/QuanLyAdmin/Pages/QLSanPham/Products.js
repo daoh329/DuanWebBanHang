@@ -100,9 +100,8 @@ function Product() {
   ];
 
   return (
-    <div>
-      <br />
-      <h1>Quản lý Sản Phẩm</h1>
+    <div style={{backgroundColor:'white', borderRadius:'5px', padding:'0px 10px 0px 10px'}}>
+      <h1 style={{ paddingTop:'10px' }}>Quản lý Sản Phẩm</h1>
       <Table columns={columns} dataSource={Product} />
     </div>
   );
