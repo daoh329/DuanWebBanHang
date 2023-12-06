@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Layout, Carousel, Tabs, Pagination } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import "./Home.scss";
 import CountdownTimer from "./CountdownTimer";
@@ -16,6 +17,7 @@ import {
 const { TabPane } = Tabs;
 
 const Home = () => {
+  const user = useSelector((state) => state.user);
   const [productsLaptop, setProductsLaptop] = useState([]);
   const [productsPhone, setProductsPhone] = useState([]);
   const [topLaptop, setTopLaptop] = useState([]);
@@ -23,8 +25,8 @@ const Home = () => {
   const [newPhone, setNewphone] = useState([]);
   const [newLaptop, setNewLaptop] = useState([]);
   const navigate = useNavigate();
-  
-  const saleEndTime = new Date(2023, 11, 18, 19, 0, 0); 
+
+  const saleEndTime = new Date(2023, 11, 18, 19, 0, 0);
 
   //top 10 laptop bán chạy
   useEffect(() => {
@@ -48,18 +50,23 @@ const Home = () => {
   }, []);
 
   const handleViewDetailProduct = (products) => {
-    addToRecentlyViewedProduct(products);
-    navigate(`/detail/${products.id}`);
+    if (user) {
+      addToRecentlyViewedProduct(products, user.id);
+      navigate(`/detail/${products.id}`);
+    }
   };
 
   const [historysp, setHistorysp] = useState([]);
   useEffect(() => {
-    // Lấy product id từ session storage
-    var arrProductId =
-      JSON.parse(localStorage.getItem("historyProductId")) || [];
-    // Cập nhật state
-    getRecentlyViewedProducts(arrProductId, setHistorysp);
-  }, []);
+    // Lấy product id từ localStorage
+    if (user) {
+      var historysp =
+        JSON.parse(localStorage.getItem("historyProductId")) || {};
+      if (Object.keys(historysp).length > 0) {
+        getRecentlyViewedProducts(historysp, setHistorysp);
+      }
+    }
+  }, [user]);
 
   // New phones
   useEffect(() => {
@@ -419,7 +426,7 @@ const Home = () => {
           <TabPane tab="Tuần lễ giảm giá" key="1">
             <div className="scroll-control-phone" ref={containerRef}>
               <div>
-              <CountdownTimer endTime={saleEndTime} />
+                <CountdownTimer endTime={saleEndTime} />
               </div>
               {topLaptop &&
                 topLaptop.length > 0 &&
@@ -437,9 +444,7 @@ const Home = () => {
           {/* Laptop bán chạy */}
           <TabPane tab="Laptop bán chạy" key="2">
             <div className="scroll-control-phone" ref={containerRef}>
-              <div>
-                
-              </div>
+              <div></div>
               {topLaptop &&
                 topLaptop.length > 0 &&
                 topLaptop
@@ -456,9 +461,7 @@ const Home = () => {
           {/* Điện thoại bán chạy */}
           <TabPane tab="Điện thoại bán chạy" key="3">
             <div className="scroll-control-phone" ref={containerRef}>
-              <div>
-               
-              </div>
+              <div></div>
               {topDienthoai &&
                 topDienthoai.length > 0 &&
                 topDienthoai

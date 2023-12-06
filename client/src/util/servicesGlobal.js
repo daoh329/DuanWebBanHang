@@ -50,44 +50,44 @@ export const checkLogin = async () => {
   }
 };
 // add recently viewed product id
-export const addToRecentlyViewedProduct = (products) => {
-  // Kiểm tra xem 'id' có tồn tại hay không
-  if (!products.id) {
-    console.error("Product ID is undefined!");
-    return;
-  }
-  // Lấy danh sách các sản phẩm đã xem từ session storage
-  var historysp =
-    JSON.parse(sessionStorage.getItem("historyProductId")) || [];
-  if (typeof historysp === "number") {
-    historysp = [historysp];
-  }
-  // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
-  const isViewed = historysp === products.id;
-  // Nếu sản phẩm mới chưa được xem
-  if (!isViewed) {
-    // Thêm đối tượng sản phẩm mới vào cuối danh sách
-    historysp.push(products.id);
-    // Lưu trữ danh sách các sản phẩm đã xem vào session storage
+export const addToRecentlyViewedProduct = (products, user_id) => {
+  // Lấy danh sách các sản phẩm đã xem từ localStorage
+  var historysp = JSON.parse(localStorage.getItem("historyProductId")) || {};
+  // Kiểm tra xem lịch sử sản phẩm xem đã có dữ liệu chưa
+  if (Object.keys(historysp).length === 0) {
+    // Nếu chưa thì tạo dữ liệu mới
+    historysp.userId = user_id;
+    historysp.productIds = [products.id];
     localStorage.setItem("historyProductId", JSON.stringify(historysp));
+    // logic code
+  } else if (Object.keys(historysp).length > 0) {
+    // Nếu có thì thêm dữ liệu mới
+    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
+    const isViewed = [...historysp.productIds].find(
+      (item) => item === products.id
+    );
+    // Nếu sản phẩm mới chưa được xem
+    if (!isViewed) {
+      // Thêm đối tượng sản phẩm mới vào cuối danh sách
+      historysp.productIds.push(products.id);
+      // Lưu trữ danh sách các sản phẩm đã xem vào localStorage
+      localStorage.setItem("historyProductId", JSON.stringify(historysp));
+    }
   }
 };
 // get recently viewed products
-export const getRecentlyViewedProducts = async (product_id, setHistorysp) => {
-  if (!Array.isArray(product_id)) {
-    return [];
-  }
+export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
   try {
     const url = `${process.env.REACT_APP_API_URL}/product/json`;
     const results = await axios.get(url, { withCredentials: true });
     const data = [];
-    [...product_id].forEach((id) => {
+    [...historysp.productIds].forEach((id) => {
       const dataFinded = [...results.data].find((item) => item.id === id);
       data.push(dataFinded);
     });
     setHistorysp(data);
   } catch (error) {
     console.log(error);
-    return [];
+    setHistorysp([]);
   }
 };
