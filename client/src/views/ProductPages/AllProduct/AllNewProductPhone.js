@@ -22,7 +22,7 @@ import { Pagination } from "antd";
 import { Box, } from '@mui/material';
 import './AllProduct.css'
 import { useNavigate } from "react-router-dom";
-import { formatCurrency} from '../../../util/FormatVnd';
+import { formatCurrency } from '../../../util/FormatVnd';
 import CardProduct from "../../Card/Card";
 import { addToRecentlyViewedProduct } from '../../../util/servicesGlobal';
 
@@ -56,16 +56,19 @@ const AllNewProductPhone = () => {
 
   const [displayedProducts, setDisplayedProducts] = useState(products);
   const brands = [...new Set(products.map(product => product.brand))];
+
   const configurations = products.map(product => JSON.parse(product.configuration));
-  const uniqueRom = [...new Set(configurations.map(config => config.rom))];
-  const uniqueChip = [...new Set(configurations.map(config => config.chip))];
+
+  const variations = products.flatMap(product => product.variations);
+  const uniqueRom = [...new Set(variations.map(variation => variation.capacity))];
+
+  const uniqueChip = [...new Set(configurations.map(config => config.cpu))];
   const uniqueSeries = [...new Set(configurations.map(config => config.series))];
   const uniqueRam = [...new Set(configurations.map(config => config.ram))];
   const uniquePin = [...new Set(configurations.map(config => config.pin))];
   const uniqueRear_camera = [...new Set(configurations.map(config => config.mainCamera))];
   const uniqueFront_camera = [...new Set(configurations.map(config => config.frontCamera))];
   const uniqueScreen = [...new Set(configurations.map(config => config.screenTechnology))];
-
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/product/newphone`)
@@ -153,7 +156,7 @@ const AllNewProductPhone = () => {
         return price >= minSliderValue && price <= maxSliderValue;
       });
     });
-    
+
 
     // Lọc theo thương hiệu
     if (selectedBrand !== 'ALL') {
@@ -163,17 +166,19 @@ const AllNewProductPhone = () => {
     // Lọc theo ROM
     if (selectedRom !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
-        const config = JSON.parse(product.configuration);
-        return config.rom === selectedRom;
+        return product.variations.some((variation) => {
+          return variation.capacity === selectedRom;
+        });
       });
     }
+    
 
 
     // Lọc theo chip
     if (selectedChip !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.chip === selectedChip;
+        return config.cpu === selectedChip;
       });
 
     }
@@ -286,9 +291,9 @@ const AllNewProductPhone = () => {
                 Khoảng giá
               </div>
               <div>
-                <div class="css-1n5trgy" direction="row">
-                  <span class="css-11mfy90">{formatCurrency(minSliderValue)}</span>
-                  <span class="css-11mfy90">{formatCurrency(maxSliderValue)}</span>
+                <div className="css-1n5trgy" direction="row">
+                  <span className="css-11mfy90">{formatCurrency(minSliderValue)}</span>
+                  <span className="css-11mfy90">{formatCurrency(maxSliderValue)}</span>
                 </div>
               </div>
               <Box sx={{ width: 'auto', padding: '5px' }}>
@@ -363,9 +368,9 @@ const AllNewProductPhone = () => {
                   </Select.Option>
 
                   {uniqueRom &&
-                    uniqueRom.map((rom) => (
-                      <Select.Option key={rom} value={rom}>
-                        <span style={{ fontSize: '13px' }}>{rom}</span>
+                    uniqueRom.map((capacity) => (
+                      <Select.Option key={capacity} value={capacity}>
+                        <span style={{ fontSize: '13px' }}>{capacity}</span>
                       </Select.Option>
                     ))
                   }
@@ -409,9 +414,9 @@ const AllNewProductPhone = () => {
                   </Select.Option>
 
                   {uniqueChip &&
-                    uniqueChip.map((chip) => (
-                      <Select.Option key={chip} value={chip}>
-                        <span style={{ fontSize: '13px' }}>{chip}</span>
+                    uniqueChip.map((cpu) => (
+                      <Select.Option key={cpu} value={cpu}>
+                        <span style={{ fontSize: '13px' }}>{cpu}</span>
                       </Select.Option>
                     ))
                   }

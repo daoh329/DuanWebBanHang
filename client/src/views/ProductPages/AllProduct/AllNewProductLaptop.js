@@ -61,19 +61,20 @@ const AllNewProductLaptop = () => {
   const configurations = products.map((product) =>
     JSON.parse(product.configuration)
   );
-  const uniqueRom = [...new Set(configurations.map((config) => config.rom))];
+  const variations = products.flatMap(product => product.variations);
+  const uniqueRom = [...new Set(variations.map(variation => variation.capacity))];
   const uniqueCpu = [...new Set(configurations.map((config) => config.cpu))];
   const uniqueSeries = [
     ...new Set(configurations.map((config) => config.series)),
   ];
   const uniqueRam = [...new Set(configurations.map((config) => config.ram))];
   const uniquePin = [...new Set(configurations.map((config) => config.pin))];
-  const uniqueVga = [...new Set(configurations.map((config) => config.vga))];
+  const uniqueVga = [...new Set(configurations.map((config) => config.graphicsCard))];
   const uniqueFront_camera = [
     ...new Set(configurations.map((config) => config.front_camera)),
   ];
   const uniqueScreen = [
-    ...new Set(configurations.map((config) => config.screen)),
+    ...new Set(configurations.map((config) => config.screenSize)),
   ];
 
   useEffect(() => {
@@ -179,10 +180,11 @@ const AllNewProductLaptop = () => {
     }
 
     // Lọc theo ROM
-    if (selectedRom !== "ALL") {
+    if (selectedRom !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
-        const config = JSON.parse(product.configuration);
-        return config.rom === selectedRom;
+        return product.variations.some((variation) => {
+          return variation.capacity === selectedRom;
+        });
       });
     }
 
@@ -221,7 +223,7 @@ const AllNewProductLaptop = () => {
     if (selectedVga !== "ALL") {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.vga === selectedVga;
+        return config.graphicsCard === selectedVga;
       });
     }
 
@@ -237,7 +239,7 @@ const AllNewProductLaptop = () => {
     if (selectedScreen !== "ALL") {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.screen === selectedScreen;
+        return config.screenSize === selectedScreen;
       });
     }
 
@@ -370,9 +372,9 @@ const AllNewProductLaptop = () => {
                   </Select.Option>
 
                   {uniqueVga &&
-                    uniqueVga.map((vga) => (
-                      <Select.Option key={vga} value={vga}>
-                        <span style={{ fontSize: "13px" }}>{vga}</span>
+                    uniqueVga.map((graphicsCard) => (
+                      <Select.Option key={graphicsCard} value={graphicsCard}>
+                        <span style={{ fontSize: "13px" }}>{graphicsCard}</span>
                       </Select.Option>
                     ))}
                 </Select>
@@ -388,9 +390,9 @@ const AllNewProductLaptop = () => {
                   </Select.Option>
 
                   {uniqueScreen &&
-                    uniqueScreen.map((screen) => (
-                      <Select.Option key={screen} value={screen}>
-                        <span style={{ fontSize: "13px" }}>{screen}</span>
+                    uniqueScreen.map((screenSize) => (
+                      <Select.Option key={screenSize} value={screenSize}>
+                        <span style={{ fontSize: "13px" }}>{screenSize}</span>
                       </Select.Option>
                     ))}
                 </Select>
@@ -428,9 +430,9 @@ const AllNewProductLaptop = () => {
                   </Select.Option>
 
                   {uniqueRom &&
-                    uniqueRom.map((rom) => (
-                      <Select.Option key={rom} value={rom}>
-                        <span style={{ fontSize: "13px" }}>{rom}</span>
+                    uniqueRom.map((capacity) => (
+                      <Select.Option key={capacity} value={capacity}>
+                        <span style={{ fontSize: "13px" }}>{capacity}</span>
                       </Select.Option>
                     ))}
                 </Select>

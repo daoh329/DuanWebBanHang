@@ -867,23 +867,23 @@ function Detail() {
                       {configuration.cpu || configuration.chip}
                     </td>
                   </tr>
-                  {(configuration.vga || configuration.resolution) && (
+                  {(configuration.graphicsCard || configuration.resolution) && (
                     <tr>
                       <td colSpan={1}>
-                        {configuration.vga
-                          ? "Chip đồ họa"
+                        {configuration.graphicsCard
+                          ? "Card đồ họa"
                           : configuration.resolution
                           ? "Phân giải"
                           : ""}
                       </td>
                       <td colSpan={3}>
-                        {configuration.vga || configuration.resolution}
+                        {configuration.graphicsCard || configuration.resolution}
                       </td>
                     </tr>
                   )}
                   <tr>
                     <td colSpan={1}>Màn hình</td>
-                    <td colSpan={3}>{configuration.screen}</td>
+                    <td colSpan={3}>{configuration.screenSize}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Ram</td>
