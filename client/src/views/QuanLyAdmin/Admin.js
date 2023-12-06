@@ -49,17 +49,17 @@ function Admin() {
       icon: <UserOutlined />,
       label: "Admin",
       children: [
-        // {
-        //   key: "1",
-        //   icon: <HomeOutlined />,
-        //   label: (
-        //     <Link to="dashboard">Biểu đồ thống kê đơn hàng</Link>
-        //   ),
-        // },
+        {
+          key: "1",
+          icon: <HomeOutlined />,
+          label: (
+            <Link to="dashboard">Thống kê SL từng sản phẩm đã giao</Link>
+          ),
+        },
         {
           key: "2",
           icon: <HomeOutlined />,
-          label: <Link to="dashboardrevenue">Biểu đồ thống kê doanh thu</Link>,
+          label: <Link to="dashboardrevenue">Thống kê doanh thu</Link>,
         },
         {
           key: "3",
