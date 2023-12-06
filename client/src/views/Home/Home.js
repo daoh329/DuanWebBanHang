@@ -56,7 +56,7 @@ const Home = () => {
   useEffect(() => {
     // Lấy product id từ session storage
     var arrProductId =
-      JSON.parse(sessionStorage.getItem("historyProductId")) || [];
+      JSON.parse(localStorage.getItem("historyProductId")) || [];
     // Cập nhật state
     getRecentlyViewedProducts(arrProductId, setHistorysp);
   }, []);

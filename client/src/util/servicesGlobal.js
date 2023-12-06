@@ -69,7 +69,7 @@ export const addToRecentlyViewedProduct = (products) => {
     // Thêm đối tượng sản phẩm mới vào cuối danh sách
     historysp.push(products.id);
     // Lưu trữ danh sách các sản phẩm đã xem vào session storage
-    sessionStorage.setItem("historyProductId", JSON.stringify(historysp));
+    localStorage.setItem("historyProductId", JSON.stringify(historysp));
   }
 };
 // get recently viewed products
