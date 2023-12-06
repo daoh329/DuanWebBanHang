@@ -1,6 +1,5 @@
 import _ from "lodash";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // ========= UTIL
 // so sánh 2 object (Chỉ so sánh các phần tử ở cấp đầu tiên)
@@ -81,11 +80,24 @@ export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
     const url = `${process.env.REACT_APP_API_URL}/product/json`;
     const results = await axios.get(url, { withCredentials: true });
     const data = [];
+    const productIdOut = [];
     [...historysp.productIds].forEach((id) => {
       const dataFinded = [...results.data].find((item) => item.id === id);
-      data.push(dataFinded);
+      if (dataFinded) {
+        data.push(dataFinded);
+      } else {
+        productIdOut.push(id);
+      }
     });
     setHistorysp(data);
+    if (productIdOut.length !== 0) {
+      var newArr = [];
+      productIdOut.forEach((id) => {
+        newArr = [...historysp.productIds].filter((i) => i !== id);
+      });
+      historysp.productIds = newArr
+      localStorage.setItem("historyProductId", JSON.stringify(historysp));
+    }
   } catch (error) {
     console.log(error);
     setHistorysp([]);
