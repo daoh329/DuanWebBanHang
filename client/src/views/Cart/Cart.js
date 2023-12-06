@@ -241,13 +241,13 @@ function Cart() {
   return (
     <div>
       <div className="style-cart">
-        <div className="fle-x">
+        <div className="fle-x-cart">
           {cart.length > 0 ? (
             <>
 
-              <div className="mo-ta">
-                <div className="title-mo">Giỏ hàng</div>
-                <div className="khoi-tiet-cha">
+              <div className="mo-ta-cart">
+                <div className="title-mo-cart">Giỏ hàng</div>
+                <div className="khoi-tiet-cha-cart">
                   <MDBTable borderless>
                     <MDBTableHead light>
                       <tr>
@@ -267,6 +267,9 @@ function Cart() {
                         </th>
                         <th style={{ textAlign: "right" }} scope="col">
                           Thành tiền
+                        </th>
+                        <th style={{ textAlign: "right" }} scope="col">
+                          
                         </th>
                       </tr>
                     </MDBTableHead>
@@ -403,7 +406,7 @@ function Cart() {
               <div className="chi-tiet-cart">
 
                 <div className="title-thanh">Thanh Toán</div>
-                <div className="khoi-tiet-cha">
+                <div className="khoi-tiet-cha-cart">
                   <MDBTable className="table-tiet" borderless>
                     <MDBTableBody>
                       <tr>
@@ -424,7 +427,7 @@ function Cart() {
                     disabled={isContinueButtonDisabled}
                     onClick={handleContinueClick} // Gọi hàm khi nút được ấn
                   >
-                    Tiếp tục
+                    <a>Tiếp tục</a>
                   </button>
                 </div>
               </div>
