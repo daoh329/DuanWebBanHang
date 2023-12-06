@@ -46,11 +46,11 @@ const DashboardRevenue = () => {
 
   return (
     <>
-    <h4>Biểu đồ doanh thu từng ngày trong tháng</h4>
+    <h4 style={{textAlign: 'center'}}>Biểu đồ doanh thu từng ngày trong tháng</h4>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <LineChart
-          width={800}
-          height={450}
+          width={1200}
+          height={500}
           data={revenueDate}
           margin={{
             top: 50,
@@ -69,11 +69,11 @@ const DashboardRevenue = () => {
         </LineChart>
       </div>
 
-    <h4>Biểu đồ doanh thu từng tháng</h4>
+    <h4 style={{textAlign: 'center', marginTop: '50px'}}>Biểu đồ doanh thu từng tháng</h4>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <LineChart
-          width={800}
-          height={450}
+          width={1200}
+          height={500}
           data={revenue}
           margin={{
             top: 50,
