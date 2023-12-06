@@ -36,14 +36,14 @@ const AllNewProductLaptop = () => {
   const [value, setValue] = useState(() => {
     // Lấy giá trị từ localStorage khi trang web được tải
     const savedSliderValue = JSON.parse(localStorage.getItem("sliderValue"));
-    return savedSliderValue || [0, 40000000];
+    return savedSliderValue || [0, 90000000];
   });
   const navigate = useNavigate();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
   const [sortType, setSortType] = useState("none");
   const [minSliderValue, setMinSliderValue] = useState(0);
-  const [maxSliderValue, setMaxSliderValue] = useState(40000000);
+  const [maxSliderValue, setMaxSliderValue] = useState(90000000);
   const [selectedBrand, setSelectedBrand] = useState("ALL");
   const [selectedRom, setSelectedRom] = useState("ALL");
   const [selectedCpu, setSelectedCpu] = useState("ALL");
@@ -300,11 +300,11 @@ const AllNewProductLaptop = () => {
                 Khoảng giá
               </div>
               <div>
-                <div class="css-1n5trgy" direction="row">
-                  <span class="css-11mfy90">
+                <div className="css-1n5trgy" direction="row">
+                  <span className="css-11mfy90">
                     {formatCurrency(minSliderValue)}
                   </span>
-                  <span class="css-11mfy90">
+                  <span className="css-11mfy90">
                     {formatCurrency(maxSliderValue)}
                   </span>
                 </div>
@@ -325,7 +325,8 @@ const AllNewProductLaptop = () => {
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Thương hiệu" name="brand">
+              <Form>
+                  <Form.Item label="Thương hiệu" name="brand">
                 <Select
                   value={selectedBrand}
                   onChange={handleBrandChange}
@@ -337,17 +338,20 @@ const AllNewProductLaptop = () => {
 
                   {brands &&
                     brands.map((brand) => (
-                      <Select.Option key={brand} value={brand}>
+                      <Select.Option key={brand} value={brand ? brand : ""}>
                         <span style={{ fontSize: "13px" }}>{brand}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+            
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Cpu" name="cpu">
+              <Form>
+                     <Form.Item label="Cpu" name="cpu">
                 <Select value={selectedCpu} onChange={handleCpuChange}>
                   <Select.Option value="ALL">
                     <span style={{ fontSize: "13px" }}>ALL</span>
@@ -355,17 +359,20 @@ const AllNewProductLaptop = () => {
 
                   {uniqueCpu &&
                     uniqueCpu.map((cpu) => (
-                      <Select.Option key={cpu} value={cpu}>
+                      <Select.Option key={cpu} value={cpu ? cpu : ""}>
                         <span style={{ fontSize: "13px" }}>{cpu}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+         
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Card đồ họa" name="Vga">
+              <Form>
+                  <Form.Item label="Card đồ họa" name="Vga">
                 <Select value={selectedVga} onChange={handleVgaChange}>
                   <Select.Option value="ALL">
                     <span style={{ fontSize: "13px" }}>ALL</span>
@@ -373,17 +380,20 @@ const AllNewProductLaptop = () => {
 
                   {uniqueVga &&
                     uniqueVga.map((graphicsCard) => (
-                      <Select.Option key={graphicsCard} value={graphicsCard}>
+                      <Select.Option key={graphicsCard} value={graphicsCard ? graphicsCard : ""}>
                         <span style={{ fontSize: "13px" }}>{graphicsCard}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+            
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Màn hình" name="screen">
+              <Form>
+                 <Form.Item label="Màn hình" name="screen">
                 <Select value={selectedScreen} onChange={handleScreenChange}>
                   <Select.Option value="ALL">
                     <span style={{ fontSize: "13px" }}>ALL</span>
@@ -391,17 +401,20 @@ const AllNewProductLaptop = () => {
 
                   {uniqueScreen &&
                     uniqueScreen.map((screenSize) => (
-                      <Select.Option key={screenSize} value={screenSize}>
+                      <Select.Option key={screenSize} value={screenSize ? screenSize : ""}>
                         <span style={{ fontSize: "13px" }}>{screenSize}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
 
+              </Form>
+             
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Series" name="series">
+              <Form>
+                   <Form.Item label="Series" name="series">
                 <Select value={selectedSeries} onChange={handleSeriesChange}>
                   <Select.Option value="ALL">
                     <span style={{ fontSize: "13px" }}>ALL</span>
@@ -409,17 +422,20 @@ const AllNewProductLaptop = () => {
 
                   {uniqueSeries &&
                     uniqueSeries.map((series) => (
-                      <Select.Option key={series} value={series}>
+                      <Select.Option key={series} value={series ? series : ""}>
                         <span style={{ fontSize: "13px" }}>{series}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+           
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Lưu trữ" name="rom">
+              <Form>
+                  <Form.Item label="Lưu trữ" name="rom">
                 <Select
                   value={selectedRom}
                   onChange={handleRomChange}
@@ -431,17 +447,20 @@ const AllNewProductLaptop = () => {
 
                   {uniqueRom &&
                     uniqueRom.map((capacity) => (
-                      <Select.Option key={capacity} value={capacity}>
+                      <Select.Option key={capacity} value={capacity ? capacity : ""}>
                         <span style={{ fontSize: "13px" }}>{capacity}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+            
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Ram" name="ram">
+              <Form>
+                   <Form.Item label="Ram" name="ram">
                 <Select
                   value={selectedRam}
                   onChange={handleRamChange}
@@ -453,17 +472,20 @@ const AllNewProductLaptop = () => {
 
                   {uniqueRam &&
                     uniqueRam.map((ram) => (
-                      <Select.Option key={ram} value={ram}>
+                      <Select.Option key={ram} value={ram ? ram : ""}>
                         <span style={{ fontSize: "13px" }}>{ram}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+           
 
               <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
-              <Form.Item label="Pin" name="pin">
+              <Form>
+                 <Form.Item label="Pin" name="pin">
                 <Select value={selectedPin} onChange={handlePinChange}>
                   <Select.Option value="ALL">
                     <span style={{ fontSize: "13px" }}>ALL</span>
@@ -471,12 +493,14 @@ const AllNewProductLaptop = () => {
 
                   {uniquePin &&
                     uniquePin.map((pin) => (
-                      <Select.Option key={pin} value={pin}>
+                      <Select.Option key={pin} value={pin ? pin : ""}>
                         <span style={{ fontSize: "13px" }}>{pin}</span>
                       </Select.Option>
                     ))}
                 </Select>
               </Form.Item>
+              </Form>
+             
             </div>
           </div>
         </div>
