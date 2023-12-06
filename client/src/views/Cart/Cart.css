@@ -132,12 +132,16 @@
 }
 .quantity-control {
   display: flex;
-  gap: 5;
+  align-items: center;
+  border: 1px solid rgba(128, 128, 128, 0.491);
+  border-radius: 3px;
 }
-.quantity-button {
-  margin: 0 10px 0 10px;
+#quantity-button {
+  margin: 0 10px 3px 10px;
   font-size: 16px;
-  cursor: pointer;
+  border: none;
+  box-shadow: none;
+  background: none;
 }
 
 .cart-description-content {

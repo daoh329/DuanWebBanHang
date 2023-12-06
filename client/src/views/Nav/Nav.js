@@ -311,47 +311,7 @@ const App = () => {
     }
   };
 
-  // cập nhật giỏ hàng khi onClick to Cart
-  const updateCart = async () => {
-    try {
-      if (cart.length === 0) return;
-      let arrId = [];
-      if (cart.length > 0) {
-        for (let i = 0; i < cart.length; i++) {
-          const data = {
-            product_id: cart[i].id,
-            capacity: parseInt(cart[i].capacity),
-            color: cart[i].color,
-          };
-          arrId.push(data);
-        }
-      }
-      const api = `${process.env.REACT_APP_API_URL}/product/cart`;
-      const results = await axios.post(api, arrId);
-      if (results.status === 200) {
-        const products = results.data;
-        for (let i = 0; i < products.length; i++) {
-          const newItem = {
-            id: products[i].id,
-            main_image: products[i].main_image,
-            shortDescription: products[i].shortDescription,
-            capacity: products[i].variations.capacity,
-            color: products[i].variations.color,
-            price: products[i].variations.price,
-            discount: products[i].variations.discount_amount,
-            thumbnail: products[i].images[0],
-            brand: products[i].brand,
-          };
-          // Cập nhật giỏ hàng tại redux
-          dispatch(updateProductCart(newItem));
-        }
-        return;
-      }
-      throw new Error("get product cart faild");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
@@ -930,7 +890,6 @@ const App = () => {
                       <div style={{fontSize:"16px", fontWeight:"500", color:"red"}}>{formatCurrency(totalCartPrice(cart))}</div>
                       </div> */}
                       <Button
-                        onClick={updateCart}
                         style={{ width: "100%", borderRadius: "3px" }}
                       >
                         <NavLink to="/cart">
