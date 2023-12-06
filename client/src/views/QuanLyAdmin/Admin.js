@@ -49,17 +49,17 @@ function Admin() {
       icon: <UserOutlined />,
       label: "Admin",
       children: [
-        // {
-        //   key: "1",
-        //   icon: <HomeOutlined />,
-        //   label: (
-        //     <Link to="dashboard">Biểu đồ thống kê đơn hàng</Link>
-        //   ),
-        // },
+        {
+          key: "1",
+          icon: <HomeOutlined />,
+          label: (
+            <Link to="dashboard">Thống kê SL từng sản phẩm đã giao</Link>
+          ),
+        },
         {
           key: "2",
           icon: <HomeOutlined />,
-          label: <Link to="dashboardrevenue">Biểu đồ thống kê doanh thu</Link>,
+          label: <Link to="dashboardrevenue">Thống kê doanh thu</Link>,
         },
         {
           key: "3",
@@ -222,7 +222,7 @@ function Admin() {
   //   return null;
   // });
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <div
@@ -234,19 +234,28 @@ function Admin() {
         backgroundColor: "#D5D8DC"
       }}
     >
-      <Menu
-        onClick={onClick}
-        mode="inline"
-        selectedKeys={[currentPath]}
-        items={menuData}
-        style={{
-          flex: "1",
-          height: "max-content",
-          margin: "0 20px 0 0"
-        }}
-      ></Menu>
+      <div className="custom-scrollbar" style={{
+        position: 'fixed',
+        maxHeight: '88vh',
+        overflowY: 'auto'
+      }}>
+        <Menu
+          onClick={onClick}
+          mode="inline"
+          selectedKeys={[currentPath]}
+          items={menuData}
+          style={{
+            flex: "1",
+            height: "max-content",
+            margin: "0 20px 0 0",
+            width: "290px",
+            borderRadius: '5px'
+          }}
+        />
+      </div>
 
-      <div style={{ flex: "4"}}>
+
+      <div style={{ flex: "4", marginLeft: "300px" }}>
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboardrevenue" element={<DashboardRevenue />} />

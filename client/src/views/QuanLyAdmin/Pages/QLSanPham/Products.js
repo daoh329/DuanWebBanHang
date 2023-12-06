@@ -107,7 +107,13 @@ function Product() {
   ];
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: "5px",
+        padding: "0px 10px 0px 10px",
+      }}
+    >
       <br />
       <h1>Danh sách sản phẩm</h1>
       <Tooltip title="Làm mới">
@@ -118,6 +124,9 @@ function Product() {
         />
       </Tooltip>
       <Table loading={isLoadingTable} columns={columns} dataSource={Product} />
+
+      {/* <h1 style={{ paddingTop:'10px' }}>Quản lý Sản Phẩm</h1> */}
+      {/* <Table columns={columns} dataSource={Product} /> */}
     </div>
   );
 }

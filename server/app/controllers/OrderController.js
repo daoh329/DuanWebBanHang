@@ -585,104 +585,130 @@ class OrderController {
   }
 
   async orderDate(req, res) {
-    let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
-    mysql.query(sql, (err, result) => {
-      if(err) throw err;
-      
-      // Chuyển đổi dữ liệu
-      const convertedData = result.reduce((acc, item) => {
-        const dateExists = acc.find(data => data.updated_Date === item.updated_Date);
-        
-        if(dateExists){
-          switch(item.status) {
-            case 0:
-              dateExists.ChuaXacNhan = (dateExists.ChuaXacNhan || 0) + item.count;
-              break;
-            case 1:
-              dateExists.DaXacNhan = (dateExists.DaXacNhan || 0) + item.count;
-              break;
-            case 2:
-              dateExists.DaHuy = (dateExists.DaHuy || 0) + item.count;
-              break;
-            case 3:
-              dateExists.DangVanChuyen = (dateExists.DangVanChuyen || 0) + item.count;
-              break;
-            case 4:
-              dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
-              break;
-            case 5:
-              dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
-              break;
-          }
-        } else {
-          let newItem = {updated_Date: item.updated_Date};
-          switch(item.status) {
-            case 0:
-              newItem.ChuaXacNhan = item.count;
-              break;
-            case 1:
-              newItem.DaXacNhan = item.count;
-              break;
-            case 2:
-              newItem.DaHuy = item.count;
-              break;
-            case 3:
-              newItem.DangVanChuyen = item.count;
-              break;
-            case 4:
-              newItem.DaGiao = item.count;
-              break;
-            case 5:
-              newItem.GiaoKhongThanhCong = item.count;
-              break;
-          }
-          acc.push(newItem);
-        }
-        
-        return acc;
-      }, []);      
-      res.send(convertedData);
-
+    const query = `
+      SELECT p.name, SUM(odp.quantity) AS Total_Quantity
+      FROM orders o
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN products p ON odp.productID = p.id
+      WHERE o.status = 4 AND DATE(o.updated_at) = CURDATE()
+      GROUP BY p.name;
+    `;
+    mysql.query(query, (error, results) => {
+      if (error) throw error;
+      res.json(results);
     });
+    // let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
+    // mysql.query(sql, (err, result) => {
+    //   if(err) throw err;
+      
+    //   // Chuyển đổi dữ liệu
+    //   const convertedData = result.reduce((acc, item) => {
+    //     const dateExists = acc.find(data => data.updated_Date === item.updated_Date);
+        
+    //     if(dateExists){
+    //       switch(item.status) {
+    //         case 0:
+    //           dateExists.ChuaXacNhan = (dateExists.ChuaXacNhan || 0) + item.count;
+    //           break;
+    //         case 1:
+    //           dateExists.DaXacNhan = (dateExists.DaXacNhan || 0) + item.count;
+    //           break;
+    //         case 2:
+    //           dateExists.DaHuy = (dateExists.DaHuy || 0) + item.count;
+    //           break;
+    //         case 3:
+    //           dateExists.DangVanChuyen = (dateExists.DangVanChuyen || 0) + item.count;
+    //           break;
+    //         case 4:
+    //           dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
+    //           break;
+    //         case 5:
+    //           dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
+    //           break;
+    //       }
+    //     } else {
+    //       let newItem = {updated_Date: item.updated_Date};
+    //       switch(item.status) {
+    //         case 0:
+    //           newItem.ChuaXacNhan = item.count;
+    //           break;
+    //         case 1:
+    //           newItem.DaXacNhan = item.count;
+    //           break;
+    //         case 2:
+    //           newItem.DaHuy = item.count;
+    //           break;
+    //         case 3:
+    //           newItem.DangVanChuyen = item.count;
+    //           break;
+    //         case 4:
+    //           newItem.DaGiao = item.count;
+    //           break;
+    //         case 5:
+    //           newItem.GiaoKhongThanhCong = item.count;
+    //           break;
+    //       }
+    //       acc.push(newItem);
+    //     }
+        
+    //     return acc;
+    //   }, []);      
+    //   res.send(convertedData);
+
+    // });
   }
 
   async dashboard(req, res) {
-    let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
-    mysql.query(sql, (err, result) => {
-      if(err) throw err;
-      
-      // Chuyển đổi dữ liệu
-      const convertedData = result.reduce((acc, item) => {
-        const dateExists = acc.find(data => data.updated_date === item.updated_date);
-        
-        if(dateExists){
-          switch(item.status) {
-            case 4:
-              dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
-              break;
-            case 5:
-              dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
-              break;
-          }
-        } else {
-          let newItem = {updated_date: item.updated_date};
-          switch(item.status) {
-            case 4:
-              newItem.DaGiao = item.count;
-              break;
-            case 5:
-              newItem.GiaoKhongThanhCong = item.count;
-              break;
-          }
-          acc.push(newItem);
-        }
-        
-        return acc;
-      }, []);
-    
-      res.send(convertedData);
 
+    const query = `
+      SELECT p.name, SUM(odp.quantity) AS Total_Quantity
+      FROM orders o
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN products p ON odp.productID = p.id
+      WHERE o.status = 4 AND o.updated_at > DATE_SUB(NOW(), INTERVAL 1 MONTH)
+      GROUP BY p.name;
+    `;
+    mysql.query(query, (error, results) => {
+      if (error) throw error;
+      res.json(results);
     });
+    
+    // let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
+    // mysql.query(sql, (err, result) => {
+    //   if(err) throw err;
+      
+    //   // Chuyển đổi dữ liệu
+    //   const convertedData = result.reduce((acc, item) => {
+    //     const dateExists = acc.find(data => data.updated_date === item.updated_date);
+        
+    //     if(dateExists){
+    //       switch(item.status) {
+    //         case 4:
+    //           dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
+    //           break;
+    //         case 5:
+    //           dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
+    //           break;
+    //       }
+    //     } else {
+    //       let newItem = {updated_date: item.updated_date};
+    //       switch(item.status) {
+    //         case 4:
+    //           newItem.DaGiao = item.count;
+    //           break;
+    //         case 5:
+    //           newItem.GiaoKhongThanhCong = item.count;
+    //           break;
+    //       }
+    //       acc.push(newItem);
+    //     }
+        
+    //     return acc;
+    //   }, []);
+    
+    //   res.send(convertedData);
+
+    // });
   }
 
   // /order/:id

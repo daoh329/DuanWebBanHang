@@ -6,15 +6,18 @@
   margin: 0 auto;
   margin-top: 30px;
 }
-.fle-x {
+.fle-x-cart {
   box-sizing: border-box;
   display: flex;
   font-size: 14px;
+  align-items: flex-start;
 }
-.mo-ta {
+.mo-ta-cart {
   box-sizing: border-box;
   width: 75%;
-  padding-right: 16px;
+  margin: 15px;
+  border-radius: 5px;
+  background-color: white;
   /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
 }
 .chi-tiet-cart {
@@ -29,13 +32,33 @@
   background-color: #1435c3;
   border-radius: 4px;
   color: #ffffff;
-  display: inline-flex;
   font-family: Roboto;
   font-size: 14px;
   line-height: 16px;
   margin: 16px 0px 0px;
-  padding: 11.2px 125px;
+  /* padding: 11.2px 125px; */
   border-color: #ffffff;
+  width: 100%;
+  height: 50px;
+}
+.btn-thanh:hover {
+  background-color: #1e41e0;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 16px;
+  margin: 16px 0px 0px;
+  /* padding: 11.2px 125px; */
+  border-color: #ffffff;
+  width: 100%;
+  height: 50px;
+}
+
+.btn-thanh:disabled, .btn-thanh[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 .title-tiet {
   color: #1b1d29;
@@ -51,14 +74,15 @@
   line-height: 20.8px;
   margin: 0px 0px 8px;
 }
-.title-mo {
+.title-mo-cart {
   color: #1b1d29;
   display: -webkit-box;
   font-size: 20px;
   font-weight: 700;
   line-height: 28px;
+  padding: 10px;
 }
-.khoi-tiet-cha {
+.khoi-tiet-cha-cart {
 }
 .table-tiet {
   font-size: 13px;
@@ -80,14 +104,14 @@
   font-size: 13px;
   padding: 24px;
 }
-.title-modal-cha {
+.title-mo-cartdal-cha {
   color: #333333;
   font-size: 14px;
   line-height: 20px;
   padding: 16px;
   text-align: center;
 }
-.title-modal-con {
+.title-mo-cartdal-con {
   color: #1b1d29;
   font-family: Roboto;
   font-size: 20px;
@@ -111,7 +135,7 @@
     margin: 0 auto;
     margin-top: 30px;
   }
-  .fle-x {
+  .fle-x-cart {
     flex-flow: column;
   }
   .chi-tiet-cart {
@@ -119,10 +143,11 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-radius: 8px;
   }
-  .mo-ta {
+  .mo-ta-cart {
     width: 100%;
+    margin: 0 auto;
   }
-  .khoi-tiet-cha {
+  .khoi-tiet-cha-cart {
     overflow-x: auto;
     max-width: 100%;
   }
