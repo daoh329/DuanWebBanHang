@@ -44,7 +44,14 @@ function MainForm() {
   const [arrVariations, setArrVariations] = useState([
     {
       color: "",
-      capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+      capacityGroup: [
+        {
+          price: 0,
+          discount_amount: 0,
+          capacity: 0,
+          quantity_variant: 1,
+        },
+      ],
       images: [],
     },
   ]);
@@ -596,7 +603,7 @@ function MainForm() {
               onClick={handleAddInput}
               type="dashed"
               icon={<PlusOutlined />}
-              style={{margin: 0}}
+              style={{ margin: 0 }}
             >
               Thêm thẻ
             </Button>
