@@ -121,7 +121,6 @@ const App = () => {
       <BrowserRouter>
         <ScrollToTop />
         <Nav />
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
@@ -131,7 +130,6 @@ const App = () => {
           />
           {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
-
           <Route
             path="/admin/*"
             element={
@@ -155,7 +153,6 @@ const App = () => {
           <Route path="/orders" element={<QLdonhang />} />
           <Route path="/shippingOrder" element={<QLshipping />} />
           <Route path="/deliveredOrder" element={<QLdelivered />} />
-
           <Route path="/dondathang" element={<TabsDonDatHang />} />
           <Route path="/vanchuyen" element={<TabsVanChuyen />} />
           <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
@@ -186,11 +183,8 @@ const App = () => {
           />
           <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
           <Route path="/danhmuc-laptop" element={<AllProduct />} />
-
           <Route path="/createorder" element={<CreateOrder />} />
-
           <Route path="/chat" element={<Chatbot />} />
-
           <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
           <Route
             path="/chinh-sach-thanh-toan"
@@ -201,7 +195,6 @@ const App = () => {
           <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
           <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
         </Routes>
-
         <MobileNav user={user} />
         <Footer />
       </BrowserRouter>

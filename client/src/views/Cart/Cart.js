@@ -34,6 +34,7 @@ function Cart() {
   const [selectAll, setSelectAll] = useState(false);
   const [arrDisable, setArrDisable] = useState([]);
   const [checkQuantityChange, setCheckQuantityChange] = useState(false);
+  const [checkProductDelete, setCheckProductDelete] = useState(false);
 
   // Hàm show modal delete product
   const showDeleteConfirm = (productId, color, capacity) => {
@@ -54,11 +55,12 @@ function Cart() {
   };
 
   // Hàm show modal auto change quantity
-  const showAutoChangeQuantity = () => {
+  const showAutoChangeQuantity = (title, content) => {
     confirm({
-      title: "Thông báo!",
+      title: title || "Thông báo!",
       icon: <ExclamationCircleFilled />,
       content:
+        content ||
         "Chúng tôi đã điều chỉnh lại số lượng một số sản phẩm do số lượng sản phẩm còn lại không đủ so với số lượng trong giỏ hàng của bạn",
       centered: true,
       footer: false,
@@ -123,6 +125,17 @@ function Cart() {
     }
   }, [productsOfCartBD, cart]);
 
+  // Bật thông báo nếu có sản phẩm trong giỏ hàng không còn tồn tại
+  // và đã được tự động xóa khỏi giỏ hàng
+  useEffect(() => {
+    if (checkProductDelete) {
+      const content =
+        "Có một vài sản phẩm trong giỏ hàng không còn được kinh doanh và đã được tự động xóa khỏi giỏ hàng";
+      showAutoChangeQuantity(null, content);
+      setCheckQuantityChange(false);
+    }
+  }, [checkProductDelete]);
+
   // Bật thông báo nếu số lượng còn lại ít hơn trong giỏ hàng
   // và đã cập nhật số lượng trong giỏ hàng bằng số lượng còn lại
   useEffect(() => {
@@ -145,7 +158,7 @@ function Cart() {
         for (let i = 0; i < cart.length; i++) {
           const data = {
             product_id: cart[i].id,
-            capacity: parseInt(cart[i].capacity),
+            capacity: cart[i].capacity,
             color: cart[i].color,
           };
           arrId.push(data);
@@ -153,7 +166,36 @@ function Cart() {
       }
       const api = `${process.env.REACT_APP_API_URL}/product/cart`;
       await axios.post(api, arrId).then((results) => {
-        const products = results.data;
+        // Xử lí nếu có sản phẩm không còn tồn tại
+        const products = [];
+        const productsIdOut = [];
+        // Lặp qua từng id sản phẩm trong giỏ hàng
+        arrId.forEach((arrIdItem) => {
+          // Tìm những sản phẩm tương ứng trong giỏ hàng
+          const productsFinded = [...results.data].find(
+            (i) =>
+              i?.id === arrIdItem.product_id &&
+              i?.variations.color === arrIdItem.color &&
+              i?.variations.capacity === arrIdItem.capacity
+          );
+          // Kiểm tra sản phẩm còn và bị xóa
+          if (productsFinded) {
+            // Nếu có thì push vào mảng products
+            products.push(productsFinded);
+          } else {
+            // Nếu sản phẩm bị xóa thì thêm id vào mảng productsIdOut
+            productsIdOut.push(arrIdItem);
+          }
+        });
+        // Xử lí bỏ sản phẩm bị xóa khỏi giỏ hàng
+        // Lặp qua từng id sản phẩm bị xóa
+        if (productsIdOut.length !== 0) {
+          productsIdOut.forEach((value) => {
+            dispatch(deleteProductInCart(value));
+            setCheckProductDelete(true);
+          });
+        }
+        // Xử lí cập nhật sản phẩm còn lại
         setProductOfCartDB(products);
         for (let i = 0; i < products.length; i++) {
           const newItem = {
@@ -497,9 +539,7 @@ function Cart() {
                         <th style={{ textAlign: "right" }} scope="col">
                           Thành tiền
                         </th>
-                        <th style={{ textAlign: "right" }} scope="col">
-                          
-                        </th>
+                        <th style={{ textAlign: "right" }} scope="col"></th>
                       </tr>
                     </MDBTableHead>
                     <MDBTableBody>

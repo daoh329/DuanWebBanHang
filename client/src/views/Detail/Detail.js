@@ -69,7 +69,6 @@ function Detail() {
   // sự kiện khi color thay đổi (Thay đổi image)
   useEffect(() => {
     if (selectedColor && Object.keys(Detail).length !== 0) {
-      console.log(Detail);
       const images = [...Detail.images].filter(
         (element) => element.color === selectedColor
       );
