@@ -297,10 +297,10 @@ function Cart() {
       selectAll: newSelectAll,
       selectedProducts: newSelectAll
         ? cart.map((item) => ({
-            id: item.id,
-            color: item.color,
-            capacity: item.capacity,
-          }))
+          id: item.id,
+          color: item.color,
+          capacity: item.capacity,
+        }))
         : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
@@ -477,7 +477,7 @@ function Cart() {
     navigate(`/detail/${products.id}`);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled = selectedProducts.length === 0;
   // Hàm xử lý khi nút "Tiếp tục" được ấn
@@ -524,6 +524,7 @@ function Cart() {
                       <tr>
                         <th scope="col">
                           <Checkbox
+                          style={{ transform: "scale(1.3)" }}
                             onChange={handleSelectAllChange}
                             checked={selectAll}
                           ></Checkbox>
@@ -547,8 +548,9 @@ function Cart() {
                         <tr key={index}>
                           {/* checkbox */}
                           <td>
-                            <input
+                            {/* <input
                               type="checkbox"
+                              style={{ transform: "scale(1.5)" }}
                               checked={selectedProducts.some(
                                 (product) =>
                                   product.id === item.id &&
@@ -562,8 +564,25 @@ function Cart() {
                                   item.capacity
                                 )
                               }
-                            />
+                            /> */}
+                            <Checkbox
+                              style={{ transform: "scale(1.3)" }}
+                              checked={selectedProducts.some(
+                                (product) =>
+                                  product.id === item.id &&
+                                  product.color === item.color &&
+                                  product.capacity === item.capacity
+                              )}
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  item.id,
+                                  item.color,
+                                  item.capacity
+                                )
+                              }
+                            ></Checkbox>
                           </td>
+
 
                           {/* image */}
                           <td style={{ width: "15%" }}>
@@ -573,9 +592,9 @@ function Cart() {
                               src={
                                 item.main_image
                                   ? process.env.REACT_APP_API_URL +
-                                    item.main_image
+                                  item.main_image
                                   : process.env.REACT_APP_API_URL +
-                                    item.thumbnail
+                                  item.thumbnail
                               }
                               alt="main_image"
                             />
