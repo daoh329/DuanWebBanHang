@@ -237,6 +237,34 @@ function ReceiverInformationModal({
     form.resetFields();
   }
 
+  const doesNotContainSpecialChars = (value) => {
+    // Kiểm tra xem giá trị có chứa ký tự đặc biệt hay không
+    const regex = /^[a-zA-Z0-9]+$/;
+    return regex.test(value);
+  };
+
+  // validate regex không chứa kí tự đặc biệt
+  const validateInput = (rule, value) => {
+    const regex = /^[\p{L}\s']+$/u;
+    if (value && !regex.test(value)) {
+      return Promise.reject(
+        "Tên không hợp lệ"
+      );
+    }
+    return Promise.resolve();
+  };
+
+
+  const validatePhoneNumber = (rule, value) => {
+    const regex = /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$/;
+
+    if (!regex.test(value)) {
+      return Promise.reject('Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.');
+    }
+
+    return Promise.resolve();
+  };
+
   return (
     <Modal
       open={open}
@@ -276,7 +304,10 @@ function ReceiverInformationModal({
         <Form.Item
           label="Tên"
           name="name"
-          rules={[{ required: true, message: "Tên không được bỏ trống" }]}
+          rules={[
+            { required: true, message: "Tên không được bỏ trống" },
+            { validator: validateInput },
+          ]}
         >
           <Input placeholder="Nhập tên người nhận" />
         </Form.Item>
@@ -287,7 +318,8 @@ function ReceiverInformationModal({
             label="Số điện thoại"
             name="phone"
             rules={[
-              { required: true, message: "Số điện thoại không được bỏ trống" },
+              { required: true, message: "Số điện thoại không được bỏ trống"},
+              { validator : validatePhoneNumber}
             ]}
             style={{ display: "inline-block", width: "calc(50% - 8px)" }}
           >
@@ -303,6 +335,12 @@ function ReceiverInformationModal({
               width: "calc(50% - 8px)",
               margin: "0 8px",
             }}
+            rules={[
+              {
+                type: "email",
+                message: "Vui lòng nhập đúng định dạng email!",
+              },
+            ]}
           >
             <Input placeholder="Nhập email người nhận" />
           </Form.Item>
