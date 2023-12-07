@@ -36,6 +36,7 @@ import TabsQLdonhang from "./Pages/TabsQLdonhang";
 import QLAlldelivered from "./QLAlldelivered";
 import AccountList from "./Pages/AccountManagement/List";
 import { max } from "lodash";
+import Brandstatistics from "./Pages/Brandstatistics";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
@@ -60,6 +61,11 @@ function Admin() {
           key: "2",
           icon: <HomeOutlined />,
           label: <Link to="dashboardrevenue">Thống kê doanh thu</Link>,
+        },
+        {
+          key: "20",
+          icon: <HomeOutlined />,
+          label: <Link to="brandstatistics">Thống kê nhãn hàng</Link>,
         },
         {
           key: "3",
@@ -259,6 +265,7 @@ function Admin() {
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboardrevenue" element={<DashboardRevenue />} />
+          <Route path="brandstatistics" element={<Brandstatistics />} />
           <Route path="newproduct" element={<TypeProduct />} />
           <Route path="newcoupon" element={<NewCoupon />} />
           <Route
