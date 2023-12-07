@@ -11,23 +11,25 @@ passport.use(
       scope: ["profile", "email"],
     },
     async function (accessToken, refreshToken, profile, callback) {
+      // console.log(profile.id);
       // lệnh kiểm tra email người dùng đã tồn tại chưa (đã đăng nhập ít nhất 1 lần)
-      const queryCheckEmail = `SELECT COUNT(*) AS count FROM users WHERE email = ?`;
+      const queryCheckEmail = `SELECT COUNT(*) AS count FROM users WHERE googleId = ?`;
 
       // lệnh thêm người dùng
-      const queryInsertUser = `INSERT INTO users (name, email, permission) VALUES (?, ?, ?)`;
+      const queryInsertUser = `INSERT INTO users (name, email, permission, googleId) VALUES (?, ?, ?, ?)`;
 
       // Lấy thông tin tên và email từ profile
       const nameProfile = profile._json.name;
       const emailProfile = profile._json.email;
       const permission = "user";
+      const googleId = profile.id;
       // Lưu thông tin người dùng vào csdl
       try {
         // Kiểm tra xem tk đã tồn tại chưa
-        const results = await query(queryCheckEmail, [emailProfile]);
+        const results = await query(queryCheckEmail, [googleId]);
         // nếu chưa thì thực hiện tạo tài khoản mới
         if (results[0].count === 0) {
-          await query(queryInsertUser, [nameProfile, emailProfile, permission]);
+          await query(queryInsertUser, [nameProfile, emailProfile, permission, profile.id]);
         }
       } catch (error) {
         console.log(error);
