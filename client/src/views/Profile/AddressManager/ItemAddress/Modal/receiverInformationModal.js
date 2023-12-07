@@ -237,12 +237,6 @@ function ReceiverInformationModal({
     form.resetFields();
   }
 
-  const doesNotContainSpecialChars = (value) => {
-    // Kiểm tra xem giá trị có chứa ký tự đặc biệt hay không
-    const regex = /^[a-zA-Z0-9]+$/;
-    return regex.test(value);
-  };
-
   // validate regex không chứa kí tự đặc biệt
   const validateInput = (rule, value) => {
     const regex = /^[\p{L}\s']+$/u;
@@ -254,12 +248,23 @@ function ReceiverInformationModal({
     return Promise.resolve();
   };
 
-
+  // regex validate phone number
   const validatePhoneNumber = (rule, value) => {
     const regex = /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})$/;
 
-    if (!regex.test(value)) {
+    if (value && !regex.test(value)) {
       return Promise.reject('Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.');
+    }
+
+    return Promise.resolve();
+  };
+
+  // regex validate address cụ thể
+  const validateAddress = (rule, value) => {
+    const regex = /^[\p{L}\d\s,.'-/]+$/u;
+
+    if (value && !regex.test(value)) {
+      return Promise.reject('Địa chỉ không hợp lệ');
     }
 
     return Promise.resolve();
@@ -434,6 +439,7 @@ function ReceiverInformationModal({
             label="Địa chỉ cụ thể"
             rules={[
               { required: true, message: "Địa chỉ cụ thể không được bỏ trống" },
+              {validator: validateAddress}
             ]}
             style={{
               display: "inline-block",
