@@ -32,3 +32,8 @@
   color: #1677ff !important;
 }
 
+.PieChart {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

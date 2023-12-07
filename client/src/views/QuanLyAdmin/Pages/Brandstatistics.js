@@ -1,6 +1,7 @@
 import { Flex } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import "../Admin.css";
 
 const Brandstatistics = () => {
   const [laptop, setLaptop] = useState([]);
@@ -37,12 +38,13 @@ const Brandstatistics = () => {
       });
   }, []);
 
+  
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginTop: '70px'}}>
-        <div>
-          <h4>Tỉ lệ thị phần bán hàng của các nhãn hiệu laptop</h4>
-          <PieChart width={400} height={400}>
+      <div style={{ display: 'flex', columnGap:'10px', width:'100%'}}>
+        <div style={{width:'50%',backgroundColor:'white', borderRadius:'5px', }}>
+            <h4 style={{padding:'20px 0px 0px 20px'}}>Tỉ lệ thị phần bán hàng của các nhãn hiệu laptop</h4>
+          <PieChart width={400} height={400} className='PieChart'>
             <Pie
               data={laptop}
               cx="50%"
@@ -63,9 +65,9 @@ const Brandstatistics = () => {
           </PieChart>
         </div>
   
-        <div>
-          <h4>Tỉ lệ thị phần bán hàng của các nhãn hiệu điện thoại</h4>
-          <PieChart width={400} height={400}>
+        <div style={{width:'50%',backgroundColor:'white', borderRadius:'5px'}}>
+          <h4 style={{padding:'20px 0px 0px 20px'}}>Tỉ lệ thị phần bán hàng của các nhãn hiệu điện thoại</h4>
+          <PieChart width={400} height={400} className='PieChart'>
             <Pie
               data={dienthoai}
               cx="50%"
