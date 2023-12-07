@@ -108,7 +108,7 @@ export default function Buy() {
       onOk() {
         navigate("/login");
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -258,6 +258,7 @@ export default function Buy() {
   };
 
   const handleBuyClick = async () => {
+
     // Kiểm tra giá trị của paymentMenthod và gọi hàm tương ứng
     if (!deliveryMethod) {
       message.error("Vui lòng chọn thời gian giao hàng");
@@ -266,6 +267,12 @@ export default function Buy() {
       paymentMenthod == null
     ) {
       message.error("Vui lòng chọn phương thức thanh toán");
+      return;
+    } else if (addressChecked === null) {
+      message.error("Vui lòng chọn địa chỉ giao hàng");
+      return;
+    } else if (deliveryAddress.length === 0) {
+      message.error("Vui lòng thêm địa chỉ giao hàng");
       return;
     }
 
@@ -474,6 +481,7 @@ export default function Buy() {
 
   const handleChecked = (value) => {
     setAddressChecked(value);
+    console.log(addressChecked);
   };
 
   // Đếm chiều dài mảng address
@@ -521,7 +529,7 @@ export default function Buy() {
                     </MDBTabsItem> */}
                   </MDBTabs>
 
-                  <MDBTabsContent style={{padding:'20px'}}>
+                  <MDBTabsContent style={{ padding: '20px' }}>
                     <MDBTabsPane show={fillActive === "tab1"}>
                       <h6 style={{ marginTop: "10px" }}>Thông tin nhận hàng</h6>
                       <div className="address-group">
@@ -567,10 +575,10 @@ export default function Buy() {
                         >
                           Thời gian giao hàng
                         </div>
-                        
+
                         <div className="check_box" >
                           <div
-                            
+
                           >
                             {/* <input
                               type="checkbox"
@@ -582,7 +590,7 @@ export default function Buy() {
                                 )
                               }
                             /> */}
-                            
+
                             <Checkbox type="checkbox"
                               value="ngày trong tuần"
                               checked={deliveryMethod === "ngày trong tuần"}
@@ -594,7 +602,7 @@ export default function Buy() {
                           </div>
                           {/*  */}
                           <div
-                            style={{marginTop:"5px" ,marginRight:"82px"}}
+                            style={{ marginTop: "5px", marginRight: "82px" }}
                           >
                             {/* <input
                               type="checkbox"
@@ -606,7 +614,7 @@ export default function Buy() {
                                 )
                               }
                             /> */}
-                         
+
                             <Checkbox type="checkbox"
                               value="Chủ nhật"
                               checked={deliveryMethod === "Chủ nhật"}
@@ -615,7 +623,7 @@ export default function Buy() {
                                   e.target.checked ? e.target.value : ""
                                 )
                               }>Chủ nhật</Checkbox>
-                           
+
                           </div>
                         </div>
                       </div>
@@ -1034,9 +1042,9 @@ export default function Buy() {
                                     src={
                                       item.main_image
                                         ? process.env.REACT_APP_API_URL +
-                                          item.main_image
+                                        item.main_image
                                         : process.env.REACT_APP_API_URL +
-                                          item.thumbnail
+                                        item.thumbnail
                                     } // Lấy URL ảnh từ dữ liệu
                                     loading="lazy"
                                     decoding="async"
