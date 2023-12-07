@@ -188,3 +188,12 @@
   font-size: 12px;
   line-height: 16px;
 }
+
+.checkbox-item-div{
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
