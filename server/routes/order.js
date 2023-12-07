@@ -10,12 +10,15 @@ router.post('/paymentmomo', OrderController.Paymentmomo);
 // router.get('/quanlyOrder', OrderController.quanlyOrder);
 router.get('/quanlyAllOrder', OrderController.quanlyAllOrder);
 
+// thống kê
+router.get('/brandstatisticslaptop', OrderController.BrandstatisticsLaptop);
+router.get('/brandstatisticsdienthoai', OrderController.BrandstatisticsDienthoai);
+router.get('/dashboard', OrderController.dashboard);
+router.get('/orderDate', OrderController.orderDate);
 router.get('/revenue', OrderController.Revenue);
 router.get('/revenueDate', OrderController.RevenueDate);
 
-router.get('/dashboard', OrderController.dashboard);
-router.get('/orderDate', OrderController.orderDate);
-
+//Trạng thái
 router.put(`/confirm/:id`, OrderController.confirmOrder);
 router.put(`/shipping/:id`, OrderController.shippingOrder);
 router.put(`/delivered/:id`, OrderController.deliveredOrder);
