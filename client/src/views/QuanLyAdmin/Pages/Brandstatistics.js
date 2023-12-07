@@ -44,13 +44,13 @@ const Brandstatistics = () => {
       <div style={{ display: 'flex', columnGap:'10px', width:'100%'}}>
         <div style={{width:'50%',backgroundColor:'white', borderRadius:'5px', }}>
             <h4 style={{padding:'20px 0px 0px 20px'}}>Tỉ lệ thị phần bán hàng của các nhãn hiệu laptop</h4>
-          <PieChart width={400} height={400} className='PieChart'>
+          <PieChart width={500} height={500} className='PieChart'>
             <Pie
               data={laptop}
               cx="50%"
               cy="50%"
               labelLine={false}
-              outerRadius={150}
+              outerRadius={100}
               fill="#8884d8"
               dataKey="value"
               nameKey="name"
@@ -67,13 +67,13 @@ const Brandstatistics = () => {
   
         <div style={{width:'50%',backgroundColor:'white', borderRadius:'5px'}}>
           <h4 style={{padding:'20px 0px 0px 20px'}}>Tỉ lệ thị phần bán hàng của các nhãn hiệu điện thoại</h4>
-          <PieChart width={400} height={400} className='PieChart'>
+          <PieChart width={500} height={500} className='PieChart'>
             <Pie
               data={dienthoai}
               cx="50%"
               cy="50%"
               labelLine={false}
-              outerRadius={150}
+              outerRadius={100}
               fill="#8884d8"
               dataKey="value"
               nameKey="name"
