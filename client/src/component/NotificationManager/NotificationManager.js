@@ -15,7 +15,7 @@ async function CreateNotification(user_id, order_id, type, title, content) {
       content,
     };
     const api = `${process.env.REACT_APP_API_URL}/auth/create-notification`;
-    const results = await axios.post(api, data);
+    const results = await axios.post(api, data, {withCredentials: true});
 
     if (results.status !== 200) {
       throw new Error("Lỗi tạo thông báo");

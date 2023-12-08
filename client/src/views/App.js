@@ -60,6 +60,7 @@ import GiaiQuyetKhieuNai from "./Footer/MenuFooter/GiaiQuyetKhieuNai.js";
 import ChinhSachBaoHanh from "./Footer/MenuFooter/ChinhSachBaoHanh.js";
 import ChinhSachDoiTra from "./Footer/MenuFooter/ChinhSachDoiTra.js";
 import ScrollToTop from "../util/scrollToTop.js";
+import NotFound from "./404/NotFound.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -194,6 +195,9 @@ const App = () => {
           <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
           <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
           <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
+          {/* Route cho trang 404 */}
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
         <MobileNav user={user} />
         <Footer />
