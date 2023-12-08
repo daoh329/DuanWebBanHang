@@ -156,7 +156,6 @@ const App = () => {
   const adminPage = () => {
     navigate("/admin/dashboard");
   };
-
   const menuAccount = [
     {
       key: "1",
@@ -343,7 +342,7 @@ const App = () => {
                 textDecoration: "none",
               }}
             >
-              <TagOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+              
               Hướng dẫn mua hàng
             </a>
             <a
@@ -354,9 +353,7 @@ const App = () => {
                 textDecoration: "none",
               }}
             >
-              <EnvironmentOutlined
-                style={{ marginRight: "8px", color: "#fff" }}
-              />{" "}
+             
                 Chính sách đổi trả.
             </a>
             <a
@@ -367,7 +364,7 @@ const App = () => {
                 textDecoration: "none",
               }}
             >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+             
               Chính sách bảo hành
             </a>
             <Dropdown menu={{ items: menuContact }} placement="bottomRight">
@@ -379,7 +376,7 @@ const App = () => {
                   textDecoration: "none",
                 }}
               >
-                <PhoneOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+               
                 Liên hệ
               </a>
             </Dropdown>
@@ -391,7 +388,7 @@ const App = () => {
                 textDecoration: "none",
               }}
             >
-              <CommentOutlined style={{ marginRight: "8px", color: "#fff" }} />{" "}
+            
               Chính sách thanh toán
             </a>
           </div>
