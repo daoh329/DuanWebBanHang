@@ -243,11 +243,10 @@ const Home = () => {
 
   return (
     <Layout>
-      {user.isLocked !== 0 && (
+      {user.isLocked === 1 ? (
           <>
             <br />
             <Alert
-              
               message="Tài khoản của bạn đã bị khóa"
               description="Bạn không thể mua hàng và sử dụng một số chức năng khác.Ngoài ra bạn vẫn có thể xem và tham khảo các sản phẩm của Dinh Minh Computer."
               type="error"
@@ -255,7 +254,7 @@ const Home = () => {
             />
             <br />
           </>
-        )}
+        ): null}
       <div className="content">
         <Carousel autoplay>
           {sliderImages.map((image, index) => (
