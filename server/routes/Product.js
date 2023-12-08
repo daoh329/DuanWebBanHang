@@ -45,5 +45,6 @@ router.get("/productsPhone", ProductControllers.QueryProductsDienThoai);
 router.get("/detail/:id", ProductControllers.DetailProducts);
 router.get("/laptopbanchay", ProductControllers.topLaptop);
 router.get("/dienthoaibanchay", ProductControllers.topDienthoai);
+router.post("/:id/variant", ProductControllers.getRemainingQuantityVariant); 
 
 module.exports = router;

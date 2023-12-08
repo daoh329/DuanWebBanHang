@@ -29,6 +29,8 @@ const createTables = () => {
     product_id INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     discount_amount NUMERIC(10,2) DEFAULT 0,
+    quantity_variant INT DEFAULT 1 NOT NULL,
+    remaining_quantity_variant INT DEFAULT 1 NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (capacity) REFERENCES capacity (capacity),
     FOREIGN KEY (color) REFERENCES colors (name)

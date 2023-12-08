@@ -14,7 +14,7 @@ class OrderController {
     }
 
     // Kiểm tra số lượng sản phẩm hiện có
-    let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+    let sql = `SELECT remaining_quantity_variant FROM product_variations WHERE product_id = ?`;
 
     let canBuy = true;
 
@@ -31,7 +31,7 @@ class OrderController {
         });
 
         // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-        if (data.quantity[i] > productResult[0].remaining_quantity) {
+        if (data.quantity[i] > productResult[0].remaining_quantity_variant) {
             canBuy = false;
             return res.status(400).json("Số lượng sản phẩm không đủ");
         }
@@ -230,7 +230,7 @@ class OrderController {
               const quantity = orderDetails[i].quantity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE productDetails SET remaining_quantity = remaining_quantity - ? WHERE product_id = ?`;
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ?`;
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
@@ -283,7 +283,7 @@ class OrderController {
               const quantity = orderDetails[i].quantity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE productDetails SET remaining_quantity = remaining_quantity + ? WHERE product_id = ?`;
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ?`;
               values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
@@ -462,15 +462,29 @@ class OrderController {
 
   async topLaptop(req, res) {
     const query = `
-      SELECT products.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity
-      FROM products
-      JOIN productDetails ON products.id = productDetails.product_id
-      JOIN orderDetailsProduct ON products.id = orderDetailsProduct.productID
-      JOIN orders ON orderDetailsProduct.orderID = orders.id
-      WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
-      AND products.CategoryID = 1 AND products.status = 1
-      GROUP BY products.id, productDetails.remaining_quantity
-      ORDER BY SUM(orderDetailsProduct.quantity) DESC
+      SELECT  
+        p.*, 
+        MAX(pd.brand) as brand, 
+        SUM(odp.quantity) as total_quantity_ordered, 
+        pv.remaining_quantity_variant as remaining_quantity
+      FROM 
+        products p
+      JOIN 
+        product_variations pv ON p.id = pv.product_id
+      JOIN 
+        productDetails pd ON p.id = pd.product_id
+      JOIN 
+        orderDetailsProduct odp ON p.id = odp.productID
+      JOIN 
+        orders o ON odp.orderID = o.id
+      WHERE 
+        o.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
+        AND p.CategoryID = 1 
+        AND p.status = 1
+      GROUP BY 
+        p.id, pv.remaining_quantity_variant
+      ORDER BY 
+        total_quantity_ordered DESC
       LIMIT 10;
       `;
   
@@ -486,15 +500,29 @@ class OrderController {
 
   async topDienthoai(req, res) {
     const query = `
-      SELECT products.*, MAX(productDetails.brand) as brand, productDetails.remaining_quantity
-      FROM products
-      JOIN productDetails ON products.id = productDetails.product_id
-      JOIN orderDetailsProduct ON products.id = orderDetailsProduct.productID
-      JOIN orders ON orderDetailsProduct.orderID = orders.id
-      WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
-      AND products.CategoryID = 2 AND products.status = 1
-      GROUP BY products.id, productDetails.remaining_quantity
-      ORDER BY SUM(orderDetailsProduct.quantity) DESC
+      SELECT  
+        p.*, 
+        MAX(pd.brand) as brand, 
+        SUM(odp.quantity) as total_quantity_ordered, 
+        pv.remaining_quantity_variant as remaining_quantity
+      FROM 
+        products p
+      JOIN 
+        product_variations pv ON p.id = pv.product_id
+      JOIN 
+        productDetails pd ON p.id = pd.product_id
+      JOIN 
+        orderDetailsProduct odp ON p.id = odp.productID
+      JOIN 
+        orders o ON odp.orderID = o.id
+      WHERE 
+        o.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
+        AND p.CategoryID = 2 
+        AND p.status = 1
+      GROUP BY 
+        p.id, pv.remaining_quantity_variant
+      ORDER BY 
+        total_quantity_ordered DESC
       LIMIT 10;
       `;
 
@@ -585,104 +613,196 @@ class OrderController {
   }
 
   async orderDate(req, res) {
-    let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
-    mysql.query(sql, (err, result) => {
-      if(err) throw err;
+    const query = `
+      SELECT p.name, SUM(odp.quantity) AS Total_Quantity
+      FROM orders o
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN products p ON odp.productID = p.id
+      WHERE o.status = 4 AND DATE(o.updated_at) = CURDATE()
+      GROUP BY p.name;
+    `;
+    mysql.query(query, (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    });
+    // let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE MONTH(updated_at) = MONTH(CURRENT_DATE()) AND YEAR(updated_at) = YEAR(CURRENT_DATE()) AND status IN (0, 1, 2, 3, 4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
+    // mysql.query(sql, (err, result) => {
+    //   if(err) throw err;
       
-      // Chuyển đổi dữ liệu
-      const convertedData = result.reduce((acc, item) => {
-        const dateExists = acc.find(data => data.updated_Date === item.updated_Date);
+    //   // Chuyển đổi dữ liệu
+    //   const convertedData = result.reduce((acc, item) => {
+    //     const dateExists = acc.find(data => data.updated_Date === item.updated_Date);
         
-        if(dateExists){
-          switch(item.status) {
-            case 0:
-              dateExists.ChuaXacNhan = (dateExists.ChuaXacNhan || 0) + item.count;
-              break;
-            case 1:
-              dateExists.DaXacNhan = (dateExists.DaXacNhan || 0) + item.count;
-              break;
-            case 2:
-              dateExists.DaHuy = (dateExists.DaHuy || 0) + item.count;
-              break;
-            case 3:
-              dateExists.DangVanChuyen = (dateExists.DangVanChuyen || 0) + item.count;
-              break;
-            case 4:
-              dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
-              break;
-            case 5:
-              dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
-              break;
-          }
-        } else {
-          let newItem = {updated_Date: item.updated_Date};
-          switch(item.status) {
-            case 0:
-              newItem.ChuaXacNhan = item.count;
-              break;
-            case 1:
-              newItem.DaXacNhan = item.count;
-              break;
-            case 2:
-              newItem.DaHuy = item.count;
-              break;
-            case 3:
-              newItem.DangVanChuyen = item.count;
-              break;
-            case 4:
-              newItem.DaGiao = item.count;
-              break;
-            case 5:
-              newItem.GiaoKhongThanhCong = item.count;
-              break;
-          }
-          acc.push(newItem);
-        }
+    //     if(dateExists){
+    //       switch(item.status) {
+    //         case 0:
+    //           dateExists.ChuaXacNhan = (dateExists.ChuaXacNhan || 0) + item.count;
+    //           break;
+    //         case 1:
+    //           dateExists.DaXacNhan = (dateExists.DaXacNhan || 0) + item.count;
+    //           break;
+    //         case 2:
+    //           dateExists.DaHuy = (dateExists.DaHuy || 0) + item.count;
+    //           break;
+    //         case 3:
+    //           dateExists.DangVanChuyen = (dateExists.DangVanChuyen || 0) + item.count;
+    //           break;
+    //         case 4:
+    //           dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
+    //           break;
+    //         case 5:
+    //           dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
+    //           break;
+    //       }
+    //     } else {
+    //       let newItem = {updated_Date: item.updated_Date};
+    //       switch(item.status) {
+    //         case 0:
+    //           newItem.ChuaXacNhan = item.count;
+    //           break;
+    //         case 1:
+    //           newItem.DaXacNhan = item.count;
+    //           break;
+    //         case 2:
+    //           newItem.DaHuy = item.count;
+    //           break;
+    //         case 3:
+    //           newItem.DangVanChuyen = item.count;
+    //           break;
+    //         case 4:
+    //           newItem.DaGiao = item.count;
+    //           break;
+    //         case 5:
+    //           newItem.GiaoKhongThanhCong = item.count;
+    //           break;
+    //       }
+    //       acc.push(newItem);
+    //     }
         
-        return acc;
-      }, []);      
-      res.send(convertedData);
+    //     return acc;
+    //   }, []);      
+    //   res.send(convertedData);
 
+    // });
+  }
+
+  async BrandstatisticsLaptop(req, res) {
+    const query = `
+      SELECT 
+      pd.brand,
+      ROUND((SUM(odp.quantity) / (SELECT SUM(odp_inner.quantity) FROM orderDetailsProduct odp_inner
+                                  JOIN orders o_inner ON odp_inner.orderID = o_inner.id
+                                  JOIN products p_inner ON odp_inner.productID = p_inner.id
+                                  WHERE o_inner.created_at >= DATE_SUB(NOW(), INTERVAL 2 YEAR)
+                                  AND o_inner.status = 4
+                                  AND p_inner.CategoryID = 1)) * 100, 2) AS percentage_sold
+      FROM 
+        products p
+      JOIN 
+        orderDetailsProduct odp ON p.id = odp.productID
+      JOIN 
+        orders o ON odp.orderID = o.id
+      JOIN 
+        productDetails pd ON p.id = pd.product_id
+      WHERE 
+        o.created_at >= DATE_SUB(NOW(), INTERVAL 2 YEAR)
+        AND p.CategoryID = 1
+        AND o.status = 4
+      GROUP BY 
+        pd.brand
+      ORDER BY 
+        percentage_sold DESC
+    `;
+    mysql.query(query, (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    });
+  }
+
+  async BrandstatisticsDienthoai(req, res) {
+    const query = `
+      SELECT 
+      pd.brand,
+      ROUND((SUM(odp.quantity) / (SELECT SUM(odp_inner.quantity) FROM orderDetailsProduct odp_inner
+                                  JOIN orders o_inner ON odp_inner.orderID = o_inner.id
+                                  JOIN products p_inner ON odp_inner.productID = p_inner.id
+                                  WHERE o_inner.created_at >= DATE_SUB(NOW(), INTERVAL 2 YEAR)
+                                  AND o_inner.status = 4
+                                  AND p_inner.CategoryID = 2)) * 100, 2) AS percentage_sold
+      FROM 
+        products p
+      JOIN 
+        orderDetailsProduct odp ON p.id = odp.productID
+      JOIN 
+        orders o ON odp.orderID = o.id
+      JOIN 
+        productDetails pd ON p.id = pd.product_id
+      WHERE 
+        o.created_at >= DATE_SUB(NOW(), INTERVAL 2 YEAR)
+        AND p.CategoryID = 2
+        AND o.status = 4
+      GROUP BY 
+        pd.brand
+      ORDER BY 
+        percentage_sold DESC
+    `;
+    mysql.query(query, (error, results) => {
+      if (error) throw error;
+      res.json(results);
     });
   }
 
   async dashboard(req, res) {
-    let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
-    mysql.query(sql, (err, result) => {
-      if(err) throw err;
-      
-      // Chuyển đổi dữ liệu
-      const convertedData = result.reduce((acc, item) => {
-        const dateExists = acc.find(data => data.updated_date === item.updated_date);
-        
-        if(dateExists){
-          switch(item.status) {
-            case 4:
-              dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
-              break;
-            case 5:
-              dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
-              break;
-          }
-        } else {
-          let newItem = {updated_date: item.updated_date};
-          switch(item.status) {
-            case 4:
-              newItem.DaGiao = item.count;
-              break;
-            case 5:
-              newItem.GiaoKhongThanhCong = item.count;
-              break;
-          }
-          acc.push(newItem);
-        }
-        
-        return acc;
-      }, []);
-    
-      res.send(convertedData);
 
+    const query = `
+      SELECT p.name, SUM(odp.quantity) AS Total_Quantity
+      FROM orders o
+      JOIN orderDetailsProduct odp ON o.id = odp.orderID
+      JOIN products p ON odp.productID = p.id
+      WHERE o.status = 4 AND o.updated_at > DATE_SUB(NOW(), INTERVAL 1 MONTH)
+      GROUP BY p.name;
+    `;
+    mysql.query(query, (error, results) => {
+      if (error) throw error;
+      res.json(results);
     });
+    
+    // let sql = "SELECT status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d') as updated_Date, COUNT(*) as count FROM orders WHERE status IN (4, 5) GROUP BY status, DATE_FORMAT(CONVERT_TZ(updated_at, '+00:00', '+07:00'), '%Y-%m-%d')";
+    // mysql.query(sql, (err, result) => {
+    //   if(err) throw err;
+      
+    //   // Chuyển đổi dữ liệu
+    //   const convertedData = result.reduce((acc, item) => {
+    //     const dateExists = acc.find(data => data.updated_date === item.updated_date);
+        
+    //     if(dateExists){
+    //       switch(item.status) {
+    //         case 4:
+    //           dateExists.DaGiao = (dateExists.DaGiao || 0) + item.count;
+    //           break;
+    //         case 5:
+    //           dateExists.GiaoKhongThanhCong = (dateExists.GiaoKhongThanhCong || 0) + item.count;
+    //           break;
+    //       }
+    //     } else {
+    //       let newItem = {updated_date: item.updated_date};
+    //       switch(item.status) {
+    //         case 4:
+    //           newItem.DaGiao = item.count;
+    //           break;
+    //         case 5:
+    //           newItem.GiaoKhongThanhCong = item.count;
+    //           break;
+    //       }
+    //       acc.push(newItem);
+    //     }
+        
+    //     return acc;
+    //   }, []);
+    
+    //   res.send(convertedData);
+
+    // });
   }
 
   // /order/:id

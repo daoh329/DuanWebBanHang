@@ -38,6 +38,7 @@ import TabsQLdonhang from "./Pages/TabsQLdonhang";
 import QLAlldelivered from "./QLAlldelivered";
 import AccountList from "./Pages/AccountManagement/List";
 import { max } from "lodash";
+import Brandstatistics from "./Pages/Brandstatistics";
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
 
@@ -51,17 +52,22 @@ function Admin() {
       icon: <UserOutlined />,
       label: "Admin",
       children: [
-        // {
-        //   key: "1",
-        //   icon: <HomeOutlined />,
-        //   label: (
-        //     <Link to="dashboard">Biểu đồ thống kê đơn hàng</Link>
-        //   ),
-        // },
+        {
+          key: "1",
+          icon: <HomeOutlined />,
+          label: (
+            <Link to="dashboard">Thống kê SL từng sản phẩm đã giao</Link>
+          ),
+        },
         {
           key: "2",
           icon: <HomeOutlined />,
-          label: <Link to="dashboardrevenue">Biểu đồ thống kê doanh thu</Link>,
+          label: <Link to="dashboardrevenue">Thống kê doanh thu</Link>,
+        },
+        {
+          key: "20",
+          icon: <HomeOutlined />,
+          label: <Link to="brandstatistics">Thống kê nhãn hàng</Link>,
         },
         {
           key: "3",
@@ -236,22 +242,32 @@ function Admin() {
         backgroundColor: "#D5D8DC"
       }}
     >
-      <Menu
-        onClick={onClick}
-        mode="inline"
-        selectedKeys={[currentPath]}
-        items={menuData}
-        style={{
-          flex: "1",
-          height: "max-content",
-          margin: "0 20px 0 0"
-        }}
-      ></Menu>
+      <div className="custom-scrollbar" style={{
+        position: 'fixed',
+        maxHeight: '88vh',
+        overflowY: 'auto'
+      }}>
+        <Menu
+          onClick={onClick}
+          mode="inline"
+          selectedKeys={[currentPath]}
+          items={menuData}
+          style={{
+            flex: "1",
+            height: "max-content",
+            margin: "0 20px 0 0",
+            width: "290px",
+            borderRadius: '5px'
+          }}
+        />
+      </div>
 
-      <div style={{ flex: "4" }}>
+
+      <div style={{ flex: "4", marginLeft: "300px" }}>
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboardrevenue" element={<DashboardRevenue />} />
+          <Route path="brandstatistics" element={<Brandstatistics />} />
           <Route path="newproduct" element={<TypeProduct />} />
           <Route path="newcoupon" element={<NewCoupon />} />
           <Route

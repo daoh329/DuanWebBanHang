@@ -7,7 +7,7 @@
 }
 
 .container-content{
-    background: #f1f1f1;
+    /* background: #f1f1f1; */
     min-height: 100vh;
     display: flex;
     justify-content: flex-start;
@@ -15,6 +15,8 @@
     font-size: 62.5%;
     font-family: 'Open Sans', sans-serif;
     flex-direction: column;
+    margin-top: 10px;
+    border-radius: 5px;
 }
 
 .title{
@@ -26,28 +28,33 @@
     min-height: 100px;
     padding: 32px 24px;
     background: #fff;
-    border-radius: 2px;
+    border-radius: 5px;
     box-shadow: 0 2px 5px 0 rgba(51,62,73,.1);
 }
 
 .page-group{
-    width: 100%;
+    /* width: 100%;
     display: flex;
     justify-content: space-around;
     text-align: center;
-    align-self: center;
+    align-self: center; */
+    column-gap: 10px;
 }
 
 .page1-control{
-    width: 45%;
+    width: 50%;
     height: max-content;
     margin-top: 0;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .page2-control{
-    width: 45%;
+    width: 50%;
     height: 100%;
     margin-top: 0;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .form-group {

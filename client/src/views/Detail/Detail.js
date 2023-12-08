@@ -68,11 +68,13 @@ function Detail() {
 
   // sự kiện khi color thay đổi (Thay đổi image)
   useEffect(() => {
-    if (selectedColor && Detail) {
+    if (selectedColor && Object.keys(Detail).length !== 0) {
       const images = [...Detail.images].filter(
         (element) => element.color === selectedColor
       );
-      setImagesSelected(images[0].path);
+      if (images.length !== 0) {
+        setImagesSelected(images[0].path);
+      }
     }
   }, [selectedColor, Detail]);
 
@@ -457,9 +459,7 @@ function Detail() {
                   <div className="css-1q5zfcu">
                     {parseInt(variationSelected.discount_amount) === 0 ? (
                       <div className="css-oj899w">
-                        {formatCurrency(
-                          variationSelected.price
-                        )}
+                        {formatCurrency(variationSelected.price)}
                       </div>
                     ) : (
                       <>
@@ -867,23 +867,23 @@ function Detail() {
                       {configuration.cpu || configuration.chip}
                     </td>
                   </tr>
-                  {(configuration.vga || configuration.resolution) && (
+                  {(configuration.graphicsCard || configuration.resolution) && (
                     <tr>
                       <td colSpan={1}>
-                        {configuration.vga
-                          ? "Chip đồ họa"
+                        {configuration.graphicsCard
+                          ? "Card đồ họa"
                           : configuration.resolution
                           ? "Phân giải"
                           : ""}
                       </td>
                       <td colSpan={3}>
-                        {configuration.vga || configuration.resolution}
+                        {configuration.graphicsCard || configuration.resolution}
                       </td>
                     </tr>
                   )}
                   <tr>
                     <td colSpan={1}>Màn hình</td>
-                    <td colSpan={3}>{configuration.screen}</td>
+                    <td colSpan={3}>{configuration.screenSize}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Ram</td>
@@ -1064,12 +1064,14 @@ function Detail() {
                 {relatedProducts &&
                   relatedProducts.length > 0 &&
                   relatedProducts.map((item, index) => (
-                    <CardProduct
-                      key={index}
-                      item={item}
-                      items={relatedProducts}
-                      onClick={handleViewDetailProduct}
-                    />
+                    <div key={index}>
+                      <CardProduct
+                        key={index}
+                        item={item}
+                        items={relatedProducts}
+                        onClick={() => handleViewDetailProduct(item)}
+                      />
+                    </div>
                   ))}
               </div>
               {/* button */}

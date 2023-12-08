@@ -80,6 +80,8 @@ function ProductVariations(props) {
       price: 0,
       discount_amount: 0,
       capacity: 0,
+      quantity_variant: 1,
+      remaining_quantity_variant: 1,
     });
     setArrVariations(updatedVariations);
   };
@@ -238,6 +240,7 @@ function ProductVariations(props) {
             subFieldIndex={i}
             openModalAddCapacity={openModalAddCapacity}
             handleSubFieldChange={handleSubFieldChange}
+            arrVariations={arrVariations}
           />
         </div>
       ))}
@@ -265,6 +268,7 @@ function CapacityGroup(props) {
     subFieldIndex,
     openModalAddCapacity,
     handleSubFieldChange,
+    arrVariations,
   } = props;
 
   return (
@@ -316,7 +320,7 @@ function CapacityGroup(props) {
 
       {/* Giá */}
       {/* Giá giảm */}
-      <Form.Item style={{ margin: "0" }}>
+      <Form.Item>
         <Form.Item
           label="Giá"
           style={{
@@ -357,6 +361,32 @@ function CapacityGroup(props) {
           />
         </Form.Item>
       </Form.Item>
+
+      {/* Số lượng nhập */}
+      <Form.Item
+        label="Số lượng"
+        style={{
+          display: "inline-block",
+          width: "calc(50% - 8px)",
+          margin: 0,
+        }}
+      >
+        <InputNumber
+          style={{ width: "100%" }}
+          placeholder="Nhập số lượng sản phẩm"
+          min={0}
+          value={arrVariations[fieldIndex].capacityGroup[subFieldIndex].quantity_variant}
+          onChange={(value) =>
+            handleSubFieldChange(
+              fieldIndex,
+              subFieldIndex,
+              "quantity_variant",
+              value
+            )
+          }
+        />
+      </Form.Item>
+
       <hr />
       <br />
     </>

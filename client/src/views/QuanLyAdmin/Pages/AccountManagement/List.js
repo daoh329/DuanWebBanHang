@@ -186,11 +186,11 @@ function AccountList() {
     {
       title: "Trạng thái",
       key: "status",
-      dataIndex: "status",
+      dataIndex: "isLocked",
       width: "10%",
-      render: (status) => (
-        <Tag color={status === 1 ? "success" : "error"}>
-          {status === 1 ? "Đang hoạt động" : "Bị khóa"}
+      render: (isLocked) => (
+        <Tag color={isLocked === 0 ? "success" : "error"}>
+          {isLocked === 0 ? "Đang hoạt động" : "Đang bị khóa"}
         </Tag>
       ),
     },
@@ -202,13 +202,13 @@ function AccountList() {
         <div>
           <Tooltip
             title={
-              record?.status === 1 ? "Khóa tài khoản" : "Mở khóa tài khoản"
+              record?.isLocked === 0 ? "Khóa tài khoản" : "Mở khóa tài khoản"
             }
           >
             <Button
               onClick={() => handleLockAccount(record.id)}
               icon={
-                record?.status === 1 ? <LockOutlined /> : <UnlockOutlined />
+                record?.isLocked === 0 ? <UnlockOutlined /> : <LockOutlined />
               }
               style={{ margin: "0 10px 0 0" }}
             />
@@ -253,5 +253,4 @@ function AccountList() {
     </div>
   );
 }
-
 export default AccountList;

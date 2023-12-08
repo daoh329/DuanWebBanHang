@@ -17,7 +17,6 @@ class Product {
           .status(400)
           .json({ message: "Không có thông tin biến thể sản phẩm" });
       }
-
       // Đưa images trở lại variations
       var variations = data.variations;
       for (let i = 0; i < variations.length; i++) {
@@ -32,10 +31,8 @@ class Product {
         });
         variations[i].images = files;
       }
-
       // Lấy ra mảng dữ liệu cho bảng product_variations
       const arrValueTableProductVariations = [];
-
       for (let i = 0; i < variations.length; i++) {
         const capacityGroup = variations[i].capacityGroup;
         capacityGroup.forEach((item) => {
@@ -44,11 +41,13 @@ class Product {
             price: item.price,
             discount_amount: item.discount_amount ? item.discount_amount : 0,
             color: variations[i].color,
+            quantity_variant: item.quantity_variant,
+            remaining_quantity_variant: item.quantity_variant,
           };
           arrValueTableProductVariations.push(data);
         });
       }
-      // console.log(variations);
+      // console.log(arrValueTableProductVariations);
       // res.status(200).send("success");
       // return;
 
@@ -57,9 +56,7 @@ class Product {
       if (main_image) {
         mainImagePath = `/images/${path.basename(main_image.path)}`;
       }
-
       const configurationString = JSON.stringify(data.configuration);
-
       const is_product = `INSERT INTO products (name, main_image, shortDescription, CategoryID, status, release_date) VALUES (?, ?, ?, ?, ?, ?)`;
       const is_productdetail =
         "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
@@ -92,7 +89,7 @@ class Product {
 
       // product_variations & product_images
       const is_product_variations = `
-      INSERT INTO product_variations(color, capacity, product_id, price, discount_amount) VALUES (?,?,?,?,?);
+      INSERT INTO product_variations(color, capacity, product_id, price, discount_amount, quantity_variant, remaining_quantity_variant) VALUES (?,?,?,?,?,?,?);
     `;
       // insert to product_variations
       arrValueTableProductVariations &&
@@ -103,6 +100,8 @@ class Product {
             id_product,
             variation.price,
             variation.discount_amount,
+            variation.quantity_variant,
+            variation.remaining_quantity_variant,
           ];
           await query(is_product_variations, variationsValues);
         });
@@ -151,7 +150,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		) 
       FROM product_variations AS pv
@@ -503,7 +504,9 @@ class Product {
         'color', pv.color,
         'capacity', pv.capacity,
         'price', pv.price,
-        'discount_amount', pv.discount_amount 
+        'discount_amount', pv.discount_amount,
+        'quantity_variant', pv.quantity_variant,
+        'remaining_quantity_variant', pv.remaining_quantity_variant
       )
     ) AS variations,
     (
@@ -556,7 +559,9 @@ class Product {
           'color', pv.color,
             'capacity', pv.capacity,
             'price', pv.price,
-            'discount_amount', pv.discount_amount 
+            'discount_amount', pv.discount_amount,
+            'quantity_variant', pv.quantity_variant,
+            'remaining_quantity_variant', pv.remaining_quantity_variant
           )
         FROM product_variations AS pv
         WHERE p.id = pv.product_id AND pv.color = ? AND pv.capacity = ?
@@ -613,7 +618,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		  )
       FROM product_variations AS pv
@@ -632,7 +639,6 @@ class Product {
     GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
       pd.quantity, pd.remaining_quantity, pd.brand,configuration, pd.created_at;
     `;
-
     mysql.query(query, (error, results) => {
       if (error) {
         return res.json({ error });
@@ -663,7 +669,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		  )
       FROM product_variations AS pv
@@ -712,7 +720,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount ,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		  )
       FROM product_variations AS pv
@@ -761,7 +771,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		  )
       FROM product_variations AS pv
@@ -803,7 +815,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		  )
       FROM product_variations AS pv
@@ -836,7 +850,9 @@ class Product {
         'color', pv.color,
           'capacity', pv.capacity,
           'price', pv.price,
-          'discount_amount', pv.discount_amount 
+          'discount_amount', pv.discount_amount,
+          'quantity_variant', pv.quantity_variant,
+          'remaining_quantity_variant', pv.remaining_quantity_variant
         )
 		  )
       FROM product_variations AS pv
@@ -929,6 +945,21 @@ class Product {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Get product failed" });
+    }
+  }
+
+  // /product/:id/variant
+  async getRemainingQuantityVariant(req, res){
+    try {
+      const product_id = req.params.id;
+      const {color, capacity} = req.body;
+      const qr = `Select * from product_variations where product_id = ? and color = ? and capacity = ?`
+      const results = await query(qr, [product_id, color, capacity]);
+
+      res.status(200).json(results);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({message: "Get failed variant"})
     }
   }
 
