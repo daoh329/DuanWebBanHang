@@ -61,7 +61,7 @@ function QLAlldonhang() {
     const handleOpenOrderInformations = (order_id) => {
         // Lấy dữ liệu đơn hàng dựa trên order_id
         const orderData = data.find(order => order.order_id === order_id);
-    
+
         // Chuyển hướng người dùng đến trang mới với dữ liệu đơn hàng
         navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
     };
@@ -72,19 +72,19 @@ function QLAlldonhang() {
             dataIndex: "order_id",
             key: "magd",
             render: (order_id) => (
-              <div>
-                {order_id}
-                <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleOpenOrderInformations(order_id);
-                  }}
-                  style={{ fontSize: '12px', padding: '5px 10px' }}
-                >
-                  <p>Hóa đơn thanh toán</p>
-                </a>
-              </div>
+                <div>
+                    {order_id}
+                    <a
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleOpenOrderInformations(order_id);
+                        }}
+                        style={{ fontSize: '12px', padding: '5px 10px' }}
+                    >
+                        <p>Hóa đơn thanh toán</p>
+                    </a>
+                </div>
             )
         },
         { title: 'Tên người mua', dataIndex: 'user_name', key: 'Username' },
@@ -116,30 +116,30 @@ function QLAlldonhang() {
             dataIndex: 'order_created_at',
             key: 'created_at',
             render: (date) => {
-              const fmt = 'HH:mm:ss - dd/MM/yyyy';
-              const zonedDate = utcToZonedTime(date, 'Etc/UTC');
-              return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
+                const fmt = 'HH:mm:ss - dd/MM/yyyy';
+                const zonedDate = utcToZonedTime(date, 'Etc/UTC');
+                return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
             },
-          },
-          
-          {
+        },
+
+        {
             title: 'Thời gian CN',
             dataIndex: 'order_updated_at',
             key: 'order_updated_at',
             render: (date) => {
-              const fmt = 'HH:mm:ss - dd/MM/yyyy';
-              const zonedDate = utcToZonedTime(date, 'Etc/UTC');
-              return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
+                const fmt = 'HH:mm:ss - dd/MM/yyyy';
+                const zonedDate = utcToZonedTime(date, 'Etc/UTC');
+                return format(zonedDate, fmt, { timeZone: 'Etc/UTC' });
             },
-          },
-          
+        },
+
         {
-            title: 'Trạng thái', 
-            dataIndex: 'order_status', 
-            key: 'status', 
+            title: 'Trạng thái',
+            dataIndex: 'order_status',
+            key: 'status',
             render: status => (
                 <span style={{
-                    fontWeight: 'bold', 
+                    fontWeight: 'bold',
                     color: status === 5 ? 'violet' : (status === 2 ? '#FF3399' : (status === 4 ? '#33CCFF' : 'orange'))
                 }}>
                     {status === 5 ? 'Giao không thành công' : (status === 2 ? 'Đã bị hủy' : (status === 4 ? 'Đã giao' : 'Chưa xác nhận'))}
@@ -149,30 +149,12 @@ function QLAlldonhang() {
     ];
 
     return (
-        <div>
-            <h1>Tất cả đơn hàng</h1>
-
-            {/* <div>
-                <a href="/deliveryfailed" style={{width: 250, height: 60, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-            <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ margin: '10px' }}>
-                    <a href="/deliveryfailed" style={{ width: '100%', height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                    Đơn hàng đã hủy hoặc giao không thành công
-                        </a>
-                </div>
-
-                <div style={{ margin: '10px' }}>
-                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                        Xem đơn hàng trong một tháng</a>
-                </div>
+        <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
+            <div style={{padding:"10px"}}>
+            <h4>Tất cả đơn hàng</h4>
+                <Table columns={columns} dataSource={data} />
             </div>
-            <div>
-                <a href="/delivered" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                    Xác nhận đơn hàng đã giao
-                </a>
-            </div> */}
-            
-            <Table columns={columns} dataSource={data} />
+
         </div>
     );
 }
