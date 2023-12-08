@@ -49,7 +49,7 @@ function Admin() {
     {
       key: "grp",
       icon: <UserOutlined />,
-      label: "Admin",
+      label: "ĐƯỜNG DẪN NHANH",
       children: [
         {
           key: "1",
