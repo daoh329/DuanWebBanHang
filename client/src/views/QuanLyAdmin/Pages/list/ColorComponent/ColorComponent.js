@@ -109,7 +109,7 @@ function Color() {
           }}
         >
           <Button className="confirm-button" onClick={() => handleUpdate(name)}>
-            <EditOutlined /> Edit
+            <EditOutlined />Sửa
           </Button>
 
           <Modal
@@ -128,7 +128,7 @@ function Color() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined /> Delete
+              <DeleteOutlined />Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -153,7 +153,7 @@ function Color() {
     <div className="container-content">
       <div className="page-group">
         <div className="page1-control">
-          <h3 style={{ fontWeight: "bold" }}>color</h3>
+          <h3 style={{ fontWeight: "bold" }}>Màu sắc</h3>
           <Table columns={columns} dataSource={color} />
         </div>
         <div className="page2-control">
@@ -164,7 +164,7 @@ function Color() {
           >
             <h3 style={{ fontWeight: "bold" }}>Thêm màu</h3>
             <div className="form-group">
-              <label className="form-label">color</label>
+              {/* <label className="form-label">color</label> */}
               <input
                 type="text"
                 name="name"

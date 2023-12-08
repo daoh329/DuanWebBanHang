@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Layout, Carousel, Tabs, Pagination } from "antd";
+import { Layout, Carousel, Tabs, Pagination, Alert } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -243,6 +243,19 @@ const Home = () => {
 
   return (
     <Layout>
+      {user.isLocked !== 0 && (
+          <>
+            <br />
+            <Alert
+              
+              message="Tài khoản của bạn đã bị khóa"
+              description="Bạn không thể mua hàng và sử dụng một số chức năng khác.Ngoài ra bạn vẫn có thể xem và tham khảo các sản phẩm của Dinh Minh Computer."
+              type="error"
+              showIcon
+            />
+            <br />
+          </>
+        )}
       <div className="content">
         <Carousel autoplay>
           {sliderImages.map((image, index) => (

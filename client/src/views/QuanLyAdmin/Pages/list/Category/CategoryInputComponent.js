@@ -67,16 +67,16 @@ function FormInputCategory({ name,onUpdated }) {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
-            <hr />
-            <h6 style={{ margin: "20px 0 10px 0" }}>Sửa Danh mục</h6>
+            {/* <hr /> */}
+            {/* <h6 style={{ margin: "20px 0 10px 0" }}>Sửa thể loại</h6> */}
             {/* Danh mục */}
             <Form.Item
                 hasFeedback
                 validateDebounce={1000}
-                label="Danh mục"
+                // label="Danh mục"
                 name="name"
             >
-                <Input placeholder="nhập Danh mục" />
+                <Input placeholder="Nhập thể loại" />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={isLoading}>

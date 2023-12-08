@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Checkbox,
   DatePicker,
   Form,
@@ -10,15 +9,13 @@ import {
   Select,
   Upload,
   notification,
+  Space,
+  Card,
 } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductVariations from "./ProductVariations";
-import {
-  CloseOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { formatSpecifications } from "../../../../../util/formatSpecifications";
@@ -41,20 +38,20 @@ function MainForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSpecifications, setSelectedSpecifications] = useState("");
-  const [arrVariations, setArrVariations] = useState([
-    {
-      color: "",
-      capacityGroup: [
-        {
-          price: 0,
-          discount_amount: 0,
-          capacity: 0,
-          quantity_variant: 1,
-        },
-      ],
-      images: [],
-    },
-  ]);
+  // const [arrVariations, setArrVariations] = useState([
+  //   {
+  //     color: "",
+  //     capacityGroup: [
+  //       {
+  //         price: 0,
+  //         discount_amount: 0,
+  //         capacity: 0,
+  //         quantity_variant: 1,
+  //       },
+  //     ],
+  //     images: [],
+  //   },
+  // ]);
   const [inputs, setInputs] = useState([]);
   const [description, setDescription] = useState("");
 
@@ -62,7 +59,7 @@ function MainForm() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([]);
+
   const [mainImage, setMainImage] = useState([]);
 
   useEffect(() => {
@@ -130,10 +127,17 @@ function MainForm() {
 
       // Tạo các trường cần thiết
       values["main_image"] = mainImage[0].originFileObj;
-      values["variations"] = arrVariations;
+      // values["variations"] = arrVariations;
       values["description"] = description;
-      values["configuration"] = {};
 
+      // Cấu trúc lại configuration
+      const configuration = values.configuration;
+      values.configuration = {};
+      [...configuration].forEach((item) => {
+        values.configuration[item.inputName] = item.value;
+      });
+
+      // Các field chính
       const mainField = [
         "brand",
         "name",
@@ -147,6 +151,7 @@ function MainForm() {
         "release_date",
       ];
 
+      // Đưa các trường thuộc configuration vào trường configuration
       for (const fieldName in values) {
         if (!mainField.includes(fieldName) && fieldName !== "configuration") {
           values["configuration"][fieldName] = values[fieldName];
@@ -222,22 +227,22 @@ function MainForm() {
   );
 
   // logic variation
-  const remove = (index) => {
-    const updatedRomInfo = [...arrVariations];
-    updatedRomInfo.splice(index, 1);
-    setArrVariations(updatedRomInfo);
-  };
+  // const remove = (index) => {
+  //   const updatedRomInfo = [...arrVariations];
+  //   updatedRomInfo.splice(index, 1);
+  //   setArrVariations(updatedRomInfo);
+  // };
 
-  const add = () => {
-    setArrVariations([
-      ...arrVariations,
-      {
-        color: "",
-        capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
-        images: [],
-      },
-    ]);
-  };
+  // const add = () => {
+  //   setArrVariations([
+  //     ...arrVariations,
+  //     {
+  //       color: "",
+  //       capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+  //       images: [],
+  //     },
+  //   ]);
+  // };
 
   // logic add field
   const handleAddInput = () => {
@@ -256,6 +261,21 @@ function MainForm() {
     setInputs(newInputs);
   };
 
+  const getInitialValues = () => [
+    {
+      capacityGroup: [
+        {
+          price: null,
+          discount_amount: null,
+          capacity: null,
+          quantity_variant: null,
+        },
+      ],
+      color: null,
+      images: [],
+    },
+  ];
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Form
@@ -264,7 +284,10 @@ function MainForm() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         form={form}
-        initialValues={{ status: true }}
+        initialValues={{
+          status: true,
+          variations: getInitialValues(),
+        }}
         // autoComplete="off"
       >
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
@@ -272,9 +295,8 @@ function MainForm() {
         </h5>
         <div
           style={{
-            padding: "12px",
+            padding: "20px",
             background: "#fff",
-            margin: "0 20px",
             borderRadius: "10px",
           }}
         >
@@ -301,6 +323,7 @@ function MainForm() {
               name="guarantee"
               rules={[
                 { required: true, message: "Vui lòng nhập thời gian bảo hành" },
+                { max: 20, message: "Không được nhập quá 20 kí tự" },
               ]}
               style={{
                 display: "inline-block",
@@ -323,6 +346,7 @@ function MainForm() {
               name="name"
               rules={[
                 { required: true, message: "Vui lòng nhập tên sản phẩm" },
+                { max: 80, message: "Không được nhập quá 80 kí tự" },
               ]}
               style={{ display: "inline-block", width: "calc(50% - 8px)" }}
             >
@@ -336,6 +360,7 @@ function MainForm() {
                 width: "calc(50% - 8px)",
                 margin: "0 8px",
               }}
+              rules={[{ max: 25, message: "Không được nhập quá 25 kí tự" }]}
             >
               <Input
                 placeholder="Nhập Series sản phẩm"
@@ -393,8 +418,8 @@ function MainForm() {
             </Form.Item>
           </Form.Item>
 
-          {/* số lượng */}
           {/* demand */}
+          {/* số lượng */}
           <Form.Item style={{ margin: 0 }}>
             <Form.Item
               label="Nhu cầu"
@@ -403,6 +428,7 @@ function MainForm() {
                 display: "inline-block",
                 width: "calc(50% - 8px)",
               }}
+              rules={[{ max: 100, message: "Không được nhập quá 100 kí tự" }]}
             >
               <Input
                 placeholder="Nhập nhu cầu sử dụng sản phẩm"
@@ -432,12 +458,16 @@ function MainForm() {
 
           {/* Mô tả ngắn */}
           <Form.Item
-            label="Mô tả ngắn"
+            label="Mô tả ngắn (Tối đa 160 kí tự)"
             name="shortDescription"
             rules={[
               {
                 required: true,
                 message: "Vui lòng nhập mô tả ngắn của sản phẩm",
+              },
+              {
+                max: 160,
+                message: "Không được nhập quá 160 kí tự",
               },
             ]}
           >
@@ -477,143 +507,84 @@ function MainForm() {
 
         <br />
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
-          Biến thể của sản phẩm
+          Thêm các phân loại của sản phẩm
         </h5>
         {/* product variations */}
-        <div style={{ padding: "0 20px" }}>
-          <>
-            {arrVariations.map((variation, index) => (
-              <Card
-                size="small"
-                title={`Biến thể ${index + 1}`}
-                key={index}
-                style={{ marginBottom: 8 }}
-                extra={
-                  <CloseOutlined
-                    onClick={() => {
-                      remove(index);
-                    }}
-                  />
-                }
-              >
-                <ProductVariations
-                  index={index}
-                  variations={variation}
-                  handlePreview={handlePreview}
-                  fileList={fileList}
-                  setFileList={setFileList}
-                  arrVariations={arrVariations}
-                  setArrVariations={setArrVariations}
-                />
-              </Card>
-            ))}
-          </>
-          {/* btn add variations */}
-          <Form.Item>
-            <Button
-              type="dashed"
-              onClick={() => add()}
-              block
-              icon={<PlusOutlined />}
-            >
-              Thêm biến thể
-            </Button>
-          </Form.Item>
-        </div>
+        <ProductVariations />
 
         {/* Other information */}
         <br />
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
           Thông tin khác (Tùy chọn)
         </h5>
-        <div
-          style={{
-            padding: "12px",
-            background: "#fff",
-            margin: "0 20px",
-            borderRadius: "10px",
-          }}
-        >
-          {inputs.map((input, index) => (
-            <Form.Item key={index}>
-              <Form.Item
-                style={{
-                  display: "inline-block",
-                  width: "calc(25% - 8px)",
-                  margin: "0",
-                }}
-              >
-                <Select
-                  placeholder="Chọn thông tin"
-                  // value={input.inputName}
-                  onChange={(value) =>
-                    handleInputChange(index, "inputName", value)
-                  }
-                  style={{ height: 40 }}
-                  showSearch
-                  allowClear
-                >
-                  {selectedSpecifications &&
-                    selectedSpecifications.map((specification) => (
-                      <Select.Option value={specification}>
-                        {formatSpecifications(specification)}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name={input.inputName}
-                style={{
-                  display: "inline-block",
-                  width: "calc(50% - 8px)",
-                  margin: "0 8px",
-                }}
-              >
-                <Input
-                  type="text"
-                  placeholder="Nhập thông tin"
-                  value={input.value}
-                  onChange={(e) =>
-                    handleInputChange(index, "value", e.target.value)
-                  }
-                />
-              </Form.Item>
-              <Form.Item
-                style={{
-                  display: "inline-block",
-                  width: "calc(10% - 8px)",
-                  margin: "0 8px",
-                }}
-              >
-                <Button
-                  onClick={() => handleRemoveElement(index)}
-                  icon={<MinusCircleOutlined />}
+        <Form.List name="configuration">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space
+                  key={key}
                   style={{
-                    border: "none",
-                    background: "none",
-                    margin: "3px 0 0 0",
+                    display: "flex",
+                    marginBottom: 8,
                   }}
-                />
+                  align="baseline"
+                >
+                  <Form.Item
+                    {...restField}
+                    style={{ width: "200px", margin: "0" }}
+                    name={[name, "inputName"]}
+                    rules={[
+                      { required: true, message: "Không bỏ trống trường này" },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Chọn thông tin"
+                      style={{ height: 40 }}
+                      showSearch
+                      allowClear
+                    >
+                      {selectedSpecifications &&
+                        selectedSpecifications.map((specification, index) => (
+                          <Select.Option key={index} value={specification}>
+                            {formatSpecifications(specification)}
+                          </Select.Option>
+                        ))}
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item
+                    {...restField}
+                    name={[name, "value"]}
+                    style={{ width: "400px", margin: "0" }}
+                    rules={[
+                      { required: true, message: "Không bỏ trống trường này" },
+                      { max: 200, message: "Không được nhập quá 200 kí tự" },
+                    ]}
+                  >
+                    <Input type="text" placeholder="Nhập thông tin" />
+                  </Form.Item>
+
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Add field
+                </Button>
               </Form.Item>
-            </Form.Item>
-          ))}
-          <Form.Item>
-            <Button
-              onClick={handleAddInput}
-              type="dashed"
-              icon={<PlusOutlined />}
-              style={{ margin: 0 }}
-            >
-              Thêm thẻ
-            </Button>
-          </Form.Item>
-        </div>
+            </>
+          )}
+        </Form.List>
 
         <br />
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>Mô tả</h5>
         {/* description */}
-        <div style={{ margin: "0 20px" }}>
+        <div>
           <Form.Item name="description">
             <CKEditor
               editor={ClassicEditor}
@@ -642,11 +613,11 @@ function MainForm() {
               type="primary"
               htmlType="submit"
               loading={isLoading}
-              disabled={
-                !clientReady ||
-                !!form.getFieldsError().filter(({ errors }) => errors.length)
-                  .length
-              }
+              // disabled={
+              //   !clientReady ||
+              //   !!form.getFieldsError().filter(({ errors }) => errors.length)
+              //     .length
+              // }
             >
               Tạo sản phẩm
             </Button>
