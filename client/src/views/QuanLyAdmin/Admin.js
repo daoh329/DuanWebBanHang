@@ -16,6 +16,7 @@ import {
   DatabaseOutlined,
   FileProtectOutlined,
   UserOutlined,
+  PieChartOutlined,
 } from "@ant-design/icons";
 import { Routes, Route, Link } from "react-router-dom";
 import "./Admin.css";
@@ -52,19 +53,19 @@ function Admin() {
       children: [
         {
           key: "1",
-          icon: <HomeOutlined />,
+          icon: <PieChartOutlined />,
           label: (
             <Link to="dashboard">Thống kê SL từng sản phẩm đã giao</Link>
           ),
         },
         {
           key: "2",
-          icon: <HomeOutlined />,
+          icon:<PieChartOutlined />,
           label: <Link to="dashboardrevenue">Thống kê doanh thu</Link>,
         },
         {
           key: "20",
-          icon: <HomeOutlined />,
+          icon: <PieChartOutlined />,
           label: <Link to="brandstatistics">Thống kê nhãn hàng</Link>,
         },
         {
@@ -92,7 +93,7 @@ function Admin() {
         {
           key: "6",
           icon: <OrderedListOutlined />,
-          label: <Link to="ListCate">Danh mục</Link>,
+          label: <Link to="ListCate">Thuộc tính</Link>,
         },
         // {
         //   key: "7",

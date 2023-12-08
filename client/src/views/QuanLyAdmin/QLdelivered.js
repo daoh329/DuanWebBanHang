@@ -175,7 +175,8 @@ function QLdelivered() {
     ];
 
     return (
-        <div>
+        <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
+            <div style={{padding:"10px"}}>
             <h1>Xác nhận giao hàng</h1>
             {/* <div>
                 <a href="/allorders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
@@ -196,6 +197,7 @@ function QLdelivered() {
             </div> */}
 
             <Table columns={columns} dataSource={data} />
+            </div>
         </div>
     );
 }

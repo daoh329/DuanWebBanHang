@@ -154,7 +154,7 @@ const App = () => {
 
   // tới profile
   const adminPage = () => {
-    navigate("/admin");
+    navigate("/admin/dashboard");
   };
 
   const menuAccount = [
