@@ -84,7 +84,7 @@ function QLshipping() {
             render: status => (
                 <span style={{
                     fontWeight: 'bold', 
-                    color: status === 1 ? 'blue' : (status === 2 ? 'blue' : 'blue')
+                    color: status === 1 ? 'blue' : (status === 2 ? 'red' : 'red')
                 }}>
                     {status === 2 ? 'MOMO' : (status === 1 ? 'COD' : 'VNPAY')}
                 </span>

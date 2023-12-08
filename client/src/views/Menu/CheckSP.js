@@ -13,75 +13,75 @@ const CheckSP = () => {
   // Đang sửa otp
   // Khai báo state cho các trường thông tin cá nhân
   // const [phone, setPhone] = useState('');
-//   const [status, setStatus] = useState('');
-// // otp
-//   const [confirmationResult, setConfirmationResult] = useState(null);
-//   const [isOTPVerified, setIsOTPVerified] = useState(false);
- 
-  
-//   const handleSendOTP = () => {
-//     // Set up reCAPTCHA verifier
-//     const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
+  //   const [status, setStatus] = useState('');
+  // // otp
+  //   const [confirmationResult, setConfirmationResult] = useState(null);
+  //   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
-//     // Send OTP to user's phone number
-//     signInWithPhoneNumber(auth, phone, verifier).then((result) => {
-//       setConfirmationResult(result);
-//     });
-//   };
 
-//   const handleVerifyOTP = () => {
-//     // Prompt user to enter OTP
-//     const code = window.prompt("Enter OTP");
+  //   const handleSendOTP = () => {
+  //     // Set up reCAPTCHA verifier
+  //     const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
 
-//     // Verify OTP
-//     confirmationResult.confirm(code).then((result) => {
-//       // User is signed in
-//       const user = result.user;
-//       setIsOTPVerified(true); // Cập nhật trạng thái xác minh OTP
-//     });
-//   };
+  //     // Send OTP to user's phone number
+  //     signInWithPhoneNumber(auth, phone, verifier).then((result) => {
+  //       setConfirmationResult(result);
+  //     });
+  //   };
 
-//   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
-//   const handleConfirm = async () => {
-//     const data = {
-//       phone: phone,
-//       status:'Chưa xác nhận',
-//     };
+  //   const handleVerifyOTP = () => {
+  //     // Prompt user to enter OTP
+  //     const code = window.prompt("Enter OTP");
 
-//     // In ra giá trị của biến data
-//     console.log("Data:", data);
+  //     // Verify OTP
+  //     confirmationResult.confirm(code).then((result) => {
+  //       // User is signed in
+  //       const user = result.user;
+  //       setIsOTPVerified(true); // Cập nhật trạng thái xác minh OTP
+  //     });
+  //   };
 
-//     // Gửi thông tin đăng ký lên server
-//     const response = await fetch("http://localhost:3000/order/order", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     });
+  //   // Hàm xử lý khi người dùng nhấn nút "Xác nhận"
+  //   const handleConfirm = async () => {
+  //     const data = {
+  //       phone: phone,
+  //       status:'Chưa xác nhận',
+  //     };
 
-//     // Xử lý kết quả trả về từ server NodeJS
-//     if (response.ok) {
-//       // Thông báo thành công
-//       alert("thành công");
-//     } else {
-//       // Thông báo lỗi
-//       alert("Có lỗi ");
-//     }
-//   };
-  
+  //     // In ra giá trị của biến data
+  //     console.log("Data:", data);
 
-    const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+  //     // Gửi thông tin đăng ký lên server
+  //     const response = await fetch("http://localhost:3000/order/order", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
 
-// phone
-    const [phone, setPhone] = useState('');
-    const handleConfirm = async () => {
-        // Lưu giá trị phone vào session
-        window.sessionStorage.setItem('phone', phone);
-        navigate(`/orderHistory/${phone}`);
-    }
+  //     // Xử lý kết quả trả về từ server NodeJS
+  //     if (response.ok) {
+  //       // Thông báo thành công
+  //       alert("thành công");
+  //     } else {
+  //       // Thông báo lỗi
+  //       alert("Có lỗi ");
+  //     }
+  //   };
+
+
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  // phone
+  const [phone, setPhone] = useState('');
+  const handleConfirm = async () => {
+    // Lưu giá trị phone vào session
+    window.sessionStorage.setItem('phone', phone);
+    navigate(`/orderHistory/${phone}`);
+  }
 
   useEffect(() => {
     // Tải dữ liệu từ API khi component được render
@@ -99,42 +99,42 @@ const CheckSP = () => {
   }, []);
 
   return (
-    <div style={{margin:'0 auto', width:'80%',marginTop:'10px'}}>
+    <div style={{ margin: '0 auto', width: '80%', marginTop: '10px' }}>
       <h6>
         <Breadcrumb
-        items={[
-          {
-            title: <a href="/">Home</a>,
-          },
-          {
-            title: <a href="/checkSP">Tra cứu</a>,
-          }
-        ]}
-      />
+          items={[
+            {
+              title: <a href="/">Home</a>,
+            },
+            {
+              title: <a href="/checkSP">Tra cứu</a>,
+            }
+          ]}
+        />
       </h6>
-      
 
-        <h4>Tra cứu thông tin đơn hàng</h4>
-        <Form >
-          <div className="input-area">
-            <i className="iconoh-phone-blue input-icon"></i>
-      <Input size="large"
-           placeholder="Nhập số điện thoại"
-            prefix={<UserOutlined />} 
+
+      <Form style={{ display: 'block', textAlign: 'center' }}>
+        <div className="input-area">
+          <i className="iconoh-phone-blue input-icon"></i>
+          <Input size="large"
+            placeholder="Nhập số điện thoại"
+            prefix={<UserOutlined />}
             onChange={(e) => setPhone(e.target.value)} value={phone}
             type="tel"
             name="txtPhoneNumber"
             id="txtPhoneNumber"
             onkeypress="ValidateOnlyNumber(event)"
             autoComplete="off"
-              maxLength={15}
-            />
-          </div>
-          <label className="hide"></label>
-          <Button type="submit" onClick={handleConfirm} className="btn">
-            Tra cứu
-          </Button>
-        </Form>
+            maxLength={15}
+          />
+        </div>
+        <label className="hide"></label>
+        <Button type="submit" onClick={handleConfirm} className="btn">
+          Tra cứu
+        </Button>
+      </Form>
+
 
     </div>
 

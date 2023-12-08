@@ -32,7 +32,7 @@ export default function Buy() {
   const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [note, setNote] = useState("");
-  const [paymentMenthod, setPaymentMenthod] = useState([]);
+  const [paymentMenthod, setPaymentMenthod] = useState(null);
   const [quantity, setQuantity] = useState(0);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
   const [fillActive, setFillActive] = useState("tab1");
@@ -108,7 +108,7 @@ export default function Buy() {
       onOk() {
         navigate("/login");
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -245,10 +245,47 @@ export default function Buy() {
     }
   };
 
+  const selectVNPay = () => {
+    setPaymentMenthod(0); // Giả sử setPaymentMethod là hàm cập nhật state
+  };
+
+  const selectCOD = () => {
+    setPaymentMenthod(1); // Giả sử setPaymentMethod là hàm cập nhật state
+  };
+
+  const selectMoMoPay = () => {
+    setPaymentMenthod(2); // Giả sử setPaymentMethod là hàm cập nhật state
+  };
+
+  const handleBuyClick = async () => {
+
+    // Kiểm tra giá trị của paymentMenthod và gọi hàm tương ứng
+    if (!deliveryMethod) {
+      message.error("Vui lòng chọn thời gian giao hàng");
+      return;
+    } else if (
+      paymentMenthod == null
+    ) {
+      message.error("Vui lòng chọn phương thức thanh toán");
+      return;
+    } else if (addressChecked === null) {
+      message.error("Vui lòng chọn địa chỉ giao hàng");
+      return;
+    } else if (deliveryAddress.length === 0) {
+      message.error("Vui lòng thêm địa chỉ giao hàng");
+      return;
+    }
+
+    if (paymentMenthod === 0) {
+      await handleBuyVNpay();
+    } else if (paymentMenthod === 1) {
+      handleBuyCOD();
+    } else if (paymentMenthod === 2) {
+      await handleBuyMoMoPay();
+    }
+  };
+
   const handleBuyVNpay = async () => {
-    // const totalAmount = buysData.total; // Lấy tổng tiền từ buysData
-    // console.log('amount: '+totalAmount)
-    // setPaymentMenthod(0); // Cập nhật phương thức thanh toán
 
     const data = {
       amount,
@@ -268,11 +305,6 @@ export default function Buy() {
     };
     // console.log("data: "+ data)
 
-    if (!deliveryMethod) {
-      message.error("Vui lòng chọn hình thức giao hàng");
-      return;
-    }
-
     // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 1 tỷ không
     if (amount < 5000 || amount > 1000000000) {
       message.error("Thanh toán VN Pay chỉ hỗ trợ mốc giá từ 5 nghìn đến 1 tỷ");
@@ -283,6 +315,8 @@ export default function Buy() {
     Modal.confirm({
       title: "Xác nhận",
       content: "Bạn có chắc chắn muốn mua hàng không?",
+      okText: 'Đồng ý',
+      cancelText: 'Không đồng ý',
       onOk: async () => {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/pay/create_payment_url`,
@@ -312,24 +346,76 @@ export default function Buy() {
   };
   // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
   const handleBuyCOD = () => {
-    // Xử lý cho phương thức thanh toán COD
-    setPaymentMenthod(1); // Cập nhật phương thức thanh toán
+    // Lấy thông tin cá nhân của người dùng từ state hoặc form
+    const data = {
+      UserID: user.id,
+      addressID: deliveryAddress[addressChecked].id,
+      productID: productID,
+      color: color,
+      capacity: capacity,
+      quantity: quantity,
+      totalPrice: totalPrice,
+      deliveryMethod: deliveryMethod,
+      paymentMenthod: 1,
+      totalAmount: amount,
+      note: note,
+      status: 0,
+    };
+
+    // console.log(data)
+
+    // Thêm thông báo xác nhận mua hàng
+    Modal.confirm({
+      title: "Xác nhận",
+      content: "Bạn có chắc chắn muốn mua hàng?",
+      okText: 'Đồng ý',
+      cancelText: 'Không đồng ý',
+      onOk: async () => {
+        // In ra giá trị của biến data
+        // console.log("Data:", data);
+        // Gửi thông tin đăng ký lên server
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/order/pay`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        // Xử lý kết quả trả về từ server NodeJS
+        if (response.ok) {
+          // Thông báo thành công
+          message.success("Thanh toán đơn hàng thành công");
+
+          // Chuyển hướng người dùng đến trang thông báo thành công
+          window.location.replace("/success");
+          // Xóa sản phẩm khỏi giỏ hàng
+          removeFromCart();
+        } else {
+          // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
+          const responseData = await response.json();
+          if (responseData === "Số lượng sản phẩm không đủ") {
+            message.error("Số lượng sản phẩm không đủ");
+          } else {
+            // Thông báo lỗi khác
+            message.error("Thanh toán đơn hàng thất bại");
+          }
+        }
+      },
+    });
   };
 
   const handleBuyMoMoPay = async () => {
-    // Xử lý cho phương thức thanh toán ZaloPay
-    setPaymentMenthod(2); // Cập nhật phương thức thanh toán
+    // Xử lý cho phương thức thanh toán MoMoPay
 
     const data = {
       amount,
       productID: productID,
       quantity: quantity,
     };
-
-    if (!deliveryMethod) {
-      message.error("Vui lòng chọn hình thức giao hàng");
-      return;
-    }
 
     // Kiểm tra xem số tiền có nằm trong khoảng từ 5 nghìn đến 50 triệu không
     if (amount < 5000 || amount > 50000000) {
@@ -343,6 +429,8 @@ export default function Buy() {
     Modal.confirm({
       title: "Xác nhận",
       content: "Bạn có chắc chắn muốn mua hàng?",
+      okText: 'Đồng ý',
+      cancelText: 'Không đồng ý',
       onOk: async () => {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/pay/paymomo`,
@@ -391,81 +479,9 @@ export default function Buy() {
     });
   };
 
-  const handleBuyClick = async () => {
-    // Lấy thông tin cá nhân của người dùng từ state hoặc form
-    const data = {
-      UserID: user.id,
-      addressID: deliveryAddress[addressChecked].id,
-      productID: productID,
-      color: color,
-      capacity: capacity,
-      quantity: quantity,
-      totalPrice: totalPrice,
-      deliveryMethod: deliveryMethod,
-      paymentMenthod: paymentMenthod,
-      totalAmount: amount,
-      note: note,
-      status: 0,
-    };
-
-    // console.log(data)
-
-    if (!deliveryMethod) {
-      message.error("Vui lòng chọn hình thức giao hàng");
-      return;
-    } else if (
-      !paymentMenthod ||
-      paymentMenthod == [] ||
-      paymentMenthod == null
-    ) {
-      message.error("Vui lòng chọn phương thức thanh toán");
-      return;
-    }
-
-    // Thêm thông báo xác nhận mua hàng
-    Modal.confirm({
-      title: "Xác nhận",
-      content: "Bạn có chắc chắn muốn mua hàng?",
-      onOk: async () => {
-        // In ra giá trị của biến data
-        // console.log("Data:", data);
-        // Gửi thông tin đăng ký lên server
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/order/pay`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
-
-        // Xử lý kết quả trả về từ server NodeJS
-        if (response.ok) {
-          // Thông báo thành công
-          message.success("Thanh toán đơn hàng thành công");
-
-          // Chuyển hướng người dùng đến trang thông báo thành công
-          window.location.replace("/success");
-          // Xóa sản phẩm khỏi giỏ hàng
-          removeFromCart();
-        } else {
-          // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
-          const responseData = await response.json();
-          if (responseData === "Số lượng sản phẩm không đủ") {
-            message.error("Số lượng sản phẩm không đủ");
-          } else {
-            // Thông báo lỗi khác
-            message.error("Thanh toán đơn hàng thất bại");
-          }
-        }
-      },
-    });
-  };
-
   const handleChecked = (value) => {
     setAddressChecked(value);
+    console.log(addressChecked);
   };
 
   // Đếm chiều dài mảng address
@@ -513,7 +529,7 @@ export default function Buy() {
                     </MDBTabsItem> */}
                   </MDBTabs>
 
-                  <MDBTabsContent>
+                  <MDBTabsContent style={{ padding: '20px' }}>
                     <MDBTabsPane show={fillActive === "tab1"}>
                       <h6 style={{ marginTop: "10px" }}>Thông tin nhận hàng</h6>
                       <div className="address-group">
@@ -559,10 +575,10 @@ export default function Buy() {
                         >
                           Thời gian giao hàng
                         </div>
-                        
+
                         <div className="check_box" >
                           <div
-                            
+
                           >
                             {/* <input
                               type="checkbox"
@@ -574,7 +590,7 @@ export default function Buy() {
                                 )
                               }
                             /> */}
-                            
+
                             <Checkbox type="checkbox"
                               value="ngày trong tuần"
                               checked={deliveryMethod === "ngày trong tuần"}
@@ -586,7 +602,7 @@ export default function Buy() {
                           </div>
                           {/*  */}
                           <div
-                            style={{marginTop:"5px" ,marginRight:"82px"}}
+                            style={{ marginTop: "5px", marginRight: "82px" }}
                           >
                             {/* <input
                               type="checkbox"
@@ -598,7 +614,7 @@ export default function Buy() {
                                 )
                               }
                             /> */}
-                         
+
                             <Checkbox type="checkbox"
                               value="Chủ nhật"
                               checked={deliveryMethod === "Chủ nhật"}
@@ -607,7 +623,7 @@ export default function Buy() {
                                   e.target.checked ? e.target.value : ""
                                 )
                               }>Chủ nhật</Checkbox>
-                           
+
                           </div>
                         </div>
                       </div>
@@ -682,7 +698,7 @@ export default function Buy() {
                             data-content-target="COD"
                             className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
                             id="style-UMMoQ"
-                            onClick={handleBuyVNpay}
+                            onClick={selectVNPay}
                           >
                             <div
                               type="subtitle"
@@ -715,7 +731,7 @@ export default function Buy() {
                             data-content-target="COD"
                             className="css-64rk53 snipcss0-8-75-76 style-UMMoQ"
                             id="style-UMMoQ"
-                            onClick={handleBuyVNpay}
+                            onClick={selectVNPay}
                           >
                             <div
                               type="subtitle"
@@ -796,7 +812,7 @@ export default function Buy() {
                             data-content-target="COD"
                             className="css-64rk53 snipcss0-8-75-76 style-UMMoQ button-select"
                             id="style-UMMoQ"
-                            onClick={handleBuyCOD}
+                            onClick={selectCOD}
                           >
                             <div
                               type="subtitle"
@@ -826,7 +842,7 @@ export default function Buy() {
                             data-content-target="COD"
                             className="css-64rk53 snipcss0-8-75-76 style-UMMoQ "
                             id="style-UMMoQ"
-                            onClick={handleBuyCOD}
+                            onClick={selectCOD}
                           >
                             <div
                               type="subtitle"
@@ -901,7 +917,7 @@ export default function Buy() {
                             data-content-target="ZALOPAY_GATEWAY"
                             className="css-64rk53 snipcss0-8-81-82 style-OQooy button-select"
                             id="style-OQooy"
-                            onClick={handleBuyMoMoPay}
+                            onClick={selectMoMoPay}
                           >
                             <div
                               type="subtitle"
@@ -926,7 +942,7 @@ export default function Buy() {
                             data-content-target="ZALOPAY_GATEWAY"
                             className="css-64rk53 snipcss0-8-81-82 style-OQooy"
                             id="style-OQooy"
-                            onClick={handleBuyMoMoPay}
+                            onClick={selectMoMoPay}
                           >
                             <div
                               type="subtitle"
@@ -1026,9 +1042,9 @@ export default function Buy() {
                                     src={
                                       item.main_image
                                         ? process.env.REACT_APP_API_URL +
-                                          item.main_image
+                                        item.main_image
                                         : process.env.REACT_APP_API_URL +
-                                          item.thumbnail
+                                        item.thumbnail
                                     } // Lấy URL ảnh từ dữ liệu
                                     loading="lazy"
                                     decoding="async"

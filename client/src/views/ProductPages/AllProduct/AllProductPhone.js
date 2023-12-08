@@ -23,6 +23,7 @@ import { Box } from "@mui/material";
 import "./AllProduct.css";
 import { useNavigate } from "react-router-dom";
 import CardProduct from "../../Card/Card";
+import { addToRecentlyViewedProduct } from "../../../util/servicesGlobal";
 
 const { Option } = Select;
 function valuetext(value) {
@@ -286,23 +287,7 @@ const AllProductPhone = () => {
   const endIndex = startIndex + itemsPerPage;
 
   const handleViewDetailProduct = (products) => {
-    // Kiểm tra xem 'id' có tồn tại hay không
-    if (!products.id) {
-      console.error("Product ID is undefined!");
-      return;
-    }
-    // Lấy danh sách các sản phẩm đã xem từ session storage
-    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
-    const isViewed = historysp.some((product) => product.id === products.id);
-    // Nếu sản phẩm mới chưa được xem
-    if (!isViewed) {
-      // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(products);
-      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
-      sessionStorage.setItem("products", JSON.stringify(historysp));
-    }
-
+    addToRecentlyViewedProduct(products);
     navigate(`/detail/${products.id}`);
   };
 

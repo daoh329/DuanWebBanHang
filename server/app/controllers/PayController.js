@@ -79,7 +79,7 @@ class PayController {
         statuss = req.body.status;
         
         // Kiểm tra số lượng sản phẩm hiện có
-        let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+        let sql = `SELECT remaining_quantity_variant FROM product_variations WHERE product_id = ?`;
 
         let canBuy = true;
 
@@ -96,7 +96,7 @@ class PayController {
             });
 
             // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-            if (quantitys[i] > productResult[0].remaining_quantity) {
+            if (quantitys[i] > productResult[0].remaining_quantity_variant) {
                 canBuy = false;
                 return res.status(400).json("Số lượng sản phẩm không đủ");
             }
@@ -460,7 +460,7 @@ class PayController {
         var lang = 'vi';
 
         // Kiểm tra số lượng sản phẩm hiện có
-        let sql = `SELECT remaining_quantity FROM productdetails WHERE product_id = ?`;
+        let sql = `SELECT remaining_quantity_variant FROM product_variations WHERE product_id = ?`;
 
         let canBuy = true;
 
@@ -477,7 +477,7 @@ class PayController {
             });
 
             // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-            if (quantity[i] > productResult[0].remaining_quantity) {
+            if (quantity[i] > productResult[0].remaining_quantity_variant) {
                 canBuy = false;
                 return response.status(400).json("Số lượng sản phẩm không đủ");
             }

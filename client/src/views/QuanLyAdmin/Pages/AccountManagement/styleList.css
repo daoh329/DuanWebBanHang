@@ -1,0 +1,21 @@
+
+.account-container{
+    width: 100%;
+    height: max-content;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.account-container .action{
+    margin: 0 0 15px 0;
+}
+
+.table-text-column{
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    word-break: break-all;
+}

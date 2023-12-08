@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag } from "antd";
+import { Table, Tag, Button, Tooltip } from "antd";
 import { format } from "date-fns";
+import { RedoOutlined } from "@ant-design/icons";
 import axios from "axios";
 import ActionButton from "./ActionComponent/ActionButton";
 
 function Product() {
   const [Product, setProduct] = useState([]);
+  const [isLoadingTable, setIsLoadingTable] = useState(false);
 
   useEffect(() => {
     getProduct();
   }, []);
 
   const getProduct = async () => {
+    setIsLoadingTable(true);
     await axios
       .get(`${process.env.REACT_APP_API_URL}/product/json`, {
         withCredentials: true,
       })
       .then((res) => {
-        setProduct(res.data);
+        const arrCopy = [...res.data];
+        arrCopy.forEach((item) => {
+          item.key = item.id;
+        });
+        setProduct(arrCopy);
+        setIsLoadingTable(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsLoadingTable(false);
+      });
   };
 
   // const handleConfirmOrder = async (record) => {
@@ -96,10 +107,26 @@ function Product() {
   ];
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: "5px",
+        padding: "0px 10px 0px 10px",
+      }}
+    >
       <br />
-      <h1>Quản lý Sản Phẩm</h1>
-      <Table columns={columns} dataSource={Product} />
+      <h1>Danh sách sản phẩm</h1>
+      <Tooltip title="Làm mới">
+        <Button
+          onClick={getProduct}
+          icon={<RedoOutlined />}
+          style={{ margin: "0 0 10px 0" }}
+        />
+      </Tooltip>
+      <Table loading={isLoadingTable} columns={columns} dataSource={Product} />
+
+      {/* <h1 style={{ paddingTop:'10px' }}>Quản lý Sản Phẩm</h1> */}
+      {/* <Table columns={columns} dataSource={Product} /> */}
     </div>
   );
 }

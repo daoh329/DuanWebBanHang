@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { da } from "date-fns/locale";
 
 const initialState = {
   products: [],
@@ -36,6 +35,7 @@ export const cartSlice = createSlice({
         brand,
         shortDescription,
         discount,
+        remaining_quantity,
       } = action.payload;
       // Tìm sản phẩm có cùng id, color và capacity trong cart để update
       const productUpdate = [...state.products].find(
@@ -52,6 +52,9 @@ export const cartSlice = createSlice({
         productUpdate.brand = brand;
         productUpdate.shortDescription = shortDescription;
         productUpdate.discount = discount;
+        if (productUpdate.quantity > remaining_quantity) {
+          productUpdate.quantity = remaining_quantity
+        }
         productUpdate.totalPrice =
           (productUpdate.price - discount) * productUpdate.quantity;
       }

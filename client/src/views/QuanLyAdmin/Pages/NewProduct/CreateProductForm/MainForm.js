@@ -44,7 +44,14 @@ function MainForm() {
   const [arrVariations, setArrVariations] = useState([
     {
       color: "",
-      capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+      capacityGroup: [
+        {
+          price: 0,
+          discount_amount: 0,
+          capacity: 0,
+          quantity_variant: 1,
+        },
+      ],
       images: [],
     },
   ]);
@@ -263,276 +270,38 @@ function MainForm() {
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
           Thông tin chung
         </h5>
-        {/* thương hiệu */}
-        {/* bảo hành */}
-        <Form.Item style={{ margin: 0 }}>
-          <Form.Item
-            label="Thương hiệu"
-            name="brand"
-            rules={[{ required: true, message: "Vui lòng chọn thương hiệu" }]}
-            style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-          >
-            <Select placeholder="Chọn thương hiệu" style={{ height: 40 }}>
-              {brands &&
-                brands.map((brand) => (
-                  <Select.Option key={brand.name} value={brand.name}>
-                    {brand.name}
-                  </Select.Option>
-                ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="Thời gian bảo hành"
-            name="guarantee"
-            rules={[
-              { required: true, message: "Vui lòng nhập thời gian bảo hành" },
-            ]}
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-          >
-            <Input
-              placeholder="Nhập thời gian bảo hành"
-              style={{ height: 40 }}
-            />
-          </Form.Item>
-        </Form.Item>
-
-        {/* tên */}
-        {/* Series */}
-        <Form.Item style={{ margin: 0 }}>
-          <Form.Item
-            label="Tên sản phẩm"
-            name="name"
-            rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm" }]}
-            style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-          >
-            <Input placeholder="Nhập tên sản phẩm" style={{ height: 40 }} />
-          </Form.Item>
-          <Form.Item
-            label="Series"
-            name="series"
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-          >
-            <Input placeholder="Nhập Series sản phẩm" style={{ height: 40 }} />
-          </Form.Item>
-        </Form.Item>
-
-        {/* Loại sản phẩm */}
-        {/* Ngày phát hành */}
-        <Form.Item style={{ margin: 0 }}>
-          <Form.Item
-            label="Loại sản phẩm"
-            name="category"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng chọn loại sản phẩm",
-              },
-            ]}
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-            }}
-          >
-            <Select
-              placeholder="Chọn loại sản phẩm"
-              style={{ height: 40 }}
-              onChange={handleSelectedCategory}
-            >
-              {categories &&
-                [...categories].map((category) => (
-                  <Select.Option key={category.id} value={category.id}>
-                    {category.name}
-                  </Select.Option>
-                ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name={"release_date"}
-            label="Ngày phát hành"
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng chọn ngày phát hành",
-              },
-            ]}
-          >
-            <DatePicker style={{ height: 40 }} />
-          </Form.Item>
-        </Form.Item>
-
-        {/* số lượng */}
-        {/* demand */}
-        <Form.Item style={{ margin: 0 }}>
-          <Form.Item
-            label="Nhu cầu"
-            name="demand"
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-            }}
-          >
-            <Input
-              placeholder="Nhập nhu cầu sử dụng sản phẩm"
-              style={{ height: 40 }}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Số lượng"
-            name="quantity"
-            rules={[
-              { required: true, message: "Vui lòng nhập số lượng sản phẩm" },
-            ]}
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-          >
-            <InputNumber
-              placeholder="Nhập số lượng sản phẩm đang bán"
-              style={{ height: 40 }}
-              min={0}
-            />
-          </Form.Item>
-        </Form.Item>
-
-        {/* Mô tả ngắn */}
-        <Form.Item
-          label="Mô tả ngắn"
-          name="shortDescription"
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập mô tả ngắn của sản phẩm",
-            },
-          ]}
+        <div
+          style={{
+            padding: "12px",
+            background: "#fff",
+            margin: "0 20px",
+            borderRadius: "10px",
+          }}
         >
-          <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
-        </Form.Item>
-
-        {/* main image */}
-        <Form.Item
-          label="Hình ảnh mặc định"
-          name="main_image"
-          rules={[{ required: true, message: "Vui lòng chọn hình ảnh" }]}
-        >
-          <Upload
-            listType="picture-card"
-            accept=".png,.jpeg,.jpg"
-            onPreview={handlePreview}
-            onChange={({ fileList: newFileList }) => {
-              setMainImage(newFileList);
-            }}
-            beforeUpload={() => {
-              return false;
-            }}
-          >
-            {mainImage.length === 1 ? null : uploadButton}
-          </Upload>
-        </Form.Item>
-        {/* modal preview image */}
-        <Modal
-          open={previewOpen}
-          title={previewTitle}
-          footer={null}
-          onCancel={handleCancel}
-        >
-          <img alt="example" style={{ width: "100%" }} src={previewImage} />
-        </Modal>
-
-        {/* product variations */}
-        <>
-          <br />
-          <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
-            Biến thể của sản phẩm
-          </h5>
-          {arrVariations.map((variation, index) => (
-            <Card
-              size="small"
-              title={`Biến thể ${index + 1}`}
-              key={index}
-              style={{ marginBottom: 8 }}
-              extra={
-                <CloseOutlined
-                  onClick={() => {
-                    remove(index);
-                  }}
-                />
-              }
-            >
-              <ProductVariations
-                index={index}
-                variations={variation}
-                handlePreview={handlePreview}
-                fileList={fileList}
-                setFileList={setFileList}
-                arrVariations={arrVariations}
-                setArrVariations={setArrVariations}
-              />
-            </Card>
-          ))}
-        </>
-        {/* btn add variations */}
-        <Form.Item>
-          <Button
-            type="dashed"
-            onClick={() => add()}
-            block
-            icon={<PlusOutlined />}
-          >
-            Thêm biến thể
-          </Button>
-        </Form.Item>
-
-        {/* Other information */}
-        <br />
-        <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
-          Thông tin khác (Tùy chọn)
-        </h5>
-        {inputs.map((input, index) => (
-          <Form.Item key={index}>
+          {/* thương hiệu */}
+          {/* bảo hành */}
+          <Form.Item style={{ margin: 0 }}>
             <Form.Item
-              style={{
-                display: "inline-block",
-                width: "calc(25% - 8px)",
-                margin: "0",
-              }}
+              label="Thương hiệu"
+              name="brand"
+              rules={[{ required: true, message: "Vui lòng chọn thương hiệu" }]}
+              style={{ display: "inline-block", width: "calc(50% - 8px)" }}
             >
-              <Select
-                placeholder="Chọn thông tin"
-                // value={input.inputName}
-                onChange={(value) =>
-                  handleInputChange(index, "inputName", value)
-                }
-                style={{ height: 40 }}
-                showSearch
-                allowClear
-              >
-                {selectedSpecifications &&
-                  selectedSpecifications.map((specification) => (
-                    <Select.Option value={specification}>
-                      {formatSpecifications(specification)}
+              <Select placeholder="Chọn thương hiệu" style={{ height: 40 }}>
+                {brands &&
+                  brands.map((brand) => (
+                    <Select.Option key={brand.name} value={brand.name}>
+                      {brand.name}
                     </Select.Option>
                   ))}
               </Select>
             </Form.Item>
-
             <Form.Item
-              name={input.inputName}
+              label="Thời gian bảo hành"
+              name="guarantee"
+              rules={[
+                { required: true, message: "Vui lòng nhập thời gian bảo hành" },
+              ]}
               style={{
                 display: "inline-block",
                 width: "calc(50% - 8px)",
@@ -540,58 +309,323 @@ function MainForm() {
               }}
             >
               <Input
-                type="text"
-                placeholder="Nhập thông tin"
-                value={input.value}
-                onChange={(e) =>
-                  handleInputChange(index, "value", e.target.value)
-                }
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                display: "inline-block",
-                width: "calc(10% - 8px)",
-                margin: "0 8px",
-              }}
-            >
-              <Button
-                onClick={() => handleRemoveElement(index)}
-                icon={<MinusCircleOutlined />}
-                style={{
-                  border: "none",
-                  background: "none",
-                  margin: "3px 0 0 0",
-                }}
+                placeholder="Nhập thời gian bảo hành"
+                style={{ height: 40 }}
               />
             </Form.Item>
           </Form.Item>
-        ))}
-        <Form.Item>
-          <Button
-            onClick={handleAddInput}
-            type="dashed"
-            icon={<PlusOutlined />}
+
+          {/* tên */}
+          {/* Series */}
+          <Form.Item style={{ margin: 0 }}>
+            <Form.Item
+              label="Tên sản phẩm"
+              name="name"
+              rules={[
+                { required: true, message: "Vui lòng nhập tên sản phẩm" },
+              ]}
+              style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+            >
+              <Input placeholder="Nhập tên sản phẩm" style={{ height: 40 }} />
+            </Form.Item>
+            <Form.Item
+              label="Series"
+              name="series"
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+            >
+              <Input
+                placeholder="Nhập Series sản phẩm"
+                style={{ height: 40 }}
+              />
+            </Form.Item>
+          </Form.Item>
+
+          {/* Loại sản phẩm */}
+          {/* Ngày phát hành */}
+          <Form.Item style={{ margin: 0 }}>
+            <Form.Item
+              label="Loại sản phẩm"
+              name="category"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn loại sản phẩm",
+                },
+              ]}
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+              }}
+            >
+              <Select
+                placeholder="Chọn loại sản phẩm"
+                style={{ height: 40 }}
+                onChange={handleSelectedCategory}
+              >
+                {categories &&
+                  [...categories].map((category) => (
+                    <Select.Option key={category.id} value={category.id}>
+                      {category.name}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name={"release_date"}
+              label="Ngày phát hành"
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng chọn ngày phát hành",
+                },
+              ]}
+            >
+              <DatePicker style={{ height: 40 }} />
+            </Form.Item>
+          </Form.Item>
+
+          {/* số lượng */}
+          {/* demand */}
+          <Form.Item style={{ margin: 0 }}>
+            <Form.Item
+              label="Nhu cầu"
+              name="demand"
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+              }}
+            >
+              <Input
+                placeholder="Nhập nhu cầu sử dụng sản phẩm"
+                style={{ height: 40 }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Số lượng"
+              name="quantity"
+              rules={[
+                { required: true, message: "Vui lòng nhập số lượng sản phẩm" },
+              ]}
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+            >
+              <InputNumber
+                placeholder="Nhập số lượng sản phẩm đang bán"
+                style={{ height: 40 }}
+                min={0}
+              />
+            </Form.Item>
+          </Form.Item>
+
+          {/* Mô tả ngắn */}
+          <Form.Item
+            label="Mô tả ngắn"
+            name="shortDescription"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập mô tả ngắn của sản phẩm",
+              },
+            ]}
           >
-            Thêm thẻ
-          </Button>
-        </Form.Item>
+            <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
+          </Form.Item>
+
+          {/* main image */}
+          <Form.Item
+            label="Hình ảnh mặc định"
+            name="main_image"
+            rules={[{ required: true, message: "Vui lòng chọn hình ảnh" }]}
+          >
+            <Upload
+              listType="picture-card"
+              accept=".png,.jpeg,.jpg"
+              onPreview={handlePreview}
+              onChange={({ fileList: newFileList }) => {
+                setMainImage(newFileList);
+              }}
+              beforeUpload={() => {
+                return false;
+              }}
+            >
+              {mainImage.length === 1 ? null : uploadButton}
+            </Upload>
+          </Form.Item>
+          {/* modal preview image */}
+          <Modal
+            open={previewOpen}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+          >
+            <img alt="example" style={{ width: "100%" }} src={previewImage} />
+          </Modal>
+        </div>
+
+        <br />
+        <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+          Biến thể của sản phẩm
+        </h5>
+        {/* product variations */}
+        <div style={{ padding: "0 20px" }}>
+          <>
+            {arrVariations.map((variation, index) => (
+              <Card
+                size="small"
+                title={`Biến thể ${index + 1}`}
+                key={index}
+                style={{ marginBottom: 8 }}
+                extra={
+                  <CloseOutlined
+                    onClick={() => {
+                      remove(index);
+                    }}
+                  />
+                }
+              >
+                <ProductVariations
+                  index={index}
+                  variations={variation}
+                  handlePreview={handlePreview}
+                  fileList={fileList}
+                  setFileList={setFileList}
+                  arrVariations={arrVariations}
+                  setArrVariations={setArrVariations}
+                />
+              </Card>
+            ))}
+          </>
+          {/* btn add variations */}
+          <Form.Item>
+            <Button
+              type="dashed"
+              onClick={() => add()}
+              block
+              icon={<PlusOutlined />}
+            >
+              Thêm biến thể
+            </Button>
+          </Form.Item>
+        </div>
+
+        {/* Other information */}
+        <br />
+        <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
+          Thông tin khác (Tùy chọn)
+        </h5>
+        <div
+          style={{
+            padding: "12px",
+            background: "#fff",
+            margin: "0 20px",
+            borderRadius: "10px",
+          }}
+        >
+          {inputs.map((input, index) => (
+            <Form.Item key={index}>
+              <Form.Item
+                style={{
+                  display: "inline-block",
+                  width: "calc(25% - 8px)",
+                  margin: "0",
+                }}
+              >
+                <Select
+                  placeholder="Chọn thông tin"
+                  // value={input.inputName}
+                  onChange={(value) =>
+                    handleInputChange(index, "inputName", value)
+                  }
+                  style={{ height: 40 }}
+                  showSearch
+                  allowClear
+                >
+                  {selectedSpecifications &&
+                    selectedSpecifications.map((specification) => (
+                      <Select.Option value={specification}>
+                        {formatSpecifications(specification)}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                name={input.inputName}
+                style={{
+                  display: "inline-block",
+                  width: "calc(50% - 8px)",
+                  margin: "0 8px",
+                }}
+              >
+                <Input
+                  type="text"
+                  placeholder="Nhập thông tin"
+                  value={input.value}
+                  onChange={(e) =>
+                    handleInputChange(index, "value", e.target.value)
+                  }
+                />
+              </Form.Item>
+              <Form.Item
+                style={{
+                  display: "inline-block",
+                  width: "calc(10% - 8px)",
+                  margin: "0 8px",
+                }}
+              >
+                <Button
+                  onClick={() => handleRemoveElement(index)}
+                  icon={<MinusCircleOutlined />}
+                  style={{
+                    border: "none",
+                    background: "none",
+                    margin: "3px 0 0 0",
+                  }}
+                />
+              </Form.Item>
+            </Form.Item>
+          ))}
+          <Form.Item>
+            <Button
+              onClick={handleAddInput}
+              type="dashed"
+              icon={<PlusOutlined />}
+              style={{ margin: 0 }}
+            >
+              Thêm thẻ
+            </Button>
+          </Form.Item>
+        </div>
 
         <br />
         <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>Mô tả</h5>
         {/* description */}
-        <Form.Item name="description">
-          <CKEditor
-            editor={ClassicEditor}
-            data={description}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              setDescription(data);
-              // console.log({ event, editor, data });
-            }}
-          />
-        </Form.Item>
-
+        <div style={{ margin: "0 20px" }}>
+          <Form.Item name="description">
+            <CKEditor
+              editor={ClassicEditor}
+              data={description}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setDescription(data);
+                // console.log({ event, editor, data });
+              }}
+            />
+          </Form.Item>
+        </div>
         {/* status */}
         <Form.Item
           name="status"

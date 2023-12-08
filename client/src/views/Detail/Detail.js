@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import CardProduct from "../Card/Card";
+import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
 
 function Detail() {
   const navigate = useNavigate();
@@ -67,11 +68,13 @@ function Detail() {
 
   // sự kiện khi color thay đổi (Thay đổi image)
   useEffect(() => {
-    if (selectedColor && Detail) {
+    if (selectedColor && Object.keys(Detail).length !== 0) {
       const images = [...Detail.images].filter(
         (element) => element.color === selectedColor
       );
-      setImagesSelected(images[0].path);
+      if (images.length !== 0) {
+        setImagesSelected(images[0].path);
+      }
     }
   }, [selectedColor, Detail]);
 
@@ -253,23 +256,7 @@ function Detail() {
   }, [Detail]);
 
   const handleViewDetailProduct = (products) => {
-    // Kiểm tra xem 'id' có tồn tại hay không
-    if (!products.id) {
-      console.error("Product ID is undefined!");
-      return;
-    }
-    // Lấy danh sách các sản phẩm đã xem từ session storage
-    const historysp = JSON.parse(sessionStorage.getItem("products")) || [];
-
-    // Kiểm tra xem sản phẩm mới có nằm trong danh sách các sản phẩm đã xem hay không
-    const isViewed = historysp.some((product) => product.id === products.id);
-    // Nếu sản phẩm mới chưa được xem
-    if (!isViewed) {
-      // Thêm đối tượng sản phẩm mới vào cuối danh sách
-      historysp.push(products);
-      // Lưu trữ danh sách các sản phẩm đã xem vào session storage
-      sessionStorage.setItem("products", JSON.stringify(historysp));
-    }
+    addToRecentlyViewedProduct(products);
     navigate(`/detail/${products.id}`);
   };
 
@@ -472,9 +459,7 @@ function Detail() {
                   <div className="css-1q5zfcu">
                     {parseInt(variationSelected.discount_amount) === 0 ? (
                       <div className="css-oj899w">
-                        {formatCurrency(
-                          variationSelected.price
-                        )}
+                        {formatCurrency(variationSelected.price)}
                       </div>
                     ) : (
                       <>
@@ -882,23 +867,23 @@ function Detail() {
                       {configuration.cpu || configuration.chip}
                     </td>
                   </tr>
-                  {(configuration.vga || configuration.resolution) && (
+                  {(configuration.graphicsCard || configuration.resolution) && (
                     <tr>
                       <td colSpan={1}>
-                        {configuration.vga
-                          ? "Chip đồ họa"
+                        {configuration.graphicsCard
+                          ? "Card đồ họa"
                           : configuration.resolution
                           ? "Phân giải"
                           : ""}
                       </td>
                       <td colSpan={3}>
-                        {configuration.vga || configuration.resolution}
+                        {configuration.graphicsCard || configuration.resolution}
                       </td>
                     </tr>
                   )}
                   <tr>
                     <td colSpan={1}>Màn hình</td>
-                    <td colSpan={3}>{configuration.screen}</td>
+                    <td colSpan={3}>{configuration.screenSize}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Ram</td>
@@ -1079,12 +1064,14 @@ function Detail() {
                 {relatedProducts &&
                   relatedProducts.length > 0 &&
                   relatedProducts.map((item, index) => (
-                    <CardProduct
-                      key={index}
-                      item={item}
-                      items={relatedProducts}
-                      onClick={handleViewDetailProduct}
-                    />
+                    <div key={index}>
+                      <CardProduct
+                        key={index}
+                        item={item}
+                        items={relatedProducts}
+                        onClick={() => handleViewDetailProduct(item)}
+                      />
+                    </div>
                   ))}
               </div>
               {/* button */}

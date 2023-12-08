@@ -18,7 +18,11 @@ function Capacity() {
         withCredentials: true,
       })
       .then((response) => {
-        setCapacities(response.data.results);
+        const arrCopy = [...response.data.results];
+        for (let i = 0; i < arrCopy.length; i++) {
+          arrCopy[i].key = i + 1;
+        }
+        setCapacities(arrCopy);
       })
       .catch((e) => {
         console.log(e);
@@ -39,7 +43,7 @@ function Capacity() {
     } catch (error) {
       if (error.response.status === 401) {
         NotificationBeenLoggedOut();
-      }else {
+      } else {
         console.log(error);
         message.error("Xóa thất bại");
       }
@@ -76,8 +80,8 @@ function Capacity() {
     },
   ];
   return (
-    <div style={{ padding: "0 100px 0 50px" }}>
-      <h3 style={{ fontWeight: "bold" }}>Capacity</h3>
+    <div style={{ padding: "0 100px 0 50px" , backgroundColor:'white', borderRadius:'5px', marginTop:'10px'}}>
+      <h3 style={{ fontWeight: "bold", paddingTop:'10px' }}>Capacity</h3>
       <Table columns={columns} dataSource={capacities} />
     </div>
   );

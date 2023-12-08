@@ -29,6 +29,8 @@ const createTables = () => {
     product_id INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     discount_amount NUMERIC(10,2) DEFAULT 0,
+    quantity_variant INT DEFAULT 1 NOT NULL,
+    remaining_quantity_variant INT DEFAULT 1 NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (capacity) REFERENCES capacity (capacity),
     FOREIGN KEY (color) REFERENCES colors (name)
@@ -113,7 +115,8 @@ const createTables = () => {
     name varchar(255),
     phone varchar(255),
     email varchar(255) UNIQUE,
-    permission varchar(50)
+    permission varchar(50),
+    status boolean DEFAULT 1
   );`;
   const delivery_address = `CREATE TABLE IF NOT EXISTS delivery_address (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -149,7 +152,7 @@ const createTables = () => {
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    type text NOT NULL,  
+    type text NOT NULL,
     is_read BOOLEAN DEFAULT 0
   );`;
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -9,97 +9,77 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/orderDate`);
-  
-      // Chuyển đổi updated_date từ timestamp về chuỗi ngày tháng
-      const convertedData = result.data
-        .sort((a, b) => new Date(a.updated_Date) - new Date(b.updated_Date));
-  
-      setOrderDate(convertedData);
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/order/orderDate`);
+        // Chuyển đổi total_quantity từ chuỗi sang số
+        const formattedData = response.data.map(item => ({
+          ...item,
+          total_quantity: parseInt(item.total_quantity, 10) // Hoặc parseFloat nếu là số thập phân
+        }));
+        setOrderDate(formattedData);
+        console.log(formattedData);
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
     };
-  
-    fetchData();
-  }, []);  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/order/orderDate`);
-    
-      // Chuyển đổi updated_date từ timestamp về chuỗi ngày tháng
-      const convertedData = result.data
-        .sort((a, b) => a.updated_Date - b.updated_Date)
-    
-      setData(convertedData);
-    };
-    
     fetchData();
   }, []);
 
-  function CustomTooltip({ payload, label, active }) {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`Ngày: ${label}`}</p>
-          <p className="intro">{`Mã Giao Dịch: ${payload[0].payload.MaGiaoDich}`}</p>
-          <p className="desc">{`Phương Thức Thanh Toán: ${payload[0].payload.paymentMenthod}`}</p>
-        </div>
-      );
-    }
-  
-    return null;
-  }
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/order/dashboard`);
+        // Chuyển đổi total_quantity từ chuỗi sang số
+        const formattedData = response.data.map(item => ({
+          ...item,
+          total_quantity: parseInt(item.total_quantity, 10) // Hoặc parseFloat nếu là số thập phân
+        }));
+        setData(formattedData);
+        console.log(formattedData);
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+
+    fetch();
+  }, []);
+
 
   return (
     <>
-    <h4>Biểu đồ trạng thái đơn hàng từng ngày trong tháng</h4>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <LineChart
-        width={800}
-        height={450}
-        data={orderDate}
-        margin={{
-          top: 50,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="updated_Date" />
-        <YAxis domain={[0, 50]} />
-        <Tooltip/>
-        <Legend />
-        <Line type="monotone" dataKey="ChuaXacNhan" stroke="orange" activeDot={{ r: 10 }} dot={{ stroke: 'orange', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="DaXacNhan" stroke="green" activeDot={{ r: 10 }} dot={{ stroke: 'green', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="DangVanChuyen" stroke="#BDB76B" activeDot={{ r: 10 }} dot={{ stroke: '#BDB76B', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="DaGiao" stroke="#33CCFF" activeDot={{ r: 10 }} dot={{ stroke: '#33CCFF', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="DaHuy" stroke="#FF3399" activeDot={{ r: 10 }} dot={{ stroke: '#FF3399', strokeWidth: 2 }} />
-        <Line type="monotone" dataKey="GiaoKhongThanhCong" stroke="violet" activeDot={{ r: 10 }} dot={{ stroke: 'violet', strokeWidth: 2 }} />
-      </LineChart>
+      <div>
+        <div style={{ backgroundColor: 'white', borderRadius: "5px" }}>
+          <h4 style={{ padding: '20px 0px 0px 20px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong ngày</h4>
+          <div style={{ display: 'flex', justifyContent: 'center', }}>
+            <BarChart width={1100} height={500} data={orderDate}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Total_Quantity" fill="#33CCFF" barSize={40} />
+            </BarChart>
+          </div>
+
+        </div>
+
+        <div style={{ backgroundColor: 'white', borderRadius: "5px" }}>
+          <h4 style={{  marginTop: '20px', padding: '20px 0px 0px 20px' }}>Biểu đồ số lượng từng sản phẩm đã giao trong tháng</h4>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <BarChart width={1100} height={500} data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 200]} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Total_Quantity" fill="#33CCFF" barSize={40} />
+            </BarChart>
+          </div>
+        </div>
+
       </div>
 
-    <h4>Biểu đồ đơn đã giao trong tháng</h4>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <LineChart
-        width={800}
-        height={450}
-        data={data}
-        margin={{
-          top: 50,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="updated_Date" />
-        <YAxis domain={[0, 50]} />
-        <Tooltip/>
-        <Legend />
-        <Line type="monotone" dataKey="DaGiao" stroke="#33CCFF" activeDot={{ r: 10 }} dot={{ stroke: '#33CCFF', strokeWidth: 2 }} />
-        {/* <Line type="monotone" dataKey="GiaoKhongThanhCong" stroke="violet" activeDot={{ r: 10 }} dot={{ stroke: 'violet', strokeWidth: 2 }} /> */}
-      </LineChart>
-      </div>
     </>
   );
 };
