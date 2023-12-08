@@ -52,7 +52,6 @@ function MainForm() {
   //     images: [],
   //   },
   // ]);
-  const [inputs, setInputs] = useState([]);
   const [description, setDescription] = useState("");
 
   //   images and colors
@@ -225,41 +224,6 @@ function MainForm() {
       <div style={{ marginTop: 8 }}>Tải lên</div>
     </div>
   );
-
-  // logic variation
-  // const remove = (index) => {
-  //   const updatedRomInfo = [...arrVariations];
-  //   updatedRomInfo.splice(index, 1);
-  //   setArrVariations(updatedRomInfo);
-  // };
-
-  // const add = () => {
-  //   setArrVariations([
-  //     ...arrVariations,
-  //     {
-  //       color: "",
-  //       capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
-  //       images: [],
-  //     },
-  //   ]);
-  // };
-
-  // logic add field
-  const handleAddInput = () => {
-    setInputs([...inputs, { value: "", inputName: "" }]);
-  };
-
-  const handleRemoveElement = (index) => {
-    const updatedInputs = [...inputs];
-    updatedInputs.splice(index, 1);
-    setInputs(updatedInputs);
-  };
-
-  const handleInputChange = (index, prop, value) => {
-    const newInputs = [...inputs];
-    newInputs[index][prop] = value;
-    setInputs(newInputs);
-  };
 
   const getInitialValues = () => [
     {
