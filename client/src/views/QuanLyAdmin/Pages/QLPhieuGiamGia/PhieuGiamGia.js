@@ -33,7 +33,7 @@ function discount() {
       render: (start_date) =>
         <div>
           <p style={{ margin: "0" }}>
-            {format(new Date(start_date), "HH:mm:ss")}
+            {format(new Date(start_date), "HH:mm")}
           </p>
           <p style={{ margin: "0" }}>
             {format(new Date(start_date), "dd/MM/yyyy")}
@@ -47,7 +47,7 @@ function discount() {
       render: (end_date) =>
         <div>
           <p style={{ margin: "0" }}>
-            {format(new Date(end_date), "HH:mm:ss")}
+            {format(new Date(end_date), "HH:mm")}
           </p>
           <p style={{ margin: "0" }}>
             {format(new Date(end_date), "dd/MM/yyyy")}

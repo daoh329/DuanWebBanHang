@@ -36,7 +36,9 @@ function InputFrom({ data, onClick, setModal }) {
   const [isLoading, setIsLoading] = useState(false);
   // Tạo state toàn cục
   const [content, setContent] = useState(discountCode.content);
-  const [value_percent, setValue_percent] = useState(discountCode.value_percent);
+  const [value_percent, setValue_percent] = useState(
+    discountCode.value_percent
+  );
   const [Value_vnd, setValue_vnd] = useState(discountCode.value_vnd);
   const [start_date, setStart_date] = useState(discountCode.start_date);
   const [end_date, setEnd_date] = useState(discountCode.end_date);
@@ -48,7 +50,12 @@ function InputFrom({ data, onClick, setModal }) {
   useEffect(() => {}, []);
 
   // Hàm được gọi khi form hoàn thành
-  const onFinishUpdate = async (values) => {};
+  const onFinishUpdate = async (fieldsValue) => {
+    const values = {
+      start_date: fieldsValue["start_date"].format("YYYY-MM-DD HH:mm"),
+      end_date: fieldsValue["end_date"].format("YYYY-MM-DD HH:mm"),
+    };
+  };
 
   // Hàm được gọi khi form bị lỗi
   const onFinishFailed = (errorInfo) => {
@@ -63,17 +70,28 @@ function InputFrom({ data, onClick, setModal }) {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
       initialValues={{
-        content:discountCode.content,
-        value_percent:discountCode.value_percent,
-        value_vnd:discountCode.value_vnd,
-        start_date:discountCode.start_date,
-        end_date:discountCode.end_date
+        content: discountCode.content,
+        value_percent: discountCode.value_percent,
+        value_vnd: discountCode.value_vnd,
+        start_date: discountCode.start_date,
+        end_date: discountCode.end_date,
       }}
     >
-      <hr />
-      <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
-        Thông tin chung
-      </h5>
+      <Form.Item name="content" label="nội dung">
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name={value_percent == 0 ? "value_percent" : "value_vnd"}
+        label={value_percent == 0 ? "Phần Trăm" : "Tiền VND"}
+      >
+        <InputNumber min={0} max={value_percent == 0 ? 100 : undefined} />
+      </Form.Item>
+      <Form.Item name="start_date" label="Ngày bắt đầu">
+        <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+      </Form.Item>
+      <Form.Item name="end_date" label="Ngày kết thúc">
+        <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+      </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 20, span: 8 }}>
         <Button type="primary" htmlType="submit" loading={isLoading}>

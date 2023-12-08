@@ -69,7 +69,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
       >
         <div>
           <Products
-            setModal={setOpenModal}
+            setModal={setOpenModalproduct}
             onClick={getPhieuGiamGia}
             data={record}
           />
