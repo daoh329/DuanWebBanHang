@@ -1,28 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
-// import firebase from 'firebase'
 import { Image, Modal, Carousel } from "antd";
-// Thư viện mdb
 import { MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
-// link
-import "./Detail.css";
-import axios from "axios";
+import { LeftOutlined, RightOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { message } from "antd";
-import { formatCurrency } from "../../util/FormatVnd";
-import { format_sale } from "../../util/formatSale";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addProductToCart } from "../../redux/cartSlice";
-import { formatCapacity } from "../../util/formatCapacity";
-
 import { useNavigate } from "react-router-dom";
 
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import "./Detail.css";
+import { formatCurrency } from "../../util/FormatVnd";
+import { format_sale } from "../../util/formatSale";
+import { addProductToCart } from "../../redux/cartSlice";
+import { formatCapacity } from "../../util/formatCapacity";
 import CardProduct from "../Card/Card";
 import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
 
+const { error } = Modal;
+
 function Detail() {
   const navigate = useNavigate();
-
+  const user = useSelector((state) => state.user);
   //Modal antd
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const dispatch = useDispatch();
@@ -147,15 +145,31 @@ function Detail() {
     }
   };
 
+    // Hàm show modal delete product
+    const showDeleteConfirm = () => {
+      error({
+        title: "Tài khoản của bạn đã bị khóa và không thể sử dụng giỏ hàng",
+        icon: <ExclamationCircleFilled />,
+        centered: true,
+        footer:false,
+        maskClosable: true,
+      });
+    };
+
   // them giỏ hàng
   const cart = useSelector((state) => state.cart.products);
   const handleAddToCart = () => {
+
+    if (user && user.isLocked !== 0) {
+      showDeleteConfirm();
+      return;
+    }
+
     // Check quantity
     if (Detail.remaining_quantity === 0) {
       message.warning("Sản phẩm đã hết hàng");
       return false;
     }
-
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.id,
@@ -170,7 +184,6 @@ function Detail() {
       quantity: 1,
       totalPrice: variationSelected.price - variationSelected.discount_amount,
     };
-
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingItemIndex = cart.findIndex(
       (cartItem) =>

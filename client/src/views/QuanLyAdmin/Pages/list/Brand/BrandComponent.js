@@ -133,7 +133,7 @@ function Brand() {
           }}
         >
           <Button className="confirm-button" onClick={() => handleUpdate(name)}>
-            <EditOutlined /> Edit{" "}
+            <EditOutlined />Sửa{" "}
           </Button>
           <Modal
             open={openModals[name]}
@@ -151,7 +151,7 @@ function Brand() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined /> Delete
+              <DeleteOutlined />Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -163,7 +163,8 @@ function Brand() {
     <div className="container-content">
       <div className="page-group">
         <div className="page1-control">
-          <h3 style={{ fontWeight: "bold" }}>Brand</h3>
+          {/* <h3 style={{ fontWeight: "bold" }}>Chỉnh sửa</h3> */}
+          <br/>
           <Table columns={columns} dataSource={brand} />
         </div>
         <div className="page2-control">
@@ -172,9 +173,9 @@ function Brand() {
             id="form-create-brand"
             onSubmit={formik.handleSubmit}
           >
-            <h3 style={{ fontWeight: "bold" }}>Thêm Brand</h3>
+            <h3 style={{ fontWeight: "bold" }}>Thêm thương hiệu</h3>
             <div className="form-group">
-              <label className="form-label">brand</label>
+              {/* <label className="form-label">brand</label> */}
               <input
                 type="text"
                 name="name"

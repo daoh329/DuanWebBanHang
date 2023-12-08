@@ -105,18 +105,20 @@ const createTables = () => {
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (Colorname) REFERENCES colors (name)
   );`;
-
   const brands = `CREATE TABLE IF NOT EXISTS brands (
     name varchar(255) PRIMARY KEY
   );`;
   const users = `
     CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    facebookId VARCHAR(255) UNIQUE ,
+    googleId VARCHAR(255) UNIQUE,
     name varchar(255),
     phone varchar(255),
     email varchar(255) UNIQUE,
     permission varchar(50),
-    status boolean DEFAULT 1
+    isLocked BOOLEAN DEFAULT FALSE,
+    loginAttempts INT DEFAULT 0
   );`;
   const delivery_address = `CREATE TABLE IF NOT EXISTS delivery_address (
     id INT PRIMARY KEY AUTO_INCREMENT,

@@ -87,6 +87,7 @@ const App = () => {
         email: data.user.email,
         picture: data.user.picture,
         permission: data.user.permission,
+        isLocked: data.user.isLocked,
       };
       if (result.status === 200) {
         if (!isLogin) {
@@ -171,12 +172,18 @@ const App = () => {
             path="/profile"
             element={isLogin ? <Profile /> : <Navigate to="/" />}
           />
-          <Route path="/tat-ca-san-pham-laptop" element={<AllNewProductLaptop />} />
+          <Route
+            path="/tat-ca-san-pham-laptop"
+            element={<AllNewProductLaptop />}
+          />
           <Route
             path="/tat-ca-san-pham-laptop-moi"
             element={<AllNewProductLaptop />}
           />
-          <Route path="/tat-ca-san-pham-phone" element={<AllNewProductPhone />} />
+          <Route
+            path="/tat-ca-san-pham-phone"
+            element={<AllNewProductPhone />}
+          />
           <Route
             path="/tat-ca-san-pham-phone-moi"
             element={<AllNewProductPhone />}

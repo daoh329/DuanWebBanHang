@@ -108,12 +108,12 @@ function Category() {
           }}
         >
           <Button className="confirm-button" onClick={() => handleUpdate(name)}>
-            <EditOutlined /> Edit{" "}
+            <EditOutlined />Sửa{" "}
           </Button>
 
           <Modal
             open={openModals[name]}
-            title="Cập nhật sản phẩm"
+            title="Cập nhật thể loại"
             onCancel={() => handleCancel(name)}
             footer={false}
           >
@@ -127,7 +127,7 @@ function Category() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined /> Delete
+              <DeleteOutlined />Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -152,7 +152,8 @@ function Category() {
     <div className="container-content">
       <div className="page-group">
         <div className="page1-control">
-          <h3 style={{ fontWeight: "bold" }}>Category</h3>
+          {/* <h3 style={{ fontWeight: "bold" }}>Thể loại</h3> */}
+          <br/>
           <Table columns={columns} dataSource={category} />
         </div>
         <div className="page2-control">
@@ -161,9 +162,9 @@ function Category() {
             id="form-create-category"
             onSubmit={formik.handleSubmit}
           >
-            <h3 style={{ fontWeight: "bold" }}>Thêm danh mục</h3>
+            <h4 style={{ fontWeight: "bold" }}>Thêm thể loại sản phẩm</h4>
             <div className="form-group">
-              <label className="form-label">category</label>
+              {/* <label className="form-label">category</label> */}
               <input
                 type="text"
                 name="name"
