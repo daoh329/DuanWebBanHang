@@ -613,11 +613,11 @@ function MainForm() {
               type="primary"
               htmlType="submit"
               loading={isLoading}
-              // disabled={
-              //   !clientReady ||
-              //   !!form.getFieldsError().filter(({ errors }) => errors.length)
-              //     .length
-              // }
+              disabled={
+                !clientReady ||
+                !!form.getFieldsError().filter(({ errors }) => errors.length)
+                  .length
+              }
             >
               Tạo sản phẩm
             </Button>
