@@ -59,9 +59,9 @@ function Detail() {
       [...Detail.variations].forEach((element) => {
         cp.push(element.capacity);
       });
-      const sortColor = cp.sort((a, b) => a - b);
-      setCapacities([...new Set(sortColor)]);
-      setSelectedCapacity(sortColor[0]);
+      const sortCapacity = cp.sort((a, b) => a - b);
+      setCapacities([...new Set(sortCapacity)]);
+      setSelectedCapacity(sortCapacity[0]);
       colorChangeByCapacity(Detail, cp[0]);
     }
   }, [Detail]);
@@ -161,15 +161,14 @@ function Detail() {
   // them giỏ hàng
   const cart = useSelector((state) => state.cart.products);
   const handleAddToCart = () => {
-
-    if (user && user.isLocked !== 0) {
-      showDeleteConfirm();
-      return;
-    }
+    // if (user && user.isLocked !== 0) {
+    //   showDeleteConfirm();
+    //   return;
+    // }
 
     // Check quantity
-    if (Detail.remaining_quantity === 0) {
-      message.warning("Sản phẩm đã hết hàng");
+    if (variationSelected.remaining_quantity_variant === 0) {
+      message.warning("Phân loại đã hết hàng");
       return false;
     }
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
@@ -178,14 +177,18 @@ function Detail() {
       brand: Detail.brand,
       thumbnail: imagesSelected[0],
       shortDescription: Detail.shortDescription,
-      capacity: selectedCapacity,
-      color: selectedColor,
+      capacity: variationSelected.capacity,
+      color: variationSelected.color,
       price: variationSelected.price,
       discount: variationSelected.discount_amount,
       //----
       quantity: 1,
       totalPrice: variationSelected.price - variationSelected.discount_amount,
     };
+
+    // console.log(newItem);
+    // return;
+
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingItemIndex = cart.findIndex(
       (cartItem) =>
@@ -299,6 +302,21 @@ function Detail() {
     // thêm các cặp khóa-giá trị khác nếu cần
   };
 
+  // Hàm check remaining_quantity_variant
+  const checkDisableCapacity = (capacity) => {
+    const d = [...Detail.variations].filter(
+      (variant) => variant.capacity === capacity
+    );
+    const result = d.filter((value) => value.remaining_quantity_variant !== 0);
+    return result.length !== 0 ? false : true;
+  };
+
+  // console.log(variationSelected);
+  // style
+  const disable = {
+    cursor: "not-allowed",
+    color: "#e0e0e0",
+  };
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -425,7 +443,7 @@ function Detail() {
                 <br />
 
                 {/* check box dung lượng*/}
-                {capacities && capacities.length > 1 && (
+                {capacities && (
                   <div className="block-select-color">
                     <p className="title-btn-color">
                       dung lượng (ROM): {formatCapacity(selectedCapacity)}
@@ -518,6 +536,17 @@ function Detail() {
                       </>
                     )}
                   </div>
+                )}
+
+                {variationSelected?.remaining_quantity_variant !== 0 ? (
+                  <>
+                    <span style={{ fontWeight: "bold", fontSize: "14px" }}>
+                      {variationSelected?.remaining_quantity_variant}
+                    </span>{" "}
+                    <span>sản phẩm có sẵn</span>{" "}
+                  </>
+                ) : (
+                  <h5 style={{ textTransform: "uppercase", color:"red", margin: "0" }}>hết hàng</h5>
                 )}
 
                 {/* ------------------------------------------------------------ */}
@@ -770,7 +799,6 @@ function Detail() {
                         </td>
                       </tr> */}
 
-
                       {/* chip đồ họa, phân giải */}
                       {/* {(configuration.vga || configuration.resolution) && (
                         <tr>
@@ -894,8 +922,6 @@ function Detail() {
                       Cấu hình chi tiết
                     </td>
                   </tr>
-
-
 
                   {/* Hệ điều hành 1*/}
                   <tr style={{ display: configuration.os ? "table-row" : "none" }}>
@@ -1183,7 +1209,6 @@ function Detail() {
                     </tr>
                   )} */}
 
-
                   {/* {(configuration.M2_slot_type_supported ||
                     configuration.networkConnections) && (
                     <tr>
@@ -1200,7 +1225,6 @@ function Detail() {
                       </td>
                     </tr>
                   )} */}
-
 
                   {(configuration.output_port || configuration.rear_camera) && (
                     <tr>

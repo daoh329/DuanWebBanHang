@@ -27,8 +27,6 @@ import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
 import config from "../../../../../config";
 import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
-const { Option } = Select;
-
 function InputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
   const product = data;
