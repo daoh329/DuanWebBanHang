@@ -137,15 +137,14 @@ class PhieuGiamGia {
    }
    // Get all products associated with a discount code
    async getSanPhamOnDiscountCode(req, res) {
-      const { discountCode_id } = req.params;
+      const { id } = req.params;
       try {
-         // Use new table name and column names
          const getQuery = `
-       SELECT *
+       SELECT products_id
        FROM sanpham_discountCode
        WHERE discountCode_id = ?
      `;
-         const results = await query(getQuery, [discountCode_id]);
+         const results = await query(getQuery, [id]);
          if (results.length > 0) {
             res.status(200).json(results);
          } else {
