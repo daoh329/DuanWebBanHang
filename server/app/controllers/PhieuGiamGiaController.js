@@ -145,8 +145,9 @@ class PhieuGiamGia {
        WHERE discountCode_id = ?
      `;
          const results = await query(getQuery, [id]);
-         if (results.length > 0) {
-            res.status(200).json(results);
+         const productIds = results.map((product) => product.products_id);
+         if (productIds.length > 0) {
+            res.status(200).json(productIds);
          } else {
             res.status(404).send("No products associated with this discount code");
          }

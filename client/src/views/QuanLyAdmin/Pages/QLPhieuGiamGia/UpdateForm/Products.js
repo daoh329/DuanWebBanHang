@@ -15,14 +15,13 @@ function productdiscount(record) {
         `${process.env.REACT_APP_API_URL}/discount/getProductsbyIdDC/${record.data.id}`
       )
       .then(async (res) => {
-        console.log(res.data);
         await axios
           .post(
             `${process.env.REACT_APP_API_URL}/product/ImgAndDescription`,
-            res.data.products_id
+            res.data
           )
-          .then((res) => {
-            setproductdiscount(res);
+          .then((product) => {
+            setproductdiscount(product.data);
           })
           .catch((error) => console.log(error));
       })

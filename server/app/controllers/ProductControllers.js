@@ -997,30 +997,18 @@ class Product {
   }
   async getProductImageAndDescription(req, res) {
     try {
-      const products_id = req.body; // Giả sử danh sách id được gửi trong body request
-      console.log(products_id);
-      if (!Array.isArray(products_id) || products_id.length === 0) {
-        return res.status(400).json({ message: "Invalid list of product IDs" });
-      }
-  
+      const dataID = req.body; // Giả sử danh sách id được gửi trong body request
       // Chuẩn bị câu truy vấn
-      const query = `SELECT id, main_image, shortDescription FROM products WHERE id IN (?)`;
+      const lc_query = `SELECT id, main_image, shortDescription FROM products WHERE id IN (?)`;
   
       // Thực thi truy vấn với danh sách id
-      const products = await query(query, [products_id]);
-  
+      const products = await query(lc_query, [dataID]);
       if (products.length === 0) {
         return res.status(404).json({ message: "No products found" });
       }
   
       // Trả về dữ liệu sản phẩm
-      return res.status(200).json({
-        products: products.map((product) => ({
-          id: product.id,
-          main_image: product.main_image,
-          shortDescription: product.shortDescription,
-        })),
-      });
+      return res.status(200).json(products);
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
