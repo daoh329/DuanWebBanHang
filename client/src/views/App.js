@@ -60,6 +60,7 @@ import GiaiQuyetKhieuNai from "./Footer/MenuFooter/GiaiQuyetKhieuNai.js";
 import ChinhSachBaoHanh from "./Footer/MenuFooter/ChinhSachBaoHanh.js";
 import ChinhSachDoiTra from "./Footer/MenuFooter/ChinhSachDoiTra.js";
 import ScrollToTop from "../util/scrollToTop.js";
+import NotFound from "./404/NotFound.js";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -87,6 +88,7 @@ const App = () => {
         email: data.user.email,
         picture: data.user.picture,
         permission: data.user.permission,
+        isLocked: data.user.isLocked,
       };
       if (result.status === 200) {
         if (!isLogin) {
@@ -171,12 +173,18 @@ const App = () => {
             path="/profile"
             element={isLogin ? <Profile /> : <Navigate to="/" />}
           />
-          <Route path="/tat-ca-san-pham-laptop" element={<AllNewProductLaptop />} />
+          <Route
+            path="/tat-ca-san-pham-laptop"
+            element={<AllNewProductLaptop />}
+          />
           <Route
             path="/tat-ca-san-pham-laptop-moi"
             element={<AllNewProductLaptop />}
           />
-          <Route path="/tat-ca-san-pham-phone" element={<AllNewProductPhone />} />
+          <Route
+            path="/tat-ca-san-pham-phone"
+            element={<AllNewProductPhone />}
+          />
           <Route
             path="/tat-ca-san-pham-phone-moi"
             element={<AllNewProductPhone />}
@@ -194,6 +202,9 @@ const App = () => {
           <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
           <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
           <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
+          {/* Route cho trang 404 */}
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
         <MobileNav user={user} />
         <Footer />

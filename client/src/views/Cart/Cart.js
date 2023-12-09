@@ -297,10 +297,10 @@ function Cart() {
       selectAll: newSelectAll,
       selectedProducts: newSelectAll
         ? cart.map((item) => ({
-            id: item.id,
-            color: item.color,
-            capacity: item.capacity,
-          }))
+          id: item.id,
+          color: item.color,
+          capacity: item.capacity,
+        }))
         : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
@@ -477,9 +477,10 @@ function Cart() {
     navigate(`/detail/${products.id}`);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
-  const isContinueButtonDisabled = selectedProducts.length === 0;
+  const isContinueButtonDisabled = selectedProducts.length === 0 || totalPrice === 0;
+
   // Hàm xử lý khi nút "Tiếp tục" được ấn
   const handleContinueClick = () => {
     // Lấy danh sách các sản phẩm được chọn từ giỏ hàng
@@ -547,7 +548,7 @@ function Cart() {
                       {[...cart].reverse().map((item, index) => (
                         <tr key={index}>
                           {/* checkbox */}
-                          <td style={{padding: 0 }}>
+                          <td style={{ padding: 0 }}>
                             {/* <input
                               type="checkbox"
                               style={{ transform: "scale(1.5)" }}
@@ -593,9 +594,9 @@ function Cart() {
                               src={
                                 item.main_image
                                   ? process.env.REACT_APP_API_URL +
-                                    item.main_image
+                                  item.main_image
                                   : process.env.REACT_APP_API_URL +
-                                    item.thumbnail
+                                  item.thumbnail
                               }
                               alt="main_image"
                             />

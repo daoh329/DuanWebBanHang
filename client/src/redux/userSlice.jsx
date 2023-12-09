@@ -7,6 +7,7 @@ const initialState = {
   phone: "",
   picture: "",
   permission: "",
+  isLocked: null,
 };
 
 export const counterSlice = createSlice({
@@ -20,6 +21,7 @@ export const counterSlice = createSlice({
         state.phone = action.payload.phone;
         state.picture = action.payload.picture;
         state.permission = action.payload.permission;
+        state.isLocked = action.payload.isLocked;
     },
   },
 });
