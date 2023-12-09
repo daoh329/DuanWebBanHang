@@ -228,8 +228,6 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
-              const color = orderDetails[i].color;
-              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
               sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ? AND color = ? AND capacity = ?`;
@@ -284,8 +282,6 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
-              const color = orderDetails[i].color;
-              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
               sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ? AND color = ? AND capacity = ?`;
