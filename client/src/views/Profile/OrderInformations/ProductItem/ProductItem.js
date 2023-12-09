@@ -19,7 +19,7 @@ function ProductItem(props) {
   const navigate = useNavigate();
 
   const handleDetails = () => {
-    navigate(`/detail/${productID}`);
+    navigate(`/detail/${productID}`, {state: {capacity: capacity, color: color}});
   };
   return (
     <div className="product-item">

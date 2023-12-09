@@ -244,7 +244,7 @@ const App = () => {
 
       const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
       // gọi api cập nhật trạng thái thông báo tại db
-      const results = await axios.put(api, arrId);
+      const results = await axios.put(api, arrId, {withCredentials: true});
 
       if (results.status === 200) {
         arrId.forEach((id) => {
