@@ -9,6 +9,7 @@ import {
   message,
   notification,
   DatePicker,
+  Space,
 } from "antd";
 import {
   CloseOutlined,
@@ -47,6 +48,26 @@ function InputFrom({ data, onClick, setModal }) {
   const [inputs, setInputs] = useState([]);
   const [selectedSpecifications, setSelectedSpecifications] = useState("");
   const errorMessage = "Trường này là bắt buộc";
+  const [form] = Form.useForm();
+  // đặt giá trị mặc định khi component được mount
+  useEffect(() => {
+    // Sử dụng setFieldsValue để đặt giá trị mặc định khi component được mount
+    if (product) {
+      form.setFieldsValue({
+        brand: product.brand,
+        guarantee: product.configuration.guarantee,
+        name: product.name,
+        series: product.configuration.series,
+        category: product.category,
+        release_date: product ? moment(product.release_date) : null,
+        quantity: product.quantity,
+        remaining_quantity: product.remaining_quantity,
+        demand: product.configuration.demand,
+        shortDescription: product.shortDescription,
+        configuration: inputs,
+      });
+    }
+  }, [form, inputs, product, categorySubmit]); // useEffect sẽ chạy lại khi form hoặc defaultData thay đổi
 
   // Lấy brands và colors khi lần đầu chạy
   useEffect(() => {
@@ -89,13 +110,22 @@ function InputFrom({ data, onClick, setModal }) {
       console.log(e);
     }
   };
-
+  // Hàm lấy dữ liệu thể loại
   const getCategoryList = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/List/category`
       );
-      setCategories(response.data.results);
+      const data = [];
+      
+      [...response.data.results].forEach((category)=> {
+        var obj = {};
+        obj["label"] = category.name;
+        obj["value"] = category.id;
+        data.push(obj);
+      })
+
+      setCategories(data);
     } catch (e) {
       console.log(e);
     }
@@ -126,27 +156,32 @@ function InputFrom({ data, onClick, setModal }) {
       product.release_date = moment(d).format("YYYY-MM-DD");
       // Tạo và sử lí configuration
       // chuyển đổi định dạng configuration ({inputName: "", value : ""} => {inputName: value})
-      var arrayDataRawConfiguration = {};
-      inputs.forEach((item) => {
-        const oj = {
-          ...arrayDataRawConfiguration,
-          [item.inputName]: item.value,
-        };
-        arrayDataRawConfiguration = oj;
+      // Cấu trúc lại configuration
+      const configuration = values.configuration;
+      values.configuration = {};
+      [...configuration].forEach((item) => {
+        values.configuration[item.inputName] = item.value;
       });
-      values["configuration"] = arrayDataRawConfiguration;
-      // Đưa các thông tin còn lại của configuaration vào configuaration
-      if (values.demand) {
-        values["configuration"]["demand"] = values["demand"];
-        delete values["demand"];
-      }
-      if (values.guarantee) {
-        values["configuration"]["guarantee"] = values["guarantee"];
-        delete values["guarantee"];
-      }
-      if (values.series) {
-        values["configuration"]["series"] = values["series"];
-        delete values["series"];
+
+      // Các field chính
+      const mainField = [
+        "brand",
+        "name",
+        "category",
+        "quantity",
+        "shortDescription",
+        "status",
+        "main_image",
+        "variations",
+        "description",
+        "release_date",
+        "remaining_quantity",
+      ];
+      for (const fieldName in values) {
+        if (!mainField.includes(fieldName) && fieldName !== "configuration") {
+          values["configuration"][fieldName] = values[fieldName];
+          delete values[fieldName];
+        }
       }
       // Lọc và xóa những trường dữ liệu không thay đổi
       for (let fieldName in values) {
@@ -154,7 +189,7 @@ function InputFrom({ data, onClick, setModal }) {
           values[fieldName] === product[fieldName] &&
           fieldName !== "configuaration"
         ) {
-          delete values[fieldName];
+            delete values[fieldName];
         }
         if (fieldName === "configuration") {
           if (
@@ -240,6 +275,7 @@ function InputFrom({ data, onClick, setModal }) {
       const arrDelete = ["guarantee", "series", "demand"];
       for (let fieldName in product.configuration) {
         let ob = {};
+        // ob["inputName"] = {label: formatSpecifications(fieldName), value: fieldName};
         ob["inputName"] = fieldName;
         ob["value"] = product.configuration[fieldName].trim();
         if (!arrDelete.includes(fieldName)) {
@@ -251,9 +287,9 @@ function InputFrom({ data, onClick, setModal }) {
   }, [product]);
 
   useEffect(() => {
-    if (categorySubmit && categories.length > 0) {
-      const c = categories.find((c) => c.id === categorySubmit);
-      if (c.name === "Laptop") {
+    if (product?.category && categories.length > 0) {
+      const c = categories.find((c) => c.value === product?.category);
+      if (c.label.toLowerCase() === "laptop") {
         const arr = [];
         config.laptop_specifications.forEach((item) => {
           const oj = {};
@@ -316,18 +352,7 @@ function InputFrom({ data, onClick, setModal }) {
       onFinish={onFinishUpdate}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
-      initialValues={{
-        brand: product.brand,
-        guarantee: product.configuration.guarantee,
-        name: product.name,
-        series: product.configuration.series,
-        category: categorySubmit,
-        release_date: product ? moment(product.release_date) : null,
-        quantity: product.quantity,
-        remaining_quantity: product.remaining_quantity,
-        demand: product.configuration.demand,
-        shortDescription: product.shortDescription,
-      }}
+      form={form}
     >
       <hr />
       <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
@@ -356,7 +381,10 @@ function InputFrom({ data, onClick, setModal }) {
             label="Bảo hành"
             name="guarantee"
             style={lastInput}
-            rules={[{ required: true, message: errorMessage }]}
+            rules={[
+              { required: true, message: errorMessage },
+              { max: 20, message: "Không được nhập quá 20 kí tự" },
+            ]}
           >
             <Input
               placeholder="Nhập thời gian bảo hành"
@@ -365,18 +393,26 @@ function InputFrom({ data, onClick, setModal }) {
           </Form.Item>
         </Form.Item>
 
+        {/* tên */}
+        {/* Series */}
         <Form.Item>
-          {/* tên */}
           <Form.Item
             label="Tên"
             name="name"
             style={firstInput}
-            rules={[{ required: true, message: errorMessage }]}
+            rules={[
+              { required: true, message: errorMessage },
+              { max: 80, message: "Không được nhập quá 80 kí tự" },
+            ]}
           >
             <Input placeholder="Nhập tên sản phẩm" />
           </Form.Item>
-          {/* Series */}
-          <Form.Item label="Series" name="series" style={lastInput}>
+          <Form.Item
+            label="Series"
+            name="series"
+            rules={[{ max: 25, message: "Không được nhập quá 25 kí tự" }]}
+            style={lastInput}
+          >
             <Input placeholder="Nhập Series sản phẩm" />
           </Form.Item>
         </Form.Item>
@@ -399,47 +435,76 @@ function InputFrom({ data, onClick, setModal }) {
               disabled
               placeholder="Chọn loại sản phẩm"
               style={{ height: 40 }}
-            >
-              {categories &&
-                [...categories].map((category) => (
-                  <Select.Option key={category.id} value={category.id}>
-                    {category.name}
-                  </Select.Option>
-                ))}
-            </Select>
+              options={categories}
+            />
           </Form.Item>
           <Form.Item
             name={"release_date"}
             label="Ngày phát hành"
             style={lastInput}
+            rules={[
+              {
+                required: true,
+                message: errorMessage,
+              },
+            ]}
           >
             <DatePicker style={{ height: 40 }} />
           </Form.Item>
         </Form.Item>
 
+        {/* số lượng */}
+        {/* số lượng còn lại */}
         <Form.Item>
-          {/* số lượng */}
           <Form.Item
             label="Số lượng"
             name="quantity"
             style={firstInput}
             rules={[{ required: true, message: errorMessage }]}
           >
-            <InputNumber placeholder="Nhập số lượng sản phẩm đang bán" />
+            <InputNumber
+              max={1000000}
+              min={0}
+              style={{width: "100%"}}
+              placeholder="Nhập số lượng sản phẩm đang bán"
+            />
           </Form.Item>
 
-          {/* số lượng còn lại */}
           <Form.Item
             label="Số lượng còn lại"
             name="remaining_quantity"
             style={lastInput}
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  // const price = getFieldsValue(true);
+                  const quantity = getFieldValue("quantity");
+                  if (value && value > quantity) {
+                    return Promise.reject(
+                      "Số lượng còn lại không thể lớn hơn số lượng tổng!"
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
           >
-            <InputNumber placeholder="Nhập số lượng sản phẩm còn lại" />
+            <InputNumber
+              min={0}
+              max={1000000}
+              style={{width: "100%"}}
+              placeholder="Nhập số lượng sản phẩm còn lại"
+            />
           </Form.Item>
         </Form.Item>
 
         {/* nhu cầu */}
-        <Form.Item label="Nhu cầu" name="demand">
+        <Form.Item
+          label="Nhu cầu"
+          name="demand"
+          style={{width: "calc(50% - 8px)"}}
+          rules={[{ max: 100, message: "Không được nhập quá 100 kí tự" }]}
+        >
           <Input placeholder="Nhập nhu cầu sản phẩm" />
         </Form.Item>
 
@@ -447,83 +512,80 @@ function InputFrom({ data, onClick, setModal }) {
         <Form.Item
           label="Mô tả ngắn"
           name="shortDescription"
-          rules={[{ required: true, message: errorMessage }]}
+          rules={[
+            { required: true, message: errorMessage },
+            {
+              max: 160,
+              message: "Không được nhập quá 160 kí tự",
+            },
+          ]}
         >
           <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
         </Form.Item>
       </div>
+      {/*  */}
       <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin chi tiết
       </h5>
       <div style={{ padding: "0 15px" }}>
         {/* Other information */}
-        {inputs.map((input, index) => (
-          <Form.Item key={index}>
-            <Form.Item
-              style={{
-                display: "inline-block",
-                width: "calc(25% - 8px)",
-                margin: "0",
-              }}
-            >
-              <Select
-                placeholder="Chọn thông tin"
-                onChange={(value) =>
-                  handleInputChange(index, "inputName", value)
-                }
-                style={{ height: 40 }}
-                showSearch
-                allowClear
-                value={input.inputName}
-                options={selectedSpecifications}
-              />
-            </Form.Item>
-
-            <Form.Item
-              style={{
-                display: "inline-block",
-                width: "calc(50% - 8px)",
-                margin: "0 8px",
-              }}
-            >
-              <Input
-                type="text"
-                placeholder="Nhập thông tin"
-                value={input.value}
-                onChange={(e) =>
-                  handleInputChange(index, "value", e.target.value)
-                }
-              />
-            </Form.Item>
-            <Form.Item
-              style={{
-                display: "inline-block",
-                width: "calc(10% - 8px)",
-                margin: "0 8px",
-              }}
-            >
-              <Button
-                onClick={() => handleRemoveElement(index)}
-                icon={<MinusCircleOutlined />}
-                style={{
-                  border: "none",
-                  background: "none",
-                  margin: "3px 0 0 0",
-                }}
-              />
-            </Form.Item>
-          </Form.Item>
-        ))}
-        <Form.Item>
-          <Button
-            onClick={handleAddInput}
-            type="dashed"
-            icon={<PlusOutlined />}
-          >
-            Thêm thẻ
-          </Button>
-        </Form.Item>
+        <Form.List name="configuration">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space
+                  key={key}
+                  style={{
+                    display: "flex",
+                    marginBottom: 8,
+                  }}
+                  align="baseline"
+                >
+                  <Form.Item
+                    {...restField}
+                    style={{ width: "200px", margin: "0" }}
+                    name={[name, "inputName"]}
+                    rules={[
+                      { required: true, message: "Không bỏ trống trường này" },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Chọn thông tin"
+                      style={{ height: 40 }}
+                      showSearch
+                      allowClear
+                      options={selectedSpecifications}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, "value"]}
+                    style={{ width: "400px", margin: "0" }}
+                    rules={[
+                      { required: true, message: "Không bỏ trống trường này" },
+                      { max: 200, message: "Không được nhập quá 200 kí tự" },
+                    ]}
+                  >
+                    <Input type="text" placeholder="Nhập thông tin" />
+                  </Form.Item>
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Thêm trường
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
       </div>
+
       <h5 style={{ margin: "20px 0 10px 0", fontWeight: "bold" }}>
         Thông tin mô tả
       </h5>

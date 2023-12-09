@@ -137,13 +137,13 @@ class Product {
     p.shortDescription,
     p.release_date,
     p.main_image,
+    p.CategoryID as category,
     pd.brand,
     pd.quantity,
     pd.remaining_quantity,
     pd.created_at,
     pd.configuration,
     pd.description,
-    category.name as category,
     (
       SELECT json_arrayagg(
       JSON_OBJECT(
@@ -170,10 +170,9 @@ class Product {
     ) AS images
     FROM products as p
     JOIN productDetails as pd ON p.id = pd.product_id
-    JOIN category ON p.CategoryID = category.id
-    GROUP BY p.id, p.name, p.status, p.main_image,
+    GROUP BY p.id, p.name, p.status, p.main_image,p.shortDescription, category,
     pd.brand, pd.quantity, pd.remaining_quantity, 
-    p.shortDescription, pd.created_at, pd.configuration, pd.description, category.name;
+    pd.created_at, pd.configuration, pd.description;
     `;
 
     // Hàm sử lí lỗi tập chung
@@ -394,14 +393,16 @@ class Product {
           id,
         ]);
       }
-
+      console.log();
       // 3. update product variations
       if (arrVariations && arrVariations.length != 0) {
         arrVariations.forEach(async (variation) => {
-          const queryUpdateProductVariations = `UPDATE product_variations SET price = ?, discount_amount = ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+          const queryUpdateProductVariations = `UPDATE product_variations SET price = ?, discount_amount = ?, quantity_variant =?, remaining_quantity_variant =?  WHERE product_id = ? AND color = ? AND capacity = ?`;
           await query(queryUpdateProductVariations, [
             variation.price,
             variation.discount_amount,
+            variation.quantity_variant,
+            variation.remaining_quantity_variant,
             id,
             variation.color,
             variation.capacity,
@@ -949,17 +950,17 @@ class Product {
   }
 
   // /product/:id/variant
-  async getRemainingQuantityVariant(req, res){
+  async getRemainingQuantityVariant(req, res) {
     try {
       const product_id = req.params.id;
-      const {color, capacity} = req.body;
-      const qr = `Select * from product_variations where product_id = ? and color = ? and capacity = ?`
+      const { color, capacity } = req.body;
+      const qr = `Select * from product_variations where product_id = ? and color = ? and capacity = ?`;
       const results = await query(qr, [product_id, color, capacity]);
 
       res.status(200).json(results);
     } catch (error) {
       console.log(error);
-      res.status(500).json({message: "Get failed variant"})
+      res.status(500).json({ message: "Get failed variant" });
     }
   }
 

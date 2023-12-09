@@ -141,6 +141,7 @@ function ProductVariations(props) {
                 required: true,
                 message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
               },
+              {max: 20, message:"Không được nhập quá 20 kí tự"}
             ]}
           >
             <InputNumber
@@ -391,7 +392,7 @@ function ProductVariations(props) {
                                     required: true,
                                     message: "Vui lòng nhập giá giảm (Nếu có)",
                                   },
-                                  ({ getFieldsValue, getFieldValue }) => ({
+                                  ({ getFieldValue }) => ({
                                     validator(_, value) {
                                       // const price = getFieldsValue(true);
                                       const price = getFieldValue(["variations", name, "capacityGroup", subName, "price"])
