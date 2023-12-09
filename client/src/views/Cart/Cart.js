@@ -130,7 +130,7 @@ function Cart() {
   useEffect(() => {
     if (checkProductDelete) {
       const content =
-        "Có một vài sản phẩm trong giỏ hàng không còn được kinh doanh và đã được tự động xóa khỏi giỏ hàng";
+        "Có một vài sản phẩm trong giỏ hàng đã hết hàng hoặc không còn được kinh doanh và đã được tự động xóa khỏi giỏ hàng";
       showAutoChangeQuantity(null, content);
       setCheckQuantityChange(false);
     }
@@ -176,7 +176,8 @@ function Cart() {
             (i) =>
               i?.id === arrIdItem.product_id &&
               i?.variations.color === arrIdItem.color &&
-              i?.variations.capacity === arrIdItem.capacity
+              i?.variations.capacity === arrIdItem.capacity &&
+              i?.variations.remaining_quantity_variant > 0
           );
           // Kiểm tra sản phẩm còn và bị xóa
           if (productsFinded) {
@@ -195,6 +196,7 @@ function Cart() {
             setCheckProductDelete(true);
           });
         }
+
         // Xử lí cập nhật sản phẩm còn lại
         setProductOfCartDB(products);
         for (let i = 0; i < products.length; i++) {
@@ -473,8 +475,10 @@ function Cart() {
   // const [sortedCart, setSortedCart] = useState([]); // Thêm state để lưu dữ liệu đã được sắp xếp
   const [totalPrice, setTotalPrice] = useState(0);
   const handleViewDetailProduct = (products) => {
+    // console.log(products);
+    // return;
     addToRecentlyViewedProduct(products);
-    navigate(`/detail/${products.id}`);
+    navigate(`/detail/${products.id}`, {state: {capacity: products.capacity, color: products.color}});
   };
 
   useEffect(() => { }, []);
