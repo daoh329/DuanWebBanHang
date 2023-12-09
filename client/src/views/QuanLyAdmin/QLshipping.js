@@ -43,6 +43,20 @@ function QLshipping() {
         }
     };
 
+    // Hàm vận chuyển đơn hàng
+    const handleUndocancel = async (record) => {
+        if (record.order_id) {
+            try {
+                await axios.put(`${process.env.REACT_APP_API_URL}/order/undocancel/${record.order_id}`);
+                loadData();
+            } catch (error) {
+                console.error("Error delivered order:", error);
+            }
+        } else {
+            console.error("Order ID is undefined:", record);
+        }
+    };
+
     const handleOpenOrderInformations = (order_id) => {
         // Lấy dữ liệu đơn hàng dựa trên order_id
         const orderData = data.find(order => order.order_id === order_id);
@@ -125,6 +139,17 @@ function QLshipping() {
                 </Button>
             ),
         },
+        {
+            title: 'Hành động',
+            dataIndex: 'action',
+            key: 'newAction',
+            render: (_, record) => (
+                <Button style={{ backgroundColor: '#FF69B4', color: 'white' }} onClick={() => handleUndocancel(record)}>
+                   Hoàn tác
+                </Button>
+            ),
+        },
+        
     ];
 
     return (

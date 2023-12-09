@@ -62,6 +62,34 @@ function QLdeliveryfailed() {
         }
     };
 
+    // Hàm hoàn tác đơn hàng
+    const handleUndofailed = async (record) => {
+        if (record.order_id) {
+            try {
+                await axios.put(`${process.env.REACT_APP_API_URL}/order/undofailed/${record.order_id}`);
+                loadData();
+            } catch (error) {
+                console.error("Error delivered order:", error);
+            }
+        } else {
+            console.error("Order ID is undefined:", record);
+        }
+    };
+
+    // Hàm hoàn tác đơn hàng
+    const handleUndocancel = async (record) => {
+        if (record.order_id) {
+            try {
+                await axios.put(`${process.env.REACT_APP_API_URL}/order/undocancel/${record.order_id}`);
+                loadData();
+            } catch (error) {
+                console.error("Error delivered order:", error);
+            }
+        } else {
+            console.error("Order ID is undefined:", record);
+        }
+    };
+
     const handleOpenOrderInformations = (order_id) => {
         // Lấy dữ liệu đơn hàng dựa trên order_id
         const orderData = data.find(order => order.order_id === order_id);
@@ -149,7 +177,31 @@ function QLdeliveryfailed() {
                     {status === 5 ? 'Giao không thành công' : (status === 2 ? 'Đã bị hủy' : (status === 4 ? 'Đã giao' : 'Chưa xác nhận'))}
                 </span>
             )
-        }
+        },
+
+        {
+            title: 'Hành động',
+            dataIndex: 'action',
+            key: 'newAction',
+            render: (_, record) => {
+                const { order_status } = record;
+                return (
+                    <Button
+                        style={{ backgroundColor: '#FF69B4', color: 'white' }}
+                        onClick={() => {
+                            if (order_status === 5) {
+                                handleUndofailed(record);
+                            } else if (order_status === 2) {
+                                handleUndocancel(record);
+                            }
+                        }}
+                    >
+                       Hoàn tác
+                    </Button>
+                );
+            },
+        },
+        
     ];
 
     return (
