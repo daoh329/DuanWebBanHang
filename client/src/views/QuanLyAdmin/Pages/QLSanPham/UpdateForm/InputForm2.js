@@ -27,12 +27,30 @@ function InputForm2({ data, onClick, setModal }) {
   const [arrVariations, setArrVariations] = useState([
     {
       color: "",
-      capacityGroup: [{ price: 0, discount_amount: 0, capacity: 0 }],
+      capacityGroup: [
+        {
+          price: 0,
+          discount_amount: 0,
+          capacity: 0,
+          quantity_variant: 1,
+          remaining_quantity_variant: 0,
+        },
+      ],
       // images: [],
     },
   ]);
+  const [form] = Form.useForm();
 
-  // gán giá trị variations hiện tại vào state arrVariations
+  // Gán giá trị mặc định cho form
+  useEffect(() => {
+    if (product && arrVariations.length !== 0) {
+      form.setFieldsValue({
+        variations: arrVariations,
+      });
+    }
+  }, [product, arrVariations]);
+
+  // đổi cấu trúc giá trị variations hiện tại vào state arrVariations
   useEffect(() => {
     if (product) {
       var arrUniqueColor = [];
@@ -54,6 +72,8 @@ function InputForm2({ data, onClick, setModal }) {
               price: obj.price,
               discount_amount: obj.discount_amount,
               capacity: obj.capacity,
+              quantity_variant: obj.quantity_variant,
+              remaining_quantity_variant: obj.remaining_quantity_variant,
             };
             objVariation.capacityGroup.push(objCapacityGroup);
           }
@@ -68,11 +88,14 @@ function InputForm2({ data, onClick, setModal }) {
   // Hàm được gọi khi không bị lỗi form
   const onFinish = async (values) => {
     // bật loading button submit
+
     setIsLoading(true);
+
     try {
       // So sánh giá trị variations hiện tại và giá trị variations mới
       const arrVariationsOld = [...product.variations];
-      const arrVariationsNew = [...arrVariations];
+      const arrVariationsNew = values.variations;
+
       var arrNew = [];
       arrVariationsNew.forEach((item) => {
         item.capacityGroup.forEach((itemCapacity) => {
@@ -81,6 +104,9 @@ function InputForm2({ data, onClick, setModal }) {
             price: itemCapacity.price,
             discount_amount: itemCapacity.discount_amount,
             capacity: itemCapacity.capacity,
+            remaining_quantity_variant: itemCapacity.remaining_quantity_variant,
+            quantity_variant: itemCapacity.quantity_variant,
+
           };
           arrNew.push(objCapacity);
         });
@@ -110,6 +136,9 @@ function InputForm2({ data, onClick, setModal }) {
           message: "Không có dữ liệu nào được thay đổi!",
         });
       }
+
+      // console.log(values);
+      // return;
 
       // call API update
       const result = await axios.put(
@@ -162,10 +191,10 @@ function InputForm2({ data, onClick, setModal }) {
     });
   };
 
-  //   Tắt modal preview image
+  // Tắt modal preview image
   const handleCancel = () => setPreviewOpen(false);
 
-  //   Bật modal preview image
+  // Bật modal preview image
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -178,7 +207,7 @@ function InputForm2({ data, onClick, setModal }) {
     );
   };
 
-  //   nút upload image
+  // nút upload image
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -194,12 +223,16 @@ function InputForm2({ data, onClick, setModal }) {
 
   return (
     <Form
+    {...props}
       style={{ maxWidth: 800, textAlign: "start" }}
       layout="vertical"
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
-      {...props}
+      form={form}
+      initialValues={{
+        variations: arrVariations
+      }}
     >
       {/* main image */}
       <br />
@@ -228,21 +261,8 @@ function InputForm2({ data, onClick, setModal }) {
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
 
-      {arrVariations &&
-        [...arrVariations].map((item, index) => (
-          <div key={index}>
-            <ProductVariations
-              index={index}
-              variations={item}
-              handlePreview={handlePreview}
-              fileList={fileList}
-              setFileList={setFileList}
-              arrVariations={arrVariations}
-              setArrVariations={setArrVariations}
-            />
-            <br />
-          </div>
-        ))}
+      <ProductVariations/>
+      <br />
 
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={isLoading}>

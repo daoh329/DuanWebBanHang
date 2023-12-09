@@ -46,6 +46,7 @@ const configSession = (app) => {
         user._json.phone = results[0].phone;
         user._json.id = results[0].id;
         user._json.permission = results[0].permission;
+        user._json.isLocked = results[0].isLocked;
       })
       .catch((error) => {
         if (error) {

@@ -31,28 +31,28 @@ function TypeProduct() {
           className="btn-type"
           onClick={toggleComponentBrand}
         >
-          Brand
+          Thương hiệu
         </button>
         <button
           style={state === "Category" ? { backgroundColor: "purple", color:'white' } : {}}
           className="btn-type"
           onClick={toggleComponentCategory}
         >
-          Category
+          Thể loại
         </button>
         <button
           style={state === "Color" ? { backgroundColor: "purple", color:'white' } : {}}
           className="btn-type"
           onClick={toggleComponentColor}
         >
-          Color
+          Màu sắc
         </button>
         <button
           style={state === "Capacity" ? { backgroundColor: "purple", color:'white' } : {}}
           className="btn-type"
           onClick={toggleComponentCapacity}
         >
-          Capacity
+          Dung lượng
         </button>
 
       </div>

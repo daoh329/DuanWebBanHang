@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Layout, Carousel, Tabs, Pagination } from "antd";
+import { Layout, Carousel, Tabs, Pagination, Alert } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -75,7 +75,7 @@ const Home = () => {
       .then((response) => {
         let data = response.data;
         // Sắp xếp dữ liệu tại đây
-        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        data.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
         setNewphone(data);
       })
       .catch((error) => {
@@ -89,7 +89,7 @@ const Home = () => {
       .get(`${process.env.REACT_APP_API_URL}/product/newlaptop`)
       .then((response) => {
         let data = response.data;
-        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        data.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
         setNewLaptop(data);
       })
       .catch((error) => {
@@ -104,7 +104,7 @@ const Home = () => {
       .then((response) => {
         let data = response.data;
         // Sắp xếp lại mảng sản phẩm
-        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        data.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
         setProductsLaptop(data);
       })
       .catch((error) => {
@@ -122,7 +122,7 @@ const Home = () => {
       .then((response) => {
         let data = response.data;
         // Sắp xếp lại mảng sản phẩm
-        data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        data.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
         setProductsPhone(data);
       })
       .catch((error) => {
@@ -243,6 +243,18 @@ const Home = () => {
 
   return (
     <Layout>
+      {user.isLocked === 1 ? (
+          <>
+            <br />
+            <Alert
+              message="Tài khoản của bạn đã bị khóa"
+              description="Bạn không thể mua hàng và sử dụng một số chức năng khác.Ngoài ra bạn vẫn có thể xem và tham khảo các sản phẩm của Dinh Minh Computer."
+              type="error"
+              showIcon
+            />
+            <br />
+          </>
+        ): null}
       <div className="content">
         <Carousel autoplay>
           {sliderImages.map((image, index) => (
@@ -665,9 +677,9 @@ const Home = () => {
             </div>
           </div>
           <div className="scroll-control-product">
-            {statusPhone &&
-              statusPhone.length > 0 &&
-              statusPhone
+            {productsPhone &&
+              productsPhone.length > 0 &&
+              productsPhone
                 .slice(startIndex1, endIndex1)
                 .map((item, index) => (
                   <CardProduct
@@ -714,9 +726,9 @@ const Home = () => {
             </div>
           </div>
           <div className="scroll-control-product">
-            {statusLaptop &&
-              statusLaptop.length > 0 &&
-              statusLaptop
+            {productsLaptop &&
+              productsLaptop.length > 0 &&
+              productsLaptop
                 .slice(startIndex2, endIndex2)
                 .map((item, index) => (
                   <CardProduct
@@ -773,7 +785,7 @@ const Home = () => {
             <div className="scroll-control-phone" ref={ctnRef}>
               {historysp &&
                 historysp.length > 0 &&
-                historysp.map((item, index) => (
+                historysp.reverse().map((item, index) => (
                   <CardProduct
                     key={index}
                     item={item}

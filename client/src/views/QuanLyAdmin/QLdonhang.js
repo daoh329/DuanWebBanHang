@@ -227,7 +227,8 @@ function OrderList() {
   ];
 
   return (
-    <div>
+    <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
+    <div style={{padding:"10px"}}>
       <h1>Đơn đặt hàng</h1>
        {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
         <div style={{ margin: '10px' }}>
@@ -242,7 +243,7 @@ function OrderList() {
           <a href="https://sandbox.vnpayment.vn/merchantv2/Transaction/SearchRefund.htm" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#ffc107', color: 'black', borderRadius: '5px', textDecoration: 'none' }}>Xem lịch sử thanh toán</a>
         </div>
       </div> */}
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} /> </div>
     </div>
   );
 }

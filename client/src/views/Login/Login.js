@@ -3,8 +3,9 @@ import "./login.css";
 import {
   FacebookFilled,
   GoogleOutlined,
+  ExclamationCircleFilled,
 } from "@ant-design/icons";
-import { MDBIcon } from 'mdb-react-ui-kit';
+import { MDBIcon } from "mdb-react-ui-kit";
 import { Checkbox, Input, Modal, message } from "antd";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
@@ -13,8 +14,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import config from "../../config";
 
-const Login = () => {
+const { info } = Modal;
 
+const Login = () => {
   let navigate = useNavigate();
 
   const [check, setCheck] = useState(false);
@@ -30,7 +32,21 @@ const Login = () => {
     setCheck(!check);
   };
 
+  // Hàm show modal motification
+  const showNotification = (title, content) => {
+    info({
+      title: title || "Thông báo!",
+      icon: <ExclamationCircleFilled />,
+      content: content || "...",
+      centered: true,
+      okText:"Đóng",
+      maskClosable: true,
+    });
+  };
+
   const handleOnClickFB = () => {
+    showNotification(null, "Tính năng sẽ được hoàn thiện trong phiên bản tới");
+    return;
     if (check) {
       // Call API
       alert("Tính năng đang phát triển.");
@@ -49,13 +65,16 @@ const Login = () => {
         "_self"
       );
     } else {
-      alert(
-        "Vui lòng đồng ý với chính sách điều khoản và bảo mật của chúng tôi."
+      showNotification(
+        null,
+        "Vui lòng xác nhận đồng ý với các điều khoản và điều kiện dịch vụ để tiếp tục"
       );
     }
   };
 
   const handleOnClickNumberPhone = () => {
+    showNotification(null, "Tính năng sẽ được hoàn thiện trong phiên bản tới");
+    return;
     if (check) {
       return setOpenModal(true);
     }
@@ -64,88 +83,88 @@ const Login = () => {
     );
   };
 
-  function onCaptchVerify() {
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      auth,
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: (response) => {
-          onSignup();
-        },
-        "expired-callback": () => {},
-      }
-    );
-  }
+  // function onCaptchVerify() {
+  //   window.recaptchaVerifier = new RecaptchaVerifier(
+  //     auth,
+  //     "recaptcha-container",
+  //     {
+  //       size: "invisible",
+  //       callback: (response) => {
+  //         onSignup();
+  //       },
+  //       "expired-callback": () => {},
+  //     }
+  //   );
+  // }
 
-  const onSignup = async () => {
-    if (numberPhone.length <= 0) {
-      return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
-    }
-    const regex = new RegExp(/^(0[2-9])([0-9]{8})$/);
-    if (!regex.test(numberPhone)) {
-      return setErrorNumberPhone("Vui lòng nhập đúng định dạng số điện thoại!");
-    }
-    setConfirmLoading(true);
+  // const onSignup = async () => {
+  //   if (numberPhone.length <= 0) {
+  //     return setErrorNumberPhone("Vui lòng nhập số điện thoại!");
+  //   }
+  //   const regex = new RegExp(/^(0[2-9])([0-9]{8})$/);
+  //   if (!regex.test(numberPhone)) {
+  //     return setErrorNumberPhone("Vui lòng nhập đúng định dạng số điện thoại!");
+  //   }
+  //   setConfirmLoading(true);
 
-    if (!window.recaptchaVerifier) {
-      onCaptchVerify(); // open capcha
-    }
-    const appVerifier = window.recaptchaVerifier;
+  //   if (!window.recaptchaVerifier) {
+  //     onCaptchVerify(); // open capcha
+  //   }
+  //   const appVerifier = window.recaptchaVerifier;
 
-    const formatPhone = "+84" + numberPhone;
+  //   const formatPhone = "+84" + numberPhone;
 
-    await signInWithPhoneNumber(auth, formatPhone, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setTimeout(() => {
-          setConfirmLoading(false);
-          setOpenInputOTP(true);
-          setErrorNumberPhone("");
-          message.success("Đã gửi mã OTP!");
-        }, 2000);
-      })
-      .catch((error) => {
-        console.log(error);
-        setErrorNumberPhone("");
-        setConfirmLoading(false);
-        message.error("Gửi mã OTP không thành công!");
-      });
-  };
+  //   await signInWithPhoneNumber(auth, formatPhone, appVerifier)
+  //     .then((confirmationResult) => {
+  //       window.confirmationResult = confirmationResult;
+  //       setTimeout(() => {
+  //         setConfirmLoading(false);
+  //         setOpenInputOTP(true);
+  //         setErrorNumberPhone("");
+  //         message.success("Đã gửi mã OTP!");
+  //       }, 2000);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setErrorNumberPhone("");
+  //       setConfirmLoading(false);
+  //       message.error("Gửi mã OTP không thành công!");
+  //     });
+  // };
 
-  const handleConfirmOTP = async () => {
-    if (OTP.length <= 0) {
-      return setErrorNumberPhone("Vui lòng nhập mã OTP của bạn!");
-    }
-    setConfirmLoading(true);
-    try {
-      const res = await window.confirmationResult.confirm(OTP);
-      const result = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/login-otp`,
-        {
-          phoneNumber: res.user.phoneNumber,
-        }
-      );
-      if (result.status === 200) {
-        setTimeout(() => {
-          setConfirmLoading(false);
-          setOpenModal(false);
-          setOpenInputOTP(false);
-          setErrorNumberPhone("");
-          setOTP("");
-          message.success("Xác nhận thành công!");
-        }, 1000);
-        setTimeout(() => {
-          navigate("/");
-          window.location.reload();
-        }, 2000);
-      }
-    } catch (error) {
-      console.log(error);
-      setConfirmLoading(false);
-      message.success("Xác nhận thất bại!");
-    }
-  };
+  // const handleConfirmOTP = async () => {
+  //   if (OTP.length <= 0) {
+  //     return setErrorNumberPhone("Vui lòng nhập mã OTP của bạn!");
+  //   }
+  //   setConfirmLoading(true);
+  //   try {
+  //     const res = await window.confirmationResult.confirm(OTP);
+  //     const result = await axios.post(
+  //       `${process.env.REACT_APP_API_URL}/auth/login-otp`,
+  //       {
+  //         phoneNumber: res.user.phoneNumber,
+  //       }
+  //     );
+  //     if (result.status === 200) {
+  //       setTimeout(() => {
+  //         setConfirmLoading(false);
+  //         setOpenModal(false);
+  //         setOpenInputOTP(false);
+  //         setErrorNumberPhone("");
+  //         setOTP("");
+  //         message.success("Xác nhận thành công!");
+  //       }, 1000);
+  //       setTimeout(() => {
+  //         navigate("/");
+  //         window.location.reload();
+  //       }, 2000);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     setConfirmLoading(false);
+  //     message.success("Xác nhận thất bại!");
+  //   }
+  // };
 
   const handleCancel = () => {
     setOpenModal(false);
@@ -160,7 +179,8 @@ const Login = () => {
       <div className="login">
         {/* title */}
         <p className="title-login">
-          Chào mừng bạn đến với {config.websiteLogo} | Laptop, điện thoại Chính Hãng!
+          Chào mừng bạn đến với {config.websiteLogo} | Laptop, điện thoại Chính
+          Hãng!
         </p>
         <div id="recaptcha-container"></div>
         {/* btn login fb */}
@@ -180,7 +200,7 @@ const Login = () => {
           onClick={handleOnClickNumberPhone}
           className="btn-login-number-phone"
         >
-          <MDBIcon fas icon="phone" className="icon-number-phone"/>
+          <MDBIcon fas icon="phone" className="icon-number-phone" />
           Tiếp tục với số điện thoại
         </button>
         <Modal
@@ -190,7 +210,7 @@ const Login = () => {
               : "Nhập số điện thoại của bạn"
           }
           open={openModal}
-          onOk={openInputOTP ? handleConfirmOTP : onSignup}
+          // onOk={openInputOTP ? handleConfirmOTP : onSignup}
           confirmLoading={confirmLoading}
           onCancel={handleCancel}
           cancelText={"Đóng"}
@@ -215,8 +235,10 @@ const Login = () => {
               className="input-phone"
             />
           )}
-  
-          {errorNumberPhone && <p style={{ color: "red" }}>{errorNumberPhone}</p>}
+
+          {errorNumberPhone && (
+            <p style={{ color: "red" }}>{errorNumberPhone}</p>
+          )}
         </Modal>
         {/* điều khoản (checkbox) */}
         <div className="terms-privacy-group">
@@ -236,14 +258,14 @@ const Login = () => {
               <span>
                 <a href="#">Chính sách bảo mật</a>
               </span>{" "}
-              của Phong Vũ, bao gồm việc cho phép Phong Vũ được thu thập, xử lý dữ
-              liệu cá nhân theo chính sách bảo mật này và theo quy định pháp luật.
+              của {config.websiteLogo}, bao gồm việc cho phép {config.websiteLogo} được thu thập, xử lý
+              dữ liệu cá nhân theo chính sách bảo mật này và theo quy định pháp
+              luật.
             </p>
             <p style={{ margin: "0" }}>
-              ii. Các thông tin mà tôi cung cấp và đồng ý cho Phong Vũ xử lý trong
-              quá trình thiết lập mối quan hệ, giao dịch giữa tôi và Phong Vũ là
-              hợp pháp, chính xác, đầy đủ, hợp lệ và đã được sự đồng ý của Bên thứ
-              ba (nếu có cung cấp thông tin của bên thứ ba)
+              ii. Các thông tin mà tôi cung cấp và đồng ý cho {config.websiteLogo} xử lý
+              trong quá trình thiết lập mối quan hệ, giao dịch giữa tôi và {config.websiteLogo} là hợp pháp, chính xác, đầy đủ, hợp lệ và đã được sự đồng ý của
+              Bên thứ ba (nếu có cung cấp thông tin của bên thứ ba)
             </p>
           </div>
         </div>

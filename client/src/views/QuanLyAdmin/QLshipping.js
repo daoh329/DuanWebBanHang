@@ -153,7 +153,8 @@ function QLshipping() {
     ];
 
     return (
-        <div>
+        <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
+            <div style={{padding:"10px"}}>
             <h1>Xác nhận vận chuyển đơn hàng</h1>
             
             {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
@@ -166,7 +167,7 @@ function QLshipping() {
                 </div>
             </div> */}
 
-            <Table columns={columns} dataSource={data} />
+            <Table columns={columns} dataSource={data} /> </div>
         </div>
     );
 }
