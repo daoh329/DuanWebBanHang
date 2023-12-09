@@ -16,7 +16,6 @@ function NotificationsLayout(props) {
 
   const handleReadAll = async () => {
     if (data.length === 0) return;
-
     try {
       const arrId = [];
       data.forEach((notification) => {
@@ -25,6 +24,7 @@ function NotificationsLayout(props) {
           arrId.push(notification.id);
         }
       });
+
       // return nếu không có thông báo nào chưa được đọc
       if (arrId.length === 0) return;
 

@@ -88,9 +88,7 @@ function InputForm2({ data, onClick, setModal }) {
   // Hàm được gọi khi không bị lỗi form
   const onFinish = async (values) => {
     // bật loading button submit
-
     setIsLoading(true);
-
     try {
       // So sánh giá trị variations hiện tại và giá trị variations mới
       const arrVariationsOld = [...product.variations];

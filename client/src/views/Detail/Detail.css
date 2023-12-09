@@ -1251,3 +1251,41 @@ strong {
     flex-flow: column;
   }
 }
+
+.edit-quantity-group{
+  width: 200px;
+  display: flex;
+  justify-content: space-around;
+  /* background-color: red; */
+  margin: 15px 0 0 0 ;
+  border: 1px solid gray;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.btn-increase{
+  padding: 3px 10px;
+  border: none;
+  background: none;
+}
+.btn-reduce{
+  padding: 3px 10px;
+  border: none;
+  background: none;
+}
+
+.input-quantity{
+  width: 40%;
+  text-align: center;
+  border: none;
+  background: none;
+
+}
+
+.input-quantity:focus{
+  border: none;
+}
+
+.input-quantity:hover{
+  border: none;
+}

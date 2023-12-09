@@ -23,12 +23,13 @@ function ProductVariations() {
   // const { index, arrVariations, setArrVariations, variations } = props;
   const [colors, setColors] = useState([]);
   const [capacities, setCapacities] = useState([]);
-  const [fileList, setFileList] = useState([]);
+  // const [fileList, setFileList] = useState([]);
   // const [variationsData, setVariationsData] = useState([]);
+
   useEffect(() => {
     getColorsList();
   }, []);
-
+  // console.log(capacities);
   useEffect(() => {
     getCapacitiesList();
   }, []);
@@ -231,15 +232,15 @@ function ProductVariations() {
                 size="small"
                 title={`Phân loại sản phẩm (${name + 1})`}
                 key={key}
-                extra={
-                  name + 1 !== 1 ? (
-                    <CloseOutlined
-                      onClick={() => {
-                        remove(name);
-                      }}
-                    />
-                  ) : null
-                }
+                // extra={
+                //   name + 1 !== 1 ? (
+                //     <CloseOutlined
+                //       onClick={() => {
+                //         remove(name);
+                //       }}
+                //     />
+                //   ) : null
+                // }
               >
                 {/* colors*/}
                 <Form.Item
@@ -259,16 +260,8 @@ function ProductVariations() {
                     style={{ height: 40 }}
                     allowClear //cho phép xóa
                     showSearch //cho phép tìm kiếm
-                  >
-                    {colors &&
-                      colors.map((color, index) => (
-                        <Select.Option
-                          key={index}
-                          value={color.name}
-                          label={color.name}
-                        />
-                      ))}
-                  </Select>
+                    options={colors}
+                  />
                 </Form.Item>
 
                 {/* images */}
@@ -336,15 +329,15 @@ function ProductVariations() {
                               subName + 1
                             })`}
                             key={subKey}
-                            extra={
-                              capacityGroup.length > 1 ? (
-                                <CloseOutlined
-                                  onClick={() => {
-                                    subOpt.remove(subName);
-                                  }}
-                                />
-                              ) : null
-                            }
+                            // extra={
+                            //   capacityGroup.length > 1 ? (
+                            //     <CloseOutlined
+                            //       onClick={() => {
+                            //         subOpt.remove(subName);
+                            //       }}
+                            //     />
+                            //   ) : null
+                            // }
                           >
                             <Form.Item style={{ margin: "0" }}>
                               {/* capacity */}
@@ -371,6 +364,7 @@ function ProductVariations() {
                                   style={{ height: 40 }}
                                   allowClear //cho phép xóa
                                   showSearch //cho phép tìm kiếm
+                                  options={capacities}
                                 />
                               </Form.Item>
 
@@ -532,7 +526,7 @@ function ProductVariations() {
                         {errors}
                       </p>
                       {/* btn Thêm loại dung lượng */}
-                      <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
+                      {/* <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
                         <Button
                           type="primary"
                           ghost
@@ -542,14 +536,14 @@ function ProductVariations() {
                         >
                           Thêm loại dung lượng
                         </Button>
-                      </Form.Item>
+                      </Form.Item> */}
                     </div>
                   )}
                 </Form.List>
               </Card>
             ))}
             {/* btn add subField */}
-            <Form.Item wrapperCol={{ offset: 7, span: 10 }}>
+            {/* <Form.Item wrapperCol={{ offset: 7, span: 10 }}>
               <Button
                 type="primary"
                 onClick={() => add()}
@@ -558,7 +552,7 @@ function ProductVariations() {
               >
                 Thêm phân loại sản phẩm
               </Button>
-            </Form.Item>
+            </Form.Item> */}
           </div>
         )}
       </Form.List>
@@ -567,115 +561,115 @@ function ProductVariations() {
 }
 
 // component capacity group form
-function CapacityGroup(props) {
-  const {
-    capacities,
-    fieldIndex,
-    subFieldIndex,
-    openModalAddCapacity,
-    handleSubFieldChange,
-    removeSubField,
-    capacityGroupDefault,
-  } = props;
+// function CapacityGroup(props) {
+//   const {
+//     capacities,
+//     fieldIndex,
+//     subFieldIndex,
+//     openModalAddCapacity,
+//     handleSubFieldChange,
+//     removeSubField,
+//     capacityGroupDefault,
+//   } = props;
 
-  return (
-    <>
-      {/* capacity */}
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h6>{subFieldIndex + 1}</h6>
-        <Button
-          disabled
-          onClick={() => removeSubField(subFieldIndex)}
-          icon={<MinusCircleOutlined />}
-        >
-          Xóa
-        </Button>
-      </div>
+//   return (
+//     <>
+//       {/* capacity */}
+//       <div style={{ display: "flex", justifyContent: "space-between" }}>
+//         <h6>{subFieldIndex + 1}</h6>
+//         <Button
+//           disabled
+//           onClick={() => removeSubField(subFieldIndex)}
+//           icon={<MinusCircleOutlined />}
+//         >
+//           Xóa
+//         </Button>
+//       </div>
 
-      <Form.Item style={{ margin: 0 }}>
-        <Form.Item
-          label={"Dung lượng (ROM)"}
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: 0,
-          }}
-        >
-          <Select
-            placeholder="Chọn dung lượng (ROM)"
-            optionLabelProp="label"
-            style={{ height: 40 }}
-            onChange={(value) =>
-              handleSubFieldChange(fieldIndex, subFieldIndex, "capacity", value)
-            }
-            allowClear //cho phép xóa
-            showSearch //cho phép tìm kiếm
-            value={capacityGroupDefault.capacity}
-            options={capacities}
-            disabled
-          ></Select>
-        </Form.Item>
-        {/* btn add capacity */}
-        <Form.Item>
-          <Button
-            onClick={openModalAddCapacity}
-            icon={<PlusOutlined />}
-            style={{ margin: "0 10px 0 0", border: "none", background: "none" }}
-          >
-            Thêm dung lượng (ROM)
-          </Button>
-        </Form.Item>
-      </Form.Item>
+//       <Form.Item style={{ margin: 0 }}>
+//         <Form.Item
+//           label={"Dung lượng (ROM)"}
+//           style={{
+//             display: "inline-block",
+//             width: "calc(50% - 8px)",
+//             margin: 0,
+//           }}
+//         >
+//           <Select
+//             placeholder="Chọn dung lượng (ROM)"
+//             optionLabelProp="label"
+//             style={{ height: 40 }}
+//             onChange={(value) =>
+//               handleSubFieldChange(fieldIndex, subFieldIndex, "capacity", value)
+//             }
+//             allowClear //cho phép xóa
+//             showSearch //cho phép tìm kiếm
+//             value={capacityGroupDefault.capacity}
+//             options={capacities}
+//             disabled
+//           ></Select>
+//         </Form.Item>
+//         {/* btn add capacity */}
+//         <Form.Item>
+//           <Button
+//             onClick={openModalAddCapacity}
+//             icon={<PlusOutlined />}
+//             style={{ margin: "0 10px 0 0", border: "none", background: "none" }}
+//           >
+//             Thêm dung lượng (ROM)
+//           </Button>
+//         </Form.Item>
+//       </Form.Item>
 
-      {/* Giá */}
-      {/* Giá giảm */}
-      <Form.Item style={{ margin: "0" }}>
-        <Form.Item
-          label="Giá (VND)"
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: 0,
-          }}
-        >
-          <InputNumber
-            style={{ width: "100%" }}
-            placeholder="Nhập giá sản phẩm"
-            min={0}
-            onChange={(value) =>
-              handleSubFieldChange(fieldIndex, subFieldIndex, "price", value)
-            }
-            value={capacityGroupDefault.price}
-          />
-        </Form.Item>
-        <Form.Item
-          label={`Giá giảm (VND)`}
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: "0 8px",
-          }}
-        >
-          <InputNumber
-            min={0}
-            style={{ width: "100%" }}
-            placeholder="Nhập giá giảm"
-            onChange={(value) =>
-              handleSubFieldChange(
-                fieldIndex,
-                subFieldIndex,
-                "discount_amount",
-                value
-              )
-            }
-            value={capacityGroupDefault.discount_amount}
-          />
-        </Form.Item>
-      </Form.Item>
-      <hr />
-      {/* <br /> */}
-    </>
-  );
-}
+//       {/* Giá */}
+//       {/* Giá giảm */}
+//       <Form.Item style={{ margin: "0" }}>
+//         <Form.Item
+//           label="Giá (VND)"
+//           style={{
+//             display: "inline-block",
+//             width: "calc(50% - 8px)",
+//             margin: 0,
+//           }}
+//         >
+//           <InputNumber
+//             style={{ width: "100%" }}
+//             placeholder="Nhập giá sản phẩm"
+//             min={0}
+//             onChange={(value) =>
+//               handleSubFieldChange(fieldIndex, subFieldIndex, "price", value)
+//             }
+//             value={capacityGroupDefault.price}
+//           />
+//         </Form.Item>
+//         <Form.Item
+//           label={`Giá giảm (VND)`}
+//           style={{
+//             display: "inline-block",
+//             width: "calc(50% - 8px)",
+//             margin: "0 8px",
+//           }}
+//         >
+//           <InputNumber
+//             min={0}
+//             style={{ width: "100%" }}
+//             placeholder="Nhập giá giảm"
+//             onChange={(value) =>
+//               handleSubFieldChange(
+//                 fieldIndex,
+//                 subFieldIndex,
+//                 "discount_amount",
+//                 value
+//               )
+//             }
+//             value={capacityGroupDefault.discount_amount}
+//           />
+//         </Form.Item>
+//       </Form.Item>
+//       <hr />
+//       {/* <br /> */}
+//     </>
+//   );
+// }
 
 export default ProductVariations;

@@ -36,7 +36,7 @@ const Dashboard = () => {
           total_quantity: parseInt(item.total_quantity, 10) // Hoặc parseFloat nếu là số thập phân
         }));
         setData(formattedData);
-        console.log(formattedData);
+        // console.log(formattedData);
       } catch (error) {
         console.error('Error fetching data: ', error);
       }

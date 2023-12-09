@@ -53,7 +53,7 @@ export const cartSlice = createSlice({
         productUpdate.shortDescription = shortDescription;
         productUpdate.discount = discount;
         if (productUpdate.quantity > remaining_quantity) {
-          productUpdate.quantity = remaining_quantity
+          productUpdate.quantity = remaining_quantity;
         }
         productUpdate.totalPrice =
           (productUpdate.price - discount) * productUpdate.quantity;
@@ -61,7 +61,8 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     increaseProduct: (state, action) => {
-      const { product_id, color, capacity } = action.payload;
+      const { product_id, color, capacity, numberIncreased } = action.payload;
+      const numberIncreased2 = numberIncreased || 1
       const cartToUpdate = state.products.find(
         (product) =>
           product.id === product_id &&
@@ -69,7 +70,7 @@ export const cartSlice = createSlice({
           product.capacity === capacity
       );
       if (cartToUpdate) {
-        cartToUpdate.quantity = cartToUpdate.quantity + 1;
+        cartToUpdate.quantity = cartToUpdate.quantity + numberIncreased2;
         cartToUpdate.totalPrice =
           (cartToUpdate.price - cartToUpdate.discount) * cartToUpdate.quantity;
       }
