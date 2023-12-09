@@ -219,7 +219,7 @@ class OrderController {
             res.status(404).send('No order found with the provided ID');
         } else {
           // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
-          let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+          let sql = `SELECT productID, quantity, color, capacity FROM orderDetailsProduct WHERE orderID = ?`;
           let values = [orderId];
           mysql.query(sql, values, (err, orderDetails) => {
             if (err) throw err;
@@ -228,10 +228,12 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ?`;
-              values = [quantity, productID];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
@@ -243,6 +245,7 @@ class OrderController {
         }
     });
   }
+
 
   async deliveredOrder(req, res) {
     const orderId = req.params.id;
@@ -272,7 +275,7 @@ class OrderController {
             res.status(404).send('No order found with the provided ID');
         } else {
           // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
-          let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+          let sql = `SELECT productID, quantity, color, capacity FROM orderDetailsProduct WHERE orderID = ?`;
           let values = [orderId];
           mysql.query(sql, values, (err, orderDetails) => {
             if (err) throw err;
@@ -281,10 +284,12 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ?`;
-              values = [quantity, productID];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
@@ -295,6 +300,7 @@ class OrderController {
         }
     });
   }
+
 
   async buyback(req, res) {
     const orderId = req.params.id;
