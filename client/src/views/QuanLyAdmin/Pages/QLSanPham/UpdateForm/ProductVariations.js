@@ -395,7 +395,7 @@ function ProductVariations() {
                             <Form.Item>
                               <Form.Item
                                 {...restSubField}
-                                label="Giá"
+                                label="Giá (VND)"
                                 style={{
                                   display: "inline-block",
                                   width: "calc(50% - 8px)",
@@ -440,6 +440,7 @@ function ProductVariations() {
                                         subName,
                                         "price",
                                       ]);
+
                                       if (value && value > price) {
                                         return Promise.reject(
                                           "Giá giảm không thể lớn hơn giá chính!"
@@ -452,6 +453,7 @@ function ProductVariations() {
                               >
                                 <InputNumber
                                   min={0}
+                                  max={1000000000}
                                   style={{ width: "100%" }}
                                   placeholder="Nhập giá giảm"
                                 />
@@ -473,6 +475,46 @@ function ProductVariations() {
                                 },
                               ]}
                               name={[subName, "quantity_variant"]}
+                            >
+                              <InputNumber
+                                style={{ width: "100%" }}
+                                placeholder="Nhập số lượng sản phẩm"
+                                min={0}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              label="Số lượng còn lại (Không vượt quá số lượng gốc)"
+                              style={{
+                                display: "inline-block",
+                                width: "calc(50% - 8px)",
+                                margin: "0 8px",
+                              }}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Vui lòng nhập số còn lại",
+                                },
+                                ({ getFieldValue }) => ({
+                                  validator(_, value) {
+                                    // const price = getFieldsValue(true);
+                                    const quantity = getFieldValue([
+                                      "variations",
+                                      name,
+                                      "capacityGroup",
+                                      subName,
+                                      "quantity_variant",
+                                    ]);
+                                    
+                                    if (value && value > quantity) {
+                                      return Promise.reject(
+                                        "Số lượng còn lại không thể lớn hơn số lượng gốc!"
+                                      );
+                                    }
+                                    return Promise.resolve();
+                                  },
+                                }),
+                              ]}
+                              name={[subName, "remaining_quantity_variant"]}
                             >
                               <InputNumber
                                 style={{ width: "100%" }}

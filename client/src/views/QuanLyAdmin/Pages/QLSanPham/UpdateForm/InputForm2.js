@@ -191,10 +191,10 @@ function InputForm2({ data, onClick, setModal }) {
     });
   };
 
-  //   Tắt modal preview image
+  // Tắt modal preview image
   const handleCancel = () => setPreviewOpen(false);
 
-  //   Bật modal preview image
+  // Bật modal preview image
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
