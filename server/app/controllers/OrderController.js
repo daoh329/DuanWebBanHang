@@ -230,8 +230,8 @@ class OrderController {
               const quantity = orderDetails[i].quantity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ? AND color = ? AND capacity = ?`;
-              values = [quantity, productID, color, capacity];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ?`;
+              values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
@@ -284,8 +284,8 @@ class OrderController {
               const quantity = orderDetails[i].quantity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ? AND color = ? AND capacity = ?`;
-              values = [quantity, productID, color, capacity];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ?`;
+              values = [quantity, productID];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
