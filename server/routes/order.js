@@ -21,6 +21,9 @@ router.get('/revenueDate', OrderController.RevenueDate);
 //Trạng thái
 router.put(`/confirm/:id`, OrderController.confirmOrder);
 router.put(`/shipping/:id`, OrderController.shippingOrder);
+router.put(`/undocancel/:id`, OrderController.UndocancelOrder);
+router.put(`/undo/:id`, OrderController.UndoOrder);
+router.put(`/undofailed/:id`, OrderController.UndofailedOrder);
 router.put(`/delivered/:id`, OrderController.deliveredOrder);
 router.put(`/deliveryfailed/:id`, OrderController.deliveryfailedOrder);
 router.put(`/cancel/:id`, OrderController.cancel);
