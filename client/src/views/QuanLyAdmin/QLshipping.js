@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 
 function QLshipping() {
 
@@ -46,15 +47,49 @@ function QLshipping() {
     // Hàm vận chuyển đơn hàng
     const handleUndocancel = async (record) => {
         if (record.order_id) {
-            try {
-                await axios.put(`${process.env.REACT_APP_API_URL}/order/undocancel/${record.order_id}`);
-                loadData();
-            } catch (error) {
-                console.error("Error delivered order:", error);
-            }
-        } else {
-            console.error("Order ID is undefined:", record);
-        }
+            if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
+              // Hiển thị thông báo cho phương thức thanh toán ví điện tử
+              Modal.confirm({
+                  title: 'Xác nhận',
+                  content: 'Bạn đã xử lý đơn hàng thanh toán bằng ví điện tử?',
+                  okText: 'Đã xử lý',
+                  cancelText: 'Chưa xử lý',
+                  onOk: async () => {
+                    try {
+                      await axios.put(
+                        `${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`
+                      );
+                      CreateNotification(
+                        record.user_id,
+                        record.order_id,
+                        "2",
+                        "Hủy đơn hàng thành công",
+                        `Đơn hàng ${record.order_id} của bạn đã bị hủy`
+                      );
+                      loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+                    } catch (error) {
+                      console.error("Error canceling order:", error);
+                    }
+                  }
+                });
+              } else {
+                try {
+                  await axios.put(
+                    `${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`
+                  );
+                  CreateNotification(
+                    record.user_id,
+                    record.order_id,
+                    "2",
+                    "Hủy đơn hàng thành công",
+                    `Đơn hàng ${record.order_id} của bạn đã bị hủy`
+                  );
+                  loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+                } catch (error) {
+                  console.error("Error canceling order:", error);
+                }
+              }
+          }
     };
 
     const handleOpenOrderInformations = (order_id) => {
@@ -144,8 +179,8 @@ function QLshipping() {
             dataIndex: 'action',
             key: 'newAction',
             render: (_, record) => (
-                <Button style={{ backgroundColor: '#FF69B4', color: 'white' }} onClick={() => handleUndocancel(record)}>
-                   Hoàn tác
+                <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => handleUndocancel(record)}>
+                   Hủy
                 </Button>
             ),
         },
