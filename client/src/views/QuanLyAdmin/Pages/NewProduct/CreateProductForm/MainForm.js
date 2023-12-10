@@ -413,6 +413,7 @@ function MainForm() {
               }}
             >
               <InputNumber
+                max={1000000}
                 placeholder="Nhập số lượng sản phẩm đang bán"
                 style={{ height: 40 }}
                 min={0}

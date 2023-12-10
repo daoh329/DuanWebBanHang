@@ -1,31 +1,38 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Image, Modal, Carousel } from "antd";
+import { Image, Modal, Carousel, Input, notification } from "antd";
 import { MDBContainer, MDBTable, MDBTableBody } from "mdb-react-ui-kit";
-import { LeftOutlined, RightOutlined, ExclamationCircleFilled, CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  RightOutlined,
+  ExclamationCircleFilled,
+  CaretDownOutlined,
+  CaretUpOutlined,
+  PlusOutlined,
+  MinusOutlined,
+} from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { message } from "antd";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "./Detail.css";
 import { formatCurrency } from "../../util/FormatVnd";
 import { format_sale } from "../../util/formatSale";
-import { addProductToCart } from "../../redux/cartSlice";
+import { addProductToCart, increaseProduct } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 import CardProduct from "../Card/Card";
 import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
 
 const { error } = Modal;
 
-
 function Detail() {
-
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   //Modal antd
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const dispatch = useDispatch();
+  const [api, contextHolder] = notification.useNotification();
 
   // sự kiện mở modal
   const showModal2 = () => {
@@ -39,6 +46,9 @@ function Detail() {
 
   //lấy thông tin vào modal
   const { id } = useParams();
+  const location = useLocation();
+  const { capacity, color } = location.state || { capacity: null, color: null };
+  const [firstLoad, setFirstLoad] = useState(true);
   const [Detail, setDetail] = useState(null);
   const [configuration, setConfiguration] = useState({});
   const htmlContent = Detail?.description;
@@ -61,8 +71,15 @@ function Detail() {
       });
       const sortCapacity = cp.sort((a, b) => a - b);
       setCapacities([...new Set(sortCapacity)]);
-      setSelectedCapacity(sortCapacity[0]);
-      colorChangeByCapacity(Detail, cp[0]);
+      if (capacity && color && firstLoad) {
+        setSelectedCapacity(capacity);
+        setSelectedColor(color);
+      } else {
+        setSelectedCapacity(sortCapacity[0]);
+      }
+      setTimeout(() => {
+        setFirstLoad(false);
+      }, 2000);
     }
   }, [Detail]);
 
@@ -97,7 +114,9 @@ function Detail() {
     });
     setColors(cl);
     // Mặc định chọn giá trị đầu tiên
-    setSelectedColor(cl[0]);
+    if (!color || !firstLoad) {
+      setSelectedColor(cl[0]);
+    }
   };
 
   // Hàm thay đổi giá khi color, capacity thay đổi
@@ -168,7 +187,9 @@ function Detail() {
 
     // Check quantity
     if (variationSelected.remaining_quantity_variant === 0) {
-      message.warning("Phân loại đã hết hàng");
+      api.info({
+        message: "Phân loại đã hết hàng",
+      });
       return false;
     }
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
@@ -198,15 +219,25 @@ function Detail() {
     );
 
     if (existingItemIndex !== -1) {
-      // Sản phẩm đã tồn tại trong giỏ hàng, chỉ hiển thị thông báo
-      message.success("Sản phẩm đã có trong giỏ hàng");
+      // Sản phẩm đã tồn tại trong giỏ hàng
+      const itemUpdate = {
+        product_id: Detail.id,
+        capacity: variationSelected.capacity,
+        color: variationSelected.color,
+      };
+      dispatch(increaseProduct(itemUpdate));
+      api.success({
+        message: "Đã thêm sản phẩm vào giỏ hàng",
+      });
       return true;
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
       // update redux state
       dispatch(addProductToCart(updatedCart));
-      message.success("Sản phẩm đã được thêm vào giỏ hàng");
+      api.success({
+        message: "Đã thêm sản phẩm vào giỏ hàng",
+      });
       return true;
     }
   };
@@ -294,29 +325,26 @@ function Detail() {
   };
 
   // Đối tượng chứa các cặp khóa-giá trị tương ứng
-  const labels = {
-    cpu: "Thế hệ CPU",
-    chip: "Chip",
-    vga: "Chíp đồ họa",
-    screen: "Màn hình",
-    // thêm các cặp khóa-giá trị khác nếu cần
-  };
+  // const labels = {
+  //   cpu: "Thế hệ CPU",
+  //   chip: "Chip",
+  //   vga: "Chíp đồ họa",
+  //   screen: "Màn hình",
+  //   // thêm các cặp khóa-giá trị khác nếu cần
+  // };
 
   // Hàm check remaining_quantity_variant
-  const checkDisableCapacity = (capacity) => {
-    const d = [...Detail.variations].filter(
-      (variant) => variant.capacity === capacity
-    );
-    const result = d.filter((value) => value.remaining_quantity_variant !== 0);
-    return result.length !== 0 ? false : true;
-  };
+  // const checkDisableCapacity = (capacity) => {
+  //   const d = [...Detail.variations].filter(
+  //     (variant) => variant.capacity === capacity
+  //   );
+  //   const result = d.filter((value) => value.remaining_quantity_variant !== 0);
+  //   return result.length !== 0 ? false : true;
+  // };
 
   // console.log(variationSelected);
   // style
-  const disable = {
-    cursor: "not-allowed",
-    color: "#e0e0e0",
-  };
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -332,10 +360,11 @@ function Detail() {
       return <div dangerouslySetInnerHTML={{ __html: partialContent }} />;
     }
   };
-  const buttonClass = isExpanded ? 'btn-thugon' : 'btn-xemthem';
+  const buttonClass = isExpanded ? "btn-thugon" : "btn-xemthem";
 
   return (
     <>
+      {contextHolder}
       {Detail && (
         <div>
           <div className="style-1">
@@ -456,9 +485,9 @@ function Detail() {
                             style={
                               selectedCapacity === capacity
                                 ? {
-                                  borderColor: "#024dbc",
-                                  color: "#024dbc",
-                                }
+                                    borderColor: "#024dbc",
+                                    color: "#024dbc",
+                                  }
                                 : {}
                             }
                             onClick={() => handleChangeCapacity(capacity)}
@@ -484,15 +513,15 @@ function Detail() {
                       <div className="flex-btn-color">
                         {[...colors].map((color, index) => (
                           <div
+                            key={index}
                             style={
                               selectedColor === color
                                 ? {
-                                  borderColor: "#024dbc",
-                                  color: "#024dbc",
-                                }
+                                    borderColor: "#024dbc",
+                                    color: "#024dbc",
+                                  }
                                 : {}
                             }
-                            key={index}
                             onClick={() => handleChangeColor(color)}
                             className="custom-checkbox-input"
                           >
@@ -502,7 +531,6 @@ function Detail() {
                       </div>
                     </div>
                   )}
-
                 {/* giá tiền */}
                 <br />
                 {variationSelected && (
@@ -516,7 +544,7 @@ function Detail() {
                         <div className="css-oj899w">
                           {formatCurrency(
                             variationSelected.price -
-                            variationSelected.discount_amount
+                              variationSelected.discount_amount
                           )}
                         </div>
                         <div style={{ fontSize: "12px" }}>
@@ -538,6 +566,7 @@ function Detail() {
                   </div>
                 )}
 
+                {/* show remaining quantity variant */}
                 {variationSelected?.remaining_quantity_variant !== 0 ? (
                   <>
                     <span style={{ fontWeight: "bold", fontSize: "14px" }}>
@@ -546,8 +575,36 @@ function Detail() {
                     <span>sản phẩm có sẵn</span>{" "}
                   </>
                 ) : (
-                  <h5 style={{ textTransform: "uppercase", color:"red", margin: "0" }}>hết hàng</h5>
+                  <h6
+                    style={{
+                      textTransform: "uppercase",
+                      color: "red",
+                      margin: "0",
+                    }}
+                  >
+                    hết hàng
+                  </h6>
                 )}
+
+                {/* component increase quantity */}
+                {/* <div className="edit-quantity-group">
+                  <button className="btn-increase">
+                    <MinusOutlined />
+                  </button>
+                  <Input
+                    className="input-quantity"
+                    min={0}
+                    type="number"
+                    inputNumberStyle={{
+                      width: "100%",
+                      MozAppearance: "textfield",
+                      margin: 0,
+                    }}
+                  />
+                  <button className="btn-reduce">
+                    <PlusOutlined />
+                  </button>
+                </div> */}
 
                 {/* ------------------------------------------------------------ */}
                 <div className="css-f1fyi0">
@@ -677,12 +734,19 @@ function Detail() {
               <div className="mo-ta">
                 <div className="title-mo">Mô tả sản phẩm</div>
                 {renderContent()}
-                <div  style={{ display: 'flex', justifyContent: 'center' }}>
-                   <button onClick={toggleExpanded} className={buttonClass}>
-                   {isExpanded ? <>Thu gọn <CaretUpOutlined /></> : <>Xem thêm <CaretDownOutlined /></>}
-                </button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button onClick={toggleExpanded} className={buttonClass}>
+                    {isExpanded ? (
+                      <>
+                        Thu gọn <CaretUpOutlined />
+                      </>
+                    ) : (
+                      <>
+                        Xem thêm <CaretDownOutlined />
+                      </>
+                    )}
+                  </button>
                 </div>
-               
               </div>
 
               <div className="chi-tiet">
@@ -767,9 +831,17 @@ function Detail() {
                       </tr>
                       {/* màn hình */}
 
-                      <tr style={{ display: configuration.screenTechnology ? "table-row" : "none" }}>
+                      <tr
+                        style={{
+                          display: configuration.screenTechnology
+                            ? "table-row"
+                            : "none",
+                        }}
+                      >
                         <td colSpan={1}>
-                          {configuration.screenTechnology ? " Loại màn hình" : ""}
+                          {configuration.screenTechnology
+                            ? " Loại màn hình"
+                            : ""}
                         </td>
                         <td colSpan={3}>
                           {configuration.screenTechnology || ""}
@@ -777,13 +849,14 @@ function Detail() {
                       </tr>
                       {/* cpu*/}
 
-                      <tr style={{ backgroundColor: "#f6f6f6", display: configuration.cpu ? "table-row" : "none" }}>
-                        <td colSpan={1}>
-                          {configuration.cpu ? " CPU" : ""}
-                        </td>
-                        <td colSpan={3}>
-                          {configuration.cpu || ""}
-                        </td>
+                      <tr
+                        style={{
+                          backgroundColor: "#f6f6f6",
+                          display: configuration.cpu ? "table-row" : "none",
+                        }}
+                      >
+                        <td colSpan={1}>{configuration.cpu ? " CPU" : ""}</td>
+                        <td colSpan={3}>{configuration.cpu || ""}</td>
                       </tr>
 
                       {/* <tr>
@@ -815,13 +888,14 @@ function Detail() {
                         </tr>
                       )} */}
                       {/* Ram */}
-                      <tr style={{ backgroundColor: "#f6f6f6", display: configuration.ram ? "table-row" : "none" }}>
-                        <td colSpan={1}>
-                          {configuration.ram ? " Ram" : ""}
-                        </td>
-                        <td colSpan={3}>
-                          {configuration.ram || ""}
-                        </td>
+                      <tr
+                        style={{
+                          backgroundColor: "#f6f6f6",
+                          display: configuration.ram ? "table-row" : "none",
+                        }}
+                      >
+                        <td colSpan={1}>{configuration.ram ? " Ram" : ""}</td>
+                        <td colSpan={3}>{configuration.ram || ""}</td>
                       </tr>
                       {/* <tr>
                         <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
@@ -843,8 +917,6 @@ function Detail() {
                     </MDBTableBody>
                   </MDBTable>
                 </div>
-
-
 
                 {/* Modal xem cấu hình chi tiết */}
                 <div onClick={showModal2} className="xem-tiet">
@@ -924,33 +996,33 @@ function Detail() {
                   </tr>
 
                   {/* Hệ điều hành 1*/}
-                  <tr style={{ display: configuration.os ? "table-row" : "none" }}>
+                  <tr
+                    style={{ display: configuration.os ? "table-row" : "none" }}
+                  >
                     <td colSpan={1}>
                       {configuration.os ? " Hệ điều hành" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.os || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.os || ""}</td>
                   </tr>
 
                   {/* CPU*/}
-                  <tr style={{ display: configuration.cpu ? "table-row" : "none" }}>
-                    <td colSpan={1}>
-                      {configuration.cpu ? " CPU" : ""}
-                    </td>
-                    <td colSpan={3}>
-                      {configuration.cpu || ""}
-                    </td>
+                  <tr
+                    style={{
+                      display: configuration.cpu ? "table-row" : "none",
+                    }}
+                  >
+                    <td colSpan={1}>{configuration.cpu ? " CPU" : ""}</td>
+                    <td colSpan={3}>{configuration.cpu || ""}</td>
                   </tr>
 
                   {/* Ram*/}
-                  <tr style={{ display: configuration.ram ? "table-row" : "none" }}>
-                    <td colSpan={1}>
-                      {configuration.ram ? " Ram" : ""}
-                    </td>
-                    <td colSpan={3}>
-                      {configuration.ram || ""}
-                    </td>
+                  <tr
+                    style={{
+                      display: configuration.ram ? "table-row" : "none",
+                    }}
+                  >
+                    <td colSpan={1}>{configuration.ram ? " Ram" : ""}</td>
+                    <td colSpan={3}>{configuration.ram || ""}</td>
                   </tr>
 
                   {/* Rom*/}
@@ -960,77 +1032,103 @@ function Detail() {
                   </tr>
 
                   {/* memoryStick*/}
-                  <tr style={{ display: configuration.memoryStick ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.memoryStick ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.memoryStick ? " Thẻ nhớ" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.memoryStick || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.memoryStick || ""}</td>
                   </tr>
 
                   {/*screenSize*/}
-                  <tr style={{ display: configuration.screenSize ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.screenSize ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.screenSize ? " Kích thước màn hình" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.screenSize || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.screenSize || ""}</td>
                   </tr>
 
                   {/*screenResolution*/}
-                  <tr style={{ display: configuration.screenResolution ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.screenResolution
+                        ? "table-row"
+                        : "none",
+                    }}
+                  >
                     <td colSpan={1}>
-                      {configuration.screenResolution ? " Độ phân giải màn hình" : ""}
+                      {configuration.screenResolution
+                        ? " Độ phân giải màn hình"
+                        : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.screenResolution || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.screenResolution || ""}</td>
                   </tr>
 
                   {/*screenTechnology*/}
-                  <tr style={{ display: configuration.screenTechnology ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.screenTechnology
+                        ? "table-row"
+                        : "none",
+                    }}
+                  >
                     <td colSpan={1}>
-                      {configuration.screenTechnology ? " Công nghệ màn hình" : ""}
+                      {configuration.screenTechnology
+                        ? " Công nghệ màn hình"
+                        : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.screenTechnology || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.screenTechnology || ""}</td>
                   </tr>
 
                   {/*mainCamera*/}
-                  <tr style={{ display: configuration.mainCamera ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.mainCamera ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.mainCamera ? " Camera chính" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.mainCamera || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.mainCamera || ""}</td>
                   </tr>
 
                   {/*frontCamera*/}
-                  <tr style={{ display: configuration.frontCamera ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.frontCamera ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.frontCamera ? " Camera Selfie" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.frontCamera || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.frontCamera || ""}</td>
                   </tr>
 
                   {/*Pin*/}
-                  <tr style={{ display: configuration.pin ? "table-row" : "none" }}>
-                    <td colSpan={1}>
-                      {configuration.pin ? " Pin" : ""}
-                    </td>
-                    <td colSpan={3}>
-                      {configuration.pin || ""}
-                    </td>
+                  <tr
+                    style={{
+                      display: configuration.pin ? "table-row" : "none",
+                    }}
+                  >
+                    <td colSpan={1}>{configuration.pin ? " Pin" : ""}</td>
+                    <td colSpan={3}>{configuration.pin || ""}</td>
                   </tr>
 
                   {/*chargingTechnology*/}
-                  <tr style={{ display: configuration.chargingTechnology ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.chargingTechnology
+                        ? "table-row"
+                        : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.chargingTechnology ? " Công nghệ sạc" : ""}
                     </td>
@@ -1040,67 +1138,89 @@ function Detail() {
                   </tr>
 
                   {/*connector*/}
-                  <tr style={{ display: configuration.connector ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.connector ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.connector ? " Cổng kết nối" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.connector || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.connector || ""}</td>
                   </tr>
 
                   {/*size*/}
-                  <tr style={{ display: configuration.size ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.size ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.size ? " Kích thước" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.size || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.size || ""}</td>
                   </tr>
 
                   {/*weight*/}
-                  <tr style={{ display: configuration.weight ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.weight ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.weight ? " Trọng lượng" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.weight || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.weight || ""}</td>
                   </tr>
 
                   {/*audioTechnology*/}
-                  <tr style={{ display: configuration.audioTechnology ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.audioTechnology
+                        ? "table-row"
+                        : "none",
+                    }}
+                  >
                     <td colSpan={1}>
-                      {configuration.audioTechnology ? " Công nghệ âm thanh" : ""}
+                      {configuration.audioTechnology
+                        ? " Công nghệ âm thanh"
+                        : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.audioTechnology || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.audioTechnology || ""}</td>
                   </tr>
 
                   {/*loudspeaker*/}
-                  <tr style={{ display: configuration.loudspeaker ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.loudspeaker ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.loudspeaker ? " Loa" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.loudspeaker || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.loudspeaker || ""}</td>
                   </tr>
 
                   {/*sensor*/}
-                  <tr style={{ display: configuration.sensor ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.sensor ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.sensor ? " Cảm biến" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.sensor || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.sensor || ""}</td>
                   </tr>
 
                   {/*networkConnections*/}
-                  <tr style={{ display: configuration.networkConnections ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.networkConnections
+                        ? "table-row"
+                        : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.networkConnections ? " Kết nối mạng" : ""}
                     </td>
@@ -1110,27 +1230,28 @@ function Detail() {
                   </tr>
 
                   {/*waterproof*/}
-                  <tr style={{ display: configuration.waterproof ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.waterproof ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.waterproof ? " Chống nước" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.waterproof || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.waterproof || ""}</td>
                   </tr>
 
                   {/*dustproof*/}
-                  <tr style={{ display: configuration.dustproof ? "table-row" : "none" }}>
+                  <tr
+                    style={{
+                      display: configuration.dustproof ? "table-row" : "none",
+                    }}
+                  >
                     <td colSpan={1}>
                       {configuration.dustproof ? " Chống bụi" : ""}
                     </td>
-                    <td colSpan={3}>
-                      {configuration.dustproof || ""}
-                    </td>
+                    <td colSpan={3}>{configuration.dustproof || ""}</td>
                   </tr>
-
-
-
 
                   {/* 
                   <tr>
@@ -1175,8 +1296,8 @@ function Detail() {
                         {configuration.graphicsCard
                           ? "Card đồ họa"
                           : configuration.resolution
-                            ? "Phân giải"
-                            : ""}
+                          ? "Phân giải"
+                          : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.graphicsCard || configuration.resolution}
@@ -1232,8 +1353,8 @@ function Detail() {
                         {configuration.output_port
                           ? "Cổng xuất hình"
                           : configuration.rear_camera
-                            ? "Camera sau"
-                            : ""}
+                          ? "Camera sau"
+                          : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.output_port || configuration.rear_camera}
@@ -1256,28 +1377,28 @@ function Detail() {
                   )} */}
                   {(configuration.wireless_connectivity ||
                     configuration.wifi) && (
-                      <tr>
-                        <td colSpan={1}>
-                          {configuration.wireless_connectivity
-                            ? "Kết nối không dây"
-                            : configuration.wifi
-                              ? "Wifi"
-                              : ""}
-                        </td>
-                        <td colSpan={3}>
-                          {configuration.wireless_connectivity ||
-                            configuration.wifi}
-                        </td>
-                      </tr>
-                    )}
+                    <tr>
+                      <td colSpan={1}>
+                        {configuration.wireless_connectivity
+                          ? "Kết nối không dây"
+                          : configuration.wifi
+                          ? "Wifi"
+                          : ""}
+                      </td>
+                      <td colSpan={3}>
+                        {configuration.wireless_connectivity ||
+                          configuration.wifi}
+                      </td>
+                    </tr>
+                  )}
                   {(configuration.keyboard || configuration.gps) && (
                     <tr>
                       <td colSpan={1}>
                         {configuration.keyboard
                           ? "Bàn phím"
                           : configuration.gps
-                            ? "GPS"
-                            : ""}
+                          ? "GPS"
+                          : ""}
                       </td>
                       <td colSpan={3}>
                         {configuration.keyboard || configuration.gps}

@@ -50,7 +50,6 @@ function Admin() {
   const menuData = [
     {
       key: "grp",
-      icon: <UserOutlined />,
       label: "ĐƯỜNG DẪN NHANH",
       children: [
         {

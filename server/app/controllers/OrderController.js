@@ -219,7 +219,7 @@ class OrderController {
             res.status(404).send('No order found with the provided ID');
         } else {
           // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
-          let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
+          let sql = `SELECT productID, quantity, color, capacity FROM orderDetailsProduct WHERE orderID = ?`;
           let values = [orderId];
           mysql.query(sql, values, (err, orderDetails) => {
             if (err) throw err;
@@ -228,10 +228,12 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ?`;
-              values = [quantity, productID];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
@@ -243,6 +245,7 @@ class OrderController {
         }
     });
   }
+
 
   async deliveredOrder(req, res) {
     const orderId = req.params.id;
@@ -272,6 +275,77 @@ class OrderController {
             res.status(404).send('No order found with the provided ID');
         } else {
           // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
+          let sql = `SELECT productID, quantity, color, capacity FROM orderDetailsProduct WHERE orderID = ?`;
+          let values = [orderId];
+          mysql.query(sql, values, (err, orderDetails) => {
+            if (err) throw err;
+
+            // Duyệt qua từng sản phẩm trong đơn hàng
+            for (let i = 0; i < orderDetails.length; i++) {
+              const productID = orderDetails[i].productID;
+              const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
+
+              // Cập nhật số lượng sản phẩm trong bảng productDetails
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
+              mysql.query(sql, values, (err, result) => {
+                if (err) throw err;
+                // console.log(result);
+              });
+            }
+            res.send('Order canceled and product quantity updated...');
+          });
+        }
+    });
+  }
+
+
+  async UndocancelOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 0, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            // console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order delivered...');
+        }
+    });
+  }
+
+  async UndoOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 3, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            // console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          res.send('Order delivered...');
+        }
+    });
+  }
+
+  async UndofailedOrder(req, res) {
+    const orderId = req.params.id;
+    const sql = 'UPDATE orders SET status = 3, updated_at = NOW() WHERE id = ?';
+    
+    mysql.query(sql, [orderId], (err, result) => {
+        if (err) {
+            // console.error(err);
+            res.status(500).send('Error confirming order');
+        } else if (result.affectedRows === 0) {
+            res.status(404).send('No order found with the provided ID');
+        } else {
+          // Lấy thông tin về số lượng sản phẩm trong đơn hàng từ bảng orderDetailsProduct
           let sql = `SELECT productID, quantity FROM orderDetailsProduct WHERE orderID = ?`;
           let values = [orderId];
           mysql.query(sql, values, (err, orderDetails) => {
@@ -281,16 +355,19 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ?`;
-              values = [quantity, productID];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
               });
             }
-            res.send('Order canceled and product quantity updated...');
+
+            res.send('Order shipping and product quantity updated...');
           });
         }
     });
