@@ -38,27 +38,61 @@ function InputFrom({ data, onClick, setModal }) {
     !(discountCode.value_vnd == 0) ? "vnd" : "persent"
   );
   const [isLoading, setIsLoading] = useState(false);
-  // Tạo state toàn cục
-  const [content, setContent] = useState(discountCode.content);
-  const [value_percent, setValue_percent] = useState(
-    discountCode.value_percent
-  );
-  const [Value_vnd, setValue_vnd] = useState(discountCode.value_vnd);
-  const [start_date, setStart_date] = useState(discountCode.start_date);
-  const [end_date, setEnd_date] = useState(discountCode.end_date);
-  // logic orther informations
-  const [inputs, setInputs] = useState([]);
-  const errorMessage = "Trường này là bắt buộc";
 
   // Lấy brands và colors khi lần đầu chạy
   useEffect(() => {}, []);
 
   // Hàm được gọi khi form hoàn thành
-  const onFinishUpdate = async (fieldsValue) => {
+  const onFinishUpdate = async (value) => {
+    setIsLoading(true);
     const values = {
-      start_date: fieldsValue["start_date"].format("YYYY-MM-DD HH:mm"),
-      end_date: fieldsValue["end_date"].format("YYYY-MM-DD HH:mm"),
+      ...value,
+      value_percent: value.value_percent ? value.value_percent : 0,
+      value_vnd: value.value_vnd ? value.value_vnd : 0,
+      start_date: value.rangeDate[0].format("YYYY-MM-DD HH:MM"),
+      end_date: value.rangeDate[1].format("YYYY-MM-DD HH:MM"),
     };
+      delete values.rangeDate;
+            const url = `${process.env.REACT_APP_API_URL}/discount/update/${discountCode.id}`;
+            try {
+                const res = await axios.put(url, values, { withCredentials: true });
+                if (res.status === 200) {
+                    setTimeout(() => {
+                        onClick()
+                        setModal()
+                        setIsLoading(false);
+                        notification.success({
+                            message: "Thành công",
+                            description: "Phiếu giảm giá đã được lưu thành công!",
+                        });
+                    }, 1000);
+                } else {
+                    setTimeout(() => {
+                        setIsLoading(false);
+                        notification.error({
+                            message: "Lỗi",
+                            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+                        });
+                    }, 1000);
+                }
+            } catch (e) {
+                // Nếu lỗi chưa đăng nhập
+                if (e.response.data.message === "Unauthorized") {
+                    setTimeout(() => {
+                        setIsLoading(false);
+                        NotificationBeenLoggedOut();
+                    }, 500);
+                } else {
+                    // Các lỗi khác
+                    setTimeout(() => {
+                        setIsLoading(false);
+                        notification.error({
+                            message: "Lỗi",
+                            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+                        });
+                    }, 1000);
+                }
+            }
   };
 
   // Hàm được gọi khi form bị lỗi

@@ -1015,5 +1015,23 @@ class Product {
       return res.status(500).json({ message: "Internal server error" });
     }
   }
+  async getProductDescription(req, res) {
+    try { // Giả sử danh sách id được gửi trong body request
+      // Chuẩn bị câu truy vấn
+      const lc_query = `SELECT id, shortDescription FROM products`;
+  
+      // Thực thi truy vấn với danh sách id
+      const products = await query(lc_query);
+      if (products.length === 0) {
+        return res.status(404).json({ message: "No products found" });
+      }
+  
+      // Trả về dữ liệu sản phẩm
+      return res.status(200).json(products);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
 module.exports = new Product();

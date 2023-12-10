@@ -47,4 +47,5 @@ router.get("/laptopbanchay", ProductControllers.topLaptop);
 router.get("/dienthoaibanchay", ProductControllers.topDienthoai);
 router.post("/:id/variant", ProductControllers.getRemainingQuantityVariant); 
 router.post("/ImgAndDescription",ProductControllers.getProductImageAndDescription);
+router.get("/Description",ProductControllers.getProductDescription);
 module.exports = router;

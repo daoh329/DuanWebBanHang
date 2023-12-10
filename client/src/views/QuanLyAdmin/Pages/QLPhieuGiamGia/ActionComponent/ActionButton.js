@@ -8,7 +8,7 @@ import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authent
 function ActionButton({ record, getPhieuGiamGia }) {
   const [openModal, setOpenModal] = useState(false);
   const [openModalproduct, setOpenModalproduct] = useState(false);
-
+  const [AddProduct, setAddProduct] = useState(false);
   // Hàm End_date
   async function handleEndDate() {
     try {
@@ -78,7 +78,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
       <Button onClick={handleUpdate}>Cập nhật</Button>
       <Modal
         open={openModal}
-        title="Cập nhật sản phẩm"
+        title="Cập nhật Phiếu Giảm Giá"
         onCancel={handleCancel}
         footer={false}
         style={{ minWidth: "800px" }}

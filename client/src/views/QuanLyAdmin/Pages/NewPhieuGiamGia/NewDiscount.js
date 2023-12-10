@@ -29,49 +29,51 @@ function NewDiscountCode() {
   const onFinish = async (value) => {
     setIsModalOpen(true);
     const values = {
-        ...value,
-        start_date: value.rangeDate[0],
-        end_date: value.rangeDate[1],
-      };
-      delete values.rangeDate;
-            const url = `${process.env.REACT_APP_API_URL}/discount/add`;
-            try {
-                const res = await axios.post(url, values, { withCredentials: true });
-                if (res.status === 200) {
-                    setTimeout(() => {
-                        setIsModalOpen(false);
-                        notification.success({
-                            message: "Thành công",
-                            description: "Mã giảm giá đã được lưu thành công!",
-                        });
-                    }, 1000);
-                } else {
-                    setTimeout(() => {
-                        setIsModalOpen(false);
-                        notification.error({
-                            message: "Lỗi",
-                            description: "Có lỗi xảy ra khi lưu dữ liệu!",
-                        });
-                    }, 1000);
-                }
-            } catch (e) {
-                // Nếu lỗi chưa đăng nhập
-                if (e.response.data.message === "Unauthorized") {
-                    setTimeout(() => {
-                        setIsModalOpen(false);
-                        NotificationBeenLoggedOut();
-                    }, 500);
-                } else {
-                    // Các lỗi khác
-                    setTimeout(() => {
-                        setIsModalOpen(false);
-                        notification.error({
-                            message: "Lỗi",
-                            description: "Có lỗi xảy ra khi lưu dữ liệu!",
-                        });
-                    }, 1000);
-                }
-            }
+      ...value,
+      value_percent: value.value_percent ? value.value_percent : 0,
+      value_vnd: value.value_vnd ? value.value_vnd : 0,
+      start_date: value.rangeDate[0].format("YYYY-MM-DD HH:MM"),
+      end_date: value.rangeDate[1].format("YYYY-MM-DD HH:MM"),
+    };
+    delete values.rangeDate;
+    const url = `${process.env.REACT_APP_API_URL}/discount/add`;
+    try {
+      const res = await axios.post(url, values, { withCredentials: true });
+      if (res.status === 200) {
+        setTimeout(() => {
+          setIsModalOpen(false);
+          notification.success({
+            message: "Thành công",
+            description: "Mã giảm giá đã được lưu thành công!",
+          });
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          setIsModalOpen(false);
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+          });
+        }, 1000);
+      }
+    } catch (e) {
+      // Nếu lỗi chưa đăng nhập
+      if (e.response.data.message === "Unauthorized") {
+        setTimeout(() => {
+          setIsModalOpen(false);
+          NotificationBeenLoggedOut();
+        }, 500);
+      } else {
+        // Các lỗi khác
+        setTimeout(() => {
+          setIsModalOpen(false);
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+          });
+        }, 1000);
+      }
+    }
   };
   const onFinishFailed = async (err) => {
     console.log(err);

@@ -98,23 +98,37 @@ class PhieuGiamGia {
    // Add product to discount code
    async addSanPhamOnDiscountCode(req, res) {
       const { products_id, discountCode_id } = req.body;
-
+    
       try {
-         // Use new table name and column names
-         const insertQuery = `
-         INSERT INTO sanpham_discountCode (products_id, discountCode_id)
-         VALUES (?, ?)
-       `;
-         const insertValues = [products_id, discountCode_id];
-
-         await query(insertQuery, insertValues);
-
-         res.status(200).send("Product added to Discount Code successfully");
+        // 1. Check for existing duplicate before inserting
+        const checkQuery = `
+          SELECT * FROM sanpham_discountCode
+          WHERE products_id = ? AND discountCode_id = ?
+        `;
+        const checkValues = [products_id, discountCode_id];
+    
+        const existingData = await query(checkQuery, checkValues);
+    
+        if (existingData.length > 0) {
+          // Duplicate found, return error
+          return res.status(409).send("Duplicate entry found. Product already linked to this discount code.");
+        }
+    
+        // 2. No duplicate found, proceed with insertion
+        const insertQuery = `
+          INSERT INTO sanpham_discountCode (products_id, discountCode_id)
+          VALUES (?, ?)
+        `;
+        const insertValues = [products_id, discountCode_id];
+    
+        await query(insertQuery, insertValues);
+    
+        res.status(200).send("Product added to Discount Code successfully");
       } catch (error) {
-         console.error(error);
-         res.status(500).send("Internal Server Error");
+        console.error(error);
+        res.status(500).send("Internal Server Error");
       }
-   }
+    }
 
    // Remove product from discount code
    async deleteSanPhamOnDiscountCode(req, res) {
