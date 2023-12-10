@@ -26,6 +26,8 @@ import TypeProduct from "./Pages/NewProduct/Type/TypeProduct";
 import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/QLSanPham/Products";
+import PhieuGiamGia from "./Pages/QLPhieuGiamGia/PhieuGiamGia";
+import NewDiscount from './Pages/NewPhieuGiamGia/NewDiscount';
 // import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
 import QLshipping from "./QLshipping";
@@ -75,7 +77,7 @@ function Admin() {
         {
           key: "4",
           icon: <GiftOutlined />,
-          label: <Link to="newcoupon">Tạo mã giảm giá</Link>,
+          label: <Link to="NewDiscount">Tạo phiếu giảm giá</Link>
         },
       ],
     },
@@ -94,11 +96,11 @@ function Admin() {
           icon: <OrderedListOutlined />,
           label: <Link to="ListCate">Thuộc tính</Link>,
         },
-        // {
-        //   key: "7",
-        //   icon: <BookOutlined />,
-        //   label: "Bộ sưu tập",
-        // },
+        {
+          key: "7",
+          icon: <GiftOutlined />,
+          label: <Link to="PhieuGiamGia">Tất cả phiếu giảm giá</Link>
+        },
         // {
         //   key: "8",
         //   icon: <DatabaseOutlined />,
@@ -281,6 +283,8 @@ function Admin() {
           <Route path="ListCate" element={<TypeList />} />
           {/* accounts */}
           <Route path="account_list" element={<AccountList />} />
+          <Route path="NewDiscount" element={<NewDiscount />} />
+          <Route path="PhieuGiamGia" element={<PhieuGiamGia />} />
         </Routes>
       </div>
     </div>
