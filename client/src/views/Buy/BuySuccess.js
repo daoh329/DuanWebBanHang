@@ -7,22 +7,7 @@ import { addProductToCart, deleteProductInCart } from "../../redux/cartSlice";
 const BuySuccess = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.products);
-  function logBuysData() {
-    // Lấy thông tin về những sản phẩm được chọn
-    const buys = JSON.parse(sessionStorage.getItem("buys"));
-
-    // Kiểm tra nếu buys không phải là null hoặc undefined
-    if (buys) {
-      // In thông tin về những sản phẩm được chọn ra console
-      console.log(buys);
-    } else {
-      console.log('No data found in "buys"');
-    }
-  }
-
-  // Gọi hàm
-  logBuysData();
-
+  
   const removeFromCart = () => {
     // lấy sản phẩm được chọn mua
     var informationSelected = sessionStorage.getItem("buys");

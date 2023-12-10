@@ -237,15 +237,20 @@ class PayController {
                     count++;
 
                     // Nếu tất cả sản phẩm đã được lưu
-                    if (count === product.length) {
-                        // xử lý thanh toán VNPay
-                        if(secureHash === signed){
-                            res.cookie("paymentSuccess", "true");
-                            res.redirect(`${process.env.CLIENT_URL}/success`);
-                        } else{
-                            res.send('Order details added...');
+                  // Nếu tất cả sản phẩm đã được lưu
+                        if (count === product.length) {
+                            // xử lý thanh toán VNPay
+                            if(secureHash === signed){
+                                // Đánh dấu thanh toán thành công
+                                res.cookie("paymentSuccess", "true");
+                                
+                                // Chuyển hướng người dùng đến trang thông báo thành công
+                                res.redirect(`${process.env.CLIENT_URL}/success`);
+                            } else{
+                                res.send('Order details added...');
+                            }
                         }
-                    }
+
                 });
             }
         });
