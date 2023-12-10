@@ -171,7 +171,7 @@ function QLAlldelivered() {
             key: 'newAction',
             render: (_, record) => (
                 <Button style={{ backgroundColor: '#FF69B4', color: 'white' }} onClick={() => handleUndo(record)}>
-                   Hoàn tác
+                   Chọn lại
                 </Button>
             ),
         },

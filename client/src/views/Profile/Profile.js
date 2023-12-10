@@ -186,13 +186,20 @@ export default function Profile() {
   const handleCancelOrder = async (record) => {
     // Nếu paymentMenthod là 0 hoặc 2, hiển thị thông báo yêu cầu liên hệ để hủy đơn hàng
     if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
-      Modal.confirm({
+      Modal.info({
         title: 'Yêu cầu hủy đơn hàng',
         content: `Bạn đã thanh toán bằng ví điện tử nếu bạn muốn hủy đơn hàng, vui lòng liên hệ đến số 0338112099 để yêu cầu hoàn tiền và hủy đơn hàng.`,
         okText: 'Đồng ý',
         cancelButtonProps: { style: { display: 'none' } }, // Ẩn nút "Cancel"
       });
     // Nếu paymentMenthod là 1, hiển thị thông báo xác nhận hủy đơn hàng và thực hiện hủy nếu đồng ý
+    } else if (record.order_status === 1) {
+      Modal.info({
+        title: 'Thông báo',
+        content: 'Vui lòng liên hệ đến số 0338112099 để hủy đơn hàng.',
+        okText: 'Đồng ý',
+        cancelButtonProps: { style: { display: 'none' } }, // Ẩn nút "Cancel"
+      });
     } else if (record.paymentMenthod === 1) {
       Modal.confirm({
         title: 'Xác nhận hủy đơn hàng',
@@ -304,7 +311,7 @@ export default function Profile() {
                 : status === 3
                 ? "#FF33FF"
                 : status === 4
-                ? "#00DD00"
+                ? "#33CCFF"
                 : status === 5
                 ? "red"
                 : "orange",
@@ -330,7 +337,7 @@ export default function Profile() {
       key: "action",
       render: (_, record) => (
         <span>
-          {record.order_status === 0 ? (
+          {record.order_status === 0 || record.order_status === 1 ? (
             <Button
               className="cancel-button"
               style={{ backgroundColor: "red", color: "white" }}
@@ -339,6 +346,15 @@ export default function Profile() {
               Hủy
             </Button>
           ) : null}
+          {/* {record.order_status === 2 || record.order_status === 5 ? (
+            <Button
+              className="reorder-button"
+              style={{ backgroundColor: "green", color: "white" }}
+              onClick={() => handleConfirmOrder(record)}
+            >
+              Mua lại
+            </Button>
+          ) : null} */}
         </span>
       ),
     },
