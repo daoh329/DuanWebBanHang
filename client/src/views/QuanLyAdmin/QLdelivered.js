@@ -3,6 +3,7 @@ import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 
 function QLdelivered() {
 
@@ -34,6 +35,13 @@ function QLdelivered() {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/delivered/${record.order_id}`);
+                CreateNotification(
+                    record.user_id,
+                    record.order_id,
+                    "1",
+                    "Giao hàng thành công",
+                    `Đơn hàng ${record.order_id} đã được giao thành công`
+                  );
                 loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -56,6 +64,13 @@ function QLdelivered() {
                         // Thực hiện hành động nếu đã xử lý
                         try {
                             await axios.put(`${process.env.REACT_APP_API_URL}/order/deliveryfailed/${record.order_id}`);
+                            CreateNotification(
+                                record.user_id,
+                                record.order_id,
+                                "2",
+                                "Giao hàng không thành công",
+                                `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
+                              );
                             loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
                         } catch (error) {
                             console.error("Error delivered order:", error);
@@ -66,6 +81,13 @@ function QLdelivered() {
                 // Thực hiện hành động giao hàng không thành công cho các phương thức thanh toán khác
                 try {
                     await axios.put(`${process.env.REACT_APP_API_URL}/order/deliveryfailed/${record.order_id}`);
+                    CreateNotification(
+                        record.user_id,
+                        record.order_id,
+                        "2",
+                        "Giao hàng không thành công",
+                        `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
+                      );
                     loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
                 } catch (error) {
                     console.error("Error delivered order:", error);

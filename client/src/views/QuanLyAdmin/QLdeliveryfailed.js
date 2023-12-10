@@ -196,7 +196,7 @@ function QLdeliveryfailed() {
                             }
                         }}
                     >
-                       Hoàn tác
+                       Chọn lại
                     </Button>
                 );
             },
