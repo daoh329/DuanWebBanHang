@@ -70,7 +70,6 @@ function ActionButton({ record, getPhieuGiamGia }) {
         <div>
           <Products
             setModal={setOpenModalproduct}
-            onClick={getPhieuGiamGia}
             data={record}
           />
         </div>
@@ -84,7 +83,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
         footer={false}
         style={{ minWidth: "800px" }}
       >
-        <div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <InputFrom
             setModal={setOpenModal}
             onClick={getPhieuGiamGia}
@@ -101,7 +100,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
         okText="Xác nhận"
         cancelText="Trở lại"
       >
-        <Button danger disabled={record.end_date < new Date()}>
+        <Button danger disabled={(record.end_date < new Date().toISOString())}>
           Kết thúc
         </Button>
       </Popconfirm>

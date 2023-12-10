@@ -24,11 +24,14 @@ function discount() {
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "nội dung", dataIndex: "content", key: "content" },
-    { title: "Trị giá vnd", dataIndex: "value_vnd", key: "value_vnd" },
-    { title: "Trị giá %", dataIndex: "value_percent", key: "value_percent" },
+    { title: "Trị giá", key: "value",
+    render:(value)=>{
+      return (!(value.value_vnd==0))?value.value_vnd:`${value.value_percent}%`
+    }},
+ 
     {
       title: "Ngày bắt đầu",
-      dataIndex: "start_date",
+      dataIndex: "start_date",  
       key: "start_date",
       render: (start_date) =>
         <div>

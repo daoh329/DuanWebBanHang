@@ -9,6 +9,7 @@ import {
   message,
   notification,
   DatePicker,
+  Spin,
 } from "antd";
 import {
   CloseOutlined,
@@ -27,12 +28,15 @@ import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
 import config from "../../../../../config";
 import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
 
-const { Option } = Select;
-
 function InputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
   const discountCode = data;
 
+  const [form] = Form.useForm();
+  const { RangePicker } = DatePicker;
+  const [discountType, setDiscountType] = useState(
+    !(discountCode.value_vnd == 0) ? "vnd" : "persent"
+  );
   const [isLoading, setIsLoading] = useState(false);
   // Tạo state toàn cục
   const [content, setContent] = useState(discountCode.content);
@@ -61,44 +65,72 @@ function InputFrom({ data, onClick, setModal }) {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
+  const valueVnd = {
+    content: discountCode.content,
+    value_vnd: discountCode.value_vnd,
+    rangeDate: [moment(discountCode.start_date), moment(discountCode.end_date)],
+  };
+  const valuePersent = {
+    content: discountCode.content,
+    value_percent: discountCode.value_percent,
+    rangeDate: [moment(discountCode.start_date), moment(discountCode.end_date)],
+  };
   return (
-    <Form
-      style={{ maxWidth: 800, textAlign: "start" }}
-      layout="vertical"
-      onFinish={onFinishUpdate}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-      initialValues={{
-        content: discountCode.content,
-        value_percent: discountCode.value_percent,
-        value_vnd: discountCode.value_vnd,
-        start_date: discountCode.start_date,
-        end_date: discountCode.end_date,
-      }}
-    >
-      <Form.Item name="content" label="nội dung">
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={value_percent == 0 ? "value_percent" : "value_vnd"}
-        label={value_percent == 0 ? "Phần Trăm" : "Tiền VND"}
+    <div>
+      <Form
+        style={{
+          maxWidth: 1000,
+          textAlign: "start",
+          minWidth: 800,
+          margin: "0 5%",
+        }}
+        layout="vertical"
+        onFinish={onFinishUpdate}
+        onFinishFailed={onFinishFailed}
+        form={form}
+        initialValues={discountType === "vnd" ? valueVnd : valuePersent}
       >
-        <InputNumber min={0} max={value_percent == 0 ? 100 : undefined} />
-      </Form.Item>
-      <Form.Item name="start_date" label="Ngày bắt đầu">
-        <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-      </Form.Item>
-      <Form.Item name="end_date" label="Ngày kết thúc">
-        <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-      </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 20, span: 8 }}>
-        <Button type="primary" htmlType="submit" loading={isLoading}>
+        <Form.Item
+          label="Nội dung phiếu"
+          name="content"
+          style={{
+            display: "inline-block",
+            width: "calc(50% - 8px)",
+          }}
+        >
+          <Input placeholder="Nhập Nội dung phiếu" />
+        </Form.Item>
+        <Form.Item
+          label="Giá trị"
+          style={{ marginRight: "20px" }}
+          name={discountType === "vnd" ? "value_vnd" : "value_percent"}
+          id={discountType === "vnd" ? "value_vnd" : "value_percent"}
+        >
+          <InputNumber
+            addonAfter={
+              <Button type="primary" onClick={() => {}} disabled={true}>
+                {discountType === "vnd" ? "VND" : "%"}
+              </Button>
+            }
+            placeholder="Nhập Giá Trị"
+            type="number"
+            min={discountType === "percent" ? 0 : undefined}
+            max={discountType === "percent" ? 100 : undefined}
+          />
+        </Form.Item>
+        <Form.Item label="Thời gian áp dụng" name="rangeDate">
+          <RangePicker showTime format="YYYY-MM-DD HH:mm" />
+        </Form.Item>
+        <Button type="primary" htmlType="submit">
           Xác nhận
         </Button>
-      </Form.Item>
-    </Form>
+        <Modal open={isLoading} footer={null} closeIcon={null}>
+          <Spin tip="Đang tải lên..." spinning={true}>
+            <div style={{ minHeight: "50px" }} className="content" />
+          </Spin>
+        </Modal>
+      </Form>
+    </div>
   );
 }
 

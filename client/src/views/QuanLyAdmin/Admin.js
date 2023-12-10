@@ -27,7 +27,7 @@ import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/QLSanPham/Products";
 import PhieuGiamGia from "./Pages/QLPhieuGiamGia/PhieuGiamGia";
-import NewDiscount from './Pages/NewDiscount';
+import NewDiscount from './Pages/NewPhieuGiamGia/NewDiscount';
 // import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
 import QLshipping from "./QLshipping";
