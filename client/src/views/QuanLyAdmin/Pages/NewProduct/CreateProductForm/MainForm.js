@@ -539,7 +539,7 @@ function MainForm() {
                   block
                   icon={<PlusOutlined />}
                 >
-                  Add field
+                  Thêm trường
                 </Button>
               </Form.Item>
             </>
