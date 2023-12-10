@@ -8,8 +8,6 @@ function Product() {
     const [TypeProduct, setTypeProduct] = useState([]);
 
     const fetchData = async () => {
-        
-
         await axios.get(`${process.env.REACT_APP_API_URL}/product/json`)
             .then((res) => {
                 console.log('API Response:', res.data);
@@ -19,7 +17,6 @@ function Product() {
             .catch((error) => {
                 console.error('Error:', error);
             });
-
             console.log(Product);
     };
 

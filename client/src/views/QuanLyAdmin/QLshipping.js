@@ -35,6 +35,13 @@ function QLshipping() {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/shipping/${record.order_id}`);
+                CreateNotification(
+                  record.user_id,
+                  record.order_id,
+                  "3",
+                  "Đơn hàng đang được vận chuyển",
+                  `Đơn hàng ${record.order_id} đang trên đường giao đến bạn`
+                );
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);

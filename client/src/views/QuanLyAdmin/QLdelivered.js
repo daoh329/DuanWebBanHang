@@ -38,7 +38,7 @@ function QLdelivered() {
                 CreateNotification(
                     record.user_id,
                     record.order_id,
-                    "1",
+                    "4",
                     "Giao hàng thành công",
                     `Đơn hàng ${record.order_id} đã được giao thành công`
                   );
@@ -67,7 +67,7 @@ function QLdelivered() {
                             CreateNotification(
                                 record.user_id,
                                 record.order_id,
-                                "2",
+                                "5",
                                 "Giao hàng không thành công",
                                 `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
                               );
