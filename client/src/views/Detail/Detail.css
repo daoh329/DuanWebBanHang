@@ -1241,6 +1241,9 @@ strong {
   .chi-tiet {
     width: 100%;
   }
+  .mo-ta{
+    display: none;
+  }
   .thumbnail-slider {
     display: none;
   }
