@@ -228,10 +228,12 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ?`;
-              values = [quantity, productID];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant - ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
@@ -282,10 +284,12 @@ class OrderController {
             for (let i = 0; i < orderDetails.length; i++) {
               const productID = orderDetails[i].productID;
               const quantity = orderDetails[i].quantity;
+              const color = orderDetails[i].color;
+              const capacity = orderDetails[i].capacity;
 
               // Cập nhật số lượng sản phẩm trong bảng productDetails
-              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ?`;
-              values = [quantity, productID];
+              sql = `UPDATE product_variations SET remaining_quantity_variant = remaining_quantity_variant + ? WHERE product_id = ? AND color = ? AND capacity = ?`;
+              values = [quantity, productID, color, capacity];
               mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
                 // console.log(result);
@@ -296,6 +300,7 @@ class OrderController {
         }
     });
   }
+
 
   async UndocancelOrder(req, res) {
     const orderId = req.params.id;
