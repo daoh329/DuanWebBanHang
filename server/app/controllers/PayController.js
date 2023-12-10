@@ -240,6 +240,7 @@ class PayController {
                     if (count === product.length) {
                         // xử lý thanh toán VNPay
                         if(secureHash === signed){
+                            res.cookie("paymentSuccess", "true");
                             res.redirect(`${process.env.CLIENT_URL}/success`);
                         } else{
                             res.send('Order details added...');

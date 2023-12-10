@@ -7,6 +7,9 @@ import { FileDoneOutlined, FileExcelOutlined } from "@ant-design/icons";
 import "./style.css";
 import { updateNotification } from "../../../redux/notificationsSlice";
 import { NotificationBeenLoggedOut } from "../../NotificationsForm/Authenticated";
+import fastDelivery from "../../../assets/fast-delivery.png";
+import notDelivery from "../../../assets/not-delivered.png";
+import delivered from "../../../assets/delivered.png";
 
 function NotificationsLayout(props) {
   const statusPage = props.statusPage;
@@ -61,7 +64,7 @@ function NotificationsLayout(props) {
         // tạo api
         const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
         // gọi api cập nhật trạng thái thông báo tại db
-        const results = await axios.put(api, arrId, {withCredentials:true});
+        const results = await axios.put(api, arrId, { withCredentials: true });
 
         if (results.status === 200) {
           arrId.forEach((id) => {
@@ -118,9 +121,27 @@ function NotificationsLayout(props) {
                     size={64}
                     icon={
                       item.type === "1" ? (
-                        <FileDoneOutlined style={{ color: "green" }} />
+                        <FileDoneOutlined style={{ color: "#21B2DA" }} />
+                      ) : item.type === "3" ? (
+                        <img
+                          style={{ padding: "5px" }}
+                          src={fastDelivery}
+                          alt="icon"
+                        />
+                      ) : item.type === "4" ? (
+                        <img
+                          style={{ padding: "5px" }}
+                          src={delivered}
+                          alt="icon"
+                        />
+                      ) : item.type === "5" ? (
+                        <img
+                          style={{ padding: "5px" }}
+                          src={notDelivery}
+                          alt="icon"
+                        />
                       ) : (
-                        <FileExcelOutlined style={{ color: "red" }} />
+                        <FileExcelOutlined style={{ color: "#FF5E5E" }} />
                       )
                     }
                   />
@@ -165,7 +186,7 @@ function NotificationsLayout(props) {
         <Empty
           image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
           imageStyle={{ height: 60 }}
-          style={{marginTop:"100px"}}
+          style={{ marginTop: "100px" }}
           description={
             <span style={{ color: "#A9A9A9" }}>
               Hiện không có thông báo nào

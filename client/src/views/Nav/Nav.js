@@ -39,9 +39,14 @@ import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
 import SearchComponent from "../Search/ThanhTimKiem";
 // import { useCart } from "../Cart/CartContext";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { checkLogin } from "../../util/servicesGlobal";
 import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
+import fastDelivery from "../../assets/fast-delivery.png";
+import notDelivery from "../../assets/not-delivered.png";
+import delivered from "../../assets/delivered.png";
+
+
 const { Header } = Layout;
 
 const App = () => {
@@ -51,7 +56,7 @@ const App = () => {
   );
   const dispatch = useDispatch();
   const isLogin = localStorage.getItem("isLogin");
-
+  
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
     // Kiểm tra xem tên có khoảng trắng hay không.
@@ -91,7 +96,7 @@ const App = () => {
       product_id: productId,
       color,
       capacity,
-    }
+    };
     dispatch(deleteProductInCart(data));
   };
 
@@ -145,9 +150,9 @@ const App = () => {
   };
   // tới profile
   const profile = async () => {
-    if (await checkLogin() === true) {
+    if ((await checkLogin()) === true) {
       navigate("/profile");
-    }else if (await checkLogin() === "Unauthorized") {
+    } else if ((await checkLogin()) === "Unauthorized") {
       NotificationBeenLoggedOut();
     }
   };
@@ -244,7 +249,7 @@ const App = () => {
 
       const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
       // gọi api cập nhật trạng thái thông báo tại db
-      const results = await axios.put(api, arrId, {withCredentials: true});
+      const results = await axios.put(api, arrId, { withCredentials: true });
 
       if (results.status === 200) {
         arrId.forEach((id) => {
@@ -274,8 +279,7 @@ const App = () => {
         // tạo api
         const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
         // gọi api cập nhật trạng thái thông báo tại db
-        const results = await axios.put(api, arrId);
-
+        const results = await axios.put(api, arrId , {withCredentials: true});
         if (results.status === 200) {
           arrId.forEach((id) => {
             const data = {
@@ -310,90 +314,84 @@ const App = () => {
     }
   };
 
-
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
-
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   return (
     <Layout className="nav-container">
-        {!isAdminRoute && (
-      <div className="danhmuc">
-        <img
-          alt=""
-          style={{ width: "100%", height: "56px", objectFit: "cover" }}
-          src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
-        ></img>
-      </div>
-        )}
+      {!isAdminRoute && (
+        <div className="danhmuc">
+          <img
+            alt=""
+            style={{ width: "100%", height: "56px", objectFit: "cover" }}
+            src="https://lh3.googleusercontent.com/_1IIdVmUpPTu90FMAIR66GKd5JxnBwUFTW526HgA1dRp3bo7pwuFJwuylI6dEDxOEiW3W72Eiuzs1LuRQ8NtBW3GSkxKSw=w1920-rw"
+          ></img>
+        </div>
+      )}
       <div className="logoweb">
-        <a href="/"> <img alt="" style={{ objectFit: "cover" }} src={Hinh}/></a>
-       
+        <a href="/">
+          {" "}
+          <img alt="" style={{ objectFit: "cover" }} src={Hinh} />
+        </a>
       </div>
       {!isAdminRoute && (
-      <div className="menu-container">
-        <div className="menu1">
-          <div className="css-1e7ahm9">
-            <a
-              href="/huong-dan-mua-hang"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-              
-              Hướng dẫn mua hàng
-            </a>
-            <a
-              href="/chinh-sach-doi-tra"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-             
-                Chính sách đổi trả.
-            </a>
-            <a
-              href="/chinh-sach-bao-hanh"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-             
-              Chính sách bảo hành
-            </a>
-            <Dropdown menu={{ items: menuContact }} placement="bottomRight">
+        <div className="menu-container">
+          <div className="menu1">
+            <div className="css-1e7ahm9">
               <a
-               
+                href="/huong-dan-mua-hang"
                 style={{
                   marginRight: "20px",
                   color: "#fff", // Chữ màu trắng
                   textDecoration: "none",
                 }}
               >
-               
-                Liên hệ
+                Hướng dẫn mua hàng
               </a>
-            </Dropdown>
-            <a
-              href="/chinh-sach-thanh-toan"
-              style={{
-                marginRight: "20px",
-                color: "#fff", // Chữ màu trắng
-                textDecoration: "none",
-              }}
-            >
-            
-              Chính sách thanh toán
-            </a>
+              <a
+                href="/chinh-sach-doi-tra"
+                style={{
+                  marginRight: "20px",
+                  color: "#fff", // Chữ màu trắng
+                  textDecoration: "none",
+                }}
+              >
+                Chính sách đổi trả.
+              </a>
+              <a
+                href="/chinh-sach-bao-hanh"
+                style={{
+                  marginRight: "20px",
+                  color: "#fff", // Chữ màu trắng
+                  textDecoration: "none",
+                }}
+              >
+                Chính sách bảo hành
+              </a>
+              <Dropdown menu={{ items: menuContact }} placement="bottomRight">
+                <a
+                  style={{
+                    marginRight: "20px",
+                    color: "#fff", // Chữ màu trắng
+                    textDecoration: "none",
+                  }}
+                >
+                  Liên hệ
+                </a>
+              </Dropdown>
+              <a
+                href="/chinh-sach-thanh-toan"
+                style={{
+                  marginRight: "20px",
+                  color: "#fff", // Chữ màu trắng
+                  textDecoration: "none",
+                }}
+              >
+                Chính sách thanh toán
+              </a>
+            </div>
           </div>
         </div>
-      </div>
       )}
       <Affix offsetTop={0}>
         <div>
@@ -664,7 +662,7 @@ const App = () => {
                         <div
                           style={{
                             width: "100%",
-                            maxHeight: "300px",
+                            maxHeight: "400px",
                             overflowY: "auto",
                             scrollbarWidth: "none",
                           }}
@@ -672,6 +670,7 @@ const App = () => {
                           <List
                             itemLayout="horizontal"
                             dataSource={arrayNotification}
+                            style={{height: "500px"}}
                             renderItem={(item, index) => (
                               <List.Item
                                 onClick={() => nextToNotifications(item)}
@@ -685,11 +684,29 @@ const App = () => {
                                       icon={
                                         item.type === "1" ? (
                                           <FileDoneOutlined
-                                            style={{ color: "green" }}
+                                            style={{ color: "#21B2DA" }}
                                           />
-                                        ) : (
+                                        ) : item.type === "3" ? (
+                                          <img
+                                            style={{ padding: "5px" }}
+                                            src={fastDelivery}
+                                            alt="icon"
+                                          />
+                                        ) : item.type === "4" ? (
+                                          <img
+                                            style={{ padding: "5px" }}
+                                            src={delivered}
+                                            alt="icon"
+                                          />
+                                        ) : item.type === "5" ? (
+                                          <img
+                                            style={{ padding: "5px" }}
+                                            src={notDelivery}
+                                            alt="icon"
+                                          />
+                                        ):(
                                           <FileExcelOutlined
-                                            style={{ color: "red" }}
+                                            style={{ color: "#FF5E5E" }}
                                           />
                                         )
                                       }
@@ -886,9 +903,7 @@ const App = () => {
                       <div>Tổng tiền ({cart.length}) sản phẩm: </div>
                       <div style={{fontSize:"16px", fontWeight:"500", color:"red"}}>{formatCurrency(totalCartPrice(cart))}</div>
                       </div> */}
-                      <Button
-                        style={{ width: "100%", borderRadius: "3px" }}
-                      >
+                      <Button style={{ width: "100%", borderRadius: "3px" }}>
                         <NavLink to="/cart">
                           <p>Xem giỏ hàng</p>
                         </NavLink>
