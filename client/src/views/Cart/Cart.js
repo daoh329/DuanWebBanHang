@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
-import { Checkbox, Modal, Button } from "antd";
+import { Checkbox, Modal, Button, Input } from "antd";
 import {
   ExclamationCircleFilled,
   PlusOutlined,
@@ -299,10 +299,10 @@ function Cart() {
       selectAll: newSelectAll,
       selectedProducts: newSelectAll
         ? cart.map((item) => ({
-          id: item.id,
-          color: item.color,
-          capacity: item.capacity,
-        }))
+            id: item.id,
+            color: item.color,
+            capacity: item.capacity,
+          }))
         : [],
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
@@ -478,12 +478,15 @@ function Cart() {
     // console.log(products);
     // return;
     addToRecentlyViewedProduct(products);
-    navigate(`/detail/${products.id}`, {state: {capacity: products.capacity, color: products.color}});
+    navigate(`/detail/${products.id}`, {
+      state: { capacity: products.capacity, color: products.color },
+    });
   };
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
-  const isContinueButtonDisabled = selectedProducts.length === 0 || totalPrice === 0;
+  const isContinueButtonDisabled =
+    selectedProducts.length === 0 || totalPrice === 0;
 
   // Hàm xử lý khi nút "Tiếp tục" được ấn
   const handleContinueClick = () => {
@@ -513,6 +516,10 @@ function Cart() {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+  };
+
+  const handleBlurQuantity = (value) => {
+    // console.log("Blur: ", value);
   };
 
   return (
@@ -598,9 +605,9 @@ function Cart() {
                               src={
                                 item.main_image
                                   ? process.env.REACT_APP_API_URL +
-                                  item.main_image
+                                    item.main_image
                                   : process.env.REACT_APP_API_URL +
-                                  item.thumbnail
+                                    item.thumbnail
                               }
                               alt="main_image"
                             />
@@ -663,9 +670,20 @@ function Cart() {
                                 }
                                 id="quantity-button"
                               />
-                              <span style={{ fontWeight: "bold" }}>
-                                {item.quantity}
-                              </span>
+                              <Input
+                                id="quantity-input"
+                                value={item.quantity}
+                                type="number"
+                                min={1}
+                                max={999}
+                                onBlur={(e) =>
+                                  handleBlurQuantity({
+                                    productId: item.id,
+                                    color: item.color,
+                                    capacity: item.capacity
+                                  })
+                                }
+                              />
                               <Button
                                 disabled={checkDisable(
                                   arrDisable,

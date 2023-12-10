@@ -28,6 +28,7 @@ const onChange = (e) => {
 
 export default function Buy() {
   const user = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
   const [deliveryAddress, setDeliveryAddress] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState("");
@@ -390,10 +391,11 @@ export default function Buy() {
           // Thông báo thành công
           message.success("Thanh toán đơn hàng thành công");
 
-          // Chuyển hướng người dùng đến trang thông báo thành công
-          window.location.replace("/success");
           // Xóa sản phẩm khỏi giỏ hàng
           removeFromCart();
+          // Chuyển hướng người dùng đến trang thông báo thành công
+          return;
+          window.location.replace("/success");
         } else {
           // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
           const responseData = await response.json();
