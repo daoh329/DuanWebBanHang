@@ -200,6 +200,15 @@ class Product {
 
   // API: /product/delete/:id
   async Delete(req, res) {
+    // Lấy id từ client request lên
+    const id = req.params.id;
+    // query check product in order
+    const checkInOrder = `select count(*) as count from orderdetailsproduct where productID = ?`;
+    const resultsCheck = await query(checkInOrder, [id]);
+    if (resultsCheck[0].count !== 0) {
+      return res.json({message: "Do not delete"});
+    }
+
     // query get path image
     const sl_product_images = `
       SELECT path AS imagePath
@@ -229,12 +238,9 @@ class Product {
     `;
 
     try {
-      // Lấy id từ client request lên
-      const id = req.params.id;
       if (!id) {
         return res.status(400).json({ message: "Not Id" });
       }
-
       // select imagePath galery
       var resultsImagesPath = await query(sl_product_images, [id]);
       var resultsMainImagesPath = await query(sl_main_image, [id]);
