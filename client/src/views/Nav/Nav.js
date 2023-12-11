@@ -362,28 +362,28 @@ const App = () => {
                 href="/chinh-sach-bao-hanh"
                 style={{
                   marginRight: "20px",
-                  color: "#fff", // Chữ màu trắng
+                  color: "#fff", 
                   textDecoration: "none",
                 }}
               >
                 Chính sách bảo hành
               </a>
-              <Dropdown menu={{ items: menuContact }} placement="bottomRight">
+              {/* <Dropdown menu={{ items: menuContact }} placement="bottomRight">
                 <a
                   style={{
                     marginRight: "20px",
-                    color: "#fff", // Chữ màu trắng
+                    color: "#fff", 
                     textDecoration: "none",
                   }}
                 >
                   Liên hệ
                 </a>
-              </Dropdown>
+              </Dropdown> */}
               <a
                 href="/chinh-sach-thanh-toan"
                 style={{
                   marginRight: "20px",
-                  color: "#fff", // Chữ màu trắng
+                  color: "#fff", 
                   textDecoration: "none",
                 }}
               >

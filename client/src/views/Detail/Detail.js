@@ -869,6 +869,7 @@ function Detail() {
 
                       <tr
                         style={{
+                          backgroundColor: "#f6f6f6",
                           display: configuration.screenTechnology
                             ? "table-row"
                             : "none",
@@ -887,7 +888,7 @@ function Detail() {
 
                       <tr
                         style={{
-                          backgroundColor: "#f6f6f6",
+                          
                           display: configuration.cpu ? "table-row" : "none",
                         }}
                       >
