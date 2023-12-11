@@ -36,7 +36,7 @@ const createTables = () => {
     FOREIGN KEY (color) REFERENCES colors (name)
   );
   `;
-    const product_images = `
+  const product_images = `
     CREATE TABLE IF NOT EXISTS product_images (
       id INT PRIMARY KEY AUTO_INCREMENT,
       product_id INT,
@@ -158,6 +158,26 @@ const createTables = () => {
     is_read BOOLEAN DEFAULT 0
   );`;
 
+  const discount_code = `
+    CREATE TABLE discount_code (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      content VARCHAR(255) NOT NULL,
+      value_vnd numeric(20,2),
+      value_percent numeric(5,2),
+      start_date timestamp NOT NULL,
+      end_date timestamp NOT NULL
+    );
+  `;
+  const sanpham_discountCode = `
+    CREATE TABLE sanpham_discountCode (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      products_id INT,
+      discountCode_id INT,
+    FOREIGN KEY (discountCode_id) REFERENCES discount_code(id),
+    FOREIGN KEY (products_id) REFERENCES products(id)
+  );
+  `;
+
   mysql2.query(deliveryMethod, (error, results, fields) => {
     if (error) {
       console.error(error);
@@ -191,6 +211,17 @@ const createTables = () => {
   });
 
   mysql2.query(products, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  mysql2.query(discount_code, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+    }
+  });
+
+  mysql2.query(sanpham_discountCode, (error, results, fields) => {
     if (error) {
       console.error(error);
     }

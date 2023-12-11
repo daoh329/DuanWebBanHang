@@ -24,6 +24,7 @@ import { addProductToCart, increaseProduct } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 import CardProduct from "../Card/Card";
 import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
+import { formatDateToDate } from "../../util/formatData";
 
 const { error } = Modal;
 
@@ -381,6 +382,10 @@ function Detail() {
     }
   };
 
+  const selectedCoupon = (value) => {
+    setCouponSelected(value);
+  };
+
   return (
     <>
       {contextHolder}
@@ -647,7 +652,12 @@ function Detail() {
                         Chọn 1 trong những khuyến mãi sau
                       </div>
                       {coupons.map((item, index) => (
-                        <div key={index} className=" css-1nz6s82">
+                        <div
+                          key={index}
+                          onClick={() => selectedCoupon(item)}
+                          className="css-1nz6s82"
+                          id={couponSelected.id !== item.id && `css-1nz6s82`}
+                        >
                           <div className="css-qx8kls">
                             <img
                               src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
@@ -662,7 +672,8 @@ function Detail() {
                           >
                             <div>
                               <div className=" css-1j2vnz6">
-                                Giảm 4.000.000₫ (áp dụng vào giá sản phẩm)
+                                Giảm {formatCurrency(item.value_vnd)} (áp dụng
+                                vào giá sản phẩm)
                               </div>
                               <div className=" css-756cgs">
                                 Khuyến mãi áp dụng khi mua tối thiểu 1 sản phẩm
@@ -673,8 +684,14 @@ function Detail() {
                               direction="row"
                               className="css-1rt5kwy"
                             >
-                              <div className=" css-2cgl77">HSD: 31/8/2023</div>
-                              <div className="css-1aa534q">Bỏ chọn</div>
+                              <div className=" css-2cgl77">
+                                HSD: {formatDateToDate(item.end_date)}
+                              </div>
+                              <div className="css-1aa534q">
+                                {couponSelected.id === item.id
+                                  ? "Bỏ chọn"
+                                  : "Áp dụng"}
+                              </div>
                             </div>
                           </div>
                         </div>
