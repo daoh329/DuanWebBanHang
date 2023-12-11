@@ -55,9 +55,15 @@ function ActionButton({ record, getProduct }) {
         `${process.env.REACT_APP_API_URL}/product/delete/${record.id}`,
         { withCredentials: true }
       );
+      console.log(result);
       if (result.status === 200) {
-        message.success("Đã xóa sản phẩm.");
+        if (result.data.message === "Do not delete") {
+          message.info("Không thể xóa. Sản phẩm đang có trong hóa đơn khác.");
         return getProduct();
+        }else{
+          message.success("Đã xóa sản phẩm.");
+          return getProduct();
+        }
       }
       return message.success("Đã xóa sản phẩm.");
     } catch (error) {
