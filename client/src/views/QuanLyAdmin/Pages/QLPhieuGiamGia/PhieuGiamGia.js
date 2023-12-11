@@ -16,6 +16,9 @@ function discount() {
     await axios
       .get(`${process.env.REACT_APP_API_URL}/discount/get`)
       .then((res) => {
+        [...res.data].forEach((item) => {
+          item.key = item.id;
+        })
         setdiscount(res.data);
       })
       .catch((error) => console.log(error));
@@ -69,7 +72,7 @@ function discount() {
   return (
     <div>
       <br />
-      <h1>Quản lý Phiếu giảm giá</h1>
+      <h1>Quản lý phiếu giảm giá</h1>
       <Table columns={columns} dataSource={discount} />
     </div>
   );

@@ -132,16 +132,17 @@ class PhieuGiamGia {
 
    // Remove product from discount code
    async deleteSanPhamOnDiscountCode(req, res) {
-      const { sanpham_id, discountCode_id } = req.body;
-
+      const { products_id, discountCode_id } = req.body;
+      // console.log("product_id: ", product_id);
+      // console.log("discountCode_id: ", discountCode_id);
+      // return res.json("abc");
       try {
          const deleteQuery = `
-          DELETE FROM sanpham_discountCode
-          WHERE sanpham_id = ? AND discountCode_id = ?
+            DELETE FROM sanpham_discountCode
+            WHERE products_id = ? AND discountCode_id = ?;
         `;
-         const deleteValues = [sanpham_id, discountCode_id];
 
-         const result = await query(deleteQuery, deleteValues);
+         await query(deleteQuery, [products_id, discountCode_id]);
 
          res.status(200).send("Product removed from Discount Code successfully");
       } catch (error) {

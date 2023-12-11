@@ -48,4 +48,6 @@ router.get("/dienthoaibanchay", ProductControllers.topDienthoai);
 router.post("/:id/variant", ProductControllers.getRemainingQuantityVariant); 
 router.post("/ImgAndDescription",ProductControllers.getProductImageAndDescription);
 router.get("/Description",ProductControllers.getProductDescription);
+router.get("/:id/coupons", ProductControllers.getCoupons);
+
 module.exports = router;

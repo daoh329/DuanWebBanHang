@@ -62,7 +62,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
       <Button onClick={handleProduct}>Sản phẩm áp dụng</Button>
       <Modal
         open={openModalproduct}
-        title="danh sách sản phẩm áp dụng"
+        // title="danh sách sản phẩm áp dụng"
         onCancel={handleProductCancel}
         footer={false}
         style={{ minWidth: "800px" }}
