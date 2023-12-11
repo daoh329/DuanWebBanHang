@@ -103,3 +103,4 @@ export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
     setHistorysp([]);
   }
 };
+

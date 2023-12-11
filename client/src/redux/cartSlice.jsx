@@ -13,12 +13,13 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     deleteProductInCart: (state, action) => {
-      const { product_id, color, capacity } = action.payload;
+      const { product_id, color, capacity, couponsId } = action.payload;
       const updatedProducts = state.products?.filter(
         (product) =>
           product.id !== product_id ||
           product.color !== color ||
-          product.capacity !== capacity
+          product.capacity !== capacity ||
+          product.ccouponsId !== couponsId
       );
       localStorage.setItem(
         "cart",
@@ -61,16 +62,17 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     increaseProduct: (state, action) => {
-      const { product_id, color, capacity, numberIncreased } = action.payload;
-      const numberIncreased2 = numberIncreased || 1
+      const { product_id, color, capacity, couponsId, numberIncreased } = action.payload;
+      // const numberIncreased2 = numberIncreased || 1
       const cartToUpdate = state.products.find(
         (product) =>
           product.id === product_id &&
           product.color === color &&
-          product.capacity === capacity
+          product.capacity === capacity &&
+          product.couponsId === couponsId
       );
       if (cartToUpdate) {
-        cartToUpdate.quantity = cartToUpdate.quantity + numberIncreased2;
+        cartToUpdate.quantity = cartToUpdate.quantity + 1;
         cartToUpdate.totalPrice =
           (cartToUpdate.price - cartToUpdate.discount) * cartToUpdate.quantity;
       }

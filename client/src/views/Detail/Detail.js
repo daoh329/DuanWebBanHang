@@ -36,6 +36,14 @@ function Detail() {
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
 
+  const onNotication = (type, message) => {
+    if (type === "success") {
+      api.success({
+        message: message,
+      });
+    }
+  };
+
   // sự kiện mở modal
   const showModal2 = () => {
     setIsModalOpen2(true);
@@ -204,44 +212,61 @@ function Detail() {
       color: variationSelected.color,
       price: variationSelected.price,
       discount: variationSelected.discount_amount,
+      couponsId: couponSelected.id,
       //----
       quantity: 1,
-      totalPrice: variationSelected.price - variationSelected.discount_amount,
+      totalPrice:
+        variationSelected.price -
+        ((variationSelected.discount_amount || 0) +
+          parseInt(couponSelected.value_vnd || 0)),
     };
 
     // console.log(newItem);
     // return;
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    const existingItemIndex = cart.findIndex(
+    const existingItem = cart.filter(
       (cartItem) =>
         cartItem.id === newItem.id &&
         cartItem.color === newItem.color &&
-        cartItem.capacity === newItem.capacity
+        cartItem.capacity === newItem.capacity &&
+        // cartItem.
     );
 
-    if (existingItemIndex !== -1) {
-      // Sản phẩm đã tồn tại trong giỏ hàng
-      const itemUpdate = {
-        product_id: Detail.id,
-        capacity: variationSelected.capacity,
-        color: variationSelected.color,
-      };
-      dispatch(increaseProduct(itemUpdate));
-      api.success({
-        message: "Đã thêm sản phẩm vào giỏ hàng",
-      });
-      return true;
-    } else {
-      // Thêm sản phẩm vào giỏ hàng
-      const updatedCart = [...cart, newItem];
-      // update redux state
-      dispatch(addProductToCart(updatedCart));
-      api.success({
-        message: "Đã thêm sản phẩm vào giỏ hàng",
-      });
-      return true;
-    }
+
+
+    // if (existingItem.length !== 0) {
+    //   // Sản phẩm đã tồn tại trong giỏ hàng
+    //   // Kiểm tra xem coupons có khác nhau không
+    //   [...existingItem].forEach((item) => {
+    //     if (item.couponsId === newItem.couponsId) {
+    //       const itemUpdate = {
+    //         product_id: newItem.id,
+    //         capacity: newItem.capacity,
+    //         color: newItem.color,
+    //         couponsId: newItem.couponsId,
+    //       };
+    //       dispatch(increaseProduct(itemUpdate));
+    //       onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
+    //       return;
+    //     } else {
+    //       // Thêm sản phẩm vào giỏ hàng
+    //       const updatedCart = [...cart, newItem];
+    //       // update redux state
+    //       dispatch(addProductToCart(updatedCart));
+    //       onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
+    //       return;
+    //     }
+    //   });
+    //   return true;
+    // } else {
+    //   // Thêm sản phẩm vào giỏ hàng
+    //   const updatedCart = [...cart, newItem];
+    //   // update redux state
+    //   dispatch(addProductToCart(updatedCart));
+    //   onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
+    //   return true;
+    // }
   };
 
   // Hàm xử lý sự kiện khi nhấp vào hình thu nhỏ
@@ -383,7 +408,11 @@ function Detail() {
   };
 
   const selectedCoupon = (value) => {
-    setCouponSelected(value);
+    if (couponSelected.id === value.id) {
+      setCouponSelected({});
+    } else {
+      setCouponSelected(value);
+    }
   };
 
   return (
@@ -558,9 +587,10 @@ function Detail() {
 
                 {/* giá tiền */}
                 <br />
-                {variationSelected && (
+                {variationSelected && Object.keys(couponSelected) !== 0 && (
                   <div className="css-1q5zfcu">
-                    {parseInt(variationSelected.discount_amount) === 0 ? (
+                    {parseInt(variationSelected.discount_amount) === 0 &&
+                    parseInt(couponSelected.value_vnd || 0) === 0 ? (
                       <div className="css-oj899w">
                         {formatCurrency(variationSelected.price)}
                       </div>
@@ -569,7 +599,8 @@ function Detail() {
                         <div className="css-oj899w">
                           {formatCurrency(
                             variationSelected.price -
-                              variationSelected.discount_amount
+                              ((variationSelected.discount_amount || 0) +
+                                parseInt(couponSelected.value_vnd || 0))
                           )}
                         </div>
                         <div style={{ fontSize: "12px" }}>
@@ -582,7 +613,8 @@ function Detail() {
                             -
                             {format_sale(
                               variationSelected.price,
-                              variationSelected.discount_amount
+                              (variationSelected.discount_amount || 0) +
+                                parseInt(couponSelected.value_vnd || 0)
                             )}
                           </span>
                         </div>
@@ -642,7 +674,7 @@ function Detail() {
                 </div>
 
                 {/* phần khuyến mãi */}
-                {/* {coupons && coupons.length !== 0 && (
+                {coupons && coupons.length !== 0 && (
                   <>
                     <div className="css-1gs5ebu">
                       <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
@@ -656,7 +688,9 @@ function Detail() {
                           key={index}
                           onClick={() => selectedCoupon(item)}
                           className="css-1nz6s82"
-                          id={couponSelected.id !== item.id && `css-1nz6s82`}
+                          id={
+                            couponSelected.id !== item.id ? `css-1nz6s82` : ""
+                          }
                         >
                           <div className="css-qx8kls">
                             <img
@@ -698,7 +732,7 @@ function Detail() {
                       ))}
                     </div>
                   </>
-                )} */}
+                )}
 
                 <div className="css-f7zc9t">
                   {/* button mua ngay */}

@@ -159,7 +159,7 @@ const createTables = () => {
   );`;
 
   const discount_code = `
-    CREATE TABLE discount_code (
+    CREATE TABLE IF NOT EXISTS discount_code (
       id INT AUTO_INCREMENT PRIMARY KEY,
       content VARCHAR(255) NOT NULL,
       value_vnd numeric(20,2),
@@ -169,7 +169,7 @@ const createTables = () => {
     );
   `;
   const sanpham_discountCode = `
-    CREATE TABLE sanpham_discountCode (
+    CREATE TABLE IF NOT EXISTS sanpham_discountCode (
       id INT AUTO_INCREMENT PRIMARY KEY,
       products_id INT,
       discountCode_id INT,
