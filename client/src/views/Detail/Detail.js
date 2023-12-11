@@ -9,6 +9,7 @@ import {
   CaretUpOutlined,
   PlusOutlined,
   MinusOutlined,
+  GiftOutlined,
 } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { message } from "antd";
@@ -23,6 +24,7 @@ import { addProductToCart, increaseProduct } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 import CardProduct from "../Card/Card";
 import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
+import { formatDateToDate } from "../../util/formatData";
 
 const { error } = Modal;
 
@@ -167,15 +169,15 @@ function Detail() {
   };
 
   // Hàm show modal delete product
-  const showDeleteConfirm = () => {
-    error({
-      title: "Tài khoản của bạn đã bị khóa và không thể sử dụng giỏ hàng",
-      icon: <ExclamationCircleFilled />,
-      centered: true,
-      footer: false,
-      maskClosable: true,
-    });
-  };
+  // const showDeleteConfirm = () => {
+  //   error({
+  //     title: "Tài khoản của bạn đã bị khóa và không thể sử dụng giỏ hàng",
+  //     icon: <ExclamationCircleFilled />,
+  //     centered: true,
+  //     footer: false,
+  //     maskClosable: true,
+  //   });
+  // };
 
   // them giỏ hàng
   const cart = useSelector((state) => state.cart.products);
@@ -362,6 +364,28 @@ function Detail() {
   };
   const buttonClass = isExpanded ? "btn-thugon" : "btn-xemthem";
 
+  // Lấy thông tin khuyến mãi của sản phẩm
+  const [coupons, setCoupons] = useState([]);
+  const [couponSelected, setCouponSelected] = useState({});
+  useEffect(() => {
+    getCoupons();
+  }, []);
+
+  const getCoupons = async () => {
+    try {
+      const url = `${process.env.REACT_APP_API_URL}/product/34/coupons`;
+      const results = await axios.get(url);
+
+      setCoupons(results.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const selectedCoupon = (value) => {
+    setCouponSelected(value);
+  };
+
   return (
     <>
       {contextHolder}
@@ -531,6 +555,7 @@ function Detail() {
                       </div>
                     </div>
                   )}
+
                 {/* giá tiền */}
                 <br />
                 {variationSelected && (
@@ -607,6 +632,7 @@ function Detail() {
                 </div> */}
 
                 {/* ------------------------------------------------------------ */}
+                {/* divider */}
                 <div className="css-f1fyi0">
                   <div
                     width="100%"
@@ -615,54 +641,64 @@ function Detail() {
                   ></div>
                 </div>
 
-                <div className="css-1gs5ebu" style={{ display: "none" }}>
-                  <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
-                  {/* phần khuyến mãi */}
-                </div>
-                <div className="css-30n8gl" style={{ display: "none" }}>
-                  <div className="css-ixp6xz">
-                    Chọn 1 trong những khuyến mãi sau
-                  </div>
-                  <div
-                    data-content-region-name="optionalPromotion"
-                    data-track-content="true"
-                    data-content-name="Aug 2023 | New School Year, New Gear 160"
-                    data-content-target="productDetail"
-                    data-content-payload='{"sku":"220300268","action":"unselect","promotionID":472572,"screenName":"productDetail","index":0}'
-                    className="att-product-detail-selection-promotion-472572 css-1nz6s82"
-                    direction="row"
-                  >
-                    <div className="css-qx8kls">
-                      <img
-                        src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                        alt="icon"
-                        height={25}
-                        width={25}
-                      />
+                {/* phần khuyến mãi */}
+                {/* {coupons && coupons.length !== 0 && (
+                  <>
+                    <div className="css-1gs5ebu">
+                      <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
                     </div>
-                    <div
-                      direction="column"
-                      height="100%"
-                      className="css-1qs7kih style-rjMwc"
-                      id="style-rjMwc"
-                    >
-                      <div>
-                        <div className="att-product-detail-selection-promotion-title-472572 css-1j2vnz6">
-                          Giảm 4.000.000₫ (áp dụng vào giá sản phẩm)
-                        </div>
-                        <div className="att-product-detail-selection-promotion-description-472572 css-756cgs">
-                          Khuyến mãi áp dụng khi mua tối thiểu 1 sản phẩm
-                        </div>
+                    <div className="css-30n8gl">
+                      <div className="css-ixp6xz">
+                        Chọn 1 trong những khuyến mãi sau
                       </div>
-                      <div width="100%" direction="row" className="css-1rt5kwy">
-                        <div className="att-product-detail-selection-promotion-ended-at-472572 css-2cgl77">
-                          HSD: 31/8/2023
+                      {coupons.map((item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => selectedCoupon(item)}
+                          className="css-1nz6s82"
+                          id={couponSelected.id !== item.id && `css-1nz6s82`}
+                        >
+                          <div className="css-qx8kls">
+                            <img
+                              src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+                              alt="icon"
+                              height={25}
+                              width={25}
+                            />
+                          </div>
+                          <div
+                            className="css-1qs7kih style-rjMwc"
+                            id="style-rjMwc"
+                          >
+                            <div>
+                              <div className=" css-1j2vnz6">
+                                Giảm {formatCurrency(item.value_vnd)} (áp dụng
+                                vào giá sản phẩm)
+                              </div>
+                              <div className=" css-756cgs">
+                                Khuyến mãi áp dụng khi mua tối thiểu 1 sản phẩm
+                              </div>
+                            </div>
+                            <div
+                              width="100%"
+                              direction="row"
+                              className="css-1rt5kwy"
+                            >
+                              <div className=" css-2cgl77">
+                                HSD: {formatDateToDate(item.end_date)}
+                              </div>
+                              <div className="css-1aa534q">
+                                {couponSelected.id === item.id
+                                  ? "Bỏ chọn"
+                                  : "Áp dụng"}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="css-1aa534q">Bỏ chọn</div>
-                      </div>
+                      ))}
                     </div>
-                  </div>
-                </div>
+                  </>
+                )} */}
 
                 <div className="css-f7zc9t">
                   {/* button mua ngay */}

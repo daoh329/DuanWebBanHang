@@ -996,6 +996,7 @@ class Product {
       }, 1000);
     }
   }
+
   async getProductImageAndDescription(req, res) {
     try {
       const dataID = req.body; // Giả sử danh sách id được gửi trong body request
@@ -1031,6 +1032,22 @@ class Product {
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  async getCoupons (req, res) {
+    try {
+      const product_id = req.params.id;
+      const qr = `
+      SELECT dc.*
+      FROM sanpham_discountcode AS sdc
+      JOIN discount_code AS dc ON sdc.discountCode_id = dc.id
+      WHERE sdc.products_id = ?;`
+      const results = await query(qr, [product_id]);
+
+      res.status(200).json(results);
+    } catch (error) {
+      res.status(500).json({message: "Get failed coupons"})
     }
   }
 }

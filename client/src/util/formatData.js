@@ -1,3 +1,5 @@
+import { utcToZonedTime, format } from 'date-fns-tz';
+
 export const formatColor = (color) => {
   switch (color.toLowerCase()) {
     case "yellow" || "gold":
@@ -29,3 +31,11 @@ export const formatColor = (color) => {
       return color;
   }
 };
+
+export const formatDateToDate = (date) => {
+  return format(
+    utcToZonedTime(new Date(date), 'Etc/UTC'),
+    "dd/MM/yyyy",
+    { timeZone: 'Etc/UTC' }
+  )
+}

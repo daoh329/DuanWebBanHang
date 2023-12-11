@@ -103,7 +103,7 @@ function Order(props) {
               <span>
                 {format(
                   utcToZonedTime(new Date(order[0].order_created_at), 'Etc/UTC'),
-                  "HH:mm:ss - dd/MM/yyyy",
+                  "HH:mm:ss  dd/MM/yyyy",
                   { timeZone: 'Etc/UTC' }
                 )}
               </span>
