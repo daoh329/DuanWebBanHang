@@ -394,7 +394,6 @@ export default function Buy() {
           // Xóa sản phẩm khỏi giỏ hàng
           removeFromCart();
           // Chuyển hướng người dùng đến trang thông báo thành công
-          return;
           window.location.replace("/success");
         } else {
           // Kiểm tra nếu lỗi liên quan đến số lượng sản phẩm
