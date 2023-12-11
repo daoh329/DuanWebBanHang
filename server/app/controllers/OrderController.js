@@ -13,33 +13,33 @@ class OrderController {
       return res.status(400).json("Invalid data");
     }
 
-    // Kiểm tra số lượng sản phẩm hiện có
-    let sql = `SELECT remaining_quantity_variant FROM product_variations WHERE product_id = ?`;
+    // // Kiểm tra số lượng sản phẩm hiện có
+    // let sql = `SELECT remaining_quantity_variant FROM product_variations WHERE product_id = ?`;
 
     let canBuy = true;
 
-    // Duyệt qua mỗi productID trong mảng
-    for (let i = 0; i < data.productID.length; i++) {
-        let values = [data.productID[i]];
+    // // Duyệt qua mỗi productID trong mảng
+    // for (let i = 0; i < data.productID.length; i++) {
+    //     let values = [data.productID[i]];
 
-        // Sử dụng Promise để đảm bảo rằng truy vấn này hoàn thành trước khi tiếp tục
-        const productResult = await new Promise((resolve, reject) => {
-            mysql.query(sql, values, (err, result) => {
-                if (err) reject(err);
-                resolve(result);
-            });
-        });
+    //     // Sử dụng Promise để đảm bảo rằng truy vấn này hoàn thành trước khi tiếp tục
+    //     const productResult = await new Promise((resolve, reject) => {
+    //         mysql.query(sql, values, (err, result) => {
+    //             if (err) reject(err);
+    //             resolve(result);
+    //         });
+    //     });
 
-        // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
-        if (data.quantity[i] > productResult[0].remaining_quantity_variant) {
-            canBuy = false;
-            return res.status(400).json("Số lượng sản phẩm không đủ");
-        }
-    }
+    //     // Nếu số lượng mua hàng nhiều hơn số lượng sản phẩm hiện có
+    //     if (data.quantity[i] > productResult[0].remaining_quantity_variant) {
+    //         canBuy = false;
+    //         return res.status(400).json("Số lượng sản phẩm không đủ");
+    //     }
+    // }
 
     // Tạo một đơn hàng mới
     if (canBuy) {
-      sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
+      let sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
       let values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.totalAmount, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
