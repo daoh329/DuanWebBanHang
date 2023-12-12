@@ -337,7 +337,7 @@ export default function Profile() {
       key: "action",
       render: (_, record) => (
         <span>
-          {record.order_status === 0 || record.order_status === 1 ? (
+          {record.order_status === 0 || record.order_status === 1 && (
             <Button
               className="cancel-button"
               style={{ backgroundColor: "red", color: "white" }}
@@ -345,8 +345,8 @@ export default function Profile() {
             >
               Hủy
             </Button>
-          ) : null}
-          {/* {record.order_status === 2 || record.order_status === 5 ? (
+          )}
+          {/* {record.order_status === 2 || record.order_status === 5 && (
             <Button
               className="reorder-button"
               style={{ backgroundColor: "green", color: "white" }}
@@ -354,7 +354,7 @@ export default function Profile() {
             >
               Mua lại
             </Button>
-          ) : null} */}
+          )} */}
         </span>
       ),
     },

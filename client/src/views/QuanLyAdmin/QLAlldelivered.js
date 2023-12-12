@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Table, Button, message} from 'antd';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -67,6 +67,7 @@ function QLAlldelivered() {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undo/${record.order_id}`);
+                message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục giao hàng`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -171,7 +172,7 @@ function QLAlldelivered() {
             key: 'newAction',
             render: (_, record) => (
                 <Button style={{ backgroundColor: '#FF69B4', color: 'white' }} onClick={() => handleUndo(record)}>
-                   Chọn lại
+                   Chọn lại ở mục giao hàng
                 </Button>
             ),
         },

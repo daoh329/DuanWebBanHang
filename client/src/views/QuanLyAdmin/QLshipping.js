@@ -15,7 +15,7 @@ function QLshipping() {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data.sort((a, b) => {
                     // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
-                    return new Date(b.order_created_at) - new Date(a.order_created_at);
+                    return new Date(b.order_updated_at) - new Date(a.order_updated_at);
                 });
 
                 // Lọc các đơn hàng có trạng thái bằng 1
@@ -42,6 +42,7 @@ function QLshipping() {
                   "Đơn hàng đang được vận chuyển",
                   `Đơn hàng ${record.order_id} đang trên đường giao đến bạn`
                 );
+                message.success(`Đơn hàng mã ${record.order_id} được vận chuyển`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -73,6 +74,7 @@ function QLshipping() {
                         "Hủy đơn hàng thành công",
                         `Đơn hàng ${record.order_id} của bạn đã bị hủy`
                       );
+                      message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
                       loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
                     } catch (error) {
                       console.error("Error canceling order:", error);
@@ -91,6 +93,7 @@ function QLshipping() {
                     "Hủy đơn hàng thành công",
                     `Đơn hàng ${record.order_id} của bạn đã bị hủy`
                   );
+                  message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
                   loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
                 } catch (error) {
                   console.error("Error canceling order:", error);

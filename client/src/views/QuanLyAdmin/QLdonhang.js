@@ -51,6 +51,7 @@ function OrderList() {
           "Đơn hàng đã được xác nhận",
           `Đơn hàng ${record.order_id} đã được xác nhận và đang trong quá trình đóng gói`
         );
+        message.success(`Đơn hàng mã ${record.order_id} xác nhận thành công`);
         loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
         // window.location.reload();
       } catch (error) {
@@ -83,6 +84,7 @@ function OrderList() {
                   "Hủy đơn hàng thành công",
                   `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
                 );
+                message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
                 loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
               } catch (error) {
                 console.error("Error canceling order:", error);
@@ -101,6 +103,7 @@ function OrderList() {
               "Hủy đơn hàng thành công",
               `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
             );
+            message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
             loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
           } catch (error) {
             console.error("Error canceling order:", error);
