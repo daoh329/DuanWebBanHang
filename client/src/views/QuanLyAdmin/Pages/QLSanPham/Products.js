@@ -8,6 +8,7 @@ import ActionButton from "./ActionComponent/ActionButton";
 function Product() {
   const [Product, setProduct] = useState([]);
   const [isLoadingTable, setIsLoadingTable] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     getProduct();
@@ -51,6 +52,15 @@ function Product() {
   //         console.error("Error canceling order:", error);
   //     }
   // };
+
+  //Tìm kiếm theo tên sản phẩm
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  
+  const filteredProduct = Product.filter((product) =>
+    product.id.toString().includes(searchTerm)
+  );
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -116,14 +126,22 @@ function Product() {
     >
       <br />
       <h1>Danh sách sản phẩm</h1>
+
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo ID sản phẩm..."
+        value={searchTerm}
+        onChange={handleSearch}
+        style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+      />
       <Tooltip title="Làm mới">
         <Button
           onClick={getProduct}
           icon={<RedoOutlined />}
-          style={{ margin: "0 0 10px 0" }}
+          style={{ margin: "0 0 10px 0", marginLeft: '8px' }}
         />
       </Tooltip>
-      <Table loading={isLoadingTable} columns={columns} dataSource={Product} />
+      <Table loading={isLoadingTable} columns={columns} dataSource={filteredProduct} />
 
       {/* <h1 style={{ paddingTop:'10px' }}>Quản lý Sản Phẩm</h1> */}
       {/* <Table columns={columns} dataSource={Product} /> */}
