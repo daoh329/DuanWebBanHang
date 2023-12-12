@@ -378,7 +378,8 @@ export default function Profile() {
               >
                 <Avatar src={user.picture} size="large" />
                 &nbsp;
-                {user.name}
+                <a className="username-css"> {user.name} </a>
+               
               </MDBTabsLink>
             </MDBTabsItem>
 
@@ -626,6 +627,7 @@ export default function Profile() {
           </MDBTabsContent>
         </MDBCol>
       </MDBRow>
+
     </>
   );
 }

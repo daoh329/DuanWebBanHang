@@ -1224,25 +1224,26 @@ strong {
   .style-1 {
     border-radius: 8px;
     height: 100%;
-    width: 80%;
+    width: 95%;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 20px;
   }
   .style-2 {
     border-radius: 8px;
     height: 100%;
-    width: 80%;
+    width: 95%;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 20px;
   }
   .fle-x {
-    flex-flow: column;
+    display: flex;
+    flex-direction: column-reverse;
   }
   .chi-tiet {
     width: 100%;
   }
   .mo-ta{
-    display: none;
+    width: 100%;
   }
   .thumbnail-slider {
     display: none;
