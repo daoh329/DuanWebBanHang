@@ -15,7 +15,7 @@ function QLdelivered() {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data.sort((a, b) => {
                     // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
-                    return new Date(b.order_created_at) - new Date(a.order_created_at);
+                    return new Date(b.order_updated_at) - new Date(a.order_updated_at);
                 });
 
                 // Lọc các đơn hàng có trạng thái bằng 3
@@ -42,6 +42,7 @@ function QLdelivered() {
                     "Giao hàng thành công",
                     `Đơn hàng ${record.order_id} đã được giao thành công`
                   );
+                  message.success(`Đơn hàng mã ${record.order_id} đã giao thành công`);
                 loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -71,6 +72,7 @@ function QLdelivered() {
                                 "Giao hàng không thành công",
                                 `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
                               );
+                            message.warning(`Đơn hàng mã ${record.order_id} đã giao không thành công`);
                             loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
                         } catch (error) {
                             console.error("Error delivered order:", error);
@@ -88,6 +90,7 @@ function QLdelivered() {
                         "Giao hàng không thành công",
                         `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
                       );
+                    message.warning(`Đơn hàng mã ${record.order_id} đã giao không thành công`);
                     loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
                 } catch (error) {
                     console.error("Error delivered order:", error);

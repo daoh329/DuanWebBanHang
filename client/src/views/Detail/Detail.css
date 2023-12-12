@@ -357,10 +357,12 @@ body {
   background-color: #f6f6f6;
 }
 /* table */
-.xem-tiet {
+.xem-tiet-detail {
   color: #1435c3;
   font-size: 13px;
   padding: 24px;
+  display: flex;
+  justify-content: center
 }
 .title-modal-cha {
   color: #333333;

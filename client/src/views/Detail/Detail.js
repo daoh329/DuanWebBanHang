@@ -869,6 +869,7 @@ function Detail() {
 
                       <tr
                         style={{
+                          backgroundColor: "#f6f6f6",
                           display: configuration.screenTechnology
                             ? "table-row"
                             : "none",
@@ -887,7 +888,7 @@ function Detail() {
 
                       <tr
                         style={{
-                          backgroundColor: "#f6f6f6",
+                          
                           display: configuration.cpu ? "table-row" : "none",
                         }}
                       >
@@ -955,7 +956,7 @@ function Detail() {
                 </div>
 
                 {/* Modal xem cấu hình chi tiết */}
-                <div onClick={showModal2} className="xem-tiet">
+                <div onClick={showModal2} className="xem-tiet-detail">
                   Xem chi tiết cấu hình
                 </div>
               </div>
@@ -978,8 +979,8 @@ function Detail() {
               <MDBTable className="table-tiet" borderless>
                 <MDBTableBody>
                   <tr>
-                    <td colSpan={1}>Thương hiệu</td>
-                    <td colSpan={3}>{Detail.brand}</td>
+                    <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>Thương hiệu</td>
+                    <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>{Detail.brand}</td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Bảo hành</td>
@@ -994,8 +995,8 @@ function Detail() {
                   </tr>
                   {configuration.series && (
                     <tr>
-                      <td colSpan={1}>Series</td>
-                      <td colSpan={3}>{configuration.series}</td>
+                      <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>Series</td>
+                      <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>{configuration.series}</td>
                     </tr>
                   )}
                   <tr>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Table, Button, message} from 'antd';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -62,11 +62,12 @@ function QLdeliveryfailed() {
         }
     };
 
-    // Hàm hoàn tác đơn hàng
+    // Hàm hoàn tác đơn hàng giao không thành công
     const handleUndofailed = async (record) => {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undofailed/${record.order_id}`);
+                message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục giao hàng`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -76,11 +77,12 @@ function QLdeliveryfailed() {
         }
     };
 
-    // Hàm hoàn tác đơn hàng
+    // Hàm hoàn tác đơn hàng đã hủy
     const handleUndocancel = async (record) => {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undocancel/${record.order_id}`);
+                message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục đơn đặt hàng`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -183,25 +185,27 @@ function QLdeliveryfailed() {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'newAction',
-            render: (_, record) => {
-                const { order_status } = record;
-                return (
-                    <Button
-                        style={{ backgroundColor: '#FF69B4', color: 'white' }}
-                        onClick={() => {
-                            if (order_status === 5) {
-                                handleUndofailed(record);
-                            } else if (order_status === 2) {
-                                handleUndocancel(record);
-                            }
-                        }}
-                    >
-                       Chọn lại
-                    </Button>
-                );
-            },
-        },
-        
+            render: (_, record) => (
+              <>
+                {record.order_status === 5 && (
+                  <Button
+                    style={{ backgroundColor: '#FF69B4', color: 'white' }}
+                    onClick={() => handleUndofailed(record)}
+                  >
+                    Chọn lại ở mục giao hàng
+                  </Button>
+                )}
+                {record.order_status === 2 && (
+                  <Button
+                    style={{ backgroundColor: '#FF69B4', color: 'white' }}
+                    onClick={() => handleUndocancel(record)}
+                  >
+                    Chọn lại ở mục đơn đặt hàng
+                  </Button>
+                )}
+              </>
+            ),
+        },          
     ];
 
     return (
