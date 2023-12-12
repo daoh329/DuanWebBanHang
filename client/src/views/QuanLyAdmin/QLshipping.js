@@ -8,6 +8,7 @@ import { CreateNotification } from "../../component/NotificationManager/Notifica
 function QLshipping() {
 
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -110,6 +111,15 @@ function QLshipping() {
         navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
     };
 
+    //TÌm kiếm đơn hàng
+    const handleSearch = (event) => {
+      setSearchTerm(event.target.value);
+    };
+    
+    const filteredData = data.filter((order) =>
+      order.order_id.toString().includes(searchTerm)
+    );
+
     const columns = [
         {
             title: "Mã ĐH",
@@ -202,17 +212,15 @@ function QLshipping() {
             <div style={{padding:"10px"}}>
             <h1>Xác nhận vận chuyển đơn hàng</h1>
             
-            {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ margin: '10px' }}>
-                    <a href="/delivered" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận đơn hàng đã gửi</a>
-                </div>
+            <input
+              type="text"
+              placeholder="Tìm kiếm theo mã đơn hàng..."
+              value={searchTerm}
+              onChange={handleSearch}
+              style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+            />
 
-                <div style={{ margin: '10px' }}>
-                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-                </div>
-            </div> */}
-
-            <Table columns={columns} dataSource={data} /> </div>
+            <Table columns={columns} dataSource={filteredData} /> </div>
         </div>
     );
 }

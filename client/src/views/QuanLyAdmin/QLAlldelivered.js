@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 function QLAlldelivered() {
     
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -84,6 +85,15 @@ function QLAlldelivered() {
         // Chuyển hướng người dùng đến trang mới với dữ liệu đơn hàng
         navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
     };
+
+    //TÌm kiếm đơn hàng
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+    
+    const filteredData = data.filter((order) =>
+        order.order_id.toString().includes(searchTerm)
+    );
 
     const columns = [
         {
@@ -182,25 +192,16 @@ function QLAlldelivered() {
         <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
             <div style={{padding:"10px"}}>
             <h1>Tất cả đơn hàng đã giao</h1>
-            {/* <div>
-                <a href="/allorders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
-            </div>
 
-            <div>
-                <a href="/orders" style={{width: 250, height: 40, marginTop: '10px' ,display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-            </div>
-            
-            <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ margin: '10px' }}>
-                    <a href="/allorders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
-                </div>
+            <input
+                type="text"
+                placeholder="Tìm kiếm theo mã đơn hàng..."
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+            />
 
-                <div style={{ margin: '10px' }}>
-                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-                </div>
-            </div> */}
-
-            <Table columns={columns} dataSource={data} />
+            <Table columns={columns} dataSource={filteredData} />
             </div>
         </div>
     );
