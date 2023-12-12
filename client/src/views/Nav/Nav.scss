@@ -364,7 +364,9 @@
   .css-1e7ahm9 a:last-child {
     margin-right: 0;
   }
-
+.logo-mobile{
+  display: none;
+}
 }
 
 
@@ -521,7 +523,7 @@
   }
 
   .avt-user {
-    display: none;
+    
   }
 
   .navgation {
@@ -549,12 +551,14 @@
   }
 
   .logo-mobile {
-    font-size: 24px;
-    width: 50px;
+    // font-size: 24px;
+    width: 100%;
     line-height: 30px;
-    flex: 1;
+    // flex: 1;
   }
-
+.logoweb{
+  display: none;
+}
   .logo-span {
     display: flex;
     justify-content: flex-start;
@@ -586,10 +590,13 @@
     --button-icon-border-radius: var(--search-bar-border-radius, 8px);
     border: 1px solid #eaeaea;
     align-items: center;
-    width: 150%;
+    width: 130%;
     flex-direction: row-reverse;
   }
 
+  .user-name{
+    display: none;
+  }
   .css-7wh3a0 {
     display: inline-block;
     width: 100%;
@@ -748,6 +755,7 @@
   .menu-container {
     display: none;
   }
+
 
 }
 
