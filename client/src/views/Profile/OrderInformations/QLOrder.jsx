@@ -124,9 +124,9 @@ function QLOrder() {
                 <p><b>Mã thanh toán giao dịch:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_OrderInfo || paymentData.orderId}</span></p>
                 <p><b>Mã tham chiếu giao dịch:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_TxnRef || paymentData.transId}</span></p>
                 <p><b>Thời gian thực hiện:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_PayDate || paymentData.responseTime}</span></p>
-                <p><b>Loại thanh toán:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_CardType || paymentData.payType}</span></p>
+                <p><b>Loại thanh toán:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_CardType || paymentData.payType || "Khách hàng đã hủy thanh toán"}</span></p>
                 <p><b>Ngân hàng:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_BankCode || paymentData.orderType}</span></p>
-                <p><b>Số giao dịch:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_BankTranNo || paymentData.transId}</span></p>
+                <p><b>Số giao dịch:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_BankTranNo || paymentData.transId || "Khách hàng đã hủy thanh toán"}</span></p>
                 <p><b>Tổng tiền:</b> <span style={{ fontWeight: 'normal' }}>{(parseInt(paymentData.vnp_Amount ? paymentData.vnp_Amount / 100 : paymentData.amount)).toLocaleString()}</span></p>
                 {/* Thêm các trường khác của paymentData tại đây */}
               </>

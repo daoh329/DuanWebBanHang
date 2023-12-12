@@ -140,10 +140,9 @@ function Order(props) {
                   </span>
                 </p>
                 <p>
-                  Loại thanh toán:{" "}
+                  Kiểu thanh toán:{" "}
                   <span>
-                    {order[0]?.paymentData?.vnp_CardType ||
-                      order[0]?.paymentData?.payType}
+                    {order[0]?.paymentData?.vnp_CardType || order[0]?.paymentData?.payType || "Khách hàng đã hủy thanh toán"}
                   </span>
                 </p>
                 <p>
@@ -156,10 +155,10 @@ function Order(props) {
                 <p>
                   Số giao dịch:{" "}
                   <span>
-                    {order[0]?.paymentData?.vnp_BankTranNo ||
-                      order[0]?.paymentData?.transId}
+                    {order[0]?.paymentData?.vnp_BankTranNo || order[0]?.paymentData?.transId || "Khách hàng đã hủy thanh toán"}
                   </span>
                 </p>
+
                 <p>
                   Tổng tiền:{" "}
                   <span>
