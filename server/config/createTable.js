@@ -87,8 +87,6 @@ const createTables = () => {
   `;
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    quantity INT NOT NULL,
-    remaining_quantity INT NOT NULL,
     brand varchar(25) NOT NULL,
     configuration longtext,
     description longtext,
@@ -111,9 +109,9 @@ const createTables = () => {
   const users = `
     CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    facebookId VARCHAR(10) ,
-    googleId VARCHAR(16),
-    name varchar(20),
+    facebookId VARCHAR(25) ,
+    googleId VARCHAR(25),
+    name varchar(45),
     phone varchar(10),
     email varchar(30),
     permission varchar(10),

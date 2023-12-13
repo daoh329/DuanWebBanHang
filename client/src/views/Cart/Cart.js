@@ -52,6 +52,9 @@ function Cart() {
       onOk() {
         removeFromCart(productId, color, capacity, coupons);
       },
+      style: {
+        overflow: "hidden"
+      }
     });
   };
 
@@ -712,7 +715,7 @@ function Cart() {
                       <tr>
                         <th scope="col">
                           <Checkbox
-                            style={{ transform: "scale(1.2)" }}
+                            style={{ transform: "scale(1.1)"}}
                             onChange={handleSelectAllChange}
                             checked={selectAll}
                           ></Checkbox>
@@ -821,7 +824,7 @@ function Cart() {
                               )}
                             </p>
                             {/* show discount */}
-                            {cartItem.discount > 0 && (
+                            {(cartItem.discount > 0 || cartItem.coupons?.value_vnd) && (
                               <p
                                 style={{
                                   margin: "0",

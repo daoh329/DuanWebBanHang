@@ -130,7 +130,7 @@ function MainForm() {
       values["description"] = description;
 
       // Cấu trúc lại configuration
-      const configuration = values.configuration;
+      const configuration = values.configuration || [];
       values.configuration = {};
       [...configuration].forEach((item) => {
         values.configuration[item.inputName] = item.value;
@@ -157,6 +157,13 @@ function MainForm() {
           delete values[fieldName];
         }
       }
+      // Xóa file trong images (chỉ giữ lại fileList)
+      values.variations.map((item) => {
+        delete item.images.file;
+        return {
+          ...item,
+        };
+      });
 
       // call API update
       const result = await axios.post(
@@ -183,7 +190,7 @@ function MainForm() {
       setIsLoading(false);
     } catch (error) {
       setTimeout(() => {
-        if (error.response.status === 401) {
+        if (error.response?.status === 401) {
           setIsLoading(false);
           NotificationBeenLoggedOut();
         } else {
@@ -399,7 +406,7 @@ function MainForm() {
                 style={{ height: 40 }}
               />
             </Form.Item>
-
+            {/* 
             <Form.Item
               label="Số lượng"
               name="quantity"
@@ -418,7 +425,7 @@ function MainForm() {
                 style={{ height: 40 }}
                 min={0}
               />
-            </Form.Item>
+            </Form.Item> */}
           </Form.Item>
 
           {/* Mô tả ngắn */}

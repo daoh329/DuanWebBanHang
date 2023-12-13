@@ -13,12 +13,18 @@ function CardProduct(props) {
   const [variations, setVariations] = useState([]);
   const [discountOfPiceMin, setDiscountOfPiceMin] = useState(0);
   const [discountOfPiceMax, setDiscountOfPiceMax] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
 
 
-  // useEffect(() => {
-  //   const productsFilter = items && [...items].filter((data) => data.id === item.id);
-  //   setProducts(productsFilter);
-  // }, [items, item]);
+  useEffect(() => {
+    if (item) {
+      var total = 0;
+      [...item.variations].forEach((item) => {
+        total += item.remaining_quantity_variant;
+      })
+      setTotalQuantity(total);
+    }
+  }, [ item]);
 
   useEffect(() => {
     // Nếu có nhiều biến thể
@@ -76,7 +82,7 @@ function CardProduct(props) {
         alt=""
       ></img>
       {/* tem */}
-      {item?.remaining_quantity !== 0 && discountOfPiceMin > 0 && (
+      {totalQuantity !== 0 && discountOfPiceMin > 0 && (
         <div className="css-14q2k9dd">
           <div className="css-zb7zul" style={{ textAlign: "start" }}>
             <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
@@ -139,7 +145,7 @@ function CardProduct(props) {
         }}
       >
         {/* Tag hết sản phẩm */}
-        {item.remaining_quantity === 0 ? (
+        {totalQuantity === 0 ? (
           <Tag color="red">Sản phẩm tạm hết</Tag>
         ) : (
           // Nếu còn sản phẩm

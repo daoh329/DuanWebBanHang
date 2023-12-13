@@ -547,34 +547,30 @@ function Detail() {
                 )}
 
                 {/* check box màu sắc*/}
-                {capacities &&
-                  colors &&
-                  (colors.length > 1 || capacities.length > 1) && (
-                    <div className="block-select-color">
-                      <p className="title-btn-color">
-                        màu sắc: {selectedColor}
-                      </p>
-                      <div className="flex-btn-color">
-                        {[...colors].map((color, index) => (
-                          <div
-                            key={index}
-                            style={
-                              selectedColor === color
-                                ? {
-                                    borderColor: "#024dbc",
-                                    color: "#024dbc",
-                                  }
-                                : {}
-                            }
-                            onClick={() => handleChangeColor(color)}
-                            className="custom-checkbox-input"
-                          >
-                            {color}
-                          </div>
-                        ))}
-                      </div>
+                {capacities && colors && (
+                  <div className="block-select-color">
+                    <p className="title-btn-color">màu sắc: {selectedColor}</p>
+                    <div className="flex-btn-color">
+                      {[...colors].map((color, index) => (
+                        <div
+                          key={index}
+                          style={
+                            selectedColor === color
+                              ? {
+                                  borderColor: "#024dbc",
+                                  color: "#024dbc",
+                                }
+                              : {}
+                          }
+                          onClick={() => handleChangeColor(color)}
+                          className="custom-checkbox-input"
+                        >
+                          {color}
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
+                )}
 
                 {/* giá tiền */}
                 <br />
@@ -917,7 +913,6 @@ function Detail() {
 
                       <tr
                         style={{
-                          
                           display: configuration.cpu ? "table-row" : "none",
                         }}
                       >
@@ -1008,8 +1003,12 @@ function Detail() {
               <MDBTable className="table-tiet" borderless>
                 <MDBTableBody>
                   <tr>
-                    <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>Thương hiệu</td>
-                    <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>{Detail.brand}</td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                      Thương hiệu
+                    </td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                      {Detail.brand}
+                    </td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Bảo hành</td>
@@ -1024,8 +1023,12 @@ function Detail() {
                   </tr>
                   {configuration.series && (
                     <tr>
-                      <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>Series</td>
-                      <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>{configuration.series}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Series
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {configuration.series}
+                      </td>
                     </tr>
                   )}
                   <tr>
