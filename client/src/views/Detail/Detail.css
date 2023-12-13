@@ -357,10 +357,12 @@ body {
   background-color: #f6f6f6;
 }
 /* table */
-.xem-tiet {
+.xem-tiet-detail {
   color: #1435c3;
   font-size: 13px;
   padding: 24px;
+  display: flex;
+  justify-content: center
 }
 .title-modal-cha {
   color: #333333;
@@ -1224,25 +1226,26 @@ strong {
   .style-1 {
     border-radius: 8px;
     height: 100%;
-    width: 80%;
+    width: 95%;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 20px;
   }
   .style-2 {
     border-radius: 8px;
     height: 100%;
-    width: 80%;
+    width: 95%;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 20px;
   }
   .fle-x {
-    flex-flow: column;
+    display: flex;
+    flex-direction: column-reverse;
   }
   .chi-tiet {
     width: 100%;
   }
   .mo-ta{
-    display: none;
+    width: 100%;
   }
   .thumbnail-slider {
     display: none;

@@ -359,6 +359,7 @@ export default function Buy() {
       totalPrice: totalPrice,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 1,
+      paymentData: "Thanh toán khi nhận hàng",
       totalAmount: amount,
       note: note,
       status: 0,

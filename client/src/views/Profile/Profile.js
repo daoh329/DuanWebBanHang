@@ -346,7 +346,7 @@ export default function Profile() {
               Hủy
             </Button>
           ) : null}
-          {/* {record.order_status === 2 || record.order_status === 5 ? (
+          {/* {record.order_status === 2 || record.order_status === 5 && (
             <Button
               className="reorder-button"
               style={{ backgroundColor: "green", color: "white" }}
@@ -354,7 +354,7 @@ export default function Profile() {
             >
               Mua lại
             </Button>
-          ) : null} */}
+          )} */}
         </span>
       ),
     },
@@ -378,7 +378,8 @@ export default function Profile() {
               >
                 <Avatar src={user.picture} size="large" />
                 &nbsp;
-                {user.name}
+                <a className="username-css"> {user.name} </a>
+               
               </MDBTabsLink>
             </MDBTabsItem>
 
@@ -626,6 +627,7 @@ export default function Profile() {
           </MDBTabsContent>
         </MDBCol>
       </MDBRow>
+
     </>
   );
 }

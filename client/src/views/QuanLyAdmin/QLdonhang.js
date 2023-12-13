@@ -9,6 +9,7 @@ import { utcToZonedTime, format } from 'date-fns-tz';
 function OrderList() {
 
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
   const [data, setData] = useState([]);
   const loadData = () => {
     axios
@@ -51,6 +52,7 @@ function OrderList() {
           "Đơn hàng đã được xác nhận",
           `Đơn hàng ${record.order_id} đã được xác nhận và đang trong quá trình đóng gói`
         );
+        message.success(`Đơn hàng mã ${record.order_id} xác nhận thành công`);
         loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
         // window.location.reload();
       } catch (error) {
@@ -83,6 +85,7 @@ function OrderList() {
                   "Hủy đơn hàng thành công",
                   `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
                 );
+                message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
                 loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
               } catch (error) {
                 console.error("Error canceling order:", error);
@@ -101,6 +104,7 @@ function OrderList() {
               "Hủy đơn hàng thành công",
               `Đơn hàng ${record.order_id} của bạn đã bị hủy vì không được xác nhận`
             );
+            message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
             loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
           } catch (error) {
             console.error("Error canceling order:", error);
@@ -117,6 +121,14 @@ function OrderList() {
     navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
   };
 
+  //TÌm kiếm đơn hàng
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  
+  const filteredData = data.filter((order) =>
+    order.order_id.toString().includes(searchTerm)
+  );
   
   const columns = [
     {
@@ -227,23 +239,20 @@ function OrderList() {
   ];
 
   return (
-    <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
-    <div style={{padding:"10px"}}>
-      <h1>Đơn đặt hàng</h1>
-       {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
-        <div style={{ margin: '10px' }}>
-          <a href="/shipping" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận vận chuyển đơn hàng</a>
-        </div>
+    <div style={{ backgroundColor: 'white', margin: '20px' }}>
+      <div style={{ padding: '10px' }}>
+        <h1>Đơn đặt hàng</h1>
 
-        <div style={{ margin: '10px' }}>
-          <a href="/allorders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
-        </div>
-
-        <div style={{ margin: '10px' }}>
-          <a href="https://sandbox.vnpayment.vn/merchantv2/Transaction/SearchRefund.htm" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#ffc107', color: 'black', borderRadius: '5px', textDecoration: 'none' }}>Xem lịch sử thanh toán</a>
-        </div>
-      </div> */}
-      <Table columns={columns} dataSource={data} /> </div>
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo mã đơn hàng..."
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+        />
+        
+        <Table columns={columns} dataSource={filteredData} />
+      </div>
     </div>
   );
 }

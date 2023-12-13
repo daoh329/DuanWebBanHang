@@ -39,8 +39,8 @@ class OrderController {
 
     // Tạo một đơn hàng mới
     if (canBuy) {
-      let sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`;
-      let values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.totalAmount, data.status];
+      let sql = `INSERT INTO orders (UserID, addressID, deliveryMethod, paymentMenthod, created_at, updated_at, note, paymentData, totalAmount, status) VALUES (?, ?, ?, ?, NOW(), NOW(), ?, ?, ?, ?)`;
+      let values = [data.UserID, data.addressID, data.deliveryMethod, data.paymentMenthod, data.note, data.paymentData, data.totalAmount, data.status];
       mysql.query(sql, values, (err, result) => {
         if (err) throw err;
           // console.log(result);

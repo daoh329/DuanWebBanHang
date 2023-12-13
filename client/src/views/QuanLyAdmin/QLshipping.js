@@ -8,6 +8,7 @@ import { CreateNotification } from "../../component/NotificationManager/Notifica
 function QLshipping() {
 
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -15,7 +16,7 @@ function QLshipping() {
                 // Sắp xếp các đơn hàng theo trạng thái và thời gian tạo
                 const sortedOrders = res.data.sort((a, b) => {
                     // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
-                    return new Date(b.order_created_at) - new Date(a.order_created_at);
+                    return new Date(b.order_updated_at) - new Date(a.order_updated_at);
                 });
 
                 // Lọc các đơn hàng có trạng thái bằng 1
@@ -42,6 +43,7 @@ function QLshipping() {
                   "Đơn hàng đang được vận chuyển",
                   `Đơn hàng ${record.order_id} đang trên đường giao đến bạn`
                 );
+                message.success(`Đơn hàng mã ${record.order_id} được vận chuyển`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -73,6 +75,7 @@ function QLshipping() {
                         "Hủy đơn hàng thành công",
                         `Đơn hàng ${record.order_id} của bạn đã bị hủy`
                       );
+                      message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
                       loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
                     } catch (error) {
                       console.error("Error canceling order:", error);
@@ -91,6 +94,7 @@ function QLshipping() {
                     "Hủy đơn hàng thành công",
                     `Đơn hàng ${record.order_id} của bạn đã bị hủy`
                   );
+                  message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
                   loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
                 } catch (error) {
                   console.error("Error canceling order:", error);
@@ -106,6 +110,15 @@ function QLshipping() {
         // Chuyển hướng người dùng đến trang mới với dữ liệu đơn hàng
         navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
     };
+
+    //TÌm kiếm đơn hàng
+    const handleSearch = (event) => {
+      setSearchTerm(event.target.value);
+    };
+    
+    const filteredData = data.filter((order) =>
+      order.order_id.toString().includes(searchTerm)
+    );
 
     const columns = [
         {
@@ -199,17 +212,15 @@ function QLshipping() {
             <div style={{padding:"10px"}}>
             <h1>Xác nhận vận chuyển đơn hàng</h1>
             
-            {/* <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ margin: '10px' }}>
-                    <a href="/delivered" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xác nhận đơn hàng đã gửi</a>
-                </div>
+            <input
+              type="text"
+              placeholder="Tìm kiếm theo mã đơn hàng..."
+              value={searchTerm}
+              onChange={handleSearch}
+              style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+            />
 
-                <div style={{ margin: '10px' }}>
-                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem đơn hàng trong một tháng</a>
-                </div>
-            </div> */}
-
-            <Table columns={columns} dataSource={data} /> </div>
+            <Table columns={columns} dataSource={filteredData} /> </div>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Table, Button, message} from 'antd';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 function QLAlldonhang() {
 
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -65,6 +66,15 @@ function QLAlldonhang() {
         // Chuyển hướng người dùng đến trang mới với dữ liệu đơn hàng
         navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
     };
+
+    //TÌm kiếm đơn hàng
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+    
+    const filteredData = data.filter((order) =>
+        order.order_id.toString().includes(searchTerm)
+    );
 
     const columns = [
         {
@@ -152,7 +162,16 @@ function QLAlldonhang() {
         <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
             <div style={{padding:"10px"}}>
             <h4>Tất cả đơn hàng</h4>
-                <Table columns={columns} dataSource={data} />
+
+            <input
+                type="text"
+                placeholder="Tìm kiếm theo mã đơn hàng..."
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+            />
+
+            <Table columns={columns} dataSource={filteredData} />
             </div>
 
         </div>

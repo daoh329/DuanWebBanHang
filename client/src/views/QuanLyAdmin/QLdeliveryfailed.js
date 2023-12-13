@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from 'antd';
+import { Table, Button, message} from 'antd';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 function QLdeliveryfailed() {
 
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
     const loadData = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
@@ -62,11 +63,12 @@ function QLdeliveryfailed() {
         }
     };
 
-    // Hàm hoàn tác đơn hàng
+    // Hàm hoàn tác đơn hàng giao không thành công
     const handleUndofailed = async (record) => {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undofailed/${record.order_id}`);
+                message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục giao hàng`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -76,11 +78,12 @@ function QLdeliveryfailed() {
         }
     };
 
-    // Hàm hoàn tác đơn hàng
+    // Hàm hoàn tác đơn hàng đã hủy
     const handleUndocancel = async (record) => {
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undocancel/${record.order_id}`);
+                message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục đơn đặt hàng`);
                 loadData();
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -97,6 +100,15 @@ function QLdeliveryfailed() {
         // Chuyển hướng người dùng đến trang mới với dữ liệu đơn hàng
         navigate(`/qlbillorder/${order_id}`, { state: { orderData } });
     };
+
+    //TÌm kiếm đơn hàng
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+    
+    const filteredData = data.filter((order) =>
+        order.order_id.toString().includes(searchTerm)
+    );
 
     const columns = [
         {
@@ -183,55 +195,43 @@ function QLdeliveryfailed() {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'newAction',
-            render: (_, record) => {
-                const { order_status } = record;
-                return (
-                    <Button
-                        style={{ backgroundColor: '#FF69B4', color: 'white' }}
-                        onClick={() => {
-                            if (order_status === 5) {
-                                handleUndofailed(record);
-                            } else if (order_status === 2) {
-                                handleUndocancel(record);
-                            }
-                        }}
-                    >
-                       Chọn lại
-                    </Button>
-                );
-            },
-        },
-        
+            render: (_, record) => (
+              <>
+                {record.order_status === 5 && (
+                  <Button
+                    style={{ backgroundColor: '#FF69B4', color: 'white' }}
+                    onClick={() => handleUndofailed(record)}
+                  >
+                    Chọn lại ở mục giao hàng
+                  </Button>
+                )}
+                {record.order_status === 2 && (
+                  <Button
+                    style={{ backgroundColor: '#FF69B4', color: 'white' }}
+                    onClick={() => handleUndocancel(record)}
+                  >
+                    Chọn lại ở mục đơn đặt hàng
+                  </Button>
+                )}
+              </>
+            ),
+        },          
     ];
 
     return (
         <div style={{ backgroundColor: 'white', margin: ' 20px' }}>
         <div style={{padding:"10px"}}>
             <h1>Đơn hàng đã hủy hoặc giao không thành công</h1>
-            {/* <div>
-                <a href="/orders" style={{width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                    Xem đơn hàng trong một tháng
-                </a>
-            </div>
 
-            <div>
-                <a href="/allorders" style={{width: 250, height: 40, marginTop: '10px', display: 'inline-block', padding: '10px 20px', backgroundColor: '#007BFF', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>Xem tất cả đơn hàng</a>
-            </div>
-            <div style={{ display: "flex", flexDirection: 'row', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ margin: '10px' }}>
-                    <a href="/allorders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                        Xem tất cả đơn hàng
-                        </a>
-                </div>
+            <input
+                type="text"
+                placeholder="Tìm kiếm theo mã đơn hàng..."
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+            />
 
-                <div style={{ margin: '10px' }}>
-                    <a href="/orders" style={{ width: 250, height: 40, display: 'inline-block', padding: '10px 20px', backgroundColor: '#17a2b8', color: 'white', borderRadius: '5px', textDecoration: 'none' }}>
-                        Xem đơn hàng trong một tháng
-                        </a>
-                </div>
-            </div> */}
-            
-            <Table columns={columns} dataSource={data} /> </div>
+            <Table columns={columns} dataSource={filteredData} /> </div>
         </div>
     );
 }

@@ -4,10 +4,10 @@ const createTables = () => {
   const products = `
   CREATE TABLE IF NOT EXISTS products (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name varchar(255) NOT NULL,
-    shortDescription varchar(255) NOT NULL UNIQUE,
+    name varchar(40) NOT NULL,
+    shortDescription varchar(160) NOT NULL UNIQUE,
     CategoryID INT NOT NULL,
-    main_image longtext,
+    main_image longtext ,
     release_date DATE,
     status boolean NOT NULL,
     FOREIGN KEY (CategoryID) REFERENCES category (id)
@@ -18,13 +18,13 @@ const createTables = () => {
   );`;
 
   const colors = `CREATE TABLE IF NOT EXISTS colors (
-    name varchar(255) PRIMARY KEY
+    name varchar(15) PRIMARY KEY
   );`;
 
   const product_variations = `
   CREATE TABLE IF NOT EXISTS product_variations (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    color varchar(255) NOT NULL,
+    color varchar(15) NOT NULL,
     capacity INT NOT NULL,
     product_id INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
@@ -39,35 +39,35 @@ const createTables = () => {
   const product_images = `
     CREATE TABLE IF NOT EXISTS product_images (
       id INT PRIMARY KEY AUTO_INCREMENT,
-      product_id INT,
-      color varchar(255),
-      path longtext,
+      product_id INT NOT NULL,
+      color varchar(15),
+      path longtext NOT NULL,
       FOREIGN KEY (color) REFERENCES colors (name),
       FOREIGN KEY (product_id) REFERENCES products (id)
     );
     `;
   const category = `CREATE TABLE IF NOT EXISTS category (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  name varchar(255)
+  name varchar(20) NOT NULL
   );`;
   const orders = `CREATE TABLE IF NOT EXISTS orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    addressID INT,
-    UserID INT,
-    deliveryMethod varchar(255),
-    paymentMenthod tinyINT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    addressID INT NOT NULL,
+    UserID INT NOT NULL,
+    deliveryMethod varchar(20) NOT NULL,
+    paymentMenthod tinyINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     note TEXT,
-    paymentData longtext,
-    totalAmount NUMERIC(12,2),
+    paymentData longtext NOT NULL,
+    totalAmount NUMERIC(12,2) NOT NULL,
     status tinyINT,
     FOREIGN KEY (deliveryMethod) REFERENCES deliveryMethod (name),
     FOREIGN KEY (UserID) REFERENCES users (id),
     FOREIGN KEY (addressID) REFERENCES delivery_address (id)
   );`;
   const deliveryMethod = `CREATE TABLE IF NOT EXISTS deliveryMethod (
-    name varchar(255) PRIMARY KEY
+    name varchar(20) PRIMARY KEY
   );`;
   const IsvaluedeliveryMethod = `INSERT INTO deliveryMethod (name) VALUES
   ('ngày trong tuần'),
@@ -75,75 +75,63 @@ const createTables = () => {
   ON DUPLICATE KEY UPDATE name = name;`;
   const orderDetailsProduct = `CREATE TABLE IF NOT EXISTS orderDetailsProduct (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    productID INT,
-    quantity INT,
-    color varchar(255),
+    productID INT NOT NULL,
+    quantity INT NOT NULL,
+    color varchar(15),
     capacity int,
-    totalPrice NUMERIC(12,2),
-    orderID int,
+    totalPrice NUMERIC(12,2) NOT NULL,
+    orderID int NOT NULL,
     FOREIGN KEY (orderID) REFERENCES orders (id),
     FOREIGN KEY (productID) REFERENCES products (id)
   );
   `;
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    quantity INT,
-    remaining_quantity INT,
-    brand varchar(255),
+    quantity INT NOT NULL,
+    remaining_quantity INT NOT NULL,
+    brand varchar(25) NOT NULL,
     configuration longtext,
     description longtext,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    product_id INT,
+    product_id INT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (brand)  REFERENCES brands (name)
   );`;
   const ProdetailColor = `CREATE TABLE IF NOT EXISTS prodetailColor (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    product_id INT,
-    Colorname varchar(255),
+    product_id INT NOT NULL,
+    Colorname varchar(15) NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (Colorname) REFERENCES colors (name)
   );`;
   const brands = `CREATE TABLE IF NOT EXISTS brands (
-    name varchar(255) PRIMARY KEY
+    name varchar(25) PRIMARY KEY
   );`;
   const users = `
     CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    facebookId VARCHAR(255) UNIQUE ,
-    googleId VARCHAR(255) UNIQUE,
-    name varchar(255),
-    phone varchar(255),
-    email varchar(255) UNIQUE,
-    permission varchar(50),
+    facebookId VARCHAR(10) ,
+    googleId VARCHAR(16),
+    name varchar(20),
+    phone varchar(10),
+    email varchar(30),
+    permission varchar(10),
     isLocked BOOLEAN DEFAULT FALSE,
     loginAttempts INT DEFAULT 0
   );`;
   const delivery_address = `CREATE TABLE IF NOT EXISTS delivery_address (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    idUser INT,
-    name varchar(255),
-    city varchar(255),
-    district varchar(255),
-    commune varchar(255),
-    street varchar(255),
-    email varchar(255),
-    phone varchar(255),
-    setdefault tinyINT,
+    idUser INT Not Null,
+    name varchar(20) Not Null,
+    city varchar(10) Not Null,
+    district varchar(10) Not Null,
+    commune varchar(10) Not Null,
+    street varchar(30) Not Null,
+    email varchar(30),
+    phone varchar(10) Not Null,
+    setdefault tinyint,
     FOREIGN KEY (idUser) REFERENCES users (id)
-  );`;
-  const promotional = `CREATE TABLE IF NOT EXISTS promotional (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name varchar(255),
-    percent_discount FLOAT
-  );`;
-  const promotional_product = `CREATE TABLE IF NOT EXISTS promotional_product (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    product_id INT,
-    promotional_id INT,
-    FOREIGN KEY (promotional_id) REFERENCES promotional(id),
-    FOREIGN KEY  (product_id) REFERENCES products(id)
   );`;
 
   const notitications = `CREATE TABLE IF NOT EXISTS notifications (
@@ -152,7 +140,7 @@ const createTables = () => {
     user_id INT NOT NULL, 
     title text NOT NULL,
     content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     type text NOT NULL,
     is_read BOOLEAN DEFAULT 0
@@ -162,7 +150,7 @@ const createTables = () => {
     CREATE TABLE IF NOT EXISTS discount_code (
       id INT AUTO_INCREMENT PRIMARY KEY,
       content VARCHAR(255) NOT NULL,
-      value_vnd numeric(20,2),
+      value_vnd numeric(12,2),
       value_percent numeric(5,2),
       start_date timestamp NOT NULL,
       end_date timestamp NOT NULL
@@ -171,8 +159,8 @@ const createTables = () => {
   const sanpham_discountCode = `
     CREATE TABLE IF NOT EXISTS sanpham_discountCode (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      products_id INT,
-      discountCode_id INT,
+      products_id INT NOT NULL,
+      discountCode_id INT NOT NULL,
     FOREIGN KEY (discountCode_id) REFERENCES discount_code(id),
     FOREIGN KEY (products_id) REFERENCES products(id)
   );
@@ -262,16 +250,6 @@ const createTables = () => {
     }
   });
   mysql2.query(orderDetailsProduct, (error, results, fields) => {
-    if (error) {
-      console.error(error);
-    }
-  });
-  mysql2.query(promotional, (error, results, fields) => {
-    if (error) {
-      console.error(error);
-    }
-  });
-  mysql2.query(promotional_product, (error, results, fields) => {
     if (error) {
       console.error(error);
     }

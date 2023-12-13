@@ -33,6 +33,8 @@ import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Nav/Nav.scss";
 import Hinh from "../../../src/assets/LogoWebGIF.gif";
+import logomobi from "../../../src/assets/logomobi.png";
+
 import { useDispatch, useSelector } from "react-redux";
 import { updateNotification } from "../../redux/notificationsSlice";
 import axios from "axios";
@@ -341,6 +343,12 @@ const App = () => {
           <img alt="" style={{ objectFit: "cover" }} src={Hinh} />
         </a>
       </div>
+      <div className="logo-mobile">
+        <a href="/">
+          {" "}
+          <img alt="" style={{ objectFit: "cover" }} src={logomobi} />
+        </a>
+      </div>
       {!isAdminRoute && (
         <div className="menu-container">
           <div className="menu1">
@@ -369,28 +377,28 @@ const App = () => {
                 href="/chinh-sach-bao-hanh"
                 style={{
                   marginRight: "20px",
-                  color: "#fff", // Chữ màu trắng
+                  color: "#fff", 
                   textDecoration: "none",
                 }}
               >
                 Chính sách bảo hành
               </a>
-              <Dropdown menu={{ items: menuContact }} placement="bottomRight">
+              {/* <Dropdown menu={{ items: menuContact }} placement="bottomRight">
                 <a
                   style={{
                     marginRight: "20px",
-                    color: "#fff", // Chữ màu trắng
+                    color: "#fff", 
                     textDecoration: "none",
                   }}
                 >
                   Liên hệ
                 </a>
-              </Dropdown>
+              </Dropdown> */}
               <a
                 href="/chinh-sach-thanh-toan"
                 style={{
                   marginRight: "20px",
-                  color: "#fff", // Chữ màu trắng
+                  color: "#fff", 
                   textDecoration: "none",
                 }}
               >
@@ -618,7 +626,7 @@ const App = () => {
                         src={user.picture}
                         style={{ cursor: "pointer" }}
                       />
-                      <span
+                      <span className="user-name"
                         style={{
                           fontWeight: "bold",
                           marginLeft: "5px",

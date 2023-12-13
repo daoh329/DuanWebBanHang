@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-
+import "../Nav/Nav.scss";
 const Chatbot = () => {
     useEffect(() => {
       const script = document.createElement('script');
