@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
-import { Checkbox, Modal, Button, Input } from "antd";
+import { Checkbox, Modal, Button, Input, Tooltip } from "antd";
 import {
   ExclamationCircleFilled,
   PlusOutlined,
   MinusOutlined,
+  GiftOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 
 import "./Cart.css";
 import {
+  addProductToCart,
   decreaseProduct,
   deleteProductInCart,
   increaseProduct,
@@ -21,8 +23,9 @@ import { formatCapacity } from "../../util/formatCapacity";
 import { formatCurrency } from "../../util/FormatVnd";
 import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
 import EmptyCart from "./EmptyCart ";
+import { formatDateToDate } from "../../util/formatData";
 
-const { confirm } = Modal;
+const { confirm, info, config } = Modal;
 
 function Cart() {
   const navigate = useNavigate();
@@ -37,19 +40,17 @@ function Cart() {
   const [checkProductDelete, setCheckProductDelete] = useState(false);
 
   // Hàm show modal delete product
-  const showDeleteConfirm = (productId, color, capacity) => {
+  const showDeleteConfirm = (productId, color, capacity, coupons) => {
     confirm({
-      title: "Bạn chắc chắn muốn bỏ sản phẩm này?",
+      title: "Chú ý",
       icon: <ExclamationCircleFilled />,
-      okText: "Xóa",
-      okType: "danger",
-      cancelText: "Trở lại",
+      content: "Bạn chắc chắn muốn bỏ sản phẩm này?",
+      okText: "Đồng ý",
+      okType: "primary",
+      cancelText: "Hủy bỏ",
       centered: true,
       onOk() {
-        removeFromCart(productId, color, capacity);
-      },
-      onCancel() {
-        console.log("Cancel");
+        removeFromCart(productId, color, capacity, coupons);
       },
     });
   };
@@ -160,12 +161,24 @@ function Cart() {
             product_id: cart[i].id,
             capacity: cart[i].capacity,
             color: cart[i].color,
+            
           };
-          arrId.push(data);
+          if (
+            !arrId.some(
+              (item) =>
+                item.product_id === data.product_id &&
+                item.capacity === data.capacity &&
+                item.color === data.color
+            )
+          ) {
+            arrId.push(data);
+          }
         }
       }
       const api = `${process.env.REACT_APP_API_URL}/product/cart`;
       await axios.post(api, arrId).then((results) => {
+        // console.log(results.data);
+        return;
         // Xử lí nếu có sản phẩm không còn tồn tại
         const products = [];
         const productsIdOut = [];
@@ -233,13 +246,14 @@ function Cart() {
     }
   };
 
-  const handleCheckboxChange = (productId, color, capacity) => {
+  const handleCheckboxChange = (productId, color, capacity, coupons) => {
     // Kiểm tra xem sản phẩm đã được chọn chưa
     const isSelected = selectedProducts.some(
       (product) =>
         product.id === productId &&
         product.color === color &&
-        product.capacity === capacity
+        product.capacity === capacity &&
+        product.coupons?.id === coupons?.id
     );
 
     let updatedSelectedProducts;
@@ -250,13 +264,14 @@ function Cart() {
           !(
             product.id === productId &&
             product.color === color &&
-            product.capacity === capacity
+            product.capacity === capacity &&
+            product.coupons.id === coupons.id
           )
       );
     } else {
       updatedSelectedProducts = [
         ...selectedProducts,
-        { id: productId, color, capacity },
+        { id: productId, color, capacity, coupons },
       ];
     }
 
@@ -267,7 +282,8 @@ function Cart() {
         (product) =>
           product.id === item.id &&
           product.color === item.color &&
-          product.capacity === item.capacity
+          product.capacity === item.capacity &&
+          product.coupons?.id === item.coupons?.id
       )
     );
     setSelectAll(allProductsSelected);
@@ -288,6 +304,7 @@ function Cart() {
         id: item.id,
         color: item.color,
         capacity: item.capacity,
+        coupons: item.coupons,
       }));
       setSelectedProducts(allProducts);
     } else {
@@ -302,6 +319,7 @@ function Cart() {
             id: item.id,
             color: item.color,
             capacity: item.capacity,
+            coupons: item.coupons,
           }))
         : [],
     };
@@ -317,15 +335,46 @@ function Cart() {
         selectedProducts: savedSelectedProducts,
       } = JSON.parse(savedCheckboxData);
       setSelectAll(savedSelectAll);
-      setSelectedProducts(
-        savedSelectedProducts.map((product) => ({
-          id: product.id,
-          color: product.color,
-          capacity: product.capacity,
-        }))
+      setSelectedProducts(savedSelectedProducts);
+
+      // Kiểm tra xem tất cả sản phẩm đã được chọn hay chưa
+      const allProductsSelected = cart.every((item) =>
+        savedSelectedProducts.some(
+          (product) =>
+            product.id === item.id &&
+            product.color === item.color &&
+            product.capacity === item.capacity &&
+            product.coupons?.id === item.coupons?.id
+        )
       );
+      setSelectAll(allProductsSelected);
+      // Lưu trạng thái checkbox vào sessionStorage
+      const checkboxData = {
+        selectAll: allProductsSelected,
+        selectedProducts: savedSelectedProducts,
+      };
+      sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
     }
-  }, []); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
+  }, [cart]); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
+
+  // const calculateTotalPrice = () => {
+  //   // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
+  //   const selectedItems = cart.filter((item) =>
+  //     selectedProducts.some(
+  //       (product) =>
+  //         product.id === item.id &&
+  //         product.color === item.color &&
+  //         product.capacity === item.capacity
+  //       // && product.coupons?.id === item.coupons?.id
+  //     )
+  //   );
+  //   // Tính tổng tiền của các sản phẩm được chọn
+  //   const total = selectedItems.reduce((acc, item) => {
+  //     return acc + item.totalPrice;
+  //   }, 0);
+
+  //   return total;
+  // };
 
   const calculateTotalPrice = () => {
     // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
@@ -334,13 +383,15 @@ function Cart() {
         (product) =>
           product.id === item.id &&
           product.color === item.color &&
-          product.capacity === item.capacity
+          product.capacity === item.capacity &&
+          product.coupons.id === item.coupons.id
       )
     );
     // Tính tổng tiền của các sản phẩm được chọn
-    const total = selectedItems.reduce((acc, item) => {
-      return acc + item.totalPrice;
-    }, 0);
+    let total = 0;
+    for (let i = 0; i < selectedItems.length; i++) {
+      total += selectedItems[i].totalPrice;
+    }
 
     return total;
   };
@@ -353,121 +404,84 @@ function Cart() {
   }, [selectedProducts, cart]);
 
   //xóa sp
-  const removeFromCart = (productId, color, capacity) => {
+  const removeFromCart = (productId, color, capacity, coupons) => {
+    // Kiểm tra xem sản phẩm đã được chọn chưa
+    const isSelected = selectedProducts.some(
+      (product) =>
+        product.id === productId &&
+        product.color === color &&
+        product.capacity === capacity &&
+        product.coupons?.id === coupons?.id
+    );
+    var newSelectedProducts = [...selectedProducts];
+    if (isSelected) {
+      newSelectedProducts = [...selectedProducts].filter(
+        (product) =>
+          !(
+            product.id === productId &&
+            product.color === color &&
+            product.capacity === capacity &&
+            product.coupons?.id === coupons?.id
+          )
+      );
+      setSelectedProducts(newSelectedProducts);
+    }
+
     const data = {
       product_id: productId,
       color,
       capacity,
+      coupons,
     };
     dispatch(deleteProductInCart(data));
+
+    // Lưu trạng thái checkbox vào sessionStorage
+    const checkboxData = {
+      selectAll: selectAll,
+      selectedProducts: newSelectedProducts,
+    };
+    sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
-  const increaseQuantity = async (productId, color, capacity) => {
+  const increaseQuantity = async (productId, color, capacity, coupons) => {
     updateCart();
     const data = {
       product_id: productId,
       color,
       capacity,
+      coupons,
     };
     dispatch(increaseProduct(data));
     // Cập nhật tổng tiền
     const total = calculateTotalPrice();
     setTotalPrice(total);
-    // const url = `${process.env.REACT_APP_API_URL}/product/${productId}/variant`;
-    // await axios
-    //   .post(url, data, { withCredentials: true })
-    //   .then((results) => {
-    //     const remaining_quantity = results.data[0].remaining_quantity_variant;
-    //     const cartToUpdate = [...cart].find(
-    //       (product) =>
-    //         product.id === productId &&
-    //         product.color === color &&
-    //         product.capacity === capacity
-    //     );
-    //     if (cartToUpdate && remaining_quantity) {
-    //       if (remaining_quantity - cartToUpdate.quantity > 1) {
-
-    //       } else if (remaining_quantity - cartToUpdate.quantity === 1) {
-    //         dispatch(increaseProduct(data));
-    //         // Cập nhật tổng tiền
-    //         const total = calculateTotalPrice();
-    //         setTotalPrice(total);
-    //         // setIsDisableIncreaseQuantity(true);
-    //         const dataDisable = [...arrDisable];
-    //         dataDisable.push({ productId, color, capacity });
-    //         setArrDisable(dataDisable);
-    //       }
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
-  const decreaseQuantity = async (productId, color, capacity) => {
+  const decreaseQuantity = async (productId, color, capacity, coupons) => {
     const cartToUpdate = [...cart].find(
       (product) =>
         product.id === productId &&
         product.color === color &&
-        product.capacity === capacity
+        product.capacity === capacity &&
+        product?.coupons?.id === coupons?.id
     );
     if (cartToUpdate.quantity <= 1) {
-      showDeleteConfirm(productId, color, capacity);
+      showDeleteConfirm(productId, color, capacity, coupons);
       return;
     } else if (cartToUpdate.quantity > 1) {
       const data = {
         product_id: productId,
         color,
         capacity,
+        coupons,
       };
       // Cập nhật giỏ hàng
       dispatch(decreaseProduct(data));
       // Cập nhật tổng tiền
       const total = calculateTotalPrice();
       setTotalPrice(total);
-      // const url = `${process.env.REACT_APP_API_URL}/product/${productId}/variant`;
-      // await axios
-      //   .post(url, data, { withCredentials: true })
-      //   .then((results) => {
-      //     const remaining_quantity = results.data[0].remaining_quantity_variant;
-      //     if (cartToUpdate && remaining_quantity) {
-      //       // Cập nhật giỏ hàng
-      //       dispatch(decreaseProduct(data));
-      //       // Cập nhật tổng tiền
-      //       const total = calculateTotalPrice();
-      //       setTotalPrice(total);
-      //       if (remaining_quantity - (cartToUpdate.quantity - 1) === 0) {
-      //         // Nếu sản phẩm còn lại bằng sản phẩm trong giỏ hàng
-      //         // Thực hiện tắt btn
-      //         const dataDisable = [...arrDisable];
-      //         dataDisable.push({ productId, color, capacity });
-      //         setArrDisable(dataDisable);
-      //       } else if (remaining_quantity - (cartToUpdate.quantity - 1) > 0) {
-      //         // Nếu sản phẩm còn lại lớn hơn sản phẩm trong giỏ hàng
-      //         // Thực hiện bật btn
-      //         const dataDisable = [...arrDisable];
-      //         // Kiểm tra xem btn có đang bị tắt không
-      //         if (checkDisable(dataDisable, productId, color, capacity)) {
-      //           const newData = dataDisable.find(
-      //             (item) =>
-      //               item.productId !== productId &&
-      //               item.color !== color &&
-      //               item.capacity !== capacity
-      //           );
-      //           if (newData) {
-      //             setArrDisable([newData]);
-      //           } else {
-      //             setArrDisable([]);
-      //           }
-      //         }
-      //       }
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     }
   };
 
@@ -483,7 +497,6 @@ function Cart() {
     });
   };
 
-  useEffect(() => {}, []);
   // Kiểm tra xem nút "Tiếp tục" có bị disabled hay không
   const isContinueButtonDisabled =
     selectedProducts.length === 0 || totalPrice === 0;
@@ -496,7 +509,8 @@ function Cart() {
         (product) =>
           product.id === item.id &&
           product.color === item.color &&
-          product.capacity === item.capacity
+          product.capacity === item.capacity &&
+          product.coupons?.id === item.coupons?.id
       )
     );
     // Tính tổng tiền của các sản phẩm được chọn
@@ -522,8 +536,170 @@ function Cart() {
     // console.log("Blur: ", value);
   };
 
+  // Lấy thông tin khuyến mãi của sản phẩm
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [couponSelected, setCouponSelected] = useState({});
+  const [otherCouponSelected, setOtherCouponSelected] = useState([]);
+  const [couponsCurrenClicked, setCouponsCurrenClicked] = useState([]);
+  const [productClicked, setProductClicked] = useState(null);
+
+  const hanldeSelectCoupons = (product, coupons, otherCoupons) => {
+    setCouponSelected(coupons);
+    setOtherCouponSelected(otherCoupons);
+    if (Object.keys(coupons).length !== 0) {
+      setCouponsCurrenClicked(() => [...otherCoupons, coupons]);
+    } else {
+      setCouponsCurrenClicked([...otherCoupons]);
+    }
+    setProductClicked(product);
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    // Nếu khuyến mãi được chọn khác với khuyến mãi trước đó thì mới thực hiện thay đổi
+    if (productClicked.coupons.id !== couponSelected.id) {
+      // Thực hiện thay đổi khuyến mãi
+      // Lặp qua cart tìm sản phẩm muốn thay đổi và gán giá trị cuối cùng cho biến mới (newCart)
+      const newCart = [...cart].map((item) => {
+        if (
+          item.id === productClicked.productId &&
+          item.color === productClicked.color &&
+          item.capacity === productClicked.capacity &&
+          item.coupons.id === productClicked.coupons.id
+        ) {
+          // Nếu tìm thấy sản phẩm cần thay đổi
+          // Tạo lại thuộc tính otherCoupons
+          var otherCoupons; // Biến chứa các coupons không được chọn mới
+          if (item.coupons.id) {
+            // Nếu hiện tại đang có khuyến mại giá sẵn
+            // Loại bỏ khuyến mại được chọn và thêm khuyến mại bị thay thế
+            otherCoupons = [
+              ...[...item.otherCoupons].filter(
+                (v) => v.id !== couponSelected.id
+              ),
+              item.coupons,
+            ];
+          } else {
+            // Nếu chưa áp khuyến mại giá
+            // Loại bỏ khuyến mãi muốn sử dụng
+            otherCoupons = [...item.otherCoupons].filter(
+              (v) => v.id !== couponSelected.id
+            );
+          }
+          // Trả về sản phẩm với mã giảm giá mới
+          return {
+            ...item,
+            coupons: couponSelected,
+            otherCoupons: otherCoupons,
+            totalPrice:
+              (item.price -
+                (item.discount + parseInt(couponSelected.value_vnd || 0))) *
+              item.quantity,
+          };
+        }
+        return item;
+      });
+
+      // Kiểm tra những sản phẩm giống nhau và gộp lại
+      // Object để lưu thông tin theo id, capacity, color, và coupons.id
+      const itemMap = {};
+      // Lặp qua từng phần tử trong cart
+      newCart.forEach((item) => {
+        const key = `${item.id}-${item.capacity}-${item.color}-${item.coupons.id}`;
+        // Nếu key đã tồn tại trong itemMap, tăng quantity
+        if (itemMap[key]) {
+          itemMap[key].quantity += item.quantity;
+          itemMap[key].totalPrice =
+            (itemMap[key].price -
+              (itemMap[key].discount +
+                parseInt(itemMap[key].coupons.value_vnd || 0))) *
+            itemMap[key].quantity;
+        } else {
+          // Nếu key chưa tồn tại, thêm vào itemMap
+          itemMap[key] = { ...item };
+        }
+      });
+      // Chuyển itemMap về dạng mảng
+      const mergedCart = Object.values(itemMap);
+      dispatch(addProductToCart(mergedCart));
+    }
+    // tắt modal sau khi sử lí xong
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
+      <Modal
+        title={<h4>Khuyến mãi sản phẩm</h4>}
+        open={isModalOpen}
+        closeIcon={false}
+        footer={
+          <Button
+            style={{ borderRadius: "2px", fontSize: "13px" }}
+            onClick={handleOk}
+          >
+            Đóng
+          </Button>
+        }
+      >
+        <>
+          <div className="css-1gs5ebu">
+            <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
+          </div>
+          <div className="css-30n8gl">
+            <div className="css-ixp6xz">Chọn 1 trong những khuyến mãi sau</div>
+            {couponsCurrenClicked &&
+              couponsCurrenClicked.map((item, index) => (
+                <div
+                  key={index}
+                  className="css-1nz6s82"
+                  style={{ cursor: "default" }}
+                  id={couponSelected.id !== item.id ? `css-1nz6s82` : ""}
+                >
+                  <div className="css-qx8kls">
+                    <img
+                      src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+                      alt="icon"
+                      height={25}
+                      width={25}
+                    />
+                  </div>
+                  <div className="css-1qs7kih style-rjMwc" id="style-rjMwc">
+                    <div>
+                      <div className=" css-1j2vnz6">
+                        Giảm {formatCurrency(item?.value_vnd)} (áp dụng vào giá
+                        sản phẩm)
+                      </div>
+                      <div className=" css-756cgs">
+                        Khuyến mãi áp dụng khi mua tối thiểu 1 sản phẩm
+                      </div>
+                    </div>
+                    <div width="100%" direction="row" className="css-1rt5kwy">
+                      <div className=" css-2cgl77">
+                        HSD: {formatDateToDate(item?.end_date)}
+                      </div>
+                      <div
+                        onClick={() => {
+                          if (couponSelected.id === item.id) {
+                            setCouponSelected({});
+                          } else {
+                            setCouponSelected(item);
+                          }
+                        }}
+                        className="css-1aa534q"
+                        style={{ cursor: "pointer" }}
+                      >
+                        {couponSelected?.id === item?.id
+                          ? "Bỏ chọn"
+                          : "Áp dụng"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </>
+      </Modal>
       <div className="style-cart">
         <div className="fle-x-cart">
           {cart.length > 0 ? (
@@ -556,41 +732,26 @@ function Cart() {
                       </tr>
                     </MDBTableHead>
                     <MDBTableBody>
-                      {[...cart].reverse().map((item, index) => (
+                      {[...cart].reverse().map((cartItem, index) => (
                         <tr key={index}>
                           {/* checkbox */}
                           <td style={{ padding: 0 }}>
-                            {/* <input
-                              type="checkbox"
-                              style={{ transform: "scale(1.5)" }}
-                              checked={selectedProducts.some(
-                                (product) =>
-                                  product.id === item.id &&
-                                  product.color === item.color &&
-                                  product.capacity === item.capacity
-                              )}
-                              onChange={() =>
-                                handleCheckboxChange(
-                                  item.id,
-                                  item.color,
-                                  item.capacity
-                                )
-                              }
-                            /> */}
                             <div className="checkbox-item-div">
                               <Checkbox
                                 style={{ transform: "scale(1.1)" }}
                                 checked={selectedProducts.some(
                                   (product) =>
-                                    product.id === item.id &&
-                                    product.color === item.color &&
-                                    product.capacity === item.capacity
+                                    product.id === cartItem.id &&
+                                    product.color === cartItem.color &&
+                                    product.capacity === cartItem.capacity &&
+                                    product.coupons?.id === cartItem.coupons?.id
                                 )}
                                 onChange={() =>
                                   handleCheckboxChange(
-                                    item.id,
-                                    item.color,
-                                    item.capacity
+                                    cartItem.id,
+                                    cartItem.color,
+                                    cartItem.capacity,
+                                    cartItem.coupons
                                   )
                                 }
                               />
@@ -598,33 +759,50 @@ function Cart() {
                           </td>
 
                           {/* image */}
-                          <td style={{ width: "15%" }}>
-                            <img
-                              onClick={() => handleViewDetailProduct(item)}
-                              className="image-tiet"
-                              src={
-                                item.main_image
-                                  ? process.env.REACT_APP_API_URL +
-                                    item.main_image
-                                  : process.env.REACT_APP_API_URL +
-                                    item.thumbnail
-                              }
-                              alt="main_image"
-                            />
+                          <td
+                            style={{
+                              maxWidth: "12%",
+                              padding: 0,
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "120px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <img
+                                onClick={() =>
+                                  handleViewDetailProduct(cartItem)
+                                }
+                                className="image-tiet"
+                                src={
+                                  cartItem.main_image
+                                    ? process.env.REACT_APP_API_URL +
+                                      cartItem.main_image
+                                    : process.env.REACT_APP_API_URL +
+                                      cartItem.thumbnail
+                                }
+                                alt="main_image"
+                              />
+                            </div>
                           </td>
                           {/* description */}
                           <td style={styleFlexColumn}>
                             <p className="cart-description-content">
-                              {item.shortDescription}
+                              {cartItem.shortDescription}
                             </p>
                             <p className="cart-description-SKU">
-                              SKU: {item.id}
+                              SKU: {cartItem.id}
                             </p>
                             <p className="cart-description-rom-color">
                               {" "}
-                              {item?.capacity &&
-                                formatCapacity(item?.capacity) + ","}{" "}
-                              {item?.color}
+                              {cartItem?.capacity &&
+                                formatCapacity(cartItem?.capacity) + ","}{" "}
+                              {cartItem?.color}
                             </p>
                           </td>
                           {/* Đơn giá */}
@@ -636,10 +814,14 @@ function Cart() {
                                 color: "black",
                               }}
                             >
-                              {formatCurrency(item.price - item.discount)}
+                              {formatCurrency(
+                                cartItem.price -
+                                  (cartItem.discount +
+                                    parseInt(cartItem.coupons.value_vnd || 0))
+                              )}
                             </p>
                             {/* show discount */}
-                            {item.discount > 0 && (
+                            {cartItem.discount > 0 && (
                               <p
                                 style={{
                                   margin: "0",
@@ -647,7 +829,7 @@ function Cart() {
                                   fontSize: "12px",
                                 }}
                               >
-                                {formatCurrency(item.price)}
+                                {formatCurrency(cartItem.price)}
                               </p>
                             )}
                           </td>
@@ -656,6 +838,8 @@ function Cart() {
                             style={{
                               display: "flex",
                               justifyContent: "center",
+                              flexDirection: "column",
+                              aligncartItems: "center",
                             }}
                           >
                             <div className="quantity-control">
@@ -663,44 +847,66 @@ function Cart() {
                                 icon={<MinusOutlined />}
                                 onClick={() =>
                                   decreaseQuantity(
-                                    item.id,
-                                    item.color,
-                                    item.capacity
+                                    cartItem.id,
+                                    cartItem.color,
+                                    cartItem.capacity,
+                                    cartItem.coupons
                                   )
                                 }
                                 id="quantity-button"
                               />
                               <Input
                                 id="quantity-input"
-                                value={item.quantity}
+                                value={cartItem.quantity}
                                 type="number"
                                 min={1}
                                 max={999}
                                 onBlur={(e) =>
                                   handleBlurQuantity({
-                                    productId: item.id,
-                                    color: item.color,
-                                    capacity: item.capacity
+                                    productId: cartItem.id,
+                                    color: cartItem.color,
+                                    capacity: cartItem.capacity,
                                   })
                                 }
                               />
                               <Button
                                 disabled={checkDisable(
                                   arrDisable,
-                                  item.id,
-                                  item.color,
-                                  item.capacity
+                                  cartItem.id,
+                                  cartItem.color,
+                                  cartItem.capacity,
+                                  cartItem.coupons
                                 )}
                                 icon={<PlusOutlined />}
                                 onClick={() =>
                                   increaseQuantity(
-                                    item.id,
-                                    item.color,
-                                    item.capacity
+                                    cartItem.id,
+                                    cartItem.color,
+                                    cartItem.capacity,
+                                    cartItem.coupons
                                   )
                                 }
                                 id="quantity-button"
                               />
+                            </div>
+                            {/* btn delete */}
+                            <div id="cart-btn-delete">
+                              <span
+                                style={{
+                                  width: "max-content",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  showDeleteConfirm(
+                                    cartItem.id,
+                                    cartItem.color,
+                                    cartItem.capacity,
+                                    cartItem.coupons
+                                  )
+                                }
+                              >
+                                Xóa
+                              </span>
                             </div>
                           </td>
                           {/* Thành tiền */}
@@ -712,21 +918,33 @@ function Cart() {
                               textAlign: "right",
                             }}
                           >
-                            {formatCurrency(item.totalPrice)}
+                            {formatCurrency(cartItem.totalPrice)}
                           </td>
-                          {/* btn delete product */}
+                          {/* select coupons */}
                           <td>
-                            <Link
-                              onClick={() =>
-                                removeFromCart(
-                                  item.id,
-                                  item.color,
-                                  item.capacity
-                                )
-                              }
-                            >
-                              <i className="fa-solid fa-xmark"></i>
-                            </Link>
+                            <div>
+                              <Tooltip title="Chọn khuyến mãi" color="#024dbc">
+                                <GiftOutlined
+                                  onClick={() =>
+                                    hanldeSelectCoupons(
+                                      {
+                                        productId: cartItem.id,
+                                        color: cartItem.color,
+                                        capacity: cartItem.capacity,
+                                        coupons: cartItem.coupons,
+                                      },
+                                      cartItem.coupons,
+                                      cartItem.otherCoupons
+                                    )
+                                  }
+                                  style={{
+                                    cursor: "pointer",
+                                    fontSize: "24px",
+                                    color: "red",
+                                  }}
+                                />
+                              </Tooltip>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -739,14 +957,12 @@ function Cart() {
                 <div className="khoi-tiet-cha-cart">
                   <MDBTable className="table-tiet" borderless>
                     <MDBTableBody>
-                      <tr>
+                      <tr style={{ fontSize: "14px", color: "black" }}>
                         <td>Tạm tính</td>
-
                         <th>{formatCurrency(totalPrice)}</th>
                       </tr>
-                      <tr>
+                      <tr style={{ fontSize: "14px", color: "black" }}>
                         <td>Tổng tiền</td>
-
                         <th>{formatCurrency(totalPrice)}</th>
                       </tr>
                     </MDBTableBody>

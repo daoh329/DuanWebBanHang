@@ -13,13 +13,13 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     deleteProductInCart: (state, action) => {
-      const { product_id, color, capacity, couponsId } = action.payload;
+      const { product_id, color, capacity, coupons } = action.payload;
       const updatedProducts = state.products?.filter(
         (product) =>
           product.id !== product_id ||
           product.color !== color ||
           product.capacity !== capacity ||
-          product.ccouponsId !== couponsId
+          product.coupons.id !== coupons.id
       );
       localStorage.setItem(
         "cart",
@@ -43,7 +43,8 @@ export const cartSlice = createSlice({
         (product) =>
           product.id === id &&
           product.color === color &&
-          product.capacity === capacity
+          product.capacity === capacity 
+          // product.coupons.id === 
       );
       // Nếu tìm được thì update sản phẩm
       if (productUpdate) {
@@ -57,40 +58,43 @@ export const cartSlice = createSlice({
           productUpdate.quantity = remaining_quantity;
         }
         productUpdate.totalPrice =
-          (productUpdate.price - discount) * productUpdate.quantity;
+          (productUpdate.price - (discount)) * productUpdate.quantity;
       }
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     increaseProduct: (state, action) => {
-      const { product_id, color, capacity, couponsId, numberIncreased } = action.payload;
+      const { product_id, color, capacity, coupons, numberIncreased } = action.payload;
       // const numberIncreased2 = numberIncreased || 1
       const cartToUpdate = state.products.find(
         (product) =>
           product.id === product_id &&
           product.color === color &&
           product.capacity === capacity &&
-          product.couponsId === couponsId
+          product.coupons.id === coupons.id
       );
+
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity + 1;
         cartToUpdate.totalPrice =
-          (cartToUpdate.price - cartToUpdate.discount) * cartToUpdate.quantity;
+          (cartToUpdate.price - (cartToUpdate.discount + parseInt(coupons.value_vnd || 0))) * cartToUpdate.quantity;
       }
+      
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
       localStorage.setItem("cart", JSON.stringify(state.products));
     },
     decreaseProduct: (state, action) => {
-      const { product_id, color, capacity } = action.payload;
+      const { product_id, color, capacity, coupons } = action.payload;
       const cartToUpdate = state.products.find(
         (product) =>
           product.id === product_id &&
           product.color === color &&
-          product.capacity === capacity
+          product.capacity === capacity &&
+          product.coupons.id === coupons.id
       );
       if (cartToUpdate) {
         cartToUpdate.quantity = cartToUpdate.quantity - 1;
         cartToUpdate.totalPrice =
-          (cartToUpdate.price - cartToUpdate.discount) * cartToUpdate.quantity;
+          (cartToUpdate.price - (cartToUpdate.discount + parseInt(coupons.value_vnd || 0))) * cartToUpdate.quantity;
       }
       // Lưu giỏ hàng vào sessionStorage sau khi cập nhật
       localStorage.setItem("cart", JSON.stringify(state.products));

@@ -68,9 +68,11 @@ function Detail() {
   const [selectedCapacity, setSelectedCapacity] = useState({});
   const [imagesSelected, setImagesSelected] = useState([]);
   const [variationSelected, setVariationSelected] = useState([]);
-
   const [capacities, setCapacities] = useState([]);
   const [colors, setColors] = useState([]);
+  // State thông tin khuyến mãi của sản phẩm
+  const [coupons, setCoupons] = useState([]);
+  const [couponSelected, setCouponSelected] = useState({});
 
   // Lọc những capacity có trong product (ko trùng nhau)
   useEffect(() => {
@@ -202,6 +204,16 @@ function Detail() {
       });
       return false;
     }
+    // Lấy các id coupons khác
+    const otherCoupons = [...coupons].filter(
+      (item) => item.id !== couponSelected.id
+    );
+    // const otherCoupons = [];
+    // [...otherCoupons].forEach((item) => {
+    //   otherCoupons.push({id: item.id, coupons_discount: item.value_vnd});
+    // });
+    // console.log(otherCouponsId);
+    // return;
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.id,
@@ -212,7 +224,8 @@ function Detail() {
       color: variationSelected.color,
       price: variationSelected.price,
       discount: variationSelected.discount_amount,
-      couponsId: couponSelected.id,
+      coupons: couponSelected,
+      otherCoupons: otherCoupons,
       //----
       quantity: 1,
       totalPrice:
@@ -221,52 +234,34 @@ function Detail() {
           parseInt(couponSelected.value_vnd || 0)),
     };
 
-    // console.log(newItem);
-    // return;
-
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingItem = cart.filter(
       (cartItem) =>
         cartItem.id === newItem.id &&
         cartItem.color === newItem.color &&
         cartItem.capacity === newItem.capacity &&
-        // cartItem.
+        cartItem.coupons.id === newItem.coupons.id
     );
 
-
-
-    // if (existingItem.length !== 0) {
-    //   // Sản phẩm đã tồn tại trong giỏ hàng
-    //   // Kiểm tra xem coupons có khác nhau không
-    //   [...existingItem].forEach((item) => {
-    //     if (item.couponsId === newItem.couponsId) {
-    //       const itemUpdate = {
-    //         product_id: newItem.id,
-    //         capacity: newItem.capacity,
-    //         color: newItem.color,
-    //         couponsId: newItem.couponsId,
-    //       };
-    //       dispatch(increaseProduct(itemUpdate));
-    //       onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
-    //       return;
-    //     } else {
-    //       // Thêm sản phẩm vào giỏ hàng
-    //       const updatedCart = [...cart, newItem];
-    //       // update redux state
-    //       dispatch(addProductToCart(updatedCart));
-    //       onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
-    //       return;
-    //     }
-    //   });
-    //   return true;
-    // } else {
-    //   // Thêm sản phẩm vào giỏ hàng
-    //   const updatedCart = [...cart, newItem];
-    //   // update redux state
-    //   dispatch(addProductToCart(updatedCart));
-    //   onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
-    //   return true;
-    // }
+    if (existingItem.length !== 0) {
+      // Sản phẩm đã tồn tại trong giỏ hàng
+      const itemUpdate = {
+        product_id: newItem.id,
+        capacity: newItem.capacity,
+        color: newItem.color,
+        coupons: newItem.coupons,
+      };
+      dispatch(increaseProduct(itemUpdate));
+      onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
+      return true;
+    } else {
+      // Thêm sản phẩm vào giỏ hàng
+      const updatedCart = [...cart, newItem];
+      // update redux state
+      dispatch(addProductToCart(updatedCart));
+      onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
+      return true;
+    }
   };
 
   // Hàm xử lý sự kiện khi nhấp vào hình thu nhỏ
@@ -389,18 +384,14 @@ function Detail() {
   };
   const buttonClass = isExpanded ? "btn-thugon" : "btn-xemthem";
 
-  // Lấy thông tin khuyến mãi của sản phẩm
-  const [coupons, setCoupons] = useState([]);
-  const [couponSelected, setCouponSelected] = useState({});
   useEffect(() => {
     getCoupons();
   }, []);
 
   const getCoupons = async () => {
     try {
-      const url = `${process.env.REACT_APP_API_URL}/product/34/coupons`;
+      const url = `${process.env.REACT_APP_API_URL}/product/${id}/coupons`;
       const results = await axios.get(url);
-
       setCoupons(results.data);
     } catch (error) {
       console.log(error);
@@ -686,8 +677,8 @@ function Detail() {
                       {coupons.map((item, index) => (
                         <div
                           key={index}
-                          onClick={() => selectedCoupon(item)}
                           className="css-1nz6s82"
+                          style={{ cursor: "default" }}
                           id={
                             couponSelected.id !== item.id ? `css-1nz6s82` : ""
                           }
@@ -721,7 +712,11 @@ function Detail() {
                               <div className=" css-2cgl77">
                                 HSD: {formatDateToDate(item.end_date)}
                               </div>
-                              <div className="css-1aa534q">
+                              <div
+                                onClick={() => selectedCoupon(item)}
+                                className="css-1aa534q"
+                                style={{ cursor: "pointer" }}
+                              >
                                 {couponSelected.id === item.id
                                   ? "Bỏ chọn"
                                   : "Áp dụng"}

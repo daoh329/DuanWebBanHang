@@ -236,6 +236,7 @@ export default function Buy() {
             product_id: value.id,
             capacity: value.capacity,
             color: value.color,
+            coupons: value.coupons
           };
           data.push(item);
         });
@@ -1030,6 +1031,7 @@ export default function Buy() {
                       <div key={index}>
                         <div className="css-9op68y snipcss0-2-6-7 snipcss0-6-105-106">
                           <div className="css-ov1ktg snipcss0-3-7-8 snipcss0-7-106-107">
+                            {/* images */}
                             <div className="snipcss0-4-8-9 snipcss0-8-107-108">
                               <div
                                 height={80}
@@ -1053,13 +1055,14 @@ export default function Buy() {
                                 </picture>
                               </div>
                             </div>
+                            {/* other infomation */}
                             <div className="css-f0vs3e snipcss0-4-8-15 snipcss0-8-107-114">
+                                {/* Tên sản phẩm */}
                               <a
                                 href={`/detail/${buysData.selectedItems[0].id}`} // Lấy ID sản phẩm từ dữ liệu
                                 aria-label="Image"
                                 className="css-587jha snipcss0-5-15-16 snipcss0-9-114-115"
                               >
-                                {/* Tên sản phẩm */}
                                 <div
                                   type="body"
                                   color="textPrimary"
@@ -1078,19 +1081,32 @@ export default function Buy() {
                               </div>
                               {/* Giá sản phẩm */}
                               <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
-                                {formatCurrency(item.totalPrice)}
+                                {formatCurrency(item.price - (item.discount + parseFloat(item.coupons.value_vnd)))}
                                 {/* <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
                               đ
                             </span> */}
                               </span>
-                              <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
                                 {/* Giá khuyến mãi */}
-                                {/* <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
-                                  {formatCurrency(item.promoPrice)}
-                                </span> */}
+                              <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
+                                <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
+                                  {formatCurrency(item.price)}
+                                </span> 
                               </div>
+
+                              <div></div>
+
                             </div>
+                            
                           </div>
+                          <div className="coupons-style">
+                              <img
+                                src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+                                alt="icon"
+                                height={17}
+                                width={17}
+                              />
+                              <p>Giảm {formatCurrency(item.coupons.value_vnd)} (áp dụng vào giá sản phẩm)</p>
+                            </div>
                         </div>
                       </div>
                     ))}

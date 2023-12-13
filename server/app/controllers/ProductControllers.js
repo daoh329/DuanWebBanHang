@@ -200,6 +200,15 @@ class Product {
 
   // API: /product/delete/:id
   async Delete(req, res) {
+    // Lấy id từ client request lên
+    const id = req.params.id;
+    // query check product in order
+    const checkInOrder = `select count(*) as count from orderdetailsproduct where productID = ?`;
+    const resultsCheck = await query(checkInOrder, [id]);
+    if (resultsCheck[0].count !== 0) {
+      return res.json({message: "Do not delete"});
+    }
+
     // query get path image
     const sl_product_images = `
       SELECT path AS imagePath
@@ -229,12 +238,9 @@ class Product {
     `;
 
     try {
-      // Lấy id từ client request lên
-      const id = req.params.id;
       if (!id) {
         return res.status(400).json({ message: "Not Id" });
       }
-
       // select imagePath galery
       var resultsImagesPath = await query(sl_product_images, [id]);
       var resultsMainImagesPath = await query(sl_main_image, [id]);
@@ -1002,13 +1008,13 @@ class Product {
       const dataID = req.body; // Giả sử danh sách id được gửi trong body request
       // Chuẩn bị câu truy vấn
       const lc_query = `SELECT id, main_image, shortDescription FROM products WHERE id IN (?)`;
-  
+
       // Thực thi truy vấn với danh sách id
       const products = await query(lc_query, [dataID]);
       if (products.length === 0) {
         return res.status(404).json({ message: "No products found" });
       }
-  
+
       // Trả về dữ liệu sản phẩm
       return res.status(200).json(products);
     } catch (error) {
@@ -1017,16 +1023,17 @@ class Product {
     }
   }
   async getProductDescription(req, res) {
-    try { // Giả sử danh sách id được gửi trong body request
+    try {
+      // Giả sử danh sách id được gửi trong body request
       // Chuẩn bị câu truy vấn
       const lc_query = `SELECT id, shortDescription FROM products`;
-  
+
       // Thực thi truy vấn với danh sách id
       const products = await query(lc_query);
       if (products.length === 0) {
         return res.status(404).json({ message: "No products found" });
       }
-  
+
       // Trả về dữ liệu sản phẩm
       return res.status(200).json(products);
     } catch (error) {
@@ -1035,19 +1042,19 @@ class Product {
     }
   }
 
-  async getCoupons (req, res) {
+  async getCoupons(req, res) {
     try {
       const product_id = req.params.id;
       const qr = `
       SELECT dc.*
       FROM sanpham_discountcode AS sdc
       JOIN discount_code AS dc ON sdc.discountCode_id = dc.id
-      WHERE sdc.products_id = ?;`
+      WHERE sdc.products_id = ?;`;
       const results = await query(qr, [product_id]);
 
       res.status(200).json(results);
     } catch (error) {
-      res.status(500).json({message: "Get failed coupons"})
+      res.status(500).json({ message: "Get failed coupons" });
     }
   }
 }

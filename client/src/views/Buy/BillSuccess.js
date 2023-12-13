@@ -21,6 +21,7 @@ const BillSuccess = () => {
             product_id: value.id,
             capacity: value.capacity,
             color: value.color,
+            coupons: value.coupons
           };
           data.push(item);
         });
