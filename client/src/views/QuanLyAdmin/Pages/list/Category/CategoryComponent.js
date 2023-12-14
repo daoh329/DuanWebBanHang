@@ -6,6 +6,8 @@ import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormInputCategory from "./CategoryInputComponent";
+import { openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
+import { getPermission } from "../../../../../util/servicesGlobal";
 
 function Category() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +21,12 @@ function Category() {
       name: Yup.string().required("Vui lòng nhập tên category"),
     }),
     onSubmit: async (values) => {
+      // Check permission
+      if ((await getPermission()) === "user") {
+        openInfoModalNotPermission();
+        return;
+      }
+
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/category`;
       try {
@@ -65,7 +73,6 @@ function Category() {
         });
         setCategory(arrCopy);
       }
-      
     } catch (e) {
       console.log(e);
     }
@@ -108,7 +115,8 @@ function Category() {
           }}
         >
           <Button className="confirm-button" onClick={() => handleUpdate(name)}>
-            <EditOutlined />Sửa{" "}
+            <EditOutlined />
+            Sửa{" "}
           </Button>
 
           <Modal
@@ -127,7 +135,8 @@ function Category() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined />Xóa
+              <DeleteOutlined />
+              Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -137,6 +146,12 @@ function Category() {
 
   const handleDelete = async (name) => {
     try {
+      // Check permission
+      if ((await getPermission()) === "user") {
+        openInfoModalNotPermission();
+        return;
+      }
+
       await axios.post(
         `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
         null,
@@ -153,7 +168,7 @@ function Category() {
       <div className="page-group">
         <div className="page1-control">
           {/* <h3 style={{ fontWeight: "bold" }}>Thể loại</h3> */}
-          <br/>
+          <br />
           <Table columns={columns} dataSource={category} />
         </div>
         <div className="page2-control">

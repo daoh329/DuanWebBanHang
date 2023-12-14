@@ -11,7 +11,7 @@ import {
   notification,
 } from "antd";
 import axios from "axios";
-import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
+import { NotificationBeenLoggedOut, openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
 import {
   ExclamationCircleFilled,
   PlusOutlined,
@@ -85,27 +85,10 @@ function productdiscount(record) {
       });
   };
 
-  
-  const openInfoModal = () => {
-    info({
-      title: "Thông báo",
-      content: "Bạn không có quyền thực hiện hành động này",
-      footer: (
-        <Button
-          onClick={() => window.location.reload()}
-          style={{ borderRadius: "2px", margin: "20px 0 0 0"}}
-          type="primary"
-        >
-          Đóng
-        </Button>
-      ),
-    });
-  };
-
   const deleteSanPham = async (products_id, discountCode_id) => {
     try {
       if ((await getPermission()) === "user") {
-        openInfoModal();
+        openInfoModalNotPermission();
         return;
       }
       const result = await axios.post(
@@ -201,7 +184,7 @@ function productdiscount(record) {
     const url = `${process.env.REACT_APP_API_URL}/discount/addProduct`;
     try {
       if ((await getPermission()) === "user") {
-        openInfoModal();
+        openInfoModalNotPermission();
         return;
       }
       const results = await axios.post(

@@ -24,9 +24,9 @@ import { formatCapacity } from "../../../../../util/formatCapacity";
 import { formatSpecifications } from "../../../../../util/formatSpecifications";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
+import { ObjectCompareObject, getPermission } from "../../../../../util/servicesGlobal";
 import config from "../../../../../config";
-import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
+import { NotificationBeenLoggedOut, openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
 
 function InputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
@@ -44,6 +44,12 @@ function InputFrom({ data, onClick, setModal }) {
 
   // Hàm được gọi khi form hoàn thành
   const onFinishUpdate = async (value) => {
+    // Check permission
+    if (await getPermission() === "user") {
+      openInfoModalNotPermission();
+      return;
+    }
+
     setIsLoading(true);
     const values = {
       ...value,

@@ -16,7 +16,10 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 
-import { NotificationBeenLoggedOut } from "../../../NotificationsForm/Authenticated";
+import {
+  NotificationBeenLoggedOut,
+  openInfoModalNotPermission,
+} from "../../../NotificationsForm/Authenticated";
 import "./style.css";
 import { getPermission, getUser } from "../../../../util/servicesGlobal";
 
@@ -30,6 +33,11 @@ function NewDiscountCode() {
   const [end_date, setEnd_date] = useState();
 
   const onFinish = async (value) => {
+    if ((await getPermission()) === "user") {
+      openInfoModalNotPermission();
+      return;
+    }
+
     setIsModalOpen(true);
     const values = {
       ...value,

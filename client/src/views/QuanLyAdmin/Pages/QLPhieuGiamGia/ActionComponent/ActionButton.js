@@ -3,7 +3,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import InputFrom from "../UpdateForm/InputFrom";
 import Products from "../UpdateForm/Products";
-import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
+import { NotificationBeenLoggedOut, openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
+import { getPermission } from "../../../../../util/servicesGlobal";
 
 function ActionButton({ record, getPhieuGiamGia }) {
   const [openModal, setOpenModal] = useState(false);
@@ -11,6 +12,13 @@ function ActionButton({ record, getPhieuGiamGia }) {
   const [AddProduct, setAddProduct] = useState(false);
   // Hàm End_date
   async function handleEndDate() {
+
+    // Check permission
+    if (await getPermission() === "user") {
+      openInfoModalNotPermission();
+      return;
+    }
+
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/discount/setEnd/${record.id}`,
