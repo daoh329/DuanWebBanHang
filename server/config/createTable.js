@@ -112,8 +112,8 @@ const createTables = () => {
     CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     facebookId VARCHAR(10) ,
-    googleId VARCHAR(16),
-    name varchar(20),
+    googleId VARCHAR(40),
+    name varchar(40),
     phone varchar(10),
     email varchar(30),
     permission varchar(10),
