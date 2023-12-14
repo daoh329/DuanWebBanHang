@@ -188,7 +188,7 @@ const App = () => {
     },
     {
       key: "2",
-      label: isLogin && isLogin === "admin" && (
+      label: isLogin && (isLogin === "admin" || isLogin === "superadmin") && (
         <Button
           onClick={adminPage}
           style={{

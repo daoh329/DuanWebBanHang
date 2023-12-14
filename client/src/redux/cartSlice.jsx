@@ -69,10 +69,9 @@ export const cartSlice = createSlice({
           }
           // Update other coupons
           product.otherCoupons = allCoupons.filter((coupon) => !(coupon.id === product.coupons.id) && !isCouponExpired(coupon));
-          console.log(allCoupons.filter((coupon) => !(coupon.id === product.coupons.id) && !isCouponExpired(coupon)));
           product.totalPrice =
           (product.price -
-            (product.discount + parseInt(couponSelected.value_vnd || 0))) *
+            (product.discount + parseInt(couponSelected?.value_vnd || 0))) *
           product.quantity;
         });
       }

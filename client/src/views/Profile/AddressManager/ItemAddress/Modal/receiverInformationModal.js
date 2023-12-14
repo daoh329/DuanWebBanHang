@@ -311,6 +311,7 @@ function ReceiverInformationModal({
           name="name"
           rules={[
             { required: true, message: "Tên không được bỏ trống" },
+            {max: 45, message: "Không nhập quá 45 kí tự"},
             { validator: validateInput },
           ]}
         >
@@ -344,6 +345,10 @@ function ReceiverInformationModal({
               {
                 type: "email",
                 message: "Vui lòng nhập đúng định dạng email!",
+              },
+              {
+                max: 50,
+                message: "Không nhập quá 50 kí tự",
               },
             ]}
           >

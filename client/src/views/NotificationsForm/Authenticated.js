@@ -1,6 +1,8 @@
 
 import { Modal, Button } from "antd";
 
+const {info} = Modal;
+
 export const NotificationBeenLoggedOut = () => {
     Modal.warning({
       title: "Bạn chưa đăng nhập",
@@ -26,4 +28,23 @@ export const NotificationBeenLoggedOut = () => {
         </div>
       ),
     });
+};
+
+export const openInfoModalNotPermission = () => {
+  info({
+    title: "Thông báo",
+    content: "Bạn không có quyền thực hiện hành động này",
+    footer: (
+      <div style={{display:'flex', justifyContent: "center", alignItems: "center"}}>
+        <Button
+        onClick={() => window.location.reload()}
+        style={{ borderRadius: "2px", margin: "20px 0 0 0"}}
+        type="primary"
+      >
+        Đóng
+      </Button>
+      </div>
+      
+    ),
+  });
 };

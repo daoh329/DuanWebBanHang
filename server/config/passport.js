@@ -11,7 +11,6 @@ passport.use(
       scope: ["profile", "email"],
     },
     async function (accessToken, refreshToken, profile, callback) {
-      // console.log(profile.id);
       // lệnh kiểm tra email người dùng đã tồn tại chưa (đã đăng nhập ít nhất 1 lần)
       const queryCheckEmail = `SELECT COUNT(*) AS count FROM users WHERE googleId = ?`;
 
@@ -29,7 +28,25 @@ passport.use(
         const results = await query(queryCheckEmail, [googleId]);
         // nếu chưa thì thực hiện tạo tài khoản mới
         if (results[0].count === 0) {
-          await query(queryInsertUser, [nameProfile, emailProfile, permission, profile.id]);
+          // Kiểm tra xem có phải là tài khoản đầu tiên không
+          const checkFirstAccount = `SELECT COUNT(*) AS count FROM users`;
+          const resultCheckFirstAccount = await query(checkFirstAccount);
+          if (resultCheckFirstAccount[0].count === 0) {
+            await query(queryInsertUser, [
+              nameProfile,
+              emailProfile,
+              "superadmin",
+              profile.id,
+            ]);
+          }else{
+            await query(queryInsertUser, [
+              nameProfile,
+              emailProfile,
+              permission,
+              profile.id,
+            ]);
+          }
+          
         }
       } catch (error) {
         console.log(error);

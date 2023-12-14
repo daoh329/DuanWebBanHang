@@ -61,6 +61,7 @@ import ChinhSachBaoHanh from "./Footer/MenuFooter/ChinhSachBaoHanh.js";
 import ChinhSachDoiTra from "./Footer/MenuFooter/ChinhSachDoiTra.js";
 import ScrollToTop from "../util/scrollToTop.js";
 import NotFound from "./404/NotFound.js";
+import { getUser } from '../util/servicesGlobal'
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -73,37 +74,14 @@ const App = () => {
     if (cart && cart.length !== 0) {
       dispatch(addProductToCart(cart));
     }
-    getUser();
+    getUser(dispatch);
   }, []);
 
-  const getUser = async () => {
-    try {
-      const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
-      const result = await axios.get(url, { withCredentials: true });
-      let data = result.data;
-      const u = {
-        id: data.user.id,
-        name: data.user.name,
-        phone: data.user.phone,
-        email: data.user.email,
-        picture: data.user.picture,
-        permission: data.user.permission,
-        isLocked: data.user.isLocked,
-      };
-      if (result.status === 200) {
-        if (!isLogin) {
-          localStorage.setItem("isLogin", u.permission.toLowerCase());
-        }
-        dispatch(update(u));
-        getNotifications(u.id);
-      } else {
-        localStorage.removeItem("isLogin");
-      }
-    } catch (e) {
-      localStorage.removeItem("isLogin");
-      console.log(e);
-    }
-  };
+useEffect(() => {
+  if (user) {
+    getNotifications(user.id)
+  }
+}, [user])
 
   const getNotifications = async (id) => {
     try {
@@ -135,7 +113,7 @@ const App = () => {
           <Route
             path="/admin/*"
             element={
-              isLogin === "admin" ? (
+              isLogin === "admin" || isLogin === "superadmin" ? (
                 <>
                   <Admin /> <Outlet />
                 </>
@@ -204,7 +182,6 @@ const App = () => {
           <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
           {/* Route cho trang 404 */}
           <Route path="*" element={<NotFound />} />
-
         </Routes>
         <MobileNav user={user} />
         <Footer />

@@ -2,7 +2,11 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Table, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
+import {
+  NotificationBeenLoggedOut,
+  openInfoModalNotPermission,
+} from "../../../../NotificationsForm/Authenticated";
+import { getPermission } from "../../../../../util/servicesGlobal";
 
 function Capacity() {
   const [capacities, setCapacities] = useState([]);
@@ -30,6 +34,12 @@ function Capacity() {
   };
 
   const handleDelete = async (value) => {
+    // Check permission
+    if ((await getPermission()) === "user") {
+      openInfoModalNotPermission();
+      return;
+    }
+
     try {
       const results = await axios.post(
         `${process.env.REACT_APP_API_URL}/List/delete/Capacity/${value}`,
@@ -72,7 +82,8 @@ function Capacity() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined />Xóa
+              <DeleteOutlined />
+              Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -80,8 +91,17 @@ function Capacity() {
     },
   ];
   return (
-    <div style={{ padding: "0 100px 0 50px" , backgroundColor:'white', borderRadius:'5px', marginTop:'10px'}}>
-      <h3 style={{ fontWeight: "bold", paddingTop:'10px' }}>Dung lượng (ROM)</h3>
+    <div
+      style={{
+        padding: "0 100px 0 50px",
+        backgroundColor: "white",
+        borderRadius: "5px",
+        marginTop: "10px",
+      }}
+    >
+      <h3 style={{ fontWeight: "bold", paddingTop: "10px" }}>
+        Dung lượng (ROM)
+      </h3>
       <Table columns={columns} dataSource={capacities} />
     </div>
   );
