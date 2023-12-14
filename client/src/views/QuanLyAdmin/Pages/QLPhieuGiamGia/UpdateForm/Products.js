@@ -17,8 +17,9 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from "@ant-design/icons";
+import { getPermission } from "../../../../../util/servicesGlobal";
 
-const { confirm } = Modal;
+const { confirm, info } = Modal;
 
 function productdiscount(record) {
   const [productdiscount, setproductdiscount] = useState([]);
@@ -72,7 +73,7 @@ function productdiscount(record) {
           .catch((error) => {
             setproductdiscount([]);
             console.log(error);
-          })
+          });
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -84,8 +85,29 @@ function productdiscount(record) {
       });
   };
 
+  
+  const openInfoModal = () => {
+    info({
+      title: "Thông báo",
+      content: "Bạn không có quyền thực hiện hành động này",
+      footer: (
+        <Button
+          onClick={() => window.location.reload()}
+          style={{ borderRadius: "2px", margin: "20px 0 0 0"}}
+          type="primary"
+        >
+          Đóng
+        </Button>
+      ),
+    });
+  };
+
   const deleteSanPham = async (products_id, discountCode_id) => {
     try {
+      if ((await getPermission()) === "user") {
+        openInfoModal();
+        return;
+      }
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/discount/deleteSanPhamDC`,
         { products_id, discountCode_id },
@@ -178,6 +200,10 @@ function productdiscount(record) {
   const AddProduct = async (products_id, discountCode_id) => {
     const url = `${process.env.REACT_APP_API_URL}/discount/addProduct`;
     try {
+      if ((await getPermission()) === "user") {
+        openInfoModal();
+        return;
+      }
       const results = await axios.post(
         url,
         { products_id, discountCode_id },

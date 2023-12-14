@@ -14,10 +14,14 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+
 import { NotificationBeenLoggedOut } from "../../../NotificationsForm/Authenticated";
 import "./style.css";
+import { getPermission, getUser } from "../../../../util/servicesGlobal";
 
 function NewDiscountCode() {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
   const [discountType, setDiscountType] = useState("vnd");
@@ -25,7 +29,6 @@ function NewDiscountCode() {
   const [start_date, setStart_date] = useState();
   const [end_date, setEnd_date] = useState();
 
-  useEffect(() => {}, []);
   const onFinish = async (value) => {
     setIsModalOpen(true);
     const values = {

@@ -59,7 +59,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
         justifyContent: "space-around",
       }}
     >
-      <Button onClick={handleProduct}>Sản phẩm áp dụng</Button>
+      <Button onClick={handleProduct}>Áp dụng sản phẩm</Button>
       <Modal
         open={openModalproduct}
         // title="danh sách sản phẩm áp dụng"
