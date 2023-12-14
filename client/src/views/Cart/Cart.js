@@ -149,24 +149,28 @@ function Cart() {
     }
   }, [checkQuantityChange]);
 
+  const [checkUd, setCheckUd] = useState(true);
   useEffect(() => {
     // Nếu chưa cập nhật, thực hiện cập nhật cart và đánh dấu đã cập nhật
-    if (cart) {
+    if (cart && checkUd) {
       updateCart();
+      setCheckUd(false);
     }
-  }, []);
+  }, [cart]);
 
   // cập nhật giỏ hàng khi onClick to Cart
   const updateCart = async () => {
     try {
       if (cart.length === 0) return;
       let arrId = [];
+      let arrCheck = [];
       if (cart.length > 0) {
         for (let i = 0; i < cart.length; i++) {
           const data = {
             product_id: cart[i].id,
             capacity: cart[i].capacity,
             color: cart[i].color,
+            coupons: cart[i].coupons,
           };
           if (
             !arrId.some(
@@ -188,11 +192,11 @@ function Cart() {
         const products = [];
         const productsIdOut = [];
         // Lặp qua từng sản phẩm trong giỏ hàng
-        arrId.forEach((arrIdItem) => {
+        cart.forEach((arrIdItem) => {
           // Tìm những sản phẩm tương ứng trong giỏ hàng
           const productsFinded = [...results.data].find(
             (i) =>
-              i?.id === arrIdItem.product_id &&
+              i?.id === arrIdItem.id &&
               i?.variations.color === arrIdItem.color &&
               i?.variations.capacity === arrIdItem.capacity &&
               i?.variations.remaining_quantity_variant > 0
@@ -206,14 +210,29 @@ function Cart() {
             productsIdOut.push(arrIdItem);
           }
         });
-        // return;
+
         // Xử lí bỏ sản phẩm bị xóa khỏi giỏ hàng
+
         // Lặp qua từng id sản phẩm bị xóa
         if (productsIdOut.length !== 0) {
           productsIdOut.forEach((value) => {
-            dispatch(deleteProductInCart(value));
-            setCheckProductDelete(true);
+            const v = cart.filter(
+              (i) =>
+                i?.id === value.id &&
+                i?.color === value.color &&
+                i?.capacity === value.capacity
+            );
+            [...v].forEach((d) => {
+                const obj = {
+                  product_id: d.id,
+                  color: d.color,
+                  capacity: d.capacity,
+                  coupons: d.coupons
+                }
+              dispatch(deleteProductInCart(obj));
+            })
           });
+          setCheckProductDelete(true);
         }
 
         // Xử lí cập nhật sản phẩm còn lại
@@ -618,7 +637,6 @@ function Cart() {
           item.capacity === productClicked.capacity &&
           item.coupons.id === productClicked.coupons.id
         ) {
-          
           // Trả về sản phẩm với mã giảm giá mới
           return {
             ...item,

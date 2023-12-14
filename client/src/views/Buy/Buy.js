@@ -626,7 +626,6 @@ export default function Buy() {
                                   e.target.checked ? e.target.value : ""
                                 )
                               }>Chủ nhật</Checkbox>
-
                           </div>
                         </div>
                       </div>
