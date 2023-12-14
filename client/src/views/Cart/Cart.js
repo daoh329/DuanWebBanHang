@@ -53,8 +53,8 @@ function Cart() {
         removeFromCart(productId, color, capacity, coupons);
       },
       style: {
-        overflow: "hidden"
-      }
+        overflow: "hidden",
+      },
     });
   };
 
@@ -164,7 +164,6 @@ function Cart() {
             product_id: cart[i].id,
             capacity: cart[i].capacity,
             color: cart[i].color,
-            
           };
           if (
             !arrId.some(
@@ -715,7 +714,7 @@ function Cart() {
                       <tr>
                         <th scope="col">
                           <Checkbox
-                            style={{ transform: "scale(1.1)"}}
+                            style={{ transform: "scale(1.1)" }}
                             onChange={handleSelectAllChange}
                             checked={selectAll}
                           ></Checkbox>
@@ -824,7 +823,8 @@ function Cart() {
                               )}
                             </p>
                             {/* show discount */}
-                            {(cartItem.discount > 0 || cartItem.coupons?.value_vnd) && (
+                            {(cartItem.discount > 0 ||
+                              cartItem.coupons?.value_vnd) && (
                               <p
                                 style={{
                                   margin: "0",
@@ -926,27 +926,35 @@ function Cart() {
                           {/* select coupons */}
                           <td>
                             <div>
-                              <Tooltip title="Chọn khuyến mãi" color="#024dbc">
-                                <GiftOutlined
-                                  onClick={() =>
-                                    hanldeSelectCoupons(
-                                      {
-                                        productId: cartItem.id,
-                                        color: cartItem.color,
-                                        capacity: cartItem.capacity,
-                                        coupons: cartItem.coupons,
-                                      },
-                                      cartItem.coupons,
-                                      cartItem.otherCoupons
-                                    )
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                    fontSize: "24px",
-                                    color: "red",
-                                  }}
-                                />
-                              </Tooltip>
+                              {(cartItem.coupons?.id ||
+                                cartItem.otherCoupons?.length !==
+                                  0) &&(
+                                    <Tooltip
+                                      title="Chọn khuyến mãi"
+                                      color="#024dbc"
+                                    >
+                                      {console.log(cartItem.otherCoupons)}
+                                      <GiftOutlined
+                                        onClick={() =>
+                                          hanldeSelectCoupons(
+                                            {
+                                              productId: cartItem.id,
+                                              color: cartItem.color,
+                                              capacity: cartItem.capacity,
+                                              coupons: cartItem.coupons,
+                                            },
+                                            cartItem.coupons,
+                                            cartItem.otherCoupons
+                                          )
+                                        }
+                                        style={{
+                                          cursor: "pointer",
+                                          fontSize: "24px",
+                                          color: "red",
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  )}
                             </div>
                           </td>
                         </tr>

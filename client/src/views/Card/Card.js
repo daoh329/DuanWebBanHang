@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tag } from "antd";
-import axios from "axios"
+import axios from "axios";
 
 import "./Card.css";
 import { formatCurrency } from "../../util/FormatVnd";
@@ -25,7 +25,7 @@ function CardProduct(props) {
       var total = 0;
       [...item.variations].forEach((item) => {
         total += item.remaining_quantity_variant;
-      })
+      });
       setTotalQuantity(total);
     }
   }, [item]);
@@ -68,7 +68,7 @@ function CardProduct(props) {
   // Gọi hàm lấy tất cả khuyến mãi
   useEffect(() => {
     getCoupons();
-  }, [item])
+  }, [item]);
 
   // Hàm lấy tất cả khuyến mãi của sản phẩm
   const getCoupons = async () => {
@@ -76,17 +76,19 @@ function CardProduct(props) {
       const url = `${process.env.REACT_APP_API_URL}/product/${item.id}/coupons`;
       const results = await axios.get(url);
       // Mảng chứa coupons còn hạn
-      const arr = [];
-      [...results.data].forEach((coupon) => {
-        // Kiểm tra HSD của khuyến mãi
-        if (!isCouponExpired(coupon)) {
-          // Nếu còn hạn
-          arr.push(coupon);
-        }
-      });
-      // Sắp xếp có giá lớn -> bé
-      arr.sort((a, b) => parseInt(b.value_vnd) - parseInt(a.value_vnd));
-      setCouponsShow(arr);
+      if (results.data.length !== 0) {
+        const arr = [];
+        [...results.data].forEach((coupon) => {
+          // Kiểm tra HSD của khuyến mãi
+          if (!isCouponExpired(coupon)) {
+            // Nếu còn hạn
+            arr.push(coupon);
+          }
+        });
+        // Sắp xếp có giá lớn -> bé
+        arr.sort((a, b) => parseInt(b.value_vnd) - parseInt(a.value_vnd));
+        setCouponsShow(arr);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -95,7 +97,7 @@ function CardProduct(props) {
   function handleViewDetail() {
     onClick(item);
   }
-  
+
   return (
     <div className="sanpham-card" onClick={handleViewDetail}>
       <img
@@ -113,18 +115,22 @@ function CardProduct(props) {
         alt="main_image"
       ></img>
       {/* tem */}
-      {totalQuantity !== 0 && (discountOfPiceMin > 0 ||  parseInt(couponsShow[0]?.value_vnd || 0) > 0) && (
-        <div className="css-14q2k9dd">
-          <div className="css-zb7zul" style={{ textAlign: "start" }}>
-            <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
-              TIẾT KIỆM
-            </div>
-            <div className="css-1rdv2qd">
-              {formatCurrency(discountOfPiceMin + parseInt(couponsShow[0]?.value_vnd || 0))}
+      {totalQuantity !== 0 &&
+        (discountOfPiceMin > 0 ||
+          parseInt(couponsShow[0]?.value_vnd || 0) > 0) && (
+          <div className="css-14q2k9dd">
+            <div className="css-zb7zul" style={{ textAlign: "start" }}>
+              <div className="css-1bqeu8f" style={{ fontSize: "10px" }}>
+                TIẾT KIỆM
+              </div>
+              <div className="css-1rdv2qd">
+                {formatCurrency(
+                  discountOfPiceMin + parseInt(couponsShow[0]?.value_vnd || 0)
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* brand */}
       <div
@@ -181,16 +187,19 @@ function CardProduct(props) {
         ) : (
           // Nếu còn sản phẩm
           <div>
-            {variations && Object.keys(couponsShow).length !== 0 &&(
+            {variations && (
               <>
                 {/* Giá mới */}
                 <div style={{ textAlign: "left" }} className="show-discount">
                   {formatCurrency(
-                    variations[0]?.price - (variations[0]?.discount_amount + parseInt(couponsShow[0]?.value_vnd || 0))
+                    variations[0]?.price -
+                      (variations[0]?.discount_amount +
+                        parseInt(couponsShow[0]?.value_vnd || 0))
                   )}
                 </div>
                 {/* Giá cũ */}
-                {(variations[0]?.discount_amount > 0 || parseInt(couponsShow[0]?.value_vnd || 0) > 0) && (
+                {(variations[0]?.discount_amount > 0 ||
+                  parseInt(couponsShow[0]?.value_vnd || 0) > 0) && (
                   <div
                     style={{
                       color: "gray",
@@ -204,13 +213,12 @@ function CardProduct(props) {
                       {formatCurrency(variations[0]?.price)}
                     </span>
                     &nbsp;
-                    <span
-                      className="blinking-text"
-                    >
+                    <span className="blinking-text">
                       -
                       {format_sale2(
                         variations[0]?.price,
-                        (variations[0]?.discount_amount + parseInt(couponsShow[0]?.value_vnd || 0))
+                        variations[0]?.discount_amount +
+                          parseInt(couponsShow[0]?.value_vnd || 0)
                       )}
                     </span>
                   </div>
