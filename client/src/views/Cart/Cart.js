@@ -610,6 +610,43 @@ function Cart() {
         return item;
       });
 
+      // UPDATE CHECKBOX
+      const productCheckboxNew = [...selectedProducts].map((item) => {
+        if (
+          item.id === productClicked.productId &&
+          item.color === productClicked.color &&
+          item.capacity === productClicked.capacity &&
+          item.coupons.id === productClicked.coupons.id
+        ) {
+          
+          // Trả về sản phẩm với mã giảm giá mới
+          return {
+            ...item,
+            coupons: couponSelected,
+          };
+        }
+        return item;
+      });
+      setSelectedProducts(productCheckboxNew);
+      // Kiểm tra xem tất cả sản phẩm đã được chọn hay chưa
+      const allProductsSelected = cart.every((item) =>
+        productCheckboxNew.some(
+          (product) =>
+            product.id === item.id &&
+            product.color === item.color &&
+            product.capacity === item.capacity &&
+            product.coupons?.id === item.coupons?.id
+        )
+      );
+      setSelectAll(allProductsSelected);
+      // Lưu trạng thái checkbox vào sessionStorage
+      const checkboxData = {
+        selectAll: allProductsSelected,
+        selectedProducts: productCheckboxNew,
+      };
+      sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
+
+      // ===================== UPDATE REDUX
       // Kiểm tra những sản phẩm giống nhau và gộp lại
       // Object để lưu thông tin theo id, capacity, color, và coupons.id
       const itemMap = {};
@@ -973,7 +1010,11 @@ function Cart() {
               </div>
               <div className="chi-tiet-cart">
                 <div className="title-thanh">Thanh Toán </div>
-                <p style={{fontSize: "12px", userSelect: "text"}}>(Một số phương thức thanh toán có giới hạn số tiền giao dịch cụ thể. Trong trường hợp này vui lòng liên hệ: <span style={{fontWeight:"500"}}>0123456789</span>)</p>
+                <p style={{ fontSize: "12px", userSelect: "text" }}>
+                  (Một số phương thức thanh toán có giới hạn số tiền giao dịch
+                  cụ thể. Trong trường hợp này vui lòng liên hệ:{" "}
+                  <span style={{ fontWeight: "500" }}>0123456789</span>)
+                </p>
                 <div className="khoi-tiet-cha-cart">
                   <MDBTable className="table-tiet" borderless>
                     <MDBTableBody>
