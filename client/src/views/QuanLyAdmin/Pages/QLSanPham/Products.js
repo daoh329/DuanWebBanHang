@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Button, Tooltip } from "antd";
+import { Table, Tag, Button, Tooltip, Input } from "antd";
 import { format } from "date-fns";
 import { RedoOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -69,6 +69,16 @@ function Product() {
       title: "SL còn lại",
       dataIndex: "remaining_quantity",
       key: "remaining_quantity",
+      render: (_, record) => {
+        const variations = record.variations;
+        let remaining_quantity = 0;
+        [...variations].forEach((variant) => {
+          remaining_quantity += variant.remaining_quantity_variant;
+        }) 
+        return (
+          <span>{remaining_quantity}</span>
+        )
+      }
     },
     { title: "Loại sản phẩm", dataIndex: "category", key: "category" },
     {
@@ -127,12 +137,12 @@ function Product() {
       <br />
       <h1>Danh sách sản phẩm</h1>
 
-      <input
+      <Input
         type="text"
         placeholder="Tìm kiếm theo ID sản phẩm..."
         value={searchTerm}
         onChange={handleSearch}
-        style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '5px' }}
+        style={{ marginBottom: '10px', width: '20%', height: '30px', marginTop: '10px', borderRadius: '2px' }}
       />
       <Tooltip title="Làm mới">
         <Button
