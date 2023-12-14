@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { formatCurrency } from "../../../../util/FormatVnd";
-import { format_sale } from "../../../../util/formatSale";
+import { format_sale2 } from "../../../../util/formatSale";
 
 import { Divider, Space, Tag } from 'antd';
 
@@ -119,7 +119,7 @@ function CardProduct2(props) {
                                         </div>
 
                                         <div type="caption" color="primary500" className="css-2rwx6s">
-                                        -{format_sale(item.price, item.discount)}
+                                        -{format_sale2(item.price, item.discount)}
                                         </div>
 
                                     </div>

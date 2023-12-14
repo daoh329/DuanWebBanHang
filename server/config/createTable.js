@@ -7,7 +7,7 @@ const createTables = () => {
     name varchar(40) NOT NULL,
     shortDescription varchar(160) NOT NULL UNIQUE,
     CategoryID INT NOT NULL,
-    main_image longtext ,
+    main_image longtext,
     release_date DATE,
     status boolean NOT NULL,
     FOREIGN KEY (CategoryID) REFERENCES category (id)
@@ -87,8 +87,6 @@ const createTables = () => {
   `;
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    quantity INT NOT NULL,
-    remaining_quantity INT NOT NULL,
     brand varchar(25) NOT NULL,
     configuration longtext,
     description longtext,
@@ -111,11 +109,11 @@ const createTables = () => {
   const users = `
     CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    facebookId VARCHAR(10) ,
-    googleId VARCHAR(40),
-    name varchar(40),
+    facebookId VARCHAR(25) ,
+    googleId VARCHAR(25),
+    name varchar(45),
     phone varchar(10),
-    email varchar(30),
+    email varchar(50),
     permission varchar(10),
     isLocked BOOLEAN DEFAULT FALSE,
     loginAttempts INT DEFAULT 0
@@ -123,12 +121,12 @@ const createTables = () => {
   const delivery_address = `CREATE TABLE IF NOT EXISTS delivery_address (
     id INT PRIMARY KEY AUTO_INCREMENT,
     idUser INT Not Null,
-    name varchar(20) Not Null,
-    city varchar(10) Not Null,
-    district varchar(10) Not Null,
-    commune varchar(10) Not Null,
+    name varchar(45) Not Null,
+    city varchar(35) Not Null,
+    district varchar(35) Not Null,
+    commune varchar(25) Not Null,
     street varchar(30) Not Null,
-    email varchar(30),
+    email varchar(50),
     phone varchar(10) Not Null,
     setdefault tinyint,
     FOREIGN KEY (idUser) REFERENCES users (id)

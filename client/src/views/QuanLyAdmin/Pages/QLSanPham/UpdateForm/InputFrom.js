@@ -60,8 +60,6 @@ function InputFrom({ data, onClick, setModal }) {
         series: product.configuration.series,
         category: product.category,
         release_date: product ? moment(product.release_date) : null,
-        quantity: product.quantity,
-        remaining_quantity: product.remaining_quantity,
         demand: product.configuration.demand,
         shortDescription: product.shortDescription,
         configuration: inputs,
@@ -455,7 +453,7 @@ function InputFrom({ data, onClick, setModal }) {
 
         {/* số lượng */}
         {/* số lượng còn lại */}
-        <Form.Item>
+        {/* <Form.Item>
           <Form.Item
             label="Số lượng"
             name="quantity"
@@ -496,7 +494,7 @@ function InputFrom({ data, onClick, setModal }) {
               placeholder="Nhập số lượng sản phẩm còn lại"
             />
           </Form.Item>
-        </Form.Item>
+        </Form.Item> */}
 
         {/* nhu cầu */}
         <Form.Item

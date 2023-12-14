@@ -76,40 +76,6 @@ function ProductVariations() {
       });
   };
 
-  // const uploadButton = (
-  //   <div>
-  //     <PlusOutlined />
-  //     <div style={{ marginTop: 8 }}>Tải lên</div>
-  //   </div>
-  // );
-
-  // const handleInputChange = (index, key, value) => {
-  //   const updatedVariations = [...arrVariations];
-  //   updatedVariations[index][key] = value;
-  //   setArrVariations(updatedVariations);
-  // };
-
-  // const handleSubFieldChange = (fieldIndex, subFieldIndex, key, value) => {
-  //   const updatedVariations = [...arrVariations];
-  //   updatedVariations[fieldIndex].capacityGroup[subFieldIndex][key] = value;
-  //   setArrVariations(updatedVariations);
-  // };
-
-  const addSubField = () => {
-    // const updatedVariations = [...arrVariations];
-    // updatedVariations[index].capacityGroup.push({
-    //   price: 0,
-    //   discount_amount: 0,
-    //   capacity: 0,
-    // });
-    // setArrVariations(updatedVariations);
-  };
-
-  const removeSubField = (indexToRemove) => {
-    // const updatedVariations = [...arrVariations];
-    // updatedVariations[index].capacityGroup.splice(indexToRemove, 1); // Xóa 1 phần tử từ vị trí indexToRemove
-    // setArrVariations(updatedVariations); // Cập nhật state hoặc mảng gốc của bạn
-  };
 
   // function open modal
   const [isOpenModalCapcity, setIsOpenModalCapcity] = useState(false);
@@ -163,14 +129,13 @@ function ProductVariations() {
 
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
-    // message.error("Thêm thất bại");
   };
 
   // nút upload image
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>Tải lên</div>
     </div>
   );
 

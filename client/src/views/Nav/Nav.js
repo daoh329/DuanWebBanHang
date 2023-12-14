@@ -12,6 +12,7 @@ import {
   Tooltip,
   Tag,
   Empty,
+  Image,
 } from "antd";
 import {
   SolutionOutlined,
@@ -47,7 +48,7 @@ import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
 import fastDelivery from "../../assets/fast-delivery.png";
 import notDelivery from "../../assets/not-delivered.png";
 import delivered from "../../assets/delivered.png";
-
+import { formatCapacity } from "../../util/formatCapacity";
 
 const { Header } = Layout;
 
@@ -58,7 +59,7 @@ const App = () => {
   );
   const dispatch = useDispatch();
   const isLogin = localStorage.getItem("isLogin");
-  
+
   // Hàm sử lí hiển thị name
   function formatUserName(name) {
     // Kiểm tra xem tên có khoảng trắng hay không.
@@ -80,53 +81,56 @@ const App = () => {
     }
   }
 
-  const [menuOpenKeys, setMenuOpenKeys] = useState([]);
+  // const [menuOpenKeys, setMenuOpenKeys] = useState([]);
   const cart = useSelector((state) => state.cart.products);
-  const handleMenuOpenChange = (openKeys) => {
-    setMenuOpenKeys(openKeys);
-  };
+
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const [products, setProducts] = useState([]);
+  // const [filteredProducts, setFilteredProducts] = useState([]);
 
   // const [cartList, setCartList] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  // const [selectedItems, setSelectedItems] = useState([]);
 
-  const removeFromCart = (productId, color, capacity) => {
+  // const handleMenuOpenChange = (openKeys) => {
+  //   setMenuOpenKeys(openKeys);
+  // };
+
+  const removeFromCart = (productId, color, capacity, coupons) => {
     const data = {
       product_id: productId,
       color,
       capacity,
+      coupons,
     };
     dispatch(deleteProductInCart(data));
   };
 
   // phone
-  const [phone, setPhone] = useState("");
-  const handleConfirm = async () => {
-    // Lưu giá trị phone vào session
-    window.sessionStorage.setItem("phone", phone);
-    navigate(`/orderHistory/${phone}`);
-  };
+  // const [phone, setPhone] = useState("");
+  // const handleConfirm = async () => {
+  //   // Lưu giá trị phone vào session
+  //   window.sessionStorage.setItem("phone", phone);
+  //   navigate(`/orderHistory/${phone}`);
+  // };
   //------giỏ hàng---------------
 
-  async function getData() {
-    await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-        setFilteredProducts(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }
+  // async function getData() {
+  //   await fetch(`${process.env.REACT_APP_API_URL}/product/productslaptop`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setProducts(data);
+  //       setFilteredProducts(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }
 
-  useEffect(() => {
-    // Tải dữ liệu từ API khi component được render
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   // Tải dữ liệu từ API khi component được render
+  //   getData();
+  // }, []);
 
   // useEffect(() => {
   //   // Lọc sản phẩm dựa trên từ khóa tìm kiếm
@@ -136,20 +140,21 @@ const App = () => {
   //   setFilteredProducts(filtered);
   // }, [searchQuery, products]);
 
-  const handleInputChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
+  // const handleInputChange = (event) => {
+  //   setSearchQuery(event.target.value);
+  // };
 
-  // Xử lý tìm kiếm khi người dùng nhấn nút "Tìm"
-  const handleSearch = () => {
-    navigate(`/search?query=${encodeURIComponent(searchQuery.toLowerCase())}`);
-  };
+  // // Xử lý tìm kiếm khi người dùng nhấn nút "Tìm"
+  // const handleSearch = () => {
+  //   navigate(`/search?query=${encodeURIComponent(searchQuery.toLowerCase())}`);
+  // };
 
   // call API logout
   const logout = () => {
     localStorage.removeItem("isLogin");
     window.open(`${process.env.REACT_APP_API_URL}/auth/logout`, "_self");
   };
+
   // tới profile
   const profile = async () => {
     if ((await checkLogin()) === true) {
@@ -163,6 +168,7 @@ const App = () => {
   const adminPage = () => {
     navigate("/admin/dashboard");
   };
+
   const menuAccount = [
     {
       key: "1",
@@ -281,7 +287,7 @@ const App = () => {
         // tạo api
         const api = `${process.env.REACT_APP_API_URL}/auth/read-notifications`;
         // gọi api cập nhật trạng thái thông báo tại db
-        const results = await axios.put(api, arrId , {withCredentials: true});
+        const results = await axios.put(api, arrId, { withCredentials: true });
         if (results.status === 200) {
           arrId.forEach((id) => {
             const data = {
@@ -315,9 +321,10 @@ const App = () => {
       console.log(error);
     }
   };
-
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // console.log(cart);
 
   return (
     <Layout className="nav-container">
@@ -678,7 +685,7 @@ const App = () => {
                           <List
                             itemLayout="horizontal"
                             dataSource={arrayNotification}
-                            style={{height: "500px"}}
+                            style={{ height: "500px" }}
                             renderItem={(item, index) => (
                               <List.Item
                                 onClick={() => nextToNotifications(item)}
@@ -712,7 +719,7 @@ const App = () => {
                                             src={notDelivery}
                                             alt="icon"
                                           />
-                                        ):(
+                                        ) : (
                                           <FileExcelOutlined
                                             style={{ color: "#FF5E5E" }}
                                           />
@@ -839,7 +846,7 @@ const App = () => {
                 {/* cart */}
                 <Popover
                   content={
-                    <div style={{ width: "350px" }}>
+                    <div style={{ width: "400px" }}>
                       <div
                         style={{
                           width: "100%",
@@ -853,23 +860,33 @@ const App = () => {
                           dataSource={cart}
                           renderItem={(selectedItems) => (
                             <List.Item
-                              actions={[
-                                <Button
-                                  type="danger"
-                                  icon={<DeleteOutlined />}
-                                  onClick={() =>
-                                    removeFromCart(
-                                      selectedItems.id,
-                                      selectedItems.color,
-                                      selectedItems.capacity
-                                    )
-                                  }
-                                ></Button>,
-                              ]}
+                              // actions={[
+                              //   <Button
+                              //     type="danger"
+                              //     icon={<DeleteOutlined />}
+                              //     onClick={() =>
+                              //       removeFromCart(
+                              //         selectedItems.id,
+                              //         selectedItems.color,
+                              //         selectedItems.capacity,
+                              //         selectedItems.coupons
+                              //       )
+                              //     }
+                              //   ></Button>,
+                              // ]}
                             >
                               <List.Item.Meta
                                 avatar={
-                                  <Avatar
+                                  <Image
+                                    style={{
+                                      width: "80px",
+                                      height: "80px",
+                                      padding: "5px",
+                                      // backgroundColor: "gray",
+                                      border: "1px solid #D6DBDF",
+                                      borderRadius: "2px",
+                                    }}
+                                    preview={false}
                                     src={
                                       selectedItems?.main_image
                                         ? process.env.REACT_APP_API_URL +
@@ -880,26 +897,51 @@ const App = () => {
                                   />
                                 }
                                 title={
-                                  selectedItems.shortDescription.length > 20
-                                    ? selectedItems.shortDescription.substring(
-                                        0,
-                                        20
-                                      ) + "..."
-                                    : selectedItems.shortDescription
+                                  <div
+                                    style={{
+                                      lineHeight: "18px",
+                                      fontWeight: "normal",
+                                    }}
+                                  >
+                                    {selectedItems.shortDescription.length > 20
+                                      ? selectedItems.shortDescription.substring(
+                                          0,
+                                          80
+                                        ) + "..."
+                                      : selectedItems.shortDescription}
+                                  </div>
                                 }
                                 description={
-                                  <>
-                                    <div>
-                                      Giá:{" "}
+                                  <div
+                                    style={{
+                                      fontSize: "13px",
+                                      color: "#82869E",
+                                    }}
+                                  >
+                                    <div style={{ lineHeight: "15px" }}>
+                                      {selectedItems.color},{" "}
+                                      {formatCapacity(selectedItems.capacity)}
+                                    </div>
+                                    <div style={{ lineHeight: "15px" }}>
+                                      Số lượng {selectedItems?.quantity}
+                                    </div>{" "}
+                                    <div
+                                      style={{
+                                        fontWeight: "500",
+                                        color: "black",
+                                        fontSize: "14px",
+                                      }}
+                                    >
                                       {formatCurrency(
-                                        selectedItems?.totalPrice
+                                        selectedItems.price -
+                                          (selectedItems.discount +
+                                            parseInt(
+                                              selectedItems.coupons.value_vnd ||
+                                                0
+                                            ))
                                       )}
                                     </div>
-                                    <div>
-                                      Số lượng: {selectedItems?.quantity}
-                                    </div>{" "}
-                                    {/* Hiển thị số lượng */}
-                                  </>
+                                  </div>
                                 }
                               />
                             </List.Item>

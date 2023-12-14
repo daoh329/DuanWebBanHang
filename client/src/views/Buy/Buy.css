@@ -42,6 +42,8 @@
   }
 }
 @media screen and (max-width: 767px) {
+
+  /*  */
   .teko-col {
     display: contents;
   }
@@ -71,6 +73,25 @@
 }
 
 @media (min-width: 1024px) {
+
+  .coupons-style{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin: 15px 0 0 0;
+    cursor: pointer;
+    padding-left: 30px;
+    font-size: 12px;
+  }
+
+  .coupons-style p {
+    margin: 0;
+  }
+
+  .coupons-style img {
+    margin: 0 10px 0 0;
+  }
+
   .css-q0e31u.teko-row {
     -webkit-box-pack: center;
     justify-content: center;
@@ -2831,4 +2852,22 @@ svg {
   -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.coupons-style{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin: 15px 0 0 0;
+  cursor: pointer;
+  padding-left: 30px;
+  font-size: 12px;
+}
+
+.coupons-style p {
+  margin: 0;
+}
+
+.coupons-style img {
+  margin: 0 10px 0 0;
 }

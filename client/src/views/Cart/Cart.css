@@ -73,7 +73,7 @@
   font-family: Roboto;
   font-weight: 500;
   line-height: 20.8px;
-  margin: 0px 0px 8px;
+  font-size: large;
 }
 .title-mo-cart {
   color: #1b1d29;
@@ -121,13 +121,25 @@
   text-align: center;
 }
 .image-tiet {
+  width: 80px;
   height: auto;
+  cursor: pointer;
 }
 *,
 :before,
 :after {
   box-sizing: border-box;
 }
+
+#cart-btn-delete{
+  padding: 10px;
+  border: none;
+  background: none;
+  color: #024dbc;
+  text-align: center;
+}
+
+
 @media screen and (max-width: 767px) {
   .style-cart {
     border-radius: 8px;
@@ -154,6 +166,7 @@
   }
   .image-tiet {
     max-width: 250%;
+    cursor: pointer;
   }
 }
 .quantity-control {
@@ -183,8 +196,8 @@
 /* Tắt nút năng giảm của input type number */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .cart-description-content {

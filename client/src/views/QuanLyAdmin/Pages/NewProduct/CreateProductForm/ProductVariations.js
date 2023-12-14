@@ -140,14 +140,14 @@ function ProductVariations(props) {
               {
                 required: true,
                 message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
-              },
-              {max: 20, message:"Không được nhập quá 20 kí tự"}
+              }
             ]}
           >
             <InputNumber
               placeholder="Nhập dung lượng"
               type="number"
               min={0}
+              max={100000}
               style={{ borderRadius: "3px", width: "100%" }}
             />
           </Form.Item>

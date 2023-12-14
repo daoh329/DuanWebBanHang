@@ -1,5 +1,6 @@
 import _ from "lodash";
 import axios from "axios";
+const moment = require('moment');
 
 // ========= UTIL
 // so sánh 2 object (Chỉ so sánh các phần tử ở cấp đầu tiên)
@@ -103,3 +104,13 @@ export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
     setHistorysp([]);
   }
 };
+
+// Hàm kiểm tra hạn của coupon
+export function isCouponExpired(coupon) {
+  const currentDate = new Date();
+  const expiryDate = new Date(coupon.end_date);
+
+  // So sánh ngày hiện tại với ngày hết hạn
+  return currentDate > expiryDate;
+}
+

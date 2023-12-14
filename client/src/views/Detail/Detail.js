@@ -19,11 +19,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "./Detail.css";
 import { formatCurrency } from "../../util/FormatVnd";
-import { format_sale } from "../../util/formatSale";
+import { format_sale2 } from "../../util/formatSale";
 import { addProductToCart, increaseProduct } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 import CardProduct from "../Card/Card";
-import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
+import {
+  addToRecentlyViewedProduct,
+  isCouponExpired,
+} from "../../util/servicesGlobal";
 import { formatDateToDate } from "../../util/formatData";
 
 const { error } = Modal;
@@ -35,6 +38,14 @@ function Detail() {
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const dispatch = useDispatch();
   const [api, contextHolder] = notification.useNotification();
+
+  const onNotication = (type, message) => {
+    if (type === "success") {
+      api.success({
+        message: message,
+      });
+    }
+  };
 
   // sự kiện mở modal
   const showModal2 = () => {
@@ -60,9 +71,11 @@ function Detail() {
   const [selectedCapacity, setSelectedCapacity] = useState({});
   const [imagesSelected, setImagesSelected] = useState([]);
   const [variationSelected, setVariationSelected] = useState([]);
-
   const [capacities, setCapacities] = useState([]);
   const [colors, setColors] = useState([]);
+  // State thông tin khuyến mãi của sản phẩm
+  const [coupons, setCoupons] = useState([]);
+  const [couponSelected, setCouponSelected] = useState({});
 
   // Lọc những capacity có trong product (ko trùng nhau)
   useEffect(() => {
@@ -194,6 +207,16 @@ function Detail() {
       });
       return false;
     }
+    // Lấy các id coupons khác
+    const otherCoupons = [...coupons].filter(
+      (item) => item.id !== couponSelected.id
+    );
+    // const otherCoupons = [];
+    // [...otherCoupons].forEach((item) => {
+    //   otherCoupons.push({id: item.id, coupons_discount: item.value_vnd});
+    // });
+    // console.log(otherCouponsId);
+    // return;
     // Tạo một đối tượng mới với các thuộc tính cần thiết của sản phẩm
     const newItem = {
       id: Detail.id,
@@ -204,42 +227,42 @@ function Detail() {
       color: variationSelected.color,
       price: variationSelected.price,
       discount: variationSelected.discount_amount,
+      coupons: couponSelected,
+      otherCoupons: otherCoupons,
       //----
       quantity: 1,
-      totalPrice: variationSelected.price - variationSelected.discount_amount,
+      totalPrice:
+        variationSelected.price -
+        ((variationSelected.discount_amount || 0) +
+          parseInt(couponSelected.value_vnd || 0)),
     };
 
-    // console.log(newItem);
-    // return;
-
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    const existingItemIndex = cart.findIndex(
+    const existingItem = cart.filter(
       (cartItem) =>
         cartItem.id === newItem.id &&
         cartItem.color === newItem.color &&
-        cartItem.capacity === newItem.capacity
+        cartItem.capacity === newItem.capacity &&
+        cartItem.coupons.id === newItem.coupons.id
     );
 
-    if (existingItemIndex !== -1) {
+    if (existingItem.length !== 0) {
       // Sản phẩm đã tồn tại trong giỏ hàng
       const itemUpdate = {
-        product_id: Detail.id,
-        capacity: variationSelected.capacity,
-        color: variationSelected.color,
+        product_id: newItem.id,
+        capacity: newItem.capacity,
+        color: newItem.color,
+        coupons: newItem.coupons,
       };
       dispatch(increaseProduct(itemUpdate));
-      api.success({
-        message: "Đã thêm sản phẩm vào giỏ hàng",
-      });
+      onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
       return true;
     } else {
       // Thêm sản phẩm vào giỏ hàng
       const updatedCart = [...cart, newItem];
       // update redux state
       dispatch(addProductToCart(updatedCart));
-      api.success({
-        message: "Đã thêm sản phẩm vào giỏ hàng",
-      });
+      onNotication("success", "Đã thêm sản phẩm vào giỏ hàng");
       return true;
     }
   };
@@ -364,26 +387,41 @@ function Detail() {
   };
   const buttonClass = isExpanded ? "btn-thugon" : "btn-xemthem";
 
-  // Lấy thông tin khuyến mãi của sản phẩm
-  const [coupons, setCoupons] = useState([]);
-  const [couponSelected, setCouponSelected] = useState({});
   useEffect(() => {
     getCoupons();
   }, []);
 
   const getCoupons = async () => {
     try {
-      const url = `${process.env.REACT_APP_API_URL}/product/34/coupons`;
+      const url = `${process.env.REACT_APP_API_URL}/product/${id}/coupons`;
       const results = await axios.get(url);
-
-      setCoupons(results.data);
+      // Mảng chứa coupons còn hạn
+      if (results.data.length !== 0) {
+        const arr = [];
+        [...results.data].forEach((coupon) => {
+          // Kiểm tra HSD của khuyến mãi
+          if (!isCouponExpired(coupon)) {
+            // Nếu còn hạn
+            arr.push(coupon);
+          }
+        });
+        // Sắp xếp có giá lớn -> bé
+        arr.sort((a, b) => parseInt(b.value_vnd) - parseInt(a.value_vnd));
+        setCoupons(arr);
+        // Đặt khuyến mãi mặc định được chọn
+        setCouponSelected(arr[0]);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const selectedCoupon = (value) => {
-    setCouponSelected(value);
+    if (couponSelected.id === value.id) {
+      setCouponSelected({});
+    } else {
+      setCouponSelected(value);
+    }
   };
 
   return (
@@ -527,40 +565,37 @@ function Detail() {
                 )}
 
                 {/* check box màu sắc*/}
-                {capacities &&
-                  colors &&
-                  (colors.length > 1 || capacities.length > 1) && (
-                    <div className="block-select-color">
-                      <p className="title-btn-color">
-                        màu sắc: {selectedColor}
-                      </p>
-                      <div className="flex-btn-color">
-                        {[...colors].map((color, index) => (
-                          <div
-                            key={index}
-                            style={
-                              selectedColor === color
-                                ? {
-                                    borderColor: "#024dbc",
-                                    color: "#024dbc",
-                                  }
-                                : {}
-                            }
-                            onClick={() => handleChangeColor(color)}
-                            className="custom-checkbox-input"
-                          >
-                            {color}
-                          </div>
-                        ))}
-                      </div>
+                {capacities && colors && (
+                  <div className="block-select-color">
+                    <p className="title-btn-color">màu sắc: {selectedColor}</p>
+                    <div className="flex-btn-color">
+                      {[...colors].map((color, index) => (
+                        <div
+                          key={index}
+                          style={
+                            selectedColor === color
+                              ? {
+                                  borderColor: "#024dbc",
+                                  color: "#024dbc",
+                                }
+                              : {}
+                          }
+                          onClick={() => handleChangeColor(color)}
+                          className="custom-checkbox-input"
+                        >
+                          {color}
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
+                )}
 
                 {/* giá tiền */}
                 <br />
-                {variationSelected && (
+                {variationSelected && Object.keys(couponSelected) !== 0 && (
                   <div className="css-1q5zfcu">
-                    {parseInt(variationSelected.discount_amount) === 0 ? (
+                    {parseInt(variationSelected.discount_amount) === 0 &&
+                    parseInt(couponSelected.value_vnd || 0) === 0 ? (
                       <div className="css-oj899w">
                         {formatCurrency(variationSelected.price)}
                       </div>
@@ -569,7 +604,8 @@ function Detail() {
                         <div className="css-oj899w">
                           {formatCurrency(
                             variationSelected.price -
-                              variationSelected.discount_amount
+                              ((variationSelected.discount_amount || 0) +
+                                parseInt(couponSelected.value_vnd || 0))
                           )}
                         </div>
                         <div style={{ fontSize: "12px" }}>
@@ -580,9 +616,10 @@ function Detail() {
                           <span style={{ color: "#1435c3" }}>
                             {" "}
                             -
-                            {format_sale(
+                            {format_sale2(
                               variationSelected.price,
-                              variationSelected.discount_amount
+                              (variationSelected.discount_amount || 0) +
+                                parseInt(couponSelected.value_vnd || 0)
                             )}
                           </span>
                         </div>
@@ -642,7 +679,7 @@ function Detail() {
                 </div>
 
                 {/* phần khuyến mãi */}
-                {/* {coupons && coupons.length !== 0 && (
+                {coupons && coupons.length !== 0 && (
                   <>
                     <div className="css-1gs5ebu">
                       <div className="css-ixp6xz">Khuyến mãi đã nhận</div>
@@ -654,9 +691,11 @@ function Detail() {
                       {coupons.map((item, index) => (
                         <div
                           key={index}
-                          onClick={() => selectedCoupon(item)}
                           className="css-1nz6s82"
-                          id={couponSelected.id !== item.id && `css-1nz6s82`}
+                          style={{ cursor: "default" }}
+                          id={
+                            couponSelected.id !== item.id ? `css-1nz6s82` : ""
+                          }
                         >
                           <div className="css-qx8kls">
                             <img
@@ -687,7 +726,11 @@ function Detail() {
                               <div className=" css-2cgl77">
                                 HSD: {formatDateToDate(item.end_date)}
                               </div>
-                              <div className="css-1aa534q">
+                              <div
+                                onClick={() => selectedCoupon(item)}
+                                className="css-1aa534q"
+                                style={{ cursor: "pointer" }}
+                              >
                                 {couponSelected.id === item.id
                                   ? "Bỏ chọn"
                                   : "Áp dụng"}
@@ -698,7 +741,7 @@ function Detail() {
                       ))}
                     </div>
                   </>
-                )} */}
+                )}
 
                 <div className="css-f7zc9t">
                   {/* button mua ngay */}
@@ -888,7 +931,6 @@ function Detail() {
 
                       <tr
                         style={{
-                          
                           display: configuration.cpu ? "table-row" : "none",
                         }}
                       >
@@ -979,8 +1021,12 @@ function Detail() {
               <MDBTable className="table-tiet" borderless>
                 <MDBTableBody>
                   <tr>
-                    <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>Thương hiệu</td>
-                    <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>{Detail.brand}</td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                      Thương hiệu
+                    </td>
+                    <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                      {Detail.brand}
+                    </td>
                   </tr>
                   <tr>
                     <td colSpan={1}>Bảo hành</td>
@@ -995,8 +1041,12 @@ function Detail() {
                   </tr>
                   {configuration.series && (
                     <tr>
-                      <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>Series</td>
-                      <td  style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>{configuration.series}</td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={1}>
+                        Series
+                      </td>
+                      <td style={{ backgroundColor: "#f6f6f6" }} colSpan={3}>
+                        {configuration.series}
+                      </td>
                     </tr>
                   )}
                   <tr>

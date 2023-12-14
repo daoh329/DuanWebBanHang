@@ -31,6 +31,7 @@ class Product {
         });
         variations[i].images = files;
       }
+
       // Lấy ra mảng dữ liệu cho bảng product_variations
       const arrValueTableProductVariations = [];
       for (let i = 0; i < variations.length; i++) {
@@ -59,7 +60,7 @@ class Product {
       const configurationString = JSON.stringify(data.configuration);
       const is_product = `INSERT INTO products (name, main_image, shortDescription, CategoryID, status, release_date) VALUES (?, ?, ?, ?, ?, ?)`;
       const is_productdetail =
-        "INSERT INTO productdetails(`quantity`,`brand`,`configuration`,`description`,`product_id`,`remaining_quantity`)VALUES(?,?,?,?,?,?);";
+        "INSERT INTO productdetails(`brand`,`configuration`,`description`,`product_id`)VALUES(?,?,?,?);";
       // PRODUCT
       // Chuyển đổi chuỗi release_date thành giá trị kiểu DATE
       const formattedDate = new Date(data.release_date)
@@ -78,12 +79,10 @@ class Product {
 
       // PRODUCT DETAILS
       const PdValues = [
-        data.quantity,
         data.brand,
         configurationString,
         data.description,
         id_product,
-        data.quantity,
       ];
       await query(is_productdetail, PdValues);
 
@@ -139,8 +138,6 @@ class Product {
     p.main_image,
     p.CategoryID as category,
     pd.brand,
-    pd.quantity,
-    pd.remaining_quantity,
     pd.created_at,
     pd.configuration,
     pd.description,
@@ -171,7 +168,7 @@ class Product {
     FROM products as p
     JOIN productDetails as pd ON p.id = pd.product_id
     GROUP BY p.id, p.name, p.status, p.main_image,p.shortDescription, category,
-    pd.brand, pd.quantity, pd.remaining_quantity, 
+    pd.brand,
     pd.created_at, pd.configuration, pd.description;
     `;
 
@@ -500,8 +497,6 @@ class Product {
     const productQuery = `
     SELECT
     p.*,
-    pd.quantity, 
-    pd.remaining_quantity, 
     pd.brand, 
     pd.configuration,
     pd.description,
@@ -532,7 +527,7 @@ class Product {
     WHERE p.id = ?
     GROUP BY
     p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-    pd.quantity, pd.remaining_quantity, pd.brand, pd.configuration, pd.description, pd.created_at;
+    pd.brand, pd.configuration, pd.description, pd.created_at;
     `;
 
     try {
@@ -560,7 +555,6 @@ class Product {
     SELECT 
       p.id, p.name, p.status, p.shortDescription, p.main_image,
       productDetails.brand,
-      productDetails.quantity,
       (
         SELECT JSON_OBJECT(
           'color', pv.color,
@@ -577,14 +571,30 @@ class Product {
         SELECT pi.path
         FROM product_images AS pi
         WHERE p.id = pi.product_id AND pi.color = ?
-      ) AS images
+      ) AS images,
+      (
+        SELECT 
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              "id", dc.id,
+              "content", dc.content,
+              "value_vnd", dc.value_vnd,
+              "value_percent", dc.value_percent,
+              "start_date", dc.start_date,
+              "end_date", dc.end_date
+            )
+          )
+        FROM discount_code as dc 
+        JOIN sanpham_discountcode as sd ON sd.discountCode_id = dc.id
+        WHERE sd.products_id = ?
+      ) as coupons
         FROM products as p
         JOIN productDetails ON p.id = productDetails.product_id
         JOIN category ON p.CategoryID = category.id
         LEFT JOIN prodetailcolor ON p.id = prodetailcolor.product_id
         WHERE p.id = ?
         GROUP BY p.id, p.name, p.status, p.shortDescription, p.main_image,
-      productDetails.quantity, productDetails.created_at,  productDetails.brand,
+       productDetails.created_at,  productDetails.brand,
       category.name;
     `;
     try {
@@ -594,6 +604,7 @@ class Product {
           data[i].color,
           data[i].capacity,
           data[i].color,
+          data[i].product_id,
           data[i].product_id,
         ]);
         results.forEach((result) => {
@@ -614,8 +625,6 @@ class Product {
     const query = `
     SELECT
     p.*,
-    pd.quantity,
-    pd.remaining_quantity,
     pd.brand,
     pd.configuration,
     pd.created_at,
@@ -644,7 +653,7 @@ class Product {
     LEFT JOIN product_images AS pi ON p.id = pi.product_id
     WHERE p.CategoryID = 2 AND p.status = 1 AND pd.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
     GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-      pd.quantity, pd.remaining_quantity, pd.brand,configuration, pd.created_at;
+    pd.brand,configuration, pd.created_at;
     `;
     mysql.query(query, (error, results) => {
       if (error) {
@@ -665,8 +674,6 @@ class Product {
     const query = `
     SELECT
     p.*,
-    pd.quantity, 
-    pd.remaining_quantity, 
     pd.brand,
     pd.configuration,
     pd.created_at,
@@ -695,7 +702,7 @@ class Product {
     LEFT JOIN product_images AS pi ON p.id = pi.product_id
     WHERE p.CategoryID = 1 AND p.status = 1 AND pd.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
     GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-      pd.quantity, pd.remaining_quantity, pd.brand,configuration, pd.created_at;
+    pd.brand,configuration, pd.created_at;
     `;
 
     mysql.query(query, (error, results) => {
@@ -718,8 +725,6 @@ class Product {
     const query = `
     SELECT
     p.*,
-    pd.quantity, 
-    pd.remaining_quantity, 
     pd.brand, 
     (
       SELECT JSON_ARRAYAGG(
@@ -746,7 +751,7 @@ class Product {
       LEFT JOIN product_images AS pi ON p.id = pi.product_id
       WHERE p.CategoryID = 1 AND p.status = 1
       GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-        pd.quantity, pd.remaining_quantity, pd.brand;
+      pd.brand;
     `;
 
     mysql.query(query, (error, results) => {
@@ -769,8 +774,6 @@ class Product {
     const query = `
     SELECT
     p.*,
-    pd.quantity, 
-    pd.remaining_quantity, 
     pd.brand, 
     (
       SELECT JSON_ARRAYAGG(
@@ -797,7 +800,7 @@ class Product {
       LEFT JOIN product_images AS pi ON p.id = pi.product_id
       WHERE p.CategoryID = 2 AND p.status = 1
       GROUP BY p.id, p.name, p.shortDescription, p.CategoryID, p.main_image, p.status,
-        pd.quantity, pd.remaining_quantity, pd.brand;
+      pd.brand;
     `;
 
     mysql.query(query, (error, results) => {
@@ -815,7 +818,7 @@ class Product {
 
   async topLaptop(req, res) {
     const query = `
-    SELECT p.*, MAX(pd.brand) as brand, pd.remaining_quantity,
+    SELECT p.*, MAX(pd.brand) as brand,
       (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -836,7 +839,7 @@ class Product {
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       AND p.CategoryID = 1 AND p.status = 1
-      GROUP BY p.id, pd.remaining_quantity
+      GROUP BY p.id
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
@@ -850,7 +853,7 @@ class Product {
 
   async topDienthoai(req, res) {
     const query = `
-    SELECT p.*, MAX(pd.brand) as brand, pd.remaining_quantity,
+    SELECT p.*, MAX(pd.brand) as brand,
       (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -881,7 +884,7 @@ class Product {
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
       AND p.CategoryID = 2 AND p.status = 1
-      GROUP BY p.id, pd.remaining_quantity
+      GROUP BY p.id
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
       `;
@@ -910,7 +913,6 @@ class Product {
         SELECT
         product.*,
         productDetails.brand,
-        productDetails.quantity,
         productDetails.created_at,
         productDetails.configuration,
         category.name as category,
@@ -923,7 +925,7 @@ class Product {
         LEFT JOIN galery ON product.id = galery.product_id
         WHERE product.id = ?
         GROUP BY product.id, product.name, product.price, product.status, productDetails.brand, 
-        productDetails.quantity, product.shortDescription, productDetails.created_at, productDetails.configuration, 
+        product.shortDescription, productDetails.created_at, productDetails.configuration, 
         category.name;
         `;
       const results = await query(sl_product, [product_id]);
@@ -1008,13 +1010,13 @@ class Product {
       const dataID = req.body; // Giả sử danh sách id được gửi trong body request
       // Chuẩn bị câu truy vấn
       const lc_query = `SELECT id, main_image, shortDescription FROM products WHERE id IN (?)`;
-  
+
       // Thực thi truy vấn với danh sách id
       const products = await query(lc_query, [dataID]);
       if (products.length === 0) {
         return res.status(404).json({ message: "No products found" });
       }
-  
+
       // Trả về dữ liệu sản phẩm
       return res.status(200).json(products);
     } catch (error) {
@@ -1023,16 +1025,17 @@ class Product {
     }
   }
   async getProductDescription(req, res) {
-    try { // Giả sử danh sách id được gửi trong body request
+    try {
+      // Giả sử danh sách id được gửi trong body request
       // Chuẩn bị câu truy vấn
       const lc_query = `SELECT id, shortDescription FROM products`;
-  
+
       // Thực thi truy vấn với danh sách id
       const products = await query(lc_query);
       if (products.length === 0) {
         return res.status(404).json({ message: "No products found" });
       }
-  
+
       // Trả về dữ liệu sản phẩm
       return res.status(200).json(products);
     } catch (error) {
@@ -1041,19 +1044,19 @@ class Product {
     }
   }
 
-  async getCoupons (req, res) {
+  async getCoupons(req, res) {
     try {
       const product_id = req.params.id;
       const qr = `
       SELECT dc.*
       FROM sanpham_discountcode AS sdc
       JOIN discount_code AS dc ON sdc.discountCode_id = dc.id
-      WHERE sdc.products_id = ?;`
+      WHERE sdc.products_id = ?;`;
       const results = await query(qr, [product_id]);
 
       res.status(200).json(results);
     } catch (error) {
-      res.status(500).json({message: "Get failed coupons"})
+      res.status(500).json({ message: "Get failed coupons" });
     }
   }
 }
