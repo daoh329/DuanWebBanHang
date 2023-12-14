@@ -14,36 +14,55 @@ function ProductItem(props) {
     quantity,
     main_image,
     color,
-    capacity,
+    capacity
   } = props.product;
   const navigate = useNavigate();
-
   const handleDetails = () => {
-    navigate(`/detail/${productID}`, {state: {capacity: capacity, color: color}});
+    navigate(`/detail/${productID}`, {
+      state: { capacity: capacity, color: color },
+    });
   };
   return (
-    <div className="product-item">
-      <div className="product-image">
-        <img
-          onClick={handleDetails}
-          src={process.env.REACT_APP_API_URL + main_image}
-          alt=""
-        />
+    <>
+      <div className="product-item">
+        <div className="product-image">
+          <img
+            onClick={handleDetails}
+            src={process.env.REACT_APP_API_URL + main_image}
+            alt=""
+          />
+        </div>
+        <div className="product-infomations">
+          <p onClick={handleDetails} className="name">
+            {shortDescription} ({formatColor(color)} -{" "}
+            {formatCapacity(capacity)})
+          </p>
+          <p style={{ margin: "0", color: "#a6a4a4" }}>SKU: {productID}</p>
+          <p style={{ margin: "0", color: "#a6a4a4" }}>
+            Cung cấp bởi <span>Đình Minh</span>
+          </p>
+        </div>
+        <div className="product-total">
+          <p style={{ fontWeight: "500" }}>{formatCurrency(totalPrice)}</p>
+          <p style={{ color: "#a6a4a4" }}>Số lượng: {quantity}</p>
+        </div>
       </div>
-      <div className="product-infomations">
-        <p onClick={handleDetails} className="name">
-          {shortDescription} ({formatColor(color)} - {formatCapacity(capacity)})
-        </p>
-        <p style={{ margin: "0", color: "#a6a4a4" }}>SKU: {productID}</p>
-        <p style={{ margin: "0", color: "#a6a4a4" }}>
-          Cung cấp bởi <span>Đình Minh</span>
-        </p>
-      </div>
-      <div className="product-total">
-        <p style={{ fontWeight: "500" }}>{formatCurrency(totalPrice)}</p>
-        <p style={{ color: "#a6a4a4" }}>Số lượng: {quantity}</p>
-      </div>
-    </div>
+      {/* coupons used */}
+
+        {/* <div className="coupons-style">
+          <img
+            src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+            alt="icon"
+            height={17}
+            width={17}
+          />
+          <p>
+            Giảm {formatCurrency(item.coupons.value_vnd)} (áp dụng vào giá sản
+            phẩm)
+          </p>
+        </div> */}
+
+    </>
   );
 }
 

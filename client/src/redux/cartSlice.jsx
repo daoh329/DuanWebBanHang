@@ -21,7 +21,7 @@ export const cartSlice = createSlice({
           product.id !== product_id ||
           product.color !== color ||
           product.capacity !== capacity ||
-          product.coupons.id !== coupons.id
+          product.coupons?.id !== coupons?.id
       );
       localStorage.setItem(
         "cart",
