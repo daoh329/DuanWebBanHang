@@ -571,7 +571,23 @@ class Product {
         SELECT pi.path
         FROM product_images AS pi
         WHERE p.id = pi.product_id AND pi.color = ?
-      ) AS images
+      ) AS images,
+      (
+        SELECT 
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              "id", dc.id,
+              "content", dc.content,
+              "value_vnd", dc.value_vnd,
+              "value_percent", dc.value_percent,
+              "start_date", dc.start_date,
+              "end_date", dc.end_date
+            )
+          )
+        FROM discount_code as dc 
+        JOIN sanpham_discountcode as sd ON sd.discountCode_id = dc.id
+        WHERE sd.products_id = ?
+      ) as coupons
         FROM products as p
         JOIN productDetails ON p.id = productDetails.product_id
         JOIN category ON p.CategoryID = category.id
@@ -588,6 +604,7 @@ class Product {
           data[i].color,
           data[i].capacity,
           data[i].color,
+          data[i].product_id,
           data[i].product_id,
         ]);
         results.forEach((result) => {

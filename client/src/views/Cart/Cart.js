@@ -150,8 +150,11 @@ function Cart() {
   }, [checkQuantityChange]);
 
   useEffect(() => {
-    updateCart();
-  }, [cart]);
+    // Nếu chưa cập nhật, thực hiện cập nhật cart và đánh dấu đã cập nhật
+    if (cart) {
+      updateCart();
+    }
+  }, []);
 
   // cập nhật giỏ hàng khi onClick to Cart
   const updateCart = async () => {
@@ -179,12 +182,12 @@ function Cart() {
       }
       const api = `${process.env.REACT_APP_API_URL}/product/cart`;
       await axios.post(api, arrId).then((results) => {
-        // console.log(results.data);
-        return;
+        // console.log(arrId);
+        // return;
         // Xử lí nếu có sản phẩm không còn tồn tại
         const products = [];
         const productsIdOut = [];
-        // Lặp qua từng id sản phẩm trong giỏ hàng
+        // Lặp qua từng sản phẩm trong giỏ hàng
         arrId.forEach((arrIdItem) => {
           // Tìm những sản phẩm tương ứng trong giỏ hàng
           const productsFinded = [...results.data].find(
@@ -203,6 +206,7 @@ function Cart() {
             productsIdOut.push(arrIdItem);
           }
         });
+        // return;
         // Xử lí bỏ sản phẩm bị xóa khỏi giỏ hàng
         // Lặp qua từng id sản phẩm bị xóa
         if (productsIdOut.length !== 0) {
@@ -227,6 +231,7 @@ function Cart() {
             brand: products[i].brand,
             remaining_quantity:
               products[i].variations.remaining_quantity_variant,
+            allCoupons: products[i].coupons,
           };
           [...cart].forEach((product) => {
             if (
@@ -336,7 +341,7 @@ function Cart() {
         selectAll: savedSelectAll,
         selectedProducts: savedSelectedProducts,
       } = JSON.parse(savedCheckboxData);
-      setSelectAll(savedSelectAll);
+      // setSelectAll(savedSelectAll);
       setSelectedProducts(savedSelectedProducts);
 
       // Kiểm tra xem tất cả sản phẩm đã được chọn hay chưa
@@ -357,7 +362,7 @@ function Cart() {
       };
       sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
     }
-  }, [cart]); // Thêm mảng rỗng để chỉ thực hiện khi component được mount
+  }, [cart]);
 
   // const calculateTotalPrice = () => {
   //   // Lấy danh sách các sản phẩm được chọn từ danh sách giỏ hàng
@@ -428,7 +433,6 @@ function Cart() {
       );
       setSelectedProducts(newSelectedProducts);
     }
-
     const data = {
       product_id: productId,
       color,
@@ -443,11 +447,14 @@ function Cart() {
       selectedProducts: newSelectedProducts,
     };
     sessionStorage.setItem("checkboxData", JSON.stringify(checkboxData));
+
+    updateCart();
   };
 
   // Hàm tăng số lượng sản phẩm trong giỏ hàng
   const increaseQuantity = async (productId, color, capacity, coupons) => {
     updateCart();
+    // return;
     const data = {
       product_id: productId,
       color,
@@ -462,6 +469,7 @@ function Cart() {
 
   // Hàm giảm số lượng sản phẩm trong giỏ hàng
   const decreaseQuantity = async (productId, color, capacity, coupons) => {
+    updateCart();
     const cartToUpdate = [...cart].find(
       (product) =>
         product.id === productId &&
@@ -623,6 +631,8 @@ function Cart() {
       });
       // Chuyển itemMap về dạng mảng
       const mergedCart = Object.values(itemMap);
+
+      // Cập nhật redux
       dispatch(addProductToCart(mergedCart));
     }
     // tắt modal sau khi sử lí xong
@@ -927,34 +937,32 @@ function Cart() {
                           <td>
                             <div>
                               {(cartItem.coupons?.id ||
-                                cartItem.otherCoupons?.length !==
-                                  0) &&(
-                                    <Tooltip
-                                      title="Chọn khuyến mãi"
-                                      color="#024dbc"
-                                    >
-                                      {console.log(cartItem.otherCoupons)}
-                                      <GiftOutlined
-                                        onClick={() =>
-                                          hanldeSelectCoupons(
-                                            {
-                                              productId: cartItem.id,
-                                              color: cartItem.color,
-                                              capacity: cartItem.capacity,
-                                              coupons: cartItem.coupons,
-                                            },
-                                            cartItem.coupons,
-                                            cartItem.otherCoupons
-                                          )
-                                        }
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "24px",
-                                          color: "red",
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )}
+                                cartItem.otherCoupons?.length !== 0) && (
+                                <Tooltip
+                                  title="Chọn khuyến mãi"
+                                  color="#024dbc"
+                                >
+                                  <GiftOutlined
+                                    onClick={() =>
+                                      hanldeSelectCoupons(
+                                        {
+                                          productId: cartItem.id,
+                                          color: cartItem.color,
+                                          capacity: cartItem.capacity,
+                                          coupons: cartItem.coupons,
+                                        },
+                                        cartItem.coupons,
+                                        cartItem.otherCoupons
+                                      )
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                      fontSize: "24px",
+                                      color: "red",
+                                    }}
+                                  />
+                                </Tooltip>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -964,7 +972,8 @@ function Cart() {
                 </div>
               </div>
               <div className="chi-tiet-cart">
-                <div className="title-thanh">Thanh Toán</div>
+                <div className="title-thanh">Thanh Toán </div>
+                <p style={{fontSize: "12px", userSelect: "text"}}>(Một số phương thức thanh toán có giới hạn số tiền giao dịch cụ thể. Trong trường hợp này vui lòng liên hệ: <span style={{fontWeight:"500"}}>0123456789</span>)</p>
                 <div className="khoi-tiet-cha-cart">
                   <MDBTable className="table-tiet" borderless>
                     <MDBTableBody>
