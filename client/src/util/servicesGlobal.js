@@ -107,10 +107,14 @@ export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
 
 // Hàm kiểm tra hạn của coupon
 export function isCouponExpired(coupon) {
-  const currentDate = new Date();
-  const expiryDate = new Date(coupon.end_date);
+  if (coupon && Object.keys(coupon).length !== 0) {
+    const currentDate = new Date();
+    const expiryDate = new Date(coupon.end_date);
+  
+    // So sánh ngày hiện tại với ngày hết hạn
+    return currentDate > expiryDate;
+  }
+  return true;
 
-  // So sánh ngày hiện tại với ngày hết hạn
-  return currentDate > expiryDate;
 }
 

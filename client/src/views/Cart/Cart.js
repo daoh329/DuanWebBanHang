@@ -231,7 +231,7 @@ function Cart() {
             brand: products[i].brand,
             remaining_quantity:
               products[i].variations.remaining_quantity_variant,
-            allCoupons: products[i].coupons,
+            allCoupons: products[i]?.coupons || [],
           };
           [...cart].forEach((product) => {
             if (

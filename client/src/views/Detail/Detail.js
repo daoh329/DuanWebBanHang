@@ -409,7 +409,7 @@ function Detail() {
         arr.sort((a, b) => parseInt(b.value_vnd) - parseInt(a.value_vnd));
         setCoupons(arr);
         // Đặt khuyến mãi mặc định được chọn
-        setCouponSelected(arr[0]);
+        setCouponSelected(arr[0] || {});
       }
     } catch (error) {
       console.log(error);
