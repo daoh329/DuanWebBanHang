@@ -262,7 +262,7 @@ function InputForm2({ data, onClick, setModal }) {
       <ProductVariations/>
       <br />
 
-      <Form.Item>
+      <Form.Item wrapperCol={{ offset: 20, span: 4 }}>
         <Button type="primary" htmlType="submit" loading={isLoading}>
           Xác nhận
         </Button>

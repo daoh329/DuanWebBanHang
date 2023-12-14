@@ -19,11 +19,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "./Detail.css";
 import { formatCurrency } from "../../util/FormatVnd";
-import { format_sale } from "../../util/formatSale";
+import {format_sale2 } from "../../util/formatSale";
 import { addProductToCart, increaseProduct } from "../../redux/cartSlice";
 import { formatCapacity } from "../../util/formatCapacity";
 import CardProduct from "../Card/Card";
-import { addToRecentlyViewedProduct } from "../../util/servicesGlobal";
+import {
+  addToRecentlyViewedProduct,
+  isCouponExpired,
+} from "../../util/servicesGlobal";
 import { formatDateToDate } from "../../util/formatData";
 
 const { error } = Modal;
@@ -392,7 +395,20 @@ function Detail() {
     try {
       const url = `${process.env.REACT_APP_API_URL}/product/${id}/coupons`;
       const results = await axios.get(url);
-      setCoupons(results.data);
+      // Mảng chứa coupons còn hạn
+      const arr = [];
+      [...results.data].forEach((coupon) => {
+        // Kiểm tra HSD của khuyến mãi
+        if (!isCouponExpired(coupon)) {
+          // Nếu còn hạn
+          arr.push(coupon);
+        }
+      });
+      // Sắp xếp có giá lớn -> bé
+      arr.sort((a, b) => parseInt(b.value_vnd) - parseInt(a.value_vnd));
+      setCoupons(arr);
+      // Đặt khuyến mãi mặc định được chọn
+      setCouponSelected(arr[0]);
     } catch (error) {
       console.log(error);
     }
@@ -598,7 +614,7 @@ function Detail() {
                           <span style={{ color: "#1435c3" }}>
                             {" "}
                             -
-                            {format_sale(
+                            {format_sale2(
                               variationSelected.price,
                               (variationSelected.discount_amount || 0) +
                                 parseInt(couponSelected.value_vnd || 0)
