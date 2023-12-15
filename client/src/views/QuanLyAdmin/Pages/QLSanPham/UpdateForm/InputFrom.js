@@ -18,6 +18,8 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment"; // Import thư viện moment để xử lý ngày tháng
+import dayjs from "dayjs";
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 // import { formatCurrency } from "../../../../../util/FormatVnd";
 import { formatCapacity } from "../../../../../util/formatCapacity";
@@ -27,6 +29,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { ObjectCompareObject } from "../../../../../util/servicesGlobal";
 import config from "../../../../../config";
 import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
+
+dayjs.extend(customParseFormat);
 
 function InputFrom({ data, onClick, setModal }) {
   // tạo biến chứa thông tin sản phẩm được cập nhật
@@ -59,7 +63,7 @@ function InputFrom({ data, onClick, setModal }) {
         name: product.name,
         series: product.configuration.series,
         category: product.category,
-        release_date: product ? moment(product.release_date) : null,
+        release_date: product ? dayjs(product.release_date, "YYYY/MM/DD") : null,
         demand: product.configuration.demand,
         shortDescription: product.shortDescription,
         configuration: inputs,
@@ -447,7 +451,7 @@ function InputFrom({ data, onClick, setModal }) {
               },
             ]}
           >
-            <DatePicker style={{ height: 40 }} />
+            <DatePicker format={"YYYY/MM/DD"} style={{ height: 40 }} />
           </Form.Item>
         </Form.Item>
 
