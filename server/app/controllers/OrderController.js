@@ -7,7 +7,7 @@ class OrderController {
   // API /order/order
   async order(req, res) {
     const data = req.body;
-    console.log(data);
+    // console.log(data);
 
     if (!data) {
       return res.status(400).json("Invalid data");
@@ -165,6 +165,7 @@ class OrderController {
           main_image: row.main_image,
           release_date: row.release_date,
           status: row.status,
+          discount: row.discount,
           discount_code: row.id ? {
             id: row.id,
             content: row.content,
@@ -470,6 +471,7 @@ class OrderController {
           main_image: row.main_image,
           release_date: row.release_date,
           status: row.status,
+          discount: row.discount,
           discount_code: row.id ? {
             id: row.id,
             content: row.content,
@@ -545,6 +547,7 @@ class OrderController {
           main_image: row.main_image,
           release_date: row.release_date,
           status: row.status,
+          discount: row.discount,
           discount_code: row.id ? {
             id: row.id,
             content: row.content,
