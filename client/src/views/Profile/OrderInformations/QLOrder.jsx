@@ -118,7 +118,7 @@ function QLOrder() {
 
         <div>
           <div style={{ width: 366, height: 370, backgroundColor: 'white', borderRadius: '10px', padding: '10px', marginTop: 46, textAlign: 'left' }}>
-            <p style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Thông tin hóa đơn</p>
+            <p style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Thông tin hóa đơn thanh toán</p>
             {paymentData && (paymentData.vnp_OrderInfo || paymentData.orderId) ? (
               <>
                 <p><b>Mã thanh toán giao dịch:</b> <span style={{ fontWeight: 'normal' }}>{paymentData.vnp_OrderInfo || paymentData.orderId}</span></p>
