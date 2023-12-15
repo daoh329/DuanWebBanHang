@@ -228,16 +228,9 @@ const AllNewProductPhone = () => {
         return config.screenTechnology === selectedScreen;
       });
     }
-
-
-
-
     setFilteredProducts(filteredProducts);
     setDisplayedProducts(filteredProducts);
   };
-
-
-
 
   const handleSortChange = (type) => {
     setSortType(type);
@@ -318,10 +311,6 @@ const AllNewProductPhone = () => {
                     onChange={handleBrandChange}
                     style={{ marginTop: '10px' }} // Áp dụng kiểu dáng trực tiếp
                   >
-                    <Select.Option value="ALL">
-                      <span style={{ fontSize: '13px' }}>ALL</span>
-                    </Select.Option>
-
                     {brands &&
                       brands.map((brand) => (
                         <Select.Option key={brand} value={brand ? brand : ""}>
