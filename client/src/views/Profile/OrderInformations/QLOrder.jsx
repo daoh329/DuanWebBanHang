@@ -299,7 +299,7 @@ function QLOrder() {
                     style={{margin: "0 5px 0 0"}}
                   />
                   <span style={{ lineHeight: "12px", height: "max-content" }}>
-                    Giảm {formatCurrency(product.discount_code.value_vnd)} (áp
+                    Giảm {formatCurrency(product.discount_code?.value_vnd)} (áp
                     dụng vào giá sản phẩm)
                   </span>
                 </div>
