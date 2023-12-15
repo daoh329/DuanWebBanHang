@@ -17,12 +17,21 @@ function ProductItem(props) {
     capacity,
     discount_code,
   } = props.product;
+  console.log(props.product);
   const navigate = useNavigate();
   const handleDetails = () => {
     navigate(`/detail/${productID}`, {
       state: { capacity: capacity, color: color },
     });
   };
+
+  // function tinh don gia
+  const price = (total, quantity) => {
+    let price = 0;
+    price = total/quantity
+    return price;
+  }
+
   return (
     <>
       <div className="product-item">
@@ -44,7 +53,7 @@ function ProductItem(props) {
           </p>
         </div>
         <div className="product-total">
-          <p style={{ fontWeight: "500" }}>{formatCurrency(totalPrice)}</p>
+          <p style={{ fontWeight: "500" }}>{formatCurrency(price(totalPrice, quantity))}</p>
           <p style={{ color: "#a6a4a4" }}>Số lượng: {quantity}</p>
         </div>
       </div>
@@ -58,7 +67,7 @@ function ProductItem(props) {
               margin: "0 0 5px 0",
             }}
           >
-            Khuyến mãi đã sử dụng
+            Khuyến mãi đã áp dụng
           </p>
 
           <div

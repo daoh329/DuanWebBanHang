@@ -1,51 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Form,
   Input,
   InputNumber,
   Modal,
-  Select,
-  message,
   notification,
   DatePicker,
   Spin,
 } from "antd";
-import {
-  CloseOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
 import axios from "axios";
-import moment from "moment"; // Import thư viện moment để xử lý ngày tháng
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
-// import { formatCurrency } from "../../../../../util/FormatVnd";
-import { formatCapacity } from "../../../../../util/formatCapacity";
-import { formatSpecifications } from "../../../../../util/formatSpecifications";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { ObjectCompareObject, getPermission } from "../../../../../util/servicesGlobal";
-import config from "../../../../../config";
-import { NotificationBeenLoggedOut, openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
+import { getPermission } from "../../../../../util/servicesGlobal";
+import {
+  NotificationBeenLoggedOut,
+  openInfoModalNotPermission,
+} from "../../../../NotificationsForm/Authenticated";
+
+dayjs.extend(customParseFormat);
+const { RangePicker } = DatePicker;
+const dateFormat = "YYYY/MM/DD HH:mm";
 
 function InputFrom({ data, onClick, setModal }) {
-  // tạo biến chứa thông tin sản phẩm được cập nhật
   const discountCode = data;
 
   const [form] = Form.useForm();
-  const { RangePicker } = DatePicker;
+
   const [discountType, setDiscountType] = useState(
-    !(discountCode.value_vnd == 0) ? "vnd" : "persent"
+    !(parseInt(discountCode.value_vnd) === 0) ? "vnd" : "persent"
   );
   const [isLoading, setIsLoading] = useState(false);
-
-  // Lấy brands và colors khi lần đầu chạy
-  useEffect(() => {}, []);
 
   // Hàm được gọi khi form hoàn thành
   const onFinishUpdate = async (value) => {
     // Check permission
-    if (await getPermission() === "user") {
+    if ((await getPermission()) === "user") {
       openInfoModalNotPermission();
       return;
     }
@@ -58,63 +49,72 @@ function InputFrom({ data, onClick, setModal }) {
       start_date: value.rangeDate[0].format("YYYY-MM-DD HH:MM"),
       end_date: value.rangeDate[1].format("YYYY-MM-DD HH:MM"),
     };
-      delete values.rangeDate;
-            const url = `${process.env.REACT_APP_API_URL}/discount/update/${discountCode.id}`;
-            try {
-                const res = await axios.put(url, values, { withCredentials: true });
-                if (res.status === 200) {
-                    setTimeout(() => {
-                        onClick()
-                        setModal()
-                        setIsLoading(false);
-                        notification.success({
-                            message: "Thành công",
-                            description: "Phiếu giảm giá đã được lưu thành công!",
-                        });
-                    }, 1000);
-                } else {
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        notification.error({
-                            message: "Lỗi",
-                            description: "Có lỗi xảy ra khi lưu dữ liệu!",
-                        });
-                    }, 1000);
-                }
-            } catch (e) {
-                // Nếu lỗi chưa đăng nhập
-                if (e.response.data.message === "Unauthorized") {
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        NotificationBeenLoggedOut();
-                    }, 500);
-                } else {
-                    // Các lỗi khác
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        notification.error({
-                            message: "Lỗi",
-                            description: "Có lỗi xảy ra khi lưu dữ liệu!",
-                        });
-                    }, 1000);
-                }
-            }
+    delete values.rangeDate;
+    const url = `${process.env.REACT_APP_API_URL}/discount/update/${discountCode.id}`;
+    try {
+      const res = await axios.put(url, values, { withCredentials: true });
+      if (res.status === 200) {
+        setTimeout(() => {
+          onClick();
+          setModal();
+          setIsLoading(false);
+          notification.success({
+            message: "Thành công",
+            description: "Phiếu giảm giá đã được lưu thành công!",
+          });
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+          });
+        }, 1000);
+      }
+    } catch (e) {
+      // Nếu lỗi chưa đăng nhập
+      if (e.response.data.message === "Unauthorized") {
+        setTimeout(() => {
+          setIsLoading(false);
+          NotificationBeenLoggedOut();
+        }, 500);
+      } else {
+        // Các lỗi khác
+        setTimeout(() => {
+          setIsLoading(false);
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi lưu dữ liệu!",
+          });
+        }, 1000);
+      }
+    }
   };
 
   // Hàm được gọi khi form bị lỗi
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   const valueVnd = {
     content: discountCode.content,
     value_vnd: discountCode.value_vnd,
-    rangeDate: [moment(discountCode.start_date), moment(discountCode.end_date)],
+    rangeDate: [
+      dayjs(discountCode.start_date, dateFormat),
+      dayjs(discountCode.end_date, dateFormat),
+    ],
   };
+
   const valuePersent = {
     content: discountCode.content,
     value_percent: discountCode.value_percent,
-    rangeDate: [moment(discountCode.start_date), moment(discountCode.end_date)],
+    rangeDate: [
+      dayjs(discountCode.start_date, dateFormat),
+      dayjs(discountCode.end_date, dateFormat),
+    ],
   };
+
   return (
     <div>
       <Form
@@ -158,12 +158,15 @@ function InputFrom({ data, onClick, setModal }) {
             max={discountType === "percent" ? 100 : undefined}
           />
         </Form.Item>
+
         <Form.Item label="Thời gian áp dụng" name="rangeDate">
-          <RangePicker showTime format="YYYY-MM-DD HH:mm" />
+          <RangePicker showTime format={dateFormat} />
         </Form.Item>
+
         <Button type="primary" htmlType="submit">
           Xác nhận
         </Button>
+
         <Modal open={isLoading} footer={null} closeIcon={null}>
           <Spin tip="Đang tải lên..." spinning={true}>
             <div style={{ minHeight: "50px" }} className="content" />
