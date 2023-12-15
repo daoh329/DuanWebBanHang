@@ -14,7 +14,8 @@ function ProductItem(props) {
     quantity,
     main_image,
     color,
-    capacity
+    capacity,
+    discount_code,
   } = props.product;
   const navigate = useNavigate();
   const handleDetails = () => {
@@ -48,20 +49,39 @@ function ProductItem(props) {
         </div>
       </div>
       {/* coupons used */}
-
-        {/* <div className="coupons-style">
-          <img
-            src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-            alt="icon"
-            height={17}
-            width={17}
-          />
-          <p>
-            Giảm {formatCurrency(item.coupons.value_vnd)} (áp dụng vào giá sản
-            phẩm)
+      {discount_code && (
+        <>
+          <p
+            style={{
+              fontSize: "14px",
+              padding: "0 0 0 16px",
+              margin: "0 0 5px 0",
+            }}
+          >
+            Khuyến mãi đã sử dụng
           </p>
-        </div> */}
 
+          <div
+            className="coupons-style"
+            style={{
+              margin: "0",
+              padding: "0 16px 10px 16px",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+              alt="icon"
+              height={16}
+              width={16}
+            />
+            <p style={{ lineHeight: "12px", height: "max-content" }}>
+              Giảm {formatCurrency(discount_code.value_vnd)} (áp dụng vào giá
+              sản phẩm)
+            </p>
+          </div>
+        </>
+      )}
     </>
   );
 }
