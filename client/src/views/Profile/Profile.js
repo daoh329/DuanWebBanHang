@@ -389,7 +389,7 @@ export default function Profile() {
                 onClick={() => handleVerticalClick("tab2")}
                 active={verticalActive === "tab2"}
               >
-                <FontAwesomeIcon icon={faClipboardList} /> Quản lý đơn hàng
+                <FontAwesomeIcon icon={faClipboardList} /> Đơn hàng
               </MDBTabsLink>
             </MDBTabsItem>
 
@@ -496,7 +496,7 @@ export default function Profile() {
                 className="tab-2"
                 show={verticalActive === "tab2"}
               >
-                <h5 style={{ display: "flex" }}>Quản lý đơn hàng</h5>
+                <h5 style={{ display: "flex" }}>Đơn hàng</h5>
                 {/* Tab */}
                 <MDBTabs className="mb-3">
                   <MDBTabsItem>
