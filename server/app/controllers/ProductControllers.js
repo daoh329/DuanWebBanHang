@@ -134,11 +134,11 @@ class Product {
     p.name,
     p.status,
     p.shortDescription,
-    p.release_date,
+    CONVERT_TZ(p.release_date, '+00:00', '+07:00') AS release_date,
     p.main_image,
     p.CategoryID as category,
     pd.brand,
-    pd.created_at,
+    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
     pd.configuration,
     pd.description,
     (
@@ -500,7 +500,7 @@ class Product {
     pd.brand, 
     pd.configuration,
     pd.description,
-    pd.created_at,
+    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
     JSON_ARRAYAGG(
       JSON_OBJECT(
         'color', pv.color,
@@ -580,8 +580,8 @@ class Product {
               "content", dc.content,
               "value_vnd", dc.value_vnd,
               "value_percent", dc.value_percent,
-              "start_date", dc.start_date,
-              "end_date", dc.end_date
+              "start_date", CONVERT_TZ(dc.start_date, '+00:00', '+07:00'),
+              "end_date", CONVERT_TZ(dc.end_date, '+00:00', '+07:00')
             )
           )
         FROM discount_code as dc 
@@ -627,7 +627,7 @@ class Product {
     p.*,
     pd.brand,
     pd.configuration,
-    pd.created_at,
+    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
     (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -676,7 +676,7 @@ class Product {
     p.*,
     pd.brand,
     pd.configuration,
-    pd.created_at,
+    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
     (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(

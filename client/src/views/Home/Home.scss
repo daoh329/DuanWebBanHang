@@ -471,6 +471,14 @@
     cursor: pointer;
   }
 
+  .sanpham-card img{
+    transition: all 0.1s ease-out;
+  }
+
+  .sanpham-card img:hover{
+    transform: scale(1.05);
+  }
+
   .scroll-control-phone::-webkit-scrollbar {
     display: none;
   }
@@ -840,6 +848,14 @@
     position: relative;
     cursor: pointer;
     
+  }
+
+  .sanpham-card img{
+    transition: all 0.1s ease-out;
+  }
+
+  .sanpham-card img:hover{
+    transform: scale(1.05);
   }
 
   .fa-mobile-phone:hover .sub-container {

@@ -110,13 +110,10 @@ const AllNewProductPhone = () => {
     filterProducts(value);
   };
 
-
   const handleRomChange = (value) => {
     setSelectedRom(value);
     filterProducts(value);
   };
-
-
 
   const handleChipChange = (value) => {
     setSelectedChip(value);
@@ -176,16 +173,14 @@ const AllNewProductPhone = () => {
       });
     }
 
-
-
     // Lọc theo chip
     if (selectedChip !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
         return config.cpu === selectedChip;
       });
-
     }
+      
     // Lọc theo series
     if (selectedSeries !== 'ALL') {
       filteredProducts = filteredProducts?.filter((product) => {
