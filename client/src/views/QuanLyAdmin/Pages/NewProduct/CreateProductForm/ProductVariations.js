@@ -2,7 +2,6 @@ import {
   Button,
   Form,
   InputNumber,
-  Input,
   Modal,
   Select,
   Upload,
@@ -16,7 +15,6 @@ import React, { useEffect, useState } from "react";
 import { formatCapacity } from "../../../../../util/formatCapacity";
 import {
   PlusOutlined,
-  MinusCircleOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
 

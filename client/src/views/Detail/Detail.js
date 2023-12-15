@@ -409,7 +409,7 @@ function Detail() {
         arr.sort((a, b) => parseInt(b.value_vnd) - parseInt(a.value_vnd));
         setCoupons(arr);
         // Đặt khuyến mãi mặc định được chọn
-        setCouponSelected(arr[0]);
+        setCouponSelected(arr[0] || {});
       }
     } catch (error) {
       console.log(error);
@@ -1542,18 +1542,18 @@ function Detail() {
             </div>
           </Modal>
           {/*  */}
-          <div
-            className="product-container"
-            style={{
-              borderRadius: "5px",
-              position: "relative",
-              width: "1234px",
-              margin: "0 auto",
-              marginTop: "30px",
-              backgroundColor: "white",
-            }}
-          >
-            <div>
+          {relatedProducts && relatedProducts.length > 0 && (
+            <div
+              className="product-container"
+              style={{
+                borderRadius: "5px",
+                position: "relative",
+                width: "1234px",
+                margin: "0 auto",
+                marginTop: "30px",
+                backgroundColor: "white",
+              }}
+            >
               <div
                 className="product-title"
                 style={{
@@ -1567,12 +1567,10 @@ function Detail() {
               >
                 Sản phẩm tương tự
               </div>
-            </div>
-            <div className="scroll-group-phone">
-              <div className="scroll-control-phone" ref={ctnRef}>
-                {relatedProducts &&
-                  relatedProducts.length > 0 &&
-                  relatedProducts.map((item, index) => (
+
+              <div className="scroll-group-phone">
+                <div className="scroll-control-phone" ref={ctnRef}>
+                  {relatedProducts.map((item, index) => (
                     <div key={index}>
                       <CardProduct
                         key={index}
@@ -1582,24 +1580,25 @@ function Detail() {
                       />
                     </div>
                   ))}
+                </div>
+                {/* button */}
+                <button
+                  className="scroll-button"
+                  id="scroll-left-button"
+                  onClick={scrollTrai}
+                >
+                  <LeftOutlined />
+                </button>
+                <button
+                  className="scroll-button"
+                  id="scroll-right-button"
+                  onClick={scrollPhai}
+                >
+                  <RightOutlined />
+                </button>
               </div>
-              {/* button */}
-              <button
-                className="scroll-button"
-                id="scroll-left-button"
-                onClick={scrollTrai}
-              >
-                <LeftOutlined />
-              </button>
-              <button
-                className="scroll-button"
-                id="scroll-right-button"
-                onClick={scrollPhai}
-              >
-                <RightOutlined />
-              </button>
             </div>
-          </div>
+          )}
         </div>
       )}
     </>

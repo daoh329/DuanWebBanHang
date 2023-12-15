@@ -20,7 +20,11 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { formatSpecifications } from "../../../../../util/formatSpecifications";
 import config from "../../../../../config";
-import { NotificationBeenLoggedOut } from "../../../../NotificationsForm/Authenticated";
+import {
+  NotificationBeenLoggedOut,
+  openInfoModalNotPermission,
+} from "../../../../NotificationsForm/Authenticated";
+import { getPermission } from "../../../../../util/servicesGlobal";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -110,6 +114,12 @@ function MainForm() {
 
   // function call api create product
   const onFinish = async (values) => {
+    // check permission
+    if ((await getPermission()) === "user") {
+      openInfoModalNotPermission();
+      return;
+    }
+
     // Bật loading button submit
     setIsLoading(true);
     // format release_date

@@ -1,5 +1,6 @@
 import _ from "lodash";
 import axios from "axios";
+import { update } from "../redux/userSlice";
 const moment = require('moment');
 
 // ========= UTIL
@@ -30,7 +31,7 @@ export const ArrayCompareArray = (arr1, arr2) => {
   return _(arr1).differenceWith(arr2, _.isEqual).isEmpty();
 };
 
-// =========== SERVICES
+// =========== SERVICES ===========
 export const checkLogin = async () => {
   // kiểm tra phiên đăng nhập bằng cách gọi API lấy thông tin user
   try {
@@ -49,6 +50,54 @@ export const checkLogin = async () => {
     }
   }
 };
+export const getUser = async (dispatch) => {
+  const isLogin = localStorage.getItem("isLogin");
+  try {
+    const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+    const result = await axios.get(url, { withCredentials: true });
+    let data = result.data;
+    const u = {
+      id: data.user.id,
+      name: data.user.name,
+      phone: data.user.phone,
+      email: data.user.email,
+      picture: data.user.picture,
+      permission: data.user.permission,
+      isLocked: data.user.isLocked,
+    };
+    if (result.status === 200) {
+      if (!isLogin) {
+        localStorage.setItem("isLogin", u.permission.toLowerCase());
+      } else {
+        if (isLogin !== u.permission) {
+          localStorage.setItem("isLogin", u.permission.toLowerCase());
+        }
+      }
+      dispatch(update(u));
+    } else {
+      localStorage.removeItem("isLogin");
+    }
+  } catch (e) {
+    localStorage.removeItem("isLogin");
+    console.log(e);
+  }
+};
+export const getPermission = async () => {
+  try {
+    const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+    const result = await axios.get(url, { withCredentials: true });
+    let permission = result.data.user.permission;
+    
+    if (result.status === 200) {
+      return permission;
+    } else {
+      return "user";
+    }
+  } catch (e) {
+    console.log(e);
+    return "user";
+  }
+}
 // add recently viewed product id
 export const addToRecentlyViewedProduct = (products, user_id) => {
   // Lấy danh sách các sản phẩm đã xem từ localStorage
@@ -107,10 +156,14 @@ export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
 
 // Hàm kiểm tra hạn của coupon
 export function isCouponExpired(coupon) {
-  const currentDate = new Date();
-  const expiryDate = new Date(coupon.end_date);
+  if (coupon && Object.keys(coupon).length !== 0) {
+    const currentDate = new Date();
+    const expiryDate = new Date(coupon.end_date);
+  
+    // So sánh ngày hiện tại với ngày hết hạn
+    return currentDate > expiryDate;
+  }
+  return true;
 
-  // So sánh ngày hiện tại với ngày hết hạn
-  return currentDate > expiryDate;
 }
 
