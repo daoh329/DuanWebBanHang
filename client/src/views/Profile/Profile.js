@@ -95,7 +95,7 @@ export default function Profile() {
             paymentData,
           };
         });
-        console.log(dataWithParsedPaymentData);
+
         setData(dataWithParsedPaymentData);
         const sortedOrders = dataWithParsedPaymentData.sort(
           (a, b) => new Date(b.order_created_at) - new Date(a.order_created_at)
