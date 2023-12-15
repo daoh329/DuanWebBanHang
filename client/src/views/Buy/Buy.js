@@ -45,6 +45,8 @@ export default function Buy() {
   const [amount, setAmount] = useState(null);
   const [totalPrice, settotalPrice] = useState(null);
   const [color, setColor] = useState(null);
+  const [discount, setDiscount] = useState(null);
+  const [coupons, setCoupons] = useState(null);
   const [capacity, setCapacity] = useState(null);
   const [bankCode, setBankCode] = useState("");
   const [language, setLanguage] = useState("vn");
@@ -189,6 +191,16 @@ export default function Buy() {
         (item) => item.totalPrice
       );
       settotalPrice(totalPrices);
+
+      const discount = parsedBuysData.selectedItems.map(
+        (item) => item.discount
+      );
+      setDiscount(discount);
+
+      const coupons = parsedBuysData.selectedItems.map(
+        (item) => item.coupons.id
+      );
+      setCoupons(coupons);
     }
   }, []);
 
@@ -300,6 +312,8 @@ export default function Buy() {
       capacity: capacity,
       quantity: quantity,
       totalPrice: totalPrice,
+      discount: discount,
+      coupons: coupons,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 0,
       note: note,
@@ -357,6 +371,8 @@ export default function Buy() {
       capacity: capacity,
       quantity: quantity,
       totalPrice: totalPrice,
+      discount: discount,
+      coupons: coupons,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 1,
       paymentData: "Thanh toán khi nhận hàng",
@@ -457,6 +473,8 @@ export default function Buy() {
           sessionStorage.setItem("color", JSON.stringify(color));
           sessionStorage.setItem("capacity", JSON.stringify(capacity));
           sessionStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+          sessionStorage.setItem("discount", JSON.stringify(discount));
+          sessionStorage.setItem("coupons", JSON.stringify(coupons));
           sessionStorage.setItem("deliveryMethod", deliveryMethod);
           sessionStorage.setItem("paymentMenthod", 2);
           sessionStorage.setItem("note", note);

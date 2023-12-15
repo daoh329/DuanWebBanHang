@@ -56,6 +56,8 @@ const BillSuccess = () => {
     const color = JSON.parse(sessionStorage.getItem('color'));
     const capacity = JSON.parse(sessionStorage.getItem('capacity'));
     const totalPrice = JSON.parse(sessionStorage.getItem('totalPrice'));
+    const discount = JSON.parse(sessionStorage.getItem('discount'));
+    const coupons = JSON.parse(sessionStorage.getItem('coupons'));
     const deliveryMethod = sessionStorage.getItem('deliveryMethod');
     const paymentMenthod = sessionStorage.getItem('paymentMenthod');
     const note = sessionStorage.getItem('note');
@@ -71,6 +73,8 @@ const BillSuccess = () => {
       color,
       capacity,
       totalPrice,
+      discount,
+      coupons,
       deliveryMethod,
       paymentMenthod,
       note,
