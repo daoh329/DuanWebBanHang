@@ -371,7 +371,7 @@ export default function Buy() {
       coupons: coupons,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 1,
-      paymentData: "Thanh toán khi nhận hàng",
+      paymentData: JSON.stringify("Thanh toán khi nhận hàng"),
       totalAmount: amount,
       note: note,
       status: 0,
