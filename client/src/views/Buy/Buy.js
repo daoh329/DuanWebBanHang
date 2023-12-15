@@ -1031,19 +1031,17 @@ export default function Buy() {
               id="style-FJLy3"
             >
               <div className="css-14xqo9c snipcss0-0-0-1 tether-target-attached-top snipcss0-4-99-100 tether-element-attached-top tether-element-attached-center tether-target-attached-center">
-                <div className="card-header css-0 snipcss0-1-1-2 snipcss0-5-100-101">
-                  <div className="css-1euuut5 snipcss0-2-2-3 snipcss0-6-101-102">
-                    <h5 className="snipcss0-3-3-4 snipcss0-7-102-103">
+                  <div style={{display:"flex", alignItems: "center"}}>
+                    <h5 className="">
                       Thông tin đơn hàng
                     </h5>
                     <a
                       href="/cart"
-                      className="snipcss0-3-3-5 snipcss0-7-102-104"
+                      style={{width: "90px", margin:"0 0 8px"}}
                     >
                       Chỉnh sửa
                     </a>
                   </div>
-                </div>
                 <div className="card-body css-0 snipcss0-1-1-6 snipcss0-5-100-105">
                   {buysData &&
                     buysData.selectedItems.map((item, index) => (
