@@ -435,7 +435,7 @@ const Home = () => {
           onChange={handleTabChange}
         >
           {/* Tuần lễ giảm giá */}
-          <TabPane tab="Tuần lễ giảm giá" key="1">
+          {/* <TabPane tab="Tuần lễ giảm giá" key="1">
             <div className="scroll-control-phone" ref={containerRef}>
               <div>
                 <CountdownTimer endTime={saleEndTime} />
@@ -452,9 +452,9 @@ const Home = () => {
                     />
                   ))}
             </div>
-          </TabPane>
+          </TabPane> */}
           {/* Laptop bán chạy */}
-          <TabPane tab="Laptop bán chạy" key="2">
+          <TabPane tab="Laptop bán chạy" key="1">
             <div className="scroll-control-phone" ref={containerRef}>
               <div></div>
               {topLaptop &&
@@ -471,7 +471,7 @@ const Home = () => {
             </div>
           </TabPane>
           {/* Điện thoại bán chạy */}
-          <TabPane tab="Điện thoại bán chạy" key="3">
+          <TabPane tab="Điện thoại bán chạy" key="2">
             <div className="scroll-control-phone" ref={containerRef}>
               <div></div>
               {topDienthoai &&
