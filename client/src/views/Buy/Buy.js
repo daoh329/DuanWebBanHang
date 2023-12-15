@@ -45,6 +45,8 @@ export default function Buy() {
   const [amount, setAmount] = useState(null);
   const [totalPrice, settotalPrice] = useState(null);
   const [color, setColor] = useState(null);
+  const [discount, setDiscount] = useState(null);
+  const [coupons, setCoupons] = useState(null);
   const [capacity, setCapacity] = useState(null);
   const [bankCode, setBankCode] = useState("");
   const [language, setLanguage] = useState("vn");
@@ -109,7 +111,7 @@ export default function Buy() {
       onOk() {
         navigate("/login");
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -189,6 +191,16 @@ export default function Buy() {
         (item) => item.totalPrice
       );
       settotalPrice(totalPrices);
+
+      const discount = parsedBuysData.selectedItems.map(
+        (item) => item.discount
+      );
+      setDiscount(discount);
+
+      const coupons = parsedBuysData.selectedItems.map(
+        (item) => item.coupons.id
+      );
+      setCoupons(coupons);
     }
   }, []);
 
@@ -236,7 +248,7 @@ export default function Buy() {
             product_id: value.id,
             capacity: value.capacity,
             color: value.color,
-            coupons: value.coupons
+            coupons: value.coupons,
           };
           data.push(item);
         });
@@ -260,14 +272,11 @@ export default function Buy() {
   };
 
   const handleBuyClick = async () => {
-
     // Kiểm tra giá trị của paymentMenthod và gọi hàm tương ứng
     if (!deliveryMethod) {
       message.error("Vui lòng chọn thời gian giao hàng");
       return;
-    } else if (
-      paymentMenthod == null
-    ) {
+    } else if (paymentMenthod == null) {
       message.error("Vui lòng chọn phương thức thanh toán");
       return;
     } else if (addressChecked === null) {
@@ -288,7 +297,6 @@ export default function Buy() {
   };
 
   const handleBuyVNpay = async () => {
-
     const data = {
       amount,
       bankCode,
@@ -300,6 +308,8 @@ export default function Buy() {
       capacity: capacity,
       quantity: quantity,
       totalPrice: totalPrice,
+      discount: discount,
+      coupons: coupons,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 0,
       note: note,
@@ -317,8 +327,8 @@ export default function Buy() {
     Modal.confirm({
       title: "Xác nhận",
       content: "Bạn có chắc chắn muốn mua hàng không?",
-      okText: 'Đồng ý',
-      cancelText: 'Không đồng ý',
+      okText: "Đồng ý",
+      cancelText: "Không đồng ý",
       onOk: async () => {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/pay/create_payment_url`,
@@ -357,9 +367,11 @@ export default function Buy() {
       capacity: capacity,
       quantity: quantity,
       totalPrice: totalPrice,
+      discount: discount,
+      coupons: coupons,
       deliveryMethod: deliveryMethod,
       paymentMenthod: 1,
-      paymentData: "Thanh toán khi nhận hàng",
+      paymentData: JSON.stringify("Thanh toán khi nhận hàng"),
       totalAmount: amount,
       note: note,
       status: 0,
@@ -371,8 +383,8 @@ export default function Buy() {
     Modal.confirm({
       title: "Xác nhận",
       content: "Bạn có chắc chắn muốn mua hàng?",
-      okText: 'Đồng ý',
-      cancelText: 'Không đồng ý',
+      okText: "Đồng ý",
+      cancelText: "Không đồng ý",
       onOk: async () => {
         // In ra giá trị của biến data
         // console.log("Data:", data);
@@ -432,8 +444,8 @@ export default function Buy() {
     Modal.confirm({
       title: "Xác nhận",
       content: "Bạn có chắc chắn muốn mua hàng?",
-      okText: 'Đồng ý',
-      cancelText: 'Không đồng ý',
+      okText: "Đồng ý",
+      cancelText: "Không đồng ý",
       onOk: async () => {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/pay/paymomo`,
@@ -457,6 +469,8 @@ export default function Buy() {
           sessionStorage.setItem("color", JSON.stringify(color));
           sessionStorage.setItem("capacity", JSON.stringify(capacity));
           sessionStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+          sessionStorage.setItem("discount", JSON.stringify(discount));
+          sessionStorage.setItem("coupons", JSON.stringify(coupons));
           sessionStorage.setItem("deliveryMethod", deliveryMethod);
           sessionStorage.setItem("paymentMenthod", 2);
           sessionStorage.setItem("note", note);
@@ -532,7 +546,7 @@ export default function Buy() {
                     </MDBTabsItem> */}
                   </MDBTabs>
 
-                  <MDBTabsContent style={{ padding: '20px' }}>
+                  <MDBTabsContent style={{ padding: "20px" }}>
                     <MDBTabsPane show={fillActive === "tab1"}>
                       <h6 style={{ marginTop: "10px" }}>Thông tin nhận hàng</h6>
                       <div className="address-group">
@@ -579,10 +593,8 @@ export default function Buy() {
                           Thời gian giao hàng
                         </div>
 
-                        <div className="check_box" >
-                          <div
-
-                          >
+                        <div className="check_box">
+                          <div>
                             {/* <input
                               type="checkbox"
                               value="ngày trong tuần"
@@ -594,14 +606,18 @@ export default function Buy() {
                               }
                             /> */}
 
-                            <Checkbox type="checkbox"
+                            <Checkbox
+                              type="checkbox"
                               value="ngày trong tuần"
                               checked={deliveryMethod === "ngày trong tuần"}
                               onChange={(e) =>
                                 setDeliveryMethod(
                                   e.target.checked ? e.target.value : ""
                                 )
-                              }>Tất cả ngày trong tuần</Checkbox>
+                              }
+                            >
+                              Tất cả ngày trong tuần
+                            </Checkbox>
                           </div>
                           {/*  */}
                           <div
@@ -618,19 +634,21 @@ export default function Buy() {
                               }
                             /> */}
 
-                            <Checkbox type="checkbox"
+                            <Checkbox
+                              type="checkbox"
                               value="Chủ nhật"
                               checked={deliveryMethod === "Chủ nhật"}
                               onChange={(e) =>
                                 setDeliveryMethod(
                                   e.target.checked ? e.target.value : ""
                                 )
-                              }>Chủ nhật</Checkbox>
-
+                              }
+                            >
+                              Chủ nhật
+                            </Checkbox>
                           </div>
                         </div>
                       </div>
-
 
                       {/* <div className="css-18c0ysw snipcss0-4-4-52">
                         <div
@@ -1013,19 +1031,17 @@ export default function Buy() {
               id="style-FJLy3"
             >
               <div className="css-14xqo9c snipcss0-0-0-1 tether-target-attached-top snipcss0-4-99-100 tether-element-attached-top tether-element-attached-center tether-target-attached-center">
-                <div className="card-header css-0 snipcss0-1-1-2 snipcss0-5-100-101">
-                  <div className="css-1euuut5 snipcss0-2-2-3 snipcss0-6-101-102">
-                    <h5 className="snipcss0-3-3-4 snipcss0-7-102-103">
+                  <div style={{display:"flex", alignItems: "center"}}>
+                    <h5 className="">
                       Thông tin đơn hàng
                     </h5>
                     <a
                       href="/cart"
-                      className="snipcss0-3-3-5 snipcss0-7-102-104"
+                      style={{width: "90px", margin:"0 0 8px"}}
                     >
                       Chỉnh sửa
                     </a>
                   </div>
-                </div>
                 <div className="card-body css-0 snipcss0-1-1-6 snipcss0-5-100-105">
                   {buysData &&
                     buysData.selectedItems.map((item, index) => (
@@ -1046,9 +1062,9 @@ export default function Buy() {
                                     src={
                                       item.main_image
                                         ? process.env.REACT_APP_API_URL +
-                                        item.main_image
+                                          item.main_image
                                         : process.env.REACT_APP_API_URL +
-                                        item.thumbnail
+                                          item.thumbnail
                                     } // Lấy URL ảnh từ dữ liệu
                                     loading="lazy"
                                     decoding="async"
@@ -1058,7 +1074,7 @@ export default function Buy() {
                             </div>
                             {/* other infomation */}
                             <div className="css-f0vs3e snipcss0-4-8-15 snipcss0-8-107-114">
-                                {/* Tên sản phẩm */}
+                              {/* Tên sản phẩm */}
                               <a
                                 href={`/detail/${buysData.selectedItems[0].id}`} // Lấy ID sản phẩm từ dữ liệu
                                 aria-label="Image"
@@ -1082,32 +1098,35 @@ export default function Buy() {
                               </div>
                               {/* Giá sản phẩm */}
                               <span className="css-7ofbab snipcss0-5-15-19 snipcss0-9-114-118">
-                                {formatCurrency(item.price - (item.discount + parseFloat(item.coupons.value_vnd)))}
-                                {/* <span className="css-1ul6wk9 snipcss0-6-19-20 snipcss0-10-118-119">
-                              đ
-                            </span> */}
+                                {formatCurrency(
+                                  item.price -
+                                    (item.discount +
+                                      parseFloat(item.coupons.value_vnd || 0))
+                                )}
                               </span>
-                                {/* Giá khuyến mãi */}
+                              {/* Giá khuyến mãi */}
                               <div className="css-1vptl7o snipcss0-5-15-21 snipcss0-9-114-120">
                                 <span className="css-p2smad snipcss0-6-21-22 snipcss0-10-120-121">
                                   {formatCurrency(item.price)}
-                                </span> 
+                                </span>
                               </div>
-
-                              <div></div>
-
                             </div>
-                            
                           </div>
-                          <div className="coupons-style">
+                          {/* coupons */}
+                          {item.coupons && Object.keys(item.coupons).length !== 0 && (
+                            <div className="coupons-style">
                               <img
                                 src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
                                 alt="icon"
                                 height={17}
                                 width={17}
                               />
-                              <p>Giảm {formatCurrency(item.coupons.value_vnd)} (áp dụng vào giá sản phẩm)</p>
+                              <p>
+                                Giảm {formatCurrency(item.coupons.value_vnd)}{" "}
+                                (áp dụng vào giá sản phẩm)
+                              </p>
                             </div>
+                          )}
                         </div>
                       </div>
                     ))}

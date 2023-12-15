@@ -6,6 +6,8 @@ import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormInputColor from "./ColorInputComponent";
+import { getPermission } from "../../../../../util/servicesGlobal";
+import { openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
 
 function Color() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +21,12 @@ function Color() {
       name: Yup.string().required("Vui lòng nhập tên color"),
     }),
     onSubmit: async (values) => {
+      // Check permission
+      if ((await getPermission()) === "user") {
+        openInfoModalNotPermission();
+        return;
+      }
+
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/colors`;
       try {
@@ -66,15 +74,13 @@ function Color() {
         const arrCopy = [...response.data.results];
         arrCopy.forEach((item, index) => {
           item.key = index + 1;
-        })
+        });
         setColor(response.data.results);
       }
     } catch (e) {
       console.log(e);
     }
   };
-
-
 
   const handleUpdate = (name) => {
     setOpenModals({
@@ -109,7 +115,8 @@ function Color() {
           }}
         >
           <Button className="confirm-button" onClick={() => handleUpdate(name)}>
-            <EditOutlined />Sửa
+            <EditOutlined />
+            Sửa
           </Button>
 
           <Modal
@@ -128,7 +135,8 @@ function Color() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined />Xóa
+              <DeleteOutlined />
+              Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -138,6 +146,12 @@ function Color() {
 
   const handleDelete = async (name) => {
     try {
+      // Check permission
+      if ((await getPermission()) === "user") {
+        openInfoModalNotPermission();
+        return;
+      }
+
       await axios.post(
         `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
         null,

@@ -112,7 +112,7 @@ function Order(props) {
           </div>
 
           <div className="block-1-3">
-            <p>Thông tin hóa đơn</p>
+            <p>Thông tin hóa đơn thanh toán</p>
             {order[0] &&
               order[0]?.paymentData &&
               (order[0]?.paymentData?.vnp_OrderInfo ||

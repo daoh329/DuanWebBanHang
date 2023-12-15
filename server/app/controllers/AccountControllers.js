@@ -16,6 +16,34 @@ class Accounts {
       res.status(503).json({ message: "GET_ALL_FAILED_ACCOUNTS" });
     }
   }
+
+  async upPermission(req, res){
+    try {
+      const accountId = req.body.accountId; 
+      const qr = `UPDATE users SET permission = 'admin' WHERE id = ?`;
+      await query(qr, [accountId]);
+
+      res.status(200).json({message: "UP_PERMISSION_SUCCESS_ACCOUNTS"});
+    } catch (error) {
+      console.log(error);
+      res.status(503).json({ message: "UP_PERMISSION_FAILED_ACCOUNTS" });
+    }
+  }
+
+  async downPermission(req, res){
+    try {
+      const accountId = req.body.accountId; 
+      const qr = `UPDATE users SET permission = 'user' WHERE id = ?`;
+      await query(qr, [accountId]);
+
+      res.status(200).json({message: "UP_PERMISSION_SUCCESS_ACCOUNTS"});
+    } catch (error) {
+      console.log(error);
+      res.status(503).json({ message: "UP_PERMISSION_FAILED_ACCOUNTS" });
+    }
+  }
+
+
 }
 
 module.exports = new Accounts();

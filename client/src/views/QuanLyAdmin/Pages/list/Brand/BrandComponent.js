@@ -6,7 +6,12 @@ import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormInputBrand from "./BrandInputComponent";
-import { NotificationBeenLoggedOut, NotificationLogout } from "../../../../NotificationsForm/Authenticated";
+import {
+  NotificationBeenLoggedOut,
+  NotificationLogout,
+  openInfoModalNotPermission,
+} from "../../../../NotificationsForm/Authenticated";
+import { getPermission } from "../../../../../util/servicesGlobal";
 
 function Brand() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +25,11 @@ function Brand() {
       name: Yup.string().required("Vui lòng nhập tên brand"),
     }),
     onSubmit: async (values) => {
+      if ((await getPermission()) === "user") {
+        openInfoModalNotPermission();
+        return;
+      }
+
       setIsModalOpen(true);
       const url = `${process.env.REACT_APP_API_URL}/List/add/${table}`;
       try {
@@ -77,7 +87,7 @@ function Brand() {
       if (response.status === 200) {
         const arrCopy = [...response.data.results];
         for (let i = 0; i < arrCopy.length; i++) {
-          arrCopy[i].key = i+1;
+          arrCopy[i].key = i + 1;
         }
         setBrand(arrCopy);
       }
@@ -105,7 +115,12 @@ function Brand() {
   };
 
   const handleDelete = async (name) => {
-    console.log("deleteBrand");
+    // Check permission
+    if ((await getPermission()) === "user") {
+      openInfoModalNotPermission();
+      return;
+    }
+
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/List/delete/${table}/${name}`,
@@ -133,7 +148,8 @@ function Brand() {
           }}
         >
           <Button className="confirm-button" onClick={() => handleUpdate(name)}>
-            <EditOutlined />Sửa{" "}
+            <EditOutlined />
+            Sửa{" "}
           </Button>
           <Modal
             open={openModals[name]}
@@ -151,7 +167,8 @@ function Brand() {
             cancelText="No"
           >
             <Button danger>
-              <DeleteOutlined />Xóa
+              <DeleteOutlined />
+              Xóa
             </Button>
           </Popconfirm>
         </div>
@@ -164,7 +181,7 @@ function Brand() {
       <div className="page-group">
         <div className="page1-control">
           {/* <h3 style={{ fontWeight: "bold" }}>Chỉnh sửa</h3> */}
-          <br/>
+          <br />
           <Table columns={columns} dataSource={brand} />
         </div>
         <div className="page2-control">

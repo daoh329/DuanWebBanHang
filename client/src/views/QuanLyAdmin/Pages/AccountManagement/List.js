@@ -1,5 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Space, Input, Button, Tooltip, message, Tag } from "antd";
+import {
+  Table,
+  Space,
+  Input,
+  Button,
+  Tooltip,
+  message,
+  Tag,
+  notification,
+  Modal,
+} from "antd";
 import axios from "axios";
 import {
   SearchOutlined,
@@ -8,25 +18,42 @@ import {
   LockOutlined,
   UnlockOutlined,
   DeleteOutlined,
+  ExclamationCircleFilled,
+  UserAddOutlined,
+  UserDeleteOutlined,
 } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
+import { useSelector } from "react-redux";
 
 import "./styleList.css";
 import { NotificationBeenLoggedOut } from "../../../NotificationsForm/Authenticated";
 
 function AccountList() {
+  const user = useSelector((state) => state.user);
+
   const [isLoadingTable, setIsLoadingTable] = useState(false);
   const [accountList, setAccountList] = useState([]);
   useEffect(() => {
-    getAllAccounts();
-  }, []);
+    if (user) {
+      getAllAccounts();
+    }
+  }, [user]);
 
   const getAllAccounts = async () => {
     try {
       const url = `${process.env.REACT_APP_API_URL}/account-management/list`;
       const results = await axios.get(url, { withCredentials: true });
       if (results.status === 200) {
-        const arrCopy = [...results.data];
+        var arrCopy = [];
+        if (user.permission === "superadmin") {
+          arrCopy = [...results.data].filter(
+            (item) => !(item.id === user.id) && item.permission !== "superadmin"
+          );
+        }else{
+          arrCopy = [...results.data].filter(
+            (item) => !(item.id === user.id) && item.permission !== "superadmin" && item.permission !== "admin"
+          );
+        }
+        
         arrCopy.forEach((item) => {
           item.key = item.id;
         });
@@ -136,6 +163,98 @@ function AccountList() {
     // console.log("accoutId: ", accoutId);
   };
 
+  const { confirm } = Modal;
+
+  const handleUpPermission = async (accountId) => {
+    confirm({
+      title: "Chý ý",
+      icon: <ExclamationCircleFilled />,
+      content:
+        "Bạn có chắc chắn muốn nâng quyền hạn của tài khoản này lên admin?",
+      okText: "Xác nhận",
+      cancelText: "Hủy bỏ",
+      async onOk() {
+        if (user.permission === "superadmin") {
+          try {
+            const url = `${process.env.REACT_APP_API_URL}/account-management/up-permission`;
+            const results = await axios.put(
+              url,
+              { accountId },
+              { withCredentials: true }
+            );
+
+            if (results?.status === 200) {
+              notification.success({
+                message: "Thành công",
+              });
+            } else {
+              console.log(results);
+              notification.error({
+                message: "Cấp quyền thất bại",
+              });
+            }
+          } catch (error) {
+            console.log(error);
+            notification.error({
+              message: "Cấp quyền thất bại",
+            });
+          }
+          // reload accounts infomation
+          getAllAccounts();
+        } else {
+          notification.info({
+            message: "Bạn không có đủ quyền để thực hiện nâng quyền",
+          });
+        }
+      },
+    });
+  };
+
+  const handleDownPermission = async (accountId) => {
+    confirm({
+      title: "Chý ý",
+      icon: <ExclamationCircleFilled />,
+      content:
+        "Bạn có chắc chắn muốn nâng quyền hạn của tài khoản này lên admin?",
+      okText: "Xác nhận",
+      cancelText: "Hủy bỏ",
+      async onOk() {
+        if (user.permission === "superadmin") {
+          try {
+            const url = `${process.env.REACT_APP_API_URL}/account-management/down-permission`;
+            const results = await axios.put(
+              url,
+              { accountId },
+              { withCredentials: true }
+            );
+
+            if (results?.status === 200) {
+              notification.success({
+                message: "Thành công",
+              });
+            } else {
+              console.log(results);
+              notification.error({
+                message: "Cấp quyền thất bại",
+              });
+            }
+          } catch (error) {
+            console.log(error);
+            notification.error({
+              message: "Cấp quyền thất bại",
+            });
+          }
+          // reload accounts infomation
+          getAllAccounts();
+        } else {
+          notification.info({
+            message: "Bạn không có đủ quyền để thực hiện nâng quyền",
+          });
+        }
+      },
+    });
+  };
+
   const columns = [
     {
       title: "ID",
@@ -210,14 +329,39 @@ function AccountList() {
               icon={
                 record?.isLocked === 0 ? <UnlockOutlined /> : <LockOutlined />
               }
-              style={{ margin: "0 10px 0 0" }}
+              style={{ margin: "0 10px 0 0", borderRadius: "2px" }}
             />
           </Tooltip>
           <Tooltip title="Xóa tài khoản">
             <Button
+              style={{ margin: "0 10px 0 0", borderRadius: "2px" }}
               onClick={() => handleDeleteAccount(record.id)}
               danger
               icon={<DeleteOutlined />}
+            />
+          </Tooltip>
+          <Tooltip
+            title={
+              record.permission === "user"
+                ? "Cấp quyền admin"
+                : "Bỏ quyền admin"
+            }
+          >
+            <Button
+              style={{ borderRadius: "2px" }}
+              onClick={() =>
+                record.permission === "user"
+                  ? handleUpPermission(record.id)
+                  : handleDownPermission(record.id)
+              }
+              type="primary"
+              icon={
+                record.permission === "user" ? (
+                  <UserAddOutlined />
+                ) : (
+                  <UserDeleteOutlined />
+                )
+              }
             />
           </Tooltip>
         </div>

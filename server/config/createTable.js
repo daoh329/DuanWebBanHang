@@ -80,9 +80,12 @@ const createTables = () => {
     color varchar(15),
     capacity int,
     totalPrice NUMERIC(12,2) NOT NULL,
+    discount NUMERIC(10,2),
+    coupons INT,
     orderID int NOT NULL,
     FOREIGN KEY (orderID) REFERENCES orders (id),
-    FOREIGN KEY (productID) REFERENCES products (id)
+    FOREIGN KEY (productID) REFERENCES products (id),
+    FOREIGN KEY (coupons) REFERENCES discount_code (id)
   );
   `;
   const productDetails = `CREATE TABLE IF NOT EXISTS productDetails (

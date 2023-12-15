@@ -14,6 +14,8 @@ let paymentMenthodd;
 let notee;
 let amount;
 let totalPrices;
+let discounts;
+let couponss;
 let statuss;
 
 
@@ -75,6 +77,8 @@ class PayController {
         paymentMenthodd = req.body.paymentMenthod;
         notee = req.body.note;
         totalPrices = req.body.totalPrice,
+        discounts = req.body.discount,
+        couponss = req.body.coupons,
         amount = req.body.amount;
         statuss = req.body.status;
         
@@ -191,6 +195,8 @@ class PayController {
         let color = colors;
         let capacity = capacitys;
         let totalPrice = totalPrices;
+        let discount = discounts;
+        let coupons = couponss;
         let deliveryMethod = deliveryMethodd;
         let paymentMenthod = paymentMenthodd;
         let note = notee;
@@ -228,8 +234,8 @@ class PayController {
 
             // Duyệt qua mỗi productID trong mảng
             for (let i = 0; i < productID.length; i++) {
-                let values = [productID[i], quantity[i], color[i], capacity[i], totalPrice[i], orderID];
-                sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, orderID) VALUES (?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+                let values = [productID[i], quantity[i], color[i], capacity[i], totalPrice[i], discount[i], coupons[i], orderID];
+                sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, discount, coupons, orderID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
                 mysql.query(sql, values, (err, result) => {
                     if (err) throw err;
 

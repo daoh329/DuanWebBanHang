@@ -47,8 +47,8 @@ class OrderController {
           const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
           // Duyệt qua mỗi productID trong mảng
           for (let i = 0; i < data.productID.length; i++) {
-            sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, orderID) VALUES (?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-            values = [data.productID[i], data.quantity[i], data.color[i], data.capacity[i], data.totalPrice[i], orderID]; // Thêm dữ liệu vào bảng orderDetailsProduct
+            sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, discount, coupons, orderID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+            values = [data.productID[i], data.quantity[i], data.color[i], data.capacity[i], data.totalPrice[i], data.discount[i], data.coupons[i], orderID]; // Thêm dữ liệu vào bảng orderDetailsProduct
             mysql.query(sql, values, (err, result) => {
                 if (err) throw err;
             });
@@ -77,10 +77,10 @@ class OrderController {
       const orderID = result.insertId; // Lấy ID của đơn hàng vừa được tạo
       // Duyệt qua mỗi productID trong mảng
       for (let i = 0; i < data.productID.length; i++) {
-        sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, orderID) VALUES (?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
-        values = [data.productID[i], data.quantity[i], data.color[i], data.capacity[i], data.totalPrice[i], orderID]; // Thêm dữ liệu vào bảng orderDetailsProduct
+        sql = `INSERT INTO orderDetailsProduct (productID, quantity, color, capacity, totalPrice, discount, coupons, orderID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`; // Thêm dữ liệu vào bảng orderDetailsProduct
+        values = [data.productID[i], data.quantity[i], data.color[i], data.capacity[i], data.totalPrice[i], data.discount[i], data.coupons[i], orderID]; // Thêm dữ liệu vào bảng orderDetailsProduct
         mysql.query(sql, values, (err, result) => {
-            if (err) throw err;
+          if (err) throw err;
         });
       }
     });
@@ -116,12 +116,13 @@ class OrderController {
       SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-      odp.*, p.*
+      odp.*, p.*, dc.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
       JOIN products p ON odp.productID = p.id
+      LEFT JOIN discount_code dc ON odp.coupons = dc.id
       ORDER BY o.created_at DESC
     `;
     mysql.query(sql, (err, result) => {
@@ -163,7 +164,16 @@ class OrderController {
           CategoryID: row.CategoryID,
           main_image: row.main_image,
           release_date: row.release_date,
-          status: row.status
+          status: row.status,
+          discount: row.discount,
+          discount_code: row.id ? {
+            id: row.id,
+            content: row.content,
+            value_vnd: row.value_vnd,
+            value_percent: row.value_percent,
+            start_date: row.start_date,
+            end_date: row.end_date
+          } : null
         });
       });
   
@@ -172,8 +182,7 @@ class OrderController {
   
       res.send(orders);
     });
-  }  
-
+  }    
 
   async confirmOrder(req, res) {
     const orderId = req.params.id;
@@ -412,18 +421,19 @@ class OrderController {
       SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-      odp.*, p.*
+      odp.*, p.*, dc.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
       JOIN products p ON odp.productID = p.id
+      LEFT JOIN discount_code dc ON odp.coupons = dc.id
       WHERE u.phone = ?
       ORDER BY o.created_at DESC
     `;
     mysql.query(sql, [phone], (err, result) => {
       if (err) throw err;
-
+  
       // Nhóm các sản phẩm theo order_id
       let orders = {};
       result.forEach(row => {
@@ -460,16 +470,25 @@ class OrderController {
           CategoryID: row.CategoryID,
           main_image: row.main_image,
           release_date: row.release_date,
-          status: row.status
+          status: row.status,
+          discount: row.discount,
+          discount_code: row.id ? {
+            id: row.id,
+            content: row.content,
+            value_vnd: row.value_vnd,
+            value_percent: row.value_percent,
+            start_date: row.start_date,
+            end_date: row.end_date
+          } : null
         });
       });
-
+  
       // Chuyển đổi đối tượng orders thành một mảng
       orders = Object.values(orders);
-
+  
       res.send(orders);
     });
-  }
+  }  
 
   // API /order/order
   async orderHistoryById(req, res) {
@@ -478,18 +497,19 @@ class OrderController {
       SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
-      odp.*, p.*
+      odp.*, p.*, dc.*
       FROM orders o
       JOIN users u ON o.UserID = u.id
       JOIN delivery_address da ON o.addressID = da.id
       JOIN orderDetailsProduct odp ON o.id = odp.orderID
       JOIN products p ON odp.productID = p.id
+      LEFT JOIN discount_code dc ON odp.coupons = dc.id
       WHERE u.id = ?
       ORDER BY o.created_at DESC
     `;
     mysql.query(sql, [id], (err, result) => {
       if (err) throw err;
-
+  
       // Nhóm các sản phẩm theo order_id
       let orders = {};
       result.forEach(row => {
@@ -526,16 +546,25 @@ class OrderController {
           CategoryID: row.CategoryID,
           main_image: row.main_image,
           release_date: row.release_date,
-          status: row.status
+          status: row.status,
+          discount: row.discount,
+          discount_code: row.id ? {
+            id: row.id,
+            content: row.content,
+            value_vnd: row.value_vnd,
+            value_percent: row.value_percent,
+            start_date: row.start_date,
+            end_date: row.end_date
+          } : null
         });
       });
-
+  
       // Chuyển đổi đối tượng orders thành một mảng
       orders = Object.values(orders);
-
+  
       res.send(orders);
     });
-  }
+  }  
 
   async topLaptop(req, res) {
     const query = `

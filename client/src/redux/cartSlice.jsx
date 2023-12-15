@@ -21,7 +21,7 @@ export const cartSlice = createSlice({
           product.id !== product_id ||
           product.color !== color ||
           product.capacity !== capacity ||
-          product.coupons.id !== coupons.id
+          product.coupons?.id !== coupons?.id
       );
       localStorage.setItem(
         "cart",
@@ -69,10 +69,9 @@ export const cartSlice = createSlice({
           }
           // Update other coupons
           product.otherCoupons = allCoupons.filter((coupon) => !(coupon.id === product.coupons.id) && !isCouponExpired(coupon));
-          console.log(allCoupons.filter((coupon) => !(coupon.id === product.coupons.id) && !isCouponExpired(coupon)));
           product.totalPrice =
           (product.price -
-            (product.discount + parseInt(couponSelected.value_vnd || 0))) *
+            (product.discount + parseInt(couponSelected?.value_vnd || 0))) *
           product.quantity;
         });
       }
