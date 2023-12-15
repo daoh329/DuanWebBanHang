@@ -281,29 +281,31 @@ function QLOrder() {
                   <p style={{ color: "#a6a4a4" }}>x{product.quantity}</p>
                 </div>
               </div>
-              <div style={{ padding: "0 16px 16px 16px" }}>
-                <p style={{ margin: "0" }}>Khuyến mãi đã áp dụng</p>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "3px 0 0 0",
-                    fontSize: "13px"
-                  }}
-                >
-                  <img
-                    src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
-                    alt="icon"
-                    height={16}
-                    width={16}
-                    style={{margin: "0 5px 0 0"}}
-                  />
-                  <span style={{ lineHeight: "12px", height: "max-content" }}>
-                    Giảm {formatCurrency(product.discount_code?.value_vnd)} (áp
-                    dụng vào giá sản phẩm)
-                  </span>
+              {product?.discount_code && (
+                <div style={{ padding: "0 16px 16px 16px" }}>
+                  <p style={{ margin: "0" }}>Khuyến mãi đã áp dụng</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      margin: "3px 0 0 0",
+                      fontSize: "13px",
+                    }}
+                  >
+                    <img
+                      src="https://shopfront-cdn.tekoapis.com/cart/gift-filled.png"
+                      alt="icon"
+                      height={16}
+                      width={16}
+                      style={{ margin: "0 5px 0 0" }}
+                    />
+                    <span style={{ lineHeight: "12px", height: "max-content" }}>
+                      Giảm {formatCurrency(product.discount_code?.value_vnd)}{" "}
+                      (áp dụng vào giá sản phẩm)
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>

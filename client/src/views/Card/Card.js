@@ -100,20 +100,30 @@ function CardProduct(props) {
 
   return (
     <div className="sanpham-card" onClick={handleViewDetail}>
-      <img
-        src={
-          item?.main_image && process.env.REACT_APP_API_URL + item?.main_image
-        }
+      <div
         style={{
-          color: "#333333",
-          fontSize: "14px",
-          lineHeight: "20px",
-          height: "165px",
           width: "165px",
-          backgroundColor: "pink",
+          height: "165px",
+          display: "flex",
+          alignItems: "center",
         }}
-        alt="main_image"
-      ></img>
+      >
+        <img
+          src={
+            item?.main_image && process.env.REACT_APP_API_URL + item?.main_image
+          }
+          style={{
+            color: "#333333",
+            fontSize: "14px",
+            lineHeight: "20px",
+            width: "165px",
+            maxHeight: "165px",
+            backgroundColor: "pink",
+          }}
+          alt="main_image"
+        />
+      </div>
+
       {/* tem */}
       {totalQuantity !== 0 &&
         (discountOfPiceMin > 0 ||
