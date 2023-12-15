@@ -78,7 +78,7 @@
     display: flex;
     justify-content: left;
     align-items: center;
-    margin: 15px 0 0 0;
+    margin: 5px 0 0 0;
     cursor: pointer;
     padding-left: 30px;
     font-size: 12px;
@@ -2858,9 +2858,9 @@ svg {
   display: flex;
   justify-content: left;
   align-items: center;
-  margin: 15px 0 0 0;
+  margin: 5px 0 0 0;
   cursor: pointer;
-  padding-left: 30px;
+  padding-left: 15px;
   font-size: 12px;
 }
 
