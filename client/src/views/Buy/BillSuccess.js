@@ -3,6 +3,8 @@ import { Button, Result } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart, deleteProductInCart } from "../../redux/cartSlice";
+import config from "../../config";
+
 const BillSuccess = () => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -97,9 +99,9 @@ const BillSuccess = () => {
       title={<div style={{ color: '#52c41a' }}>Đặt hàng thành công!</div>}
       subTitle={
         <div style={{ color: 'black' }}>
-          DINHMINH.VN cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của DINHMINH.VN.<br />
-          Đơn hàng của bạn đã được đặt thành công, DINHMINH.VN sẽ liên hệ xác nhận lại với bạn!<br />
-          DINHMINH.VN xin cảm ơn!
+           {config.websiteLogo} cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của  {config.websiteLogo}.<br />
+          Đơn hàng của bạn đã được đặt thành công,  {config.websiteLogo} sẽ liên hệ xác nhận lại với bạn!<br />
+           {config.websiteLogo} xin cảm ơn!
         </div>
       }
       extra={[
