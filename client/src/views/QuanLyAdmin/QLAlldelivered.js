@@ -176,16 +176,16 @@ function QLAlldelivered() {
             )
         },
 
-        {
-            title: 'Hành động',
-            dataIndex: 'action',
-            key: 'newAction',
-            render: (_, record) => (
-                <Button style={{ backgroundColor: '#FF69B4', color: 'white' }} onClick={() => handleUndo(record)}>
-                   Chọn lại ở mục giao hàng
-                </Button>
-            ),
-        },
+        // {
+        //     title: 'Hành động',
+        //     dataIndex: 'action',
+        //     key: 'newAction',
+        //     render: (_, record) => (
+        //         <Button style={{ backgroundColor: '#FF69B4', color: 'white' }} onClick={() => handleUndo(record)}>
+        //            Chọn lại ở mục giao hàng
+        //         </Button>
+        //     ),
+        // },
     ];
 
     return (

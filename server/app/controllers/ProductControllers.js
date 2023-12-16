@@ -838,7 +838,7 @@ class Product {
       JOIN orderDetailsProduct ON p.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
-      AND p.CategoryID = 1 AND p.status = 1
+      AND p.CategoryID = 1 AND p.status = 1 AND orders.status = 4
       GROUP BY p.id
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;
@@ -883,7 +883,7 @@ class Product {
       JOIN orderDetailsProduct ON p.id = orderDetailsProduct.productID
       JOIN orders ON orderDetailsProduct.orderID = orders.id
       WHERE orders.created_at >= DATE_SUB(NOW(), INTERVAL 5 MONTH)
-      AND p.CategoryID = 2 AND p.status = 1
+      AND p.CategoryID = 2 AND p.status = 1 AND orders.status = 4
       GROUP BY p.id
       ORDER BY SUM(orderDetailsProduct.quantity) DESC
       LIMIT 10;

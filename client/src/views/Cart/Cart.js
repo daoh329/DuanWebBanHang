@@ -884,7 +884,7 @@ function Cart() {
                               {formatCurrency(
                                 cartItem.price -
                                   (cartItem.discount +
-                                    parseInt(cartItem.coupons.value_vnd || 0))
+                                    parseInt(cartItem.coupons?.value_vnd || 0))
                               )}
                             </p>
                             {/* show discount */}

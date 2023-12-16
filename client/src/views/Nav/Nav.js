@@ -936,7 +936,7 @@ const App = () => {
                                         selectedItems.price -
                                           (selectedItems.discount +
                                             parseInt(
-                                              selectedItems.coupons.value_vnd ||
+                                              selectedItems.coupons?.value_vnd ||
                                                 0
                                             ))
                                       )}
