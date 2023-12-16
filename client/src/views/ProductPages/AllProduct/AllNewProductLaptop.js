@@ -481,7 +481,7 @@ const AllNewProductLaptop = () => {
               </Form>
            
 
-              <div className="css-f1fyi0">
+              {/* <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
               <Form>
@@ -499,7 +499,7 @@ const AllNewProductLaptop = () => {
                     ))}
                 </Select>
               </Form.Item>
-              </Form>
+              </Form> */}
              
             </div>
           </div>
@@ -509,7 +509,7 @@ const AllNewProductLaptop = () => {
           <div className="arrange-products">
             <div className="css-arrange">
               Xắp xếp theo
-              <button
+              {/* <button
                 className="sort-button"
                 onClick={() => handleSortChange("priceLowToHigh")}
               >
@@ -520,7 +520,7 @@ const AllNewProductLaptop = () => {
                 onClick={() => handleSortChange("priceHighToLow")}
               >
                 Giá cao đến thấp
-              </button>
+              </button> */}
               <button
                 className="sort-button"
                 onClick={() => handleSortChange("newestProducts")}

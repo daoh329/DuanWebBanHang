@@ -60,7 +60,7 @@ function QLshipping() {
               // Hiển thị thông báo cho phương thức thanh toán ví điện tử
               Modal.confirm({
                   title: 'Xác nhận',
-                  content: 'Bạn đã xử lý đơn hàng thanh toán bằng ví điện tử?',
+                  content: `Bạn đã liên hệ khách hàng để xử lý đơn hàng thanh toán điện tử có mã ${record.order_id} chưa?`,
                   okText: 'Đã xử lý',
                   cancelText: 'Chưa xử lý',
                   onOk: async () => {
@@ -83,22 +83,31 @@ function QLshipping() {
                   }
                 });
               } else {
-                try {
-                  await axios.put(
-                    `${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`
-                  );
-                  CreateNotification(
-                    record.user_id,
-                    record.order_id,
-                    "2",
-                    "Hủy đơn hàng thành công",
-                    `Đơn hàng ${record.order_id} của bạn đã bị hủy`
-                  );
-                  message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
-                  loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
-                } catch (error) {
-                  console.error("Error canceling order:", error);
-                }
+                Modal.confirm({
+                  title: 'Xác nhận',
+                  content: `Bạn đã liên hệ khách hàng để xử lý đơn hàng có mã ${record.order_id} chưa?`,
+                  okText: 'Đã xử lý',
+                  cancelText: 'Chưa xử lý',
+                  onOk: async () => {
+                    try {
+                      await axios.put(
+                        `${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`
+                      );
+                      CreateNotification(
+                        record.user_id,
+
+                        record.order_id,
+                        "2",
+                        "Hủy đơn hàng thành công",
+                        `Đơn hàng ${record.order_id} của bạn đã bị hủy`
+                      );
+                      message.warning(`Đơn hàng mã ${record.order_id} đã dược hủy thành công`);
+                      loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+                    } catch (error) {
+                      console.error("Error canceling order:", error);
+                    }
+                  }
+                });
               }
           }
     };

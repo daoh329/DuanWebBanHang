@@ -202,7 +202,7 @@ function QLdeliveryfailed() {
                     style={{ backgroundColor: '#FF69B4', color: 'white' }}
                     onClick={() => handleUndofailed(record)}
                   >
-                    Chọn lại ở mục giao hàng
+                    Giao lại
                   </Button>
                 )}
                 {record.order_status === 2 && (
@@ -210,7 +210,7 @@ function QLdeliveryfailed() {
                     style={{ backgroundColor: '#FF69B4', color: 'white' }}
                     onClick={() => handleUndocancel(record)}
                   >
-                    Chọn lại ở mục đơn đặt hàng
+                    Khôi phục đơn hàng
                   </Button>
                 )}
               </>

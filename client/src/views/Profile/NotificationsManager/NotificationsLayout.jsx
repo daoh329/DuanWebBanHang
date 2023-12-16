@@ -86,7 +86,7 @@ function NotificationsLayout(props) {
       // Log ra lỗi nếu có
       console.log(error);
       // Lỗi đăng nhập
-      if (error.response.status === 401) {
+      if (error.response.status === 401) {  
         NotificationBeenLoggedOut();
       }
     }

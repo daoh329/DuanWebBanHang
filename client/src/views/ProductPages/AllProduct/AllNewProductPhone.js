@@ -216,41 +216,41 @@ const AllNewProductPhone = () => {
     if (selectedRam !== "ALL") {
       filteredProducts = filteredProducts?.filter((product) => {
         const config = JSON.parse(product.configuration);
-        return config.ram === selectedRam;
+        return (config.ram).trim() === selectedRam.trim();
       });
     }
 
-    // // Lọc theo pin
-    // if (selectedPin !== "ALL") {
-    //   filteredProducts = filteredProducts?.filter((product) => {
-    //     const config = JSON.parse(product.configuration);
-    //     return config.pin === selectedPin;
-    //   });
-    // }
+    // Lọc theo pin
+    if (selectedPin !== "ALL") {
+      filteredProducts = filteredProducts?.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.pin === selectedPin;
+      });
+    }
 
-    // // Lọc theo  rear_camera
-    // if (selectedRear_camera !== "ALL") {
-    //   filteredProducts = filteredProducts?.filter((product) => {
-    //     const config = JSON.parse(product.configuration);
-    //     return config.mainCamera === selectedRear_camera;
-    //   });
-    // }
+    // Lọc theo  rear_camera
+    if (selectedRear_camera !== "ALL") {
+      filteredProducts = filteredProducts?.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.mainCamera === selectedRear_camera;
+      });
+    }
 
-    // // Lọc theo  front_camera
-    // if (selectedFront_camera !== "ALL") {
-    //   filteredProducts = filteredProducts?.filter((product) => {
-    //     const config = JSON.parse(product.configuration);
-    //     return config.frontCamera === selectedFront_camera;
-    //   });
-    // }
+    // Lọc theo  front_camera
+    if (selectedFront_camera !== "ALL") {
+      filteredProducts = filteredProducts?.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.frontCamera === selectedFront_camera;
+      });
+    }
 
-    // // Lọc theo  screen
-    // if (selectedScreen !== "ALL") {
-    //   filteredProducts = filteredProducts?.filter((product) => {
-    //     const config = JSON.parse(product.configuration);
-    //     return config.screenTechnology === selectedScreen;
-    //   });
-    // }
+    // Lọc theo  screen
+    if (selectedScreen !== "ALL") {
+      filteredProducts = filteredProducts?.filter((product) => {
+        const config = JSON.parse(product.configuration);
+        return config.screenTechnology === selectedScreen;
+      });
+    }
     setFilteredProducts(filteredProducts);
     setDisplayedProducts(filteredProducts);
   };
@@ -400,7 +400,62 @@ const AllNewProductPhone = () => {
                   options={handleFormatToDataSelect(uniqueChip)}
                 />
               </div>
-
+              {/* <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+                Pin <br />
+                <Select
+                  placeholder="Chọn thông tin"
+                  title="Pin"
+                  value={selectedPin}
+                  onChange={handlePinChange}
+                  style={{ marginTop: "10px", height: 40 }}
+                  options={handleFormatToDataSelect(uniquePin)} 
+                  showSearch
+                 
+                />  
+              </div>
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Camera trước <br />
+                <Select
+                  placeholder="Chọn thông tin"
+                  title="Camera trước"
+                  value={selectedFront_camera}
+                  onChange={handleFront_cameraChange}
+                  style={{ marginTop: "10px", height: 40 }}
+                  options={handleFormatToDataSelect(uniqueFront_camera)} 
+                  showSearch
+                 
+                />  
+              </div>
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Camera sau <br />
+                <Select
+                  placeholder="Chọn thông tin"
+                  title="Camera sau"
+                  value={selectedRear_camera}
+                  onChange={handleRear_cameraChange}
+                  style={{ marginTop: "10px", height: 40 }}
+                  options={handleFormatToDataSelect(uniqueRear_camera)} 
+                  showSearch
+                 
+                />  
+              </div>
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Màn hình <br />
+                <Select
+                  placeholder="Chọn thông tin"
+                  title="Màn hình"
+                  value={selectedScreen}
+                  onChange={handleScreenChange}
+                  style={{ marginTop: "10px", height: 40 }}
+                  options={handleFormatToDataSelect(uniqueScreen)} 
+                  showSearch
+                 
+                />  
+              </div> */}
               {/* <div className="css-f1fyi0">
                 <div width="100%" color="border" className="css-yae08c"></div>
               </div>
@@ -507,7 +562,7 @@ const AllNewProductPhone = () => {
           <div className="arrange-products">
             <div className="css-arrange">
               Xắp xếp theo
-              <button
+              {/* <button
                 className="sort-button"
                 onClick={() => handleSortChange("priceLowToHigh")}
               >
@@ -518,7 +573,7 @@ const AllNewProductPhone = () => {
                 onClick={() => handleSortChange("priceHighToLow")}
               >
                 Giá cao đến thấp
-              </button>
+              </button> */}
               <button
                 className="sort-button"
                 onClick={() => handleSortChange("newestProducts")}
