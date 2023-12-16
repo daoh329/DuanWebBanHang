@@ -99,13 +99,7 @@ const createTables = () => {
     FOREIGN KEY (product_id) REFERENCES products (id),
     FOREIGN KEY (brand)  REFERENCES brands (name)
   );`;
-  const ProdetailColor = `CREATE TABLE IF NOT EXISTS prodetailColor (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    product_id INT NOT NULL,
-    Colorname varchar(15) NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products (id),
-    FOREIGN KEY (Colorname) REFERENCES colors (name)
-  );`;
+
   const brands = `CREATE TABLE IF NOT EXISTS brands (
     name varchar(25) PRIMARY KEY
   );`;
@@ -231,11 +225,6 @@ const createTables = () => {
     }
   });
   mysql2.query(productDetails, (error, results, fields) => {
-    if (error) {
-      console.error(error);
-    }
-  });
-  mysql2.query(ProdetailColor, (error, results, fields) => {
     if (error) {
       console.error(error);
     }
