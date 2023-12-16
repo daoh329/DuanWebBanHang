@@ -122,7 +122,7 @@ function ProductVariations(props) {
   return (
     <>
       <Modal
-        title="Thêm lựa chọn cho dung lượng"
+        title="Thêm lựa chọn cho dung lượng (Tối đa: 100000)"
         open={isOpenModalCapcity}
         onCancel={handleCancel}
         footer={false}
@@ -138,7 +138,7 @@ function ProductVariations(props) {
               {
                 required: true,
                 message: "Vui lòng nhập dữ liệu rồi tiếp tục!",
-              }
+              },
             ]}
           >
             <InputNumber
@@ -430,6 +430,7 @@ function ProductVariations(props) {
                             >
                               <InputNumber
                                 style={{ width: "100%" }}
+                                max={10000}
                                 placeholder="Nhập số lượng sản phẩm"
                                 min={0}
                               />

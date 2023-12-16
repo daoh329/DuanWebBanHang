@@ -4,18 +4,22 @@ import {
   DatePicker,
   Form,
   Input,
-  InputNumber,
   Modal,
   Select,
   Upload,
   notification,
   Space,
-  Card,
+  Tag,
 } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductVariations from "./ProductVariations";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  SyncOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { formatSpecifications } from "../../../../../util/formatSpecifications";
@@ -62,7 +66,7 @@ function MainForm() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState(""); // error shortDescription unique
   const [mainImage, setMainImage] = useState([]);
 
   useEffect(() => {
@@ -117,6 +121,10 @@ function MainForm() {
     // check permission
     if ((await getPermission()) === "user") {
       openInfoModalNotPermission();
+      return;
+    }
+    // Nếu có lỗi thì dừng lại
+    if (errorMessage) {
       return;
     }
 
@@ -257,6 +265,62 @@ function MainForm() {
     },
   ];
 
+  // Các hàm sử lí đếm độ dài text và check shortDescription unique
+  const [shortDescription, setShortDescription] = useState("");
+  const [name, setName] = useState("");
+  const [series, setSeries] = useState("");
+  const [demand, setDemand] = useState("");
+  const onChangeLengthText = (value, setState) => {
+    setState(value.target.value);
+  };
+
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    if (shortDescription) {
+      const delay = 1500; // 1 giây
+      setIsFetching(true);
+      const timeoutId = setTimeout(() => {
+        setDebouncedValue(shortDescription);
+      }, delay);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [shortDescription]);
+
+  useEffect(() => {
+    const fetchShortDescription = async () => {
+      try {
+        if (debouncedValue) {
+          // Gửi yêu cầu kiểm tra tên lên máy chủ (thay thế URL bằng API thực tế)
+          const response = await axios.post(
+            `${process.env.REACT_APP_API_URL}/product/check/shortDescription`,
+            { shortDescription: debouncedValue }
+          );
+          // Xử lý kết quả, ví dụ: hiển thị thông báo
+          if (response.status === 200) {
+            if (response.data.message === "already exist") {
+              setErrorMessage("Thông tin mô tả ngắn đã tồn tại");
+            }
+            else{
+              setErrorMessage("");
+            }
+          } else {
+            console.log(response.status);
+          }
+          setIsFetching(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchShortDescription();
+  }, [debouncedValue]);
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Form
@@ -323,18 +387,22 @@ function MainForm() {
           {/* Series */}
           <Form.Item style={{ margin: 0 }}>
             <Form.Item
-              label="Tên sản phẩm"
+              label={`Tên sản phẩm (${name.length}/40)`}
               name="name"
               rules={[
                 { required: true, message: "Vui lòng nhập tên sản phẩm" },
-                { max: 80, message: "Không được nhập quá 80 kí tự" },
+                { max: 40, message: "Không được nhập quá 40 kí tự" },
               ]}
               style={{ display: "inline-block", width: "calc(50% - 8px)" }}
             >
-              <Input placeholder="Nhập tên sản phẩm" style={{ height: 40 }} />
+              <Input
+                onChange={(e) => onChangeLengthText(e, setName)}
+                placeholder="Nhập tên sản phẩm"
+                style={{ height: 40 }}
+              />
             </Form.Item>
             <Form.Item
-              label="Series"
+              label={`Series (${series.length}/25)`}
               name="series"
               style={{
                 display: "inline-block",
@@ -344,6 +412,7 @@ function MainForm() {
               rules={[{ max: 25, message: "Không được nhập quá 25 kí tự" }]}
             >
               <Input
+                onChange={(e) => onChangeLengthText(e, setSeries)}
                 placeholder="Nhập Series sản phẩm"
                 style={{ height: 40 }}
               />
@@ -403,7 +472,7 @@ function MainForm() {
           {/* số lượng */}
           <Form.Item style={{ margin: 0 }}>
             <Form.Item
-              label="Nhu cầu"
+              label={`Nhu cầu (${demand.length}/100)`}
               name="demand"
               style={{
                 display: "inline-block",
@@ -412,6 +481,7 @@ function MainForm() {
               rules={[{ max: 100, message: "Không được nhập quá 100 kí tự" }]}
             >
               <Input
+                onChange={(e) => onChangeLengthText(e, setDemand)}
                 placeholder="Nhập nhu cầu sử dụng sản phẩm"
                 style={{ height: 40 }}
               />
@@ -440,7 +510,17 @@ function MainForm() {
 
           {/* Mô tả ngắn */}
           <Form.Item
-            label="Mô tả ngắn (Tối đa 160 kí tự)"
+            label={
+              <>
+                Mô tả ngắn ({shortDescription.length}/160) &nbsp;
+                {isFetching && (
+                  <Tag icon={<SyncOutlined spin />} color="processing">
+                    Đang kiểm tra
+                  </Tag>
+                )}
+                {!isFetching && errorMessage && <Tag color="error">{errorMessage}</Tag>}
+              </>
+            }
             name="shortDescription"
             rules={[
               {
@@ -453,7 +533,10 @@ function MainForm() {
               },
             ]}
           >
-            <Input.TextArea placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)" />
+            <Input.TextArea
+              onChange={(e) => onChangeLengthText(e, setShortDescription)}
+              placeholder="Nhập mô tả chung của sản phẩm (Được hiển thị trên sản phẩm)"
+            />
           </Form.Item>
 
           {/* main image */}
@@ -540,10 +623,13 @@ function MainForm() {
                     style={{ width: "400px", margin: "0" }}
                     rules={[
                       { required: true, message: "Không bỏ trống trường này" },
-                      { max: 200, message: "Không được nhập quá 200 kí tự" },
+                      { max: 150, message: "Không được nhập quá 150 kí tự" },
                     ]}
                   >
-                    <Input type="text" placeholder="Nhập thông tin" />
+                    <Input
+                      type="text"
+                      placeholder="Nhập thông tin (Không quá 150 kí tự)"
+                    />
                   </Form.Item>
 
                   <MinusCircleOutlined onClick={() => remove(name)} />
@@ -598,7 +684,7 @@ function MainForm() {
               disabled={
                 !clientReady ||
                 !!form.getFieldsError().filter(({ errors }) => errors.length)
-                  .length
+                  .length || errorMessage
               }
             >
               Tạo sản phẩm

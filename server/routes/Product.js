@@ -49,5 +49,6 @@ router.post("/:id/variant", ProductControllers.getRemainingQuantityVariant);
 router.post("/ImgAndDescription",ProductControllers.getProductImageAndDescription);
 router.get("/Description",ProductControllers.getProductDescription);
 router.get("/:id/coupons", ProductControllers.getCoupons);
+router.post("/check/shortDescription", ProductControllers.checkShortDescriptionUnique);
 
 module.exports = router;
