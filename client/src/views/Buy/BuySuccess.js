@@ -66,8 +66,8 @@ const BuySuccess = () => {
         <Button type="primary" key="console" href="/">
           Về trang chủ
         </Button>,
-        <Button key="profile" href="/profile">
-          Lịch sử mua hàng
+        <Button key="profile" href="/profile/order">
+          Xem đơn hàng
         </Button>,
         <Button key="buy" href="/cart">
           Mua lại
