@@ -187,25 +187,25 @@ export default function Profile() {
     // Nếu paymentMenthod là 0 hoặc 2, hiển thị thông báo yêu cầu liên hệ để hủy đơn hàng
     if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
       Modal.info({
-        title: 'Yêu cầu hủy đơn hàng',
+        title: "Yêu cầu hủy đơn hàng",
         content: `Bạn đã thanh toán bằng ví điện tử nếu bạn muốn hủy đơn hàng, vui lòng liên hệ đến số 0338112099 để yêu cầu hoàn tiền và hủy đơn hàng.`,
-        okText: 'Đồng ý',
-        cancelButtonProps: { style: { display: 'none' } }, // Ẩn nút "Cancel"
+        okText: "Đồng ý",
+        cancelButtonProps: { style: { display: "none" } }, // Ẩn nút "Cancel"
       });
-    // Nếu paymentMenthod là 1, hiển thị thông báo xác nhận hủy đơn hàng và thực hiện hủy nếu đồng ý
+      // Nếu paymentMenthod là 1, hiển thị thông báo xác nhận hủy đơn hàng và thực hiện hủy nếu đồng ý
     } else if (record.order_status === 1) {
       Modal.info({
-        title: 'Thông báo',
-        content: 'Vui lòng liên hệ đến số 0338112099 để hủy đơn hàng.',
-        okText: 'Đồng ý',
-        cancelButtonProps: { style: { display: 'none' } }, // Ẩn nút "Cancel"
+        title: "Thông báo",
+        content: "Vui lòng liên hệ đến số 0338112099 để hủy đơn hàng.",
+        okText: "Đồng ý",
+        cancelButtonProps: { style: { display: "none" } }, // Ẩn nút "Cancel"
       });
     } else if (record.paymentMenthod === 1) {
       Modal.confirm({
-        title: 'Xác nhận hủy đơn hàng',
+        title: "Xác nhận hủy đơn hàng",
         content: `Bạn có chắc chắn muốn hủy đơn hàng ${record.order_id} không?`,
-        okText: 'Đồng ý',
-        cancelText: 'Không đồng ý',
+        okText: "Đồng ý",
+        cancelText: "Không đồng ý",
         onOk: async () => {
           // Đặt logic hủy đơn hàng ở đây
           if (record.order_id) {
@@ -233,7 +233,6 @@ export default function Profile() {
       });
     }
   };
-  
 
   // Tạo state order để chuyển sang page order mỗi khi có dữ liệu
   const [order, setOrder] = useState(null);
@@ -378,8 +377,7 @@ export default function Profile() {
               >
                 <Avatar src={user.picture} size="large" />
                 &nbsp;
-                <a className="username-css"> {user.name} </a>
-               
+                <span className="username-css"> {user.name}</span>
               </MDBTabsLink>
             </MDBTabsItem>
 
@@ -446,6 +444,10 @@ export default function Profile() {
                       {
                         required: true,
                         message: "Vui lòng nhập tên của bạn",
+                      },
+                      {
+                        max: 45,
+                        message: "Tên không được dài quá 45 kí tự",
                       },
                     ]}
                   >
@@ -627,7 +629,6 @@ export default function Profile() {
           </MDBTabsContent>
         </MDBCol>
       </MDBRow>
-
     </>
   );
 }

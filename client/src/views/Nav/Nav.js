@@ -61,25 +61,25 @@ const App = () => {
   const isLogin = localStorage.getItem("isLogin");
 
   // Hàm sử lí hiển thị name
-  function formatUserName(name) {
-    // Kiểm tra xem tên có khoảng trắng hay không.
-    name = name.trim();
-    const spaceIndex = name.indexOf(" ");
-    if (spaceIndex !== -1) {
-      // Có khoảng trắng
-      // Lấy 2 từ đầu tiên bằng cách cắt chuỗi theo khoảng trắng.
-      const firstSpace = name.indexOf(" ");
-      const editName = name.substring(0, firstSpace) + " " + name.split(" ")[1];
-      // Nếu name dài hơn 15 kí tự, lấy 15 kí tự đầu tiên của editName + ...
-      // Nếu name ngắn hơn 15 kí tự, giữ nguyên editName
-      return name.length > 15 ? editName.substring(0, 15) + "..." : editName;
-    } else {
-      // Không có khoảng trắng
-      // Nếu name dài hơn 15 kí tự, lấy 15 ký tự đầu tiên + ...
-      // Nếu name ngắn hơn 15 kí tự, giữ nguyên name
-      return name.length > 15 ? name.substring(0, 15) + "..." : name;
-    }
-  }
+  // function formatUserName(name) {
+  //   // Kiểm tra xem tên có khoảng trắng hay không.
+  //   name = name.trim();
+  //   const spaceIndex = name.indexOf(" ");
+  //   if (spaceIndex !== -1) {
+  //     // Có khoảng trắng
+  //     // Lấy 2 từ đầu tiên bằng cách cắt chuỗi theo khoảng trắng.
+  //     const firstSpace = name.indexOf(" ");
+  //     const editName = name.substring(0, firstSpace) + " " + name.split(" ")[1];
+  //     // Nếu name dài hơn 15 kí tự, lấy 15 kí tự đầu tiên của editName + ...
+  //     // Nếu name ngắn hơn 15 kí tự, giữ nguyên editName
+  //     return name.length > 20 ? editName.substring(0, 20) + "..." : editName;
+  //   } else {
+  //     // Không có khoảng trắng
+  //     // Nếu name dài hơn 15 kí tự, lấy 15 ký tự đầu tiên + ...
+  //     // Nếu name ngắn hơn 15 kí tự, giữ nguyên name
+  //     return name.length > 20 ? name.substring(0, 20) + "..." : name;
+  //   }
+  // }
 
   // const [menuOpenKeys, setMenuOpenKeys] = useState([]);
   const cart = useSelector((state) => state.cart.products);
@@ -95,16 +95,6 @@ const App = () => {
   // const handleMenuOpenChange = (openKeys) => {
   //   setMenuOpenKeys(openKeys);
   // };
-
-  const removeFromCart = (productId, color, capacity, coupons) => {
-    const data = {
-      product_id: productId,
-      color,
-      capacity,
-      coupons,
-    };
-    dispatch(deleteProductInCart(data));
-  };
 
   // phone
   // const [phone, setPhone] = useState("");
@@ -377,7 +367,7 @@ const App = () => {
                 href="/chinh-sach-bao-hanh"
                 style={{
                   marginRight: "20px",
-                  color: "#fff", 
+                  color: "#fff",
                   textDecoration: "none",
                 }}
               >
@@ -398,7 +388,7 @@ const App = () => {
                 href="/chinh-sach-thanh-toan"
                 style={{
                   marginRight: "20px",
-                  color: "#fff", 
+                  color: "#fff",
                   textDecoration: "none",
                 }}
               >
@@ -616,25 +606,17 @@ const App = () => {
                 <Dropdown menu={{ items: menuAccount }} className="avt-user">
                   {user.id ? (
                     <div
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}
+                      style={{display: "flex", justifyContent: "center", alignItems:"center"}}
                     >
                       <Avatar
                         src={user.picture}
                         style={{ cursor: "pointer" }}
                       />
-                      <span className="user-name"
-                        style={{
-                          fontWeight: "bold",
-                          marginLeft: "5px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {formatUserName(user.name)}
-                      </span>
+                      &nbsp; &nbsp;
+                      <div className="avt-user-name-group">
+                        <span className="user-name">Xin chào,</span>
+                        <span className="avt-user-name-control">{user?.name}</span>
+                      </div>
                     </div>
                   ) : (
                     <Avatar
@@ -860,20 +842,20 @@ const App = () => {
                           dataSource={cart}
                           renderItem={(selectedItems) => (
                             <List.Item
-                              // actions={[
-                              //   <Button
-                              //     type="danger"
-                              //     icon={<DeleteOutlined />}
-                              //     onClick={() =>
-                              //       removeFromCart(
-                              //         selectedItems.id,
-                              //         selectedItems.color,
-                              //         selectedItems.capacity,
-                              //         selectedItems.coupons
-                              //       )
-                              //     }
-                              //   ></Button>,
-                              // ]}
+                            // actions={[
+                            //   <Button
+                            //     type="danger"
+                            //     icon={<DeleteOutlined />}
+                            //     onClick={() =>
+                            //       removeFromCart(
+                            //         selectedItems.id,
+                            //         selectedItems.color,
+                            //         selectedItems.capacity,
+                            //         selectedItems.coupons
+                            //       )
+                            //     }
+                            //   ></Button>,
+                            // ]}
                             >
                               <List.Item.Meta
                                 avatar={
@@ -936,8 +918,8 @@ const App = () => {
                                         selectedItems.price -
                                           (selectedItems.discount +
                                             parseInt(
-                                              selectedItems.coupons?.value_vnd ||
-                                                0
+                                              selectedItems.coupons
+                                                ?.value_vnd || 0
                                             ))
                                       )}
                                     </div>
@@ -966,14 +948,16 @@ const App = () => {
                     count={cart?.length}
                     style={{ marginRight: "10px", marginTop: "10px" }}
                   >
-                    <ShoppingCartOutlined
-                      style={{
-                        fontSize: "30px",
-                        color: " #1435c3",
-                        margin: "10px",
-                        cursor: "pointer",
-                      }}
-                    />
+                    <NavLink to="/cart">
+                      <ShoppingCartOutlined
+                        style={{
+                          fontSize: "30px",
+                          color: " #1435c3",
+                          margin: "10px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </NavLink>
                   </Badge>
                 </Popover>
 

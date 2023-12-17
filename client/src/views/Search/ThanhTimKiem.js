@@ -93,7 +93,7 @@ const SearchComponent = () => {
 
   return (
     <div
-      style={{ padding: "8px", minWidth: 0, flex: "1 1 auto" }}
+      style={{ padding: "8px", maxWidth: "700px", flex: "1 1 auto" }}
       className="teko-col css-388q1u"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

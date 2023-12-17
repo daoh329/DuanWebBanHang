@@ -138,7 +138,7 @@ class Product {
     p.main_image,
     p.CategoryID as category,
     pd.brand,
-    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
+    pd.created_at,
     pd.configuration,
     pd.description,
     (
@@ -203,7 +203,7 @@ class Product {
     const checkInOrder = `select count(*) as count from orderdetailsproduct where productID = ?`;
     const resultsCheck = await query(checkInOrder, [id]);
     if (resultsCheck[0].count !== 0) {
-      return res.json({message: "Do not delete"});
+      return res.json({ message: "Do not delete" });
     }
 
     // query get path image
@@ -500,7 +500,7 @@ class Product {
     pd.brand, 
     pd.configuration,
     pd.description,
-    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
+    pd.created_at,
     JSON_ARRAYAGG(
       JSON_OBJECT(
         'color', pv.color,
@@ -627,7 +627,7 @@ class Product {
     p.*,
     pd.brand,
     pd.configuration,
-    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
+    pd.created_at,
     (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -676,7 +676,7 @@ class Product {
     p.*,
     pd.brand,
     pd.configuration,
-    CONVERT_TZ(pd.created_at, '+00:00', '+07:00') AS created_at,
+    pd.created_at,
     (
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -1057,6 +1057,23 @@ class Product {
       res.status(200).json(results);
     } catch (error) {
       res.status(500).json({ message: "Get failed coupons" });
+    }
+  }
+
+  // /product/check/shortDescription
+  async checkShortDescriptionUnique(req, res) {
+    try {
+      const { shortDescription } = req.body;
+      const qr = `SELECT COUNT(*) as count FROM products WHERE shortDescription = ?`;
+      const result = await query(qr, [shortDescription]);
+      if (result[0].count === 0) {
+        return res.status(200).json({ message: "Does not exist" });
+      } else {
+        return res.status(200).json({ message: "already exist" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Check short description failure" });
     }
   }
 }
