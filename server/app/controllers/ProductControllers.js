@@ -591,7 +591,6 @@ class Product {
         FROM products as p
         JOIN productDetails ON p.id = productDetails.product_id
         JOIN category ON p.CategoryID = category.id
-        LEFT JOIN prodetailcolor ON p.id = prodetailcolor.product_id
         WHERE p.id = ?
         GROUP BY p.id, p.name, p.status, p.shortDescription, p.main_image,
        productDetails.created_at,  productDetails.brand,

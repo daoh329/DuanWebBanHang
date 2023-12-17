@@ -262,7 +262,6 @@ function Admin() {
         />
       </div>
 
-
       <div style={{ flex: "4", marginLeft: "300px" }}>
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
