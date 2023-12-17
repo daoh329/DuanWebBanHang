@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
+import { SocketContext } from "../App";
+import { getPermission } from "../../util/servicesGlobal";
+import { openInfoModalNotPermission } from "../NotificationsForm/Authenticated";
 
 function QLdelivered() {
-
+    const socket = useContext(SocketContext);
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
@@ -33,6 +37,11 @@ function QLdelivered() {
 
     // Hàm đã giao đơn hàng
     const handleDelivered = async (record) => {
+        // check permission
+        if ((await getPermission()) === "user") {
+            openInfoModalNotPermission();
+            return;
+        }
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/delivered/${record.order_id}`);
@@ -45,6 +54,11 @@ function QLdelivered() {
                   );
                   message.success(`Đơn hàng mã ${record.order_id} đã giao thành công`);
                 loadData();  // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+                // Báo lên socket là có thông báo mới cho người dùng
+                if (socket) {
+                    // Gửi thông báo tới server khi nút được click
+                    socket.emit("notification", { message: record.user_id });
+                }
             } catch (error) {
                 console.error("Error delivered order:", error);
             }
@@ -54,6 +68,11 @@ function QLdelivered() {
     };
 
     const handleFailed = async (record) => {
+        // check permission
+        if ((await getPermission()) === "user") {
+            openInfoModalNotPermission();
+            return;
+        }
         if (record.order_id) {
             if (record.paymentMenthod === 0 || record.paymentMenthod === 2) {
                 // Hiển thị thông báo cho phương thức thanh toán ví điện tử
@@ -71,10 +90,15 @@ function QLdelivered() {
                                 record.order_id,
                                 "5",
                                 "Giao hàng không thành công",
-                                `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
+                                `Đơn hàng ${record.order_id} không thể giao tới bạn`
                               );
                             message.warning(`Đơn hàng mã ${record.order_id} đã giao không thành công`);
                             loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
+                            // Báo lên socket là có thông báo mới cho người dùng
+                            if (socket) {
+                                // Gửi thông báo tới server khi nút được click
+                                socket.emit("notification", { message: record.user_id });
+                            }
                         } catch (error) {
                             console.error("Error delivered order:", error);
                         }
@@ -87,12 +111,17 @@ function QLdelivered() {
                     CreateNotification(
                         record.user_id,
                         record.order_id,
-                        "2",
+                        "5",
                         "Giao hàng không thành công",
                         `Đơn hàng ${record.order_id} của bạn đã giao không thành công`
                       );
                     message.warning(`Đơn hàng mã ${record.order_id} đã giao không thành công`);
                     loadData();  // Gọi lại hàm tải dữ liệu sau khi giao hàng không thành công
+                    // Báo lên socket là có thông báo mới cho người dùng
+                    if (socket) {
+                        // Gửi thông báo tới server khi nút được click
+                        socket.emit("notification", { message: record.user_id });
+                    }
                 } catch (error) {
                     console.error("Error delivered order:", error);
                 }
@@ -101,7 +130,6 @@ function QLdelivered() {
             console.error("Order ID is undefined:", record);
         }
     };
-    
 
     const handleOpenOrderInformations = (order_id) => {
         // Lấy dữ liệu đơn hàng dựa trên order_id

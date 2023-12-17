@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import "./Profile.css";
 import {
   MDBTabs,
@@ -30,9 +30,11 @@ import { CreateNotification } from "../../component/NotificationManager/Notifica
 import { utcToZonedTime, format } from "date-fns-tz";
 import { formatCurrency } from "../../util/FormatVnd";
 import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
+import { SocketContext } from "../App";
 
 export default function Profile() {
   // lấy trạng thái được truyền qua bằng thẻ Link
+  const socket = useContext(SocketContext);
   const location = useLocation();
   // Lấy thông tin người dùng trong redux
   const user = useSelector((state) => state.user);
@@ -47,13 +49,23 @@ export default function Profile() {
     const action = location.state?.action;
     // nếu hành động đó gọi tới thông tin đơn hàng
     // và đã có dữ liệu đơn hàng (data.length > 0)
-
     if (action === "call_order" && data.length > 0) {
       // lấy order_id, xác định đơn hàng và chuyển page
+      loadData();
       const order_id = location.state?.order_id;
       handleOpenOrderInformations(order_id);
     }
   }, [data, location]);
+
+  // connect socket to server
+  useEffect(() => {
+    if (user.id && socket) {
+      // Lắng nghe sự kiện reload thông báo
+      socket.on("reload-notification", (data) => {
+        loadData();
+      });
+    }
+  }, [user, socket]);
 
   useEffect(() => {
     if (data) {
@@ -159,6 +171,11 @@ export default function Profile() {
                 `Đơn hàng ${record.order_id} của bạn đã được hủy thành công`
               );
               loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+              // Báo lên socket là có thông báo mới cho người dùng
+              if (socket) {
+                // Gửi thông báo tới server khi nút được click
+                socket.emit("notification", { message: record.user_id });
+              }
             } catch (error) {
               if (error.response && error.response.status === 401) {
                 NotificationBeenLoggedOut();
@@ -175,7 +192,9 @@ export default function Profile() {
     // tìm đơn hàng trong mảng đơn hàng
     // và set dữ liệu đơn hàng đó cho order
     const orderData = data.find((order) => order.order_id === order_id);
-    navigate(`order/${order_id}`, { state: orderData });
+    setTimeout(() => {
+      navigate(`order/${order_id}`, { state: orderData });
+    }, 100)
   };
 
   const handleToInformationsNotification = (parentPage, order_id) => {
