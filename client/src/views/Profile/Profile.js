@@ -22,7 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Layout from "./AddressManager/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { update } from "../../redux/userSlice";
 import NotificationsLayout from "./NotificationsManager/NotificationsLayout";
 import Order from "./OrderInformations/Order";
@@ -44,15 +44,16 @@ export default function Profile() {
 
   // hook nhận hành động chuyển page
   useEffect(() => {
-    const action = location.state?.actions;
+    const action = location.state?.action;
     // nếu hành động đó gọi tới thông tin đơn hàng
     // và đã có dữ liệu đơn hàng (data.length > 0)
+
     if (action === "call_order" && data.length > 0) {
       // lấy order_id, xác định đơn hàng và chuyển page
       const order_id = location.state?.order_id;
       handleOpenOrderInformations(order_id);
     }
-  }, [data]);
+  }, [data, location]);
 
   useEffect(() => {
     if (data) {
@@ -173,8 +174,8 @@ export default function Profile() {
   const handleOpenOrderInformations = (order_id) => {
     // tìm đơn hàng trong mảng đơn hàng
     // và set dữ liệu đơn hàng đó cho order
-    // setOrder(orderData);
-    // console.log();
+    const orderData = data.find((order) => order.order_id === order_id);
+    navigate(`order/${order_id}`, { state: orderData });
   };
 
   const handleToInformationsNotification = (parentPage, order_id) => {
@@ -524,6 +525,7 @@ const OrderLayout = (props) => {
     }
     setIconsActive(value);
   };
+  const location = useLocation();
 
   return (
     <MDBTabsPane style={{ paddingTop: "20px" }} className="tab-2" show={true}>

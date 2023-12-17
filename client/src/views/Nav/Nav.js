@@ -294,38 +294,20 @@ const App = () => {
           });
         }
         // chuyển qua page chi tiết thông báo
-        if (location.pathname === "/profile") {
-          const state = {
-            tab: "tab2",
-            actions: "call_order",
-            order_id: notification.order_id,
-          };
-        } else {
-          navigate("/profile", {
-            state: {
-              tab: "tab2",
-              actions: "call_order",
-              order_id: notification.order_id,
-            },
-          });
-        }
-      } else {
-       // chuyển qua page chi tiết thông báo
-       if (location.pathname === "/profile") {
-        const state = {
-          tab: "tab2",
-          actions: "call_order",
-          order_id: notification.order_id,
-        };
-      } else {
-        navigate("/profile", {
+        navigate("/profile/order", {
           state: {
-            tab: "tab2",
-            actions: "call_order",
             order_id: notification.order_id,
+            action: "call_order",
           },
         });
-      }
+      } else {
+        // chuyển qua page chi tiết thông báo
+        navigate("/profile/order", {
+          state: {
+            order_id: notification.order_id,
+            action: "call_order",
+          },
+        });
       }
     } catch (error) {
       // Log ra lỗi nếu có

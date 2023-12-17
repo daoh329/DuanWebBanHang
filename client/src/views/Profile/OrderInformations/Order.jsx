@@ -42,7 +42,7 @@ function Order(props) {
   // };
 
   const handleCancelOrder = () => {
-    navigate(-1)
+    navigate("/profile/order");
   };
 
   return (
