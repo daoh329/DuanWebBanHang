@@ -36,7 +36,10 @@ import Hinh from "../../../src/assets/LogoWebGIF.gif";
 import logomobi from "../../../src/assets/logomobi.png";
 
 import { useDispatch, useSelector } from "react-redux";
-import { updateNotification } from "../../redux/notificationsSlice";
+import {
+  clickNotification,
+  updateNotification,
+} from "../../redux/notificationsSlice";
 import axios from "axios";
 import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
@@ -266,7 +269,9 @@ const App = () => {
 
   // hàm chuyển tới page profile
   // và truyền state xác định tab QL đơn hàng
+  const location = useLocation();
   const nextToNotifications = async (notification) => {
+    // console.log(location.pathname);
     const { id, is_read } = notification;
     try {
       // tạo mảng chứa id thông báo (API nhận kiểu mảng)
@@ -289,20 +294,18 @@ const App = () => {
           });
         }
         // chuyển qua page chi tiết thông báo
-        navigate("/profile", {
+        navigate("/profile/order", {
           state: {
-            tab: "tab2",
-            actions: "call_order",
             order_id: notification.order_id,
+            action: "call_order",
           },
         });
       } else {
         // chuyển qua page chi tiết thông báo
-        navigate("/profile", {
+        navigate("/profile/order", {
           state: {
-            tab: "tab2",
-            actions: "call_order",
             order_id: notification.order_id,
+            action: "call_order",
           },
         });
       }
@@ -311,7 +314,7 @@ const App = () => {
       console.log(error);
     }
   };
-  const location = useLocation();
+  // const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   // console.log(cart);
@@ -606,7 +609,11 @@ const App = () => {
                 <Dropdown menu={{ items: menuAccount }} className="avt-user">
                   {user.id ? (
                     <div
-                      style={{display: "flex", justifyContent: "center", alignItems:"center"}}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
                     >
                       <Avatar
                         src={user.picture}
@@ -615,7 +622,9 @@ const App = () => {
                       &nbsp; &nbsp;
                       <div className="avt-user-name-group">
                         <span className="user-name">Xin chào,</span>
-                        <span className="avt-user-name-control">{user?.name}</span>
+                        <span className="avt-user-name-control">
+                          {user?.name}
+                        </span>
                       </div>
                     </div>
                   ) : (

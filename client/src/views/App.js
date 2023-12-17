@@ -149,7 +149,7 @@ useEffect(() => {
           <Route path="/thanks" element={<BillSuccess />} />
           <Route path="/qlbillorder/:id" element={<QLOrder />} />
           <Route
-            path="/profile"
+            path="/profile/*"
             element={isLogin ? <Profile /> : <Navigate to="/" />}
           />
           <Route

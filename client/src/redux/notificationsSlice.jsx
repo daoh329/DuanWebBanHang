@@ -19,6 +19,7 @@ export const notificationsSlice = createSlice({
         notificationToUpdate.is_read = newStatus;
       }
     },
+    
   },
 });
 

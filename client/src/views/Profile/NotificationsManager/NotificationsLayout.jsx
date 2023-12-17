@@ -3,6 +3,7 @@ import { Avatar, Empty, List, Tag } from "antd";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { FileDoneOutlined, FileExcelOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 import "./style.css";
 import { updateNotification } from "../../../redux/notificationsSlice";
@@ -13,7 +14,7 @@ import delivered from "../../../assets/delivered.png";
 
 function NotificationsLayout(props) {
   const statusPage = props.statusPage;
-
+  const navigate = useNavigate();
   const data = useSelector((state) => state.notifications.notifications);
   const dispatch = useDispatch();
 
@@ -77,16 +78,27 @@ function NotificationsLayout(props) {
           });
         }
         // chuyển qua page chi tiết thông báo
-        statusPage("tab2", order_id);
+        // statusPage("tab2", order_id);
+        navigate("/profile/order", {
+          state: {
+            order_id: order_id,
+            action: "call_order"
+          },
+        });
       } else {
         // chuyển qua page chi tiết thông báo
-        statusPage("tab2", order_id);
+        navigate("/profile/order", {
+          state: {
+            order_id: order_id,
+            action: "call_order"
+          },
+        });
       }
     } catch (error) {
       // Log ra lỗi nếu có
       console.log(error);
       // Lỗi đăng nhập
-      if (error.response.status === 401) {  
+      if (error.response.status === 401) {
         NotificationBeenLoggedOut();
       }
     }
