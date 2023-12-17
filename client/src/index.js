@@ -3,9 +3,8 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 
 // import "./styles/global.scss";
-import './index.css'
-import App from "./views/App";
-
+import "./index.css";
+import { App } from "./views/App";
 
 // thư viện mdb
 import "mdb-react-ui-kit/dist/css/mdb.min.css";

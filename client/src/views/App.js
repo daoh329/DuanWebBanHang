@@ -1,5 +1,5 @@
 //App.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { io } from "socket.io-client";
 
 import "../views/App.scss";
 import Home from "./Home/Home";
@@ -61,13 +62,35 @@ import ChinhSachBaoHanh from "./Footer/MenuFooter/ChinhSachBaoHanh.js";
 import ChinhSachDoiTra from "./Footer/MenuFooter/ChinhSachDoiTra.js";
 import ScrollToTop from "../util/scrollToTop.js";
 import NotFound from "./404/NotFound.js";
-import { getUser } from '../util/servicesGlobal'
+import { getUser } from "../util/servicesGlobal";
 import NotificationsLayout from "./Profile/NotificationsManager/NotificationsLayout.jsx";
+
+const SocketContext = createContext();
 
 const App = () => {
   const user = useSelector((state) => state.user);
   const isLogin = localStorage.getItem("isLogin");
   const dispatch = useDispatch();
+  const [socket, setSocket] = useState(null);
+  const [reloadNotification, setReloadNotification] = useState(false);
+
+  // connect socket to server
+  useEffect(() => {
+    if (user.id) {
+      const socket = io(process.env.REACT_APP_API_URL);
+      setSocket(socket);
+      // Đăng nhập socket
+      socket.emit("login", { message: user.id });
+      // Lắng nghe sự kiện reload thông báo
+      socket.on("reload-notification", (data) => {
+        getNotifications(user.id);
+      });
+      // Ngắt kết nối khi component unmounted
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user]);
 
   useEffect(() => {
     // lưu giỏ hàng vào redux
@@ -78,11 +101,11 @@ const App = () => {
     getUser(dispatch);
   }, []);
 
-useEffect(() => {
-  if (user) {
-    getNotifications(user.id)
-  }
-}, [user])
+  useEffect(() => {
+    if (user.id) {
+      getNotifications(user.id);
+    }
+  }, [user]);
 
   const getNotifications = async (id) => {
     try {
@@ -99,98 +122,103 @@ useEffect(() => {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <ScrollToTop />
-        <Nav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/detail/:id" element={<Detail />} />
-          <Route
-            path="/login"
-            element={isLogin ? <Navigate to="/" /> : <Login />}
-          />
-          {/* <Route path="/adminPage" element={<AdminPage />} />
+      <SocketContext.Provider value={socket}>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Nav />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/detail/:id" element={<Detail />} />
+            <Route
+              path="/login"
+              element={isLogin ? <Navigate to="/" /> : <Login />}
+            />
+            {/* <Route path="/adminPage" element={<AdminPage />} />
              <Route path="/admin" element={<Admin />} /> */}
-          <Route
-            path="/admin/*"
-            element={
-              isLogin === "admin" || isLogin === "superadmin" ? (
-                <>
-                  <Admin /> <Outlet />
-                </>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route path="/search" element={<Search />} />
-          <Route path="/showroom" element={<ShowRoom />} />
-          <Route path="/tin-tuc" element={<Tintuc />} />
-          <Route path="/noi-dung" element={<Noidung />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/checkSP" element={<CheckSP />} />
-          <Route path="/sale" element={<Sale />} />
-          <Route path="/orderhistory/:phone" element={<OrderHistory />} />
-          <Route path="/orders" element={<QLdonhang />} />
-          <Route path="/shippingOrder" element={<QLshipping />} />
-          <Route path="/deliveredOrder" element={<QLdelivered />} />
-          <Route path="/dondathang" element={<TabsDonDatHang />} />
-          <Route path="/vanchuyen" element={<TabsVanChuyen />} />
-          <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
-          <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
-          <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
-          <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
-          <Route path="/deliveryfailedOrder" element={<QLdeliveryfailed />} />
-          <Route path="/alldelivered" element={<QLAlldelivered />} />
-          <Route path="/allorders" element={<QLAlldonhang />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/buy" element={<Buy user={user} />} />
-          <Route path="/success" element={<BuySuccess />} />
-          <Route path="/thanks" element={<BillSuccess />} />
-          <Route path="/qlbillorder/:id" element={<QLOrder />} />
-          <Route
-            path="/profile/*"
-            element={isLogin ? <Profile /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/tat-ca-san-pham-laptop"
-            element={<AllNewProductLaptop />}
-          />
-          <Route
-            path="/tat-ca-san-pham-laptop-moi"
-            element={<AllNewProductLaptop />}
-          />
-          <Route
-            path="/tat-ca-san-pham-phone"
-            element={<AllNewProductPhone />}
-          />
-          <Route
-            path="/tat-ca-san-pham-phone-moi"
-            element={<AllNewProductPhone />}
-          />
-          <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
-          <Route path="/danhmuc-laptop" element={<AllProduct />} />
-          <Route path="/createorder" element={<CreateOrder />} />
-          <Route path="/chat" element={<Chatbot />} />
-          <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
-          <Route
-            path="/chinh-sach-thanh-toan"
-            element={<ChinhSachThanhToan />}
-          />
-          <Route path="/tra-cuu-don-hang" element={<CheckSP />} />
-          <Route path="/giai-quyet-khieu-nai" element={<GiaiQuyetKhieuNai />} />
-          <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
-          <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
+            <Route
+              path="/admin/*"
+              element={
+                isLogin === "admin" || isLogin === "superadmin" ? (
+                  <>
+                    <Admin /> <Outlet />
+                  </>
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route path="/search" element={<Search />} />
+            <Route path="/showroom" element={<ShowRoom />} />
+            <Route path="/tin-tuc" element={<Tintuc />} />
+            <Route path="/noi-dung" element={<Noidung />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/checkSP" element={<CheckSP />} />
+            <Route path="/sale" element={<Sale />} />
+            <Route path="/orderhistory/:phone" element={<OrderHistory />} />
+            <Route path="/orders" element={<QLdonhang />} />
+            <Route path="/shippingOrder" element={<QLshipping />} />
+            <Route path="/deliveredOrder" element={<QLdelivered />} />
+            <Route path="/dondathang" element={<TabsDonDatHang />} />
+            <Route path="/vanchuyen" element={<TabsVanChuyen />} />
+            <Route path="/xacnhangiaohang" element={<TabsXacNhanGiaoHuy />} />
+            <Route path="/quanlydonhang" element={<TabsQLdonhang />} />
+            <Route path="/quanlydagiao" element={<TabsQLdagiao />} />
+            <Route path="/quanlygiaohuy" element={<TabsQLgiaohuy />} />
+            <Route path="/deliveryfailedOrder" element={<QLdeliveryfailed />} />
+            <Route path="/alldelivered" element={<QLAlldelivered />} />
+            <Route path="/allorders" element={<QLAlldonhang />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/buy" element={<Buy user={user} />} />
+            <Route path="/success" element={<BuySuccess />} />
+            <Route path="/thanks" element={<BillSuccess />} />
+            <Route path="/qlbillorder/:id" element={<QLOrder />} />
+            <Route
+              path="/profile/*"
+              element={isLogin ? <Profile /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/tat-ca-san-pham-laptop"
+              element={<AllNewProductLaptop />}
+            />
+            <Route
+              path="/tat-ca-san-pham-laptop-moi"
+              element={<AllNewProductLaptop />}
+            />
+            <Route
+              path="/tat-ca-san-pham-phone"
+              element={<AllNewProductPhone />}
+            />
+            <Route
+              path="/tat-ca-san-pham-phone-moi"
+              element={<AllNewProductPhone />}
+            />
+            <Route path="/danhmuc-dienthoai" element={<AllProductPhone />} />
+            <Route path="/danhmuc-laptop" element={<AllProduct />} />
+            <Route path="/createorder" element={<CreateOrder />} />
+            <Route path="/chat" element={<Chatbot />} />
+            <Route path="/huong-dan-mua-hang" element={<HuongDanMuaHang />} />
+            <Route
+              path="/chinh-sach-thanh-toan"
+              element={<ChinhSachThanhToan />}
+            />
+            <Route path="/tra-cuu-don-hang" element={<CheckSP />} />
+            <Route
+              path="/giai-quyet-khieu-nai"
+              element={<GiaiQuyetKhieuNai />}
+            />
+            <Route path="/chinh-sach-bao-hanh" element={<ChinhSachBaoHanh />} />
+            <Route path="/chinh-sach-doi-tra" element={<ChinhSachDoiTra />} />
 
-          <Route path="/thongbao" element={<NotificationsLayout/>}/>
-          {/* Route cho trang 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <MobileNav user={user} />
-        <Footer />
-      </BrowserRouter>
+            <Route path="/thongbao" element={<NotificationsLayout />} />
+            {/* Route cho trang 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <MobileNav user={user} />
+          <Footer />
+        </BrowserRouter>
+      </SocketContext.Provider>
     </div>
   );
 };
 
-export default App;
+export { SocketContext, App };
