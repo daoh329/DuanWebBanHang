@@ -1,22 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Divider } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
-import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import "./OrderStyle.css";
 import ProductItem from "./ProductItem/ProductItem";
 import { formatCurrency } from "../../../util/FormatVnd";
 import { utcToZonedTime, format } from "date-fns-tz";
+import { SocketContext } from "../../App";
 
-function Order(props) {
-  const [productAPI, setProduct] = useState(null);
+function Order() {
   const [reducedPrice, setReducedPrice] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const [order, setOrder] = useState(location?.state);
+  const socket = useContext(SocketContext);
+  const user = useSelector((state) => state.user);
+  
+  // connect socket to server
+  useEffect(() => {
+    if (user.id && socket && order) {
+      // Lắng nghe sự kiện reload thông báo
+      socket.on("reload-notification", (data) => {
+        console.log("focus me");
+        navigate("/profile/order", {
+          state: {
+            order_id: order.order_id,
+            action: "call_order"
+          },
+        });
+      });
+    }
+  }, [user, socket, order]);
 
   useEffect(() => {
     if (order) {
