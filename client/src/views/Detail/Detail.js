@@ -1084,7 +1084,7 @@ function Detail() {
 
                   {/* Hệ điều hành 1*/}
                   <tr
-                    style={{ display: configuration.os ? "table-row" : "none" }}
+                    style={{ backgroundColor: "#f6f6f6",display: configuration.os ? "table-row" : "none" }}
                   >
                     <td colSpan={1}>
                       {configuration.os ? " Hệ điều hành" : ""}
@@ -1114,8 +1114,8 @@ function Detail() {
 
                   {/* Rom*/}
                   <tr>
-                    <td colSpan={1}>Rom</td>
-                    <td colSpan={3}>{formatCapacity(selectedCapacity)}</td>
+                    <td style={{backgroundColor: "#f6f6f6"}} colSpan={1}>Rom</td>
+                    <td style={{backgroundColor: "#f6f6f6"}} colSpan={3}>{formatCapacity(selectedCapacity)}</td>
                   </tr>
 
                   {/* memoryStick*/}
@@ -1132,7 +1132,7 @@ function Detail() {
 
                   {/*screenSize*/}
                   <tr
-                    style={{
+                    style={{backgroundColor: "#f6f6f6",
                       display: configuration.screenSize ? "table-row" : "none",
                     }}
                   >
@@ -1200,7 +1200,7 @@ function Detail() {
 
                   {/*Pin*/}
                   <tr
-                    style={{
+                    style={{backgroundColor: "#f6f6f6",
                       display: configuration.pin ? "table-row" : "none",
                     }}
                   >
@@ -1250,7 +1250,7 @@ function Detail() {
 
                   {/*weight*/}
                   <tr
-                    style={{
+                    style={{backgroundColor: "#f6f6f6",
                       display: configuration.weight ? "table-row" : "none",
                     }}
                   >
@@ -1302,7 +1302,7 @@ function Detail() {
 
                   {/*networkConnections*/}
                   <tr
-                    style={{
+                    style={{backgroundColor: "#f6f6f6",
                       display: configuration.networkConnections
                         ? "table-row"
                         : "none",
