@@ -352,7 +352,7 @@ const AllNewProductPhone = () => {
                   value={selectedBrand}
                   defaultValue={"ALL"}
                   onChange={handleBrandChange}
-                  style={{ marginTop: "5px" }}
+                  style={{ marginTop: "5px" , width:"100%"}}
                   options={handleFormatToDataSelect(brands)}
                 />
               </div>
@@ -363,7 +363,7 @@ const AllNewProductPhone = () => {
                   title="Series"
                   value={selectedSeries}
                   onChange={handleSeriesChange}
-                  style={{ marginTop: "5px" }}
+                  style={{ marginTop: "5px", width:"100%" }}
                   options={handleFormatToDataSelect(uniqueSeries)}
                 />
               </div>
@@ -374,7 +374,7 @@ const AllNewProductPhone = () => {
                   title="ROM"
                   value={selectedRom}
                   onChange={handleRomChange}
-                  style={{ marginTop: "5px" }}
+                  style={{ marginTop: "5px" , width:"100%"}}
                   options={handleFormatToDataSelect(uniqueRom)}
                 />
               </div>
@@ -385,7 +385,7 @@ const AllNewProductPhone = () => {
                   title="RAM"
                   value={selectedRam}
                   onChange={handleRamChange}
-                  style={{ marginTop: "10px" }}
+                  style={{ marginTop: "10px" , width:"100%"}}
                   options={handleFormatToDataSelect(uniqueRam)}
                 />
               </div>
@@ -396,7 +396,7 @@ const AllNewProductPhone = () => {
                   title="Chip"
                   value={selectedChip}
                   onChange={handleChipChange}
-                  style={{ marginTop: "10px" }}
+                  style={{ marginTop: "10px" , width:"100%"}}
                   options={handleFormatToDataSelect(uniqueChip)}
                 />
               </div>

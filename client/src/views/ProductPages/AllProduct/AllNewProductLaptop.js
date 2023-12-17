@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
+  Divider,
   Form,
   Input,
   InputNumber,
@@ -289,7 +290,18 @@ const AllNewProductLaptop = () => {
     addToRecentlyViewedProduct(products);
     navigate(`/detail/${products.id}`);
   };
-
+  const handleFormatToDataSelect = (arrData) => {
+    const newData = [];
+    newData.push({ label: "Tất cả", value: "ALL" });
+    [...arrData].forEach((item) => {
+      const obj = {
+        label: item,
+        value: item,
+      };
+      newData.push(obj);
+    });
+    return newData;
+  };
   return (
     <div className="box-1usfas1">
       <div className="css-1usfas1">
@@ -322,184 +334,106 @@ const AllNewProductLaptop = () => {
                   getAriaValueText={valuetext}
                 />
               </Box>
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form>
-                  <Form.Item label="Thương hiệu" name="brand">
+
+              <Divider style={{ margin: "0" }} />
+              <div>
+                Thương hiệu <br />
                 <Select
+                  title="Thương hiệu"
                   value={selectedBrand}
+                  defaultValue={"ALL"}
                   onChange={handleBrandChange}
-                  style={{ marginTop: "10px" }} // Áp dụng kiểu dáng trực tiếp
-                >
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
-
-                  {brands &&
-                    brands.map((brand) => (
-                      <Select.Option key={brand} value={brand ? brand : ""}>
-                        <span style={{ fontSize: "13px" }}>{brand}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form>
-            
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(brands)}
+                />
               </div>
-              <Form>
-                     <Form.Item label="Cpu" name="cpu">
-                <Select value={selectedCpu} onChange={handleCpuChange}>
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
 
-                  {uniqueCpu &&
-                    uniqueCpu.map((cpu) => (
-                      <Select.Option key={cpu} value={cpu ? cpu : ""}>
-                        <span style={{ fontSize: "13px" }}>{cpu}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form>
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+                Cpu <br />
+                <Select
+                  title="Cpu"
+                  value={selectedCpu}
+                  defaultValue={"ALL"}
+                  onChange={handleCpuChange}
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(uniqueCpu)}
+                />
+              </div>
+
+
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Card đồ họa <br />
+                <Select
+                  title="Card đồ họa"
+                  value={selectedVga}
+                  defaultValue={"ALL"}
+                  onChange={handleVgaChange}
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(uniqueVga)}
+                />
+              </div>
+
+          
          
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form>
-                  <Form.Item label="Card đồ họa" name="Vga">
-                <Select value={selectedVga} onChange={handleVgaChange}>
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueVga &&
-                    uniqueVga.map((graphicsCard) => (
-                      <Select.Option key={graphicsCard} value={graphicsCard ? graphicsCard : ""}>
-                        <span style={{ fontSize: "13px" }}>{graphicsCard}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form>
-            
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form>
-                 <Form.Item label="Màn hình" name="screen">
-                <Select value={selectedScreen} onChange={handleScreenChange}>
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueScreen &&
-                    uniqueScreen.map((screenSize) => (
-                      <Select.Option key={screenSize} value={screenSize ? screenSize : ""}>
-                        <span style={{ fontSize: "13px" }}>{screenSize}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-
-              </Form>
-             
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form>
-                   <Form.Item label="Series" name="series">
-                <Select value={selectedSeries} onChange={handleSeriesChange}>
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueSeries &&
-                    uniqueSeries.map((series) => (
-                      <Select.Option key={series} value={series ? series : ""}>
-                        <span style={{ fontSize: "13px" }}>{series}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form>
-           
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
-              </div>
-              <Form>
-                  <Form.Item label="Lưu trữ" name="rom">
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Màn hình <br />
                 <Select
+                  title="Screen"
+                  value={selectedScreen}
+                  defaultValue={"ALL"}
+                  onChange={handleScreenChange}
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(uniqueScreen)}
+                />
+              </div>
+
+     
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Series Laptop <br />
+                <Select
+                  title="Series"
+                  value={selectedSeries}
+                  defaultValue={"ALL"}
+                  onChange={handleSeriesChange}
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(uniqueSeries)}
+                />
+              </div>
+
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Lưu trữ <br />
+                <Select
+                  title="Rom"
                   value={selectedRom}
+                  defaultValue={"ALL"}
                   onChange={handleRomChange}
-                  style={{ marginTop: "10px" }}
-                >
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueRom &&
-                    uniqueRom.map((capacity) => (
-                      <Select.Option key={capacity} value={capacity ? capacity : ""}>
-                        <span style={{ fontSize: "13px" }}>{capacity}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form>
-            
-
-              <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(uniqueRom)}
+                />
               </div>
-              <Form>
-                   <Form.Item label="Ram" name="ram">
+
+              <Divider style={{ margin: "10px 0 10px 0" }} />
+              <div>
+              Ram <br />
                 <Select
+                  title="Ram"
                   value={selectedRam}
+                  defaultValue={"ALL"}
                   onChange={handleRamChange}
-                  style={{ marginTop: "10px" }}
-                >
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
-
-                  {uniqueRam &&
-                    uniqueRam.map((ram) => (
-                      <Select.Option key={ram} value={ram ? ram : ""}>
-                        <span style={{ fontSize: "13px" }}>{ram}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form>
-           
-
-              {/* <div className="css-f1fyi0">
-                <div width="100%" color="border" className="css-yae08c"></div>
+                  style={{ marginTop: "5px" , width:"100%"}}
+                  options={handleFormatToDataSelect(uniqueRam)}
+                />
               </div>
-              <Form>
-                 <Form.Item label="Pin" name="pin">
-                <Select value={selectedPin} onChange={handlePinChange}>
-                  <Select.Option value="ALL">
-                    <span style={{ fontSize: "13px" }}>ALL</span>
-                  </Select.Option>
 
-                  {uniquePin &&
-                    uniquePin.map((pin) => (
-                      <Select.Option key={pin} value={pin ? pin : ""}>
-                        <span style={{ fontSize: "13px" }}>{pin}</span>
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-              </Form> */}
+
+             
+             
+           
              
             </div>
           </div>
