@@ -17,7 +17,6 @@ function ProductItem(props) {
     capacity,
     discount_code,
   } = props.product;
-  console.log(props.product);
   const navigate = useNavigate();
   const handleDetails = () => {
     navigate(`/detail/${productID}`, {
