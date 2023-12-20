@@ -1,6 +1,7 @@
 import _ from "lodash";
 import axios from "axios";
 import { update } from "../redux/userSlice";
+import { addOrders } from "../redux/testNotifiOrder";
 const moment = require('moment');
 
 // ========= UTIL
@@ -30,7 +31,6 @@ export const ArrayCompareArray = (arr1, arr2) => {
 
   return _(arr1).differenceWith(arr2, _.isEqual).isEmpty();
 };
-
 // =========== SERVICES ===========
 export const checkLogin = async () => {
   // kiểm tra phiên đăng nhập bằng cách gọi API lấy thông tin user
@@ -82,7 +82,7 @@ export const getUser = async (dispatch) => {
     console.log(e);
   }
 };
-export const getPermission = async () => {
+export const getPermissionCurrent = async () => {
   try {
     const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
     const result = await axios.get(url, { withCredentials: true });
@@ -97,7 +97,7 @@ export const getPermission = async () => {
     console.log(e);
     return "user";
   }
-}
+};
 // add recently viewed product id
 export const addToRecentlyViewedProduct = (products, user_id) => {
   // Lấy danh sách các sản phẩm đã xem từ localStorage
@@ -153,7 +153,6 @@ export const getRecentlyViewedProducts = async (historysp, setHistorysp) => {
     setHistorysp([]);
   }
 };
-
 // Hàm kiểm tra hạn của coupon
 export function isCouponExpired(coupon) {
   if (coupon && Object.keys(coupon).length !== 0) {
@@ -166,4 +165,26 @@ export function isCouponExpired(coupon) {
   return true;
 
 }
+// lấy tất cả đơn hàng đang đợi xác nhận
+export const loadData = (dispatch) => {
+  axios
+    .get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
+    .then((res) => {
+      // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
+      const sortedOrders = res.data
+        .filter((order) => order.order_status === 0)
+        .sort((a, b) => {
+          // Sắp xếp theo trạng thái
+          if (a.order_status < b.order_status) return -1;
+          if (a.order_status > b.order_status) return 1;
 
+          // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
+          return new Date(b.order_created_at) - new Date(a.order_created_at);
+        });
+      dispatch(
+        addOrders({ orders: sortedOrders || [] })
+      );
+      // setData(sortedOrders || []);
+    })
+    .catch((error) => console.log(error));
+};

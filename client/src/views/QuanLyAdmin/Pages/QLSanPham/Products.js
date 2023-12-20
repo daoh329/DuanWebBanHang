@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { RedoOutlined } from "@ant-design/icons";
 import axios from "axios";
 import ActionButton from "./ActionComponent/ActionButton";
+import dayjs from "dayjs";
 
 function Product() {
   const [Product, setProduct] = useState([]);
@@ -116,7 +117,7 @@ function Product() {
         created_at && (
           <div>
             <p style={{ margin: "0" }}>
-              {format(new Date(created_at), "HH:mm:ss")}
+              {dayjs(created_at).utcOffset(0).format("HH:mm:ss")}
             </p>
             <p style={{ margin: "0" }}>
               {format(new Date(created_at), "dd/MM/yyyy")}

@@ -64,6 +64,11 @@ import ScrollToTop from "../util/scrollToTop.js";
 import NotFound from "./404/NotFound.js";
 import { getUser } from "../util/servicesGlobal";
 import NotificationsLayout from "./Profile/NotificationsManager/NotificationsLayout.jsx";
+// Cài đặt plugin utc cho dayjs
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 const SocketContext = createContext();
 
@@ -72,7 +77,6 @@ const App = () => {
   const isLogin = localStorage.getItem("isLogin");
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
-  const [reloadNotification, setReloadNotification] = useState(false);
 
   // connect socket to server
   useEffect(() => {
@@ -80,7 +84,7 @@ const App = () => {
       const socket = io(process.env.REACT_APP_API_URL);
       setSocket(socket);
       // Đăng nhập socket
-      socket.emit("login", { message: user.id });
+      socket.emit("login", { userId: user.id, permission: user.permission });
       // Lắng nghe sự kiện reload thông báo
       socket.on("reload-notification", (data) => {
         getNotifications(user.id);

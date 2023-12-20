@@ -59,37 +59,7 @@ app.use(express.static(path.join(__dirname, "./src/public")));
 app.use("/auth", authRoute);
 route(app);
 
-// SocketConfig(io);
-const ObjectUserId = {};
-
-// Socket
-io.on("connection", (socket) => {
-  console.log("A client has connected.");
-
-  // // Xử lý sự kiện khi nhận được thông báo từ client
-  socket.on("login", (data) => {
-    ObjectUserId[data.message] = socket.id;
-  });
-
-  socket.on("notification", (data) => {
-    // Gửi thông báo tới người dùng đang đăng nhập
-    const userId = data.message;
-    for (const fieldName in ObjectUserId) {
-      if (userId == fieldName) {
-        const userSocketId = ObjectUserId[fieldName];
-        io.to(userSocketId).emit("reload-notification", {
-          message: `Notification for user ${userId}`,
-        });
-      }
-    }
-    // Gửi thông báo tới tất cả client kết nối
-  });
-
-  // Xử lý sự kiện khi ngắt kết nối
-  socket.on("disconnect", () => {
-    console.log("A client has disconnected.");
-  });
-});
+SocketConfig(io);
 
 // Khởi chạy máy chủ
 const port = process.env.PORT || 3000;

@@ -7,7 +7,7 @@ import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormInputCategory from "./CategoryInputComponent";
 import { openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 
 function Category() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +22,7 @@ function Category() {
     }),
     onSubmit: async (values) => {
       // Check permission
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }
@@ -147,7 +147,7 @@ function Category() {
   const handleDelete = async (name) => {
     try {
       // Check permission
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }

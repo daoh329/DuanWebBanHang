@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import notificationsReducer from "./notificationsSlice";
 import cartReducer from "./cartSlice";
+import orders from "./testNotifiOrder";
 
 
 export const store = configureStore({
@@ -9,5 +10,6 @@ export const store = configureStore({
     user: userReducer,
     notifications: notificationsReducer,
     cart: cartReducer,
+    orders: orders,
   },
 });

@@ -11,7 +11,7 @@ import {
   NotificationLogout,
   openInfoModalNotPermission,
 } from "../../../../NotificationsForm/Authenticated";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 
 function Brand() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +25,7 @@ function Brand() {
       name: Yup.string().required("Vui lòng nhập tên brand"),
     }),
     onSubmit: async (values) => {
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }
@@ -116,7 +116,7 @@ function Brand() {
 
   const handleDelete = async (name) => {
     // Check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }

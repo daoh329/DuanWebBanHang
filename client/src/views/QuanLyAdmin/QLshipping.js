@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { SocketContext } from "../App";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
-import { getPermission } from "../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../NotificationsForm/Authenticated";
 
 function QLshipping() {
@@ -41,7 +41,7 @@ function QLshipping() {
   // Hàm vận chuyển đơn hàng
   const handleShipping = async (record) => {
     // check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }
@@ -62,7 +62,7 @@ function QLshipping() {
         // Báo lên socket là có thông báo mới cho người dùng
         if (socket) {
           // Gửi thông báo tới server khi nút được click
-          socket.emit("notification", { message: record.user_id });
+          socket.emit("notification", { userId: record.user_id });
         }
       } catch (error) {
         console.error("Error delivered order:", error);
@@ -75,7 +75,7 @@ function QLshipping() {
   // Hàm vận chuyển đơn hàng
   const handleUndocancel = async (record) => {
     // check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }
@@ -106,7 +106,7 @@ function QLshipping() {
               // Báo lên socket là có thông báo mới cho người dùng
               if (socket) {
                 // Gửi thông báo tới server khi nút được click
-                socket.emit("notification", { message: record.user_id });
+                socket.emit("notification", { userId: record.user_id });
               }
             } catch (error) {
               console.error("Error canceling order:", error);
@@ -139,7 +139,7 @@ function QLshipping() {
               // Báo lên socket là có thông báo mới cho người dùng
               if (socket) {
                 // Gửi thông báo tới server khi nút được click
-                socket.emit("notification", { message: record.user_id });
+                socket.emit("notification", { userId: record.user_id });
               }
             } catch (error) {
               console.error("Error canceling order:", error);

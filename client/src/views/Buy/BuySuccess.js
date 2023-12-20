@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Result } from "antd";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
+
 import { addProductToCart, deleteProductInCart } from "../../redux/cartSlice";
 import config from "../../config";
+import { SocketContext } from "../App";
 
 const BuySuccess = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.products);
+  const socket = useContext(SocketContext);
   
   const removeFromCart = () => {
     // lấy sản phẩm được chọn mua
@@ -34,18 +37,18 @@ const BuySuccess = () => {
   };
 
   useEffect(() => {
-    // console.log(
-    //   "Value of paymentSuccess cookie:",
-    //   Cookies.get("paymentSuccess")
-    // );
     // Kiểm tra nếu thanh toán đã thành công
     if (Cookies.get("paymentSuccess") === "true" && cart.length !== 0) {
       // Xóa trạng thái thanh toán thành công và thông tin về những sản phẩm được chọn
       Cookies.set("paymentSuccess", "false");
       // Xóa những sản phẩm được chọn khỏi giỏ hàng
       removeFromCart();
+      // Gửi thông báo cho admin
     }
-  }, [cart]);
+    if (socket) {
+      socket.emit("new-order-notification", { message: 'New order' });
+    }
+  }, [cart, socket]);
 
   return (
     <Result

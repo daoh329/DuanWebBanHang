@@ -1,14 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Button, Result } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart, deleteProductInCart } from "../../redux/cartSlice";
 import config from "../../config";
+import { SocketContext } from '../App';
 
 const BillSuccess = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.products);
+  const socket = useContext(SocketContext);
+
 
   const removeFromCart = () => {
     // lấy sản phẩm được chọn mua
@@ -40,6 +43,9 @@ const BillSuccess = () => {
     if (!hasRemovedFromCart.current && cart.length !== 0) {
       removeFromCart();
       hasRemovedFromCart.current = true;
+    }
+    if (socket) {
+      socket.emit("new-order-notification", { message: 'New order' });
     }
   }, [cart]);
   
