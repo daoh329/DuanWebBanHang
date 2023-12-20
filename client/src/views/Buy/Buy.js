@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLocation } from "react";
+import React, { useState, useEffect, useLocation, useContext } from "react";
 import axios from "axios";
 import {
   MDBTabs,
@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteProductInCart } from "../../redux/cartSlice";
 import { formatCurrency } from "../../util/FormatVnd";
 import { NotificationBeenLoggedOut } from "../NotificationsForm/Authenticated";
+import { SocketContext } from "../App";
 
 const onChange = (e) => {
   console.log(`checked = ${e.target.checked}`);
@@ -357,6 +358,7 @@ export default function Buy() {
     });
   };
   // navigate(`/createorder?amount=${totalAmount}`); // Thêm totalAmount vào URL như một tham số truy vấn
+  const socket = useContext(SocketContext);
   const handleBuyCOD = () => {
     // Lấy thông tin cá nhân của người dùng từ state hoặc form
     const data = {
@@ -404,9 +406,11 @@ export default function Buy() {
         if (response.ok) {
           // Thông báo thành công
           message.success("Thanh toán đơn hàng thành công");
-
           // Xóa sản phẩm khỏi giỏ hàng
           removeFromCart();
+          if (socket) {
+            socket.emit("new-order-notification", { message: "New order" });
+          }
           // Chuyển hướng người dùng đến trang thông báo thành công
           window.location.replace("/success");
         } else {

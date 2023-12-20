@@ -11,7 +11,7 @@ const BuySuccess = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.products);
   const socket = useContext(SocketContext);
-  
+
   const removeFromCart = () => {
     // lấy sản phẩm được chọn mua
     var informationSelected = sessionStorage.getItem("buys");
@@ -25,7 +25,7 @@ const BuySuccess = () => {
             product_id: value.id,
             capacity: value.capacity,
             color: value.color,
-            coupons: value.coupons
+            coupons: value.coupons,
           };
           data.push(item);
         });
@@ -38,15 +38,18 @@ const BuySuccess = () => {
 
   useEffect(() => {
     // Kiểm tra nếu thanh toán đã thành công
-    if (Cookies.get("paymentSuccess") === "true" && cart.length !== 0) {
+    if (
+      Cookies.get("paymentSuccess") === "true" &&
+      cart.length !== 0 &&
+      socket
+    ) {
+      console.log("focus me");
       // Xóa trạng thái thanh toán thành công và thông tin về những sản phẩm được chọn
       Cookies.set("paymentSuccess", "false");
       // Xóa những sản phẩm được chọn khỏi giỏ hàng
       removeFromCart();
       // Gửi thông báo cho admin
-    }
-    if (socket) {
-      socket.emit("new-order-notification", { message: 'New order' });
+      socket.emit("new-order-notification", { message: "New order" });
     }
   }, [cart, socket]);
 
@@ -56,13 +59,13 @@ const BuySuccess = () => {
       title={<div style={{ color: "#52c41a" }}>Đặt hàng thành công!</div>}
       subTitle={
         <div style={{ color: "black" }}>
-           {config.websiteLogo} cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của
-           {config.websiteLogo}.
+          {config.websiteLogo} cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của
+          {config.websiteLogo}.
           <br />
-          Đơn hàng của bạn đã được đặt thành công,  {config.websiteLogo} sẽ liên hệ xác
-          nhận lại với bạn!
+          Đơn hàng của bạn đã được đặt thành công, {config.websiteLogo} sẽ liên
+          hệ xác nhận lại với bạn!
           <br />
-           {config.websiteLogo} xin cảm ơn!
+          {config.websiteLogo} xin cảm ơn!
         </div>
       }
       extra={[

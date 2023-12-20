@@ -40,14 +40,12 @@ const BillSuccess = () => {
   const hasRemovedFromCart = useRef(false);
 
   useEffect(() => {
-    if (!hasRemovedFromCart.current && cart.length !== 0) {
+    if (!hasRemovedFromCart.current && cart.length !== 0 && socket) {
       removeFromCart();
       hasRemovedFromCart.current = true;
-    }
-    if (socket) {
       socket.emit("new-order-notification", { message: 'New order' });
     }
-  }, [cart]);
+  }, [cart, socket]);
   
   
   useEffect(() => {
