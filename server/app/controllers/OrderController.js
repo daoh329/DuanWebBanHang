@@ -113,7 +113,7 @@ class OrderController {
   // API /order/order
   async quanlyAllOrder(req, res, next) {
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.updated_at AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*, dc.*
@@ -168,7 +168,7 @@ class OrderController {
           discount: row.discount,
           discount_code: row.id ? {
             id: row.id,
-            content: row.content,
+            code: row.code,
             value_vnd: row.value_vnd,
             value_percent: row.value_percent,
             start_date: row.start_date,
@@ -418,7 +418,7 @@ class OrderController {
   async orderHistoryByPhone(req, res) {
     const phone = req.params.phone;
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.updated_at AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*, dc.*
@@ -474,7 +474,7 @@ class OrderController {
           discount: row.discount,
           discount_code: row.id ? {
             id: row.id,
-            content: row.content,
+            code: row.code,
             value_vnd: row.value_vnd,
             value_percent: row.value_percent,
             start_date: row.start_date,
@@ -494,7 +494,7 @@ class OrderController {
   async orderHistoryById(req, res) {
     const id = req.params.id;
     const sql = `
-      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, CONVERT_TZ(o.created_at, '+00:00', '+07:00') AS order_created_at, CONVERT_TZ(o.updated_at, '+00:00', '+07:00') AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
+      SELECT o.id AS order_id, o.deliveryMethod, o.paymentMenthod, o.created_at AS order_created_at, o.updated_at AS order_updated_at, o.note AS order_note, FORMAT(CAST(o.totalAmount AS UNSIGNED), 0) AS totalAmount, o.paymentData, o.status AS order_status, o.addressID,
       u.id AS user_id, u.name AS user_name, u.phone AS user_phone, u.email AS user_email, da.email AS delivery_email, da.phone AS delivery_phone,
       CONCAT(da.city, ', ', da.District, ', ', da.Commune, ', ', da.Street) AS address,
       odp.*, p.*, dc.*
@@ -550,7 +550,7 @@ class OrderController {
           discount: row.discount,
           discount_code: row.id ? {
             id: row.id,
-            content: row.content,
+            code: row.code,
             value_vnd: row.value_vnd,
             value_percent: row.value_percent,
             start_date: row.start_date,

@@ -9,6 +9,7 @@ import ProductItem from "./ProductItem/ProductItem";
 import { formatCurrency } from "../../../util/FormatVnd";
 import { utcToZonedTime, format } from "date-fns-tz";
 import { SocketContext } from "../../App";
+import dayjs from "dayjs";
 
 function Order() {
   const [reducedPrice, setReducedPrice] = useState(0);
@@ -25,13 +26,15 @@ function Order() {
     if (user.id && socket && order) {
       // Lắng nghe sự kiện reload thông báo
       socket.on("reload-notification", (data) => {
-        console.log("focus me");
-        navigate("/profile/order", {
-          state: {
-            order_id: order.order_id,
-            action: "call_order"
-          },
-        });
+        if (location.pathname === `/profile/order/${order.order_id}`) {
+          navigate("/profile/order", {
+            state: {
+              order_id: order.order_id,
+              action: "call_order"
+            },
+          });
+        }
+        
       });
     }
   }, [user, socket, order]);
@@ -124,14 +127,7 @@ function Order() {
                 <p>
                   Thời gian tạo:{" "}
                   <span>
-                    {format(
-                      utcToZonedTime(
-                        new Date(order.order_created_at),
-                        "Etc/UTC"
-                      ),
-                      "HH:mm:ss  dd/MM/yyyy",
-                      { timeZone: "Etc/UTC" }
-                    )}
+                    {dayjs(order.order_created_at).utcOffset(0).format("HH:mm:ss DD/MM/YYYY")}
                   </span>
                 </p>
               </div>

@@ -28,7 +28,7 @@ import {
   NotificationBeenLoggedOut,
   openInfoModalNotPermission,
 } from "../../../../NotificationsForm/Authenticated";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -118,11 +118,13 @@ function MainForm() {
 
   // function call api create product
   const onFinish = async (values) => {
+
     // check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }
+
     // Nếu có lỗi thì dừng lại
     if (errorMessage) {
       return;
@@ -295,14 +297,14 @@ function MainForm() {
     const fetchShortDescription = async () => {
       try {
         if (debouncedValue) {
-          // Gửi yêu cầu kiểm tra tên lên máy chủ (thay thế URL bằng API thực tế)
+          // Gửi yêu cầu kiểm tra tên lên máy chủ
           const response = await axios.post(
             `${process.env.REACT_APP_API_URL}/product/check/shortDescription`,
             { shortDescription: debouncedValue }
           );
           // Xử lý kết quả, ví dụ: hiển thị thông báo
           if (response.status === 200) {
-            if (response.data.message === "already exist") {
+            if (response.data.message === "Already exist") {
               setErrorMessage("Thông tin mô tả ngắn đã tồn tại");
             }
             else{

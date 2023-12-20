@@ -6,7 +6,7 @@ import {
   NotificationBeenLoggedOut,
   openInfoModalNotPermission,
 } from "../../../../NotificationsForm/Authenticated";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 
 function Capacity() {
   const [capacities, setCapacities] = useState([]);
@@ -35,7 +35,7 @@ function Capacity() {
 
   const handleDelete = async (value) => {
     // Check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }

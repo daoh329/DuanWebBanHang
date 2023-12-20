@@ -8,6 +8,7 @@ const connection = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
+    timezone: process.env.TIME_ZONE,
 });
 
 // Kết nối tới cơ sở dữ liệu

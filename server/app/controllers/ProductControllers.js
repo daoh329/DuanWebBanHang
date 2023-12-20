@@ -134,7 +134,7 @@ class Product {
     p.name,
     p.status,
     p.shortDescription,
-    CONVERT_TZ(p.release_date, '+00:00', '+07:00') AS release_date,
+    p.release_date,
     p.main_image,
     p.CategoryID as category,
     pd.brand,
@@ -577,11 +577,11 @@ class Product {
           JSON_ARRAYAGG(
             JSON_OBJECT(
               "id", dc.id,
-              "content", dc.content,
+              "code", dc.code,
               "value_vnd", dc.value_vnd,
               "value_percent", dc.value_percent,
-              "start_date", CONVERT_TZ(dc.start_date, '+00:00', '+07:00'),
-              "end_date", CONVERT_TZ(dc.end_date, '+00:00', '+07:00')
+              "start_date", dc.start_date,
+              "end_date", dc.end_date
             )
           )
         FROM discount_code as dc 
@@ -1068,7 +1068,7 @@ class Product {
       if (result[0].count === 0) {
         return res.status(200).json({ message: "Does not exist" });
       } else {
-        return res.status(200).json({ message: "already exist" });
+        return res.status(200).json({ message: "Already exist" });
       }
     } catch (error) {
       console.log(error);

@@ -163,9 +163,9 @@ const App = () => {
   };
 
   const menuAccount = [
-    {
+    user.id && {
       key: "1",
-      label: user.id && (
+      label: (
         <Button
           onClick={profile}
           style={{
@@ -179,22 +179,23 @@ const App = () => {
         </Button>
       ),
     },
-    {
-      key: "2",
-      label: isLogin && (isLogin === "admin" || isLogin === "superadmin") && (
-        <Button
-          onClick={adminPage}
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            background: "none",
-          }}
-        >
-          Quản lí hệ thống
-        </Button>
-      ),
-    },
+    isLogin &&
+      (isLogin === "admin" || isLogin === "superadmin") && {
+        key: "2",
+        label: (
+          <Button
+            onClick={adminPage}
+            style={{
+              border: "none",
+              width: "100%",
+              height: "100%",
+              background: "none",
+            }}
+          >
+            Quản lí hệ thống
+          </Button>
+        ),
+      },
     {
       key: "3",
       label: user.id ? (
@@ -210,16 +211,19 @@ const App = () => {
           Đăng xuất
         </Button>
       ) : (
-        <Button
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            background: "none",
-          }}
-        >
-          <NavLink to="/login">Đăng nhập</NavLink>
-        </Button>
+        <NavLink to="/login">
+          <Button
+            style={{
+              border: "none",
+              width: "100%",
+              height: "100%",
+              background: "none",
+              padding:"0"
+            }}
+          >
+            Đăng nhập
+          </Button>
+        </NavLink>
       ),
     },
   ];
@@ -606,13 +610,18 @@ const App = () => {
                 className="right-icons"
                 style={{ display: "flex", alignItems: "center", gap: "1px" }}
               >
-                <Dropdown menu={{ items: menuAccount }} className="avt-user">
+                <Dropdown
+                  menu={{ items: menuAccount }}
+                  className="avt-user"
+                  overlayStyle={{ width: "100px" }}
+                >
                   {user.id ? (
                     <div
                       style={{
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        cursor: "pointer",
                       }}
                     >
                       <Avatar
@@ -632,9 +641,9 @@ const App = () => {
                       icon={<UserOutlined />}
                       style={{
                         backgroundColor: " #1435c3",
-                        margin: "10px",
                         fontSize: "24px",
                         cursor: "pointer",
+                        maxHeight: "32px",
                       }}
                     />
                   )}

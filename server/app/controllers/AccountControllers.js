@@ -17,6 +17,8 @@ class Accounts {
     }
   }
 
+  // async getAccountByAccountId
+
   async upPermission(req, res){
     try {
       const accountId = req.body.accountId; 

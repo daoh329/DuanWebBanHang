@@ -3,7 +3,7 @@ import { Table, Button, message} from 'antd';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { getPermission } from "../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../NotificationsForm/Authenticated";
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { SocketContext } from "../App";
@@ -70,7 +70,7 @@ function QLdeliveryfailed() {
     // Hàm hoàn tác đơn hàng giao không thành công
     const handleUndofailed = async (record) => {
         // check permission
-        if ((await getPermission()) === "user") {
+        if ((await getPermissionCurrent()) === "user") {
             openInfoModalNotPermission();
             return;
         }
@@ -89,7 +89,7 @@ function QLdeliveryfailed() {
                 // Báo lên socket là có thông báo mới cho người dùng
                 if (socket) {
                 // Gửi thông báo tới server khi nút được click
-                socket.emit("notification", { message: record.user_id });
+                socket.emit("notification", { userId: record.user_id });
                 }
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -102,7 +102,7 @@ function QLdeliveryfailed() {
     // Hàm hoàn tác đơn hàng đã hủy
     const handleUndocancel = async (record) => {
         // check permission
-        if ((await getPermission()) === "user") {
+        if ((await getPermissionCurrent()) === "user") {
             openInfoModalNotPermission();
             return;
         }
@@ -114,7 +114,7 @@ function QLdeliveryfailed() {
                 // Báo lên socket là có thông báo mới cho người dùng
                 if (socket) {
                     // Gửi thông báo tới server khi nút được click
-                    socket.emit("notification", { message: record.user_id });
+                    socket.emit("notification", { userId: record.user_id });
                 }
             } catch (error) {
                 console.error("Error delivered order:", error);

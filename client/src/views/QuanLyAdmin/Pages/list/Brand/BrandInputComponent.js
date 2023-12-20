@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, notification } from "antd";
 import axios from "axios";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
 
 function FormInputBrand({ name, onUpdated }) {
@@ -12,7 +12,7 @@ function FormInputBrand({ name, onUpdated }) {
 
   const onFinish = async (values) => {
     // Check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }

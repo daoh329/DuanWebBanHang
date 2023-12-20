@@ -174,7 +174,7 @@ export default function Profile() {
               // Báo lên socket là có thông báo mới cho người dùng
               if (socket) {
                 // Gửi thông báo tới server khi nút được click
-                socket.emit("notification", { message: record.user_id });
+                socket.emit("notification", { userId: record.user_id });
               }
             } catch (error) {
               if (error.response && error.response.status === 401) {
@@ -544,7 +544,6 @@ const OrderLayout = (props) => {
     }
     setIconsActive(value);
   };
-  const location = useLocation();
 
   return (
     <MDBTabsPane style={{ paddingTop: "20px" }} className="tab-2" show={true}>
