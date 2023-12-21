@@ -171,7 +171,7 @@ const Home = () => {
     setActiveTab(key);
   };
 
-  const itemsPerPage = 12; // Số sản phẩm trên mỗi trang
+  const itemsPerPage = 24; // Số sản phẩm trên mỗi trang
 
   // Tính tổng số trang dựa trên số lượng sản phẩm và số sản phẩm trên mỗi trang
   const totalPages = Math.ceil(productsLaptop.length / itemsPerPage);
