@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { SocketContext } from "../App";
-import { getPermission } from "../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../NotificationsForm/Authenticated";
 
 function QLdelivered() {
@@ -38,7 +38,7 @@ function QLdelivered() {
     // Hàm đã giao đơn hàng
     const handleDelivered = async (record) => {
         // check permission
-        if ((await getPermission()) === "user") {
+        if ((await getPermissionCurrent()) === "user") {
             openInfoModalNotPermission();
             return;
         }
@@ -57,7 +57,7 @@ function QLdelivered() {
                 // Báo lên socket là có thông báo mới cho người dùng
                 if (socket) {
                     // Gửi thông báo tới server khi nút được click
-                    socket.emit("notification", { message: record.user_id });
+                    socket.emit("notification", { userId: record.user_id });
                 }
             } catch (error) {
                 console.error("Error delivered order:", error);
@@ -69,7 +69,7 @@ function QLdelivered() {
 
     const handleFailed = async (record) => {
         // check permission
-        if ((await getPermission()) === "user") {
+        if ((await getPermissionCurrent()) === "user") {
             openInfoModalNotPermission();
             return;
         }
@@ -97,7 +97,7 @@ function QLdelivered() {
                             // Báo lên socket là có thông báo mới cho người dùng
                             if (socket) {
                                 // Gửi thông báo tới server khi nút được click
-                                socket.emit("notification", { message: record.user_id });
+                                socket.emit("notification", { userId: record.user_id });
                             }
                         } catch (error) {
                             console.error("Error delivered order:", error);
@@ -120,7 +120,7 @@ function QLdelivered() {
                     // Báo lên socket là có thông báo mới cho người dùng
                     if (socket) {
                         // Gửi thông báo tới server khi nút được click
-                        socket.emit("notification", { message: record.user_id });
+                        socket.emit("notification", { userId: record.user_id });
                     }
                 } catch (error) {
                     console.error("Error delivered order:", error);

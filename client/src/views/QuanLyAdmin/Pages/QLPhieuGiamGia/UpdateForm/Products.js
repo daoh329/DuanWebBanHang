@@ -17,7 +17,7 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from "@ant-design/icons";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 
 const { confirm, info } = Modal;
 
@@ -87,7 +87,7 @@ function productdiscount(record) {
 
   const deleteSanPham = async (products_id, discountCode_id) => {
     try {
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }
@@ -183,7 +183,7 @@ function productdiscount(record) {
   const AddProduct = async (products_id, discountCode_id) => {
     const url = `${process.env.REACT_APP_API_URL}/discount/addProduct`;
     try {
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }

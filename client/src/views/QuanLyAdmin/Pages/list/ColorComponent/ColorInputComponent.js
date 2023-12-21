@@ -9,7 +9,7 @@ import {
   notification,
 } from "antd";
 import axios from "axios";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
 
 function FormInputColor({ name, onUpdated }) {
@@ -23,7 +23,7 @@ function FormInputColor({ name, onUpdated }) {
 
   const onFinish = async (values) => {
     // Check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }

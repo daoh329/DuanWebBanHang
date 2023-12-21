@@ -3,51 +3,29 @@ import { Button, Form, Input, Avatar, Table, message, Modal } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { utcToZonedTime, format } from "date-fns-tz";
+import { useDispatch, useSelector } from "react-redux";
 
 import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
 import { SocketContext } from "../App";
-import { getPermission } from "../../util/servicesGlobal";
+import { getPermissionCurrent, loadData } from "../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../NotificationsForm/Authenticated";
+import { addCountOrders } from "../../redux/testNotifiOrder";
 
 function OrderList() {
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [data, setData] = useState([]);
-
-  // Gọi hàm tải dữ liệu khi component được render
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = () => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/order/quanlyAllOrder`)
-      .then((res) => {
-        // Lọc và sắp xếp các đơn hàng theo trạng thái và thời gian tạo
-        const sortedOrders = res.data
-          .filter((order) => order.order_status === 0)
-          .sort((a, b) => {
-            // Sắp xếp theo trạng thái
-            if (a.order_status < b.order_status) return -1;
-            if (a.order_status > b.order_status) return 1;
-
-            // Nếu trạng thái giống nhau, sắp xếp theo thời gian tạo
-            return new Date(b.order_created_at) - new Date(a.order_created_at);
-          });
-
-        setData(sortedOrders || []);
-      })
-      .catch((error) => console.log(error));
-  };
+  const data = useSelector(state => state.orders.orders);
+  const dispatch = useDispatch();
 
   // Hàm xác nhận đơn hàng
   const handleConfirmOrder = async (record) => {
     // check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }
+    
     if (record.order_id) {
       // console.log('Confirm order button clicked for order:', record.order_id);
       try {
@@ -62,11 +40,11 @@ function OrderList() {
           `Đơn hàng ${record.order_id} đã được xác nhận và đang trong quá trình đóng gói`
         );
         message.success(`Đơn hàng mã ${record.order_id} xác nhận thành công`);
-        loadData(); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
+        loadData(dispatch); // Gọi lại hàm tải dữ liệu sau khi xác nhận đơn hàng
         // Báo lên socket là có thông báo mới cho người dùng
         if (socket) {
           // Gửi thông báo tới server khi nút được click
-          socket.emit("notification", { message: record.user_id });
+          socket.emit("notification", { userId: record.user_id });
         }
       } catch (error) {
         console.error("Error confirming order:", error);
@@ -79,7 +57,7 @@ function OrderList() {
   // Hàm hủy đơn hàng
   const handleCancelOrder = async (record) => {
     // check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }
@@ -91,7 +69,7 @@ function OrderList() {
           content: `Bạn đã liên hệ khách hàng để xử lý đơn hàng thanh toán điện tử có mã ${record.order_id} chưa?`,
           okText: "Đã xử lý",
           cancelText: "Chưa xử lý",
-          onOk: async () => {
+          onOk: async (socket) => {
             try {
               await axios.put(
                 `${process.env.REACT_APP_API_URL}/order/cancel/${record.order_id}`
@@ -106,11 +84,11 @@ function OrderList() {
               message.warning(
                 `Đơn hàng mã ${record.order_id} đã dược hủy thành công`
               );
-              loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+              loadData(dispatch); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
               // Báo lên socket là có thông báo mới cho người dùng
               if (socket) {
                 // Gửi thông báo tới server khi nút được click
-                socket.emit("notification", { message: record.user_id });
+                socket.emit("notification", { userId: record.user_id });
               }
             } catch (error) {
               console.error("Error canceling order:", error);
@@ -130,7 +108,6 @@ function OrderList() {
               );
               CreateNotification(
                 record.user_id,
-
                 record.order_id,
                 "2",
                 "Hủy đơn hàng thành công",
@@ -139,7 +116,12 @@ function OrderList() {
               message.warning(
                 `Đơn hàng mã ${record.order_id} đã dược hủy thành công`
               );
-              loadData(); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+              loadData(dispatch); // Gọi lại hàm tải dữ liệu sau khi hủy đơn hàng
+              // Báo lên socket là có thông báo mới cho người dùng
+              if (socket) {
+                // Gửi thông báo tới server khi nút được click
+                socket.emit("notification", { userId: record.user_id });
+              }
             } catch (error) {
               console.error("Error canceling order:", error);
             }
@@ -161,7 +143,6 @@ function OrderList() {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
   const filteredData = data.filter((order) =>
     order.order_id.toString().includes(searchTerm)
   );

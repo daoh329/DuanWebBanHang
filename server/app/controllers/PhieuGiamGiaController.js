@@ -7,11 +7,11 @@ class PhieuGiamGia {
       try {
          // Update query with new column names and data types
          const insertQuery = `
-         INSERT INTO discount_code (content, value_vnd, value_percent, start_date, end_date)
+         INSERT INTO discount_code (code, value_vnd, value_percent, start_date, end_date)
          VALUES (?, ?, ?, ?, ?)
        `;
          const insertValues = [
-            data.content,
+            data.code,
             data.value_vnd,
             data.value_percent,
             data.start_date,
@@ -52,7 +52,7 @@ class PhieuGiamGia {
          const updateQuery = `
          UPDATE discount_code
          SET
-           content = ?,
+           code = ?,
            value_vnd = ?,
            value_percent = ?,
            start_date = ?,
@@ -60,7 +60,7 @@ class PhieuGiamGia {
          WHERE id = ?
        `;
          const updateValues = [
-            data.content,
+            data.code,
             data.value_vnd,
             data.value_percent,
             data.start_date,
@@ -191,6 +191,23 @@ class PhieuGiamGia {
       } catch (error) {
          console.error(error);
          res.status(500).send("Internal Server Error");
+      }
+   }
+
+   // /discout/check-unique
+   async checkUnique (req, res) {
+      try {
+         const code = req.body.code;
+         const qr = `SELECT COUNT(*) as count FROM discount_code WHERE code = ?`
+         const result = await query(qr, [code]);
+         console.log(code);
+         if (result[0].count === 0) {
+            return res.status(200).json({ message: "Does not exist" });
+          } else {
+            return res.status(200).json({ message: "Already exist" });
+          }
+      } catch (error) {
+         res.status(500).json({message: "Check discount code failure"})
       }
    }
 }

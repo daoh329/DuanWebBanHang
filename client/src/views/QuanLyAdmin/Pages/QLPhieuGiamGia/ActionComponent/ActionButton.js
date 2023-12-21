@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import InputFrom from "../UpdateForm/InputFrom";
 import Products from "../UpdateForm/Products";
 import { NotificationBeenLoggedOut, openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 
 function ActionButton({ record, getPhieuGiamGia }) {
   const [openModal, setOpenModal] = useState(false);
@@ -14,7 +14,7 @@ function ActionButton({ record, getPhieuGiamGia }) {
   async function handleEndDate() {
 
     // Check permission
-    if (await getPermission() === "user") {
+    if (await getPermissionCurrent() === "user") {
       openInfoModalNotPermission();
       return;
     }

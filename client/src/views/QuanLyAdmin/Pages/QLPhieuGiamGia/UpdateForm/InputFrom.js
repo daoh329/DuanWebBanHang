@@ -11,15 +11,17 @@ import {
 } from "antd";
 import axios from "axios";
 import dayjs from "dayjs";
+// import 'dayjs/locale/vi';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 import {
   NotificationBeenLoggedOut,
   openInfoModalNotPermission,
 } from "../../../../NotificationsForm/Authenticated";
 
 dayjs.extend(customParseFormat);
+// dayjs.locale('vi')
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY/MM/DD HH:mm";
 
@@ -36,7 +38,7 @@ function InputFrom({ data, onClick, setModal }) {
   // Hàm được gọi khi form hoàn thành
   const onFinishUpdate = async (value) => {
     // Check permission
-    if ((await getPermission()) === "user") {
+    if ((await getPermissionCurrent()) === "user") {
       openInfoModalNotPermission();
       return;
     }
@@ -46,8 +48,8 @@ function InputFrom({ data, onClick, setModal }) {
       ...value,
       value_percent: value.value_percent ? value.value_percent : 0,
       value_vnd: value.value_vnd ? value.value_vnd : 0,
-      start_date: value.rangeDate[0].format("YYYY-MM-DD HH:MM"),
-      end_date: value.rangeDate[1].format("YYYY-MM-DD HH:MM"),
+      start_date: value.rangeDate[0].format("YYYY-MM-DD HH:mm"),
+      end_date: value.rangeDate[1].format("YYYY-MM-DD HH:mm"),
     };
     delete values.rangeDate;
     const url = `${process.env.REACT_APP_API_URL}/discount/update/${discountCode.id}`;
@@ -98,7 +100,7 @@ function InputFrom({ data, onClick, setModal }) {
   };
 
   const valueVnd = {
-    content: discountCode.content,
+    code: discountCode.code,
     value_vnd: discountCode.value_vnd,
     rangeDate: [
       dayjs(discountCode.start_date, dateFormat),
@@ -107,7 +109,7 @@ function InputFrom({ data, onClick, setModal }) {
   };
 
   const valuePersent = {
-    content: discountCode.content,
+    code: discountCode.code,
     value_percent: discountCode.value_percent,
     rangeDate: [
       dayjs(discountCode.start_date, dateFormat),
@@ -131,14 +133,14 @@ function InputFrom({ data, onClick, setModal }) {
         initialValues={discountType === "vnd" ? valueVnd : valuePersent}
       >
         <Form.Item
-          label="Nội dung phiếu"
-          name="content"
+          label="Mã"
+          name="code"
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
           }}
         >
-          <Input placeholder="Nhập Nội dung phiếu" />
+          <Input placeholder="Nhập mã" />
         </Form.Item>
         <Form.Item
           label="Giá trị"
