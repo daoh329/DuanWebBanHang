@@ -10,6 +10,8 @@ import {
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { CommentOutlined } from '@ant-design/icons';
+import { FloatButton, Tooltip } from 'antd';
 
 import "../views/App.scss";
 import Home from "./Home/Home";
@@ -219,6 +221,9 @@ const App = () => {
           </Routes>
           <MobileNav user={user} />
           <Footer />
+          <Tooltip title="Chat với admin">
+          <FloatButton type="primary" style={{top: "75vh", left:"93vw", width:"52px", height:"52px"}} icon={<CommentOutlined style={{ fontSize:"20px"}} />} />
+          </Tooltip>
         </BrowserRouter>
       </SocketContext.Provider>
     </div>
