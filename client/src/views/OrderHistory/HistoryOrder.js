@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button,Breadcrumb } from 'antd';
-import { format } from 'date-fns';
+import { utcToZonedTime, format } from "date-fns-tz";
+
 import axios from "axios";
 import './History.css'  
 
@@ -30,6 +31,11 @@ function HistoryOrder(props) {
             title: 'Thời gian tạo',
             dataIndex: 'order_updated_at',
             key: 'updated_at',
+            render: (date) => {
+                const fmt = "HH:mm:ss - dd/MM/yyyy";
+                const zonedDate = utcToZonedTime(date, "Etc/UTC");
+                return format(zonedDate, fmt, { timeZone: "Etc/UTC" });
+              },
         },
 
         {

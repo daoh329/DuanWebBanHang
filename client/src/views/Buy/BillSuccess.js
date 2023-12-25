@@ -1,14 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Button, Result } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart, deleteProductInCart } from "../../redux/cartSlice";
 import config from "../../config";
+import { SocketContext } from '../App';
 
 const BillSuccess = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.products);
+  const socket = useContext(SocketContext);
+
 
   const removeFromCart = () => {
     // lấy sản phẩm được chọn mua
@@ -37,11 +40,12 @@ const BillSuccess = () => {
   const hasRemovedFromCart = useRef(false);
 
   useEffect(() => {
-    if (!hasRemovedFromCart.current && cart.length !== 0) {
+    if (!hasRemovedFromCart.current && cart.length !== 0 && socket) {
       removeFromCart();
       hasRemovedFromCart.current = true;
+      socket.emit("new-order-notification", { message: 'New order' });
     }
-  }, [cart]);
+  }, [cart, socket]);
   
   
   useEffect(() => {
@@ -112,7 +116,9 @@ const BillSuccess = () => {
         <Button type="primary" key="console" href='/'>
           Về trang chủ
         </Button>,
-        <Button key="profile" href='/profile'>Lịch sử mua hàng</Button>,
+        <Button key="profile" href="/profile/order">
+        Xem đơn hàng
+      </Button>,
         <Button key="buy" href='/cart'>Mua lại</Button>
       ]}
     />

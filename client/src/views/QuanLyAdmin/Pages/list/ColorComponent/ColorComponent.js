@@ -6,7 +6,7 @@ import axios from "axios";
 import { Modal, notification, Spin, Table, Button, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormInputColor from "./ColorInputComponent";
-import { getPermission } from "../../../../../util/servicesGlobal";
+import { getPermissionCurrent } from "../../../../../util/servicesGlobal";
 import { openInfoModalNotPermission } from "../../../../NotificationsForm/Authenticated";
 
 function Color() {
@@ -22,7 +22,7 @@ function Color() {
     }),
     onSubmit: async (values) => {
       // Check permission
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }
@@ -147,7 +147,7 @@ function Color() {
   const handleDelete = async (name) => {
     try {
       // Check permission
-      if ((await getPermission()) === "user") {
+      if ((await getPermissionCurrent()) === "user") {
         openInfoModalNotPermission();
         return;
       }

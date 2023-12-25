@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Table, Button, message} from 'antd';
 import { utcToZonedTime, format } from 'date-fns-tz';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { getPermissionCurrent } from "../../util/servicesGlobal";
+import { openInfoModalNotPermission } from "../NotificationsForm/Authenticated";
+import { CreateNotification } from "../../component/NotificationManager/NotificationManager";
+import { SocketContext } from "../App";
 
 function QLdeliveryfailed() {
-
+    const socket = useContext(SocketContext);
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [data, setData] = useState([]);
@@ -65,11 +69,28 @@ function QLdeliveryfailed() {
 
     // Hàm hoàn tác đơn hàng giao không thành công
     const handleUndofailed = async (record) => {
+        // check permission
+        if ((await getPermissionCurrent()) === "user") {
+            openInfoModalNotPermission();
+            return;
+        }
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undofailed/${record.order_id}`);
+                CreateNotification(
+                    record.user_id,
+                    record.order_id,
+                    "3",
+                    "Đơn hàng đang được vận chuyển",
+                    `Đơn hàng ${record.order_id} đang trên đường giao đến bạn`
+                  );
                 message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục giao hàng`);
                 loadData();
+                // Báo lên socket là có thông báo mới cho người dùng
+                if (socket) {
+                // Gửi thông báo tới server khi nút được click
+                socket.emit("notification", { userId: record.user_id });
+                }
             } catch (error) {
                 console.error("Error delivered order:", error);
             }
@@ -80,11 +101,21 @@ function QLdeliveryfailed() {
 
     // Hàm hoàn tác đơn hàng đã hủy
     const handleUndocancel = async (record) => {
+        // check permission
+        if ((await getPermissionCurrent()) === "user") {
+            openInfoModalNotPermission();
+            return;
+        }
         if (record.order_id) {
             try {
                 await axios.put(`${process.env.REACT_APP_API_URL}/order/undocancel/${record.order_id}`);
                 message.success(`Đơn hàng mã ${record.order_id} đã được chọn lại ở mục đơn đặt hàng`);
                 loadData();
+                // Báo lên socket là có thông báo mới cho người dùng
+                if (socket) {
+                    // Gửi thông báo tới server khi nút được click
+                    socket.emit("notification", { userId: record.user_id });
+                }
             } catch (error) {
                 console.error("Error delivered order:", error);
             }

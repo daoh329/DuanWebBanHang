@@ -36,7 +36,10 @@ import Hinh from "../../../src/assets/LogoWebGIF.gif";
 import logomobi from "../../../src/assets/logomobi.png";
 
 import { useDispatch, useSelector } from "react-redux";
-import { updateNotification } from "../../redux/notificationsSlice";
+import {
+  clickNotification,
+  updateNotification,
+} from "../../redux/notificationsSlice";
 import axios from "axios";
 import { formatCurrency } from "../../util/FormatVnd";
 import { deleteProductInCart, updateProductCart } from "../../redux/cartSlice";
@@ -160,9 +163,9 @@ const App = () => {
   };
 
   const menuAccount = [
-    {
+    user.id && {
       key: "1",
-      label: user.id && (
+      label: (
         <Button
           onClick={profile}
           style={{
@@ -176,22 +179,23 @@ const App = () => {
         </Button>
       ),
     },
-    {
-      key: "2",
-      label: isLogin && (isLogin === "admin" || isLogin === "superadmin") && (
-        <Button
-          onClick={adminPage}
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            background: "none",
-          }}
-        >
-          Quản lí hệ thống
-        </Button>
-      ),
-    },
+    isLogin &&
+      (isLogin === "admin" || isLogin === "superadmin") && {
+        key: "2",
+        label: (
+          <Button
+            onClick={adminPage}
+            style={{
+              border: "none",
+              width: "100%",
+              height: "100%",
+              background: "none",
+            }}
+          >
+            Quản lí hệ thống
+          </Button>
+        ),
+      },
     {
       key: "3",
       label: user.id ? (
@@ -207,16 +211,19 @@ const App = () => {
           Đăng xuất
         </Button>
       ) : (
-        <Button
-          style={{
-            border: "none",
-            width: "100%",
-            height: "100%",
-            background: "none",
-          }}
-        >
-          <NavLink to="/login">Đăng nhập</NavLink>
-        </Button>
+        <NavLink to="/login">
+          <Button
+            style={{
+              border: "none",
+              width: "100%",
+              height: "100%",
+              background: "none",
+              padding:"0"
+            }}
+          >
+            Đăng nhập
+          </Button>
+        </NavLink>
       ),
     },
   ];
@@ -266,7 +273,9 @@ const App = () => {
 
   // hàm chuyển tới page profile
   // và truyền state xác định tab QL đơn hàng
+  const location = useLocation();
   const nextToNotifications = async (notification) => {
+    // console.log(location.pathname);
     const { id, is_read } = notification;
     try {
       // tạo mảng chứa id thông báo (API nhận kiểu mảng)
@@ -289,20 +298,18 @@ const App = () => {
           });
         }
         // chuyển qua page chi tiết thông báo
-        navigate("/profile", {
+        navigate("/profile/order", {
           state: {
-            tab: "tab2",
-            actions: "call_order",
             order_id: notification.order_id,
+            action: "call_order",
           },
         });
       } else {
         // chuyển qua page chi tiết thông báo
-        navigate("/profile", {
+        navigate("/profile/order", {
           state: {
-            tab: "tab2",
-            actions: "call_order",
             order_id: notification.order_id,
+            action: "call_order",
           },
         });
       }
@@ -311,7 +318,7 @@ const App = () => {
       console.log(error);
     }
   };
-  const location = useLocation();
+  // const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   // console.log(cart);
@@ -603,10 +610,19 @@ const App = () => {
                 className="right-icons"
                 style={{ display: "flex", alignItems: "center", gap: "1px" }}
               >
-                <Dropdown menu={{ items: menuAccount }} className="avt-user">
+                <Dropdown
+                  menu={{ items: menuAccount }}
+                  className="avt-user"
+                  overlayStyle={{ width: "100px" }}
+                >
                   {user.id ? (
                     <div
-                      style={{display: "flex", justifyContent: "center", alignItems:"center"}}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
                     >
                       <Avatar
                         src={user.picture}
@@ -615,7 +631,9 @@ const App = () => {
                       &nbsp; &nbsp;
                       <div className="avt-user-name-group">
                         <span className="user-name">Xin chào,</span>
-                        <span className="avt-user-name-control">{user?.name}</span>
+                        <span className="avt-user-name-control">
+                          {user?.name}
+                        </span>
                       </div>
                     </div>
                   ) : (
@@ -623,9 +641,9 @@ const App = () => {
                       icon={<UserOutlined />}
                       style={{
                         backgroundColor: " #1435c3",
-                        margin: "10px",
                         fontSize: "24px",
                         cursor: "pointer",
+                        maxHeight: "32px",
                       }}
                     />
                   )}

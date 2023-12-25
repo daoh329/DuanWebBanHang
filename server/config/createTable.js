@@ -144,7 +144,7 @@ const createTables = () => {
   const discount_code = `
     CREATE TABLE IF NOT EXISTS discount_code (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      content VARCHAR(255) NOT NULL,
+      code VARCHAR(20) NOT NULL,
       value_vnd numeric(12,2),
       value_percent numeric(5,2),
       start_date timestamp NOT NULL,

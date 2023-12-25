@@ -12,4 +12,6 @@ router.post('/addProduct',passportConfig.isAuthenticated, discountController.add
 router.post('/deleteSanPhamDC',passportConfig.isAuthenticated,discountController.deleteSanPhamOnDiscountCode);
 router.get('/getProductsbyIdDC/:id',discountController.getSanPhamOnDiscountCode);
 router.get('/getProductsbyIdSP/:id',discountController.getSanPhamOnDiscountCodeByIdSanPham);
+router.post('/check-unique', passportConfig.isAuthenticated, discountController.checkUnique);
+
 module.exports = router;

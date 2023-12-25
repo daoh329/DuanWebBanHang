@@ -252,7 +252,7 @@ const Login = () => {
             <p style={{ margin: "0" }}>
               i. Đã đọc và đồng ý với{" "}
               <span>
-                <a href="#">Điều kiện giao dịch chung</a>
+                <a href="/chinh-sach-doi-tra">Chính sách mua hàng</a>
               </span>{" "}
               và{" "}
               <span>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Col, Row, Menu } from "antd";
+import React, { useState, useEffect, useContext } from "react";
+import { Col, Row, Menu, Badge, Button } from "antd";
 import {
   TagsOutlined,
   SettingOutlined,
@@ -19,6 +19,8 @@ import {
   PieChartOutlined,
 } from "@ant-design/icons";
 import { Routes, Route, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import "./Admin.css";
 import Dashboard from "./Pages/Dashboard";
 import DashboardRevenue from "./Pages/DashboardRevenue";
@@ -27,7 +29,7 @@ import TypeList from "./Pages/list/Type/TypeList";
 import NewCoupon from "./Pages/NewCoupon";
 import Products from "./Pages/QLSanPham/Products";
 import PhieuGiamGia from "./Pages/QLPhieuGiamGia/PhieuGiamGia";
-import NewDiscount from './Pages/NewPhieuGiamGia/NewDiscount';
+import NewDiscount from "./Pages/NewPhieuGiamGia/NewDiscount";
 // import QuanLyAdmin from "./QuanLyAdmin";
 import OrderList from "./QLdonhang";
 import QLshipping from "./QLshipping";
@@ -40,12 +42,35 @@ import QLAlldelivered from "./QLAlldelivered";
 import AccountList from "./Pages/AccountManagement/List";
 import { max } from "lodash";
 import Brandstatistics from "./Pages/Brandstatistics";
+import { loadData } from "../../util/servicesGlobal";
+import { SocketContext } from "../App";
+import NotificationSound, { playNotificationSound } from "../NotificationsForm/NotificationSound";
+
 function Admin() {
   const [currentPath, setCurrentPath] = useState("dashboard"); // Mặc định hiển thị trang Dashboard
+  const orders = useSelector((state) => state.orders.orders);
+  const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
 
   const onClick = (e) => {
     setCurrentPath(e.key);
   };
+
+  // socket
+  useEffect(() => {
+    if (socket) {
+      // Nhận sự kiện thông báo có đơn đặt hàng mới
+      socket.on("new-order-notification", (data) => {
+        loadData(dispatch);
+        playNotificationSound('/sound/notification.mp3');
+      });
+    }
+  }, [socket]);
+
+  // Gọi hàm tải dữ liệu khi component được render
+  useEffect(() => {
+    loadData(dispatch);
+  }, [dispatch]);
 
   const menuData = [
     {
@@ -55,13 +80,11 @@ function Admin() {
         {
           key: "1",
           icon: <PieChartOutlined />,
-          label: (
-            <Link to="dashboard">Thống kê SL từng sản phẩm đã giao</Link>
-          ),
+          label: <Link to="dashboard">Thống kê SL từng sản phẩm đã giao</Link>,
         },
         {
           key: "2",
-          icon:<PieChartOutlined />,
+          icon: <PieChartOutlined />,
           label: <Link to="dashboardrevenue">Thống kê doanh thu</Link>,
         },
         {
@@ -77,7 +100,7 @@ function Admin() {
         {
           key: "4",
           icon: <GiftOutlined />,
-          label: <Link to="NewDiscount">Tạo phiếu giảm giá</Link>
+          label: <Link to="NewDiscount">Tạo phiếu giảm giá</Link>,
         },
       ],
     },
@@ -99,7 +122,7 @@ function Admin() {
         {
           key: "7",
           icon: <GiftOutlined />,
-          label: <Link to="PhieuGiamGia">Tất cả phiếu giảm giá</Link>
+          label: <Link to="PhieuGiamGia">Tất cả phiếu giảm giá</Link>,
         },
         // {
         //   key: "8",
@@ -111,12 +134,17 @@ function Admin() {
     {
       key: "sub4",
       icon: <DollarCircleOutlined />,
-      label: "Trạng thái đơn hàng",
+      label: <>Trạng thái đơn hàng</>,
       children: [
         {
           key: "9",
           icon: <ShoppingCartOutlined />,
-          label: <Link to="/dondathang">Đơn đặt hàng</Link>,
+          label: (
+            <Link to="/dondathang">
+              Đơn đặt hàng &nbsp;
+              <Badge count={orders ? orders.length : 0} />
+            </Link>
+          ),
         },
         {
           key: "10",
@@ -230,8 +258,6 @@ function Admin() {
   //   return null;
   // });
 
-  useEffect(() => { }, []);
-
   return (
     <div
       style={{
@@ -239,14 +265,18 @@ function Admin() {
         padding: "10px",
         height: "max-content",
         minHeight: "100vh",
-        backgroundColor: "#D5D8DC"
+        backgroundColor: "#D5D8DC",
       }}
     >
-      <div className="custom-scrollbar" style={{
-        position: 'fixed',
-        maxHeight: '88vh',
-        overflowY: 'auto'
-      }}>
+
+      <div
+        className="custom-scrollbar"
+        style={{
+          position: "fixed",
+          maxHeight: "88vh",
+          overflowY: "auto",
+        }}
+      >
         <Menu
           onClick={onClick}
           mode="inline"
@@ -257,11 +287,10 @@ function Admin() {
             height: "max-content",
             margin: "0 20px 0 0",
             width: "290px",
-            borderRadius: '5px'
+            borderRadius: "5px",
           }}
         />
       </div>
-
 
       <div style={{ flex: "4", marginLeft: "300px" }}>
         <Routes>
