@@ -47,12 +47,15 @@ const BillSuccess = () => {
     }
   }, [cart, socket]);
   
-  
+  const isOrderCreated = useRef(false);
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const paymentDataobject = Object.fromEntries(params);
     const paymentData = JSON.stringify(paymentDataobject);
     // console.log('Momo payment data:', paymentData);
+
+    // Kiểm tra xem thanh toán đã thành công hay chưa
+    if (paymentDataobject.resultCode === '0' && !isOrderCreated.current) {
 
     // Lấy các giá trị từ sessionStorage
     const UserID = sessionStorage.getItem('UserID');
@@ -97,7 +100,11 @@ const BillSuccess = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+    }).then(() =>{
+      isOrderCreated.current = true;
     });
+  
+}
   }, [location]);
 
 
