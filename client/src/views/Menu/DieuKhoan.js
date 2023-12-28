@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./ChinhSachThanhToan.css"
+import "./DieuKhoan.css"
 
 function DieuKhoan() {
   return (
@@ -26,7 +26,7 @@ function DieuKhoan() {
                         className="r-1xnzce8 r-crgep1 r-1nf4jbm"
                         data-testid="page.title"
                       >
-                        Chính Sách Bảo Hành
+                       Điều Khoản
                       </h1>
                     </div>
                   </div>

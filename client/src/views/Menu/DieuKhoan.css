@@ -1,0 +1,141 @@
+@font-face { 
+    font-family:"ROBOTO LIGHT";
+    src:url("https://cdn.tgdd.vn/mwgcart/orderhistory/fonts/Roboto-Light.ttf");
+  } 
+
+  :root { 
+      --mainColor: #F96F3A; 
+  } 
+  
+  
+  div.d1  { 
+      padding: 85px 99px;
+  } 
+  
+  div > form > *  { 
+      display: block; 
+      margin: auto; 
+      font-family: ROBOTO LIGHT;
+  } 
+  
+  div > form > .input-area  { 
+      position: relative; 
+      margin-bottom: 15px; 
+      width: 302px; 
+      max-width: 100%;
+  } 
+   
+  
+  .hide { 
+      display: none;
+  } 
+  
+  .hide { 
+      display: none !important;
+  } 
+  
+  .hide { 
+      display: none!important;
+  } 
+  
+  div > form > label  { 
+      color: #f01; 
+      margin-bottom: 15px; 
+      max-width: 302px; 
+      font-weight: 600; 
+      font-size: 13px;
+  } 
+  
+  .btn { 
+      box-shadow: 0 2px 6px 0 #9ed4ec; 
+      border-radius: 100px; 
+      width: 302px; 
+      height: 50px; 
+      border: 0; 
+      text-transform: uppercase; 
+      color: #fff; 
+      font-size: 17px; 
+      max-width: 100%;
+  } 
+  
+  .btn { 
+      background-color: var(--mainColor); 
+      box-shadow: unset; 
+      border-radius: 100px; 
+      width: 302px; 
+      height: 50px; 
+      border: none; 
+      text-transform: uppercase; 
+      color: #fff; 
+      font-size: 17px; 
+      max-width: 100%;
+  } 
+  
+  div > form > .btn  { 
+      cursor: pointer;
+  } 
+  
+  [class^="iconoh-"],[class*="iconoh-"] { 
+      background-image: url('https://cdn.tgdd.vn/mwgcart/orderhistory/images/2022/icons@2022.png'); 
+      background-repeat: no-repeat; 
+      display: inline-block; 
+      line-height: 30px; 
+      vertical-align: middle; 
+      background-size: 490px 224px; 
+      background-repeat-x: no-repeat; 
+      background-repeat-y: no-repeat;
+  } 
+  
+  .iconoh-phone-blue { 
+      background-position: -66px -19px; 
+      width: 14px; 
+      height: 21px;
+  } 
+  
+  div > form > .input-area > .input-icon  { 
+      position: absolute; 
+      top: 50%; 
+      left: 25px; 
+      transform: translate(0,-50%);
+  } 
+  
+
+  div > form input  { 
+      border: 1px solid #e0e0e0; 
+      border-radius: 100px; 
+      height: 38px; 
+      padding: 0 50px; 
+      font-size: 15px; 
+      box-sizing: border-box;
+  } 
+
+  @media screen and (max-width: 767px) {
+
+    div > form > .input-area > .input-icon  { 
+        position: absolute; 
+        top: 50%; 
+        left: 25px; 
+        transform: translate(0,-50%);
+    }
+    div > form > .input-area  { 
+        position: relative; 
+        margin-bottom: 15px; 
+        width: 1502px; 
+        max-width: 100%;
+    } 
+    
+  
+    div > form input  { 
+        border: 1px solid #e0e0e0; 
+        border-radius: 100px; 
+        height: 38px; 
+        padding: 0 50px; 
+        font-size: 15px; 
+        width: 100%; 
+        box-sizing: border-box;
+    } 
+  
+    
+  }
+  
+  
